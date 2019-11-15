@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+    <!-- jquery link js -->
+    <script src="{% static 'main_app/js/jquery.js' %}"></script>
+
+    <!-- style css  -->
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
+
+    <title>{% block title %}    {% endblock title %}</title>
+</head>
+<body id="{% block pageid %}{% endblock pageid %}">
+    
+   <div class="container-fluid">
+ 
+        {% block content %}
+        
+        {% endblock content %}
+   </div>
+        
+    <!-- bootstrap js -->
+    <script src="{% static 'main_app/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'main_app/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

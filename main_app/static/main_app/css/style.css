@@ -1,0 +1,18 @@
+
+#index{
+    background-image: url('../images/background.jpg');
+    background-repeat: no-repeat;
+    background-size:100% 800px ;
+    background-position-x: center;
+}
+#rgbtndiv{
+    text-align: center;
+
+    padding: 20px;
+}
+.lgbtndiv{
+    text-align: center;
+   
+    padding: 20px;
+    
+}
