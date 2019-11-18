@@ -23,9 +23,13 @@ def login(request):
         username = request.POST['username']
         password = request.POST['password']
         try:
-            g_user = User.objects.get(email= username)
+            g_user = User.objects.get(email= username) # checkng whether user registered or not ?
             try:
-                username = g_user.username
+                if g_user.is_active == False: # checking if user activated his account or not
+                    error = 'User already registered, check your mail and follow the link to activate your account.'
+                    return render(request, 'registration/login.html', {'error':error})
+                else:
+                    username = g_user.username
                 user = auth.authenticate(username=username, password=password)
                 if user is not None:
                     auth.login(request, user)
@@ -35,12 +39,11 @@ def login(request):
                     return render(request, 'registration/login.html', {'error':error})
             except:
                 error = 'Email or password incorrect'
-                return render(request, 'registration/login.html', {'error':error})
-
-                        
+                return render(request, 'registration/login.html', {'error':error})               
         except:
             error = 'No user registered with this email !'
             return render(request, 'registration/login.html', {'error':error})
     else:
         return render(request, 'registration/login.html')
     
+

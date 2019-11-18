@@ -1,18 +1,6 @@
-
-#index{
-    background-image: url('../images/background.jpg');
-    background-repeat: no-repeat;
-    background-size:100% 800px ;
-    background-position-x: center;
+#hint_id_password2, #hint_id_password1, #hint_id_username{
+    display: none;
 }
-#rgbtndiv{
-    text-align: center;
-
-    padding: 20px;
-}
-.lgbtndiv{
-    text-align: center;
-   
-    padding: 20px;
-    
+.login_page{
+    background: #ececec;
 }

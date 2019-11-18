@@ -137,5 +137,5 @@ EMAIL_HOST_USER = 'yourcollegeportal@gmail.com'
 EMAIL_HOST_PASSWORD = 'test@1234'
 
 
-ACCOUNT_ACTIVATION_DAYS = 3
+ACCOUNT_ACTIVATION_DAYS = 1
 LOGIN_REDIRECT_URL = 'user_dashboard'
