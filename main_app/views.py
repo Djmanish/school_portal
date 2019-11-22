@@ -1,9 +1,15 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from registration.backends.default.views import RegistrationView
 from registration.forms import RegistrationFormUniqueEmail
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.generic import *
+from .models import *
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from .forms import ProfileUpdateForm
+
 
 # Create your views here.
 
@@ -33,7 +39,7 @@ def login(request):
                 user = auth.authenticate(username=username, password=password)
                 if user is not None:
                     auth.login(request, user)
-                    return render(request, 'main_app/dashboard.html')
+                    return redirect('user_dashboard')
                 else:
                     error = 'Email or password incorrect'
                     return render(request, 'registration/login.html', {'error':error})
@@ -45,5 +51,25 @@ def login(request):
             return render(request, 'registration/login.html', {'error':error})
     else:
         return render(request, 'registration/login.html')
+
+@login_required
+def user_profile(request):
+    return render(request, 'main_app/admin_user_profile.html')
     
+
+
+
+class Profile_update_View(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+    model = UserProfile
+    form_class = ProfileUpdateForm
+    # fields = ['full_name', 'about', 'profile_pic', 'mobile_number', 'address', 'city', 'state', 'facebook_link']
+    template_name = 'main_app/edit_profile.html'
+    success_url ='/user/profile'
+    success_message = 'Your Information Updated Successfully !!!'
+
+    def test_func(self):
+        profile = self.get_object()
+        if self.request.user == profile.user:
+            return True
+        return False
 
