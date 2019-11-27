@@ -42,6 +42,7 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
 
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
@@ -337,11 +338,56 @@
                         </div>
                         <div class="user_content">
                        
-                            <form method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                {{form | crispy}}
-                                <input class="btn btn-success btn-sm" type="submit" value="Save">
-                            </form>
+                        <!-- starting user form  -->
+                        <form method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' user.profile.pk %}">
+                            {% csrf_token %}
+
+                           
+
+                            <div class="form-group">
+                                <label >First Name:</label>
+                                <input type="text" value="{{user_info.first_name}}" class="form-control" name='first_name' required>
+                              </div>
+
+                              <div class="form-group">
+                                <label >Middle Name:</label>
+                                <input type="text" class="form-control" name='middle_name'>
+                              </div>
+
+                              <div class="form-group">
+                                <label >Last Name:</label>
+                                <input type="text" class="form-control" name='last_name'>
+                              </div>
+
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="checkbox" class="form-check-input" value="">I'm new admin
+                                </label>
+                              </div>
+
+                              <div class="form-group">
+                                <label >Select School:</label>
+                                <select class="form-control" name="select_school">
+                                  <option selected>{{user_info.institute}}</option>
+                                  
+                                  {% for institute in all_institutes %}
+                                      <option>{{institute}}</option>
+                                  {% endfor %}
+                                      
+                                  
+                                </select>
+                              </div>
+
+                              
+                              <input type="submit" value="Update" class="btn btn-sm btn-success">
+
+
+                        </form>
+                        <!-- ending user form -->
+
+
+
+                            
                                             </div>
                                    
                     </div>

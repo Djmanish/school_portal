@@ -8,7 +8,7 @@ from django.views.generic import *
 from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from .forms import ProfileUpdateForm
+
 
 
 # Create your views here.
@@ -59,17 +59,12 @@ def user_profile(request):
 
 
 
-class Profile_update_View(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
-    model = UserProfile
-    form_class = ProfileUpdateForm
-    # fields = ['full_name', 'about', 'profile_pic', 'mobile_number', 'address', 'city', 'state', 'facebook_link']
-    template_name = 'main_app/edit_profile.html'
-    success_url ='/user/profile'
-    success_message = 'Your Information Updated Successfully !!!'
 
-    def test_func(self):
-        profile = self.get_object()
-        if self.request.user == profile.user:
-            return True
-        return False
+@login_required
+def edit_profile(request, pk):
+    user_info = UserProfile.objects.get(pk=pk)
+    all_institutes = Institute.objects.all()
 
+    if request.method == "POST":
+        print('post method')
+    return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes})
