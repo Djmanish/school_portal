@@ -11,7 +11,8 @@ urlpatterns = [
   path('user/dashboard', views.dashboard, name="user_dashboard"),
   path('user/login/', views.login, name="login_user"),
   path('user/profile/', views.user_profile, name="user_profile"),
-  path('user/profile/edit/<int:pk>', views.edit_profile, name= 'edit_profile')
+  path('user/profile/edit/<int:pk>', views.edit_profile, name= 'edit_profile'),
+  path('fetch_levels/', views.fetch_levels)
  
 
 ]

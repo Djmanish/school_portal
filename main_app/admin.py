@@ -7,3 +7,4 @@ from .models import *
 admin.site.register(UserProfile)
 admin.site.register(Institute)
 admin.site.register(State)
+admin.site.register(Institute_levels)
