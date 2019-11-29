@@ -2,7 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+#this is comment
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'school_portal.settings')
