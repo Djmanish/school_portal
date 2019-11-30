@@ -73,3 +73,6 @@ class Profile_update_View(LoginRequiredMixin, UserPassesTestMixin, SuccessMessag
             return True
         return False
 
+
+def approvals(request):
+    return render(request, 'main_app/Approvals.html')

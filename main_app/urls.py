@@ -12,5 +12,5 @@ urlpatterns = [
   path('user/login/', views.login, name="login_user"),
   path('user/profile/', views.user_profile, name="user_profile"),
   path('user/profile/edit/<int:pk>/', Profile_update_View.as_view(), name='edit_profile' ),
-
+  path('user/profile/approvals', views.approvals, name="approvals")
 ]

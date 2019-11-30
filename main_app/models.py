@@ -21,6 +21,7 @@ class Institute(models.Model):
 
 
 class UserProfile(models.Model):
+    User_choices=[('Pending','Pending'),('Approve','Approve'),('Disapprove','Disapprove')]
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='profile')
     institute = models.OneToOneField(to=Institute, related_name="institute", on_delete=models.CASCADE, null=True, blank=True)
     full_name = models.CharField(max_length=100, default="Your Full Name ")
@@ -31,7 +32,19 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=50, null=True,)
     state = models.CharField(max_length=50, null=True)
     facebook_link = models.URLField(null=True, blank=True)
-    
+    Status =models.CharField(max_length=50,choices=User_choices,default="Pending")
+    def __str__(self):
+        return self.full_name
+
+
+class Approvals(models.Model):
+    User_choices=[('Pending','Pending'),('Approve','Approve'),('Disapprove','Disapprove')]
+    Username = models.OneToOneField(to=UserProfile,on_delete=models.CASCADE, related_name='profile')
+    Assignee = models.CharField(max_length=50,default="SiteAdmin")
+    Request_date = models.DateTimeField(auto_now_add= True)
+    Action_date =models.DateTimeField(auto_now=True)
+    Status =models.CharField(max_length=50,choices=User_choices,default="Pending")
+
     def __str__(self):
         return self.full_name
 
