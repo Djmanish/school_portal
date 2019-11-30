@@ -16,6 +16,7 @@
 
 
     <title>Update Profile</title>
+    <script src="{% static 'main_app/js/jquery.js' %}"></script>
 
 
     <!-- uikit -->
@@ -42,7 +43,9 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
 
+ 
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -337,11 +340,164 @@
                         </div>
                         <div class="user_content">
                        
-                            <form method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                {{form | crispy}}
-                                <input class="btn btn-success btn-sm" type="submit" value="Save">
-                            </form>
+                        <!-- starting user form  -->
+                        <form method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' user.profile.pk %}">
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                                <label >First Name:</label>
+                                <input type="text" value="{{user_info.first_name}}" class="form-control" name='first_name' required>
+                              </div>
+
+                              <div class="form-group">
+                                <label >Middle Name:</label>
+                                <input type="text" class="form-control" name='middle_name' value="{{user_info.middle_name}}">
+                              </div>
+
+                              <div class="form-group">
+                                <label >Last Name:</label>
+                                <input type="text" class="form-control" name='last_name' value="{{user_info.last_name}}">
+                              </div>
+
+<div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" id="defaultUnchecked" name="admin_check">
+    <label class="custom-control-label" for="defaultUnchecked">Institute not Listed ? Create new Institute as Admin</label>
+</div>
+
+<div id="institute_list">
+    <div class="form-group" >
+        <label >Select Institute:</label>
+        
+        <select class="form-control" name="select_school" id="select_school">
+          <option selected disabled>{{user_info.institute}}</option>
+          {% for institute in all_institutes %}
+              <option value="{{institute.id}}">{{institute}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Join as:</label>
+        <select class="form-control" name="user_designation" id="fdata">
+    
+        </select>
+    </div>
+</div>
+  
+
+ 
+
+
+
+
+  <div id="institute-options" style="display: none;">
+    <div class="form-group">
+        <label >Institute Name:</label>
+        <input type="text" class="form-control" name='new_institute_name' >
+      </div>
+      <div class="form-group">
+        <label>Institute Phone:</label>
+        <input type="text" class="form-control" name="new_institute_phone">
+      </div>
+
+      <div class="form-group">
+        <label>Institute Address :</label>
+        <input type="text" class="form-control" name="new_institute_address">
+      </div>
+  </div>
+
+
+
+
+
+
+
+                              <div class="form-group">
+                                <label >Date of Birth:</label>
+                                
+                                <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" >
+                              </div>
+
+                              <div class="form-group">
+                                <label >About Yourself:</label>
+                               
+                                <textarea class="form-control"  name='about' >{{user_info.about}}</textarea>
+                              </div>
+
+                              <div class="form-group">
+                                <label >Change Profile Picture:</label>
+                                <input type="file" class="form-control" name='profile_pic'>
+                              </div>
+
+                              <div class="form-group">
+                                <label >Mobile:</label>
+                                <input type="text" class="form-control" name='mobile_number' value="{{user_info.mobile_number}}">
+                              </div>
+                            
+                              <div class="form-group">
+                                <label >Address Line 1:</label>
+                                <input type="text" class="form-control" name='address_line_1' value="{{user_info.address_line_1}}">
+                              </div>
+
+                              <div class="form-group">
+                                <label >Address Line 2:</label>
+                                <input type="text" class="form-control" name='address_line_2' value="{{user_info.address_line_2}}">
+                              </div>
+
+                              <div class="form-group">
+                                <label >City:</label>
+                                <input type="text" class="form-control" name='city' value="{{user_info.city}}">
+                              </div>
+
+                              <div class="form-group" >
+                                <label >State:</label>
+                                <select class="form-control" name="state" >
+                                  <option selected value="{{user_info.state.id}}"  >{{user_info.state}} </option>
+                                  
+                                  {% for state in all_states %}
+                                      <option value="{{state.id}}">{{state}}</option>
+                                  {% endfor %}
+                                      
+                                  
+                                </select>
+                              </div>
+
+                              <div class="form-group">
+                                <label >Facebook Profile link:</label>
+                                <input type="url" class="form-control" name='facebook_link' value="{{user_info.facebook_link}}">
+                              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              
+
+
+
+
+
+
+                             
+                              
+                              <input type="submit" value="Update" class="btn btn-sm btn-success">
+
+
+                        </form>
+                        <!-- ending user form -->
+
+
+
+                            
                                             </div>
                                    
                     </div>
@@ -654,5 +810,55 @@
 
         });
     </script>
+
+<!-- code to toggle admin options -->
+<script>
+        $(document).ready(function(){
+            $('#defaultUnchecked').click(function(){
+                if($(this).prop("checked") == true){
+                    $('#institute_list').hide()
+                    $('#institute-options').show()
+                }
+                else if($(this).prop("checked") == false){
+                    $('#institute-options').hide()
+                    $('#institute_list').show()
+                }
+            });
+        });
+    
+    </script>
+
+<!-- ending code to toggle admin options -->
+
+<script>
+    $("input[type=date]").datepicker({
+  dateFormat: 'yy-mm-dd',
+  onSelect: function(dateText, inst) {
+    $(inst).val(dateText); // Write the value in the input
+  }
+});
+
+// Code below to avoid the classic date-picker
+$("input[type=date]").on('click', function() {
+  return false;
+});
+</script>
+
+<script>
+    $(document).ready(function(){
+      $('#select_school').change(function(){
+          $.ajax({
+              type:'POST',
+              url:'/fetch_levels/',
+              data:{school_id:$("#select_school").val(), csrfmiddlewaretoken: '{{ csrf_token }}' },
+              
+              success: function(msg){
+                  $('#fdata').html(msg);
+              }
+          })
+      })
+    })
+    </script>
+   
 </body>
 </html>

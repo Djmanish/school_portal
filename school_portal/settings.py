@@ -111,6 +111,7 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Kolkata'
 
+
 USE_I18N = True
 
 USE_L10N = True
@@ -122,8 +123,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 CRISPY_TEMPLATE_PACK='bootstrap4'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT= os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 

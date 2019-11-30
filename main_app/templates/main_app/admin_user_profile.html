@@ -41,6 +41,8 @@
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
 
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
+
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -328,7 +330,19 @@
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.full_name}}</span><span class="sub-heading">Land acquisition specialist</span></h2>
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.first_name}}
+                                    
+                                    {% if user.profile.middle_name %}
+                                       {{user.profile.middle_name}} 
+                                    {% endif %}
+
+                                    
+                                    {% if user.profile.last_name %}
+                                        {{user.profile.last_name}}
+                                    {% endif %}
+                                        
+                                        
+                                </span><span class="sub-heading">{{user.profile.designation}}</span></h2>
                                                             </div>
                             <a class="md-fab md-fab-small md-fab-accent hidden-print" href="{% url 'edit_profile' user.profile.pk %}">
                                 <i class="material-icons">&#xE150;</i>
@@ -392,7 +406,7 @@
                                                 <li>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Name</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{user.profile.full_name}}</span>
+                                                        <span class="uk-text-small uk-text-muted">{{user.profile.institute}}</span>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -445,7 +459,7 @@
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Email Id</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.institute.email}}</span>
+                                                                <span class="uk-text-small uk-text-muted">{{user.email}}</span>
                                                             </div>
                                                         </li>
                                                         
@@ -533,7 +547,7 @@
     <script>
         $(function() {
             if(isHighDensity()) {
-                $.getScript( "assets/js/custom/dense.min.js", function(data) {
+                $.getScript( "static 'main_app/js/custom/dense.min.js'", function(data) {
                     // enable hires images
                     altair_helpers.retina_images();
                 });

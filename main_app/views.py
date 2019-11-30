@@ -8,7 +8,8 @@ from django.views.generic import *
 from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from .forms import ProfileUpdateForm
+from django.utils.datastructures import MultiValueDictKeyError
+
 
 
 # Create your views here.
@@ -57,19 +58,63 @@ def user_profile(request):
     return render(request, 'main_app/admin_user_profile.html')
     
 
+def fetch_levels(request):
+    id = request.POST['school_id']
+    levels = Institute_levels.objects.filter( institute = id)
+    nlevels=""
+    for t in levels:
+        nlevels= nlevels+ f"<option value='{t.id}' >"+str(t)+"</option>"
+    return HttpResponse(nlevels)
+
+    
 
 
-class Profile_update_View(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
-    model = UserProfile
-    form_class = ProfileUpdateForm
-    # fields = ['full_name', 'about', 'profile_pic', 'mobile_number', 'address', 'city', 'state', 'facebook_link']
-    template_name = 'main_app/edit_profile.html'
-    success_url ='/user/profile'
-    success_message = 'Your Information Updated Successfully !!!'
+@login_required
+def edit_profile(request, pk):
+    user_info = UserProfile.objects.get(pk=pk)
+    all_institutes = Institute.objects.all()
+    all_states = State.objects.all()
+    
 
-    def test_func(self):
-        profile = self.get_object()
-        if self.request.user == profile.user:
-            return True
-        return False
+    if request.method == "POST":
+        new_admin = 'admin_check'  in request.POST
+        if new_admin: #if admin checkbox is checked
+            new_create_institute = Institute.objects.create(name=request.POST['new_institute_name'],
+            Contact_number= request.POST['new_institute_phone'],
+            address = request.POST['new_institute_address'])
+
+        else:
+            pass
+        
+        user_info.first_name= request.POST['first_name']
+        user_info.middle_name= request.POST['middle_name']
+        user_info.last_name= request.POST['last_name']
+        user_info.date_of_birth= request.POST['dob']
+        if 'select_school' in request.POST:
+            selected_institute_pk = request.POST['select_school']
+            updated_institute = Institute.objects.get(pk=selected_institute_pk)
+            user_info.institute= updated_institute
+        if 'user_designation' in request.POST:
+            level_id = request.POST['user_designation']
+            up_level= Institute_levels.objects.get(pk=level_id)
+            user_info.designation = up_level
+        
+        
+        user_info.about= request.POST['about']
+        if 'profile_pic' in request.FILES:
+            user_info.profile_pic= request.FILES['profile_pic']
+        
+        user_info.mobile_number= request.POST['mobile_number']
+        user_info.address_line_1= request.POST['address_line_1']
+        user_info.address_line_2= request.POST['address_line_2']
+        user_info.city= request.POST['city']
+        if 'state' in request.POST:
+            updated_state= State.objects.get(pk=request.POST['state'])
+            user_info.state= updated_state 
+        
+        user_info.facebook_link= request.POST['facebook_link']
+        user_info.save()
+        return redirect('user_profile')
+        
+    return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})
 
