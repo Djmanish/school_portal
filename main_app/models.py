@@ -6,13 +6,24 @@ from datetime import date
 
 
 class Institute(models.Model):
-    name = models.CharField(max_length=150)
+    code=models.PositiveIntegerField(null=True)
+    name = models.CharField(max_length=150, default="Institute Name")
+    address1 = models.CharField(max_length=100,default="Address 1 ")
+    address2 = models.CharField(max_length=100, default="Address 2 ")
+    city= models.CharField(max_length=100,default="City ")
+    state=models.CharField(max_length=50, default="State ")
+    zip=models.CharField(max_length=20, default="Zip")
+    country= models.CharField(max_length=50, default="Country")
+    phone1=models.PositiveIntegerField(null=True, default="Phone 1")
+    phone2=models.PositiveIntegerField(null=True, default="Phone 2")    
+    email = models.EmailField(null=True, default="Email")
     profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.jpg" )
-    principal = models.CharField(max_length=50, null=True)
-    about = models.CharField(max_length=300, blank=True, default="This is about Institute" )
-    Contact_number = models.CharField(max_length=12, )
-    address = models.TextField( null=True)
-    email = models.EmailField(null=True)
+    about = models.TextField(max_length=300, blank=True, null=True)
+    facebook_link=models.URLField(null=True, blank=True, default="Facebook Link")
+    website_link=models.URLField(null=True, blank=True, default="Website Link")
+    create_date=models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated_date=models.DateTimeField(auto_now=True,null=True, blank=True)
+    created_by=models.OneToOneField(to=User, on_delete
     
     def __str__(self):
         return self.name
