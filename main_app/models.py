@@ -23,7 +23,7 @@ class Institute(models.Model):
     website_link=models.URLField(null=True, blank=True, default="Website Link")
     create_date=models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated_date=models.DateTimeField(auto_now=True,null=True, blank=True)
-    created_by=models.OneToOneField(to=User, on_delete
+    created_by=models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='institute_profile')
     
     def __str__(self):
         return self.name
