@@ -8,11 +8,20 @@ from datetime import date
 class Institute(models.Model):
     name = models.CharField(max_length=150)
     profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.jpg" )
+<<<<<<< HEAD
     principal = models.CharField(max_length=50, null=True)
     about = models.CharField(max_length=300, blank=True, default="This is about Institute" )
     Contact_number = models.CharField(max_length=12, )
     address = models.TextField( null=True)
     email = models.EmailField(null=True)
+=======
+    about = models.TextField(max_length=300, blank=True, null=True)
+    facebook_link=models.URLField(null=True, blank=True, default="Facebook Link")
+    website_link=models.URLField(null=True, blank=True, default="Website Link")
+    create_date=models.DateTimeField(auto_now_add=True,null=True, blank=True)
+    updated_date=models.DateTimeField(auto_now=True,null=True, blank=True)
+    created_by=models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='institute_profile')
+>>>>>>> 52bfcb8df6ceef40d83c4a134f5daa99ff3849fe
     
     def __str__(self):
         return self.name
@@ -26,11 +35,6 @@ class State(models.Model):
 
 
 class UserProfile(models.Model):
-    CHOICES =[
-        ('Pending','Pending'),
-        ('Approve','Approve'),
-        ('Dissapprove','Dissapprove')
-    ]
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='profile')
     institute = models.ForeignKey(to=Institute, related_name="institute", on_delete=models.PROTECT, null=True, blank=True, default="")
     designation = models.ForeignKey('Institute_levels', on_delete=models.PROTECT, related_name='user_designation', null=True)
@@ -40,12 +44,6 @@ class UserProfile(models.Model):
     date_of_birth = models.DateField(null= True,  default=date.today)
     about = models.CharField(max_length=300, blank=True, null=True, default="About yourself")
     profile_pic = models.ImageField(default="default_profile_pic.jpg", upload_to='UserProfilePictures')
-    mobile_number = models.PositiveIntegerField(null=True)
-    address = models.TextField(null=True)
-    city = models.CharField(max_length=50, null=True,)
-    state = models.CharField(max_length=50, null=True)
-    facebook_link = models.URLField(null=True, blank=True)
-    Status = models.CharField(max_length=50,choices=CHOICES,default="Pending")
     mobile_number = models.PositiveIntegerField(null=True, default="999999999")
     address_line_1 = models.CharField(max_length= 50 , null= True, default="Address line 1")
     address_line_2 = models.CharField(max_length=50, null = True, default="Address line 2")
@@ -64,3 +62,13 @@ class Institute_levels(models.Model):
     
     def __str__(self):
         return self.level_name
+
+
+class Role_Description(models.Model):
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='user_institute_role', null=True)
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institute_role_desc')
+    level = models.ForeignKey(to=Institute_levels, on_delete=models.CASCADE, related_name='level_desc')
+
+    def __str__(self):
+        return str(self.level.level_name)
+

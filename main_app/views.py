@@ -85,7 +85,6 @@ def edit_profile(request, pk):
             new_create_institute = Institute.objects.create(name=request.POST['new_institute_name'],
             Contact_number= request.POST['new_institute_phone'],
             address = request.POST['new_institute_address'])
-
         else:
             pass
         
@@ -93,16 +92,15 @@ def edit_profile(request, pk):
         user_info.middle_name= request.POST['middle_name']
         user_info.last_name= request.POST['last_name']
         user_info.date_of_birth= request.POST['dob']
-        if 'select_school' in request.POST:
+        if 'select_school' in request.POST: # checking if new admin select box is checked and selected institute
             selected_institute_pk = request.POST['select_school']
-            updated_institute = Institute.objects.get(pk=selected_institute_pk)
+            updated_institute = Institute.objects.get(pk=selected_institute_pk) #fetching the selected institutes list
             user_info.institute= updated_institute
-        if 'user_designation' in request.POST:
+        if 'user_designation' in request.POST: 
             level_id = request.POST['user_designation']
-            up_level= Institute_levels.objects.get(pk=level_id)
+            up_level= Institute_levels.objects.get(pk=level_id) # fetching the selected level the levels list
             user_info.designation = up_level
-        
-        
+    
         user_info.about= request.POST['about']
         if 'profile_pic' in request.FILES:
             user_info.profile_pic= request.FILES['profile_pic']
@@ -117,6 +115,8 @@ def edit_profile(request, pk):
         
         user_info.facebook_link= request.POST['facebook_link']
         user_info.save()
+        # creating row in role_description table
+        new_level = Role_Description.objects.create(user=request.user, institute= updated_institute, level= up_level  )
         return redirect('user_profile')
         
     return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})
