@@ -47,7 +47,7 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=50, null=True, default="City")
     state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True)
     facebook_link = models.URLField(null=True, blank=True, default="https://www.facebook.com/")
-    status =models.CharField(max_length=50,,default="Pending")
+    
     def __str__(self):
         return str(self.first_name)
 
