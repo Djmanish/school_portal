@@ -14,6 +14,9 @@ from django.utils.datastructures import MultiValueDictKeyError
 
 # Create your views here.
 
+def approvals(request):
+    return render(request, 'main_app/Approvals.html')
+
 def index(request):
     return render(request, 'main_app/index.html')
 
