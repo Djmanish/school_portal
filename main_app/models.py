@@ -53,3 +53,13 @@ class Institute_levels(models.Model):
     
     def __str__(self):
         return self.level_name
+
+
+class Role_Description(models.Model):
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='user_institute_role', null=True)
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institute_role_desc')
+    level = models.ForeignKey(to=Institute_levels, on_delete=models.CASCADE, related_name='level_desc')
+
+    def __str__(self):
+        return str(self.level.level_name)
+
