@@ -9,6 +9,7 @@ from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.datastructures import MultiValueDictKeyError
+from django.views.generic import DetailView
 
 
 
@@ -60,7 +61,11 @@ def login(request):
 def user_profile(request):
     return render(request, 'main_app/admin_user_profile.html')
     
-
+@login_required
+def institute_profile(request):
+    return render(request, 'main_app/institute_profile.html')
+    
+    
 def fetch_levels(request):
     id = request.POST['school_id']
     levels = Institute_levels.objects.filter( institute = id)
@@ -71,6 +76,8 @@ def fetch_levels(request):
 
     
 
+
+    
 
 @login_required
 def edit_profile(request, pk):
@@ -121,3 +128,8 @@ def edit_profile(request, pk):
         
     return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})
 
+
+class Institute_detail_view(DetailView):
+    model= Institute
+    template_name ="main_app/institute_profile.html"
+    queryset=Institute.objects.all()
