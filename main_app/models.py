@@ -18,7 +18,7 @@ class Institute(models.Model):
     website_link=models.URLField(null=True, blank=True, default="Website Link")
     create_date=models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated_date=models.DateTimeField(auto_now=True,null=True, blank=True)
-    created_by=models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='institute_profile')
+    created_by=models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='institute_profile',null=True)
     
     def __str__(self):
         return self.name
@@ -32,6 +32,11 @@ class State(models.Model):
 
 
 class UserProfile(models.Model):
+    Chi1 =[
+        ('pending', 'Pending'),
+        ('approve', 'Approve'),
+        ('dissapprove', 'Dissapprove'),
+    ]
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='profile')
     institute = models.ForeignKey(to=Institute, related_name="institute", on_delete=models.PROTECT, null=True, blank=True, default="")
     designation = models.ForeignKey('Institute_levels', on_delete=models.PROTECT, related_name='user_designation', null=True)
@@ -47,7 +52,7 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=50, null=True, default="City")
     state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True)
     facebook_link = models.URLField(null=True, blank=True, default="https://www.facebook.com/")
-    
+    status = models.CharField(max_length=25,choices=Chi1,default="pending"),
     def __str__(self):
         return str(self.first_name)
 
