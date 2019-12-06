@@ -308,12 +308,14 @@
                         <span class="menu_title">My Profile</span>
                     </a>    
                 </li>
+
                 <li title="Institute Profile">
-                    <a href="{% url 'institute_profile' %}">
+                    <a href="{% url 'institute_detail' user.profile.institute.id %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
+                
                 <li  title="Approvals">
                     <a href="{% url 'approvals' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
@@ -335,6 +337,8 @@
 
     <div id="page_content">
         <div id="page_content_inner">
+
+
 
             <!-- statistics (small charts) -->
             <div class="uk-grid uk-grid-width-large-1-2 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>

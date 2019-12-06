@@ -16,7 +16,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
 
-    <title>User Profile</title>
+    <title>Institute Profile</title>
 
 
     <!-- bootstrap -->
@@ -341,7 +341,7 @@
 
                 </li>
                 <li class="current_section" title="Institute Profile">
-                    <a href="{% url 'institute_profile' %}">
+                    <a href="">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
@@ -379,16 +379,15 @@
                             </div>
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{user.profile.profile_pic.url}}" alt="user avatar" />
+                                    <img src="{{institute_data.profile_pic.url}}" alt="user avatar" />
                                 </div>
                             </div>
                             <div class="user_heading_content">
                                 <h2 class="heading_b uk-margin-bottom"><span
-                                        class="uk-text-truncate">{{user.profile.institute.name}}</span><span
-                                        class="sub-heading">Land acquisition specialist</span></h2>
+                                        class="uk-text-truncate">{{institute_data.name}}</span></h2>
                             </div>
                             <a class="md-fab md-fab-small md-fab-accent hidden-print"
-                                href="#">
+                                href="{% url 'edit_institute' user.profile.institute.pk %}">
                                 <i class="material-icons">&#xE150;</i>
                             </a>
                         </div>
@@ -411,7 +410,7 @@
                             </ul>
                             <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
                                 <li>
-                                    {{user.profile.about}} <div
+                                    {{institute_data.about}} <div
                                         class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                         <div class="uk-width-large-1-2">
                                             <h4 class="heading_c uk-margin-small-bottom">Contact Info</h4>
@@ -421,7 +420,7 @@
                                                         <i class="md-list-addon-icon material-icons">&#xE158;</i>
                                                     </div>
                                                     <div class="md-list-content">
-                                                        <span class="md-list-heading">{{user.email}}</span>
+                                                        <span class="md-list-heading">{{institute_data.email}}</span>
                                                         <span class="uk-text-small uk-text-muted">Email</span>
                                                     </div>
                                                 </li>
@@ -431,7 +430,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span
-                                                            class="md-list-heading">{{user.profile.mobile_number}}</span>
+                                                            class="md-list-heading">{{institute_data.contact_number1}}</span>
                                                         <span class="uk-text-small uk-text-muted">Phone</span>
                                                     </div>
                                                 </li>
@@ -441,7 +440,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span
-                                                            class="md-list-heading">{{user.profile.facebook_link}}</span>
+                                                            class="md-list-heading">{{institute_data.facebook_link}}</span>
                                                         <span class="uk-text-small uk-text-muted">Facebook</span>
                                                     </div>
                                                 </li>
@@ -456,20 +455,20 @@
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Name</a></span>
                                                         <span
-                                                            class="uk-text-small uk-text-muted">{{user.profile.full_name}}</span>
+                                                            class="uk-text-small uk-text-muted">{{institute_data.name}}</span>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Address</a></span>
                                                         <span
-                                                            class="uk-text-small uk-text-muted">{{user.profile.address}}</span>
+                                                            class="uk-text-small uk-text-muted">{{institute_data.address1}} {{institute_data.address2}}</span>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Code</a></span>
-                                                        <span class="uk-text-small uk-text-muted">123456789</span>
+                                                        <span class="uk-text-small uk-text-muted">{{institute_data.code}}</span>
                                                     </div>
                                                 </li>
 
@@ -486,37 +485,53 @@
                                                     <span class="md-list-heading"><a href="#">Organization
                                                             Name</a></span>
                                                     <span
-                                                        class="uk-text-small uk-text-muted">{{user.profile.institute.name}}</span>
+                                                        class="uk-text-small uk-text-muted">{{institute_data.name}}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="md-list-heading"><a href="#">Establish Year</a></span>
+                                                    <span
+                                                        class="uk-text-small uk-text-muted">{{institute_data.establish_date}}</span>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Address</a></span>
                                                     <span
-                                                        class="uk-text-small uk-text-muted">{{user.profile.institute.address}}</span>
+                                                        class="uk-text-small uk-text-muted">{{institute_data.address1}} {{institute_data.address1}}
+                                                        {{institute_data.district}} {{institute_state}} {{institute_data.country}}</span>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Contact</a></span>
                                                     <span
-                                                        class="uk-text-small uk-text-muted">{{user.profile.institute.contact_number}}</span>
+                                                        class="uk-text-small uk-text-muted">{{institute_data.contact_number1}}</span>
                                                 </div>
                                             </li>
 
 
-                                            <li>
-                                                <div class="md-list-content">
-                                                    <span class="md-list-heading"><a
-                                                            href="#">Role/Designation</a></span>
-                                                    <span class="uk-text-small uk-text-muted">123456789</span>
-                                                </div>
-                                            </li>
+                                           
                                             <li>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Email Id</a></span>
                                                     <span
-                                                        class="uk-text-small uk-text-muted">{{user.profile.institute.email}}</span>
+                                                        class="uk-text-small uk-text-muted">{{institute_data.email}}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="md-list-heading"><a href="#">Facebook</a></span>
+                                                    <span
+                                                        class="uk-text-small uk-text-muted">{{institute_data.facebook_link}}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="md-list-heading"><a href="#">Website</a></span>
+                                                    <span
+                                                        class="uk-text-small uk-text-muted">{{institute_data.website_link}}</span>
                                                 </div>
                                             </li>
 
