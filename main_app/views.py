@@ -10,10 +10,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib import messages
+from django.urls import reverse_lazy, reverse
+
+
 
 
 
 # Create your views here.
+
+def approvals(request):
+    pending_users= UserProfile.objects.filter(status='pending')
+    return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users})
 
 def index(request):
     return render(request, 'main_app/index.html')
@@ -58,7 +65,9 @@ def login(request):
 def user_profile(request):
     return render(request, 'main_app/admin_user_profile.html')
     
-
+  
+    
+    
 def fetch_levels(request):
     id = request.POST['school_id']
     levels = Institute_levels.objects.filter( institute = id)
@@ -68,7 +77,13 @@ def fetch_levels(request):
     return HttpResponse(nlevels)
 
     
+def edit_institute(request, pk):
+    institute_info =Institute.objects.get(pk=pk)
 
+
+
+
+    
 
 @login_required
 def edit_profile(request, pk):
@@ -130,3 +145,30 @@ def edit_profile(request, pk):
         
     return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})
 
+
+  
+
+@login_required
+def institute_profile(request, pk):
+    institute_data= Institute.objects.get(pk=pk)
+    return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data})
+   
+@login_required
+def edit_institute(request, pk):
+    edit_institute= Institute.objects.get(pk=pk)
+    return render(request, 'main_app/edit_institute.html', {'edit_institute':edit_institute})
+   
+
+class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Institute
+    
+    fields = ['code','name','establish_date', 'profile_pic','principal','about','contact_number1','contact_number2','contact_number3','address1','address2','district','state','country','pin_code','email','facebook_link','website_link']
+
+    template_name="main_app/edit_institute.html"
+    success_message = "Details were updated successfully"
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+    def get_success_url(self, **kwargs):         
+        return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
