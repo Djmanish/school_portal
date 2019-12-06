@@ -227,7 +227,7 @@
                             <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
-                                    <li><a href="page_user_profile.html">My profile</a></li>
+                                    <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                     <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
                                    
                                 </ul>
@@ -301,8 +301,15 @@
                             <span class="menu_title">Institute Profile</span>
                         </a>    
                     </li>
+                    <li  title="Approvals">
+                        <a href="{% url 'approvals' %}">
+                            <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                            <span class="menu_title">Approvals</span>
+                        </a>
+                        
+                    </li>   
                    
-                    <li title="LogIn">
+                    <li title="Log Out">
                             <a href="{% url 'auth_logout' %}">
                                 <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
                                 <span class="menu_title">Log Out</span>
@@ -352,7 +359,7 @@
                                                             </div>
 
 
-                            <a class="md-fab md-fab-small md-fab-accent hidden-print" href="{% url 'edit_profile' user.profile.pk %}">
+                            <a title="Edit Profile" class="md-fab md-fab-small md-fab-accent hidden-print" href="{% url 'edit_profile' user.profile.pk %}">
                                 <i class="material-icons">&#xE150;</i>
                             </a>
                         </div>

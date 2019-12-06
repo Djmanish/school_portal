@@ -4,6 +4,11 @@ from datetime import date
 
 # Create your models here.
 
+class State(models.Model):
+    name = models.CharField(max_length=35)
+    def __str__(self):
+        return self.name
+
 
 class Institute(models.Model):
     name = models.CharField(max_length=150, unique=True )
@@ -21,11 +26,10 @@ class Institute(models.Model):
     address1 = models.CharField(max_length=100, null=True)
     address2 = models.CharField(max_length=100, null=True)
     district=models.CharField(max_length=50,null=True)
-    state= models.CharField(max_length=100, null=True, blank=True)
+    state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True)
     country= models.CharField(max_length=100, null=True, blank=True)
     pin_code = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(null=True)
-
     about = models.TextField(max_length=300, blank=True, null=True)
     facebook_link=models.URLField(null=True, blank=True, default="Facebook Link")
     website_link=models.URLField(null=True, blank=True, default="Website Link")
@@ -38,10 +42,6 @@ class Institute(models.Model):
         return self.name
 
 
-class State(models.Model):
-    name = models.CharField(max_length=35)
-    def __str__(self):
-        return self.name
 
 
 

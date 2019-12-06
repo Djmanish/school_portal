@@ -230,10 +230,8 @@
                             <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
-                                    <li><a href="page_user_profile.html">My profile</a></li>
-                                    <li><a href="page_settings.html">Settings</a></li>
-                                    <li><a href="login.html">Login Page</a></li>
-                                    <li><a href="login_v2.html">Login Page v2</a></li>
+                                    <li><a href="{% url 'user_profile' %}">My profile</a></li>
+                                    <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -285,26 +283,45 @@
         
         <div class="menu_section">
             <ul>
-                    <li title="Dashboard">
-                            <a href="{% url 'user_dashboard' %}">
-                                <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
-                                <span class="menu_title">Dashboard</span>
-                            </a>
-                            
-                        </li>
-                        <li class="current_section" title="My Profile">
-                            <a href="{% url 'user_profile' %}">
-                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                                <span class="menu_title">My Profile</span>
-                            </a>
-                            </li>
-                           
-                            <li title="LogIn">
-                                    <a href="{% url 'auth_logout' %}">
-                                        <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
-                                        <span class="menu_title">Log Out</span>
-                                    </a>
-                                </li>
+                <li  title="Dashboard">
+                    <a href="{% url 'user_dashboard' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
+                        <span class="menu_title">Dashboard</span>
+                    </a>
+                    
+                </li>
+                
+                 
+
+                <li title="User Profile" class="current_section">
+                    <a href="{% url 'user_profile' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_title">My Profile</span>
+                    </a>    
+                </li>
+
+                <li title="Institute Profile">
+                    <a href="">
+                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_title">Institute Profile</span>
+                    </a>    
+                </li>
+                
+                <li  title="Approvals">
+                    <a href="{% url 'approvals' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_title">Approvals</span>
+                    </a>
+                    
+                </li>   
+            
+                <li title="LogIn">
+                        <a href="{% url 'auth_logout' %}">
+                            <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
+                            <span class="menu_title">Log Out</span>
+                        </a>
+                    </li>
+
             </ul>
         </div>
     </aside><!-- main sidebar end -->
@@ -343,9 +360,7 @@
                                         {{user.profile.last_name}}
                                     {% endif %}</span><span class="sub-heading">{{user.profile.designation}}</span></h2>
                                                             </div>
-                            <a class="md-fab md-fab-small md-fab-accent hidden-print" href="#">
-                                <i class="material-icons">&#xE150;</i>
-                            </a>
+                           
                         </div>
                         <div class="user_content">
                        
@@ -358,7 +373,7 @@
                             </ul>
                             {% endif %}
 
-
+                            <h3 class="uk-text-primary">Update Your Information</h3>
                         <!-- starting user form  -->
                         <form method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' user.profile.pk %}">
                             {% csrf_token %}
