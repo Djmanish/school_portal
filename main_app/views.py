@@ -18,7 +18,8 @@ from django.urls import reverse_lazy, reverse
 # Create your views here.
 
 def approvals(request):
-    return render(request, 'main_app/Approvals.html')
+    pending_users= UserProfile.objects.filter(status='pending')
+    return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users})
 
 def index(request):
     return render(request, 'main_app/index.html')
