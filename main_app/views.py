@@ -9,6 +9,7 @@ from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.datastructures import MultiValueDictKeyError
+from django.contrib import messages
 
 
 
@@ -75,13 +76,23 @@ def edit_profile(request, pk):
     all_institutes = Institute.objects.all()
     all_states = State.objects.all()
     
-
     if request.method == "POST":
         new_admin = 'admin_check'  in request.POST
         if new_admin: #if admin checkbox is checked
-            new_create_institute = Institute.objects.create(name=request.POST['new_institute_name'],
+            try:
+                new_create_institute = Institute.objects.create(name=request.POST['new_institute_name'],
             Contact_number= request.POST['new_institute_phone'],
-            address = request.POST['new_institute_address'])
+            address = request.POST['new_institute_address'],
+            created_by = request.user) # creating new institute
+            except:
+                messages.info(request, 'Institute already exists !!!')
+                return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})
+            
+            new_level = Institute_levels.objects.create(institute=new_create_institute, level_id=1, level_name='admin') # creating default level for admin
+            role = Role_Description.objects.create(user=request.user, institute=new_create_institute, level= new_level) # creating default role for admin
+            user_info.designation = new_level
+            user_info.institute= new_create_institute
+            user_info.save()
         else:
             pass
         
@@ -97,7 +108,8 @@ def edit_profile(request, pk):
             level_id = request.POST['user_designation']
             up_level= Institute_levels.objects.get(pk=level_id) # fetching the selected level the levels list
             user_info.designation = up_level
-    
+            new_level = Role_Description.objects.create(user=request.user, institute= updated_institute, level= up_level  )
+
         user_info.about= request.POST['about']
         if 'profile_pic' in request.FILES:
             user_info.profile_pic= request.FILES['profile_pic']
@@ -112,8 +124,8 @@ def edit_profile(request, pk):
         
         user_info.facebook_link= request.POST['facebook_link']
         user_info.save()
-        # creating row in role_description table
-        new_level = Role_Description.objects.create(user=request.user, institute= updated_institute, level= up_level  )
+        
+        messages.success(request, 'Profile details updated.')
         return redirect('user_profile')
         
     return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})

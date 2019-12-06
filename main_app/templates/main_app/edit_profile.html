@@ -332,7 +332,16 @@
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.full_name}}</span><span class="sub-heading">Land acquisition specialist</span></h2>
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.first_name}}
+                                    
+                                    {% if user.profile.middle_name %}
+                                       {{user.profile.middle_name}} 
+                                    {% endif %}
+
+                                    
+                                    {% if user.profile.last_name %}
+                                        {{user.profile.last_name}}
+                                    {% endif %}</span><span class="sub-heading">{{user.profile.designation}}</span></h2>
                                                             </div>
                             <a class="md-fab md-fab-small md-fab-accent hidden-print" href="#">
                                 <i class="material-icons">&#xE150;</i>
@@ -340,6 +349,16 @@
                         </div>
                         <div class="user_content">
                        
+                            <!-- messages -->
+                            {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                <li{% if message.tags %} class="text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
+
                         <!-- starting user form  -->
                         <form method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' user.profile.pk %}">
                             {% csrf_token %}
@@ -359,17 +378,27 @@
                                 <input type="text" class="form-control" name='last_name' value="{{user_info.last_name}}">
                               </div>
 
+
+
+
+{% if not user_info.designation  %}
 <div class="custom-control custom-checkbox">
     <input type="checkbox" class="custom-control-input" id="defaultUnchecked" name="admin_check">
     <label class="custom-control-label" for="defaultUnchecked">Institute not Listed ? Create new Institute as Admin</label>
 </div>
+
 
 <div id="institute_list">
     <div class="form-group" >
         <label >Select Institute:</label>
         
         <select class="form-control" name="select_school" id="select_school">
-          <option selected disabled>{{user_info.institute}}</option>
+            
+            {% if not user_info.institute %}
+            <option selected disabled>-- select your institute --</option>
+
+            {% endif %}
+            
           {% for institute in all_institutes %}
               <option value="{{institute.id}}">{{institute}}</option>
           {% endfor %}
@@ -382,7 +411,10 @@
         </select>
     </div>
 </div>
-  
+ 
+{% endif %}
+    
+ 
 
  
 
@@ -450,8 +482,12 @@
 
                               <div class="form-group" >
                                 <label >State:</label>
-                                <select class="form-control" name="state" >
-                                  <option selected value="{{user_info.state.id}}"  >{{user_info.state}} </option>
+                                <select class="form-control" name="state"  required>
+                                  
+                                  {% if user_info.state %}
+                                      <option selected disabled>{{user_info.state}}</option>
+                                  {% endif %}
+                                      
                                   
                                   {% for state in all_states %}
                                       <option value="{{state.id}}">{{state}}</option>
