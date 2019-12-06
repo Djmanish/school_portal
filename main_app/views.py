@@ -96,8 +96,8 @@ def edit_profile(request, pk):
         if new_admin: #if admin checkbox is checked
             try:
                 new_create_institute = Institute.objects.create(name=request.POST['new_institute_name'],
-            Contact_number= request.POST['new_institute_phone'],
-            address = request.POST['new_institute_address'],
+            contact_number1= request.POST['new_institute_phone'],
+            address1 = request.POST['new_institute_address'],
             created_by = request.user) # creating new institute
             except:
                 messages.info(request, 'Institute already exists !!!')
