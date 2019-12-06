@@ -9,6 +9,7 @@ class Role_Description_admin(admin.ModelAdmin):
     list_display = ('user', 'institute', 'level',)
 
 
+
 admin.site.register(UserProfile)
 admin.site.register(Institute)
 admin.site.register(State)

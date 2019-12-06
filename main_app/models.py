@@ -9,10 +9,21 @@ class Institute(models.Model):
     name = models.CharField(max_length=150, unique=True )
     profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.jpg" )
 
+    code = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=150)
+    establish_date=models.DateField(null=True, blank=True)
+    profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.jpg" )
     principal = models.CharField(max_length=50, null=True)
-    about = models.CharField(max_length=300, blank=True, default="This is about Institute" )
-    Contact_number = models.CharField(max_length=12, )
-    address = models.TextField( null=True)
+    about = models.TextField(max_length=300, blank=True, default="This is about Institute" )
+    contact_number1 = models.CharField(max_length=12,null=True)
+    contact_number2 = models.CharField(max_length=12,null=True)
+    contact_number3 = models.CharField(max_length=12,null=True)
+    address1 = models.CharField(max_length=100, null=True)
+    address2 = models.CharField(max_length=100, null=True)
+    district=models.CharField(max_length=50,null=True)
+    state= models.CharField(max_length=100, null=True, blank=True)
+    country= models.CharField(max_length=100, null=True, blank=True)
+    pin_code = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(null=True)
 
     about = models.TextField(max_length=300, blank=True, null=True)
@@ -22,7 +33,7 @@ class Institute(models.Model):
     updated_date=models.DateTimeField(auto_now=True,null=True, blank=True)
     created_by=models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='institute_profile', null=True)
 
-    
+
     def __str__(self):
         return self.name
 
@@ -35,6 +46,11 @@ class State(models.Model):
 
 
 class UserProfile(models.Model):
+    Chi1 =[
+        ('pending', 'Pending'),
+        ('approve', 'Approve'),
+        ('dissapprove', 'Dissapprove'),
+    ]
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='profile')
     institute = models.ForeignKey(to=Institute, related_name="institute", on_delete=models.PROTECT, null=True, blank=True, default="")
     designation = models.ForeignKey('Institute_levels', on_delete=models.PROTECT, related_name='user_designation', null=True)
@@ -50,7 +66,9 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=50, null=True, default="City")
     state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True)
     facebook_link = models.URLField(null=True, blank=True, default="https://www.facebook.com/")
-    
+    status = models.CharField(max_length=25,choices=Chi1,default="pending")
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
+    updated_at = models.DateTimeField(auto_now=True,null=True)
     def __str__(self):
         return str(self.first_name)
 
