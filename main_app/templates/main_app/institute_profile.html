@@ -330,31 +330,43 @@
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
                     </a>
-
+                    
                 </li>
-                <li  title="My Profile">
+                
+                 
+
+                <li title="User Profile">
                     <a href="{% url 'user_profile' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">My Profile</span>
-                    </a>
+                    </a>    
                 </li>
-
-                </li>
-                <li class="current_section" title="Institute Profile">
-                    <a href="">
+                {% if user.profile.institute  %}
+                <li   class="current_section" title="Institute Profile">
+                    <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
 
+                {% else %}
 
-
-                <li title="LogIn">
-                    <a href="{% url 'auth_logout' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
-                        <span class="menu_title">Log Out</span>
+                {% endif %}
+                
+                <li  title="Approvals">
+                    <a href="{% url 'approvals' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_title">Approvals</span>
                     </a>
-                </li>
+                    
+                </li>   
+            
+                <li title="LogIn">
+                        <a href="{% url 'auth_logout' %}">
+                            <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
+                            <span class="menu_title">Log Out</span>
+                        </a>
+                    </li>
 
             </ul>
         </div>
@@ -386,10 +398,25 @@
                                 <h2 class="heading_b uk-margin-bottom"><span
                                         class="uk-text-truncate">{{institute_data.name}}</span></h2>
                             </div>
-                            <a class="md-fab md-fab-small md-fab-accent hidden-print"
-                                href="{% url 'edit_institute' user.profile.institute.pk %}">
-                                <i class="material-icons">&#xE150;</i>
-                            </a>
+                      
+                            
+                            {% if user.user_institute_role %}
+                                  
+                        <a class="md-fab md-fab-small md-fab-accent hidden-print"
+                        href="{% url 'edit_institute' user.profile.institute.pk %}">
+                        <i class="material-icons">&#xE150;</i>
+                    </a>
+                        {% else %}
+                     
+                            {% endif %}
+                                
+
+                        
+                            
+                              
+                           
+                         
+                           
                         </div>
 
                         <div class="user_content">
