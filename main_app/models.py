@@ -91,7 +91,7 @@ class Institute_levels(models.Model):
 
 
 class Role_Description(models.Model):
-    user = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='user_institute_role', null=True)
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='user_institute_role', null=True)
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institute_role_desc')
     level = models.ForeignKey(to=Institute_levels, on_delete=models.CASCADE, related_name='level_desc')
 
