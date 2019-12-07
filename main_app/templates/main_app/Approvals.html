@@ -334,6 +334,7 @@
                             <ul class="uk-tab" data-uk-tab="{connect:'#tabs_1_content'}" id="tabs_1">
                                 <li class="uk-active"><a href="#">Pending</a></li>
                                 <li><a href="#">Approved</a></li>
+                                <li><a href="#">Disaproved</a></li>
                                 
                             </ul>
                             <ul id="tabs_1_content" class="uk-switcher uk-margin">
@@ -379,8 +380,8 @@
                                                                 <td> {{pending.updated_at}} </td>
                                                                 <td> {{pending.status}}  </td>
                                                                 <td style="text-align: right;"> <div class="uk-width-medium-1-6">
-                                                                    <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave" href="javascript:void(0)">Approve</a>
-                                                                    <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave" href="javascript:void(0)">Disapprove</a>
+                                                                    <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave" href="{% url 'user_approval' pending.pk %}">Approve</a>
+                                                                    <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave" href="{% url 'user_disapproval' pending.pk %}">Disapprove</a>
                                                                 </div> </td>
                         
                                                             </tr>
@@ -456,6 +457,54 @@
                                         </div>
                         
                                     </div>
+                                </li>
+                                <li>
+                                    <div id="page_content_inner">
+                                        <div class="md-card">
+                                            <div class="md-card-content">
+                                                <div class="uk-overflow-container uk-margin-bottom">
+                                                    <table
+                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                                        id="ts_issues">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="uk-text-center">Sr No.</th>
+                                                                <th>Name</th>
+                                                                <th>Designation</th>
+                        
+                                                                <th>Request Date</th>
+                                                                <th>Action Date</th>
+                                                                <th>Status</th>
+                                                                <th style="text-align: left;">Permission</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th class="uk-text-center">Sr No.</th>
+                                                                <th>Name</th>
+                                                                <th>Designation</th>
+                                                                <th>Request Date</th>
+                                                                <th>Action Date</th>
+                                                                <th>Status</th>
+                                                                <th style="text-align: left">Permission</th>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                                {% for inactive in Inactive_user %}
+                                                                <tr>
+                                                                    <th style="text-align: center;"> {{ forloop.counter}} </th>
+                                                                    <td> {{inactive.first_name }} </td>
+                                                                    <td> {{inactive.designation }} </td>
+                                                                    <td> {{inactive.created_at}} </td>
+                                                                    <td> {{inactive.updated_at}} </td>
+                                                                    <td style="text-align: left;"> {{inactive.status}}  </td>
+                                                                    <td style="text-align: left;"> <div class="uk-width-medium-1-6">
+                                                                            <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave" href="{% url 'user_approval' inactive.pk %}">Approve</a>
+                                                                        </div>
+                                                                        </td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                        </tbody>
                                 </li>
                                 
                             </ul>
