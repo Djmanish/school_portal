@@ -399,17 +399,13 @@
                                         class="uk-text-truncate">{{institute_data.name}}</span></h2>
                             </div>
                       
-                            
-                            {% if user.user_institute_role %}
+                         
                                   
                         <a class="md-fab md-fab-small md-fab-accent hidden-print"
                         href="{% url 'edit_institute' user.profile.institute.pk %}">
                         <i class="material-icons">&#xE150;</i>
                     </a>
-                        {% else %}
-                     
-                            {% endif %}
-                                
+                    
 
                         
                             
