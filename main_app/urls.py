@@ -17,5 +17,6 @@ urlpatterns = [
   path('user/approvals/',views.approvals, name="approvals"), 
   path('institute/profile/<int:pk>', views.institute_profile, name='institute_detail'),
   path('institute/profile/edit/<int:pk>',InstituteUpdateview.as_view() , name='edit_institute'),
-
+  path('user/approve/<int:pk>', views.approve_request, name="user_approval"),
+  path('user/disapprove/<int:pk>', views.disapprove_request, name="user_disapproval"),
 ]

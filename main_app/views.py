@@ -18,10 +18,12 @@ from django.urls import reverse_lazy, reverse
 
 # Create your views here.
 
+
 def approvals(request):
     pending_users= UserProfile.objects.filter(status='pending')
     active_users= UserProfile.objects.filter(status='approve')
-    return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users})
+    inactive_users= UserProfile.objects.filter(status='dissapprove')
+    return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
 
 def index(request):
     return render(request, 'main_app/index.html')
@@ -173,3 +175,15 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return super().form_valid(form)
     def get_success_url(self, **kwargs):         
         return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
+
+
+
+def approve_request(request, pk):
+    user = UserProfile.objects.get(pk=pk)
+    user.approve()
+    return redirect('approvals')
+
+def disapprove_request(request, pk):
+    user = UserProfile.objects.get(pk=pk)
+    user.disapprove()
+    return redirect('approvals')

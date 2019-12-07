@@ -47,8 +47,7 @@ class Institute(models.Model):
 
 class UserProfile(models.Model):
     Chi1 =[
-        ('pending', 'Pending'),
-        ('approve', 'Approve'),
+        ('pending', 'Pending'),('approve', 'Approve'),
         ('dissapprove', 'Dissapprove'),
     ]
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='profile')
@@ -69,6 +68,15 @@ class UserProfile(models.Model):
     status = models.CharField(max_length=25,choices=Chi1,default="pending")
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,null=True)
+
+    def approve(self):
+        self.status= 'approve'
+        self.save()
+    
+    def disapprove(self):
+        self.status= 'dissapprove'
+        self.save()
+
     def __str__(self):
         return str(self.first_name)
 
