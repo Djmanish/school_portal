@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from datetime import date
 
+
 # Create your models here.
 
 class State(models.Model):
@@ -98,3 +99,13 @@ class Role_Description(models.Model):
     def __str__(self):
         return str(self.level.level_name)
 
+class classes(models.Model):
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='institute_classes')
+    code = models.CharField(max_length=5,null=True)
+    name =models.CharField(max_length=10,null=True)
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
+    updated_at = models.DateTimeField(auto_now=True,null=True)
+    responsible_user =models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='responsible_user',null=True)
+    created_by=models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='created_by', null=True)
+    def __str__(self):
+        return str(self.name)
