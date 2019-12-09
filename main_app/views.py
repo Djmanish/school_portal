@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
 from registration.backends.default.views import RegistrationView
 from registration.forms import RegistrationFormUniqueEmail
 from django.contrib import auth
@@ -154,7 +154,10 @@ def edit_profile(request, pk):
 @login_required
 def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
-    return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data})
+    institute_roles = Institute_levels.objects.filter(institute=institute_data)
+    
+    
+    return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles})
    
 @login_required
 def edit_institute(request, pk):
@@ -187,3 +190,46 @@ def disapprove_request(request, pk):
     user = UserProfile.objects.get(pk=pk)
     user.disapprove()
     return redirect('approvals')
+
+def add_new_role(request, pk):
+    if request.method== "POST":
+        institute = Institute.objects.get(pk=pk)
+    
+        new_role = Institute_levels()
+        new_role.institute= institute
+        new_role.level_id = request.POST['level_id']
+        new_role.level_name = request.POST['level_name']
+        rr= institute.id
+        try:
+            new_role.save()
+            messages.success(request, "New Role Added Successfully !")
+            return HttpResponseRedirect(f'/institute/profile/{rr}/')  
+        except:
+            messages.info(request, "Failed to Add, check you fields!")
+            return HttpResponseRedirect(f'/institute/profile/{rr}/')
+  
+    else:
+         return HttpResponseRedirect(f'/institute/profile/{rr}/')
+
+def delete_user_role(request, pk):
+    
+    user_role =  Institute_levels.objects.get(pk=pk)
+    if user_role.level_name == 'admin':
+        messages.warning(request, 'Admin can not be deleted !!!')
+        rr= request.user.profile.institute.id
+        return HttpResponseRedirect(f'/institute/profile/{rr}/')
+    else:
+        user_role.delete()
+        messages.success(request, 'User role deleted successfully !')
+        rr= request.user.profile.institute.id
+        return HttpResponseRedirect(f'/institute/profile/{rr}/')
+
+
+    
+
+    
+
+
+
+    
+

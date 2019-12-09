@@ -374,13 +374,14 @@
 
                         <div class="user_content">
                             <!-- success message -->
-{% if messages %}
-<div class="alert alert-success">
-    {% for m in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
-    {% endfor %}
-</div>
-{% endif %}
+  <!-- success message -->
+  {% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">About</a></li>
                                  <li><a href="#">Details</a></li>
