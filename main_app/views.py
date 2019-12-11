@@ -11,6 +11,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
+from django.db.models import Q
 
 
 
@@ -106,7 +107,9 @@ def edit_profile(request, pk):
                 messages.info(request, 'Institute already exists !!!')
                 return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})
             
-            new_level = Institute_levels.objects.create(institute=new_create_institute, level_id=1, level_name='admin') # creating default level for admin
+            new_level = Institute_levels.objects.create(institute=new_create_institute, level_id=1, level_name='admin')
+            new_level = Institute_levels.objects.create(institute=new_create_institute, level_id=2, level_name='parent') 
+            new_level = Institute_levels.objects.create(institute=new_create_institute, level_id=3, level_name='student')# creating default level for admin
             role = Role_Description.objects.create(user=request.user, institute=new_create_institute, level= new_level) # creating default role for admin
             user_info.designation = new_level
             user_info.institute= new_create_institute
@@ -154,7 +157,7 @@ def edit_profile(request, pk):
 @login_required
 def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
-    institute_roles = Institute_levels.objects.filter(institute=institute_data)
+    institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     
     
     return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles})
@@ -201,6 +204,10 @@ def add_new_role(request, pk):
         new_role.level_name = request.POST['level_name']
         rr= institute.id
         try:
+            roles_level_toi = Institute_levels.objects.filter(Q(institute = institute) & Q(level_id__gte =  request.POST['level_id'] )  )
+            for role in roles_level_toi: 
+                role.level_id += 1
+                role.save()
             new_role.save()
             messages.success(request, "New Role Added Successfully !")
             return HttpResponseRedirect(f'/institute/profile/{rr}/')  
@@ -213,12 +220,17 @@ def add_new_role(request, pk):
 
 def delete_user_role(request, pk):
     
-    user_role =  Institute_levels.objects.get(pk=pk)
-    if user_role.level_name == 'admin':
-        messages.warning(request, 'Admin can not be deleted !!!')
+    user_role =  Institute_levels.objects.get(pk=pk, institute= request.user.profile.institute)
+    role_id= user_role.level_id
+    if user_role.level_name == 'admin'  or user_role.level_name == 'parent' or user_role.level_name == 'student' :
+        messages.warning(request, 'Admin, Parent or student roles can not be deleted !!!')
         rr= request.user.profile.institute.id
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
     else:
+        roles_level_tod = Institute_levels.objects.filter(Q(institute = user_role.institute) & Q(level_id__gte =  user_role.level_id )  )
+        for roles in roles_level_tod:
+            roles.level_id -= 1
+            roles.save()
         user_role.delete()
         messages.success(request, 'User role deleted successfully !')
         rr= request.user.profile.institute.id
