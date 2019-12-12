@@ -18,6 +18,11 @@ from django.urls import reverse_lazy, reverse
 
 # Create your views here.
 
+def classes(request):
+    all_classes= Classes.objects.all()
+    return render(request, 'main_app/classes.html', {'All_classes':all_classes})
+
+
 
 def approvals(request):
     pending_users= UserProfile.objects.filter(status='pending')
