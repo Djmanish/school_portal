@@ -672,7 +672,7 @@
                                                     <form  method="POST" action="{% url 'add_subjects' %}">
                                                         {% csrf_token %}
                                                         <div class="form-group">
-                                                            <label for="sel1">Select list (select one):</label>
+                                                            <label for="sel1">Select Class:</label>
                                                             <select class="form-control" id="sel1" name="new_class">
                                                                 
                                                                 {% for class in institute_class %}
@@ -720,7 +720,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {% for subjects in All_Subjects %}
+                                                            {% for subjects in institute_subject %}
                                                              <tr>
                                                                <th style="text-align: center;"> {{ forloop.counter}} </th>
                                                                <td> {{subjects.subject_class}} </td>
