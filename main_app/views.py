@@ -32,7 +32,18 @@ def classes(request):
     all_classes= Classes.objects.all()
     return render(request, 'main_app/classes.html', {'All_classes':all_classes})
 
+def add_subjects(request):
+    if request.method == "POST":
+        subject_code= request.POST['subject_code']
+        subject_name= request.POST['subject_name']
+        subject_class = Subjects.objects.create(subject_class=request.user.profile.institute.subject_class, subject_code= subject_code, subject_name= subject_name)
+        messages.success(request, 'Subject Created successfully !!!')
+        
+    return HttpResponseRedirect("/institute/profile/subjects/")
 
+def subjects(request):
+    all_subjects= Subjects.objects.all()
+    return render(request, 'main_app/institute_profile.html', {'All_Subjects':all_subjects})
 
 def approvals(request):
     pending_users= UserProfile.objects.filter(status='pending')

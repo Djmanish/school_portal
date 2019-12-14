@@ -429,6 +429,9 @@
                                 <li class="uk-active"><a href="#">About</a></li>
                                 <li><a href="#">Details</a></li>
                                 <li><a href="#">Subjects</a></li>
+                        
+
+
 
 
 
@@ -592,7 +595,12 @@
                                                     <div class="uk-modal-header">
                                                         <h3 class="uk-modal-title">Add New Subject </h3>
                                                     </div>
-                                                    <form>
+                                                    <form  method="POST" action="{% url 'add_subjects' %}">
+                                                        {% csrf_token %}
+                                                        <div class="form-group">
+                                                            <label>Class:</label>
+                                                            <input type="text" class="form-control" name="subject_class">
+                                                        </div>
                                                         <div class="form-group">
                                                             <label>Subject Name:</label>
                                                             <input type="text" class="form-control" name="subject_name">
@@ -622,28 +630,33 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><b>Sr. No.</b></th>
+                                                                <th><b>class</b></th>
                                                                 <th><b>Subject Name</b></th>
                                                                 <th><b>Subject Code</b></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
-                                                                <td>1</td>
-                                                                <td>English</td>
-                                                                <td>001</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>2</td>
-                                                                <td>Mathematics</td>
-                                                                <td>002</td>
-                                                            </tr>
-                                                        </tbody>
+                                                            {% for subjects in All_Subjects %}
+                                                             <tr>
+                                                               <th style="text-align: center;"> {{ forloop.counter}} </th>
+                                                               <td> {{subjects.subject_class}} </td>
+                                                               
+                                                               <td> {{subjects.subject_code}} </td>
+                                                               <td> {{subjects.subject_name}} </td>
+
+                                                              
+
+                                                             </tr>
+                                                             {% endfor %}
+                                                           </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
+                                
+                           
                                 <!-- ending subjects tab content -->
                                 <!-- starting roles tab content -->
                                 <li>

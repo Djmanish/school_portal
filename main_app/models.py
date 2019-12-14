@@ -84,7 +84,7 @@ class UserProfile(models.Model):
 
 class Institute_levels(models.Model):
     institute= models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institute_levels')
-    level_id= models.IntegerField()
+    level_id= models.IntegerField(null=True)
     level_name = models.CharField(max_length=25)
     start_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     end_date = models.DateField(null=True, blank= True)
@@ -118,3 +118,10 @@ class Classes(models.Model):
     def __str__(self):
         return str(self.name)
 
+class Subjects(models.Model):
+    subject_class=models.ForeignKey(to=Classes, on_delete=models.CASCADE, related_name='class_subject', null=True)
+    subject_code=models.CharField(max_length=100)
+    subject_name=models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.subject_code)

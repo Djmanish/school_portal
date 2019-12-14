@@ -313,12 +313,30 @@
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Institute Profile</span>
-                    </a>    
+                    </a>
+                    </li>
+                    {% else %}
+
+                    {% endif %}
+                    
+                <li  title="Classes">
+                            <a href="{% url 'classes' %}">
+                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                                <span class="menu_title">Classes</span>
+                            </a>
+                            
+                </li>
+                        <li  title="Subjects">
+                            <a href="#">
+                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                                <span class="menu_title">Subjects</span>
+                            </a>
+                            
+                        </li>
+                    
                 </li>
 
-                {% else %}
-
-                {% endif %}
+                
                 
                 <li  title="Approvals">
                     <a href="{% url 'approvals' %}">
@@ -327,6 +345,7 @@
                     </a>
                     
                 </li>   
+                   
             
                 <li title="LogIn">
                         <a href="{% url 'auth_logout' %}">
