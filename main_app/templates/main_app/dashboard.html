@@ -330,7 +330,7 @@
 
                 
                 
-                {% endif %}
+                
                 {% if user.profile.institute  %}
                 <li  title="Approvals">
                     <a href="{% url 'approvals' %}">
@@ -339,15 +339,9 @@
                     </a>
                     
                 </li>   
-<<<<<<< HEAD
-                   
-=======
                 {% endif %}
-                
->>>>>>> bc45cd821c61e7549db48ccbf2fff7bd19699d93
             
                 <li title="LogIn">
-                        <a href="{% url 'auth_logout' %}">
                             <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
                             <span class="menu_title">Log Out</span>
                         </a>

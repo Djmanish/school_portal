@@ -36,7 +36,12 @@ def add_subjects(request):
     if request.method == "POST":
         subject_code= request.POST['subject_code']
         subject_name= request.POST['subject_name']
-        subject_class = Subjects.objects.create(subject_class=request.user.profile.institute.subject_class, subject_code= subject_code, subject_name= subject_name)
+        new_class= request.POST['new_class']
+
+        subject_class=Classes.objects.get(id=new_class)
+
+        subject_class = Subjects.objects.create(institute=request.user.profile.institute, subject_class=subject_class, subject_code= subject_code, subject_name= subject_name)
+
         messages.success(request, 'Subject Created successfully !!!')
         
     return HttpResponseRedirect("/institute/profile/subjects/")
@@ -183,9 +188,11 @@ def edit_profile(request, pk):
 def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
+    institute_class = Classes.objects.filter(institute=institute_data).reverse()
+
     
     
-    return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles})
+    return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class})
    
 @login_required
 def edit_institute(request, pk):

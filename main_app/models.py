@@ -119,6 +119,7 @@ class Classes(models.Model):
         return str(self.name)
 
 class Subjects(models.Model):
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='subject_institute', null=True)
     subject_class=models.ForeignKey(to=Classes, on_delete=models.CASCADE, related_name='class_subject', null=True)
     subject_code=models.CharField(max_length=100)
     subject_name=models.CharField(max_length=100)
