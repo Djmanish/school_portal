@@ -25,8 +25,8 @@ def add_classes(request):
         
         new_class = Classes.objects.create(institute = request.user.profile.institute, name= class_name)
         messages.success(request, 'Class Created successfully !!!')
-        institute_id = request.user.institute.id
-    return HttpResponseRedirect(f"/institute/profile/{institute_id}")
+    
+    return render(request, 'main_app/dashboard.html')
 
 
 
@@ -188,12 +188,16 @@ def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
+    all_classes= Classes.objects.all()
+    
+    
+    # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
 
 
     
     
-    return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject})
+    return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':all_classes})
    
 @login_required
 def edit_institute(request, pk):
