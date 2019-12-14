@@ -283,7 +283,7 @@
         
         <div class="menu_section">
             <ul>
-                <li  title="Dashboard">
+                <li class="current_section" title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -293,7 +293,7 @@
                 
                  
 
-                <li class="current_section" title="User Profile">
+                <li title="User Profile">
                     <a href="{% url 'user_profile' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">My Profile</span>
@@ -307,10 +307,8 @@
                     </a>    
                 </li>
 
-                {% else %}
-
                 {% endif %}
-                
+                {% if user.profile.institute  %}
                 <li  title="Approvals">
                     <a href="{% url 'approvals' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
@@ -318,6 +316,8 @@
                     </a>
                     
                 </li>   
+                {% endif %}
+                
             
                 <li title="LogIn">
                         <a href="{% url 'auth_logout' %}">

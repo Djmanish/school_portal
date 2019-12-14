@@ -325,19 +325,13 @@
                                 <span class="menu_title">Classes</span>
                             </a>
                             
-                </li>
-                        <li  title="Subjects">
-                            <a href="#">
-                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                                <span class="menu_title">Subjects</span>
-                            </a>
-                            
-                        </li>
-                    
+                
                 </li>
 
                 
                 
+                {% endif %}
+                {% if user.profile.institute  %}
                 <li  title="Approvals">
                     <a href="{% url 'approvals' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
@@ -345,7 +339,12 @@
                     </a>
                     
                 </li>   
+<<<<<<< HEAD
                    
+=======
+                {% endif %}
+                
+>>>>>>> bc45cd821c61e7549db48ccbf2fff7bd19699d93
             
                 <li title="LogIn">
                         <a href="{% url 'auth_logout' %}">
