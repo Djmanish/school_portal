@@ -107,11 +107,11 @@ def edit_profile(request, pk):
                 messages.info(request, 'Institute already exists !!!')
                 return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})
             
-            new_level = Institute_levels.objects.create(institute=new_create_institute, level_id=1, level_name='admin')
-            new_level = Institute_levels.objects.create(institute=new_create_institute, level_id=2, level_name='parent') 
-            new_level = Institute_levels.objects.create(institute=new_create_institute, level_id=3, level_name='student')# creating default level for admin
-            role = Role_Description.objects.create(user=request.user, institute=new_create_institute, level= new_level) # creating default role for admin
-            user_info.designation = new_level
+            new_level_admin = Institute_levels.objects.create(institute=new_create_institute, level_id=1, level_name='admin')
+            new_level_parent = Institute_levels.objects.create(institute=new_create_institute, level_id=2, level_name='parent') 
+            new_level_student = Institute_levels.objects.create(institute=new_create_institute, level_id=3, level_name='student')# creating default level for admin
+            role = Role_Description.objects.create(user=request.user, institute=new_create_institute, level= new_level_admin) # creating default role for admin
+            user_info.designation = new_level_admin
             user_info.institute= new_create_institute
             user_info.save()
         else:
