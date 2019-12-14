@@ -108,7 +108,7 @@ class Role_Description(models.Model):
 
 class Classes(models.Model):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='institute_classes')
-    code = models.CharField(max_length=5,null=True)
+
     name =models.CharField(max_length=10,null=True)
     teacher_name= models.CharField(max_length=20,null=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True)

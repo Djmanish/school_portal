@@ -22,15 +22,13 @@ from django.db.models import Q
 def add_classes(request):
     if request.method == "POST":
         class_name= request.POST['class_name']
-        class_teacher = request.POST['class_teacher']
-        new_class = Classes.objects.create(institute = request.user.profile.institute, name= class_name, teacher_name= class_teacher)
-        messages.success(request, 'Class Created successfully !!!')
         
-    return HttpResponseRedirect("/user/classes/")
+        new_class = Classes.objects.create(institute = request.user.profile.institute, name= class_name)
+        messages.success(request, 'Class Created successfully !!!')
+        institute_id = request.user.institute.id
+    return HttpResponseRedirect(f"/institute/profile/{institute_id}")
 
-def classes(request):
-    all_classes= Classes.objects.all()
-    return render(request, 'main_app/classes.html', {'All_classes':all_classes})
+
 
 def add_subjects(request):
     if request.method == "POST":
@@ -190,6 +188,10 @@ def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
+    all_classes= Classes.objects.all()
+    
+    
+    return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
 
 
