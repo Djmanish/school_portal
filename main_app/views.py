@@ -237,7 +237,7 @@ def delete_user_role(request, pk):
     user_role =  Institute_levels.objects.get(pk=pk, institute= request.user.profile.institute)
     role_id= user_role.level_id
     if user_role.level_name == 'admin'  or user_role.level_name == 'parent' or user_role.level_name == 'student' :
-        messages.warning(request, 'Admin, Parent or student roles can not be deleted !!!')
+        messages.error(request, 'Admin, Parent or student roles can not be deleted !!!')
         rr= request.user.profile.institute.id
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
     else:
