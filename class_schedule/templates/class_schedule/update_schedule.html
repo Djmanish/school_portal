@@ -18,7 +18,7 @@
     <title>Update Profile</title>
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
 
-
+    <link href="{% static 'main_app/bower_components/uikit/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}" media="all">
 
@@ -36,6 +36,10 @@
 
     <!-- bootstrap -->
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+    <script src="{% static 'js/jquery-3.1.1.js' %}"></script>
+<script src="{% static 'main_app/bower_components/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'main_app/bower_components/js/moment-master/min/moment.min.js' %}"></script>
+<script src="{% static 'main_app/bower_components/js/bootstrap-datetimepicker.min.js' %}"></script>
 
    <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
@@ -230,8 +234,10 @@
                             <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
-                                    <li><a href="{% url 'user_profile' %}">My profile</a></li>
-                                    <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                    <li><a href="page_user_profile.html">My profile</a></li>
+                                    <li><a href="page_settings.html">Settings</a></li>
+                                    <li><a href="login.html">Login Page</a></li>
+                                    <li><a href="login_v2.html">Login Page v2</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -283,7 +289,7 @@
         
         <div class="menu_section">
             <ul>
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -309,7 +315,7 @@
 
                 {% endif %}
                 {% if user.profile.institute  %}
-                <li  title="Approvals">
+                <li class="current_section" title="Approvals">
                     <a href="{% url 'approvals' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Approvals</span>
@@ -353,205 +359,255 @@
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.first_name}}
-                                    
-                                    {% if user.profile.middle_name %}
-                                       {{user.profile.middle_name}} 
-                                    {% endif %}
-
-                                    
-                                    {% if user.profile.last_name %}
-                                        {{user.profile.last_name}}
-                                    {% endif %}</span><span class="sub-heading">{{user.profile.designation}}</span></h2>
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.full_name}}</span><span class="sub-heading">Land acquisition specialist</span></h2>
                                                             </div>
-                           
+
+
+
+                            <a class="md-fab md-fab-small md-fab-accent hidden-print" href="#">
+                                <i class="material-icons">&#xE150;</i>
+                            </a>
+                            
                         </div>
                         <div class="user_content">
-                       
-                            <!-- messages -->
-                            {% if messages %}
-                            <ul class="messages">
-                                {% for message in messages %}
-                                <li{% if message.tags %} class="text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
 
-                            <h3 class="uk-text-primary">Update Your Information</h3>
-                        <!-- starting user form  -->
-                        <form method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' user.profile.pk %}">
-                            {% csrf_token %}
+                            <form method="POST" enctype="multipart/form-data" action="">
+                          {% csrf_token %}
+                                                
 
-                            <div class="form-group">
-                                <label >First Name:</label>
-                                <input type="text" value="{{user_info.first_name}}" class="form-control" name='first_name' required>
-                              </div>
+                                <div class="">
+                                    <label>Lecture 1 Subject Name: </label>
+                                    <select name="subject_lecture_one" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                        
+                                        <option selected value="{{schedule_info.subject_lecture_one.id}}">{{schedule_info.subject_lecture_one}}</option>  
+                                        
+                                        {% for subject in all_subjects %}
+                                            <option value="{{subject.id}}">{{subject}}</option>
+                                        {% endfor %}
+                                            
+                                    </select>
+                                </div>  
+                                <br>
 
-                              <div class="form-group">
-                                <label >Middle Name:</label>
-                                <input type="text" class="form-control" name='middle_name' value="{{user_info.middle_name}}">
-                              </div>
-
-                              <div class="form-group">
-                                <label >Last Name:</label>
-                                <input type="text" class="form-control" name='last_name' value="{{user_info.last_name}}">
-                              </div>
-
-
-
-
-{% if not user_info.designation  %}
-<div class="custom-control custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="defaultUnchecked" name="admin_check">
-    <label class="custom-control-label" for="defaultUnchecked">Institute not Listed ? Create new Institute as Admin</label>
-</div>
-
-
-<div id="institute_list">
-    <div class="form-group" >
-        <label >Select Institute:</label>
-        
-        <select class="form-control" name="select_school" id="select_school">
-            
-            {% if not user_info.institute %}
-            <option selected disabled>-- select your institute --</option>
-
-            {% endif %}
-            
-          {% for institute in all_institutes %}
-              <option value="{{institute.id}}">{{institute}}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Join as:</label>
-        <select class="form-control" name="user_designation" id="fdata">
-    
-        </select>
-    </div>
-</div>
- 
-{% endif %}
-    
- 
-
- 
-
-
-
-
-  <div id="institute-options" style="display: none;">
-    <div class="form-group">
-        <label >Institute Name:</label>
-        <input type="text" class="form-control" name='new_institute_name' >
-      </div>
-      <div class="form-group">
-        <label>Institute Phone:</label>
-        <input type="text" class="form-control" name="new_institute_phone">
-      </div>
-
-      <div class="form-group">
-        <label>Institute Address :</label>
-        <input type="text" class="form-control" name="new_institute_address">
-      </div>
-  </div>
-
-
-
-
-
-
-
-                              <div class="form-group">
-                                <label >Date of Birth:</label>
-                                
-                                <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" >
-                              </div>
-
-                              <div class="form-group">
-                                <label >About Yourself:</label>
-                               
-                                <textarea class="form-control"  name='about' >{{user_info.about}}</textarea>
-                              </div>
-
-                              <div class="form-group">
-                                <label >Change Profile Picture:</label>
-                                <input type="file" class="form-control" name='profile_pic'>
-                              </div>
-
-                              <div class="form-group">
-                                <label >Mobile:</label>
-                                <input type="number" class="form-control" name='mobile_number' value="{{user_info.mobile_number}}">
-                              </div>
-                            
-                              <div class="form-group">
-                                <label >Address Line 1:</label>
-                                <input type="text" class="form-control" name='address_line_1' value="{{user_info.address_line_1}}">
-                              </div>
-
-                              <div class="form-group">
-                                <label >Address Line 2:</label>
-                                <input type="text" class="form-control" name='address_line_2' value="{{user_info.address_line_2}}">
-                              </div>
-
-                              <div class="form-group">
-                                <label >City:</label>
-                                <input type="text" class="form-control" name='city' value="{{user_info.city}}">
-                              </div>
-
-                              <div class="form-group" >
-                                <label >State:</label>
-                                <select class="form-control" name="state"  required>
-                                  
-                                  {% if user_info.state %}
-                                      <option selected disabled>{{user_info.state}}</option>
-                                  {% endif %}
+                                <div class="">
+                                    <label>Lecture 1 Subject Teacher Name: </label>
+                                    <select name="subject_teacher_lecture_one" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+                                        <option selected value="{{schedule_info.subject_teacher_lecture_one.id}}" >{{schedule_info.subject_teacher_lecture_one}}</option>
                                       
-                                  
-                                  {% for state in all_states %}
-                                      <option value="{{state.id}}">{{state}}</option>
-                                  {% endfor %}
+                                        
+                                        {% for teacher in institute_teachers %}
+                                            <option value="{{teacher.id}}">{{teacher}}</option>
+                                        {% endfor %}
+                                            
+                                    </select>
+                                </div>  
+                                <br>
+
+                                <div class="">
+                                    <label>Lecture 2 Subject Name: </label>
+                                    <select name="subject_lecture_two" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                        
+                                        <option selected value="{{schedule_info.subject_lecture_two.id}}">{{schedule_info.subject_lecture_two}}</option>  
+                                        
+                                        {% for subject in all_subjects %}
+                                            <option value="{{subject.id}}">{{subject}}</option>
+                                        {% endfor %}
+                                            
+                                    </select>
+                                </div>  
+                                <br>
+
+                                <div class="">
+                                    <label>Lecture 2 Subject Teacher Name: </label>
+                                    <select name="subject_teacher_lecture_two" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+                                        <option selected value="{{schedule_info.subject_teacher_lecture_two.id}}" >{{schedule_info.subject_teacher_lecture_two}}</option>
                                       
-                                  
-                                </select>
-                              </div>
-
-                              <div class="form-group">
-                                <label >Facebook Profile link:</label>
-                                <input type="url" class="form-control" name='facebook_link' value="{{user_info.facebook_link}}">
-                              </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                              
-
-
-
-
-
-
+                                        
+                                        {% for teacher in institute_teachers %}
+                                            <option value="{{teacher.id}}">{{teacher}}</option>
+                                        {% endfor %}
+                                            
+                                    </select>
+                                </div> 
+<br>
                              
-                              
-                              <input type="submit" value="Update" class="btn btn-sm btn-success">
+<div class="">
+    <label>Lecture 3 Subject Name: </label>
+    <select name="subject_lecture_three" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+        
+        <option selected value="{{schedule_info.subject_lecture_three.id}}">{{schedule_info.subject_lecture_three}}</option>  
+        
+        {% for subject in all_subjects %}
+            <option value="{{subject.id}}">{{subject}}</option>
+        {% endfor %}
+            
+    </select>
+</div>  
+<br>
+
+<div class="">
+    <label>Lecture 3 Subject Teacher Name: </label>
+    <select name="subject_teacher_lecture_three" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+        <option selected value="{{schedule_info.subject_teacher_lecture_three.id}}" >{{schedule_info.subject_teacher_lecture_three}}</option>
+      
+        
+        {% for teacher in institute_teachers %}
+            <option value="{{teacher.id}}">{{teacher}}</option>
+        {% endfor %}
+            
+    </select>
+</div> 
+<br>
+
+<div class="">
+    <label>Lecture 4 Subject Name: </label>
+    <select name="subject_lecture_four" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+        
+        <option selected value="{{schedule_info.subject_lecture_four.id}}">{{schedule_info.subject_lecture_four}}</option>  
+        
+        {% for subject in all_subjects %}
+            <option value="{{subject.id}}">{{subject}}</option>
+        {% endfor %}
+            
+    </select>
+</div>  
+<br>
+
+<div class="">
+    <label>Lecture 4 Subject Teacher Name: </label>
+    <select name="subject_teacher_lecture_four" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+        <option selected value="{{schedule_info.subject_teacher_lecture_four.id}}" >{{schedule_info.subject_teacher_lecture_four}}</option>
+        {% for teacher in institute_teachers %}
+            <option value="{{teacher.id}}">{{teacher}}</option>
+        {% endfor %}      
+    </select>
+</div> 
+<br>
+
+<div class="">
+    <label>Lecture 5 Subject Name: </label>
+    <select name="subject_lecture_five" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+        
+        <option selected value="{{schedule_info.subject_lecture_five.id}}">{{schedule_info.subject_lecture_five}}</option>  
+        
+        {% for subject in all_subjects %}
+            <option value="{{subject.id}}">{{subject}}</option>
+        {% endfor %}       
+    </select>
+</div>  
+<br>
 
 
-                        </form>
-                        <!-- ending user form -->
+<div class="">
+    <label>Lecture 5 Subject Teacher Name: </label>
+    <select name="subject_teacher_lecture_five" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+        <option selected value="{{schedule_info.subject_teacher_lecture_five.id}}" >{{schedule_info.subject_teacher_lecture_five}}</option>  
+        {% for teacher in institute_teachers %}
+            <option value="{{teacher.id}}">{{teacher}}</option>
+        {% endfor %}
+            
+    </select>
+</div> 
+<br>
+
+<div class="">
+    <label>Lecture 6 Subject Name: </label>
+    <select name="subject_lecture_six" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+        
+        <option selected value="{{schedule_info.subject_lecture_six.id}}">{{schedule_info.subject_lecture_six}}</option>  
+        
+        {% for subject in all_subjects %}
+            <option value="{{subject.id}}">{{subject}}</option>
+        {% endfor %}
+            
+    </select>
+</div>  
+<br>
+
+<div class="">
+    <label>Lecture 6 Subject Teacher Name: </label>
+    <select name="subject_teacher_lecture_six" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+        <option selected value="{{schedule_info.subject_teacher_lecture_six.id}}" >{{schedule_info.subject_teacher_lecture_six}}</option>
+      
+        
+        {% for teacher in institute_teachers %}
+            <option value="{{teacher.id}}">{{teacher}}</option>
+        {% endfor %}
+            
+    </select>
+</div> 
+<br>
+
+<div class="">
+    <label>Lecture 7 Subject Name: </label>
+    <select name="subject_lecture_seven" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+        
+        <option selected value="{{schedule_info.subject_lecture_seven.id}}">{{schedule_info.subject_lecture_seven}}</option>  
+        
+        {% for subject in all_subjects %}
+            <option value="{{subject.id}}">{{subject}}</option>
+        {% endfor %}
+            
+    </select>
+</div>  
+<br>
+
+<div class="">
+    <label>Lecture 7 Subject Teacher Name: </label>
+    <select name="subject_teacher_lecture_seven" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+        <option selected value="{{schedule_info.subject_teacher_lecture_seven.id}}" >{{schedule_info.subject_teacher_lecture_seven}}</option>
+      
+        
+        {% for teacher in institute_teachers %}
+            <option value="{{teacher.id}}">{{teacher}}</option>
+        {% endfor %}
+            
+    </select>
+</div> 
+<br>
+
+<div class="">
+    <label>Lecture 8 Subject Name: </label>
+    <select name="subject_lecture_eight" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+        
+        <option selected value="{{schedule_info.subject_lecture_eight.id}}">{{schedule_info.subject_lecture_eight}}</option>  
+        
+        {% for subject in all_subjects %}
+            <option value="{{subject.id}}">{{subject}}</option>
+        {% endfor %}
+            
+    </select>
+</div>  
+<br>
+
+<div class="">
+    <label>Lecture 8 Subject Teacher Name: </label>
+    <select name="subject_teacher_lecture_eight" class="md-input" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+        <option selected value="{{schedule_info.subject_teacher_lecture_eight.id}}" >{{schedule_info.subject_teacher_lecture_eight}}</option>
+      
+        
+        {% for teacher in institute_teachers %}
+            <option value="{{teacher.id}}">{{teacher}}</option>
+        {% endfor %}
+            
+    </select>
+</div> 
+<br>
 
 
 
+
+
+
+
+
+
+
+
+
+
+                                <input type="submit" value="Update" class="btn btn-success">
+                            </form>
                             
                                             </div>
                                    

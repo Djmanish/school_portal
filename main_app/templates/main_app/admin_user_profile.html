@@ -363,7 +363,13 @@
                                     {% endif %}
                                         
                                         
-                                </span><span class="sub-heading">{{user.profile.designation}}</span></h2>
+                                </span><span class="sub-heading">
+                                {% if user.profile.designation %}
+                                {{user.profile.designation}}
+                                {% else %}
+                                Edit and Complete your profile to select role
+                                {% endif %}
+                                </span></h2>
                                                             </div>
 
 
