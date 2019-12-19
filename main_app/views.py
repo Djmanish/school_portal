@@ -12,6 +12,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.db.models import Q
+from holidaylist.views import *
 
 
 
@@ -29,7 +30,7 @@ def add_classes(request):
     return render(request, 'main_app/dashboard.html')
 
 
-
+# Add Subjects
 def add_subjects(request):
     if request.method == "POST":
         subject_code= request.POST['subject_code']
@@ -45,9 +46,6 @@ def add_subjects(request):
         
     return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
-def subjects(request):
-    all_subjects= Subjects.objects.all()
-    return render(request, 'main_app/institute_profile.html', {'All_Subjects':all_subjects})
 
 def approvals(request):
     pending_users= UserProfile.objects.filter(status='pending')

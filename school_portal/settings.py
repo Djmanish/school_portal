@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',
+    'holidaylist.apps.HolidaylistConfig',
     'main_app.apps.MainAppConfig',
     'registration',
     'django.contrib.admin',
@@ -62,7 +64,7 @@ ROOT_URLCONF = 'school_portal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates',],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
