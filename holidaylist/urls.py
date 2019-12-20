@@ -9,7 +9,7 @@ from main_app.views import *
 
 urlpatterns = [
   
-  path('institute/holidaylist/data/', views.holidaylist, name="holidaylist")
+  path('', views.holidaylist, name="holidaylist")
   # path('', views.add_holiday, name="holidaylist")
 
 

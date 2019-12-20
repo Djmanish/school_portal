@@ -29,5 +29,6 @@ from main_app import urls
           # return HttpResponseRedirect(f'/institute/holidaylist/data')
 
 def holidaylist(request):
+        
     return render(request, 'holidaylist/holidaylist.html')
   
