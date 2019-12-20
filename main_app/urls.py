@@ -1,5 +1,7 @@
 from django.urls import path, include
 from main_app import views
+from . import views
+
 from django.views.generic.base import RedirectView
 from .views import RegistrationViewUniqueEmail, InstituteUpdateview
 
@@ -33,6 +35,7 @@ urlpatterns = [
   path('add/new_subject/', views.add_subjects, name="add_subjects"),
   path('/institute/holidaylist/data/', include('holidaylist.urls')),
   
+  path('attendance/', include('Attendance.urls')),
 
 
 ]

@@ -301,57 +301,59 @@
         </div>
         <div class="menu_section">
             <ul>
-                <li title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
                     </a>
-
+                    
                 </li>
-
-
+                
+                 
 
                 <li title="User Profile">
                     <a href="{% url 'user_profile' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">My Profile</span>
-                    </a>
+                    </a>    
                 </li>
                 {% if user.profile.institute  %}
-                <li title="Institute Profile">
+            
+        <li class="current_section" title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Institute Profile</span>
-                    </a>
-
-                </li>
-
-                <li class="current_section" title="Holiday List">
-                    <a href="{% url 'holidaylist' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Holiday List</span>
-                    </a>
-
-                </li>
+                    </a> 
+            
+        </li>
+        <li title="Holiday List">
+            <a href="{% url 'holidaylist' %}">
+                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                <span class="menu_title">Holiday List</span>
+            </a>
+            
+        </li>
 
                 {% endif %}
                 {% if user.profile.institute  %}
-                <li title="Approvals">
+                <li  title="Approvals">
                     <a href="{% url 'approvals' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Approvals</span>
                     </a>
-
-                </li>
+                    
+                </li>   
                 {% endif %}
+                
+            
+               
 
-                <li title="Log Out">
-                    <a href="{% url 'auth_logout' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
-                        <span class="menu_title">Log In</span>
-                    </a>
-
-                </li>
+                <li title="LogIn">
+                        <a href="{% url 'auth_logout' %}">
+                            <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
+                            <span class="menu_title">Log Out</span>
+                        </a>
+                    </li>
 
             </ul>
         </div>

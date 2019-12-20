@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'main_app.apps.MainAppConfig',
     'class_schedule.apps.ClassScheduleConfig',
     'registration',
+    'Attendance',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

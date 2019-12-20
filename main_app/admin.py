@@ -17,3 +17,4 @@ admin.site.register(Institute_levels, Institute_levels_admin)
 admin.site.register(Role_Description, Role_Description_admin)
 admin.site.register(Classes)
 admin.site.register(Subjects)
+
