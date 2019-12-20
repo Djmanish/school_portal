@@ -315,6 +315,13 @@
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
+                <li  title="Holiday List">
+                    <a href="{% url 'holidaylist' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_title">Holiday List</span>
+                    </a>
+                    
+                </li>
 
                 {% endif %}
                 {% if user.profile.institute  %}
@@ -328,7 +335,7 @@
                 {% endif %}
                 
             
-                <li title="LogIn">
+                <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
                             <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
                             <span class="menu_title">Log Out</span>
