@@ -22,8 +22,8 @@ class Institute(models.Model):
     principal = models.CharField(max_length=50, null=True)
     about = models.TextField(max_length=300, blank=True, default="This is about Institute" )
     contact_number1 = models.CharField(max_length=12,null=True)
-    contact_number2 = models.CharField(max_length=12,null=True)
-    contact_number3 = models.CharField(max_length=12,null=True)
+    contact_number2 = models.CharField(max_length=12,null=True, blank=True)
+    contact_number3 = models.CharField(max_length=12,null=True, blank=True)
     address1 = models.CharField(max_length=100, null=True)
     address2 = models.CharField(max_length=100, null=True)
     district=models.CharField(max_length=50,null=True)
@@ -79,7 +79,7 @@ class UserProfile(models.Model):
         self.save()
 
     def __str__(self):
-        return str(self.first_name)
+        return str(self.user)
 
 
 class Institute_levels(models.Model):
@@ -110,7 +110,7 @@ class Classes(models.Model):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='institute_classes')
 
     name =models.CharField(max_length=10,null=True)
-    teacher_name= models.CharField(max_length=20,null=True)
+    teacher_name= models.CharField(max_length=20,null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(null=True)
     # responsible_user =models.OneToOneField(to=User, on_delete=models.CASCADE, null=True, related_name='responsible_user',null=True)
@@ -125,4 +125,5 @@ class Subjects(models.Model):
     subject_name=models.CharField(max_length=100)
 
     def __str__(self):
-        return str(self.subject_code)
+        return str(self.subject_name)
+        

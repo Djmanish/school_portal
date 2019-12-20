@@ -292,7 +292,7 @@
         
         <div class="menu_section">
             <ul>
-                <li  class="current_section" title="Dashboard">
+                <li class="current_section" title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -309,7 +309,7 @@
                     </a>    
                 </li>
                 {% if user.profile.institute  %}
-                <li title="Institute Profile">
+                <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Institute Profile</span>

@@ -1,5 +1,5 @@
 from django.urls import path, include
-from main_app.views import *
+from main_app import views
 from django.views.generic.base import RedirectView
 from .views import RegistrationViewUniqueEmail, InstituteUpdateview
 
@@ -31,7 +31,7 @@ urlpatterns = [
   path('user_role/delete/<int:pk>/', views.delete_user_role, name="delete_user_role"),
   path('user/class/add_class/',views.add_classes, name="add_classes"),
   path('add/new_subject/', views.add_subjects, name="add_subjects"),
-  path('', include('holidaylist.urls')),
+  path('/institute/holidaylist/data/', include('holidaylist.urls')),
   
 
 

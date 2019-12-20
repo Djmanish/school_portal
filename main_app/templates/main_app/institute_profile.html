@@ -773,7 +773,7 @@
                                                             <div class="uk-form-row">
                                                                 <label>Level Id</label>
                                                                 <input type="number" class="md-input" name="level_id"
-                                                                    maxlength="2" / required>
+                                                                 min="0"   maxlength="2" / required>
                                                             </div>
                                                             <div class="uk-form-row">
                                                                 <label>Role Name</label>
@@ -806,18 +806,7 @@
 
                                                             </tr>
                                                         </thead>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <th class="uk-text-center">Level</th>
-                                                                <th>Role</th>
-
-
-                                                                <th>Start Date</th>
-                                                                <th>End Date</th>
-                                                                <th>Action</th>
-
-                                                            </tr>
-                                                        </tfoot>
+                                                  
                                                         <tbody>
 
                                                             {% for role in institute_roles %}

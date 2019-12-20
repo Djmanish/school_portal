@@ -19,7 +19,7 @@ DAYS_OF_WEEK = [
 
 # Holiday List Model
 class HolidayList(models.Model):
-    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='institute_holiday', null=True)
+    # institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='institute_holiday', null=True)
     date=models.DateField(max_length=100, null=True)
     days = models.CharField(max_length=10, choices=DAYS_OF_WEEK, null= True)
     name = models.CharField(max_length=100, null=True)

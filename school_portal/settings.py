@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'holidaylist.apps.HolidaylistConfig',
     'main_app.apps.MainAppConfig',
+    'class_schedule.apps.ClassScheduleConfig',
     'registration',
     'django.contrib.admin',
     'django.contrib.auth',
