@@ -4,10 +4,10 @@ from main_app.models import *
 
 class Lecture(models.Model):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, null=True, related_name="institute_lecture")
-    lecture_order = models.IntegerField()
+    
     lecture_name = models.CharField(max_length=100)
-    start_time = models.TimeField(null=True)
-    end_time = models.TimeField(null=True)
+    start_time = models.TimeField(null=True, auto_now_add=True)
+    end_time = models.TimeField(null=True , auto_now_add=True)
 
     def __str__(self):
         return self.lecture_name
