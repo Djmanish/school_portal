@@ -8,8 +8,8 @@ class Attendance(models.Model):
    Ds = [
       ('present','Present'),('absent','Absent'),('leave','Leave'),('holiday','Holiday'),
    ]  
-   institute =models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institue_name')  
-   classes =models.ForeignKey(to=Classes, on_delete=models.CASCADE, related_name='classes')
+   institute =models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institue_name', null=True)  
+   classes =models.ForeignKey(to=Classes, on_delete=models.CASCADE, related_name='classes', null=True)
    rollno = models.CharField(max_length=25, null=True, default="")
    first_name = models.CharField(max_length=25, null=True, default="")     
    last_name = models.CharField(max_length= 25, null = True,default="")

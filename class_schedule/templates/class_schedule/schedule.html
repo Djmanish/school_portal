@@ -850,7 +850,10 @@
                             </li>
                             <li>
                                 <div id="page_content_inner">
+
+                                   
                                     <div class="md-card">
+                                      
                                         <div class="md-card-content">
                                             <div class="uk-overflow-container uk-margin-bottom">
                                                 <table
@@ -873,7 +876,7 @@
                     </form>
                                                             
                                                             </th>
-                                                            <th> </th>
+                                                            <th>  </th>
                                                             
                                                             {% for lecture in all_lectures %}
                                                             <th colspan="2">{{lecture}}</th>
@@ -883,13 +886,12 @@
                                                         <tr>
                                             
                                                             
-                                                            <th class="uk-text-center" colspan="2"><b></b>
+                                                            <th class="uk-text-center" colspan="3">
                                                        
-                                                             </select>
+                                                             <b style="color: #1976d2;"> {{time_table_for_class}} Time Table</b>
+                                                          
                                                             
-                                                            
-                                                            
-                                                            <th> </th>
+                                                            </th>
                                                              
                                                              {% for lecture in all_lectures %}
                                                              <th colspan="2">{{lecture.start_time}} - 

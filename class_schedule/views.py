@@ -19,6 +19,8 @@ def schedule(request):
 
     selected_class = Classes.objects.get(pk=select_class_for_schedule) #fetching the class instance seleted to view
 
+    time_table_for_class = selected_class.name
+    
     all_class = Classes.objects.filter(institute=request.user.profile.institute)
     all_lectures = Lecture.objects.filter(institute=request.user.profile.institute)
     
@@ -43,7 +45,8 @@ def schedule(request):
                 'wednesday_schedule':wednesday_schedule,
                 'thursday_schedule':thursday_schedule,
                 'friday_schedule':friday_schedule,
-                'saturday_schedule':saturday_schedule
+                'saturday_schedule':saturday_schedule,
+                "time_table_for_class": time_table_for_class
 
                 }
    

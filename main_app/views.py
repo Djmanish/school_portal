@@ -70,6 +70,8 @@ class RegistrationViewUniqueEmail(RegistrationView):
     form_class = RegistrationFormUniqueEmail
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('user_dashboard')
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
