@@ -16,7 +16,6 @@ from django.db.models import Q
 
 
 
-
 # Create your views here.
 
 def add_classes(request):
@@ -188,16 +187,17 @@ def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
-    all_classes= Classes.objects.all()
+    # all_classes= Classes.objects.all()
     
     
     # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
+    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class}
 
 
     
     
-    return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':all_classes})
+    return render(request, 'main_app/institute_profile.html', context_data)
    
 @login_required
 def edit_institute(request, pk):
