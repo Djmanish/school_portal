@@ -33,7 +33,7 @@ urlpatterns = [
   path('user_role/delete/<int:pk>/', views.delete_user_role, name="delete_user_role"),
   path('user/class/add_class/',views.add_classes, name="add_classes"),
   path('add/new_subject/', views.add_subjects, name="add_subjects"),
-  path('/institute/holidaylist/data/', include('holidaylist.urls')),
+  path('holidaylist/', include('holidaylist.urls')),
   
   path('attendance/', include('Attendance.urls')),
 

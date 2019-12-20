@@ -6,7 +6,7 @@ from main_app.models import *
 Answers=[
     ('yes', 'yes'),
     ('no','no'),
-]
+],
 DAYS_OF_WEEK = [
     ('Monday', 'Monday'),
     ('Tuesday', 'Tuesday'),

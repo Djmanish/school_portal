@@ -367,7 +367,7 @@
                     <div class="uk-margin-bottom">
                         <a href="#" class="md-btn uk-margin-right" id="printTable">Print Table</a>
                         <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
-                            <button class="md-btn">Columns <i class="uk-icon-caret-down"></i></button>
+                            <!-- <button class="md-btn">Columns <i class="uk-icon-caret-down"></i></button> -->
                             <div class="uk-dropdown">
                                 <ul class="uk-nav uk-nav-dropdown" id="columnSelector"></ul>
 
@@ -377,13 +377,21 @@
                         <!-- <div class="md-card"> -->
                         <button type="button" class="md-btn" data-uk-modal="{target:'#modal_new_holiday'}">Add
                             Holiday</button>
+                              <!-- success message -->
+                              {% if messages %}
+                              <ul class="messages">
+                                  {% for message in messages %}
+                                  <li{% if message.tags %} class=" text-{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                      {% endfor %}
+                              </ul>
+                              {% endif %}
                         <!-- starting Holiday modal themes -->
                         <div class="uk-modal" id="modal_new_holiday">
                             <div class="uk-modal-dialog">
                                 <div class="uk-modal-header">
                                     <h3 class="uk-modal-title">Add Holiday </h3>
                                 </div>
-                                <form method="POST" action="{% url 'holidaylist' %}">
+                                <form method="POST" action="{% url 'add_holiday' %}">
                                     {% csrf_token %}
                                     <div class="form-group">
                                             <label>Date</label>
@@ -411,11 +419,21 @@
 
                                     <div class="form-group">
                                         <label>Holiday Name:</label>
+                                        
                                         <input type="text" class="form-control" name="holiday_name">
                                     </div>
                                     <div class="form-group">
                                         <label>Applicable:</label>
-                                        <input type="text" class="form-control" name="holiday_applicable">{{in}}
+                                        <select class="form-control" id="sel1" name="holiday_day">
+                                                    
+                                            
+                                            <option value={{applicable}}>{{institute_holiday_list.applicable}}</option> 
+                                            
+                                                
+                                          
+                                         
+                                        </select>
+                                        <!-- <input type="text" class="form-control" name="holiday_applicable">{{institute_holiday_list.applicable}} -->
                                     </div>
                                     <div class="form-group">
                                             <label>Holiday Type:</label>
@@ -427,7 +445,7 @@
                                             </div>
                                             <div class="form-group">
                                                     <label>Holiday SMS Send:</label>
-                                                    <input type="text" class="form-control" name="holiday_sms_end">
+                                                    <input type="text" class="form-control" name="holiday_sms_send">
                                                 </div>
                                                 <div class="form-group">
                                                         <label>Holiday Notification Send:</label>
@@ -486,7 +504,7 @@
                                     </tr>
                                 </tfoot>
                                 <tbody>
-
+                                  
                                     {% for holiday in institute_holiday_list %}
                                     <tr>
 
