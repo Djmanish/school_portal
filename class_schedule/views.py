@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import *
+from django.views.generic import ListView, UpdateView
 
 # Create your views here.
 
@@ -52,8 +53,9 @@ def schedule(request):
    
     return render(request, 'class_schedule/schedule.html', context)
 
-
+@login_required
 def schedule_update(request, pk):
+
         schedule_to_update = Schedule.objects.get(pk=pk) # fetching schedule instance to update
         
         institute_subjects = Subjects.objects.filter(institute= request.user.profile.institute, subject_class= schedule_to_update.Class) # fetching available subjects in the institute
@@ -94,3 +96,17 @@ def schedule_update(request, pk):
                 schedule_to_update.save()
        
         return render(request, 'class_schedule/update_schedule.html', context_data )
+
+class LectureListView(LoginRequiredMixin, ListView):
+        model = Lecture
+        template_name = 'class_schedule/update_lecture_time.html'
+
+
+class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+        model = Lecture
+
+        fields = ['start_time','end_time']
+        template_name= 'class_schedule/update_timing.html'
+        success_message = "Timing Updated Successfully !!!"
+        success_url = "/schedule/update/lectures/"
+        

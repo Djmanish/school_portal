@@ -919,7 +919,7 @@ fieldset + * {
  * 1. Gutter
  * 2. Remove default list style
  */
-.uk-dotna
+.uk-dotnav {
   display: -ms-flexbox;
   display: -webkit-box;
   display: flex;
