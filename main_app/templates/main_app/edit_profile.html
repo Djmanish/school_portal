@@ -18,7 +18,8 @@
     <title>Update Profile</title>
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
 
-
+   <!-- bootstrap -->
+   <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}" media="all">
 
@@ -34,8 +35,7 @@
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
 
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+ 
 
    <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
@@ -467,15 +467,38 @@
 
 
 
+    
 
 
 
+ 
 
                               <div class="form-group">
                                 <label >Date of Birth:</label>
                                 
                                 <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" >
                               </div>
+                              {% if user.user_institute_role.level.level_name == "student" %}
+<div class="form-group">
+    <label for="sel1">Select Your Class:</label>
+    <select class="form-control" name="student_class">
+    
+    {% if user_info.Class %}
+    <option selected value="{{user_info.Class.id}}">{{user_info.Class}}</option>  
+    {% else %}
+    <option  disabled> -- select your class --</option>
+    {% endif %}
+           
+     
+     
+     {% for class in all_institute_classes %}
+     <option value="{{class.id}}">{{class}}</option>
+     {% endfor %}
+         
+    </select>
+  </div>
+  {% else %}
+{% endif %}
 
                               <div class="form-group">
                                 <label >About Yourself:</label>
@@ -529,31 +552,8 @@
                                 <label >Facebook Profile link:</label>
                                 <input type="url" class="form-control" name='facebook_link' value="{{user_info.facebook_link}}">
                               </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                              
-
-
-
-
-
-
-                             
-                              
-                              <input type="submit" value="Update" class="btn btn-sm btn-success">
+                      
+                              <input  class="md-btn md-btn-primary" type="submit" value="Update" >
 
 
                         </form>

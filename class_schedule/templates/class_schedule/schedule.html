@@ -349,7 +349,7 @@
                     
                 </li>
 
-                <li class="current_section" title="Institute Schedule">
+                <li class="current_section"  title="Institute Schedule">
                     <a href="{% url 'class_schedule' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Schedule</span>
@@ -383,7 +383,7 @@
                         </a>
                     </li>
 
-            </ul>
+            </ul>            
         </div>
     </aside><!-- main sidebar end -->
 
@@ -445,10 +445,10 @@
                                                     id="ts_issues">
                                                     <thead>
                                                         <tr>
-                                                            <th class="uk-text-center" colspan="2"><b>Class</b>
+                                                            <th class="uk-text-center" colspan="2"><b></b>
                     <form >
-                        <select name="selected_class">
-                            <option selected >--Select Class--</option>
+                        <select name="selected_class" style="padding: 2px;" >
+                            <option selected disabled>--Select Class--</option>
                             
                             {% for class in all_classes %}
                                <option value="{{class.id}}"  > {{class}}</option>
@@ -456,7 +456,7 @@
                                 
 
                      </select>
-                     <input type="submit" value="View">
+                     <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
                     </form>
                                                             
                                                             </th>
@@ -509,7 +509,7 @@
                                                             </td>
                                                         
                                                     <td colspan="2" rowspan="2">
-                                                        <a class="md-button" href="{% url 'update_schedule' monday_schedule.pk %}">Update</a>
+                                                        <a class="md-btn md-btn-primary" href="{% url 'update_schedule' monday_schedule.pk %}">Update</a>
                                                     </td>
                                                          
                                                         </tr> 
@@ -543,7 +543,7 @@
                                                             <td colspan="2">{{tuesday_schedule.subject_lecture_eight}}</td> 
 
                                                             <td colspan="2" rowspan="2" >
-                                                                <a class="md-button" href="{% url 'update_schedule' tuesday_schedule.pk %}">Update</a>
+                                                                <a class="md-btn md-btn-primary" href="{% url 'update_schedule' tuesday_schedule.pk %}">Update</a>
                                                             </td>
                                                          
                                                         </tr> 
@@ -582,7 +582,7 @@
 
                                                             
                                                                 <td colspan="2" rowspan="2">
-                                                                    <a class="md-button" href="{% url 'update_schedule' wednesday_schedule.pk %}">Update</a>
+                                                                    <a class="md-btn md-btn-primary" href="{% url 'update_schedule' wednesday_schedule.pk %}">Update</a>
                                                                 </td>
                                                         
                                                         
@@ -623,7 +623,7 @@
                                                             <td colspan="2">{{thursday_schedule.subject_lecture_eight}}</td> 
                                                           
                                                             <td colspan="2" rowspan="2">
-                                                                <a class="md-button" href="{% url 'update_schedule' thursday_schedule.pk %}">Update</a>
+                                                                <a class="md-btn md-btn-primary" href="{% url 'update_schedule' thursday_schedule.pk %}">Update</a>
                                                             </td>
 
                                                         </tr> 
@@ -657,7 +657,7 @@
                                                             <td colspan="2">{{friday_schedule.subject_lecture_eight}}</td> 
                                                                 
                                                     <td colspan="2" rowspan="2">
-                                                        <a class="md-button" href="{% url 'update_schedule' friday_schedule.pk %}">Update</a>
+                                                        <a class="md-btn md-btn-primary" href="{% url 'update_schedule' friday_schedule.pk %}">Update</a>
                                                     </td>
 
                                                         </tr> 
@@ -690,7 +690,7 @@
                                                             <td colspan="2">{{saturday_schedule.subject_lecture_eight}}</td> 
                                                          
                                                             <td colspan="2" rowspan="2">
-                                                                <a class="md-button" href="{% url 'update_schedule' saturday_schedule.pk %}">Update</a>
+                                                                <a class="md-btn md-btn-primary" href="{% url 'update_schedule' saturday_schedule.pk %}">Update</a>
                                                             </td>
 
                                                         </tr> 
