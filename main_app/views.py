@@ -101,7 +101,11 @@ def login(request):
 
 @login_required
 def user_profile(request):
-    return render(request, 'main_app/admin_user_profile.html')
+    all_institute_classes = Classes.objects.filter(institute= request.user.profile.institute)
+    context ={
+        'all_institute_classes':all_institute_classes
+    }
+    return render(request, 'main_app/admin_user_profile.html', context)
     
   
     
@@ -281,7 +285,14 @@ def delete_user_role(request, pk):
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
 
-    
+def selecting_class(request):
+    if request.method == 'POST':
+        selected_class= request.POST.get('student_class')
+        student = UserProfile.objects.get(user = request.user)
+        student.Class= Classes.objects.get(pk= selected_class)
+        student.save()
+
+    return redirect('user_profile')
 
     
 
