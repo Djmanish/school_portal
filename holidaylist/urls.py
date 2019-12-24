@@ -11,7 +11,7 @@ from holidaylist import views
 urlpatterns = [
   
   path('holidaylist/', views.holidaylist, name="holidaylist"),
-  path('holiday_list/add_holiday', views.add_holiday, name="add_holiday")
+  path('holidays/add', views.add_holiday, name="add_holiday")
 
 
 ]

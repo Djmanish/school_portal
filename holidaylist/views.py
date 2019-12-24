@@ -10,6 +10,7 @@ from main_app import urls
 from holidaylist.urls import *
 
 
+
         # Create your views here.
 def holidaylist(request):
      institute_holiday_list = HolidayList.objects.all()
