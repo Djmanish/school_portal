@@ -8,10 +8,7 @@ from main_app.models import *
 
 # Holiday List Model
 class HolidayList(models.Model):
-    Answers=(
-    ('yes', 'yes'),
-    ('no','no'),
-    ),
+   
     DAYS_OF_WEEK = (
     ('Monday', 'Monday'),
     ('Tuesday', 'Tuesday'),
@@ -25,11 +22,11 @@ class HolidayList(models.Model):
     date=models.DateField(max_length=100, null=True)
     days = models.CharField(max_length=10, choices=DAYS_OF_WEEK, null= True)
     name = models.CharField(max_length=100, null=True)
-    applicable =models.CharField(max_length=10,choices=Answers, null=True, default="Yes")
+    applicable =models.CharField(max_length=10,null=True, choices=((False, 'No'), (True, 'Yes')))
     holiday_type= models.CharField(max_length=100, null=True)
-    holiday_email=models.CharField(max_length=10,choices=Answers, null=True, default="No")
-    holiday_sms=models.CharField(max_length=10, choices=Answers,null=True, default="No")
-    holiday_notification=models.CharField(max_length=10, choices=Answers, null=True, default="No")
+    holiday_email=models.CharField(max_length=10,null=True, choices=((False, 'No'), (True, 'Yes')))
+    holiday_sms=models.CharField(max_length=10,null=True, choices=((False, 'No'), (True, 'Yes')))
+    holiday_notification=models.CharField(max_length=10,null=True, choices=((False, 'No'), (True, 'Yes')))
     created_at= models.DateTimeField(auto_now=True, null=True, )
     updated_at = models.DateTimeField(auto_now=True, null=True)
     

@@ -12,10 +12,6 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.db.models import Q
-
-
-
-
 from class_schedule.models import *
 # Create your views here.
 
