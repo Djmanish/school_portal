@@ -101,7 +101,7 @@ def login(request):
 
 @login_required
 def user_profile(request):
-    return render(request, 'main_app/admin_user_profile.html')
+     return render(request, 'main_app/admin_user_profile.html', )
     
   
     
@@ -128,6 +128,7 @@ def edit_profile(request, pk):
     user_info = UserProfile.objects.get(pk=pk)
     all_institutes = Institute.objects.all()
     all_states = State.objects.all()
+    all_institute_classes = Classes.objects.filter(institute= request.user.profile.institute)
     
     if request.method == "POST":
         new_admin = 'admin_check'  in request.POST
@@ -166,6 +167,10 @@ def edit_profile(request, pk):
             user_info.designation = up_level
             new_level = Role_Description.objects.create(user=request.user, institute= updated_institute, level= up_level  )
 
+        if 'student_class' in request.POST: 
+            selected_class= request.POST.get('student_class')
+            user_info.Class= Classes.objects.get(pk= selected_class)
+
         user_info.about= request.POST['about']
         if 'profile_pic' in request.FILES:
             user_info.profile_pic= request.FILES['profile_pic']
@@ -184,7 +189,7 @@ def edit_profile(request, pk):
         messages.success(request, 'Profile details updated.')
         return redirect('user_profile')
         
-    return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})
+    return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,'all_institute_classes':all_institute_classes})
 
 
   
@@ -281,7 +286,14 @@ def delete_user_role(request, pk):
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
 
-    
+def selecting_class(request):
+    if request.method == 'POST':
+        selected_class= request.POST.get('student_class')
+        student = UserProfile.objects.get(user = request.user)
+        student.Class= Classes.objects.get(pk= selected_class)
+        student.save()
+
+    return redirect('user_profile')
 
     
 
