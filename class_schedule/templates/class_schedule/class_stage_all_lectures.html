@@ -381,7 +381,7 @@
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading"></span></h2>
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading">Update the lecture timing of all {{class_stage}} stage classes</span></h2>
                                                             </div>
 
 
@@ -402,28 +402,25 @@
                                 <tr>
                                 
                                   
-                                    <th class="uk-width-2-10">Class Stage</th>
-                                    <th class="uk-width-1-10 uk-text-center">Update</th>
-                                 
+                                    <th class="uk-width-2-10">Lecture</th>
+                                    <th class="uk-width-1-10 uk-text-center">Start Time</th>
+                                    <th class="uk-width-1-10 uk-text-center">End Time</th>
+                                    <th class="uk-width-1-10 uk-text-center">Update Lecture Time</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
-                                    <tr>
-                                        <td>Primary Classes</td>
-                                        <td class="uk-text-center"><a href="{% url 'class_stage_lectures' id=1 %}">Update Lecture Timing</a></td> 
-                                    </tr> 
-                                    <!-- class stage has id 1 -->
-                                    <tr>
-                                        <td>Middle Classes</td>
-                                        <td class="uk-text-center"><a href="{% url 'class_stage_lectures' id=2 %}">Update Lecture Timing</a></td>
-                                    </tr>
-                                    <!-- # secondary stage has id 2 -->
-                                    <tr>
-                                        <td>Highschool Classes</td>
-                                        <td class="uk-text-center"><a href="{% url 'class_stage_lectures' id=3 %}">Update Lecture Timing</a></td> 
-                                    </tr>
-                                    <!-- # highschool has id 3 -->
+            
+            {% for lecture in all_lectures %}
+            <tr>
+                <td >{{lecture.lecture_name}}</td>
+                <td class="uk-text-center">{{lecture.start_time}}</td>
+                <td class="uk-text-center">{{lecture.end_time}}</td>
+                <td class="uk-text-center"><a href="{% url 'lecture_time' lecture.pk %}">Update Lecture Time</a></td>
+            </tr>  
+            {% endfor %}
+                
+                                   
+                                 
                                 </tbody>
                             </table>
 

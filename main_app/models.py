@@ -114,7 +114,8 @@ class Classes(models.Model):
     teacher_name= models.CharField(max_length=20,null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(null=True)
-    # responsible_user =models.OneToOneField(to=User, on_delete=models.CASCADE, null=True, related_name='responsible_user',null=True)
+    class_stage_choices = [('Primary','Primary'),('Middle','Middle'),('Highschool','Highschool')]
+    class_stage = models.CharField(max_length=50, choices= class_stage_choices, null=True)
     # created_by=models.OneToOneField(to=User, on_delete=models.CASCADE, null=True,  related_name='created_by', null=True)
     def __str__(self):
         return str(self.name)

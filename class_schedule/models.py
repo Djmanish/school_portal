@@ -5,6 +5,8 @@ from main_app.models import *
 class Lecture(models.Model):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, null=True, related_name="institute_lecture")
     
+    class_stage_choices = [('Primary','Primary'),('Middle','Middle'),('Highschool','Highschool')]
+    class_stage = models.CharField(max_length=50, choices= class_stage_choices, null=True)
     lecture_name = models.CharField(max_length=100)
     start_time = models.TimeField(null=True,)
     end_time = models.TimeField(null=True , )
