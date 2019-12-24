@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import *
 from django.views.generic import ListView, UpdateView
-
+from django.urls import reverse, reverse_lazy
 # Create your views here.
 
 @login_required
@@ -21,9 +21,10 @@ def schedule(request):
     selected_class = Classes.objects.get(pk=select_class_for_schedule) #fetching the class instance seleted to view
 
     time_table_for_class = selected_class.name
+    selected_class_stage = selected_class.class_stage
     
     all_class = Classes.objects.filter(institute=request.user.profile.institute)
-    all_lectures = Lecture.objects.filter(institute=request.user.profile.institute)
+    all_lectures = Lecture.objects.filter(institute=request.user.profile.institute, class_stage= selected_class_stage)
     
 
     monday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Monday"  )
@@ -96,10 +97,10 @@ def schedule_update(request, pk):
                 schedule_to_update.save()
        
         return render(request, 'class_schedule/update_schedule.html', context_data )
+@login_required
+def class_stage_lecture_time_update(request):
+        return render(request, 'class_schedule/update_lecture_time.html')
 
-class LectureListView(LoginRequiredMixin, ListView):
-        model = Lecture
-        template_name = 'class_schedule/update_lecture_time.html'
 
 
 class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -108,5 +109,28 @@ class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         fields = ['start_time','end_time']
         template_name= 'class_schedule/update_timing.html'
         success_message = "Timing Updated Successfully !!!"
-        success_url = "/schedule/update/lectures/"
+
+        def get_success_url(self, **kwargs):
+                current_object = self.get_object()
+                if current_object.class_stage == "Primary":
+                        stage_id=1
+                elif current_object.class_stage == "Middle":
+                        stage_id=2
+                else:
+                        stage_id=3
+                return reverse_lazy("class_stage_lectures", kwargs={'id':stage_id})
         
+        
+        
+
+def class_stage_all_lectures(request, id):
+        if id == 1:
+                all_lectures = Lecture.objects.filter(institute=request.user.profile.institute, class_stage='Primary')
+                return render(request, 'class_schedule/class_stage_all_lectures.html',{'all_lectures':all_lectures, 'class_stage':'Primary'})
+        elif id ==2:
+                all_lectures = Lecture.objects.filter(institute=request.user.profile.institute, class_stage='Middle')
+                return render(request, 'class_schedule/class_stage_all_lectures.html',{'all_lectures':all_lectures,'class_stage':'Middle'})
+        elif id == 3:
+                all_lectures = Lecture.objects.filter(institute=request.user.profile.institute, class_stage='Highschool')
+                return render(request, 'class_schedule/class_stage_all_lectures.html',{'all_lectures':all_lectures,'class_stage':'Highschool'})
+
