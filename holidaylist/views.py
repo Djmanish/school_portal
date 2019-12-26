@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin 
 from django.urls import reverse_lazy, reverse
 from django.views.generic import *
+from django.contrib.messages.views import SuccessMessageMixin
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -9,7 +10,7 @@ from holidaylist import templates
 from django.contrib import messages
 from holidaylist.models import *
 from main_app import models
-from main_app import views
+
 from main_app import urls
 from holidaylist.urls import *
 
@@ -37,19 +38,22 @@ def holidaylist(request):
 
     return render(request, 'holidaylist/holidaylist.html',{'institute_holiday_list':institute_holiday_list})
 
-        
-# def add_holiday(request):
-   
 
-       
-     
-     
-#         return HttpResponseRedirect(f'/holidaylist/holidaylist/')
                 
-
-class HolidayUpdateView(UpdateView):
+def edit_holiday(request, pk):
+    edit_holiday= HolidayList.objects.get(pk=pk)
+    return render(request, 'holidaylist/edit_holiday.html', {'edit_holiday':edit_holiday})
+   
+from .forms import HolidayUpdateForm
+class HolidayUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
  model = HolidayList
- fields = ['date','days','name', 'applicable','holiday_type','holiday_email','holiday_sms','holiday_notification']
-
- template_name="holidaylist/holidaylist.html"
+ form_class = HolidayUpdateForm
+ template_name="holidaylist/edit_holiday.html"
  success_message = "Details were updated successfully"
+ success_url= "/holiday"
+
+def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+

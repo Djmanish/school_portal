@@ -409,16 +409,13 @@
                                 <div class="uk-modal-header">
                                     <h3 class="uk-modal-title">Add Holiday </h3>
                                 </div>
-                                <form method="POST" action="{% url 'holidaylist' %}">
+                               <form method="POST" action="{% url 'holidaylist' %}">
                                     {% csrf_token %}
                                     <div class="form-group">
                                             <label>Date</label>
                                             <input type="date" class="form-control" name="holiday_date">
                                         </div>
-                                        <!-- <div class="form-group">
-                                            <label>Day</label>
-                                            <input type="text" class="form-control" name="holiday_day">
-                                        </div> -->
+                                        
                                         
                                         <div class="form-group">
                                                 <label for="sel7">Select Day:</label>
@@ -479,9 +476,9 @@
                                               
                                             </select>
                                           </div>
-                                    <button type="submit" class="btn btn-success">Add
+                                    <button type="submit" class="btn btn-primary">Add
                                         Holiday</button>
-                                </form>
+                                </form> 
                                 <div class="uk-modal-footer uk-text-right">
                                     <button type="button" class="md-btn md-btn-flat uk-modal-close">Cancel</button>
                                 </div>
@@ -564,29 +561,17 @@
                                         <td>{{holiday.name}}</td>
                                         <td>{{holiday.applicable}}
 
-                                            <!-- <select>
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-
-                                    </select> -->
+                                        
                                         </td>
                                         <td>{{holiday.holiday_type}}</td>
                                         <td>
                                             {{holiday.holiday_email}}
-                                            <!-- <select>
-                                                <option value="yes">Yes</option>
-                                                <option value="no">No</option>
-        
-                                            </select> -->
+                                            
                                         </td>
                                         <td><a href="#">Link</a></td>
                                         <td>
                                             {{holiday.holiday_sms}}
-                                            <!-- <select>
-                                                <option value="yes">Yes</option>
-                                                <option value="no">No</option>
-        
-                                            </select> -->
+                                           
                                         </td>
                                         <td><a href="#">Link</a></td>
                                         <td>
@@ -598,7 +583,7 @@
                                             </select> -->
                                         </td>
                                         <td><a href="#">Link</a></td>
-                                        <td><button type="button" class="btn btn-primary" data-uk-modal="{target:'#modal_new_holiday'}">Edit</button>
+                                        <td><a  class="btn btn-primary" href="{% url 'edit_holiday' holiday.pk %}">Edit</a>
                                         </td>
 
                                     </tr>
