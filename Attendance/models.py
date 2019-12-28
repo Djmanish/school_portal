@@ -6,7 +6,7 @@ from main_app.models import *
 
 
 class Attendance(models.Model):
-   student = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="student_attendance" )
+   student = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="student_attendance", null=True )
    Ds = [
       ('present','Present'),('absent','Absent'),('leave','Leave'),('holiday','Holiday'),
    ]  

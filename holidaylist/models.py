@@ -27,7 +27,7 @@ class HolidayList(models.Model):
     holiday_email=models.CharField(max_length=10,null=True, choices=(('No', 'No'), ('Yes', 'Yes')))
     holiday_sms=models.CharField(max_length=10,null=True, choices=(('No', 'No'), ('Yes', 'Yes')))
     holiday_notification=models.CharField(max_length=10,null=True, choices=(('No', 'No'), ('Yes', 'Yes')))
-    created_at= models.DateTimeField(auto_now=True, null=True, )
+    created_at= models.DateTimeField(auto_now=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     
  
@@ -35,12 +35,12 @@ class HolidayList(models.Model):
             return str(self.name)    
 
 
-class SendEmail(models.Model):
-    mail_to=models.CharField(max_length=1000)
-    mail_subject=models.CharField(max_length=1000)
-    mail_content = models.CharField(max_length=1000)
-    # mail_from = models.CharField(max_length=1000)
-    mail_date=models.DateTimeField(auto_now=True, null=True)
+# class SendEmail(models.Model):
+#     mail_to=models.CharField(max_length=1000)
+#     mail_subject=models.CharField(max_length=1000)
+#     mail_content = models.CharField(max_length=1000)
+#     mail_from = models.CharField(max_length=1000)
+#     mail_date=models.DateTimeField(auto_now=True, null=True)
 
-    def __str__(self):
-        return str(self.mail_to)
+#     def __str__(self):
+#         return str(self.mail_to)
