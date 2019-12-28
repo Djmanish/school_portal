@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, AbstractUser
 from datetime import date
 
 
+
 # Create your models here.
 
 class State(models.Model):

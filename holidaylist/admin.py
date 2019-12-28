@@ -4,3 +4,4 @@ from holidaylist.models import *
 
 # Register your models here.
 admin.site.register(HolidayList)
+admin.site.register(SendEmail)

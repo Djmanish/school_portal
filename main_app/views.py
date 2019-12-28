@@ -13,6 +13,8 @@ from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.db.models import Q
 from class_schedule.models import *
+from .forms import SubjectUpdateForm
+
 
 # Create your views here.
 
@@ -46,6 +48,14 @@ def add_subjects(request):
         messages.success(request, 'Subject Created successfully !!!')
         
     return HttpResponseRedirect(f'/institute/profile/{rr}/')
+
+       
+class SubjectUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+ model = Subjects
+ form_class = SubjectUpdateForm
+ template_name="main_app/edit_subject.html"
+ success_message = "Details were updated successfully"
+ success_url= "/subject"
 
 
 def approvals(request):

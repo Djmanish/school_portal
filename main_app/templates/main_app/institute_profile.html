@@ -739,7 +739,8 @@
                                                                <td> {{subjects.subject_code}} </td>
                                                                <td> {{subjects.subject_name}} </td>
 
-                                                              
+                                                               <td><a  class="btn btn-primary" href="{% url 'edit_subject' subject.pk %}">Edit</a>
+                                                               </td>
 
                                                              </tr>
                                                              {% endfor %}

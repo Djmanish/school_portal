@@ -13,6 +13,7 @@ from main_app import models
 
 from main_app import urls
 from holidaylist.urls import *
+from django.core.mail import send_mail, send_mass_mail, mail_admins, mail_managers
 
 
 
@@ -57,3 +58,13 @@ def form_valid(self, form):
         return super().form_valid(form)
 
 
+def holidayemail(request):
+        return render('holidaylist/holiday_email.html')
+
+def send_mails(request):
+        mail= send_mail("Test", "Hello",'yourcollegeportal@gmail.com',['neha.gautam869@gmail.com'], fail_silently=False, html_message="Test")
+
+        if mail:
+           return HttpResponse(mail)
+        else :
+           raise Exception("Error")

@@ -33,3 +33,14 @@ class HolidayList(models.Model):
  
     def __str__(self):
             return str(self.name)    
+
+
+class SendEmail(models.Model):
+    mail_to=models.CharField(max_length=1000)
+    mail_subject=models.CharField(max_length=1000)
+    mail_content = models.CharField(max_length=1000)
+    # mail_from = models.CharField(max_length=1000)
+    mail_date=models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return str(self.mail_to)
