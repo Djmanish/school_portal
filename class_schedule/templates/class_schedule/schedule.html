@@ -16,11 +16,8 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
 
-    <title>Institute Profile</title>
+    <title>Institute Schedule</title>
 
-
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
         media="all">
@@ -447,8 +444,8 @@
                                                         <tr>
                                                             <th class="uk-text-center" colspan="2"><b></b>
                     <form >
-                        <select name="selected_class" style="padding: 2px;" >
-                            <option selected disabled>--Select Class--</option>
+                        <select name="selected_class" style="padding: 2px;" required>
+                            <option selected disabled value="">--Select Class--</option>
                             
                             {% for class in all_classes %}
                                <option value="{{class.id}}"  > {{class}}</option>

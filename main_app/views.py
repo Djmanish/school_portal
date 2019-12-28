@@ -18,8 +18,9 @@ from class_schedule.models import *
 def add_classes(request):
     if request.method == "POST":
         class_name= request.POST['class_name']
+        class_stage= request.POST.get('class_stage')
         
-        new_class = Classes.objects.create(institute = request.user.profile.institute, name= class_name)
+        new_class = Classes.objects.create(institute = request.user.profile.institute, name= class_name, class_stage= class_stage )
         #creating schedule for created class
         days=['Monday','Tuesday', 'Wednesday', 'Thursday','Friday','Saturday']
         for day in days:
