@@ -27,4 +27,6 @@ urlpatterns = [
     path('attendance/', include('Attendance.urls')),
     path('accounts/', include('registration.backends.default.urls')),
     path('schedule/', include('class_schedule.urls')),
+    path('holiday/', include('holidaylist.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
