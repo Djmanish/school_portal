@@ -6,7 +6,7 @@ from main_app.models import *
 
 
 class Attendance(models.Model):
-   student = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="student_attendance", null=True )
+   student = models.ForeignKey(to=User, on_delete=models.CASCADE,null=True, related_name="student_attendance" )
    Ds = [
       ('present','Present'),('absent','Absent'),('leave','Leave'),('holiday','Holiday'),
    ]  
@@ -16,7 +16,7 @@ class Attendance(models.Model):
    
    attendance_status = models.CharField(max_length= 100, null = True,default="")
    current_date = models.DateTimeField(auto_now_add=True,null=True)
-   daily_status = models.CharField(max_length=25,choices=Ds,default="--Select--")
+   update_date = models.DateTimeField(auto_now=True,null=True)
 
    def __str__(self):
       return str(self.first_name)
