@@ -610,14 +610,21 @@
                                                                 {% csrf_token %}
                                                                 <div class="form-group">
                                                                         <label >Class Name:</label>
-                                                                        <input type="text" class="form-control" name="class_name">
+                                                                        <input type="text" class="form-control" name="class_name" required>
                                                                       </div>
-                                                                      <!-- <div class="form-group">
-                                                                            <label >Class Teacher Name:</label>
-                                                                            <input type="text" class="form-control" name="class_teacher">
-                                                                          </div> -->
+                                                                   
+                                                                      <div class="form-group">
+                                                                        <label for="sel1">Select Class Stage:</label>
+                                                                        <select class="form-control" name="class_stage" required>
+                                                                            <option selected disabled value="">--- select class stage ---</option>
+                                                                          <option>Primary</option>
+                                                                          <option>Middle</option>
+                                                                          <option>Highschool</option>
                                                                          
-                                                                          <button type="submit" class="btn btn-success">Add Class</button>
+                                                                        </select>
+                                                                      </div>
+                                                                         
+                                                                          <button type="submit" class="md-btn md-btn-primary md-btn-wave-light">Add Class</button>
                                                           </form>
                                                             <div class="uk-modal-footer uk-text-right">
                                                                 <button type="button" class="md-btn md-btn-flat uk-modal-close">Cancel</button>
