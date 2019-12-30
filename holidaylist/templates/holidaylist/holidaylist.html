@@ -577,24 +577,15 @@
                                        
                                         <td>
                                             
+                                            {% if holiday.holiday_email == "Yes" %}
+                                            <a href="{% url 'emailView' %}">Link</a>
                                             
-                                            
-                
-                                              <a href="{% url 'emailView' %}">Link</a>
-                                                  
-                                             
-                                                    
-                                            
+                                            {% else %}
+                                            <p>Link</p>
+                                            {% endif %}
                                                 
-                                               
-
-                                           
-                                             
-                                            
-                                             
-                                           
-                                            
-                                        </td>
+                                              
+                                             </td>
                                         
                                         <td>
                                             {{holiday.holiday_sms}}
