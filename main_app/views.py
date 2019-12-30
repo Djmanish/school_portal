@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.db.models import Q
 from class_schedule.models import *
-from .forms import SubjectUpdateForm
+from .forms import SubjectUpdateForm, ClassUpdateForm
 
 
 # Create your views here.
@@ -30,8 +30,23 @@ def add_classes(request):
             create_schedule = Schedule.objects.create(institute=request.user.profile.institute, Class= new_class, day= day )
 
         messages.success(request, 'Class Created successfully !!!')
+        rr=request.user.profile.institute.id
     
-    return render(request, 'main_app/dashboard.html')
+    return HttpResponseRedirect(f'/institute/profile/{rr}/')
+
+
+class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+ model = Classes
+ form_class = ClassUpdateForm
+ template_name="main_app/edit_class.html"
+ success_message = "Details were updated successfully"
+ 
+
+ def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+ def get_success_url(self, **kwargs):         
+        return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
 
 
 # Add Subjects
@@ -56,7 +71,14 @@ class SubjectUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
  form_class = SubjectUpdateForm
  template_name="main_app/edit_subject.html"
  success_message = "Details were updated successfully"
- success_url= "/subject"
+ 
+
+ def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+ def get_success_url(self, **kwargs):         
+        return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
+
 
 
 def approvals(request):

@@ -641,7 +641,7 @@
                                                                     <thead>
                                                                       <tr>
                                                                         <th><b>Sr. No.</b></th>
-                                                                        <th><b>Class Name</b></th>
+                                                                        <th><b>Class Stage</b></th>
                                                                         <th><b>Class Teacher</b></th>
                                                                         <th><b>Created Date</b></th>
                                                                         <th><b>Updated Date</b></th>
@@ -654,10 +654,11 @@
                                                                       <tr>
                                                                         <th style="text-align: center;"> {{ forloop.counter}} </th>
                                                                         <td> {{classes.name }} </td>
-                                                                        <td>{{classes.teacher_name}}</td>
+                                                                        <td>{{classes.class_stage}}</td>
                                                                         <td>{{classes.created_at}}</td>
                                                                         <td>{{classes.updated_at}}</td>
-                                                                        
+                                                                        <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_class' classes.pk %}">Edit</a>
+                                                                        </td>
     
                                                                       </tr>
                                                                       {% endfor %}
@@ -746,7 +747,7 @@
                                                                <td> {{subjects.subject_code}} </td>
                                                                <td> {{subjects.subject_name}} </td>
 
-                                                               <td><a  class="btn btn-info btn-sm pull-right" href="">Edit</a>
+                                                               <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_subject' subjects.pk %}">Edit</a>
                                                                </td>
 
                                                              </tr>

@@ -3,7 +3,7 @@ from main_app import views
 from . import views
 
 from django.views.generic.base import RedirectView
-from .views import RegistrationViewUniqueEmail, InstituteUpdateview, SubjectUpdateView
+from .views import RegistrationViewUniqueEmail, InstituteUpdateview, SubjectUpdateView,ClassUpdateView
 
 
 
@@ -34,6 +34,8 @@ urlpatterns = [
   path('user/class/add_class/',views.add_classes, name="add_classes"),
   path('add/new_subject/', views.add_subjects, name="add_subjects"),
   path('subject/edit/<int:pk>/',SubjectUpdateView.as_view(), name='edit_subject'),
+  path('class/edit/<int:pk>/',ClassUpdateView.as_view(), name='edit_class'),
+
 
   path('student/select_class/', views.selecting_class, name="selecting_class"),
   
