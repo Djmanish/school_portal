@@ -293,6 +293,25 @@ def selecting_class(request):
 
     return redirect('user_profile')
 
+def assign_class_teacher(request, pk):
+    selected_class = Classes.objects.get(pk=pk)
+    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+    context_data= {'selected_class':selected_class, 'institute_teachers':institute_teachers}
+
+    if request.method == 'POST':
+        
+        new_class_teacher = request.POST.get('class_teacher')
+    
+        selected_class.class_teacher = User.objects.get(pk= new_class_teacher)
+        try:
+            selected_class.save()
+            messages.success(request, 'Class Teacher assigned successfully!!!')
+        except:
+            messages.error(request,'Something went wrong !!!')
+
+    return render(request, 'main_app/assign_class_teacher.html', context_data)
+
     
 
 

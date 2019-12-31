@@ -44,7 +44,8 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-
+ <!-- jquery cdn  -->
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -413,7 +414,9 @@
                        
                        <a href="#" class="md-btn uk-margin-right" id="printTable">Print Table</a> 
                     </div>
-                    <div class="uk-overflow-container uk-margin-bottom">
+                    <td class="uk-overflow-container uk-margin-bottom">
+<h4>Taking attendance for  {% now "jS F Y H:i" %}</h4>
+
                         <table class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair" id="ts_pager_filter">
                             <thead>
                             <tr>
@@ -430,17 +433,7 @@
                             </tr>
                             </thead>
 
-                            <tfoot>
-                                <tr>
-                                <th>Sr No.</th>
-                                <th> First Name</th>
-                                <th> Last Name</th>
-                                <th style="text-align: center;">Day</th style="text-align: center;">
-                                
-                                
-                                
-                                </tr>
-                            </tfoot>
+                           
                             <tbody>
                             {% for student in all_students %}
                             <tr> 
@@ -449,12 +442,50 @@
                                 <td> {{ student.last_name }} </td>
                                 <td style="text-align: center;"> {{student.current_date}} </td>
                                 
-                                        <td> <div class="uk-width-medium-1-6">
-                                            <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave" href="#">Present</a>
-                                            <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave" href="#">Absent</a>
-                                            <a class="md-btn md-btn-flat md-btn-flat-warning md-btn-wave" href="#">Leave</a>
-                                        </div> </td>
-                                
+                                        <td > 
+                           
+    <form    action="{% url 'attendanceupdate' student.id %}" method="POST">
+        {% csrf_token %}    
+        <span class="icheck-inline">
+                                      
+            <input type="radio" name="{{student.id}}"  required class="wizard-icheck" value="present" />
+            <label for="wizard_status_present" class="inline-label">Present</label>
+        </span>
+        <span class="icheck-inline">
+            <input type="radio" name="{{student.id}}" class="wizard-icheck" value="absent" />
+            <label for="wizard_status_absent" class="inline-label">Absent</label>
+        </span> 
+        <span class="icheck-inline">
+            <input type="radio" name="{{student.id}}" class="wizard-icheck" value="leave" />
+            <label for="wizard_status_leave" class="inline-label">Leave</label>
+            
+        </span>
+        <input type="submit" id="attendance_status" value="Update" class="md-btn md-btn-primary mini-button">
+        
+    </form>
+   
+                                        </td>
+                                    
+                                    </tr>     
+                                    <script>
+                                        $(document).ready(function(){
+                                          $('#"{{student.id}}"').submit(function(){
+                                           
+                                                var radioValue= $("input[name='{{student.id}}']:checked").val();
+                                                alert(radioValue);
+                                              $.ajax({
+                                                type:'POST',
+                                                url:'attendanceupdate/<int:pk>/',
+                                                data:{student_id:radioValue, csrfmiddlewaretoken:  },
+                                                  
+                                                  success: function(msg){
+                                                    alert('done');
+                                                  }
+                                              })
+                                          })
+                                        })
+                                        </script>
+                                   
                                 {% endfor %}
                                 
                                 
@@ -462,7 +493,7 @@
                                 
                                 
                                 
-                            </tr>
+                          
                             
                             
                             </tbody>
@@ -778,5 +809,8 @@
 
         });
     </script>
+  <!-- jquery cdn  -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
 </body>
 </html>
