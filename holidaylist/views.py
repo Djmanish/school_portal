@@ -13,6 +13,8 @@ from main_app import models
 
 from main_app import urls
 from holidaylist.urls import *
+from holidaylist.forms import ContactForm
+from django.core.mail import send_mail, send_mass_mail, mail_admins, mail_managers
 
 
 
@@ -57,3 +59,36 @@ def form_valid(self, form):
         return super().form_valid(form)
 
 
+def holidayemail(request):
+        return render('holidaylist/holiday_email.html')
+
+# def send_mails(request):
+#     holiday_email = SendEmail.objects.all()
+#  return render('holidaylist/holiday_email.html',{'holiday_email':holiday_email})
+
+#         # mail= send_mail("Test", "Hello",'yourcollegeportal@gmail.com',['neha.gautam869@gmail.com'], fail_silently=False, html_message="Test")
+
+#         # if mail:
+#         #    return HttpResponse(mail)
+#         # else :
+#         #    raise Exception("Error")
+
+def emailView(request):
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            to_email = form.cleaned_data['to_email']
+            subject = form.cleaned_data['subject']
+            from_email = form.cleaned_data['from_email']
+            message = form.cleaned_data['message']
+            try:
+                send_mail(subject, message,from_email,[to_email],fail_silently=False)
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return redirect('holidaylist')
+    return render(request, "holidaylist/holiday_email.html", {'form': form})
+
+def successView(request):
+    return HttpResponse('Success! Thank you for your message.')

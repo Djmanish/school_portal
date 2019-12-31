@@ -609,33 +609,42 @@
                                                     <div class="uk-modal-header">
                                                         <h3 class="uk-modal-title">Add New Class </h3>
                                                     </div>
-                                                    <form method="POST" action="{% url 'add_classes' %}">
-                                                        {% csrf_token %}
-                                                        <div class="form-group">
-                                                            <label>Class Name:</label>
-                                                            <input type="text" class="form-control" name="class_name"
-                                                                required>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="sel1">Select Class Stage:</label>
-                                                            <select class="form-control" name="class_stage" required>
-                                                                <option selected disabled value="">--- select class
-                                                                    stage ---</option>
-                                                                <option>Primary</option>
-                                                                <option>Middle</option>
-                                                                <option>Highschool</option>
-
-                                                            </select>
-                                                        </div>
-
-                                                        <button type="submit"
-                                                            class="md-btn md-btn-primary md-btn-wave-light">Add
-                                                            Class</button>
-                                                    </form>
-                                                    <div class="uk-modal-footer uk-text-right">
-                                                        <button type="button"
-                                                            class="md-btn md-btn-flat uk-modal-close">Cancel</button>
+                                    
+                                       
+                                                <div class="md-card-content">
+                                                        
+                                                    <div class="uk-overflow-container uk-margin-bottom">
+                                                       
+                                                            <table class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair table table-hover table-sm"  id="ts_issues">
+                                                                    <thead>
+                                                                      <tr>
+                                                                        <th><b>Sr. No.</b></th>
+                                                                        <th><b>Class Stage</b></th>
+                                                                        <th><b>Class Teacher</b></th>
+                                                                        <th><b>Created Date</b></th>
+                                                                        <th><b>Updated Date</b></th>
+                                                                        
+    
+                                                                      </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                     {% for classes in institute_class %}
+                                                                      <tr>
+                                                                        <th style="text-align: center;"> {{ forloop.counter}} </th>
+                                                                        <td> {{classes.name }} </td>
+                                                                        <td>{{classes.class_stage}}</td>
+                                                                        <td>{{classes.created_at}}</td>
+                                                                        <td>{{classes.updated_at}}</td>
+                                                                        <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_class' classes.pk %}">Edit</a>
+                                                                        </td>
+    
+                                                                      </tr>
+                                                                      {% endfor %}
+                                                                    </tbody>
+                                                                  </table>
+                                                           
+                                    
+                                                    
                                                     </div>
                                                 </div>
                                             </div>
@@ -763,6 +772,8 @@
                                                                 <td> {{subjects.subject_name}} </td>
 
 
+                                                               <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_subject' subjects.pk %}">Edit</a>
+                                                               </td>
 
                                                             </tr>
                                                             {% endfor %}

@@ -506,12 +506,18 @@
                                         <th data-priority="5">Email</th>
                                         
                                         
-                                            
+                                          
+                                          
+                                              
+                                        
+                                                
                                        
                                      
                                        <th data-priority="6">Content</th> 
+
+
                                        
-                                           
+                                        
                                             
                                        
                                         <th data-priority="7">SMS</th>
@@ -544,11 +550,16 @@
                                 </tfoot>
                                 <tbody>
                                   
+                                  
+                                      
+                                  
+                                      
                                     {% for holiday in institute_holiday_list %}
+                                    
                                     <tr>
 
 
-
+                                        
                                         
                                         <td><input type="checkbox" data-md-icheck class="ts_checkbox"></td>
                                        
@@ -568,7 +579,19 @@
                                             {{holiday.holiday_email}}
                                             
                                         </td>
-                                        <td><a href="#">Link</a></td>
+                                       
+                                        <td>
+                                            
+                                            {% if holiday.holiday_email == "Yes" %}
+                                            <a href="{% url 'emailView' %}">Link</a>
+                                            
+                                            {% else %}
+                                            <p>Link</p>
+                                            {% endif %}
+                                                
+                                              
+                                             </td>
+                                        
                                         <td>
                                             {{holiday.holiday_sms}}
                                            
@@ -583,10 +606,11 @@
                                             </select> -->
                                         </td>
                                         <td><a href="#">Link</a></td>
-                                        <td><a  class="btn btn-primary" href="{% url 'edit_holiday' holiday.pk %}">Edit</a>
+                                        <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_holiday' holiday.pk %}">Edit</a>
                                         </td>
 
                                     </tr>
+                                    
                                     {% endfor %}
 
                                 </tbody>

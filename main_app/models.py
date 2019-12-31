@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, AbstractUser
 from datetime import date
 
 
+
 # Create your models here.
 
 class State(models.Model):
@@ -112,7 +113,7 @@ class Classes(models.Model):
     name =models.CharField(max_length=10,null=True)
     class_teacher= models.OneToOneField(to=User, null=True, on_delete=models.CASCADE,related_name='class_teacher')
     created_at = models.DateTimeField(auto_now_add=True,null=True)
-    updated_at = models.DateTimeField(null=True)
+    updated_at = models.DateTimeField(auto_now=True,null=True)
     class_stage_choices = [('Primary','Primary'),('Middle','Middle'),('Highschool','Highschool')]
     class_stage = models.CharField(max_length=50, choices= class_stage_choices, null=True)
     # created_by=models.OneToOneField(to=User, on_delete=models.CASCADE, null=True,  related_name='created_by', null=True)
