@@ -307,7 +307,7 @@
                     </a>    
                 </li>
                 <li  title="Holiday List">
-                    <a href="{% url 'holidaylist' %}">
+                    <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Holiday List</span>
                     </a>

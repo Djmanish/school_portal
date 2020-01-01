@@ -349,7 +349,7 @@
             
         </li>
         <li title="Holiday List">
-            <a href="{% url 'holidaylist' %}">
+            <a href="{% url 'holidaylist' user.profile.institute.pk%}">
                 <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                 <span class="menu_title">Holiday List</span>
             </a>
@@ -712,7 +712,7 @@
                                                             <input type="text" class="form-control" name="subject_name">
                                                         </div>
                                                         
-                                                        <button type="submit" class="btn btn-success">Add
+                                                        <button type="submit" class="btn btn-info btn-sm pull-right">Add
                                                             Subject</button>
                                                     </form>
                                                     <div class="uk-modal-footer uk-text-right">

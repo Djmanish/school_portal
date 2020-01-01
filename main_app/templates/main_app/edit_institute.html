@@ -313,7 +313,7 @@
                     </a>    
                 </li>
                 <li  title="Holiday List">
-                    <a href="{% url 'holidaylist' %}">
+                    <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Holiday List</span>
                     </a>
@@ -362,11 +362,13 @@
                             </div>
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{user.profile.profile_pic.url}}" alt="user avatar"/>
+                                    <img src="{{edit_institute.profile_pic.url}}" alt="user avatar"/>
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.full_name}}</span><span class="sub-heading">Land acquisition specialist</span></h2>
+                                <h2 class="heading_b uk-margin-bottom">
+                                    <span class="uk-text-truncate">{{edit_institute.name}}</span>
+                                    </span></h2>
                                                             </div>
 
 

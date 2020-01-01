@@ -16,6 +16,7 @@ from class_schedule.models import *
 from .forms import SubjectUpdateForm, ClassUpdateForm
 
 
+
 # Create your views here.
 
 def add_classes(request):
@@ -145,8 +146,9 @@ def fetch_levels(request):
     return HttpResponse(nlevels)
 
     
-def edit_institute(request, pk):
-    institute_info =Institute.objects.get(pk=pk)
+# def edit_institute(request, pk):
+#     edit_institute =Institute.objects.get(pk=pk)
+#     return render(request, 'main_app/edit_institute.html',{'institute_info': institute_info})
 
 
 
