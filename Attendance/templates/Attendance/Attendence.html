@@ -467,8 +467,13 @@
                                     <script>
                                         $(document).ready(function(){
                                           $('#{{student.id|slugify }}').click(function(){
-                                            $('#{{student.id|slugify }}').hide()
-                                              
+                                              var status = $("input[name='{{student.id|slugify }}']:checked").val();
+                                              if (typeof status == 'undefined'){
+                                                  alert('please select before clicking update');
+                                                  return false;
+                                              }
+                                        
+                                              $('#{{student.id|slugify }}').hide();
                                               $.ajax({
                                                   type:'POST',
                                                   url:'attendanceupdate/{{student.id}}/',
