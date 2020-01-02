@@ -440,45 +440,50 @@
                                 <th style="text-align: center;"> {{ forloop.counter}} </th>                 
                                 <td> {{ student.first_name }} </td>
                                 <td> {{ student.last_name }} </td>
-                                <td style="text-align: center;"> {{student.current_date}} </td>
+                                <td style="text-align: center;"> </td>
                                 
                                         <td > 
                            
-    <form id="{{student.id}}|slugify"   action="{% url 'attendanceupdate' student.id %}" method="POST">
+    <form  >
         {% csrf_token %}    
         <span class="icheck-inline">
                                       
-            <input type="radio" name="{{student.id}}"  required class="wizard-icheck" value="present" />
+            <input type="radio" name="{{student.id|slugify }}"  required class="wizard-icheck" value="present" />
             <label for="wizard_status_present" class="inline-label">Present</label>
         </span>
         <span class="icheck-inline">
-            <input type="radio" name="{{student.id}}" class="wizard-icheck" value="absent" />
+            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="absent" />
             <label for="wizard_status_absent" class="inline-label">Absent</label>
         </span> 
         <span class="icheck-inline">
-            <input type="radio" name="{{student.id}}" class="wizard-icheck" value="leave" />
+            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="leave" />
             <label for="wizard_status_leave" class="inline-label">Leave</label>
             
         </span>
-        <input type="submit" id="attendance_status" value="Update" class="md-btn md-btn-primary mini-button" onclick="Hide()">
-        
+        <input type="button" id="{{student.id|slugify }}"   value="Update" class="md-btn md-btn-primary mini-button">
     </form>
-   
                                         </td>
-                                        <script>
-                                            function Hide(){
-                                                if (document.getElementById('attendance_status').click) 
-                                                {
-                                                   document.getElementById('test').style.display='none'; 
-                                                }
-                                                else
-                                                {
-                                                    document.getElementById('test').style.display='block';
-                                                }
-                                            }
-                                        </script>
-                                    
                                     </tr>     
+                                    <script>
+                                        $(document).ready(function(){
+                                          $('#{{student.id|slugify }}').click(function(){
+                                           
+                                              
+                                              $.ajax({
+                                                  type:'POST',
+                                                  url:'attendanceupdate/{{student.id}}/',
+                                                  data:{pk_str:$("input[name='{{student.id|slugify }}']:checked").val(),
+                                                   csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                  
+                                                  success: function(msg){
+                                                      
+                                                    
+                                                  }
+                                              })
+                                          })
+                                        })
+                                        </script>         
+
                                     
                                    
                                 {% endfor %}
