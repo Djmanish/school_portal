@@ -289,7 +289,7 @@
         
         <div class="menu_section">
             <ul>
-                <li  class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -306,7 +306,7 @@
                     </a>    
                 </li>
                 {% if user.profile.institute  %}
-                <li title="Institute Profile">
+                <li class="current_section" title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Institute Profile</span>
@@ -320,17 +320,32 @@
                     
                 </li>
 
+                <li  title="Institute Schedule">
+                    <a href="{% url 'class_schedule' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_title">Schedule</span>
+                    </a>
+                    
+                </li>
+
                 {% endif %}
                 {% if user.profile.institute  %}
                 <li  title="Approvals">
-                    <a href="{% url 'approvals' %}">
+                    <a href="{% url 'approvals' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Approvals</span>
                     </a>
                     
-                </li>   
+                </li>
+                 
                 {% endif %}
-                
+                <li  title="Attendance">
+                    <a href="{% url 'attendance' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_title">Attendance</span>
+                    </a>
+                    
+                </li>   
             
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
@@ -341,6 +356,8 @@
 
             </ul>
         </div>
+
+
     </aside><!-- main sidebar end -->
 
     <div id="page_content">

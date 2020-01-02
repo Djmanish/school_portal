@@ -21,19 +21,26 @@ from .forms import SubjectUpdateForm, ClassUpdateForm
 
 # Create your views here.
 
-def add_classes(request):
+def add_classes(request,pk):
+    rr=request.user.profile.institute.id
+    selected_class = Classes.objects.get(pk=pk)
     if request.method == "POST":
         class_name= request.POST['class_name']
         class_stage= request.POST.get('class_stage')
+        if request.method == 'POST':
         
-        new_class = Classes.objects.create(institute = request.user.profile.institute, name= class_name, class_stage= class_stage )
+         class_teacher = request.POST.get('class_teacher')
+    
+        
+        new_class = Classes.objects.create(institute = request.user.profile.institute, name= class_name, class_stage= class_stage)
         #creating schedule for created class
         days=['Monday','Tuesday', 'Wednesday', 'Thursday','Friday','Saturday']
         for day in days:
             create_schedule = Schedule.objects.create(institute=request.user.profile.institute, Class= new_class, day= day )
 
         messages.success(request, 'Class Created successfully !!!')
-        rr=request.user.profile.institute.id
+
+       
     
     return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
@@ -84,8 +91,10 @@ class SubjectUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 
-def approvals(request):
-    pending_users= UserProfile.objects.filter(status='pending')
+def approvals(request,pk):
+    institute_approval = Institute.objects.get(pk=pk)
+
+    pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval)
     active_users= UserProfile.objects.filter(status='approve')
     inactive_users= UserProfile.objects.filter(status='dissapprove')
     return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
@@ -236,13 +245,12 @@ def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
-    # all_classes= Classes.objects.all()
     
-    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
-    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+    
+ 
     # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
-    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class,'institute_teachers':institute_teachers}
+    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class}
 
 
     
@@ -271,15 +279,19 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 
-def approve_request(request, pk):
+def approve_request(request,pk):
+    
+
     user = UserProfile.objects.get(pk=pk)
     user.approve()
-    return redirect('approvals')
+    return redirect('user_dashboard')
 
-def disapprove_request(request, pk):
+def disapprove_request(request,pk):
+    
+
     user = UserProfile.objects.get(pk=pk)
     user.disapprove()
-    return redirect('approvals')
+    return redirect('user_dashboard')
 
 def add_new_role(request, pk):
     if request.method== "POST":

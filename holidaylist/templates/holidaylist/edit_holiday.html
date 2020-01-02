@@ -326,7 +326,7 @@
         {% endif %}
         {% if user.profile.institute  %}
         <li  title="Approvals">
-            <a href="{% url 'approvals' %}">
+            <a href="{% url 'approvals' user.profile.institute.pk %}">
                 <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                 <span class="menu_title">Approvals</span>
             </a>
