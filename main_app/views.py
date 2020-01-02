@@ -233,10 +233,11 @@ def institute_profile(request, pk):
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
     # all_classes= Classes.objects.all()
     
-    
+    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
     # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
-    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class}
+    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class,'institute_teachers':institute_teachers}
 
 
     
@@ -326,6 +327,25 @@ def selecting_class(request):
         student.save()
 
     return redirect('user_profile')
+
+def assign_class_teacher(request, pk):
+    selected_class = Classes.objects.get(pk=pk)
+    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+    context_data= {'selected_class':selected_class, 'institute_teachers':institute_teachers}
+
+    if request.method == 'POST':
+        
+        new_class_teacher = request.POST.get('class_teacher')
+    
+        selected_class.class_teacher = User.objects.get(pk= new_class_teacher)
+        try:
+            selected_class.save()
+            messages.success(request, 'Class Teacher assigned successfully!!!')
+        except:
+            messages.error(request,'Something went wrong !!!')
+
+    return render(request, 'main_app/assign_class_teacher.html', context_data)
 
     
 

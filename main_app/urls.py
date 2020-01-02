@@ -39,7 +39,8 @@ urlpatterns = [
 
   path('student/select_class/', views.selecting_class, name="selecting_class"),
   
-  path('attendance/', include('Attendance.urls')),
+ 
+  path('class/<int:pk>/assign_class_teacher', views.assign_class_teacher, name="assign_class_teacher"),
 
 
 ]

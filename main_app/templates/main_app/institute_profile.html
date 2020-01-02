@@ -43,8 +43,10 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"> </head> <body
-        class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
+</head>
+
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
     <header id="header_main">
         <div class="header_main_content">
@@ -323,25 +325,25 @@
 
         <div class="menu_section">
             <ul>
-                <li  title="Dashboard">
+                <li title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
                     </a>
-                    
+
                 </li>
-                
-                 
+
+
 
                 <li title="User Profile">
                     <a href="{% url 'user_profile' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">My Profile</span>
-                    </a>    
+                    </a>
                 </li>
                 {% if user.profile.institute  %}
-            
-        <li class="current_section" title="Institute Profile">
+
+                <li class="current_section" title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Institute Profile</span>
@@ -358,24 +360,24 @@
 
                 {% endif %}
                 {% if user.profile.institute  %}
-                <li  title="Approvals">
+                <li title="Approvals">
                     <a href="{% url 'approvals' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Approvals</span>
                     </a>
-                    
-                </li>   
+
+                </li>
                 {% endif %}
-                
-            
-               
+
+
+
 
                 <li title="LogIn">
-                        <a href="{% url 'auth_logout' %}">
-                            <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
-                            <span class="menu_title">Log Out</span>
-                        </a>
-                    </li>
+                    <a href="{% url 'auth_logout' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
+                        <span class="menu_title">Log Out</span>
+                    </a>
+                </li>
 
             </ul>
         </div>
@@ -441,7 +443,7 @@
                                 <li><a href="#">Details</a></li>
                                 <li><a href="#">Classes</a></li>
                                 <li><a href="#">Subjects</a></li>
-                        
+
 
 
 
@@ -594,46 +596,59 @@
                                 <!-- ending details tab content -->
                                 <!-- Starting Classes Tab Content -->
                                 <li>
-                                        <div id="page_content_inner">
-                                                <h4 class="heading_c uk-margin-small-bottom">Currently Available Classes</h4>
-                                                
-                                                
-                                            <div class="md-card">
-                                                    <button type="button" class="btn btn-info btn-sm pull-right " data-uk-modal="{target:'#modal_new_class'}" >Add New Class</button>
-                                                       <!-- starting subject modal themes -->
-                                                       <div class="uk-modal" id="modal_new_class">
-                                                        <div class="uk-modal-dialog">
-                                                            <div class="uk-modal-header">
-                                                                <h3 class="uk-modal-title">Add New Class </h3>
-                                                            </div>
-                                                            <form  method="POST" action="{% url 'add_classes' %}">
-                                                                {% csrf_token %}
-                                                                <div class="form-group">
-                                                                        <label >Class Name:</label>
-                                                                        <input type="text" class="form-control" name="class_name" required>
-                                                                      </div>
-                                                                   
-                                                                      <div class="form-group">
-                                                                        <label for="sel1">Select Class Stage:</label>
-                                                                        <select class="form-control" name="class_stage" required>
-                                                                            <option selected disabled value="">--- select class stage ---</option>
-                                                                          <option>Primary</option>
-                                                                          <option>Middle</option>
-                                                                          <option>Highschool</option>
-                                                                         
-                                                                        </select>
-                                                                      </div>
-                                                                         
-                                                                          <button type="submit" class="md-btn md-btn-primary md-btn-wave-light">Add Class</button>
-                                                          </form>
-                                                            <div class="uk-modal-footer uk-text-right">
-                                                                <button type="button" class="md-btn md-btn-flat uk-modal-close">Cancel</button>
-                                                            </div>
-                                                        </div>
+                                    <div id="page_content_inner">
+                                        <h4 class="heading_c uk-margin-small-bottom">Currently Available Classes</h4>
+
+
+                                        <div class="md-card">
+                                            <button type="button" class="btn btn-info btn-sm pull-right "
+                                                data-uk-modal="{target:'#modal_new_class'}">Add New Class</button>
+                                            <!-- starting Classes modal themes -->
+                                            <div class="uk-modal" id="modal_new_class">
+                                                <div class="uk-modal-dialog">
+                                                    <div class="uk-modal-header">
+                                                        <h3 class="uk-modal-title">Add New Class </h3>
                                                     </div>
-                                    
+                                                    <form  method="POST" action="{% url 'add_classes' %}">
+                                                        {% csrf_token %}
+                                                        <div class="form-group">
+                                                                <label >Class Name:</label>
+                                                                <input type="text" class="form-control" name="class_name" required>
+                                                              </div>
+                                                           
+                                                              <div class="form-group">
+                                                                <label for="sel1">Select Class Stage:</label>
+                                                                <select class="form-control" name="class_stage" required>
+                                                                    <option selected disabled value="">--- select class stage ---</option>
+                                                                  <option>Primary</option>
+                                                                  <option>Middle</option>
+                                                                  <option>Highschool</option>
+                                                                 
+                                                                </select>
+                                                              </div>
+                                                              <div class="form-group">
+                                                                <label for="sel1">Select Class Teacher</label>
+                                                                <select class="form-control" name="class_teacher" required>
+                                                                    <option selected disabled value="">--select class
+                                                                        Teacher--</option>
+                                                                  
+                                                                  {% for teacher in institute_teachers %}
+                                                                      <option value='{{teacher.pk}}'>{{teacher}}</option>
+                                                                  {% endfor %}
+                                                                      
+                                                        
+                                                                </select>
+                                                            </div>
+                                                                 
+                                                                  <button type="submit" class="md-btn md-btn-primary md-btn-wave-light">Add Class</button>
+                                                  </form>
+                                                    <div class="uk-modal-footer uk-text-right">
+                                                        <button type="button" class="md-btn md-btn-flat uk-modal-close">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                        
-                                                <div class="md-card-content">
+                                                <!-- <div class="md-card-content">
                                                         
                                                     <div class="uk-overflow-container uk-margin-bottom">
                                                        
@@ -668,10 +683,57 @@
                                     
                                                     
                                                     </div>
-                                         
-                                                  
                                                 </div>
                                             </div>
+ -->
+
+                                            <div class="md-card-content">
+
+                                                <div class="uk-overflow-container uk-margin-bottom">
+
+                                                    <table
+                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair table table-hover table-sm"
+                                                        id="ts_issues">
+                                                        <thead>
+                                                            <tr>
+                                                                <th><b>Sr. No.</b></th>
+                                                                <th><b>Class Name</b></th>
+                                                                <th><b>Class Teacher</b></th>
+                                                                <th><b>Action</b></th>
+
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for classes in institute_class %}
+                                                            <tr>
+                                                                <th style="text-align: center;"> {{ forloop.counter}}
+                                                                </th>
+                                                                <td> {{classes.name }} </td>
+                                                                <td>
+                                                                    {% if classes.class_teacher %}
+                                                                    {{classes.class_teacher}}
+                                                                    {% else %}
+                                                                   No class teacher assigned
+                                                                    {% endif %}   
+                                                                    </td>
+                                                               
+                                                                <td><a href="{% url 'assign_class_teacher' classes.pk %}">Assign Class Teacher</a></td>
+                                                                <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_class' classes.pk %}">Edit</a>
+                                                                </td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+
+
+
+                                                </div>
+
+
+                                            </div>
+                                        </div>
                                 </li>
                                 <!-- End Classes Tab Content -->
                                 <!-- starting subjects tab content -->
@@ -688,22 +750,22 @@
                                                     <div class="uk-modal-header">
                                                         <h3 class="uk-modal-title">Add New Subject </h3>
                                                     </div>
-                                                    <form  method="POST" action="{% url 'add_subjects' %}">
+                                                    <form method="POST" action="{% url 'add_subjects' %}">
                                                         {% csrf_token %}
                                                         <div class="form-group">
                                                             <label for="sel1">Select Class:</label>
                                                             <select class="form-control" id="sel1" name="new_class">
-                                                                
+
                                                                 {% for class in institute_class %}
-                                                                <option value={{class.id}}>{{class}}</option> 
+                                                                <option value={{class.id}}>{{class}}</option>
                                                                 {% endfor %}
-                                                                    
-                                                              
-                                                             
+
+
+
                                                             </select>
-                                                            
-                                                          </div>
-                                                          <div class="form-group">
+
+                                                        </div>
+                                                        <div class="form-group">
                                                             <label>Subject Code:</label>
                                                             <input type="text" class="form-control" name="subject_code">
                                                         </div>
@@ -740,27 +802,29 @@
                                                         </thead>
                                                         <tbody>
                                                             {% for subjects in institute_subject %}
-                                                             <tr>
-                                                               <th style="text-align: center;"> {{ forloop.counter}} </th>
-                                                               <td> {{subjects.subject_class}} </td>
-                                                               
-                                                               <td> {{subjects.subject_code}} </td>
-                                                               <td> {{subjects.subject_name}} </td>
+                                                            <tr>
+                                                                <th style="text-align: center;"> {{ forloop.counter}}
+                                                                </th>
+                                                                <td> {{subjects.subject_class}} </td>
+
+                                                                <td> {{subjects.subject_code}} </td>
+                                                                <td> {{subjects.subject_name}} </td>
+
 
                                                                <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_subject' subjects.pk %}">Edit</a>
                                                                </td>
 
-                                                             </tr>
-                                                             {% endfor %}
-                                                           </tbody>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
-                                
-                           
+
+
                                 <!-- ending subjects tab content -->
                                 <!-- starting roles tab content -->
                                 <li>
@@ -782,7 +846,7 @@
                                                             <div class="uk-form-row">
                                                                 <label>Level Id</label>
                                                                 <input type="number" class="md-input" name="level_id"
-                                                                 min="0"   maxlength="2" / required>
+                                                                    min="0" maxlength="2" / required>
                                                             </div>
                                                             <div class="uk-form-row">
                                                                 <label>Role Name</label>
@@ -815,7 +879,7 @@
 
                                                             </tr>
                                                         </thead>
-                                                  
+
                                                         <tbody>
 
                                                             {% for role in institute_roles %}
@@ -1173,6 +1237,6 @@
 
         });
     </script>
-    </body>
+</body>
 
 </html>

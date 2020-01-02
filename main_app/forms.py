@@ -11,5 +11,5 @@ class SubjectUpdateForm(forms.ModelForm):
 class ClassUpdateForm(forms.ModelForm):
     class Meta:
         model = Classes
-        fields = ['name','class_stage']
+        fields = ['name','class_stage','class_teacher']
     
