@@ -14,6 +14,7 @@ from django.urls import reverse_lazy, reverse
 from django.db.models import Q
 from class_schedule.models import *
 from .forms import SubjectUpdateForm
+from django.core.mail import send_mail, send_mass_mail
 
 
 # Create your views here.
@@ -158,6 +159,9 @@ def edit_profile(request, pk):
             user_info.designation = new_level_admin
             user_info.institute= new_create_institute
             user_info.save()
+            # sending mail to admin on registering
+            send_mail('Admin Request Confirmation ',f'Hello {request.user} , Thank you for using our application.  ', 'yourcollegeportal@gmail.com',['dhananjay.bhadauria@trueblueappwerks.com'], html_message=f"<h4>Hello {request.user},</h4><p>Thank you for using our application.</p><p> You have requested to be an admin profile so you are able to create your own institution profile.once your request is approved you will received a confirmation email.</p><p></p>"
+            )
         else:
             pass
         

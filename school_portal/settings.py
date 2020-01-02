@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django_extensions',
+   
     'holidaylist.apps.HolidaylistConfig',
     'main_app.apps.MainAppConfig',
     'class_schedule.apps.ClassScheduleConfig',
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+     'django_extensions',
    
     
 ]

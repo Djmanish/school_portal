@@ -16,7 +16,7 @@ class Attendance(models.Model):
    
    attendance_status = models.CharField(max_length= 100, null = True,default="")
    current_date = models.DateTimeField(auto_now_add=True,null=True)
-   update_date = models.DateTimeField(auto_now=True,null=True)
+  
 
    def __str__(self):
       return str(self.first_name)
