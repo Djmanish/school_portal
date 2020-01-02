@@ -11,7 +11,7 @@ from .views import holidaylist,HolidayUpdateView,emailView,successView
 
 urlpatterns = [
   
-  path('', views.holidaylist, name="holidaylist"),
+  path('holiday/<int:pk>', views.holidaylist, name="holidaylist"),
   # path('holidays/add/', views.add_holiday, name="add_holiday")
   path('holiday/edit/<int:pk>/',HolidayUpdateView.as_view(), name='edit_holiday'),
   path('mails/', views.emailView, name='emailView'),

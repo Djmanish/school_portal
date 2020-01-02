@@ -327,7 +327,7 @@
             
         </li>
         <li class="current_section" title="Holiday List">
-            <a href="{% url 'holidaylist' %}">
+            <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                 <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                 <span class="menu_title">Holiday List</span>
             </a>
@@ -383,17 +383,17 @@
             <div class="md-card">
                 <div class="md-card-content">
                     <div class="uk-margin-bottom">
-                        <a href="#" class="md-btn uk-margin-right" id="printTable">Print Table</a>
+                        <!-- <a href="#" class="md-btn uk-margin-right" id="printTable">Print Table</a> -->
                         <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
                             <!-- <button class="md-btn">Columns <i class="uk-icon-caret-down"></i></button> -->
-                            <div class="uk-dropdown">
+                            <!-- <div class="uk-dropdown">
                                 <ul class="uk-nav uk-nav-dropdown" id="columnSelector"></ul>
 
 
-                            </div>
+                            </div> -->
                         </div>
                         <!-- <div class="md-card"> -->
-                        <button type="button" class="md-btn" data-uk-modal="{target:'#modal_new_holiday'}">Add
+                        <button type="button" class="btn btn-info btn-sm pull-right" data-uk-modal="{target:'#modal_new_holiday'}">Add
                             Holiday</button>
                               <!-- success message -->
                               {% if messages %}
@@ -409,7 +409,7 @@
                                 <div class="uk-modal-header">
                                     <h3 class="uk-modal-title">Add Holiday </h3>
                                 </div>
-                               <form method="POST" action="{% url 'holidaylist' %}">
+                               <form method="POST" action="{% url 'holidaylist' user.profile.institute.pk %}">
                                     {% csrf_token %}
                                     <div class="form-group">
                                             <label>Date</label>
@@ -476,7 +476,7 @@
                                               
                                             </select>
                                           </div>
-                                    <button type="submit" class="btn btn-primary">Add
+                                    <button type="submit" class="btn btn-info btn-sm pull-right">Add
                                         Holiday</button>
                                 </form> 
                                 <div class="uk-modal-footer uk-text-right">
@@ -593,10 +593,16 @@
                                              </td>
                                         
                                         <td>
+                                            
                                             {{holiday.holiday_sms}}
                                            
                                         </td>
-                                        <td><a href="#">Link</a></td>
+                                        <td>
+                                            {% if holiday.holiday_sms == "Yes" %}
+                                            <a href="#">Link</a>
+                                            {% else %}
+                                            <p>Link</p>
+                                            {% endif %}</td>
                                         <td>
                                             {{holiday.holiday_notification}}
                                             <!-- <select>
@@ -605,7 +611,13 @@
         
                                             </select> -->
                                         </td>
-                                        <td><a href="#">Link</a></td>
+                                        <td>
+                                            {% if holiday.holiday_notification == "Yes" %}
+
+                                            <a href="#">Link</a>
+                                            {% else %}
+                                            <p>Link</p>
+                                            {% endif %}</td>
                                         <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_holiday' holiday.pk %}">Edit</a>
                                         </td>
 
