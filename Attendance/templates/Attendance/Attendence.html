@@ -444,7 +444,7 @@
                                 
                                         <td > 
                            
-    <form    action="{% url 'attendanceupdate' student.id %}" method="POST">
+    <form id="{{student.id}}|slugify"   action="{% url 'attendanceupdate' student.id %}" method="POST">
         {% csrf_token %}    
         <span class="icheck-inline">
                                       
@@ -460,31 +460,26 @@
             <label for="wizard_status_leave" class="inline-label">Leave</label>
             
         </span>
-        <input type="submit" id="attendance_status" value="Update" class="md-btn md-btn-primary mini-button">
+        <input type="submit" id="attendance_status" value="Update" class="md-btn md-btn-primary mini-button" onclick="Hide()">
         
     </form>
    
                                         </td>
+                                        <script>
+                                            function Hide(){
+                                                if (document.getElementById('attendance_status').click) 
+                                                {
+                                                   document.getElementById('test').style.display='none'; 
+                                                }
+                                                else
+                                                {
+                                                    document.getElementById('test').style.display='block';
+                                                }
+                                            }
+                                        </script>
                                     
                                     </tr>     
-                                    <script>
-                                        $(document).ready(function(){
-                                          $('#"{{student.id}}"').submit(function(){
-                                           
-                                                var radioValue= $("input[name='{{student.id}}']:checked").val();
-                                                alert(radioValue);
-                                              $.ajax({
-                                                type:'POST',
-                                                url:'attendanceupdate/<int:pk>/',
-                                                data:{student_id:radioValue, csrfmiddlewaretoken:  },
-                                                  
-                                                  success: function(msg){
-                                                    alert('done');
-                                                  }
-                                              })
-                                          })
-                                        })
-                                        </script>
+                                    
                                    
                                 {% endfor %}
                                 
@@ -541,6 +536,7 @@
             s.parentNode.insertBefore(wf, s);
         })();
     </script>
+
 
     <!-- common functions -->
     <script src="{% static 'main_app/js/common.min.js' %}"></script>
@@ -811,6 +807,7 @@
     </script>
   <!-- jquery cdn  -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ 
   
 </body>
 </html>

@@ -347,16 +347,10 @@
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Institute Profile</span>
-                    </a>
-
-                </li>
-                <li title="Holiday List">
-                    <a href="{% url 'holidaylist' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Holiday List</span>
-                    </a>
-
-                </li>
+                    </a> 
+            
+        </li>
+        
 
                 {% endif %}
                 {% if user.profile.institute  %}
@@ -603,15 +597,39 @@
                                         <div class="md-card">
                                             <button type="button" class="btn btn-info btn-sm pull-right "
                                                 data-uk-modal="{target:'#modal_new_class'}">Add New Class</button>
-                                            <!-- starting subject modal themes -->
+                                            <!-- starting Classes modal themes -->
                                             <div class="uk-modal" id="modal_new_class">
                                                 <div class="uk-modal-dialog">
                                                     <div class="uk-modal-header">
                                                         <h3 class="uk-modal-title">Add New Class </h3>
                                                     </div>
-                                    
+                                                    <form  method="POST" action="{% url 'add_classes' %}">
+                                                        {% csrf_token %}
+                                                        <div class="form-group">
+                                                                <label >Class Name:</label>
+                                                                <input type="text" class="form-control" name="class_name" required>
+                                                              </div>
+                                                           
+                                                              <div class="form-group">
+                                                                <label for="sel1">Select Class Stage:</label>
+                                                                <select class="form-control" name="class_stage" required>
+                                                                    <option selected disabled value="">--- select class stage ---</option>
+                                                                  <option>Primary</option>
+                                                                  <option>Middle</option>
+                                                                  <option>Highschool</option>
+                                                                 
+                                                                </select>
+                                                              </div>
+                                                                 
+                                                                  <button type="submit" class="md-btn md-btn-primary md-btn-wave-light">Add Class</button>
+                                                  </form>
+                                                    <div class="uk-modal-footer uk-text-right">
+                                                        <button type="button" class="md-btn md-btn-flat uk-modal-close">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                        
-                                                <div class="md-card-content">
+                                                <!-- <div class="md-card-content">
                                                         
                                                     <div class="uk-overflow-container uk-margin-bottom">
                                                        
@@ -648,7 +666,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+ -->
 
                                             <div class="md-card-content">
 
@@ -683,6 +701,8 @@
                                                                     </td>
                                                                
                                                                 <td><a href="{% url 'assign_class_teacher' classes.pk %}">Assign Class Teacher</a></td>
+                                                                <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_class' classes.pk %}">Edit</a>
+                                                                </td>
                                                             </tr>
                                                             {% endfor %}
                                                         </tbody>
@@ -734,8 +754,8 @@
                                                             <label>Subject Name:</label>
                                                             <input type="text" class="form-control" name="subject_name">
                                                         </div>
-
-                                                        <button type="submit" class="btn btn-success">Add
+                                                        
+                                                        <button type="submit" class="btn btn-info btn-sm pull-right">Add
                                                             Subject</button>
                                                     </form>
                                                     <div class="uk-modal-footer uk-text-right">
