@@ -68,29 +68,86 @@ def schedule_update(request, pk):
                         'institute_teachers': institute_teachers}
         if request.method == "POST":
                 
-                schedule_to_update.subject_lecture_one = Subjects.objects.get(pk=request.POST.get('subject_lecture_one'))
-                schedule_to_update.subject_teacher_lecture_one= User.objects.get(pk=request.POST.get('subject_teacher_lecture_one'))
+                try:
+                        schedule_to_update.subject_lecture_one = Subjects.objects.get(pk=request.POST.get('subject_lecture_one'))
+                except:
+                        schedule_to_update.subject_lecture_one =None
 
-                schedule_to_update.subject_lecture_two = Subjects.objects.get(pk=request.POST.get('subject_lecture_two'))
-                schedule_to_update.subject_teacher_lecture_two=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_two'))
+                try:
+                        schedule_to_update.subject_teacher_lecture_one= User.objects.get(pk=request.POST.get('subject_teacher_lecture_one'))
+                except:
+                        schedule_to_update.subject_teacher_lecture_one=None
 
-                schedule_to_update.subject_lecture_three= Subjects.objects.get(pk=request.POST.get('subject_lecture_three'))
-                schedule_to_update.subject_teacher_lecture_three=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_three'))
+                try:
+                        schedule_to_update.subject_lecture_two = Subjects.objects.get(pk=request.POST.get('subject_lecture_two'))
+                except:
+                        schedule_to_update.subject_lecture_two = None
 
-                schedule_to_update.subject_lecture_four= Subjects.objects.get(pk=request.POST.get('subject_lecture_four'))
-                schedule_to_update.subject_teacher_lecture_four=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_four'))
+                try:
+                        schedule_to_update.subject_teacher_lecture_two=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_two'))
+                except:
+                        schedule_to_update.subject_teacher_lecture_two= None
 
-                schedule_to_update.subject_lecture_five= Subjects.objects.get(pk=request.POST.get('subject_lecture_five'))
-                schedule_to_update.subject_teacher_lecture_five=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_five'))
+                try:
+                        schedule_to_update.subject_lecture_three= Subjects.objects.get(pk=request.POST.get('subject_lecture_three'))
+                except:
+                        schedule_to_update.subject_lecture_three=None
 
-                schedule_to_update.subject_lecture_six= Subjects.objects.get(pk=request.POST.get('subject_lecture_six'))
-                schedule_to_update.subject_teacher_lecture_six=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_six'))
+                try:
+                        schedule_to_update.subject_teacher_lecture_three=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_three'))
+                except:
+                        schedule_to_update.subject_teacher_lecture_three= None
 
-                schedule_to_update.subject_lecture_seven= Subjects.objects.get(pk=request.POST.get('subject_lecture_seven'))
-                schedule_to_update.subject_teacher_lecture_seven=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_seven'))
+                try:
+                        schedule_to_update.subject_lecture_four= Subjects.objects.get(pk=request.POST.get('subject_lecture_four'))
+                except:
+                        schedule_to_update.subject_lecture_four= None
 
-                schedule_to_update.subject_lecture_eight= Subjects.objects.get(pk=request.POST.get('subject_lecture_eight'))
-                schedule_to_update.subject_teacher_lecture_eight=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_eight'))
+                try:
+                        schedule_to_update.subject_teacher_lecture_four=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_four'))
+                except:
+                        schedule_to_update.subject_teacher_lecture_four= None
+
+                try:
+                        schedule_to_update.subject_lecture_five= Subjects.objects.get(pk=request.POST.get('subject_lecture_five'))
+                except:
+                        schedule_to_update.subject_lecture_five= None
+
+                try:
+                        schedule_to_update.subject_teacher_lecture_five=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_five'))
+                except:
+                        schedule_to_update.subject_teacher_lecture_five= None
+
+                try:
+                        schedule_to_update.subject_lecture_six= Subjects.objects.get(pk=request.POST.get('subject_lecture_six'))
+                except:
+                        schedule_to_update.subject_lecture_six= None
+
+                try:
+                        schedule_to_update.subject_teacher_lecture_six=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_six'))
+                except:
+                        schedule_to_update.subject_teacher_lecture_six=  None
+
+                try:
+                        schedule_to_update.subject_lecture_seven= Subjects.objects.get(pk=request.POST.get('subject_lecture_seven'))
+                except:
+                        schedule_to_update.subject_lecture_seven= None
+                
+                try:
+                        schedule_to_update.subject_teacher_lecture_seven=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_seven'))
+                except:
+                        schedule_to_update.subject_teacher_lecture_seven= None
+
+                try:
+                        schedule_to_update.subject_lecture_eight= Subjects.objects.get(pk=request.POST.get('subject_lecture_eight'))
+                except:
+                       schedule_to_update.subject_lecture_eight=None
+                        
+                try:
+                        schedule_to_update.subject_teacher_lecture_eight=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_eight'))
+                except:
+                        schedule_to_update.subject_teacher_lecture_eight=None
+
 
 
 
