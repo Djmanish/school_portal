@@ -22,7 +22,7 @@ from .forms import SubjectUpdateForm, ClassUpdateForm
 # Create your views here.
 
 def add_classes(request):
-    if request.method == "POST":
+       if request.method == "POST":
         class_name= request.POST['class_name']
         class_stage= request.POST.get('class_stage')
         
@@ -35,7 +35,7 @@ def add_classes(request):
         messages.success(request, 'Class Created successfully !!!')
         rr=request.user.profile.institute.id
     
-    return HttpResponseRedirect(f'/institute/profile/{rr}/')
+        return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
 
 class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -84,14 +84,25 @@ class SubjectUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 
-def approvals(request):
-    pending_users= UserProfile.objects.filter(status='pending')
-    active_users= UserProfile.objects.filter(status='approve')
-    inactive_users= UserProfile.objects.filter(status='dissapprove')
+def approvals(request,pk):
+    institute_approval = Institute.objects.get(pk=pk)
+    student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
+    if request.user.profile.designation.level_name=='teacher':
+         pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval, designation=student_designation_id)
+         active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id)
+         inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval, designation=student_designation_id)
+
+
+    else:
+        pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval)
+        active_users= UserProfile.objects.filter(status='approve', institute=institute_approval)
+        inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval)
+
+   
     return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
 
 def index(request):
-    return render(request, 'main_app/index.html')
+    return HttpResponseRedirect(request, 'main_app/index.html')
 
 @login_required
 def dashboard(request):
@@ -236,13 +247,12 @@ def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
-    # all_classes= Classes.objects.all()
     
-    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
-    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+    
+ 
     # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
-    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class,'institute_teachers':institute_teachers}
+    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class}
 
 
     
@@ -271,17 +281,25 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 
-def approve_request(request, pk):
+def approve_request(request,pk):
+    
+
     user = UserProfile.objects.get(pk=pk)
     user.approve()
-    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>Your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School Portal<br>school_portal@gmail.com<p></p>"
+    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>Your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>school_portal@gmail.com<p></p>"
             )
-    return redirect('approvals')
+    rr= request.user.profile.institute.id
+    return HttpResponseRedirect(f'/user/approvals/{rr}/')
+    
 
-def disapprove_request(request, pk):
+def disapprove_request(request,pk):
+    
+
     user = UserProfile.objects.get(pk=pk)
     user.disapprove()
-    return redirect('approvals')
+    rr= request.user.profile.institute.id
+    return HttpResponseRedirect(f'/user/approvals/{rr}/')
+    
 
 def add_new_role(request, pk):
     if request.method== "POST":
