@@ -320,16 +320,16 @@
                 </li>
 
                 {% endif %}
-                {% if user.profile.institute  %}
-                <li  title="Approvals">
-                    <a href="{% url 'approvals' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Approvals</span>
-                    </a>
-                    
-                </li>
-                 
-                {% endif %}
+                {% if user.profile.institute %}
+                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+                    <li  title="Approvals">
+                        <a href="{% url 'approvals' user.profile.institute.pk %}">
+                            <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                            <span class="menu_title">Approvals</span>
+                        </a>
+                        
+                    </li>
+              
                 <li  title="Attendance">
                     <a href="{% url 'attendance' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
@@ -337,7 +337,9 @@
                     </a>
                     
                 </li>   
-            
+                {% endif %}
+                
+                {% endif %}
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
                             <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>

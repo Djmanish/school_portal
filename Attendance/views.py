@@ -19,10 +19,10 @@ def attendance_update(request, pk):
     student= User.objects.get(pk=pk) #student whose attendance marked
     pk_str = str(pk) # pk of marked student
     if request.method == "POST":
-        student_status = request.POST.get(pk_str)
+        student_status = request.POST.get('pk_str')
         
         new_attendance = Attendance.objects.create(student=student, attendance_status=student_status)
-    
-        return redirect('attendance')
+        return HttpResponse(f'{pk}')
+        # return redirect('attendance')
 
 

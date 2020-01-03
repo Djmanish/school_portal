@@ -289,7 +289,7 @@
         
         <div class="menu_section">
             <ul>
-                <li  title="Dashboard">
+                <li class="current_section" title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -313,39 +313,46 @@
                     </a>    
                 </li>
                 <li  title="Holiday List">
-                    <a href="{% url 'holidaylist' %}">
+                    <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Holiday List</span>
                     </a>
                     
                 </li>
 
-                <li class="current_section"  title="Institute Schedule">
-                    <a href="{% url 'class_schedule' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Schedule</span>
-                    </a>
-                    
-                </li>
+               
+             
+               <li  title="Institute Schedule">
+                <a href="{% url 'class_schedule' %}">
+                    <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                    <span class="menu_title">Schedule</span>
+                </a>
+                
+            </li>
+               
+                   
 
                 {% endif %}
-                {% if user.profile.institute  %}
-                <li  title="Approvals">
-                    <a href="{% url 'approvals' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Approvals</span>
-                    </a>
-                    
-                </li>
-                 
-                {% endif %}
+                {% if user.profile.institute %}
+                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" %}
+                    <li  title="Approvals">
+                        <a href="{% url 'approvals' user.profile.institute.pk %}">
+                            <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                            <span class="menu_title">Approvals</span>
+                        </a>
+                        
+                    </li>
+               
                 <li  title="Attendance">
                     <a href="{% url 'attendance' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Attendance</span>
                     </a>
                     
-                </li>   
+                </li> 
+                {% endif %}
+                
+                {% endif %}  
             
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">

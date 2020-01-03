@@ -365,23 +365,26 @@
                 </li>
 
                 {% endif %}
-                {% if user.profile.institute  %}
-                <li  title="Approvals">
-                    <a href="{% url 'approvals' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Approvals</span>
-                    </a>
-                    
-                </li>
-                 
-                {% endif %}
+                {% if user.profile.institute %}
+                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+                    <li  title="Approvals">
+                        <a href="{% url 'approvals' user.profile.institute.pk %}">
+                            <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                            <span class="menu_title">Approvals</span>
+                        </a>
+                        
+                    </li>
+                
                 <li  title="Attendance">
                     <a href="{% url 'attendance' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Attendance</span>
                     </a>
                     
-                </li>   
+                </li> 
+                {% endif %}
+                
+            {% endif %}  
             
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
@@ -423,13 +426,14 @@
                             </div>
 
 
+                            {% if user.profile.designation.level_name == "admin" %}
 
                             <a class="md-fab md-fab-small md-fab-accent hidden-print"
                                 href="{% url 'edit_institute' user.profile.institute.pk %}">
                                 <i class="material-icons">&#xE150;</i>
                             </a>
 
-
+                            {% endif %}
 
 
 
@@ -453,12 +457,13 @@
                                 data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">About</a></li>
                                 <li><a href="#">Details</a></li>
+
                                 <li><a href="#">Classes</a></li>
                                 <li><a href="#">Subjects</a></li>
 
 
 
-
+                                
 
 
                                 {% if user.user_institute_role.institute.id == institute_data.id  and user.user_institute_role.level.level_name == 'admin' %}
@@ -613,8 +618,11 @@
 
 
                                         <div class="md-card">
+                                            {% if user.profile.designation.level_name == "admin" %}
+
                                             <button type="button" class="btn btn-info btn-sm pull-right "
                                                 data-uk-modal="{target:'#modal_new_class'}">Add New Class</button>
+                                                {% endif %}
                                             <!-- starting Classes modal themes -->
                                             <div class="uk-modal" id="modal_new_class">
                                                 <div class="uk-modal-dialog">
@@ -638,7 +646,7 @@
                                                                  
                                                                 </select>
                                                               </div>
-                                                              
+                                                             
                                                                  
                                                                   <button type="submit" class="btn btn-info btn-sm pull-right">Add Class</button>
                                                   </form>
@@ -681,10 +689,13 @@
                                                                     Not assigned
                                                                     {% endif %}   
                                                                     </td>
+                                            {% if user.profile.designation.level_name == "admin" %}                        
                                                                     <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'assign_class_teacher' classes.pk %}">Assign Class Teacher</a>
+                                            
                                                                
                                                                 <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_class' classes.pk %}">Edit</a>
                                                                 </td>
+                                            {% endif %}
                                                             </tr>
                                                             {% endfor %}
                                                         </tbody>
@@ -705,8 +716,11 @@
                                         <h4 class="heading_c uk-margin-small-bottom">Currently Available Subjects</h4>
 
                                         <div class="md-card">
+                                            {% if user.profile.designation.level_name == "admin" %}
+
                                             <button type="button" class="btn btn-info btn-sm pull-right "
                                                 data-uk-modal="{target:'#modal_new_subject'}">Add New Subject</button>
+                                            {% endif %}
                                             <!-- starting subject modal themes -->
                                             <div class="uk-modal" id="modal_new_subject">
                                                 <div class="uk-modal-dialog">
@@ -773,9 +787,11 @@
                                                                 <td> {{subjects.subject_code}} </td>
                                                                 <td> {{subjects.subject_name}} </td>
 
-
+                                            {% if user.profile.designation.level_name == "admin" %}
+                                                                
                                                                <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_subject' subjects.pk %}">Edit</a>
                                                                </td>
+                                            {% endif %}
 
                                                             </tr>
                                                             {% endfor %}

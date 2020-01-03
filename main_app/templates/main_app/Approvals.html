@@ -321,23 +321,26 @@
                 </li>
 
                 {% endif %}
-                {% if user.profile.institute  %}
-                <li class="current_section" title="Approvals">
-                    <a href="{% url 'approvals' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Approvals</span>
-                    </a>
+                {% if user.profile.institute %}
+                    {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+                        <li class="current_section" title="Approvals">
+                            <a href="{% url 'approvals' user.profile.institute.pk %}">
+                                <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                                <span class="menu_title">Approvals</span>
+                            </a>
+                            
+                        </li>
                     
-                </li>
-                 
-                {% endif %}
                 <li  title="Attendance">
                     <a href="{% url 'attendance' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Attendance</span>
                     </a>
                     
-                </li>   
+                </li>  
+                {% endif %}
+                    
+                {% endif %} 
             
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
@@ -398,84 +401,29 @@
                                                             </tr>
                                                         </tfoot>
                                                         <tbody>
-                                                  {% if user.user_institute_role.institute.id == institute_data.id  and user.user_institute_role.level.level_name == 'admin' %}
                                                             
-
-                                                                
+                                                           
                                                             
-                                                                
-                                                            {% for pending in Pending_user %}
-                                                                
-                                                            
-                                                                    
-                                                                
-                                                                    
-                                                            <tr>
-                                                                <th style="text-align: center;"> {{ forloop.counter}} </th>
-                                                                <td> {{pending.first_name }} </td>
-                                                                <td> {{pending.designation }} </td>
-                                                                <td> {{pending.created_at}} </td>
-                                                                <td> {{pending.updated_at}} </td>
-                                                                <td> {{pending.status}}  </td>
-                                                                <td style="text-align: right;"> <div class="uk-width-medium-1-6">
-                                                                    <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave" href="{% url 'user_approval' pending.pk %}">Approve</a>
-                                                                    <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave" href="{% url 'user_disapproval' pending.pk %}">Disapprove</a>
-                                                                </div> </td>
-                        
-                                                            </tr>
-                                                            {% endfor %}
+                                                                {% for pending in Pending_user %}
+                                                                        <tr>
+                                                                            <th style="text-align: center;"> {{ forloop.counter}} </th>
+                                                                            <td> {{pending.first_name }} </td>
+                                                                            <td> {{pending.designation }} </td>
+                                                                            <td> {{pending.created_at}} </td>
+                                                                            <td> {{pending.updated_at}} </td>
+                                                                            <td> {{pending.status}}  </td>
+                                                                            <td style="text-align: right;"> <div class="uk-width-medium-1-6">
+                                                                                <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave" href="{% url 'user_approval' pending.pk %}">Approve</a>
+                                                                                <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave" href="{% url 'user_disapproval' pending.pk %}">Disapprove</a>
+                                                                            </div> </td>
+                                    
+                                                                        </tr>
+                                                                {% endfor %}
 
                                                           
-                                                            {% elif user.user_institute_role.level.level_name == 'Teacher' %}
+                                                            
 
-                                                            {% for pending in Pending_user %}
-                                                                
-                                                            
-                                                                    
-                                                                    
-                                                                        
-                                                                   
-                                                                        
-                                                                
-                                                                    <tr>
-                                                                        <th style="text-align: center;"> {{ forloop.counter}} </th>
-                                                                        <td> {{pending.first_name }} </td>
-                                                                        <td> {{pending.designation }} </td>
-                                                                        <td> {{pending.created_at}} </td>
-                                                                        <td> {{pending.updated_at}} </td>
-                                                                        <td> {{pending.status}}  </td>
-                                                                        <td style="text-align: right;"> <div class="uk-width-medium-1-6">
-                                                                            <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave" href="{% url 'user_approval' pending.pk %}">Approve</a>
-                                                                            <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave" href="{% url 'user_disapproval' pending.pk %}">Disapprove</a>
-                                                                        </div> </td>
-                                
-                                                                    </tr>
-                                                            
-                                                            {% endfor %}
-                                                            {% else %}
-                                                            {% for pending in Pending_user %}
-                                                                
-                                                            
-                                                                    
-                                                                
-                                                                    
-                                                            <tr>
-                                                                <th style="text-align: center;"> {{ forloop.counter}} </th>
-                                                                <td> {{pending.first_name }} </td>
-                                                                
-                                                                <td> {{pending.created_at}} </td>
-                                                                
-                                                                <td style="text-align: right;"> <div class="uk-width-medium-1-6">
-                                                                    <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave" href="{% url 'user_approval' pending.pk %}">Approve</a>
-                                                                    <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave" href="{% url 'user_disapproval' pending.pk %}">Disapprove</a>
-                                                                </div> </td>
-                        
-                                                            </tr>
-                                                            {% endfor %}
-                        
-
-                                                         {% endif %}
-                        
+                                                               
                                                         </tbody>
                         
                                                     </table>

@@ -339,39 +339,46 @@
                     </a>    
                 </li>
                 <li  title="Holiday List">
-                    <a href="{% url 'holidaylist' %}">
+                    <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Holiday List</span>
                     </a>
                     
                 </li>
 
-                <li class="current_section"  title="Institute Schedule">
-                    <a href="{% url 'class_schedule' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Schedule</span>
-                    </a>
-                    
-                </li>
+               
+             
+               <li  class="current_section" title="Institute Schedule">
+                <a href="{% url 'class_schedule' %}">
+                    <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                    <span class="menu_title">Schedule</span>
+                </a>
+                
+            </li>
+               
+                   
 
                 {% endif %}
-                {% if user.profile.institute  %}
-                <li  title="Approvals">
-                    <a href="{% url 'approvals' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Approvals</span>
-                    </a>
-                    
-                </li>
-                 
-                {% endif %}
+                {% if user.profile.institute %}
+                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" %}
+                    <li title="Approvals">
+                        <a href="{% url 'approvals' user.profile.institute.pk %}">
+                            <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                            <span class="menu_title">Approvals</span>
+                        </a>
+                        
+                    </li>
+                
                 <li  title="Attendance">
                     <a href="{% url 'attendance' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">Attendance</span>
                     </a>
                     
-                </li>   
+                </li>  
+                {% endif %}
+                
+            {% endif %} 
             
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
@@ -504,10 +511,12 @@
                                                             <td colspan="2">
                                                         {{monday_schedule.subject_lecture_eight.subject_name}}
                                                             </td>
+                {% if user.profile.designation.level_name == "admin" %}
                                                         
                                                     <td colspan="2" rowspan="2">
                                                         <a class="md-btn md-btn-primary" href="{% url 'update_schedule' monday_schedule.pk %}">Update</a>
                                                     </td>
+                 {% endif %}
                                                          
                                                         </tr> 
                                                         <tr> 
@@ -538,10 +547,12 @@
                                                             <td colspan="2">{{tuesday_schedule.subject_lecture_seven}}</td> 
                                                           
                                                             <td colspan="2">{{tuesday_schedule.subject_lecture_eight}}</td> 
+                                                        {% if user.profile.designation.level_name == "admin" %}
 
                                                             <td colspan="2" rowspan="2" >
                                                                 <a class="md-btn md-btn-primary" href="{% url 'update_schedule' tuesday_schedule.pk %}">Update</a>
                                                             </td>
+                                                            {% endif %}
                                                          
                                                         </tr> 
                                                         <tr> 
@@ -577,10 +588,14 @@
                                                        
                                                             <td colspan="2">{{wednesday_schedule.subject_lecture_eight}}</td> 
 
+                {% if user.profile.designation.level_name == "admin" %}
                                                             
                                                                 <td colspan="2" rowspan="2">
                                                                     <a class="md-btn md-btn-primary" href="{% url 'update_schedule' wednesday_schedule.pk %}">Update</a>
                                                                 </td>
+                                                        
+
+                                                {% endif %}
                                                         
                                                         
                                                         </tr> 
@@ -618,11 +633,12 @@
                                                             <td colspan="2">{{thursday_schedule.subject_lecture_seven}}</td> 
                                                             
                                                             <td colspan="2">{{thursday_schedule.subject_lecture_eight}}</td> 
+                {% if user.profile.designation.level_name == "admin" %}
                                                           
                                                             <td colspan="2" rowspan="2">
                                                                 <a class="md-btn md-btn-primary" href="{% url 'update_schedule' thursday_schedule.pk %}">Update</a>
                                                             </td>
-
+                                                            {% endif %}
                                                         </tr> 
                                                         <tr> 
                                                             <th>Teacher</th>
@@ -652,10 +668,12 @@
                                                             <td colspan="2">{{friday_schedule.subject_lecture_seven}}</td> 
                                                            
                                                             <td colspan="2">{{friday_schedule.subject_lecture_eight}}</td> 
+                {% if user.profile.designation.level_name == "admin" %}
                                                                 
                                                     <td colspan="2" rowspan="2">
                                                         <a class="md-btn md-btn-primary" href="{% url 'update_schedule' friday_schedule.pk %}">Update</a>
                                                     </td>
+                {% endif %}
 
                                                         </tr> 
                                                         <tr> 
@@ -685,10 +703,12 @@
                                                             <td colspan="2">{{saturday_schedule.subject_lecture_seven}}</td> 
                                                          
                                                             <td colspan="2">{{saturday_schedule.subject_lecture_eight}}</td> 
+                {% if user.profile.designation.level_name == "admin" %}
                                                          
                                                             <td colspan="2" rowspan="2">
                                                                 <a class="md-btn md-btn-primary" href="{% url 'update_schedule' saturday_schedule.pk %}">Update</a>
                                                             </td>
+                 {% endif %}
 
                                                         </tr> 
                                                         <tr> 
