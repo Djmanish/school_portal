@@ -334,45 +334,54 @@
                 {% if user.profile.institute  %}
                 <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">domain</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
                 <li  title="Holiday List">
-                    <a href="{% url 'holidaylist' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                    <a href="{% url 'holidaylist' user.profile.institute.pk %}">
+                        <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
                     </a>
                     
                 </li>
 
-                <li class="current_section"  title="Institute Schedule">
-                    <a href="{% url 'class_schedule' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Schedule</span>
-                    </a>
-                    
-                </li>
+               
+             
+               <li class="current_section"  title="Institute Schedule">
+                <a href="{% url 'class_schedule' %}">
+                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                    <span class="menu_title">Schedule</span>
+                </a>
+                
+            </li>
+               
+                   
 
                 {% endif %}
                 {% if user.profile.institute  %}
+                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" %}
+
                 <li  title="Approvals">
-                    <a href="{% url 'approvals' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                    <a href="{% url 'approvals' user.profile.institute.pk %}">
+                        <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                         <span class="menu_title">Approvals</span>
                     </a>
                     
                 </li>
                  
-                {% endif %}
+                
+                
                 <li  title="Attendance">
                     <a href="{% url 'attendance' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">poll</i></span>
                         <span class="menu_title">Attendance</span>
                     </a>
                     
                 </li>   
-            
+                {% endif %}
+                
+                {% endif %} 
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
                             <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
@@ -486,23 +495,84 @@
                                                         <tr> <th rowspan="2">Monday</th>
                                                             <th>Subject</th>
                                                             <td > </td> 
-                                                            <td colspan="2">  {{monday_schedule.subject_lecture_one.subject_name}}</td>
-                                                            <td colspan="2"> {{monday_schedule.subject_lecture_two.subject_name}}</td> 
+                                                            <td colspan="2">
+                                                                
+                                                                {% if monday_schedule.subject_lecture_one.subject_name %}
+                                                                {{monday_schedule.subject_lecture_one.subject_name}}
+                                                                {% else %}
+                                                                -
+                                                                {% endif %}
+                                                                      </td>
+                                                            <td colspan="2"> 
+                                                                
+                                                                {% if monday_schedule.subject_lecture_two.subject_name %}
+                                                                {{monday_schedule.subject_lecture_two.subject_name}}
+                                                                {% else %}
+                                                                -  
+                                                                {% endif %}
+                                                                    
+                                                               </td> 
                                                           
-                                                            <td colspan="2">{{monday_schedule.subject_lecture_three.subject_name}}</td> 
+                                                            <td colspan="2">
+                                                                
+                                                                {% if monday_schedule.subject_lecture_three.subject_name %}
+                                                                {{monday_schedule.subject_lecture_three.subject_name}}
+                                                                {% else %}
+                                                                - 
+                                                                {% endif %}
+                                                                    
+                                                                </td> 
                                                          
-                                                            <td colspan="2">{{monday_schedule.subject_lecture_four.subject_name}}</td> 
+                                                            <td colspan="2">
+                                                                
+                                                                {% if monday_schedule.subject_lecture_four.subject_name %}
+                                                                {{monday_schedule.subject_lecture_four.subject_name}}
+                                                                {% else %}
+                                                                - 
+                                                                {% endif %}
+                                                                    
+                                                                </td> 
                                                          
-                                                            <td colspan="2">{{monday_schedule.subject_lecture_five.subject_name}}</td> 
+                                                            <td colspan="2">
+                                                                
+                                                                {% if monday_schedule.subject_lecture_five.subject_name %}
+                                                                {{monday_schedule.subject_lecture_five.subject_name}}
+                                                                {% else %}
+                                                                - 
+                                                                {% endif %}
+                                                                    
+                                                                </td> 
                                                          
-                                                            <td colspan="2">{{monday_schedule.subject_lecture_six.subject_name}}</td> 
+                                                            <td colspan="2">
+                                                                
+                                                                {% if monday_schedule.subject_lecture_six.subject_name %}
+                                                                {{monday_schedule.subject_lecture_six.subject_name}}
+                                                                {% else %}
+                                                                -  
+                                                                {% endif %}
+                                                                    
+                                                                </td> 
 
                                                             <td colspan="2">
-                                                        {{monday_schedule.subject_lecture_seven.subject_name}}
+                                                                
+                                                                {% if monday_schedule.subject_lecture_seven.subject_name %}
+                                                                {{monday_schedule.subject_lecture_seven.subject_name}}
+                                                                {% else %}
+                                                                -
+                                                                {% endif %}
+                                                                    
+                                                        
                                                             </td>
 
                                                             <td colspan="2">
-                                                        {{monday_schedule.subject_lecture_eight.subject_name}}
+                                                                
+                                                                {% if monday_schedule.subject_lecture_eight.subject_name %}
+                                                                {{monday_schedule.subject_lecture_eight.subject_name}}
+                                                                {% else %}
+                                                                -            
+                                                                {% endif %}
+                                                                    
+                                                        
                                                             </td>
                                                         
                                                     <td colspan="2" rowspan="2">
@@ -513,31 +583,128 @@
                                                         <tr> 
                                                             <th>Teacher</th>
                                                             <td> </td>
-                                                            <td colspan="2">{{monday_schedule.subject_teacher_lecture_one}}</td>                       
-                                                            <td colspan="2">{{monday_schedule.subject_teacher_lecture_two}}</td>       
-                                                            <td colspan="2">{{monday_schedule.subject_teacher_lecture_three}}</td>                                                            
-                                                            <td colspan="2">{{monday_schedule.subject_teacher_lecture_four}}</td>                                                            
-                                                            <td colspan="2">{{monday_schedule.subject_teacher_lecture_five}}</td> 
-                                                            <td colspan="2">{{monday_schedule.subject_teacher_lecture_six}}</td>             
-                                                            <td colspan="2">{{monday_schedule.subject_teacher_lecture_seven}}</td>           
-                                                    <td colspan="2">{{monday_schedule.subject_teacher_lecture_eight}}</td>                                                            
+                                                            <td colspan="2">
+                                                            {% if monday_schedule.subject_teacher_lecture_one %}
+                                                            {{monday_schedule.subject_teacher_lecture_one}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                
+                                                                </td>                       
+                                                            <td colspan="2">
+                                                            {% if monday_schedule.subject_teacher_lecture_two %}
+                                                            {{monday_schedule.subject_teacher_lecture_two}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>       
+                                                            <td colspan="2">
+                                                            {% if monday_schedule.subject_teacher_lecture_three %}
+                                                            {{monday_schedule.subject_teacher_lecture_three}} 
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                               </td>                                                            
+                                                            <td colspan="2">
+                                                            {% if monday_schedule.subject_teacher_lecture_four %}
+                                                            {{monday_schedule.subject_teacher_lecture_four}}
+                                                            {% else %}
+                                                            - 
+                                                            {% endif %}
+                                                               </td>                                                            
+                                                            <td colspan="2">
+                                                            {% if monday_schedule.subject_teacher_lecture_five %}
+                                                            {{monday_schedule.subject_teacher_lecture_five}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if monday_schedule.subject_teacher_lecture_six %}
+                                                            {{monday_schedule.subject_teacher_lecture_six}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>             
+                                                            <td colspan="2">
+                                                            {% if monday_schedule.subject_teacher_lecture_seven %}
+                                                            {{monday_schedule.subject_teacher_lecture_seven}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>           
+                                                    <td colspan="2">
+                                                    {% if monday_schedule.subject_teacher_lecture_eight %}
+                                                    {{monday_schedule.subject_teacher_lecture_eight}}
+                                                    {% else %}
+                                                    -
+                                                    {% endif %}
+                                                        </td>                                                            
                                                           
                                                         </tr>
                                                         <tr> <th rowspan="2">Tuesday</th>
                                                             <th>Subject</th>
                                                             <td> </td>
-                                                            <td colspan="2">{{tuesday_schedule.subject_lecture_one}}</td> 
-                                                            <td colspan="2">{{tuesday_schedule.subject_lecture_two}}</td> 
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_lecture_one %}
+                                                            {{tuesday_schedule.subject_lecture_one}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_lecture_two %}
+                                                            {{tuesday_schedule.subject_lecture_two}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                          
-                                                            <td colspan="2">{{tuesday_schedule.subject_lecture_three}}</td> 
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_lecture_three %}
+                                                            {{tuesday_schedule.subject_lecture_three}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                          
-                                                            <td colspan="2">{{tuesday_schedule.subject_lecture_four}}</td> 
-                                                            <td colspan="2">{{tuesday_schedule.subject_lecture_five}}</td> 
-                                                            <td colspan="2">{{tuesday_schedule.subject_lecture_six}}</td> 
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_lecture_four %}
+                                                            {{tuesday_schedule.subject_lecture_four}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_lecture_five %}
+                                                            {{tuesday_schedule.subject_lecture_five}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_lecture_six %}
+                                                            {{tuesday_schedule.subject_lecture_six}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                          
-                                                            <td colspan="2">{{tuesday_schedule.subject_lecture_seven}}</td> 
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_lecture_seven %}
+                                                            {{tuesday_schedule.subject_lecture_seven}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                           
-                                                            <td colspan="2">{{tuesday_schedule.subject_lecture_eight}}</td> 
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_lecture_eight %}
+                                                            {{tuesday_schedule.subject_lecture_eight}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
 
                                                             <td colspan="2" rowspan="2" >
                                                                 <a class="md-btn md-btn-primary" href="{% url 'update_schedule' tuesday_schedule.pk %}">Update</a>
@@ -547,16 +714,64 @@
                                                         <tr> 
                                                             <th>Teacher</th>
                                                             <td> </td>
-                                                            <td colspan="2">{{tuesday_schedule.subject_teacher_lecture_one}}</td>                                                            
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_teacher_lecture_one %}
+                                                            {{tuesday_schedule.subject_teacher_lecture_one}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
                                                           
-                                                            <td colspan="2">{{tuesday_schedule.subject_teacher_lecture_two}}</td>                                                            
-                                                            <td colspan="2">{{tuesday_schedule.subject_teacher_lecture_three}}</td>                                                            
-                                                            <td colspan="2">{{tuesday_schedule.subject_teacher_lecture_four}}</td>                                                            
-                                                            <td colspan="2">{{tuesday_schedule.subject_teacher_lecture_five}}</td> 
-                                                            <td colspan="2">{{tuesday_schedule.subject_teacher_lecture_six}}</td>                                                            
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_teacher_lecture_two %}
+                                                            {{tuesday_schedule.subject_teacher_lecture_two}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_teacher_lecture_three %}
+                                                            {{tuesday_schedule.subject_teacher_lecture_three}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_teacher_lecture_four %}
+                                                            {{tuesday_schedule.subject_teacher_lecture_four}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_teacher_lecture_five %}
+                                                            {{tuesday_schedule.subject_teacher_lecture_five}}
+                                                            {% else %}
+                                                            - 
+                                                            {% endif %}
+                                                               </td> 
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_teacher_lecture_six %}
+                                                            {{tuesday_schedule.subject_teacher_lecture_six}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
                                                          
-                                                            <td colspan="2">{{tuesday_schedule.subject_teacher_lecture_seven}}</td>                             
-                                                            <td colspan="2">{{tuesday_schedule.subject_teacher_lecture_eight}}</td>  
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_teacher_lecture_seven %}
+                                                            {{tuesday_schedule.subject_teacher_lecture_seven}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                             
+                                                            <td colspan="2">
+                                                            {% if tuesday_schedule.subject_teacher_lecture_eight %}
+                                                            {{tuesday_schedule.subject_teacher_lecture_eight}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>  
                                                             
                                                             
                                                            
@@ -564,18 +779,68 @@
                                                         <tr> <th rowspan="2">Wednesday</th>
                                                             <th>Subject</th>
                                                             <td> </td>
-                                                            <td colspan="2">{{wednesday_schedule.subject_lecture_one}}</td> 
-                                                            <td colspan="2">{{wednesday_schedule.subject_lecture_two}}</td> 
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_lecture_one %}
+                                                            {{wednesday_schedule.subject_lecture_one}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_lecture_two %}
+                                                            {{wednesday_schedule.subject_lecture_two}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                         
-                                                            <td colspan="2">{{wednesday_schedule.subject_lecture_three}}</td> 
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_lecture_three %}
+                                                            {{wednesday_schedule.subject_lecture_three}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                         
-                                                            <td colspan="2">{{wednesday_schedule.subject_lecture_four}}</td> 
-                                                            <td colspan="2">{{wednesday_schedule.subject_lecture_five}}</td> 
-                                                            <td colspan="2">{{wednesday_schedule.subject_lecture_six}}</td> 
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_lecture_four %}
+                                                            {{wednesday_schedule.subject_lecture_four}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_lecture_five %}
+                                                                
+                                                                {{wednesday_schedule.subject_lecture_five}}
+                                                                {% else %}
+                                                                -
+                                                            {% endif %}
+
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_lecture_six %}
+                                                            {{wednesday_schedule.subject_lecture_six}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                         
-                                                            <td colspan="2">{{wednesday_schedule.subject_lecture_seven}}</td> 
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_lecture_seven %}
+                                                            {{wednesday_schedule.subject_lecture_seven}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                        
-                                                            <td colspan="2">{{wednesday_schedule.subject_lecture_eight}}</td> 
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_lecture_eight %}
+                                                            {{wednesday_schedule.subject_lecture_eight}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
 
                                                             
                                                                 <td colspan="2" rowspan="2">
@@ -587,18 +852,66 @@
                                                         <tr> 
                                                             <th>Teacher</th>
                                                             <td> </td>
-                                                            <td colspan="2">{{wednesday_schedule.subject_teacher_lecture_one}}</td>                                                  
-                                                            <td colspan="2">{{wednesday_schedule.subject_teacher_lecture_two}}</td>                                                            
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_teacher_lecture_one %}
+                                                            {{wednesday_schedule.subject_teacher_lecture_one}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                  
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_teacher_lecture_two %}
+                                                            {{wednesday_schedule.subject_teacher_lecture_two}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
                                                         
-                                                            <td colspan="2">{{wednesday_schedule.subject_teacher_lecture_three}}</td>                                                            
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_teacher_lecture_three %}
+                                                            {{wednesday_schedule.subject_teacher_lecture_three}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
                                                            
-                                                            <td colspan="2">{{wednesday_schedule.subject_teacher_lecture_four}}</td>                                                            
-                                                            <td colspan="2">{{wednesday_schedule.subject_teacher_lecture_five}}</td> 
-                                                            <td colspan="2">{{wednesday_schedule.subject_teacher_lecture_six}}</td>                                                            
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_teacher_lecture_four %}
+                                                            {{wednesday_schedule.subject_teacher_lecture_four}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_teacher_lecture_five %}
+                                                            {{wednesday_schedule.subject_teacher_lecture_five}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_teacher_lecture_six %}
+                                                            {{wednesday_schedule.subject_teacher_lecture_six}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
                                                            
-                                                            <td colspan="2">{{wednesday_schedule.subject_teacher_lecture_seven}}</td>                                                            
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_teacher_lecture_seven %}
+                                                            {{wednesday_schedule.subject_teacher_lecture_seven}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
                                                           
-                                                            <td colspan="2">{{wednesday_schedule.subject_teacher_lecture_eight}}</td>                                          
+                                                            <td colspan="2">
+                                                            {% if wednesday_schedule.subject_teacher_lecture_eight %}
+                                                            {{wednesday_schedule.subject_teacher_lecture_eight}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                          
                                                             
                                                            
                                                             
@@ -606,18 +919,66 @@
                                                         <tr> <th rowspan="2">Thursday</th>
                                                             <th>Subject</th>
                                                             <td> </td>
-                                                            <td colspan="2">{{thursday_schedule.subject_lecture_one}}</td> 
-                                                            <td colspan="2">{{thursday_schedule.subject_lecture_two}}</td> 
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_lecture_one %}
+                                                            {{thursday_schedule.subject_lecture_one}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_lecture_two %}
+                                                            {{thursday_schedule.subject_lecture_two}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                             
-                                                            <td colspan="2">{{thursday_schedule.subject_lecture_three}}</td> 
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_lecture_three %}
+                                                            {{thursday_schedule.subject_lecture_three}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                            
-                                                            <td colspan="2">{{thursday_schedule.subject_lecture_four}}</td> 
-                                                            <td colspan="2">{{thursday_schedule.subject_lecture_five}}</td> 
-                                                            <td colspan="2">{{thursday_schedule.subject_lecture_six}}</td> 
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_lecture_four %}
+                                                            {{thursday_schedule.subject_lecture_four}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_lecture_five %}
+                                                            {{thursday_schedule.subject_lecture_five}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_lecture_six %}
+                                                            {{thursday_schedule.subject_lecture_six}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                         
-                                                            <td colspan="2">{{thursday_schedule.subject_lecture_seven}}</td> 
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_lecture_seven %}
+                                                            {{thursday_schedule.subject_lecture_seven}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                             
-                                                            <td colspan="2">{{thursday_schedule.subject_lecture_eight}}</td> 
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_lecture_eight %}
+                                                            {{thursday_schedule.subject_lecture_eight}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                           
                                                             <td colspan="2" rowspan="2">
                                                                 <a class="md-btn md-btn-primary" href="{% url 'update_schedule' thursday_schedule.pk %}">Update</a>
@@ -627,31 +988,127 @@
                                                         <tr> 
                                                             <th>Teacher</th>
                                                             <td> </td>
-                                                            <td colspan="2">{{thursday_schedule.subject_teacher_lecture_one}}</td>                                                  
-                                                            <td colspan="2">{{thursday_schedule.subject_teacher_lecture_two}}</td>                                                            
-                                                            <td colspan="2">{{thursday_schedule.subject_teacher_lecture_three}}</td> 
-                                                            <td colspan="2">{{thursday_schedule.subject_teacher_lecture_four}}</td>                                                            
-                                                            <td colspan="2">{{thursday_schedule.subject_teacher_lecture_five}}</td> 
-                                                            <td colspan="2">{{thursday_schedule.subject_teacher_lecture_six}}</td>                                            
-                                                            <td colspan="2">{{thursday_schedule.subject_teacher_lecture_seven}}</td>                                           
-                                                            <td colspan="2">{{thursday_schedule.subject_teacher_lecture_eight}}</td>                                                            
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_teacher_lecture_one %}
+                                                            {{thursday_schedule.subject_teacher_lecture_one}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                  
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_teacher_lecture_two %}
+                                                            {{thursday_schedule.subject_teacher_lecture_two}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_teacher_lecture_three %}
+                                                            {{thursday_schedule.subject_teacher_lecture_three}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_teacher_lecture_four %}
+                                                            {{thursday_schedule.subject_teacher_lecture_four}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_teacher_lecture_five %}
+                                                            {{thursday_schedule.subject_teacher_lecture_five}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_teacher_lecture_six %}
+                                                            {{thursday_schedule.subject_teacher_lecture_six}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                            
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_teacher_lecture_seven %}
+                                                            {{thursday_schedule.subject_teacher_lecture_seven}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                           
+                                                            <td colspan="2">
+                                                            {% if thursday_schedule.subject_teacher_lecture_eight %}
+                                                            {{thursday_schedule.subject_teacher_lecture_eight}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
                                                           
                                                         </tr>
                                                         <tr> <th rowspan="2">Friday</th>
                                                             <th>Subject</th>
                                                             <td> </td>
-                                                            <td colspan="2">{{friday_schedule.subject_lecture_one}}</td> 
-                                                            <td colspan="2">{{friday_schedule.subject_lecture_two}}</td> 
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_lecture_one %}
+                                                            {{friday_schedule.subject_lecture_one}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_lecture_two %}
+                                                            {{friday_schedule.subject_lecture_two}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                          
-                                                            <td colspan="2">{{friday_schedule.subject_lecture_three}}</td> 
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_lecture_three %}
+                                                            {{friday_schedule.subject_lecture_three}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                          
-                                                            <td colspan="2">{{friday_schedule.subject_lecture_four}}</td> 
-                                                            <td colspan="2">{{friday_schedule.subject_lecture_five}}</td> 
-                                                            <td colspan="2">{{friday_schedule.subject_lecture_six}}</td> 
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_lecture_four %}
+                                                            {{friday_schedule.subject_lecture_four}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_lecture_five %}
+                                                            {{friday_schedule.subject_lecture_five}}
+                                                            {% else %}
+                                                            -  
+                                                            {% endif %}
+                                                              </td> 
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_lecture_six %}
+                                                            {{friday_schedule.subject_lecture_six}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                        
-                                                            <td colspan="2">{{friday_schedule.subject_lecture_seven}}</td> 
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_lecture_seven %}
+                                                            {{friday_schedule.subject_lecture_seven}}
+                                                            {% else %}
+                                                            - 
+                                                            {% endif %}
+                                                               </td> 
                                                            
-                                                            <td colspan="2">{{friday_schedule.subject_lecture_eight}}</td> 
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_lecture_eight %}
+                                                            {{friday_schedule.subject_lecture_eight}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                                 
                                                     <td colspan="2" rowspan="2">
                                                         <a class="md-btn md-btn-primary" href="{% url 'update_schedule' friday_schedule.pk %}">Update</a>
@@ -661,30 +1118,126 @@
                                                         <tr> 
                                                             <th>Teacher</th>
                                                             <td> </td>
-                                                            <td colspan="2">{{friday_schedule.subject_teacher_lecture_one}}</td>                                               
-                                                            <td colspan="2">{{friday_schedule.subject_teacher_lecture_two}}</td>                          
-                                                            <td colspan="2">{{friday_schedule.subject_teacher_lecture_three}}</td>                                            
-                                                            <td colspan="2">{{friday_schedule.subject_teacher_lecture_four}}</td>                                                            
-                                                            <td colspan="2">{{friday_schedule.subject_teacher_lecture_five}}</td> 
-                                                            <td colspan="2">{{friday_schedule.subject_teacher_lecture_six}}</td>                                              
-                                                            <td colspan="2">{{friday_schedule.subject_teacher_lecture_seven}}</td>                                            
-                                                            <td colspan="2">{{friday_schedule.subject_teacher_lecture_eight}}</td>                                            
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_teacher_lecture_one %}
+                                                            {{friday_schedule.subject_teacher_lecture_one}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                               
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_teacher_lecture_two %}
+                                                            {{friday_schedule.subject_teacher_lecture_two}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                          
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_teacher_lecture_three %}
+                                                            {{friday_schedule.subject_teacher_lecture_three}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                            
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_teacher_lecture_four %}
+                                                            {{friday_schedule.subject_teacher_lecture_four}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_teacher_lecture_five %}
+                                                            {{friday_schedule.subject_teacher_lecture_five}}
+                                                            {% else %}
+                                                            - 
+                                                            {% endif %}
+                                                               </td> 
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_teacher_lecture_six %}
+                                                            {{friday_schedule.subject_teacher_lecture_six}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                              
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_teacher_lecture_seven %}
+                                                            {{friday_schedule.subject_teacher_lecture_seven}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                            
+                                                            <td colspan="2">
+                                                            {% if friday_schedule.subject_teacher_lecture_eight %}
+                                                            {{friday_schedule.subject_teacher_lecture_eight}}
+                                                            {% else %}
+                                                            - 
+                                                            {% endif %}
+                                                               </td>                                            
                                                         </tr>
                                                         <tr> <th rowspan="2">Saturday</th>
                                                             <th>Subject</th>
                                                             <td> </td>
-                                                            <td colspan="2">{{saturday_schedule.subject_lecture_one}}</td> 
-                                                            <td colspan="2">{{saturday_schedule.subject_lecture_two}}</td> 
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_lecture_one %}
+                                                            {{saturday_schedule.subject_lecture_one}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_lecture_two %}
+                                                            {{saturday_schedule.subject_lecture_two}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                            
-                                                            <td colspan="2">{{saturday_schedule.subject_lecture_three}}</td> 
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_lecture_three %}
+                                                            {{saturday_schedule.subject_lecture_three}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                           
-                                                            <td colspan="2">{{saturday_schedule.subject_lecture_four}}</td> 
-                                                            <td colspan="2">{{saturday_schedule.subject_lecture_five}}</td> 
-                                                            <td colspan="2">{{saturday_schedule.subject_lecture_six}}</td> 
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_lecture_four %}
+                                                            {{saturday_schedule.subject_lecture_four}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_lecture_five %}
+                                                            {{saturday_schedule.subject_lecture_five}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_lecture_six %}
+                                                            {{saturday_schedule.subject_lecture_six}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                         
-                                                            <td colspan="2">{{saturday_schedule.subject_lecture_seven}}</td> 
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_lecture_seven %}
+                                                            {{saturday_schedule.subject_lecture_seven}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
                                                          
-                                                            <td colspan="2">{{saturday_schedule.subject_lecture_eight}}</td> 
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_lecture_eight %}
+                                                            {{saturday_schedule.subject_lecture_eight}}
+                                                            {% else %}
+                                                            - 
+                                                            {% endif %}
+                                                               </td> 
                                                          
                                                             <td colspan="2" rowspan="2">
                                                                 <a class="md-btn md-btn-primary" href="{% url 'update_schedule' saturday_schedule.pk %}">Update</a>
@@ -694,15 +1247,63 @@
                                                         <tr> 
                                                             <th>Teacher</th>
                                                             <td> </td>
-                                                            <td colspan="2">{{saturday_schedule.subject_teacher_lecture_one}}</td>                                            
-                                                            <td colspan="2">{{saturday_schedule.subject_teacher_lecture_two}}</td>                                               
-                                                            <td colspan="2">{{saturday_schedule.subject_teacher_lecture_three}}</td>                                            
-                                                            <td colspan="2">{{saturday_schedule.subject_teacher_lecture_four}}</td>                                                            
-                                                            <td colspan="2">{{saturday_schedule.subject_teacher_lecture_five}}</td> 
-                                                            <td colspan="2">{{saturday_schedule.subject_teacher_lecture_six}}</td>                                                            
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_teacher_lecture_one %}
+                                                            {{saturday_schedule.subject_teacher_lecture_one}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                            
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_teacher_lecture_two %}
+                                                            {{saturday_schedule.subject_teacher_lecture_two}}
+                                                            {% else %}
+                                                            - 
+                                                            {% endif %}
+                                                               </td>                                               
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_teacher_lecture_three %}
+                                                            {{saturday_schedule.subject_teacher_lecture_three}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                            
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_teacher_lecture_four %}
+                                                            {{saturday_schedule.subject_teacher_lecture_four}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                                            
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_teacher_lecture_five %}
+                                                            {{saturday_schedule.subject_teacher_lecture_five}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td> 
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_teacher_lecture_six %}
+                                                            {{saturday_schedule.subject_teacher_lecture_six}}
+                                                            {% else %}
+                                                            - 
+                                                            {% endif %}
+                                                               </td>                                                            
                                                             
-                                                            <td colspan="2">{{saturday_schedule.subject_teacher_lecture_seven}}</td>        
-                                                            <td colspan="2">{{saturday_schedule.subject_teacher_lecture_eight}}</td>                                           
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_teacher_lecture_seven %}
+                                                            {{saturday_schedule.subject_teacher_lecture_seven}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>        
+                                                            <td colspan="2">
+                                                            {% if saturday_schedule.subject_teacher_lecture_eight %}
+                                                            {{saturday_schedule.subject_teacher_lecture_eight}}
+                                                            {% else %}
+                                                            -
+                                                            {% endif %}
+                                                                </td>                                           
                                                         </tr>
 
 

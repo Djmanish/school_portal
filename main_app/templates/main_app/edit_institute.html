@@ -289,7 +289,7 @@
         
         <div class="menu_section">
             <ul>
-                <li  class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -306,31 +306,49 @@
                     </a>    
                 </li>
                 {% if user.profile.institute  %}
-                <li title="Institute Profile">
+                <li class="current_section" title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">domain</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
                     </a>
                     
                 </li>
 
-                {% endif %}
-                {% if user.profile.institute  %}
-                <li  title="Approvals">
-                    <a href="{% url 'approvals' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Approvals</span>
+                <li  title="Institute Schedule">
+                    <a href="{% url 'class_schedule' %}">
+                        <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                        <span class="menu_title">Schedule</span>
                     </a>
                     
-                </li>   
+                </li>
+
+                {% endif %}
+                {% if user.profile.institute %}
+                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+                    <li  title="Approvals">
+                        <a href="{% url 'approvals' user.profile.institute.pk %}">
+                            <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
+                            <span class="menu_title">Approvals</span>
+                        </a>
+                        
+                    </li>
+                
+                <li  title="Attendance">
+                    <a href="{% url 'attendance' %}">
+                        <span class="menu_icon"><i class="material-icons">poll</i></span>
+                        <span class="menu_title">Attendance</span>
+                    </a>
+                    
+                </li>  
                 {% endif %}
                 
+            {% endif %} 
             
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
@@ -341,6 +359,8 @@
 
             </ul>
         </div>
+
+
     </aside><!-- main sidebar end -->
 
     <div id="page_content">
@@ -362,12 +382,12 @@
                             </div>
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{edit_institute.profile_pic.url}}" alt="user avatar"/>
+                                    <img src="{{object.profile_pic.url}}" alt="user avatar"/>
                                 </div>
                             </div>
                             <div class="user_heading_content">
                                 <h2 class="heading_b uk-margin-bottom">
-                                    <span class="uk-text-truncate">{{edit_institute.name}}</span>
+                                    <span class="uk-text-truncate">{{object.name}}</span>
                                     </span></h2>
                                                             </div>
 
@@ -379,11 +399,10 @@
                             
                         </div>
                         <div class="user_content">
-
                             <form method="POST" enctype="multipart/form-data" action="">
                                 {% csrf_token %}
                                 {{form | crispy }}
-                                <input type="submit" value="Update" class="btn btn-success">
+                                <input type="submit" value="Update" class="btn btn-info btn-sm pull-right ">
                             </form>
                             
                                             </div>

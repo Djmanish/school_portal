@@ -310,33 +310,52 @@
                     </a>    
                 </li>
                 {% if user.profile.institute  %}
-                <li  title="Institute Profile">
+                <li class="current_section" title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">domain</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
-
-                {% endif %}
-                {% if user.profile.institute  %}
-                <li  title="Approvals">
-                    <a href="{% url 'approvals' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
-                        <span class="menu_title">Approvals</span>
+                <li  title="Holiday List">
+                    <a href="{% url 'holidaylist' user.profile.institute.pk %}">
+                        <span class="menu_icon"><i class="material-icons">date_range</i></span>
+                        <span class="menu_title">Holiday List</span>
                     </a>
                     
                 </li>
-                 
+
+                <li  title="Institute Schedule">
+                    <a href="{% url 'class_schedule' %}">
+                        <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                        <span class="menu_title">Schedule</span>
+                    </a>
+                    
+                </li>
+
+                {% endif %}
+                {% if user.profile.institute %}
+                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+                    <li  title="Approvals">
+                        <a href="{% url 'approvals' user.profile.institute.pk %}">
+                            <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
+                            <span class="menu_title">Approvals</span>
+                        </a>
+                        
+                    </li>
                
-                <li class="current_section" title="Attendance">
+                
+            
+                <li  title="Attendance">
                     <a href="{% url 'attendance' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">poll</i></span>
                         <span class="menu_title">Attendance</span>
                     </a>
                     
-                </li>   
+                </li> 
                 {% endif %}
-                <li title="LogIn">
+                {% endif %}  
+            
+                <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
                             <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
                             <span class="menu_title">Log Out</span>
@@ -345,6 +364,7 @@
 
             </ul>
         </div>
+
     </aside><!-- main sidebar end -->
 
     <div id="page_content">
@@ -440,45 +460,55 @@
                                 <th style="text-align: center;"> {{ forloop.counter}} </th>                 
                                 <td> {{ student.first_name }} </td>
                                 <td> {{ student.last_name }} </td>
-                                <td style="text-align: center;"> {{student.current_date}} </td>
+                                <td style="text-align: center;"> </td>
                                 
                                         <td > 
                            
-    <form id="{{student.id}}|slugify"   action="{% url 'attendanceupdate' student.id %}" method="POST">
+    <form  >
         {% csrf_token %}    
         <span class="icheck-inline">
                                       
-            <input type="radio" name="{{student.id}}"  required class="wizard-icheck" value="present" />
+            <input type="radio" name="{{student.id|slugify }}"  required class="wizard-icheck" value="present" />
             <label for="wizard_status_present" class="inline-label">Present</label>
         </span>
         <span class="icheck-inline">
-            <input type="radio" name="{{student.id}}" class="wizard-icheck" value="absent" />
+            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="absent" />
             <label for="wizard_status_absent" class="inline-label">Absent</label>
         </span> 
         <span class="icheck-inline">
-            <input type="radio" name="{{student.id}}" class="wizard-icheck" value="leave" />
+            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="leave" />
             <label for="wizard_status_leave" class="inline-label">Leave</label>
             
         </span>
-        <input type="submit" id="attendance_status" value="Update" class="md-btn md-btn-primary mini-button" onclick="Hide()">
-        
+        <input type="button" id="{{student.id|slugify }}"   value="Update" class="md-btn md-btn-primary mini-button">
     </form>
-   
                                         </td>
-                                        <script>
-                                            function Hide(){
-                                                if (document.getElementById('attendance_status').click) 
-                                                {
-                                                   document.getElementById('test').style.display='none'; 
-                                                }
-                                                else
-                                                {
-                                                    document.getElementById('test').style.display='block';
-                                                }
-                                            }
-                                        </script>
-                                    
                                     </tr>     
+                                    <script>
+                                        $(document).ready(function(){
+                                          $('#{{student.id|slugify }}').click(function(){
+                                              var status = $("input[name='{{student.id|slugify }}']:checked").val();
+                                              if (typeof status == 'undefined'){
+                                                  alert('please select before clicking update');
+                                                  return false;
+                                              }
+                                        
+                                              $('#{{student.id|slugify }}').hide();
+                                              $.ajax({
+                                                  type:'POST',
+                                                  url:'attendanceupdate/{{student.id}}/',
+                                                  data:{pk_str:$("input[name='{{student.id|slugify }}']:checked").val(),
+                                                   csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                  
+                                                  success: function(msg){
+                                                      
+                                                    
+                                                  }
+                                              })
+                                          })
+                                        })
+                                        </script>         
+
                                     
                                    
                                 {% endfor %}
@@ -494,24 +524,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <ul class="uk-pagination ts_pager">
-                        <li data-uk-tooltip title="Select Page">
-                            <select class="ts_gotoPage ts_selectize"></select>
-                        </li>
-                        <li class="first"><a href="javascript:void(0)"><i class="uk-icon-angle-double-left"></i></a></li>
-                        <li class="prev"><a href="javascript:void(0)"><i class="uk-icon-angle-left"></i></a></li>
-                        <li><span class="pagedisplay"></span></li>
-                        <li class="next"><a href="javascript:void(0)"><i class="uk-icon-angle-right"></i></a></li>
-                        <li class="last"><a href="javascript:void(0)"><i class="uk-icon-angle-double-right"></i></a></li>
-                        <li data-uk-tooltip title="Page Size">
-                            <select class="pagesize ts_selectize">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                            </select>
-                        </li>
-                    </ul>
+              
                 </div>
             </div>
 
