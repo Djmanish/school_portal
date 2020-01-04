@@ -299,13 +299,13 @@
                 {% if user.profile.institute  %}
                 <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">domain</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
                     </a>
                     
@@ -313,7 +313,7 @@
 
                 <li  title="Institute Schedule">
                     <a href="{% url 'class_schedule' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">assignment</i></span>
                         <span class="menu_title">Schedule</span>
                     </a>
                     
@@ -324,7 +324,7 @@
                 {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
                     <li  title="Approvals">
                         <a href="{% url 'approvals' user.profile.institute.pk %}">
-                            <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                            <span class="menu_icon"><i class="material-icons">notifications-active</i></span>
                             <span class="menu_title">Approvals</span>
                         </a>
                         
@@ -332,7 +332,7 @@
               
                 <li  title="Attendance">
                     <a href="{% url 'attendance' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">border-color</i></span>
                         <span class="menu_title">Attendance</span>
                     </a>
                     

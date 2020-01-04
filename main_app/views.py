@@ -158,11 +158,6 @@ def fetch_levels(request):
         nlevels= nlevels+ f"<option value='{t.id}' >"+str(t)+"</option>"
     return HttpResponse(nlevels)
 
-    
-# def edit_institute(request, pk):
-#     edit_institute =Institute.objects.get(pk=pk)
-#     return render(request, 'main_app/edit_institute.html',{'institute_info': institute_info})
-
 
 
 

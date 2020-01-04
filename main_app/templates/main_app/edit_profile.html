@@ -10,6 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
@@ -293,22 +294,22 @@
                 
                  
 
-                <li title="User Profile">
+                <li class="current_section" title="User Profile">
                     <a href="{% url 'user_profile' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">face</i></span>
                         <span class="menu_title">My Profile</span>
                     </a>    
                 </li>
                 {% if user.profile.institute  %}
-                <li  class="current_section"  title="Institute Profile">
+                <li    title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">domain</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
                     </a>
                     
@@ -318,7 +319,7 @@
              
                <li  title="Institute Schedule">
                 <a href="{% url 'class_schedule' %}">
-                    <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
                     <span class="menu_title">Schedule</span>
                 </a>
                 
@@ -339,7 +340,7 @@
                 
                 <li  title="Attendance">
                     <a href="{% url 'attendance' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">chart</i></span>
                         <span class="menu_title">Attendance</span>
                     </a>
                     
