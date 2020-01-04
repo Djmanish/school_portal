@@ -53,7 +53,7 @@ class Schedule(models.Model):
     subject_teacher_lecture_seven = models.ForeignKey(to=User, on_delete=models.PROTECT, related_name="subject_teacher_lecture_seven",  null=True, blank=True, default="")
 
     lecture_eight = models.ForeignKey(to=Lecture, on_delete=models.PROTECT, related_name="schedule_lecture_eight", null=True)
-    subject_lecture_eight = models.ForeignKey(to=Subjects, on_delete=models.PROTECT, related_name="subject_lecture_eight", null=True, blank=True, default=" ")
+    subject_lecture_eight = models.ForeignKey(to=Subjects, on_delete=models.PROTECT, related_name="subject_lecture_eight", null=True, blank=True, default="")
     subject_teacher_lecture_eight = models.ForeignKey(to=User, on_delete=models.PROTECT, related_name="subject_teacher_lecture_eight", null=True, blank=True, default="")
     
 
