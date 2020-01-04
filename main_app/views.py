@@ -27,11 +27,10 @@ def add_classes(request):
         class_stage= request.POST.get('class_stage')
         
         new_class = Classes.objects.create(institute = request.user.profile.institute, name= class_name, class_stage= class_stage )
-        #creating schedule for created class
+         #creating schedule for created class
         days=['Monday','Tuesday', 'Wednesday', 'Thursday','Friday','Saturday']
         for day in days:
             create_schedule = Schedule.objects.create(institute=request.user.profile.institute, Class= new_class, day= day )
-
         messages.success(request, 'Class Created successfully !!!')
         rr=request.user.profile.institute.id
     
@@ -157,6 +156,11 @@ def fetch_levels(request):
     for t in levels:
         nlevels= nlevels+ f"<option value='{t.id}' >"+str(t)+"</option>"
     return HttpResponse(nlevels)
+
+    
+# def edit_institute(request, pk):
+#     edit_institute =Institute.objects.get(pk=pk)
+#     return render(request, 'main_app/edit_institute.html',{'institute_info': institute_info})
 
 
 
