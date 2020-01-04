@@ -337,7 +337,7 @@
                 {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
                     <li  title="Approvals">
                         <a href="{% url 'approvals' user.profile.institute.pk %}">
-                            <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                            <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                             <span class="menu_title">Approvals</span>
                         </a>
                         
@@ -347,7 +347,7 @@
             
                 <li  title="Attendance">
                     <a href="{% url 'attendance' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">poll</i></span>
                         <span class="menu_title">Attendance</span>
                     </a>
                     
