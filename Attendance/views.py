@@ -11,7 +11,9 @@ from Attendance import templates
 def attendance(request):
 
     designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
+    
     all_students= UserProfile.objects.filter(institute=request.user.profile.institute, designation= designation_pk)
+    
     return render(request, 'Attendance/Attendence.html',{'all_students': all_students})
 
 def attendance_update(request, pk):
