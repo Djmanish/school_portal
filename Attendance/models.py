@@ -9,6 +9,7 @@ class Attendance(models.Model):
 
 
    student = models.ForeignKey(to=User, on_delete=models.CASCADE,null=True, related_name="student_attendance" )
+   Class_attendance = models.ForeignKey(to=Classes, on_delete=models.PROTECT, null=True, related_name="attendance_class")
   
    
    attendance_status = models.CharField(max_length= 10, null = True)

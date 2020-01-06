@@ -9,22 +9,29 @@ from Attendance import templates
 
 # Create your views here.
 def attendance(request):
+    if request.method == "POST":
+        students_class = Classes.objects.get(pk=request.POST.get('selected_class_attendance'))
+        all_class = Classes.objects.filter(institute=request.user.profile.institute)
+        designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
+        all_students= UserProfile.objects.filter(institute=request.user.profile.institute,designation= designation_pk, Class=students_class)
+        print(all_students)
+        return render(request, 'Attendance/Attendence.html',{'all_students': all_students, 'selected_class':all_class})
 
-    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
-    
-    all_students= UserProfile.objects.filter(institute=request.user.profile.institute, designation= designation_pk)
-    
-    return render(request, 'Attendance/Attendence.html',{'all_students': all_students})
+    all_class = Classes.objects.filter(institute=request.user.profile.institute)  
+    return render(request, 'Attendance/Attendence.html',{'selected_class':all_class})
+
+# def attendance_principal(request): 
+#     return render(request, 'Attendance/attendance_principal.html',{'all_students': all_students})
 
 def attendance_update(request, pk):
-    
-    student= User.objects.get(pk=pk) #student whose attendance marked
-    pk_str = str(pk) # pk of marked student
-    if request.method == "POST":
-        student_status = request.POST.get('pk_str')
-        
+    # all_class = Classes.objects.filter(institute=request.user.profile.institute)
+ student= User.objects.get(pk=pk) #student whose attendance marked
+ pk_str = str(pk) # pk of marked student
+
+ if request.method == "POST":
+        student_status = request.POST.get('pk_str')                   
         new_attendance = Attendance.objects.create(student=student, attendance_status=student_status)
-        return HttpResponse(f'{pk}')
+ return render(request, 'Attendance/Attendence.html')
         # return redirect('attendance')
 
 
