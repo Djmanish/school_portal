@@ -592,7 +592,7 @@
                                         <td>
                                             
                                             {% if holiday.holiday_email == "Yes" %}
-                                            <a href="{% url 'emailView' %}">Link</a>
+                                            <a href="{% url 'emailView' user.profile.institute.id %}">Link</a>
                                             
                                             {% else %}
                                             <p>Link</p>
