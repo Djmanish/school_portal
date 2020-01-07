@@ -7,6 +7,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import *
 from django.views.generic import ListView, UpdateView
 from django.urls import reverse, reverse_lazy
+from django.contrib import messages
 # Create your views here.
 
 @login_required
@@ -147,10 +148,8 @@ def schedule_update(request, pk):
                         schedule_to_update.subject_teacher_lecture_eight=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_eight'))
                 except:
                         schedule_to_update.subject_teacher_lecture_eight=None
-
-
-
-
+                
+                messages.success(request, "Class Schedule Updated Successfully !!!")
                 schedule_to_update.save()
        
         return render(request, 'class_schedule/update_schedule.html', context_data )
