@@ -13,7 +13,7 @@ from django.urls import reverse, reverse_lazy
 def schedule(request):
     select_class_for_schedule = request.GET.get('selected_class') # class selected to view
     if select_class_for_schedule == None:
-            first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
+            first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
             first_class_id = first_class.id
             select_class_for_schedule= first_class_id
             
@@ -60,8 +60,8 @@ def schedule_update(request, pk):
         schedule_to_update = Schedule.objects.get(pk=pk) # fetching schedule instance to update
         
         institute_subjects = Subjects.objects.filter(institute= request.user.profile.institute, subject_class= schedule_to_update.Class) # fetching available subjects in the institute
-
-        institute_teachers = UserProfile.objects.filter(institute=request.user.profile.institute)
+        teacher_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+        institute_teachers = UserProfile.objects.filter(institute=request.user.profile.institute, designation= teacher_designation_pk )
 
         context_data = {'schedule_info':schedule_to_update,
                         'all_subjects':institute_subjects,
