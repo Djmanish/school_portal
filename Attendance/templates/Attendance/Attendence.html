@@ -310,7 +310,7 @@
                     </a>    
                 </li>
                 {% if user.profile.institute  %}
-                <li class="current_section" title="Institute Profile">
+                <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">domain</i></span>
                         <span class="menu_title">Institute Profile</span>
@@ -345,7 +345,7 @@
                
                 
             
-                <li  title="Attendance">
+                <li class="current_section" title="Attendance">
                     <a href="{% url 'attendance' %}">
                         <span class="menu_icon"><i class="material-icons">poll</i></span>
                         <span class="menu_title">Attendance</span>
@@ -374,66 +374,24 @@
             <div class="md-card">
                 
                 <div class="md-card-content">
-                    
-                    <div class="uk-margin-bottom">
-                        <div class="uk-button-dropdown" data-uk-dropdown>
-                                <button class="md-btn">Class <i class="material-icons">&#xE313;</i></button>
-                                <div class="uk-dropdown uk-dropdown-small">
-                                    <ul class="uk-nav uk-nav-dropdown">
-                                        <li><a href="#">Class 01</a></li>
-                                        <li><a href="#">Class 02</a></li>
-                                        <li><a href="#">Class 03</a></li>
-                                        <li><a href="#">Class 04</a></li>
-                                        <li><a href="#">Class 05</a></li>
-                                        <li><a href="#">Class 06</a></li>
-                                        <li><a href="#">Class 07</a></li>
-                                        <li><a href="#">Class 08</a></li>
-                                        <li><a href="#">Class 09</a></li>
-                                        <li><a href="#">Class 10</a></li>
-                                        <li><a href="#">Class 11</a></li>
-                                        <li><a href="#">Class 12</a></li>
-                                    </ul>
-                                </div>
-                                </div>
-                            <div class="uk-button-dropdown" data-uk-dropdown>
-                                <button class="md-btn">Month <i class="material-icons">&#xE313;</i></button>
-                                <div class="uk-dropdown uk-dropdown-small">
-                                    <ul class="uk-nav uk-nav-dropdown">
-                                        <li><a href="#">Month 01</a></li>
-                                        <li><a href="#">Month 02</a></li>
-                                        <li><a href="#">Month 03</a></li>
-                                        <li><a href="#">Month 04</a></li>
-                                        <li><a href="#">Month 05</a></li>
-                                        <li><a href="#">Month 06</a></li>
-                                        <li><a href="#">Month 07</a></li>
-                                        <li><a href="#">Month 08</a></li>
-                                        <li><a href="#">Month 09</a></li>
-                                        <li><a href="#">Month 10</a></li>
-                                        <li><a href="#">Month 11</a></li>
-                                        <li><a href="#">Month 12</a></li>
-                                    </ul>
-                                </div>    
-                            </div>
-                            <div class="uk-button-dropdown" data-uk-dropdown>
-                                <button class="md-btn">Session <i class="material-icons">&#xE313;</i></button>
-                                <div class="uk-dropdown uk-dropdown-small">
-                                    <ul class="uk-nav uk-nav-dropdown">
-                                        <li><a href="#">2012-13</a></li>
-                                        <li><a href="#">2013-14</a></li>
-                                        <li><a href="#">2014-15</a></li>
-                                        <li><a href="#">2015-16</a></li>
-                                        <li><a href="#">2016-17</a></li>
-                                        <li><a href="#">2017-18</a></li>
-                                        <li><a href="#">2018-19</a></li>
-                                        <li><a href="#">2019-20</a></li>
-                                        <li><a href="#">2020-21</a></li>
-                                        
-                                    </ul>
-                                </div>
-                                </div>
                        
-                       <a href="#" class="md-btn uk-margin-right" id="printTable">Print Table</a> 
-                    </div>
+                    <form  method="POST" action="#">
+                        {% csrf_token %}
+
+                        <select name="selected_class_attendance" style="padding: 2px;" required>
+                            <option selected disabled value="">--Select Class--</option>
+                            {% for class in selected_class %}
+                            <option value={{class.id}}>{{class}}</option>
+                            {% endfor %}
+                                
+
+                     </select>
+
+                     <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
+                     
+                    </form>
+                    
+                    
                     <td class="uk-overflow-container uk-margin-bottom">
 <h4>Taking attendance for  {% now "jS F Y H:i" %}</h4>
 
