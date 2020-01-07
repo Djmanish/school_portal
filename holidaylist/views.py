@@ -80,7 +80,11 @@ def holidayemail(request):
 #         # else :
 #         #    raise Exception("Error")
 
-def emailView(request):
+def emailView(request,pk):
+    institute_holiday = Institute.objects.get(pk=pk)
+
+    institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
+    
     if request.method == 'GET':
         form = ContactForm()
     else:
@@ -94,8 +98,11 @@ def emailView(request):
                 send_mail(subject, message,from_email,[to_email],fail_silently=False)
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
-            return redirect('holidaylist')
-    return render(request, "holidaylist/holiday_email.html", {'form': form})
+            
+            return render(request, 'holidaylist/holidaylist.html',{'institute_holiday_list':institute_holiday_list})
+    
+            
+    return render(request, "holidaylist/holiday_email.html", {'form': form,'institute_holiday_list':institute_holiday_list})
 
 def successView(request):
     return HttpResponse('Success! Thank you for your message.')
