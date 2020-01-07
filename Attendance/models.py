@@ -9,8 +9,6 @@ class Attendance(models.Model):
 
 
    student = models.ForeignKey(to=User, on_delete=models.CASCADE,null=True, related_name="student_attendance" )
-  
-   
    attendance_status = models.CharField(max_length= 10, null = True)
    # date = models.DateField(null=True)
    date = models.DateField(("Date"), default=datetime.date.today)
