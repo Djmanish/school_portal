@@ -13,9 +13,9 @@ from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.db.models import Q
 from class_schedule.models import *
-from .forms import SubjectUpdateForm
+from .forms import ClassUpdateForm
 from django.core.mail import send_mail, send_mass_mail
-from .forms import SubjectUpdateForm, ClassUpdateForm
+
 
 
 
@@ -42,7 +42,7 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
  model = Classes
  form_class = ClassUpdateForm
  template_name="main_app/edit_class.html"
- success_message = "Details were updated successfully"
+ success_message = "Details were updated successfully !!!"
  
 
  def form_valid(self, form):
@@ -68,12 +68,70 @@ def add_subjects(request):
         
     return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
-     
-        
-   
+       
 
        
 
+
+
+def edit_subject(request, pk):
+    subject_to_edit = Subjects.objects.get(pk=pk)
+    institute_classes = Classes.objects.filter(institute=request.user.profile.institute )
+
+    if request.method == 'POST':
+        # class_id = request.POST.get('new_class')
+        
+        subject_class = Classes.objects.get(pk= request.POST.get('new_class'))
+        
+        new_subject_code =  request.POST.get('subject_code')
+        new_subject_name = request.POST.get('subject_name')
+        subject_to_edit.subject_class = subject_class
+        subject_to_edit.subject_code = new_subject_code
+        subject_to_edit.subject_name = new_subject_name
+        subject_to_edit.save()
+        messages.success(request, 'Subject Updated Successfully !!!')
+        institue_pk = request.user.profile.institute.pk
+        return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
+  
+    context = {
+        'all_classes':institute_classes,
+        'subject_info': subject_to_edit
+    }
+    return render(request, 'main_app/edit_subject.html', context)
+
+
+def edit_class(request, pk):
+    class_to_edit = Classes.objects.get(pk=pk)
+    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+    # institute_classes = Classes.objects.filter(institute=request.user.profile.institute)
+
+    if request.method == 'POST':
+            print('post method')
+        
+            new_class_teacher = User.objects.get(pk= request.POST.get('class_teacher'))
+            class_to_edit.class_teacher = new_class_teacher
+            new_edit_class =  request.POST.get('class_name')
+            new_class_stage = request.POST.get('class_stage')
+            class_to_edit.name = new_edit_class
+            class_to_edit.class_stage = new_class_stage
+            institue_pk = request.user.profile.institute.pk
+            try:
+                class_to_edit.save()
+            except:
+                messages.error(request, 'Teacher already assigned to a class !!!')
+                return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
+            messages.success(request, 'Class Updated Successfully !!!')
+            
+            return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
+  
+    context = {
+
+        # 'all_classes':institute_classes,
+        'class_info': class_to_edit,
+        'institute_teachers':institute_teachers
+    }
+    return render(request, 'main_app/edit_class.html', context)
 
 
 def approvals(request,pk):
@@ -226,7 +284,7 @@ def edit_profile(request, pk):
         user_info.facebook_link= request.POST['facebook_link']
         user_info.save()
         
-        messages.success(request, 'Profile details updated.')
+        messages.success(request, 'Profile details updated !!!')
         return redirect('user_profile')
         
     return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,'all_institute_classes':all_institute_classes})
