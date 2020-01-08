@@ -19,6 +19,7 @@ from .forms import SubjectUpdateForm, ClassUpdateForm
 
 
 
+
 # Create your views here.
 
 def add_classes(request):
@@ -67,19 +68,11 @@ def add_subjects(request):
         
     return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
-       
-class SubjectUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
- model = Subjects
- form_class = SubjectUpdateForm
- template_name="main_app/edit_subject.html"
- success_message = "Details were updated successfully"
- 
+     
+        
+   
 
- def form_valid(self, form):
-        form.instance.created_by = self.request.user
-        return super().form_valid(form)
- def get_success_url(self, **kwargs):         
-        return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
+       
 
 
 
