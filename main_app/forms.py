@@ -13,3 +13,5 @@ class ClassUpdateForm(forms.ModelForm):
         model = Classes
         fields = ['name','class_stage','class_teacher']
     
+
+

@@ -41,7 +41,7 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
  model = Classes
  form_class = ClassUpdateForm
  template_name="main_app/edit_class.html"
- success_message = "Details were updated successfully"
+ success_message = "Details were updated successfully !!!"
  
 
  def form_valid(self, form):
@@ -72,7 +72,7 @@ class SubjectUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
  model = Subjects
  form_class = SubjectUpdateForm
  template_name="main_app/edit_subject.html"
- success_message = "Details were updated successfully"
+ success_message = "Details were updated successfully !!!"
  
 
  def form_valid(self, form):
@@ -81,6 +81,31 @@ class SubjectUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
  def get_success_url(self, **kwargs):         
         return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
 
+
+
+def edit_subject(request, pk):
+    subject_to_edit = Subjects.objects.get(pk=pk)
+    institute_classes = Classes.objects.filter(institute=request.user.profile.institute )
+
+    if request.method == 'POST':
+        class_id = request.POST.get('new_class')
+        print(class_id)
+        subject_class = Classes.objects.get(pk= request.POST.get('new_class'))
+        new_subject_code =  request.POST.get('subject_code')
+        new_subject_name = request.POST.get('subject_name')
+        subject_to_edit.subject_class = subject_class
+        subject_to_edit.subject_code = new_subject_code
+        subject_to_edit.subject_name = new_subject_name
+        subject_to_edit.save()
+        messages.success(request, 'Subject Updated Successfully !!!')
+        institue_pk = request.user.profile.institute.pk
+        return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
+  
+    context = {
+        'all_classes':institute_classes,
+        'subject_info': subject_to_edit
+    }
+    return render(request, 'main_app/edit_subject.html', context)
 
 
 def approvals(request,pk):
@@ -233,7 +258,7 @@ def edit_profile(request, pk):
         user_info.facebook_link= request.POST['facebook_link']
         user_info.save()
         
-        messages.success(request, 'Profile details updated.')
+        messages.success(request, 'Profile details updated !!!')
         return redirect('user_profile')
         
     return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,'all_institute_classes':all_institute_classes})
