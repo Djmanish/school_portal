@@ -620,7 +620,7 @@
                                         <div class="md-card">
                                             {% if user.profile.designation.level_name == "admin" %}
 
-                                            <button type="button" class="btn btn-info btn-sm pull-right "
+                                            <button type="button" class="md-btn md-btn-primary md-btn-small"
                                                 data-uk-modal="{target:'#modal_new_class'}">Add New Class</button>
                                                 {% endif %}
                                             <!-- starting Classes modal themes -->
@@ -690,7 +690,7 @@
                                                                     {% endif %}   
                                                                     </td>
                                             {% if user.profile.designation.level_name == "admin" %}                        
-                                                                    <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'assign_class_teacher' classes.pk %}">Assign Class Teacher</a>
+                                                                    <td><a  class="md-btn md-btn-primary md-btn-mini" href="{% url 'assign_class_teacher' classes.pk %}">Assign Class Teacher</a>
                                             
                                                                
                                                                 <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_class' classes.pk %}">Edit</a>
