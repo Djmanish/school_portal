@@ -411,7 +411,7 @@
   </div>
 <div class="form-group" >
     <label >Class Teacher:</label>
-    <select class="form-control" name="class_teacher">
+    <select class="form-control" name="class_teacher" required/>
         
         {% if class_info.class_teacher %}
         <option selected  value="{{class_info.class_teacher.id}}" >{{class_info.class_teacher}}</option>        
