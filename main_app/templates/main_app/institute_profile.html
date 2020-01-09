@@ -720,7 +720,7 @@
                                         <div class="md-card">
                                             {% if user.profile.designation.level_name == "admin" %}
 
-                                            <button type="button" class="btn btn-info btn-sm pull-right "
+                                            <button type="button" class="md-btn md-btn-primary md-btn-small "
                                                 data-uk-modal="{target:'#modal_new_subject'}">Add New Subject</button>
                                             {% endif %}
                                             <!-- starting subject modal themes -->
@@ -814,7 +814,7 @@
                                         <div class="md-card">
                                             <div class="md-card-content">
                                                 <!-- starting add new role modal and button -->
-                                                <button class="md-btn md-btn-primary md-btn-wave-light"
+                                                <button class="md-btn md-btn-primary md-btn-small "
                                                     data-uk-modal="{target:'#add_new_role'}">Add New Role</button>
                                                 <div class="uk-modal" id="add_new_role">
                                                     <div class="uk-modal-dialog">
@@ -856,7 +856,7 @@
                                                                 <th class="uk-text-center">Level</th>
                                                                 <th>Role</th>
                                                                 <th>Start Date</th>
-                                                                <th>EndDate</th>
+                                                              
                                                                 <th>Action</th>
 
                                                             </tr>
@@ -875,7 +875,7 @@
                                                                 </td>
 
                                                                 <td class="uk-text-small">{{role.start_date}}</td>
-                                                                <td class="uk-text-small">{{role.end_date}}</td>
+                                                            
                                                                 <td>
 
                                                                     <i class="material-icons "><a class="text-danger"
