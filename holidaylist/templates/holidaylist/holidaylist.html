@@ -595,8 +595,10 @@
                                             <a href="{% url 'emailView' user.profile.institute.id %}">Link</a>
                                             
                                             {% else %}
+                                            <div>
                                             <p>Link</p>
                                             {% endif %}
+                                        </div>
                                                 
                                               
                                              </td>
@@ -610,8 +612,11 @@
                                             {% if holiday.holiday_sms == "Yes" %}
                                             <a href="#">Link</a>
                                             {% else %}
+                                            <div>
                                             <p>Link</p>
-                                            {% endif %}</td>
+                                            </div>
+                                            {% endif %}
+                                        </td>
                                         <td>
                                             {{holiday.holiday_notification}}
                                             <!-- <select>
@@ -625,9 +630,13 @@
 
                                             <a href="#">Link</a>
                                             {% else %}
+                                            <div>
                                             <p>Link</p>
+                                        </div>
                                             {% endif %}</td>
                                         <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_holiday' holiday.pk %}">Edit</a>
+                                        </td>
+                                        <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_holiday' holiday.pk %}">Delete</a>
                                         </td>
                                         {% endif %}
 

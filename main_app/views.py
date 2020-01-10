@@ -107,7 +107,7 @@ def edit_class(request, pk):
     # institute_classes = Classes.objects.filter(institute=request.user.profile.institute)
 
     if request.method == 'POST':
-            print('post method')
+            
         
             new_class_teacher = User.objects.get(pk= request.POST.get('class_teacher'))
             class_to_edit.class_teacher = new_class_teacher

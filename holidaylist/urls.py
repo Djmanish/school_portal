@@ -13,7 +13,7 @@ urlpatterns = [
   
   path('holiday/<int:pk>', views.holidaylist, name="holidaylist"),
  
-  path('holiday/edit/<int:pk>/',HolidayUpdateView.as_view(), name='edit_holiday'),
+  path('holiday/edit/<int:pk>/',views.edit_holiday, name='edit_holiday'),
   path('mails/<int:pk>/', views.emailView, name='emailView'),
  
   path('success/', views.successView, name='successView')

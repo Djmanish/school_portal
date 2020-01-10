@@ -376,16 +376,18 @@
                             
                            
                         </div>
-                        <div class="user_content">
+ <div class="user_content">
 
-                              <!-- messages -->
-                              {% if messages %}
-                              <ul class="messages">
-                                  {% for message in messages %}
-                                  <li{% if message.tags %} class="text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                  {% endfor %}
-                              </ul>
-                              {% endif %}
+ <!-- messages -->
+ {% if messages %}
+ <ul class="messages">
+     {% for message in messages %}
+     <li{% if message.tags %} class="text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+     {% endfor %}
+ </ul>
+ {% endif %}
+ 
+ <!-- Subject form -->
                        
     <form method="POST" action="{% url 'edit_subject' subject_info.pk %}">
     {% csrf_token %}
