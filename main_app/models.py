@@ -52,6 +52,9 @@ class UserProfile(models.Model):
         ('pending', 'Pending'),('approve', 'Approve'),
         ('dissapprove', 'Dissapprove'),
     ]
+    gender_choices = [('', '-- select one --'),('Male', 'Male'), ('Female','Female'),('Other','Other')]
+    marital_choices = [('','-- select one --'),('Married','Married'),('nmarried','Unmarried')]
+    category_choices =[('','-- select one --'),('Unreserved','Unreserved'),('Sc/St','Sc/St'),('OBC','OBC')]
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='profile')
     institute = models.ForeignKey(to=Institute, related_name="institute", on_delete=models.PROTECT, null=True, blank=True, default="")
     designation = models.ForeignKey('Institute_levels', on_delete=models.PROTECT, related_name='user_designation', null=True)
@@ -59,7 +62,15 @@ class UserProfile(models.Model):
     first_name = models.CharField(max_length=25, null=True, default="")
     middle_name = models.CharField(max_length=20, null=True, default="")
     last_name = models.CharField(max_length= 25, null = True,default="")
+    father_name = models.CharField(max_length=25, null=True, default="")
+    mother_name = models.CharField(max_length=25, null=True, default="")
+    gender = models.CharField(max_length=10, choices= gender_choices, null=True, default="" )
     date_of_birth = models.DateField(null= True,  default=date.today)
+    marital_status = models.CharField(max_length= 10, choices = marital_choices , default="", null=True)
+    category = models.CharField(max_length=10, choices= category_choices , default="", null=True)
+    qualification = models.CharField(max_length=200, null=True, default='' )
+    aadhar_card_number = models.CharField(max_length= 20, null=True, default='')
+
     about = models.CharField(max_length=300, blank=True, null=True, default="write something about yourself ")
     profile_pic = models.ImageField(default="default_profile_pic.jpg", upload_to='UserProfilePictures')
     mobile_number = models.PositiveIntegerField(null=True, default="999999999")

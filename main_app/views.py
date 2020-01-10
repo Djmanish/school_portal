@@ -248,13 +248,19 @@ def edit_profile(request, pk):
             # sending mail to admin on registering
             send_mail('Admin Request Confirmation ',f'Hello {request.user} , Thank you for using our application.  ', 'yourcollegeportal@gmail.com',[f'{request.user.email}'], html_message=f"<h4>Hello {request.user},</h4><p>Thank you for choosing our application.</p><p> You have requested to be an admin profile so you are able to create your own institution profile.once your request is approved you will received a confirmation email.</p>School Portal<br>school_portal@gmail.com<p></p>"
             )
-        else:
-            pass
+        
         
         user_info.first_name= request.POST['first_name']
         user_info.middle_name= request.POST['middle_name']
         user_info.last_name= request.POST['last_name']
+        user_info.father_name = request.POST.get('father_name')
+        user_info.mother_name = request.POST.get('mother_name')
+        user_info.gender = request.POST.get('gender')
+        user_info.marital_status = request.POST.get('marital_status')
         user_info.date_of_birth= request.POST['dob']
+        user_info.category= request.POST.get('category_')
+        user_info.aadhar_card_number = request.POST.get('adhar_number')
+        user_info.qualification= request.POST.get('user_qualification')
         if 'select_school' in request.POST: # checking if new admin select box is checked and selected institute
             selected_institute_pk = request.POST['select_school']
             updated_institute = Institute.objects.get(pk=selected_institute_pk) #fetching the selected institutes list
@@ -282,9 +288,17 @@ def edit_profile(request, pk):
             user_info.state= updated_state 
         
         user_info.facebook_link= request.POST['facebook_link']
-        user_info.save()
         
-        messages.success(request, 'Profile details updated !!!')
+        try:
+            user_info.save()
+            messages.success(request, 'Profile details updated !!!')
+        except:
+            messages.error(request, 'Failed to update, Please fill details correctly !!!')
+            
+            return redirect('user_profile')
+
+        
+        
         return redirect('user_profile')
         
     return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,'all_institute_classes':all_institute_classes})

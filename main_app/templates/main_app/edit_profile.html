@@ -429,6 +429,30 @@
                                 <input type="text" class="form-control" name='last_name' value="{{user_info.last_name}}">
                               </div>
 
+                              <div class="form-group">
+                                <label >Father's Name:</label>
+                                <input type="text" class="form-control" name='father_name' value="{{user_info.father_name}}">
+                              </div>
+
+                              <div class="form-group">
+                                <label >Mother's Name:</label>
+                                <input type="text" class="form-control" name='mother_name' value="{{user_info.mother_name}}">
+                              </div>
+    
+                              <div class="form-group">
+                                <label for="gender">Gender:</label>
+                                <select class="form-control" id="gender" name="gender">
+                                    
+                                    {% if user_info.gender %}
+                                        <option selected disabled >{{user_info.gender}}</option>
+                                    {% endif %}
+                                        
+                                  <option >Male</option>
+                                  <option  >Female</option >
+                                  <option >Other</option>
+                                  
+                                </select>
+                              </div>
 
 
 
@@ -503,6 +527,38 @@
                                 
                                 <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" >
                               </div>
+                              {% if user.user_institute_role.level.level_name != "student" %}
+                              <div class="form-group">
+                                <label >Marital Status:</label>
+                                <select class="form-control" name="marital_status">     
+                                    {% if user_info.marital_status %}
+                                        <option selected disabled >{{user_info.marital_status}}</option>
+                                    {% else %}
+                                    <option selected disabled>--select one --</option>
+                                    {% endif %}
+                                  <option >Married</option>
+                                  <option  >Unmarried</option >
+                                </select>
+                              </div>
+                              {% endif %}
+
+                              <div class="form-group">
+                                <label >Category:</label>
+                                <select class="form-control" name="category_">     
+                                    {% if user_info.category %}
+                                        <option selected disabled >{{user_info.category}}</option>
+                                    {% else %}
+                                    <option selected disabled>--select one --</option>
+                                    {% endif %}
+                                  <option >Unreserved</option>
+                                  <option  >Sc/St</option >
+                                    <option  >OBC</option >
+                                </select>
+                              </div>
+
+
+
+
                               {% if user.user_institute_role.level.level_name == "student" %}
 <div class="form-group">
     <label for="sel1">Select Your Class:</label>
@@ -531,6 +587,14 @@
                                 <textarea class="form-control"  name='about' >{{user_info.about}}</textarea>
                               </div>
 
+                              {% if user.user_institute_role.level.level_name != "student" %}
+                              <div class="form-group">
+                                <label >Qualification:</label>
+                                <input type="text" class="form-control" name='user_qualification' value="{{user_info.qualification}}" >
+                              </div>
+                              {% endif %}
+                             
+
                               <div class="form-group">
                                 <label >Change Profile Picture:</label>
                                 <input type="file" class="form-control" name='profile_pic'>
@@ -541,6 +605,11 @@
                                 <input type="text" class="form-control" name='mobile_number' value="{{user_info.mobile_number}}" pattern="[1-9]{1}[0-9]{9}">
                               </div>
                             
+                              <div class="form-group">
+                                <label >Aadhaar Card Number:</label>
+                                <input type="text" class="form-control" name='adhar_number' value="{{user_info.aadhar_card_number}}"  >
+                              </div>
+
                               <div class="form-group">
                                 <label >Address Line 1:</label>
                                 <input type="text" class="form-control" name='address_line_1' value="{{user_info.address_line_1}}">
