@@ -53,7 +53,7 @@ class UserProfile(models.Model):
         ('dissapprove', 'Dissapprove'),
     ]
     gender_choices = [('', '-- select one --'),('Male', 'Male'), ('Female','Female'),('Other','Other')]
-    marital_choices = [('','-- select one --'),('Married','Married'),('nmarried','Unmarried')]
+    marital_choices = [('','-- select one --'),('Married','Married'),('Unmarried','Unmarried')]
     category_choices =[('','-- select one --'),('Unreserved','Unreserved'),('Sc/St','Sc/St'),('OBC','OBC')]
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='profile')
     institute = models.ForeignKey(to=Institute, related_name="institute", on_delete=models.PROTECT, null=True, blank=True, default="")

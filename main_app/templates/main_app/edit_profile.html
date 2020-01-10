@@ -445,7 +445,7 @@
                                 <select class="form-control" id="gender" name="gender">
                                     
                                     {% if user_info.gender %}
-                                        <option selected disabled >{{user_info.gender}}</option>
+                                        <option selected  >{{user_info.gender}}</option>
                                     {% endif %}
                                         
                                   <option >Male</option>
@@ -533,12 +533,12 @@
                                 <label >Marital Status:</label>
                                 <select class="form-control" name="marital_status">     
                                     {% if user_info.marital_status %}
-                                        <option selected disabled >{{user_info.marital_status}}</option>
-                                    {% else %}
-                                    <option selected disabled>--select one --</option>
+                                        <option selected  >{{user_info.marital_status}}</option>
+                                
+                                   
                                     {% endif %}
                                   <option >Married</option>
-                                  <option  >Unmarried</option >
+                                  <option >Unmarried</option >
                                 </select>
                               </div>
                               {% endif %}
@@ -547,10 +547,10 @@
                                 <label >Category:</label>
                                 <select class="form-control" name="category_">     
                                     {% if user_info.category %}
-                                        <option selected disabled >{{user_info.category}}</option>
-                                    {% else %}
-                                    <option selected disabled>--select one --</option>
+                                        <option selected  >{{user_info.category}}</option>
+                                
                                     {% endif %}
+                                    <option disabled>-- Select one --</option>
                                   <option >Unreserved</option>
                                   <option  >Sc/St</option >
                                     <option  >OBC</option >
@@ -570,9 +570,6 @@
     {% else %}
     <option  disabled> -- select your class --</option>
     {% endif %}
-           
-     
-     
      {% for class in all_institute_classes %}
      <option value="{{class.id}}">{{class}}</option>
      {% endfor %}
