@@ -35,6 +35,7 @@
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
 
     <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
@@ -262,10 +263,9 @@
                                     src="{ % static 'main_app/img/avatars/avatar_11_tn.png' %}" alt="" /></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
-                                    <li><a href="page_user_profile.html">My profile</a></li>
-                                    <li><a href="page_settings.html">Settings</a></li>
-                                    <li><a href="login.html">Login Page</a></li>
-                                    <li><a href="login_v2.html">Login Page v2</a></li>
+                                    <li><a href="{% url 'user_profile' %}">My profile</a></li>
+                                    <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                   
                                 </ul>
                             </div>
                         </li>
