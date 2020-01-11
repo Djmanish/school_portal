@@ -494,6 +494,7 @@
                                     </div>
                                    
                                         <li>
+                                            <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                                 <div class="uk-width-large-1-2">
                                                     <h4 class="heading_c uk-margin-small-bottom">Personal Details</h4>
                                                     <ul class="md-list">
@@ -538,11 +539,19 @@
                                                     </li>
                                                       {% endif %}
                                                       <!-- class for students -->
+                                                      {% if user.user_institute_role.level.level_name != 'student'  %}
+                                                      <li>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading"><a href="#">Qualification</a></span>
+                                                            <span class="uk-text-small uk-text-muted">{{user.profile.qualification}}</span>
+                                                        </div>
+                                                    </li>
+                                                    {% endif %}
                                                           
                                                         <li>
                                                             <div class="md-list-content">
-                                                                <span class="md-list-heading"><a href="#">Email Id</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.email}}</span>
+                                                                <span class="md-list-heading"><a href="#">Aadhar Card Number</a></span>
+                                                                <span class="uk-text-small uk-text-muted">{{user.profile.aadhar_card_number}}</span>
                                                             </div>
                                                         </li>
                                                         
@@ -550,6 +559,64 @@
                                                          
                                                     </ul>
                                                 </div>
+
+                                                <div class="uk-width-large-1-2">
+                                                    <h4 class="heading_c uk-margin-small-bottom">Other Details</h4>
+                                                    <ul class="md-list">
+                                                        <li>
+                                                            <div class="md-list-content">
+                                                                <span class="md-list-heading"><a href="#">Father's Name</a></span>
+                                                                <span class="uk-text-small uk-text-muted">{{user.profile.father_name}}</span>
+                                                            </div>
+                                                        </li>
+
+                                                        <li>
+                                                            <div class="md-list-content">
+                                                                <span class="md-list-heading"><a href="#">Mother's Name</a></span>
+                                                                <span class="uk-text-small uk-text-muted">{{user.profile.mother_name}}</span>
+                                                            </div>
+                                                        </li>
+
+                                                        <li>
+                                                            <div class="md-list-content">
+                                                                <span class="md-list-heading"><a href="#">Date of Birth</a></span>
+                                                                <span class="uk-text-small uk-text-muted">{{user.profile.date_of_birth}}</span>
+                                                            </div>
+                                                        </li>
+
+                                                        <li>
+                                                            <div class="md-list-content">
+                                                                <span class="md-list-heading"><a href="#">Gender</a></span>
+                                                                <span class="uk-text-small uk-text-muted">{{user.profile.gender}}</span>
+                                                            </div>
+                                                        </li>
+
+
+                                                        {% if user.user_institute_role.level.level_name != 'student'  %}
+                                                        <li>
+                                                            <div class="md-list-content">
+                                                                <span class="md-list-heading"><a href="#">Marital Status</a></span>
+                                                                <span class="uk-text-small uk-text-muted">{{user.profile.marital_status}}</span>
+                                                            </div>
+                                                        </li>
+                                                        {% endif %}
+
+                                                        <li>
+                                                            <div class="md-list-content">
+                                                                <span class="md-list-heading"><a href="#">Category</a></span>
+                                                                <span class="uk-text-small uk-text-muted">{{user.profile.category}}</span>
+                                                            </div>
+                                                        </li>
+                                                        </ul>
+                                                  
+                                                </div>
+                                            </div>
+
+
+
+
+
+                                                
                                             </div>
                                    
                     </div>
