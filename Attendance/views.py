@@ -37,9 +37,14 @@ def attendance_update(request, pk):
         student_status = request.POST.get('pk_str') 
         try:
             check_for_today = Attendance.objects.filter(student= student, date=current_date  )
-            return HttpResponse('attendance taken for today')
+            if len(check_for_today) !=0:
+                return HttpResponse('attendance taken for today')
+            else:
+                new_attendance = Attendance.objects.create(student=student, attendance_status=student_status, date=current_date )
+            return HttpResponse('Attendance Submitted') 
         except:
-            new_attendance = Attendance.objects.create(student=student, attendance_status=student_status, date=current_date )
+            pass
+            
         
  return render(request, 'Attendance/Attendence.html')
         # return redirect('attendance')
