@@ -232,6 +232,7 @@
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                     <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                   
                                 </ul>
                             </div>
                         </li>
@@ -377,16 +378,66 @@
                            
                         </div>
                         <div class="user_content">
-                       
-<form method="POST" action="">
-    {% csrf_token %}
-    {{form | crispy}}
-    <div>
-   
+ <!-- messages -->
+ {% if messages %}
+ <ul class="messages">
+     {% for message in messages %}
+     <li{% if message.tags %} class="text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+     {% endfor %}
+ </ul>
+ {% endif %}
 
-    <input type="submit" class="btn btn-primary" value="Update">
+<form method="POST" action="{% url 'edit_class' class_info.pk %}">
+{% csrf_token %}
+<div>
+
+<div class="form-group">
+<label >Name:</label>
+<input type="text" class="form-control" name='class_name' value="{{class_info.name}}">
 </div>
+
+<div class="form-group">
+    <label for="sel1">Select Class Stage:</label>
+    <select class="form-control" name="class_stage" required>
+        
+        {% if class_info.class_stage %}
+        <option selected>{{class_info.class_stage}}</option>
+        {% endif %}
+            
+        <option>Primary</option>
+        <option>Middle</option>
+        <option>Highschool</option>
+     
+    </select>
+  </div>
+<div class="form-group" >
+    <label >Class Teacher:</label>
+    <select class="form-control" name="class_teacher" required/>
+        
+        {% if class_info.class_teacher %}
+        <option selected  value="{{class_info.class_teacher.id}}" >{{class_info.class_teacher}}</option>        
+        {% endif %}
+            
+      {% for teacher in institute_teachers %}
+    <option value="{{teacher.id}}">{{teacher}}</option>
+    {% endfor %}
+    
+    
+    </select>
+    </div>
+
+<input type="submit" class="btn btn-primary" value="Update">
+
+</div>
+
+
+
 </form>
+
+
+
+
+
 
 
 

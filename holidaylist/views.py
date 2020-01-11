@@ -4,7 +4,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import *
 from django.contrib.messages.views import SuccessMessageMixin
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from holidaylist import templates
 from django.contrib import messages
@@ -22,9 +22,6 @@ from django.core.mail import send_mail, send_mass_mail, mail_admins, mail_manage
 def holidaylist(request,pk):
     institute_holiday = Institute.objects.get(pk=pk)
     institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
-
-    
-
 
     if request.method == "POST":
                 holiday_date= request.POST.get('holiday_date')
@@ -49,10 +46,37 @@ def holidaylist(request,pk):
 
 
                 
-# def edit_holiday(request, pk):
-#     edit_holiday= HolidayList.objects.get(pk=pk)
-#     return render(request, 'holidaylist/edit_holiday.html', {'edit_holiday':edit_holiday})
-   
+def edit_holiday(request, pk):
+    edit_holiday= HolidayList.objects.get(pk=pk)
+    
+    if request.method == 'POST':
+         holiday_date=request.POST.get('holiday_date') 
+         holiday_day = request.POST.get('holiday_day')
+         holiday_name =  request.POST.get('holiday_name')
+         holiday_applicable =  request.POST.get('holiday_applicable')
+         holiday_type =  request.POST.get('holiday_type')
+         holiday_email =  request.POST.get('holiday_email')
+         holiday_sms =  request.POST.get('holiday_sms')
+         holiday_notification =  request.POST.get('holiday_notification')
+
+         edit_holiday.date=holiday_date
+         edit_holiday.days=holiday_day
+         edit_holiday.name=holiday_name
+         edit_holiday.applicable=holiday_applicable
+         edit_holiday.holiday_type=holiday_type
+         edit_holiday.holiday_email=holiday_email
+         edit_holiday.holiday_sms=holiday_sms
+         edit_holiday.holiday_notification=holiday_notification
+
+         edit_holiday.save()
+         messages.success(request, 'Holiday Updated Successfully !!!')
+         rr=request.user.profile.institute.pk
+         return HttpResponseRedirect(f'/holiday/holiday/{rr}')
+
+    return render(request, 'holidaylist/edit_holiday.html', {'edit_holiday':edit_holiday})
+
+
+
 from .forms import HolidayUpdateForm
 class HolidayUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
  model = HolidayList
@@ -80,7 +104,11 @@ def holidayemail(request):
 #         # else :
 #         #    raise Exception("Error")
 
-def emailView(request):
+def emailView(request,pk):
+    institute_holiday = Institute.objects.get(pk=pk)
+
+    institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
+    
     if request.method == 'GET':
         form = ContactForm()
     else:
@@ -94,8 +122,11 @@ def emailView(request):
                 send_mail(subject, message,from_email,[to_email],fail_silently=False)
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
-            return redirect('holidaylist')
-    return render(request, "holidaylist/holiday_email.html", {'form': form})
+            
+            return render(request, 'holidaylist/holidaylist.html',{'institute_holiday_list':institute_holiday_list})
+    
+            
+    return render(request, "holidaylist/holiday_email.html", {'form': form,'institute_holiday_list':institute_holiday_list})
 
 def successView(request):
     return HttpResponse('Success! Thank you for your message.')

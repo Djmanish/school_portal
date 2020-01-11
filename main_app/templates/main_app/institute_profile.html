@@ -265,10 +265,9 @@
                                     src="{{user.profile.profile_pic.url}}" alt="" /></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
-                                    <li><a href="page_user_profile.html">My profile</a></li>
-                                    <li><a href="page_settings.html">Settings</a></li>
-                                    <li><a href="login.html">Login Page</a></li>
-                                    <li><a href="login_v2.html">Login Page v2</a></li>
+                                    <li><a href="{% url 'user_profile' %}">My profile</a></li>
+                                    <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                   
                                 </ul>
                             </div>
                         </li>
@@ -620,7 +619,7 @@
                                         <div class="md-card">
                                             {% if user.profile.designation.level_name == "admin" %}
 
-                                            <button type="button" class="btn btn-info btn-sm pull-right "
+                                            <button type="button" class="md-btn md-btn-primary md-btn-small"
                                                 data-uk-modal="{target:'#modal_new_class'}">Add New Class</button>
                                                 {% endif %}
                                             <!-- starting Classes modal themes -->
@@ -648,7 +647,7 @@
                                                               </div>
                                                              
                                                                  
-                                                                  <button type="submit" class="btn btn-info btn-sm pull-right">Add Class</button>
+                                                                  <button type="submit" class="md-btn md-btn-primary">Add Class</button>
                                                   </form>
                                                     <div class="uk-modal-footer uk-text-right">
                                                         <button type="button" class="md-btn md-btn-flat uk-modal-close">Cancel</button>
@@ -670,6 +669,8 @@
                                                                 <th><b>Class Name</b></th>
                                                                 <!-- <th><b>Class Teacher</b></th> -->
                                                                 <th><b>Class Teacher</b></th>
+                                                                <th><b>Change Class Teacher</b></th>
+                                                                <th><b>Edit</b></th>
 
 
 
@@ -690,10 +691,10 @@
                                                                     {% endif %}   
                                                                     </td>
                                             {% if user.profile.designation.level_name == "admin" %}                        
-                                                                    <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'assign_class_teacher' classes.pk %}">Assign Class Teacher</a>
+                                                                    <td class="text-center"><a  class="" href="{% url 'assign_class_teacher' classes.pk %}"><i class="material-icons" style="color: #2196f3;" >person_add</i></a>
                                             
                                                                
-                                                                <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_class' classes.pk %}">Edit</a>
+                                                                <td><a  class="" href="{% url 'edit_class' classes.pk %}"> <i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                                 </td>
                                             {% endif %}
                                                             </tr>
@@ -718,7 +719,7 @@
                                         <div class="md-card">
                                             {% if user.profile.designation.level_name == "admin" %}
 
-                                            <button type="button" class="btn btn-info btn-sm pull-right "
+                                            <button type="button" class="md-btn md-btn-primary md-btn-small "
                                                 data-uk-modal="{target:'#modal_new_subject'}">Add New Subject</button>
                                             {% endif %}
                                             <!-- starting subject modal themes -->
@@ -751,7 +752,7 @@
                                                             <input type="text" class="form-control" name="subject_name">
                                                         </div>
                                                         
-                                                        <button type="submit" class="btn btn-info btn-sm pull-right">Add
+                                                        <button type="submit" class="md-btn md-btn-primary">Add
                                                             Subject</button>
                                                     </form>
                                                     <div class="uk-modal-footer uk-text-right">
@@ -775,6 +776,7 @@
                                                                 <th><b>Class</b></th>
                                                                 <th><b>Subject Code</b></th>
                                                                 <th><b>Subject Name</b></th>
+                                                                <th><b>Edit</b></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -789,7 +791,7 @@
 
                                             {% if user.profile.designation.level_name == "admin" %}
                                                                 
-                                                               <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_subject' subjects.pk %}">Edit</a>
+                                                               <td><a   href="{% url 'edit_subject' subjects.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                                </td>
                                             {% endif %}
 
@@ -811,7 +813,7 @@
                                         <div class="md-card">
                                             <div class="md-card-content">
                                                 <!-- starting add new role modal and button -->
-                                                <button class="md-btn md-btn-primary md-btn-wave-light"
+                                                <button class="md-btn md-btn-primary md-btn-small "
                                                     data-uk-modal="{target:'#add_new_role'}">Add New Role</button>
                                                 <div class="uk-modal" id="add_new_role">
                                                     <div class="uk-modal-dialog">
@@ -853,7 +855,7 @@
                                                                 <th class="uk-text-center">Level</th>
                                                                 <th>Role</th>
                                                                 <th>Start Date</th>
-                                                                <th>EndDate</th>
+                                                              
                                                                 <th>Action</th>
 
                                                             </tr>
@@ -872,7 +874,7 @@
                                                                 </td>
 
                                                                 <td class="uk-text-small">{{role.start_date}}</td>
-                                                                <td class="uk-text-small">{{role.end_date}}</td>
+                                                            
                                                                 <td>
 
                                                                     <i class="material-icons "><a class="text-danger"

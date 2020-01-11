@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
-    <title>User Dashboard</title>
+    <title>Attendance</title>
 
     <!-- additional styles for plugins -->
         <!-- weather icons -->
@@ -237,10 +237,8 @@
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
-                                
-                                    <li><a href="page_settings.html">Settings</a></li>
-                                    <li><a href="login.html">Login Page</a></li>
-                                    <li><a href="login_v2.html">Login Page v2</a></li>
+                                    <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                   
                                 </ul>
                             </div>
                         </li>

@@ -15,7 +15,7 @@
     <link rel="icon" type="image/png" href="{% static 'holidaylist/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'holidaylist/img/favicon-32x32.png' %}" sizes="32x32">
 
-    <title>School management System</title>
+    <title>HolidayList</title>
 
     <!-- bootstrap -->
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
@@ -35,6 +35,7 @@
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
 
     <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
@@ -262,10 +263,9 @@
                                     src="{ % static 'main_app/img/avatars/avatar_11_tn.png' %}" alt="" /></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
-                                    <li><a href="page_user_profile.html">My profile</a></li>
-                                    <li><a href="page_settings.html">Settings</a></li>
-                                    <li><a href="login.html">Login Page</a></li>
-                                    <li><a href="login_v2.html">Login Page v2</a></li>
+                                    <li><a href="{% url 'user_profile' %}">My profile</a></li>
+                                    <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                   
                                 </ul>
                             </div>
                         </li>
@@ -398,7 +398,7 @@
                         <!-- <div class="md-card"> -->
                             {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
 
-                        <button type="button" class="btn btn-info btn-sm pull-right" data-uk-modal="{target:'#modal_new_holiday'}">Add
+                        <button type="button" class="md-btn md-btn-primary md-btn-small " data-uk-modal="{target:'#modal_new_holiday'}">Add
                             Holiday</button>
 
                             {% endif %}
@@ -483,7 +483,7 @@
                                               
                                             </select>
                                           </div>
-                                    <button type="submit" class="btn btn-info btn-sm pull-right">Add
+                                    <button type="submit" class="md-btn md-btn-primary md-btn-small ">Add
                                         Holiday</button>
                                 </form> 
                                 <div class="uk-modal-footer uk-text-right">
@@ -592,11 +592,13 @@
                                         <td>
                                             
                                             {% if holiday.holiday_email == "Yes" %}
-                                            <a href="{% url 'emailView' %}">Link</a>
+                                            <a href="{% url 'emailView' user.profile.institute.id %}">Link</a>
                                             
                                             {% else %}
+                                            <div>
                                             <p>Link</p>
                                             {% endif %}
+                                        </div>
                                                 
                                               
                                              </td>
@@ -610,8 +612,11 @@
                                             {% if holiday.holiday_sms == "Yes" %}
                                             <a href="#">Link</a>
                                             {% else %}
+                                            <div>
                                             <p>Link</p>
-                                            {% endif %}</td>
+                                            </div>
+                                            {% endif %}
+                                        </td>
                                         <td>
                                             {{holiday.holiday_notification}}
                                             <!-- <select>
@@ -625,9 +630,13 @@
 
                                             <a href="#">Link</a>
                                             {% else %}
+                                            <div>
                                             <p>Link</p>
+                                        </div>
                                             {% endif %}</td>
-                                        <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_holiday' holiday.pk %}">Edit</a>
+                                        <td><a  class="" href="{% url 'edit_holiday' holiday.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                        </td>
+                                        <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_holiday' holiday.pk %}">Delete</a>
                                         </td>
                                         {% endif %}
 

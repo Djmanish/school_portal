@@ -16,7 +16,7 @@
 
     <title>User Profile</title>
 
-
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}" media="all">
@@ -372,7 +372,7 @@
                                     
                                     
                                         
-                                            <li><a href="#">Add Your Class</a></li>
+                                            <li><a href="#"></a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -474,13 +474,18 @@
                                                 <li>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Address</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{user.profile.institute.address}}</span>
+                                                        <span class="uk-text-small uk-text-muted">{{user.profile.institute.address1}},
+                                                            {{user.profile.institute.address2}},
+                                                            {{user.profile.institute.district}},
+                                                            {{user.profile.institute.state}}
+
+                                                        </span>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Code</a></span>
-                                                        <span class="uk-text-small uk-text-muted">123456789</span>
+                                                        <span class="uk-text-small uk-text-muted">{{user.profile.institute.code}}</span>
                                                     </div>
                                                 </li>
                                                

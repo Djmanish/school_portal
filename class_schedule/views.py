@@ -7,13 +7,14 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import *
 from django.views.generic import ListView, UpdateView
 from django.urls import reverse, reverse_lazy
+from django.contrib import messages
 # Create your views here.
 
 @login_required
 def schedule(request):
     select_class_for_schedule = request.GET.get('selected_class') # class selected to view
     if select_class_for_schedule == None:
-            first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
+            first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
             first_class_id = first_class.id
             select_class_for_schedule= first_class_id
             
@@ -60,8 +61,8 @@ def schedule_update(request, pk):
         schedule_to_update = Schedule.objects.get(pk=pk) # fetching schedule instance to update
         
         institute_subjects = Subjects.objects.filter(institute= request.user.profile.institute, subject_class= schedule_to_update.Class) # fetching available subjects in the institute
-
-        institute_teachers = UserProfile.objects.filter(institute=request.user.profile.institute)
+        teacher_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+        institute_teachers = UserProfile.objects.filter(institute=request.user.profile.institute, designation= teacher_designation_pk )
 
         context_data = {'schedule_info':schedule_to_update,
                         'all_subjects':institute_subjects,
@@ -147,10 +148,8 @@ def schedule_update(request, pk):
                         schedule_to_update.subject_teacher_lecture_eight=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_eight'))
                 except:
                         schedule_to_update.subject_teacher_lecture_eight=None
-
-
-
-
+                
+                messages.success(request, "Class Schedule Updated Successfully !!!")
                 schedule_to_update.save()
        
         return render(request, 'class_schedule/update_schedule.html', context_data )

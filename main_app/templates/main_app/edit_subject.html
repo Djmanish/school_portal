@@ -232,6 +232,7 @@
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                     <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                   
                                 </ul>
                             </div>
                         </li>
@@ -376,25 +377,61 @@
                             
                            
                         </div>
-                        <div class="user_content">
-                       
-<form method="POST" action="">
-    {% csrf_token %}
-    {{form | crispy}}
-    <div>
-   
+ <div class="user_content">
 
-    <input type="submit" class="btn btn-primary" value="Update">
-</div>
+ <!-- messages -->
+ {% if messages %}
+ <ul class="messages">
+     {% for message in messages %}
+     <li{% if message.tags %} class="text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+     {% endfor %}
+ </ul>
+ {% endif %}
+ 
+ <!-- Subject form -->
+                       
+    <form method="POST" action="{% url 'edit_subject' subject_info.pk %}">
+    {% csrf_token %}
+  
+    <div>
+
+        <div class="form-group" >
+        <label >Select Class:</label>
+        <select class="form-control" name="new_class" id="new_class">
+        <option selected  value="{{subject_info.subject_class.id}}" >{{subject_info.subject_class}}</option>
+        {% for class in all_classes %}
+        <option value="{{class.id}}">{{class}}</option>
+        {% endfor %}
+            
+       
+        </select>
+        </div>
+        
+        <div class="form-group">
+        <label >Subject Code:</label>
+        <input type="text" class="form-control" name='subject_code' value="{{subject_info.subject_code}}" required="required">
+        </div>
+        
+        <div class="form-group">
+        <label >Subject Name:</label>
+        <input type="text" class="form-control" name='subject_name' value="{{subject_info.subject_name}}" required="required">
+        </div>
+        
+        <input type="submit" class="btn btn-primary" value="Update">
+       
+        </div>
+        
+
+
 </form>
 
 
 
                             
-                                            </div>
+ </div>
                                    
-                    </div>
-                </div>
+</div>
+</div>
                 <div class="uk-width-large-3-10 hidden-print">
                     <div class="md-card">
                         <div class="md-card-content">

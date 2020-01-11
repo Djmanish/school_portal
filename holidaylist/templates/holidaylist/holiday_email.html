@@ -15,7 +15,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
 
-    <title>Update Profile</title>
+    <title>HolidayList</title>
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
 
    <!-- bootstrap -->
@@ -232,6 +232,7 @@
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                     <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                   
                                 </ul>
                             </div>
                         </li>
@@ -309,7 +310,7 @@
             
         </li>
         <li class="current_section" title="Holiday List">
-            <a href="{% url 'holidaylist' %}">
+            <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                 <span class="menu_icon"><i class="material-icons">date_range</i></span>
                 <span class="menu_title">Holiday List</span>
             </a>
