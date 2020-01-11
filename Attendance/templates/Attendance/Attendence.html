@@ -393,6 +393,7 @@
                     <td class="uk-overflow-container uk-margin-bottom">
 <h4>Taking attendance for  {% now "jS F Y H:i" %}</h4>
 
+
                         <table class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair" id="ts_pager_filter">
                             <thead>
                             <tr>
@@ -403,7 +404,7 @@
                                 <th data-priority="1">Sr No.</th>
                                 <th data-priority="1">First Name</th>
                                 <th data-priority="1">Last Name</th>
-                                <th data-priority="1" style="text-align: center;">Day</th>
+                                <th class="success"></th>
                                 
                                 
                             </tr>
@@ -417,10 +418,11 @@
                                 <td> {{ student.first_name }} </td>
                                 <td> {{ student.last_name }} </td>
                                 <td style="text-align: center;"> </td>
+                               
                                 
                                         <td > 
                            
-    <form  >
+    <form id="{{student.id|slugify }}" >
         {% csrf_token %}    
         <span class="icheck-inline">
                                       
@@ -436,14 +438,17 @@
             <label for="wizard_status_leave" class="inline-label">Leave</label>
             
         </span>
-        <input type="button" id="{{student.id|slugify }}"   value="Update" class="md-btn md-btn-primary mini-button">
+        
     </form>
                                         </td>
                                     </tr>     
                                     <script>
+                                        
                                         $(document).ready(function(){
                                           $('#{{student.id|slugify }}').click(function(){
                                               var status = $("input[name='{{student.id|slugify }}']:checked").val();
+                                            
+                                    
                                               if (typeof status == 'undefined'){
                                                   alert('please select before clicking update');
                                                   return false;
@@ -457,7 +462,7 @@
                                                    csrfmiddlewaretoken: '{{ csrf_token }}' },
                                                   
                                                   success: function(msg){
-                                                      
+                                                    alert( msg);
                                                     
                                                   }
                                               })
@@ -774,8 +779,18 @@
 
         });
     </script>
+    <!-- <script>
+    function hideform() {
+        if (document.getElementById=('{{student.id|slugify }}').click){
+        document.getElementById=('{{student.id|slugify }}').style.display='none';
+        } else{
+            document.getElementById=('{{student.id|slugify }}').style.display='block';
+            }
+    }
+    </script> -->
   <!-- jquery cdn  -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
  
   
 </body>
