@@ -669,9 +669,11 @@
                                                                 <th><b>Class Name</b></th>
                                                                 <!-- <th><b>Class Teacher</b></th> -->
                                                                 <th><b>Class Teacher</b></th>
+                                                                {% if user.profile.designation.level_name == "admin" %} 
                                                                 <th><b>Assign Class Teacher</b></th>
                                                                 <th><b>Edit</b></th>
                                                                 <th><b>Delete</b></th>
+                                                                {% endif %}
                                                                 
 
 
@@ -698,7 +700,7 @@
                                                                
                                                                 <td><a  class="" href="{% url 'edit_class' classes.pk %}"> <i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                                 </td>
-                                                                <td><a  class="" href=""><i class="material-icons" style="color: #ff0000;">delete</i></a>
+                                                                <td><a  class="" href="{% url 'delete_class' classes.pk %}"><i class="material-icons" style="color: #ff0000;">delete</i></a>
                                                                 </td>
                                             {% endif %}
                                                             </tr>
@@ -780,8 +782,10 @@
                                                                 <th><b>Class</b></th>
                                                                 <th><b>Subject Code</b></th>
                                                                 <th><b>Subject Name</b></th>
+                                                                {% if user.profile.designation.level_name == "admin" %}                        
                                                                 <th><b>Edit</b></th>
                                                                 <th><b>Delete</b></th>
+                                                                {% endif %}
 
                                                             </tr>
                                                         </thead>
@@ -799,7 +803,7 @@
                                                                 
                                                                <td><a   href="{% url 'edit_subject' subjects.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                                </td>
-                                                               <td><a  class="" href=""><i class="material-icons" style="color: #ff0000;">delete</i></a>
+                                                               <td><a  class="" href="{% url 'delete_subject' subjects.pk %}"><i class="material-icons" style="color: #ff0000;">delete</i></a>
                                                                </td>
                                             {% endif %}
 

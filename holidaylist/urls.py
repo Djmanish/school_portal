@@ -12,7 +12,7 @@ from .views import holidaylist,HolidayUpdateView,emailView,successView
 urlpatterns = [
   
   path('holiday/<int:pk>', views.holidaylist, name="holidaylist"),
-  path('holiday/<int:pk>', views.delete_holiday,name='delete_holiday'),
+  path('holiday/delete/<int:pk>', views.delete_holiday,name='delete_holiday'),
   path('holiday/edit/<int:pk>/',views.edit_holiday, name='edit_holiday'),
   path('mails/<int:pk>/', views.emailView, name='emailView'),
  

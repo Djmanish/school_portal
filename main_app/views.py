@@ -99,6 +99,15 @@ def edit_subject(request, pk):
     }
     return render(request, 'main_app/edit_subject.html', context)
 
+def delete_subject(request, pk):
+        subject_to_delete = Subjects.objects.get(pk=pk)
+        subject_to_delete.subject_code = "null"
+        subject_to_delete.subject_name = "null"
+        subject_to_delete.delete()
+        messages.success(request, 'Subject Deleted Successfully !!!')
+        institue_pk = request.user.profile.institute.pk
+        return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
+
 
 def edit_class(request, pk):
     class_to_edit = Classes.objects.get(pk=pk)
@@ -133,6 +142,19 @@ def edit_class(request, pk):
     }
     return render(request, 'main_app/edit_class.html', context)
 
+def delete_class(request, pk):
+        class_to_delete = Classes.objects.get(pk=pk)
+        class_to_delete.class_teacher = "null"
+        class_to_delete.name = "null"
+        class_to_delete.class_stage = "null"
+        class_to_delete.delete()
+        messages.success(request, 'Class Deleted Successfully !!!')
+        institue_pk = request.user.profile.institute.pk
+        return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
+
+
+
+       
 
 def approvals(request,pk):
     institute_approval = Institute.objects.get(pk=pk)

@@ -122,7 +122,7 @@ class Role_Description(models.Model):
 class Classes(models.Model):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='institute_classes')
     name =models.CharField(max_length=10,null=True)
-    class_teacher= models.OneToOneField(to=User, null=True, on_delete=models.CASCADE,related_name='class_teacher')
+    class_teacher= models.ForeignKey(to=User, null=True, on_delete=models.CASCADE,related_name='class_teacher')
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,null=True)
     class_stage_choices = [('Primary','Primary'),('Middle','Middle'),('Highschool','Highschool')]

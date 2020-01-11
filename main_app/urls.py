@@ -34,7 +34,11 @@ urlpatterns = [
   path('user/class/add_class/',views.add_classes, name="add_classes"),
   path('add/new_subject/', views.add_subjects, name="add_subjects"),
   path('subject/edit/<int:pk>/', views.edit_subject, name='edit_subject'),
+  path('subject/delete/<int:pk>/', views.delete_subject, name='delete_subject'),
+
   path('class/edit/<int:pk>/',views.edit_class, name='edit_class'),
+  path('class/delete/<int:pk>/',views.delete_class, name='delete_class'),
+
 
 
   path('student/select_class/', views.selecting_class, name="selecting_class"),
