@@ -669,8 +669,10 @@
                                                                 <th><b>Class Name</b></th>
                                                                 <!-- <th><b>Class Teacher</b></th> -->
                                                                 <th><b>Class Teacher</b></th>
-                                                                <th><b>Change Class Teacher</b></th>
+                                                                <th><b>Assign Class Teacher</b></th>
                                                                 <th><b>Edit</b></th>
+                                                                <th><b>Delete</b></th>
+                                                                
 
 
 
@@ -695,6 +697,8 @@
                                             
                                                                
                                                                 <td><a  class="" href="{% url 'edit_class' classes.pk %}"> <i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                                </td>
+                                                                <td><a  class="" href=""><i class="material-icons" style="color: #ff0000;">delete</i></a>
                                                                 </td>
                                             {% endif %}
                                                             </tr>
@@ -777,6 +781,8 @@
                                                                 <th><b>Subject Code</b></th>
                                                                 <th><b>Subject Name</b></th>
                                                                 <th><b>Edit</b></th>
+                                                                <th><b>Delete</b></th>
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -792,6 +798,8 @@
                                             {% if user.profile.designation.level_name == "admin" %}
                                                                 
                                                                <td><a   href="{% url 'edit_subject' subjects.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                               </td>
+                                                               <td><a  class="" href=""><i class="material-icons" style="color: #ff0000;">delete</i></a>
                                                                </td>
                                             {% endif %}
 

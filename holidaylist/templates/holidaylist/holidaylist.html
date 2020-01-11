@@ -500,9 +500,7 @@
                                 id="ts_pager_filter">
                                 <thead>
                                     <tr>
-                                        <th data-name="Select" data-priority="5"><input type="checkbox"
-                                                class="ts_checkbox_all"></th>
-                                        
+                                       
 
                                         <th class="filter-false remove sorter-false" data-priority="6">S.No.</th>
                                         <th data-priority="critical">Date</th>
@@ -531,15 +529,17 @@
                                         <th data-priority="8">Content</th>
                                         <th data-priority="9">Notification</th>
                                         <th data-priority="10">Content</th>
+                                        <th data-priority="11">Edit</th>
+                                        <th data-priority="12">Delete</th>
+
+                                                           
                                         
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         
-                                        <th data-name="Select" data-priority="5"><input type="checkbox"
-                                                class="ts_checkbox_all"></th>
-                                        
+                                       
 
                                         <th class="filter-false remove sorter-false" data-priority="6">S.No.</th>
                                         <th data-priority="critical">Date</th>
@@ -556,20 +556,9 @@
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                  
-                                  
-                                      
-                                  
-                                      
-                                    {% for holiday in institute_holiday_list %}
+                                  {% for holiday in institute_holiday_list %}
                                     
                                     <tr>
-
-
-                                        
-                                        
-                                        <td><input type="checkbox" data-md-icheck class="ts_checkbox"></td>
-                                       
                                         <td>{{ forloop.counter}}</td>
                                         <td>
                                             {{holiday.date}}
@@ -636,7 +625,7 @@
                                             {% endif %}</td>
                                         <td><a  class="" href="{% url 'edit_holiday' holiday.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
                                         </td>
-                                        <td><a  class="btn btn-info btn-sm pull-right" href="{% url 'edit_holiday' holiday.pk %}">Delete</a>
+                                        <td><a  class="" href=""><i class="material-icons" style="color: #ff0000;">delete</i></a>
                                         </td>
                                         {% endif %}
 
