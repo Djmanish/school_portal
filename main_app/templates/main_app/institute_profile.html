@@ -669,8 +669,11 @@
                                                                 <th><b>Class Name</b></th>
                                                                 <!-- <th><b>Class Teacher</b></th> -->
                                                                 <th><b>Class Teacher</b></th>
+
+                                                                {% if user.profile.designation.level_name == "admin" %}    
                                                                 <th><b>Change Class Teacher</b></th>
                                                                 <th><b>Edit</b></th>
+                                                                {% endif %}
 
 
 
@@ -679,8 +682,8 @@
                                                         <tbody>
                                                             {% for classes in institute_class %}
                                                             <tr>
-                                                                <th style="text-align: center;"> {{ forloop.counter}}
-                                                                </th>
+                                                                <td style="text-align: center;"> {{ forloop.counter}}
+                                                                </td>
                                                                 <td> {{classes.name }} </td>
                                                                 <!-- <td>{{classes.class_teacher}}</td> -->
                                                                 <td>
@@ -692,6 +695,7 @@
                                                                     </td>
                                             {% if user.profile.designation.level_name == "admin" %}                        
                                                                     <td class="text-center"><a  class="" href="{% url 'assign_class_teacher' classes.pk %}"><i class="material-icons" style="color: #2196f3;" >person_add</i></a>
+                                                                    </td>
                                             
                                                                
                                                                 <td><a  class="" href="{% url 'edit_class' classes.pk %}"> <i class="material-icons" style="color: #2196f3;">edit</i></a>
@@ -776,14 +780,16 @@
                                                                 <th><b>Class</b></th>
                                                                 <th><b>Subject Code</b></th>
                                                                 <th><b>Subject Name</b></th>
+                                                                {% if user.profile.designation.level_name == "admin" %}    
                                                                 <th><b>Edit</b></th>
+                                                                {% endif %}
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             {% for subjects in institute_subject %}
                                                             <tr>
-                                                                <th style="text-align: center;"> {{ forloop.counter}}
-                                                                </th>
+                                                                <td style="text-align: center;"> {{ forloop.counter}}
+                                                                </td>
                                                                 <td> {{subjects.subject_class}} </td>
 
                                                                 <td> {{subjects.subject_code}} </td>
