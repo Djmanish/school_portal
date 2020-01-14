@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.db.models import Q
 from class_schedule.models import *
-from .forms import ClassUpdateForm
+from .forms import ClassUpdateForm, InstituteUpdateProfile
 from django.core.mail import send_mail, send_mass_mail
 
 
@@ -354,7 +354,7 @@ def edit_institute(request, pk):
 class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Institute
     
-    fields = ['code','name','establish_date', 'profile_pic','principal','about','contact_number1','contact_number2','contact_number3','address1','address2','district','state','country','pin_code','email','facebook_link','website_link']
+    form_class = InstituteUpdateProfile
 
     template_name="main_app/edit_institute.html"
     success_message = "Details were updated successfully"

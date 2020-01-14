@@ -15,3 +15,13 @@ class ClassUpdateForm(forms.ModelForm):
     
 
 
+
+class InstituteUpdateProfile(forms.ModelForm):
+    class Meta:
+        model = Institute
+        fields = ['code','name','establish_date', 'profile_pic','principal','about','contact_number1','contact_number2','contact_number3','address1','address2','district','state','country','pin_code','email','facebook_link','website_link']
+
+        widgets = {
+            'establish_date': forms.DateInput(attrs={'type':'date'}),
+        }
+

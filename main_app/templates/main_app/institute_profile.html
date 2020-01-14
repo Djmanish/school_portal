@@ -496,7 +496,18 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span
-                                                            class="md-list-heading">{{institute_data.contact_number1}}</span>
+                                                            class="md-list-heading">{{institute_data.contact_number1}},
+                                                        
+                                                        
+                                                        {% if institute_data.contact_number2 %}
+                                                            {{institute_data.contact_number2}}
+                                                        {% endif %}
+
+                                                        {% if institute_data.contact_number3 %}
+                                                            {{institute_data.contact_number3}}
+                                                        {% endif %}
+                                                        
+                                                        </span>
                                                         <span class="uk-text-small uk-text-muted">Phone</span>
                                                     </div>
                                                 </li>
@@ -506,7 +517,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span
-                                                            class="md-list-heading">{{institute_data.facebook_link}}</span>
+                                                            class="md-list-heading"><a href="{{institute_data.facebook_link}}" target="_blank">{{institute_data.facebook_link}}</a></span>
                                                         <span class="uk-text-small uk-text-muted">Facebook</span>
                                                     </div>
                                                 </li>
@@ -528,8 +539,34 @@
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Address</a></span>
                                                         <span
-                                                            class="uk-text-small uk-text-muted">{{institute_data.address1}}
-                                                            {{institute_data.address2}}</span>
+                                                            class="uk-text-small uk-text-muted">{{institute_data.address1}},
+                                                
+                                                {% if institute_data.address2 %}
+                                                {{institute_data.address2}},
+                                                {% endif %}
+
+                                                {% if institute_data.district %}
+                                                {{institute_data.district}}
+                                                {% endif %}
+
+                                                {% if institute_data.state %}
+                                                {{institute_data.state}},
+                                                {% endif %}
+
+                                                {% if institute_data.country %}
+                                                {{institute_data.country}},
+                                                {% endif %}
+
+                                                {% if institute_data.pin_code %}
+                                                {{institute_data.pin_code}},
+                                                {% endif %}
+
+
+
+
+
+                                                     
+                                                            </span>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -570,10 +607,29 @@
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Address</a></span>
                                                     <span
-                                                        class="uk-text-small uk-text-muted">{{institute_data.address1}}
-                                                        {{institute_data.address1}}
-                                                        {{institute_data.district}} {{institute_state}}
-                                                        {{institute_data.country}}</span>
+                                                        class="uk-text-small uk-text-muted">{{institute_data.address1}},
+                                                
+                                                        {% if institute_data.address2 %}
+                                                        {{institute_data.address2}},
+                                                        {% endif %}
+        
+                                                        {% if institute_data.district %}
+                                                        {{institute_data.district}}
+                                                        {% endif %}
+        
+                                                        {% if institute_data.state %}
+                                                        {{institute_data.state}},
+                                                        {% endif %}
+        
+                                                        {% if institute_data.country %}
+                                                        {{institute_data.country}},
+                                                        {% endif %}
+        
+                                                        {% if institute_data.pin_code %}
+                                                        {{institute_data.pin_code}},
+                                                        {% endif %}
+        
+        </span>
                                                 </div>
                                             </li>
                                             <li>
