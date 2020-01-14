@@ -496,11 +496,15 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span
-                                                            class="md-list-heading">{{institute_data.contact_number1}},
+                                                            class="md-list-heading">
                                                         
+                                                        {% if institute_data.contact_number1 %}
+                                                        {{institute_data.contact_number1}},
+                                                        {% endif %}
+                                                            
                                                         
                                                         {% if institute_data.contact_number2 %}
-                                                            {{institute_data.contact_number2}}
+                                                         {{institute_data.contact_number2}},
                                                         {% endif %}
 
                                                         {% if institute_data.contact_number3 %}
@@ -546,7 +550,7 @@
                                                 {% endif %}
 
                                                 {% if institute_data.district %}
-                                                {{institute_data.district}}
+                                                {{institute_data.district}},
                                                 {% endif %}
 
                                                 {% if institute_data.state %}
@@ -558,7 +562,7 @@
                                                 {% endif %}
 
                                                 {% if institute_data.pin_code %}
-                                                {{institute_data.pin_code}},
+                                                {{institute_data.pin_code}}
                                                 {% endif %}
 
 
@@ -626,7 +630,7 @@
                                                         {% endif %}
         
                                                         {% if institute_data.pin_code %}
-                                                        {{institute_data.pin_code}},
+                                                        {{institute_data.pin_code}}
                                                         {% endif %}
         
         </span>
