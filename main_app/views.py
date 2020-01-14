@@ -144,9 +144,9 @@ def edit_class(request, pk):
 
 def delete_class(request, pk):
         class_to_delete = Classes.objects.get(pk=pk)
-        class_to_delete.class_teacher = "null"
-        class_to_delete.name = "null"
-        class_to_delete.class_stage = "null"
+        class_to_delete.class_teacher = None
+        class_to_delete.name = None
+        class_to_delete.class_stage = None
         class_to_delete.delete()
         messages.success(request, 'Class Deleted Successfully !!!')
         institue_pk = request.user.profile.institute.pk
