@@ -10,7 +10,7 @@ from holidaylist import templates
 from django.contrib import messages
 from holidaylist.models import *
 from main_app.models import *
-
+from django.views.generic.edit import DeleteView
 from main_app import urls
 from holidaylist.urls import *
 from holidaylist.forms import ContactForm
@@ -74,6 +74,24 @@ def edit_holiday(request, pk):
          return HttpResponseRedirect(f'/holiday/holiday/{rr}')
 
     return render(request, 'holidaylist/edit_holiday.html', {'edit_holiday':edit_holiday})
+
+
+def delete_holiday(request,pk):
+
+
+         delete_holiday=HolidayList.objects.get(pk=pk)
+         delete_holiday.date="null"
+         delete_holiday.days="null"
+         delete_holiday.name="null"
+         delete_holiday.applicable="null"
+         delete_holiday.holiday_type="null"
+         delete_holiday.holiday_email="null"
+         delete_holiday.holiday_sms="null"
+         delete_holiday.holiday_notification="null"
+         delete_holiday.delete()
+         messages.success(request, 'Holiday Deleted Successfully !!!')
+         rr=request.user.profile.institute.pk
+         return HttpResponseRedirect(f'/holiday/holiday/{rr}')
 
 
 
