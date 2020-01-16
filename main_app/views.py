@@ -178,7 +178,15 @@ def index(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'main_app/dashboard.html')
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    delete_subject_permission = App_functions.objects.get(function_name='Delete Subject')
+    
+    
+    context = {
+        'user_permissions': user_permissions,
+        'delete_subject_permission': delete_subject_permission
+    }
+    return render(request, 'main_app/dashboard.html', context)
 
 
 
@@ -458,9 +466,14 @@ def assign_class_teacher(request, pk):
 
     return render(request, 'main_app/assign_class_teacher.html', context_data)
 
-    
 
-
+class Edit_Role_Permissions(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Institute_levels
+    fields = ['permissions']
+    template_name = "main_app/role_permissions_edit.html"
+    success_message = "Role Permissions Updated Successfully"
+    def get_success_url(self, **kwargs):         
+        return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
 
     
 

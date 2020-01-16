@@ -42,3 +42,6 @@ body{
     border: 1px solid #ccc;
     border-top: none;
   }
+  #id_permissions{
+    min-height: 270px;
+  }
