@@ -96,7 +96,7 @@ class UserProfile(models.Model):
         return str(self.user)
 
 class App_functions(models.Model):
-    function_name = models.CharField(max_length= 266, null=True, blank=True)
+    function_name = models.CharField(max_length= 266, null=True, blank=True, unique=True)
     def __str__(self):
         return self.function_name
 
