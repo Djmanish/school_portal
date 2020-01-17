@@ -467,8 +467,9 @@
 
                                 {% if user.user_institute_role.institute.id == institute_data.id  and user.user_institute_role.level.level_name == 'admin' %}
                                 <li><a href="#">Roles</a></li>
-                                {% endif %}
                                 <li><a href="#">Role Permissions</a></li>
+                                {% endif %}
+                               
 
 
 
@@ -882,6 +883,9 @@
 
                                 <!-- ending subjects tab content -->
                                 <!-- starting roles tab content -->
+
+                                
+                                {% if user.user_institute_role.institute.id == institute_data.id  and user.user_institute_role.level.level_name == 'admin' %}
                                 <li>
                                     <div id="page_content_inner">
                                         <div class="md-card">
@@ -973,9 +977,12 @@
                                         </div>
                                     </div>
                                 </li>
+
+{% endif %}
                                 <!-- ending roles tab content -->
 
     <!-- starting roles permissions tab content -->
+    {% if user.user_institute_role.institute.id == institute_data.id  and user.user_institute_role.level.level_name == 'admin' %}
     <li>
         <div id="page_content_inner">
             <div class="md-card">
@@ -1000,7 +1007,7 @@
                                 <tr>
                                   
                                     <td class="text-center">
-                                        <a href="page_issue_details.html">
+                                        <a href="#">
                                             {{role.level_name}}</a>
                                     </td>
                                 
@@ -1028,6 +1035,7 @@
             </div>
         </div>
     </li>
+    {% endif %}
      <!-- ending roles permissions tab content -->
 
                         </div>

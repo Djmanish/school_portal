@@ -73,7 +73,7 @@ class UserProfile(models.Model):
 
     about = models.CharField(max_length=300, blank=True, null=True, default="write something about yourself ")
     profile_pic = models.ImageField(default="default_profile_pic.jpg", upload_to='UserProfilePictures')
-    mobile_number = models.PositiveIntegerField(null=True, default="999999999")
+    mobile_number = models.PositiveIntegerField(null=True,)
     address_line_1 = models.CharField(max_length= 50 , null= True, default="Address line 1")
     address_line_2 = models.CharField(max_length=50, null = True, default="Address line 2")
     city = models.CharField(max_length=50, null=True, default="City")

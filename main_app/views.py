@@ -178,15 +178,8 @@ def index(request):
 
 @login_required
 def dashboard(request):
-    user_permissions = request.user.user_institute_role.level.permissions.all()
-    delete_subject_permission = App_functions.objects.get(function_name='Delete Subject')
-    
-    
-    context = {
-        'user_permissions': user_permissions,
-        'delete_subject_permission': delete_subject_permission
-    }
-    return render(request, 'main_app/dashboard.html', context)
+   
+    return render(request, 'main_app/dashboard.html')
 
 
 
@@ -275,6 +268,7 @@ def edit_profile(request, pk):
             user_info.designation = new_level_admin
             user_info.institute= new_create_institute
             user_info.save()
+
             # sending mail to admin on registering
             send_mail('Admin Request Confirmation ',f'Hello {request.user} , Thank you for using our application.  ', 'yourcollegeportal@gmail.com',[f'{request.user.email}'], html_message=f"<h4>Hello {request.user},</h4><p>Thank you for choosing our application.</p><p> You have requested to be an admin profile so you are able to create your own institution profile.once your request is approved you will received a confirmation email.</p>School Portal<br>school_portal@gmail.com<p></p>"
             )
@@ -338,19 +332,31 @@ def edit_profile(request, pk):
 
 @login_required
 def institute_profile(request, pk):
+    
+# starting assigning all functionalities to admin
+    admin_pk = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='admin')
+    
+    checking_for_admin = Role_Description.objects.filter(user=request.user, institute=request.user.profile.institute, level= admin_pk ).first()
+
+
+    if checking_for_admin is not None:
+        all_app_functions = App_functions.objects.all()
+        for function in all_app_functions:
+            request.user.user_institute_role.level.permissions.add(function)
+# ending assigning all functionalities to admin
+
+
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
     
-    
- 
-    # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
-    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class}
+    context_data = {'institute_data':institute_data, 
+    'institute_roles':institute_roles,
+     'institute_class':institute_class,
+     'institute_subject':institute_subject,
+      'all_classes':institute_class}
 
-
-    
-    
     return render(request, 'main_app/institute_profile.html', context_data)
    
 @login_required
