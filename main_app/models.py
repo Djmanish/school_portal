@@ -106,7 +106,7 @@ class Institute_levels(models.Model):
     institute= models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institute_levels')
     level_id= models.IntegerField(null=True)
     level_name = models.CharField(max_length=25)
-    permissions = models.ManyToManyField(to=App_functions, related_name='user_permissions')
+    permissions = models.ManyToManyField(to=App_functions, related_name='user_permissions', null=True, blank=True)
     start_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     end_date = models.DateField(null=True, blank= True)
     class Meta:

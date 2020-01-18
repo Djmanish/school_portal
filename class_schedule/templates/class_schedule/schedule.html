@@ -395,7 +395,14 @@
     <div id="page_content">
 
         <div id="page_content_inner">
-            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">           
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">      
+                
+       
+      
+                    
+
+
+
                 <div class="uk-width-large">
 
                     <div class="md-card">
@@ -573,10 +580,14 @@
                                                                     
                                                         
                                                             </td>
+
                                                         
+                                                    
+                                                    {% if schedule_update_permission in user_permissions %}
                                                     <td colspan="2" rowspan="2">
                                                         <a class="md-btn md-btn-primary" href="{% url 'update_schedule' monday_schedule.pk %}">Update</a>
                                                     </td>
+                                                    {% endif %}
                                                          
                                                         </tr> 
                                                         <tr> 
@@ -705,9 +716,14 @@
                                                             {% endif %}
                                                                 </td> 
 
+                                                            
+
+                                                            {% if schedule_update_permission in user_permissions %}
                                                             <td colspan="2" rowspan="2" >
                                                                 <a class="md-btn md-btn-primary" href="{% url 'update_schedule' tuesday_schedule.pk %}">Update</a>
                                                             </td>
+                                                            {% endif %}
+
                                                          
                                                         </tr> 
                                                         <tr> 
@@ -842,9 +858,13 @@
                                                                 </td> 
 
                                                             
-                                                                <td colspan="2" rowspan="2">
-                                                                    <a class="md-btn md-btn-primary" href="{% url 'update_schedule' wednesday_schedule.pk %}">Update</a>
-                                                                </td>
+                                                                
+                                                                
+ {% if schedule_update_permission in user_permissions %}
+ <td colspan="2" rowspan="2">
+    <a class="md-btn md-btn-primary" href="{% url 'update_schedule' wednesday_schedule.pk %}">Update</a>
+</td>   
+ {% endif %}
                                                         
                                                         
                                                         </tr> 
@@ -979,9 +999,13 @@
                                                             {% endif %}
                                                                 </td> 
                                                           
-                                                            <td colspan="2" rowspan="2">
-                                                                <a class="md-btn md-btn-primary" href="{% url 'update_schedule' thursday_schedule.pk %}">Update</a>
-                                                            </td>
+                                                            
+                                                            
+ {% if schedule_update_permission in user_permissions %}
+ <td colspan="2" rowspan="2">
+    <a class="md-btn md-btn-primary" href="{% url 'update_schedule' thursday_schedule.pk %}">Update</a>
+</td>      
+ {% endif %}
 
                                                         </tr> 
                                                         <tr> 
@@ -1109,10 +1133,14 @@
                                                             {% endif %}
                                                                 </td> 
                                                                 
-                                                    <td colspan="2" rowspan="2">
-                                                        <a class="md-btn md-btn-primary" href="{% url 'update_schedule' friday_schedule.pk %}">Update</a>
-                                                    </td>
+                                                    
 
+
+ {% if schedule_update_permission in user_permissions %}
+ <td colspan="2" rowspan="2">
+    <a class="md-btn md-btn-primary" href="{% url 'update_schedule' friday_schedule.pk %}">Update</a>
+</td>
+       {% endif %}
                                                         </tr> 
                                                         <tr> 
                                                             <th>Teacher</th>
@@ -1238,9 +1266,14 @@
                                                             {% endif %}
                                                                </td> 
                                                          
+                                                           
+
+                                                            {% if schedule_update_permission in user_permissions %}
                                                             <td colspan="2" rowspan="2">
                                                                 <a class="md-btn md-btn-primary" href="{% url 'update_schedule' saturday_schedule.pk %}">Update</a>
                                                             </td>
+                                                            {% endif %}
+
 
                                                         </tr> 
                                                         <tr> 
