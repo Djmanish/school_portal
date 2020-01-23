@@ -409,6 +409,7 @@ def add_new_role(request, pk):
         new_role.institute= institute
         new_role.level_id = request.POST['level_id']
         new_role.level_name = request.POST['level_name']
+        new_role.created_by = request.user
         rr= institute.id
         try:
             roles_level_toi = Institute_levels.objects.filter(Q(institute = institute) & Q(level_id__gte =  request.POST['level_id'] )  )

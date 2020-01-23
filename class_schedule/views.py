@@ -40,7 +40,7 @@ def schedule(request):
     saturday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Saturday" )
 
     user_permissions = request.user.user_institute_role.level.permissions.all()
-    schedule_update_permission = App_functions.objects.get(function_name='Update Schedule')
+    schedule_update_permission = App_functions.objects.get(function_name='Can Update Schedule')
 
 
 

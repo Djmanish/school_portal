@@ -18,4 +18,5 @@ admin.site.register(Role_Description, Role_Description_admin)
 admin.site.register(Classes)
 admin.site.register(Subjects)
 admin.site.register(App_functions)
+admin.site.register(Tracking_permission_changes)
 

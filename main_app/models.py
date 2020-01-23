@@ -107,6 +107,7 @@ class Institute_levels(models.Model):
     level_id= models.IntegerField(null=True)
     level_name = models.CharField(max_length=25)
     permissions = models.ManyToManyField(to=App_functions, related_name='user_permissions', null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True, blank=True)
     start_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     end_date = models.DateField(null=True, blank= True)
     class Meta:
@@ -147,4 +148,15 @@ class Subjects(models.Model):
 
     def __str__(self):
         return str(self.subject_name)
-        
+
+
+
+
+class Tracking_permission_changes(models.Model):
+    update_time = models.DateTimeField()
+    changes_made_by = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, related_name='changed_permissions_by', null=True)
+    updated_permissions = models.ManyToManyField(to=App_functions, related_name='new_permissions', null=True, blank=True)
+
+    def __str__(self):
+        return str(self.update_time)
+            
