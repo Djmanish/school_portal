@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-   
+    'examschedule.apps.ExamscheduleConfig',
     'holidaylist.apps.HolidaylistConfig',
     'main_app.apps.MainAppConfig',
     'class_schedule.apps.ClassScheduleConfig',

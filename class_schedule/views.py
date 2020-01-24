@@ -40,7 +40,7 @@ def schedule(request):
     saturday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Saturday" )
 
 
-    print(monday_schedule)
+   
     context = {'all_classes': all_class,
                 'all_lectures': all_lectures,
                 'monday_schedule':monday_schedule,

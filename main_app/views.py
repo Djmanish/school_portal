@@ -178,15 +178,7 @@ def index(request):
 
 @login_required
 def dashboard(request):
-    user_permissions = request.user.user_institute_role.level.permissions.all()
-    delete_subject_permission = App_functions.objects.get(function_name='Delete Subject')
-    
-    
-    context = {
-        'user_permissions': user_permissions,
-        'delete_subject_permission': delete_subject_permission
-    }
-    return render(request, 'main_app/dashboard.html', context)
+    return render(request, 'main_app/dashboard.html')
 
 
 

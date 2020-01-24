@@ -832,9 +832,7 @@
                                                                 </th>
                                                                 <th> </th>
 
-                                                                <!-- {% for examschedule_details in examschedule_detail  %}
-                                                                <th colspan="2">{{examschedule_details.test_code}}</th>
-                                                                {% endfor %} -->
+                                                               
 
                                                             </tr>
                                                             <tr>
@@ -848,8 +846,8 @@
 
                                                                 </th>
 
-                                                                {% for lecture in all_lectures %}
-                                                                <th colspan="2">{{lecture.start_time}} -
+                                                                {% for examschedule_details in examschedule_detail %}
+                                                                <th colspan="2">{{examschedule_details.test_code}} -
                                                                     {{lecture.end_time}}</th>
                                                                 {% endfor %}
 
@@ -863,8 +861,8 @@
                                                                 <td> </td>
                                                                 <td colspan="2">
 
-                                                                    {% if monday_schedule.subject_lecture_one.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_one.subject_name}}
+                                                                    {% if examschedule_details.test_code %}
+                                                                    {{examschedule_details.test_code}}
                                                                     {% else %}
                                                                     -
                                                                     {% endif %}
