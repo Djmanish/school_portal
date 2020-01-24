@@ -477,7 +477,7 @@
                                                                 <form method="POST" action="{% url 'examschedule'  user.profile.institute.pk %}">
                                                                     {% csrf_token %}
                                                                      <div class=form-group>
-                                                                        <select name="selected_class" class="md-input label-fixed" data-uk-tooltip="{pos:'top'}"  required>
+                                                                        <select name="selected_class" class="md-input label-fixed" data-uk-tooltip="{pos:'top'}" >
                                                                             <option selected disabled value="">--Select Class--</option>
                                                                             
                                                                             {% for class in all_classes %}
@@ -492,13 +492,13 @@
                                                                       <label>Test Code</label>
                                                                                                                                   
                                                                       <input type="text" class="form-control"name='examschedule_code' value=""
-                                                                        required="required">
+                                                                        >
                                                                   </div>
                                                                   
                                                                   <br>
                                                                   <div class="form-group">
                                                                       <label>Exam Type</label>
-                                                                      <select name="examschedule_type" class="md-input label-fixed" data-uk-tooltip="{pos:'top'}"title="Select with tooltip" required>
+                                                                      <select name="examschedule_type" class="md-input label-fixed" data-uk-tooltip="{pos:'top'}"title="Select with tooltip" >
                                                               
                                           
                                                                           <option value="Unit">Unit</option>
@@ -846,10 +846,6 @@
 
                                                                 </th>
 
-                                                                {% for examschedule_details in examschedule_detail %}
-                                                                <th colspan="2">{{examschedule_details.test_code}} -
-                                                                    {{lecture.end_time}}</th>
-                                                                {% endfor %}
 
                                                             </tr>
                                                         </thead>
@@ -861,8 +857,8 @@
                                                                 <td> </td>
                                                                 <td colspan="2">
 
-                                                                    {% if examschedule_details.test_code %}
-                                                                    {{examschedule_details.test_code}}
+                                                                    {% if examschedule_detail.test_code %}
+                                                                    {{examschedule_detail.test_code}}
                                                                     {% else %}
                                                                     -
                                                                     {% endif %}
