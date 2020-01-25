@@ -15,6 +15,7 @@ from django.db.models import Q
 from class_schedule.models import *
 from .forms import ClassUpdateForm, InstituteUpdateProfile
 from django.core.mail import send_mail, send_mass_mail
+from django.utils import timezone
 
 
 
@@ -178,7 +179,6 @@ def index(request):
 
 @login_required
 def dashboard(request):
-   
     return render(request, 'main_app/dashboard.html')
 
 
@@ -218,7 +218,34 @@ def login(request):
 
 @login_required
 def user_profile(request):
-     return render(request, 'main_app/admin_user_profile.html', )
+    user_permissions_changes = Tracking_permission_changes.objects.filter(institute= request.user.profile.institute, role = request.user.profile.designation).last()
+
+    if user_permissions_changes:
+
+        users_old_permissions = user_permissions_changes.old_permissions.all()
+        users_new_permissions = user_permissions_changes.updated_permissions.all()
+        added_permissions = []
+        removed_permissions = []
+    
+        for permission in users_old_permissions:
+            if permission not in users_new_permissions:
+                removed_permissions.append(permission)
+    
+        for permission in users_new_permissions:
+            if permission not in users_old_permissions:
+                added_permissions.append(permission)
+
+
+        update_time = user_permissions_changes.update_time        
+        context = {
+        'added_permissions': added_permissions,
+        'removed_permissions': removed_permissions,
+        'updated_time': update_time
+        
+        }
+        return render(request, 'main_app/admin_user_profile.html', context )
+    
+    return render(request, 'main_app/admin_user_profile.html' )
     
   
     
@@ -484,3 +511,44 @@ class Edit_Role_Permissions(LoginRequiredMixin, SuccessMessageMixin, UpdateView)
 
     
 
+def edit_role_permissions(request, pk):
+    role_to_update_permissions = Institute_levels.objects.get(pk=pk)
+    roles_to_update_all_permissions = role_to_update_permissions.permissions.all()
+    all_app_functions = App_functions.objects.all()
+    
+
+    if request.method == "POST":
+        # creating object to to track changes in table
+        tracking_permission_change = Tracking_permission_changes()
+        tracking_permission_change.update_time = timezone.now()
+        tracking_permission_change.changes_made_by = request.user
+        tracking_permission_change.institute = request.user.profile.institute
+        tracking_permission_change.role = role_to_update_permissions
+        tracking_permission_change.save()
+        for old_permission in roles_to_update_all_permissions:
+            tracking_permission_change.old_permissions.add(old_permission)
+    
+
+        updated_permissions = request.POST.getlist('new_permissions')
+        role_to_update_permissions.permissions.clear()
+        for permission in updated_permissions:
+            get_permission = App_functions.objects.get(pk = permission)
+            role_to_update_permissions.permissions.add(get_permission)
+        for updated_permissions in updated_permissions:
+
+            tracking_permission_change.updated_permissions.add(updated_permissions)
+        messages.success(request, 'Role Permissions Updated !!!')    
+        rr= request.user.profile.institute.id
+        return HttpResponseRedirect(f'/institute/profile/{rr}/')
+        
+    
+    
+    
+
+
+    context= {
+        'role_to_update_permissions': role_to_update_permissions,
+        'roles_all_permissions': roles_to_update_all_permissions,
+        'all_app_functions':all_app_functions
+    }
+    return render(request, 'main_app/role_permissions_edit.html', context)

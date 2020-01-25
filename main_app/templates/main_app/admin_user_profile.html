@@ -629,37 +629,53 @@
                             <div class="uk-margin-medium-bottom">
                                 <h3 class="heading_c uk-margin-bottom">Alerts</h3>
                                 <ul class="md-list md-list-addon">
-                                    <li>
+                                    
+                                   
+                                   {% if added_permissions or removed_permissions  %}
+                                   <small>Permissoins Updated at: {{updated_time}}</small>
+                                     
+                                   {% endif %}
+                                       
+                                       
+                                        
+                                        {% if added_permissions  %}
+                                        <li>
                                         <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
+                                            <i class="md-list-addon-icon material-icons uk-text-success">new_releases</i>
                                         </div>
                                         <div class="md-list-content">
-                                            <span class="md-list-heading">Ullam dolor praesentium.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Et voluptatum cumque excepturi dolores.</span>
+                                            <span class="md-list-heading">New Permissions Assigned
+                                            </span>
+                                            
+                                           
+                                            {% for pn in added_permissions %}
+                                            <span class="uk-text-small uk-text-muted uk-text-truncate">
+                                                <i class="material-icons tiny uk-text-success">done</i>{{pn}}</span>
+                                            {% endfor %}
                                         </div>
                                     </li>
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Veniam fuga sed.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Quia similique autem aut eaque qui.</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Voluptatem voluptatem veritatis.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Iure autem asperiores numquam rerum ut sunt.</span>
-                                        </div>
-                                    </li>
+                                        {% endif %}
+
+                                  
+                                  {% if removed_permissions %}
+                                  <li>
+                                    <div class="md-list-addon-element">
+                                        <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
+                                    </div>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">Removed Permissions</span>
+                                        {% for pn in removed_permissions %}
+                                        <span class="uk-text-small uk-text-muted uk-text-truncate">
+                                            <i class="material-icons tiny uk-text-danger">clear</i>{{pn}}</span>
+                                        {% endfor %}
+                                    </div>
+                                </li>
+                                  {% endif %}
+                                  
                                 </ul>
                             </div>
                             
-                            <a class="md-btn md-btn-flat md-btn-flat-primary" href="#">Show all</a>
+                          
                         </div>
                     </div>
                 </div>

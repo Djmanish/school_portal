@@ -153,8 +153,15 @@ class Subjects(models.Model):
 
 
 class Tracking_permission_changes(models.Model):
+    
+    institute = models.ForeignKey(to=Institute, on_delete=models.DO_NOTHING,related_name='institute_role_permission_updated', null=True, blank=True)
+    
+    role =  models.ForeignKey(to=Institute_levels, on_delete=models.DO_NOTHING, related_name='role_permission_updated', null=True, blank=True)
+
     update_time = models.DateTimeField()
-    changes_made_by = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, related_name='changed_permissions_by', null=True)
+    changes_made_by = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True, blank=True, related_name='user_made_changes_permission')
+    
+    old_permissions = models.ManyToManyField(to=App_functions, related_name='old_permissions', null=True, blank=True)
     updated_permissions = models.ManyToManyField(to=App_functions, related_name='new_permissions', null=True, blank=True)
 
     def __str__(self):

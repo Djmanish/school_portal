@@ -16,6 +16,7 @@
 
 
     <title>Update Profile</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
 
     <link href="{% static 'main_app/bower_components/uikit/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
@@ -35,11 +36,12 @@
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
 
     <!-- bootstrap -->
-    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+ 
     <script src="{% static 'js/jquery-3.1.1.js' %}"></script>
 <script src="{% static 'main_app/bower_components/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'main_app/bower_components/js/moment-master/min/moment.min.js' %}"></script>
 <script src="{% static 'main_app/bower_components/js/bootstrap-datetimepicker.min.js' %}"></script>
+
 
    <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
@@ -305,7 +307,7 @@
                     </a>    
                 </li>
                 {% if user.profile.institute  %}
-                <li class="current_section" title="Institute Profile">
+                <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">domain</i></span>
                         <span class="menu_title">Institute Profile</span>
@@ -319,13 +321,17 @@
                     
                 </li>
 
-                <li  title="Institute Schedule">
-                    <a href="{% url 'class_schedule' %}">
-                        <span class="menu_icon"><i class="material-icons">assignment</i></span>
-                        <span class="menu_title">Schedule</span>
-                    </a>
-                    
-                </li>
+               
+             
+               <li  class="current_section" title="Institute Schedule">
+                <a href="{% url 'class_schedule' %}">
+                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                    <span class="menu_title">Schedule</span>
+                </a>
+                
+            </li>
+               
+                   
 
                 {% endif %}
                 {% if user.profile.institute %}
@@ -344,10 +350,10 @@
                         <span class="menu_title">Attendance</span>
                     </a>
                     
-                </li>  
+                </li> 
                 {% endif %}
                 
-            {% endif %} 
+            {% endif %}  
             
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
@@ -356,10 +362,8 @@
                         </a>
                     </li>
 
-            </ul>
+            </ul> 
         </div>
-
-
     </aside><!-- main sidebar end -->
 
     <div id="page_content">
@@ -381,61 +385,374 @@
                             </div>
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{request.user.profile.institute.profile_pic.url}}" alt="user avatar"/>
+                                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom">
-                                    <span class="uk-text-truncate">{{request.user.profile.institute.name}}</span>
-                                    </span></h2>
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading">Update schedule of  {{schedule_info.Class}} 
+                            for {{schedule_info.day}} </span></h2>
                                                             </div>
 
 
 
-                            <a class="md-fab md-fab-small md-fab-accent hidden-print" href="#">
-                                <!-- <i class="material-icons">&#xE150;</i> -->
-                            </a>
+                            <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="#">
+                                <i class="material-icons">&#xE150;</i>
+                            </a> -->
                             
                         </div>
                         <div class="user_content">
-                            <h4 class="heading_c uk-margin-small-bottom">Update Permissions for the {{role_to_update_permissions.level_name}} Role</h4>
-                             <!-- success message -->
-                             {% if messages %}
-                             <ul class="messages">
-                                 {% for message in messages %}
-                                 <li{% if message.tags %} class=" text-{{ message.tags }}" {% endif %}>{{ message }}</li>
-                                     {% endfor %}
-                             </ul>
-                             {% endif %}
-                            <small class="text-info">press and hold control to select multiple permissions</small>
-                            
-                            <form method="POST" >
-                                {% csrf_token %}
-                                <select multiple class="form-control" name="new_permissions" style="min-height: 300px;">
-                                    
-                                    {% for fun in all_app_functions %}
-                                    <option 
-                                    {% if fun in roles_all_permissions %}
-                                        selected
-                                    {% endif %}
+                            <!-- success message -->
 
-                                         value="{{fun.id}}">{{fun}}</option>
-                                    {% endfor %}
+
+                            <form method="POST" action="{% url 'examschedule'  user.profile.institute.pk %}">
+                                {% csrf_token %}
+                                 <div class=form-group>
+                                    <select name="selected_class" class="md-input label-fixed" data-uk-tooltip="{pos:'top'}"  required>
+                                        <option selected disabled value="">--Select Class--</option>
                                         
+                                        {% for class in all_classes %}
+                                           <option value="{{class.id}}"  > {{class}}</option>
+                                        {% endfor %}
+                                            
+            
+                                 </select>
+                                 </div>
+
+                                <div class="form-group">
+                                  <label>Test Code</label>
+                                                                                              
+                                  <input type="text" class="form-control"name='examschedule_code' value=""
+                                    required="required">
+                              </div>
+                              
+                              <br>
+                              <div class="form-group">
+                                  <label>Exam Type</label>
+                                  <select name="examschedule_type" class="md-input label-fixed" data-uk-tooltip="{pos:'top'}"title="Select with tooltip" required>
+                          
+      
+                                      <option value="Unit">Unit</option>
+                                      <option value="Monthly">Monthly</option>
+                                      <option value="Quarterly">Quarterly</option>
+                                      <option value="Half Yearly">Half Yearly</option>
+                                      <option value="Yearly">Yearly</option>
+                                   
+      
+                              </select>
+                              </div>
+                              <br>
+                                      <div class="form-group">
+                                          <label>Subject 1 </label>
+                                          <select name="test_subject1" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                           <option selected disabled value="">--Select Subject 1--</option>
+                                             
+                                            {% for class_subject1 in all_subject %}
+                                            <option value="{{class_subject1}}"> {{class_subject1}}</option>
+                                         {% endfor %}
+                                                  
+                                          </select>
+                                      </div>  
+                                      <br>
+      
+                                      <div class="form-group">
+                                          <label>Subject 1 Date</label>
+                                          <input type="date" class="form-control" name="test_date1">
+                                      </div>  
+                                      <br>
+      
+                                      <div class="form-group">
+                                          <label>Subject 1 Time</label>
+                                          <input type="time" class="form-control" name="test_time1">
+                                      </div> 
+                                      <br>
+      
+                                      <div class="">
+                                          <label>Subject 1 Teacher: </label>
+                                          <select name="subject_teacher1" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
                                     
+                                            <option selected disabled value="">--Select Subject 1 Teacher--</option>
+                                             
+                                            {% for subject_teacher1 in institute_teachers %}
+                                            <option value="{{subject_teacher1}}"> {{subject_teacher1}}</option>
+                                         {% endfor %}
+                                                  
+                                          </select>
+                                      </div> 
+                                      <br>
                                    
-                                  </select>
-                                  <br>
-                                  <input type="submit" class="md-btn md-btn-primary btn-small" value="Update Permissions">
-                            </form>
-                        
-                            
-                     
-                            
-                                            </div>
+                                      <div class="">
+                                          <label>Subject 1 Assign Teacher: </label>
+                                          <select name="assign_teacher1" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                            <option selected disabled value="">--Select Subject 1 Assign Teacher--</option>
+                                             
+                                            {% for assign_teacher1 in institute_teachers %}
+                                            <option value="{{assign_teacher1}}"> {{assign_teacher1}}</option>
+                                         {% endfor %}
+                                                  
+                                          </select>
+                                      </div>  
+                              <br>
+                              <div class="form-group">
+                                <label>Subject 2 </label>
+                                <select name="test_subject2" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                 <option selected disabled value="">--Select Subject 2--</option>
                                    
-                    </div>
-                </div>
+                                  {% for class_subject2 in all_subject %}
+                                  <option value="{{class_subject2}}"> {{class_subject2}}</option>
+                               {% endfor %}
+                                        
+                                </select>
+                            </div>  
+                            <br>
+
+                            <div class="form-group">
+                                <label>Subject 2 Date</label>
+                                <input type="date" class="form-control" name="test_date2">
+                            </div>  
+                            <br>
+
+                            <div class="form-group">
+                                <label>Subject 2 Time</label>
+                                <input type="time" class="form-control" name="test_time2">
+                            </div> 
+                            <br>
+
+                            <div class="">
+                                <label>Subject 2 Teacher: </label>
+                                <select name="subject_teacher2" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+                          
+                                  <option selected disabled value="">--Select Subject 2 Teacher--</option>
+                                   
+                                  {% for subject_teacher2 in institute_teachers %}
+                                  <option value="{{subject_teacher2}}"> {{subject_teacher2}}</option>
+                               {% endfor %}
+                                        
+                                </select>
+                            </div> 
+                            <br>
+                         
+                            <div class="">
+                                <label>Subject 2 Assign Teacher: </label>
+                                <select name="assign_teacher2" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                  <option selected disabled value="">--Select Subject 2 Assign Teacher--</option>
+                                   
+                                  {% for assign_teacher2 in institute_teachers %}
+                                  <option value="{{assign_teacher2}}"> {{assign_teacher2}}</option>
+                               {% endfor %}
+                                        
+                                </select>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <label>Subject 3 </label>
+                                <select name="test_subject3" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                 <option selected disabled value="">--Select Subject 3--</option>
+                                   
+                                  {% for class_subject3 in all_subject %}
+                                  <option value="{{class_subject3}}"> {{class_subject3}}</option>
+                               {% endfor %}
+                                        
+                                </select>
+                            </div>  
+                            <br>
+
+                            <div class="form-group">
+                                <label>Subject 3 Date</label>
+                                <input type="date" class="form-control" name="test_date3">
+                            </div>  
+                            <br>
+
+                            <div class="form-group">
+                                <label>Subject 3 Time</label>
+                                <input type="time" class="form-control" name="test_time3">
+                            </div> 
+                            <br>
+
+                            <div class="">
+                                <label>Subject 3 Teacher: </label>
+                                <select name="subject_teacher3" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+                          
+                                  <option selected disabled value="">--Select Subject Teacher--</option>
+                                   
+                                  {% for subject_teacher3 in institute_teachers %}
+                                  <option value="{{subject_teacher3}}"> {{subject_teacher3}}</option>
+                               {% endfor %}
+                                        
+                                </select>
+                            </div> 
+                            <br>
+                         
+                            <div class="">
+                                <label>Subject 3 Assign Teacher: </label>
+                                <select name="assign_teacher3" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                  <option selected disabled value="">--Select Assign Teacher--</option>
+                                   
+                                  {% for assign_teacher3 in institute_teachers %}
+                                  <option value="{{assign_teacher3}}"> {{assign_teacher3}}</option>
+                               {% endfor %}
+                                        
+                                </select>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <label>Subject 4 </label>
+                                <select name="test_subject4" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                 <option selected disabled value="">--Select Subject--</option>
+                                   
+                                  {% for class_subject4 in all_subject %}
+                                  <option value="{{class_subject4}}"> {{class_subject4}}</option>
+                               {% endfor %}
+                                        
+                                </select>
+                            </div>  
+                            <br>
+
+                            <div class="form-group">
+                                <label>Subject 4 Date</label>
+                                <input type="date" class="form-control" name="test_date4">
+                            </div>  
+                            <br>
+
+                            <div class="form-group">
+                                <label>Subject 4 Time</label>
+                                <input type="time" class="form-control" name="test_time4">
+                            </div> 
+                            <br>
+
+                            <div class="">
+                                <label>Subject 4 Teacher: </label>
+                                <select name="subject_teacher4" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+                          
+                                  <option selected disabled value="">--Select Subject Teacher--</option>
+                                   
+                                  {% for subject_teacher4 in institute_teachers %}
+                                  <option value="{{subject_teacher4}}"> {{subject_teacher4}}</option>
+                               {% endfor %}
+                                        
+                                </select>
+                            </div> 
+                            <br>
+                         
+                            <div class="">
+                                <label>Subject 4 Assign Teacher: </label>
+                                <select name="assign_teacher4" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                  <option selected disabled value="">--Select Assign Teacher--</option>
+                                   
+                                  {% for assign_teacher4 in institute_teachers %}
+                                  <option value="{{assign_teacher4}}"> {{assign_teacher4}}</option>
+                               {% endfor %}
+                                        
+                                </select>
+                            </div>
+                            <br>
+                               <div class="form-group">
+                                          <label>Subject 5</label>
+                                          <select name="test_subject5" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                           <option selected disabled value="">--Select Subject--</option>
+                                             
+                                            {% for class_subject5 in all_subject %}
+                                            <option value="{{class_subject5}}"> {{class_subject5}}</option>
+                                         {% endfor %}
+                                                  
+                                          </select>
+                                      </div>  
+                                      <br>
+      
+                                      <div class="form-group">
+                                          <label>Subject 5 Date</label>
+                                          <input type="date" class="form-control" name="test_date5">
+                                      </div>  
+                                      <br>
+      
+                                      <div class="form-group">
+                                          <label>Subject 5 Time</label>
+                                          <input type="time" class="form-control" name="test_time5">
+                                      </div> 
+                                      <br>
+      
+                                      <div class="form-group">
+                                          <label>Subject 5 Teacher: </label>
+                                          <select name="subject_teacher5" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+                                    
+                                            <option selected disabled value="">--Select Subject Teacher--</option>
+                                             
+                                            {% for subject_teacher5 in institute_teachers %}
+                                            <option value="{{subject_teacher5}}"> {{subject_teacher5}}</option>
+                                         {% endfor %}
+                                                  
+                                          </select>
+                                      </div> 
+                                      <br>
+                                   
+                                      <div class="">
+                                          <label>Subject 5 Assign Teacher: </label>
+                                          <select name="assign_teacher5" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                            <option selected disabled value="">--Select Subject 5 Assign Teacher--</option>
+                                             
+                                            {% for assign_teacher5 in institute_teachers %}
+                                            <option value="{{assign_teacher5}}"> {{assign_teacher5}}</option>
+                                         {% endfor %}
+                                                  
+                                          </select>
+                                      </div>
+                                      <br>
+                                      <div class="form-group">
+                                        <label>Subject 6</label>
+                                        <select name="test_subject6" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                         <option selected disabled value="">--Select Subject 6--</option>
+                                           
+                                          {% for class_subject6 in all_subject %}
+                                          <option value="{{class_subject6}}"> {{class_subject6}}</option>
+                                       {% endfor %}
+                                                
+                                        </select>
+                                    </div>  
+                                    <br>
+    
+                                    <div class="form-group">
+                                        <label>Subject 6 Date</label>
+                                        <input type="date" class="form-control" name="test_date6">
+                                    </div>  
+                                    <br>
+    
+                                    <div class="form-group">
+                                        <label>Subject 6 Time</label>
+                                        <input type="time" class="form-control" name="test_time6">
+                                    </div> 
+                                    <br>
+    
+                                    <div class="">
+                                        <label>Subject 6 Teacher: </label>
+                                        <select name="subject_teacher6" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
+                                  
+                                          <option selected disabled value="">--Select Subject Teacher--</option>
+                                           
+                                          {% for subject_teacher6 in institute_teachers %}
+                                          <option value="{{subject_teacher6}}"> {{subject_teacher6}}</option>
+                                       {% endfor %}
+                                                
+                                        </select>
+                                    </div> 
+                                    <br>
+                                 
+                                    <div class="">
+                                        <label>Subject 6 Assign Teacher: </label>
+                                        <select name="assign_teacher6" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
+                                          <option selected disabled value="">--Select Subject 6 Assign Teacher--</option>
+                                           
+                                          {% for assign_teacher6 in institute_teachers %}
+                                          <option value="{{assign_teacher6}}"> {{assign_teacher6}}</option>
+                                       {% endfor %}
+                                                
+                                        </select>
+                                    </div>
+                                    <br>
+                              <input type="submit" value="Add Plan" class="md-btn md-btn-primary">
+                              </form>
+                                                   </div>
+                                   
+  </div>
+ </div>
                 <div class="uk-width-large-3-10 hidden-print">
                     <div class="md-card">
                         <div class="md-card-content">
@@ -666,7 +983,7 @@
             if(localStorage.getItem("altair_theme") !== null) {
                 $theme_switcher.children('li[data-app-theme='+localStorage.getItem("altair_theme")+']').click();
             }
-
+            $('#input_starttime').pickatime({});
 
         // toggle mini sidebar
 
@@ -795,4 +1112,4 @@ $("input[type=date]").on('click', function() {
     </script>
    
 </body>
-</html>
+</html> 
