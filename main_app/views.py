@@ -524,6 +524,7 @@ def edit_role_permissions(request, pk):
         tracking_permission_change.changes_made_by = request.user
         tracking_permission_change.institute = request.user.profile.institute
         tracking_permission_change.role = role_to_update_permissions
+        tracking_permission_change.comment = request.POST['pc_comment']
         tracking_permission_change.save()
         for old_permission in roles_to_update_all_permissions:
             tracking_permission_change.old_permissions.add(old_permission)
@@ -541,14 +542,22 @@ def edit_role_permissions(request, pk):
         rr= request.user.profile.institute.id
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
         
-    
-    
-    
-
-
     context= {
         'role_to_update_permissions': role_to_update_permissions,
         'roles_all_permissions': roles_to_update_all_permissions,
         'all_app_functions':all_app_functions
     }
     return render(request, 'main_app/role_permissions_edit.html', context)
+
+
+class Permission_Updates_History_list_View(LoginRequiredMixin, ListView):
+    
+    
+    template_name = 'main_app/permissions_update_history.html'
+    paginate_by = 15
+
+    def get_queryset(self):
+        admin_role = Institute_levels.objects.get(institute=self.request.user.profile.institute, level_name="admin") ##skipping admin role changes
+        queryset = Tracking_permission_changes.objects.filter(institute= self.request.user.profile.institute).exclude(role= admin_role).order_by('-update_time')
+       
+        return queryset

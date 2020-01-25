@@ -985,6 +985,7 @@
     {% if user.user_institute_role.institute.id == institute_data.id  and user.user_institute_role.level.level_name == 'admin' %}
     <li>
         <div id="page_content_inner">
+            <a href="{% url 'permission_update_history' %}" ><strong> <i class="material-icons uk-text-success">history</i> Permission Updates(Full History)</strong></a>
             <div class="md-card">
                 <div class="md-card-content">
                     <div class="uk-overflow-container uk-margin-bottom">
@@ -1027,10 +1028,7 @@
 
                         </table>
                     </div>
-                   
-                  
-                  
-                   
+                
                 </div>
             </div>
         </div>

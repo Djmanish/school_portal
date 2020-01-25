@@ -162,7 +162,11 @@ class Tracking_permission_changes(models.Model):
     changes_made_by = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True, blank=True, related_name='user_made_changes_permission')
     
     old_permissions = models.ManyToManyField(to=App_functions, related_name='old_permissions', null=True, blank=True)
+    
     updated_permissions = models.ManyToManyField(to=App_functions, related_name='new_permissions', null=True, blank=True)
+
+    comment = models.TextField()
+
 
     def __str__(self):
         return str(self.update_time)
