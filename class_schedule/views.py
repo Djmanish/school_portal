@@ -45,6 +45,7 @@ def schedule(request):
 
 
 
+   
     context = {'all_classes': all_class,
                 'all_lectures': all_lectures,
                 'monday_schedule':monday_schedule,
