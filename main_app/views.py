@@ -224,6 +224,7 @@ def user_profile(request):
 
         users_old_permissions = user_permissions_changes.old_permissions.all()
         users_new_permissions = user_permissions_changes.updated_permissions.all()
+        changes_comment = user_permissions_changes.comment
         added_permissions = []
         removed_permissions = []
     
@@ -240,7 +241,8 @@ def user_profile(request):
         context = {
         'added_permissions': added_permissions,
         'removed_permissions': removed_permissions,
-        'updated_time': update_time
+        'updated_time': update_time,
+        'changes_comment': changes_comment
         
         }
         return render(request, 'main_app/admin_user_profile.html', context )

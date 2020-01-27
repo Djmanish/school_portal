@@ -165,7 +165,7 @@ class Tracking_permission_changes(models.Model):
     
     updated_permissions = models.ManyToManyField(to=App_functions, related_name='new_permissions', null=True, blank=True)
 
-    comment = models.TextField()
+    comment = models.TextField(null=True, blank=True)
 
 
     def __str__(self):
