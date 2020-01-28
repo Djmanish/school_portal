@@ -41,6 +41,7 @@ def schedule(request):
 
     user_permissions = request.user.user_institute_role.level.permissions.all()
     schedule_update_permission = App_functions.objects.get(function_name='Can Update Schedule')
+    update_lecture_timing = App_functions.objects.get(function_name='Can Update Lecture Timing')
 
 
 
@@ -56,7 +57,8 @@ def schedule(request):
                 'saturday_schedule':saturday_schedule,
                 "time_table_for_class": time_table_for_class,
                 'user_permissions': user_permissions,
-                'schedule_update_permission': schedule_update_permission
+                'schedule_update_permission': schedule_update_permission,
+                'update_lecture_timing':update_lecture_timing
 
                 }
    
