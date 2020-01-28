@@ -39,6 +39,8 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
 
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
 
@@ -423,6 +425,7 @@
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">About</a></li>
                                  <li><a href="#">Details</a></li>
+                                 <li><a href="#">My Permissions</a></li>
                                 <!-- <li><a href="#">Posts</a></li> -->
                             </ul>
                             <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
@@ -493,7 +496,8 @@
                                             </ul>
                                         </div>
                                     </div>
-                                   
+                                
+                                </li>
                                         <li>
                                             <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                                 <div class="uk-width-large-1-2">
@@ -615,11 +619,71 @@
                                             </div>
 
 
+                                        </li>
+
+
+                                        <li>
+                                            {% if added_permissions or removed_permissions  %}
+                                            
+                                           
+
+                                            <div class="row">
+                                                <div class="col ">
+                                                  <div class="card" >
+                                                   
+                                                    <div class="card-content">
+                                                        <small class="">Permissoins Updated at: <a>{{updated_time}}</a></small>
+                                                      <p>Comment: {{changes_comment}}</p>
+                                                    </div>
+                                                    
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                            
+                                              
+                                            {% endif %}
+                                            <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                               
+                                              
+                                               
+                                                <div class="uk-width-large-1-2">
+                                                   
+                                                    {% if added_permissions  %}
+                                                   
+                                                    <span class="heading_c uk-margin-small-bottom"> <i class="md-list-addon-icon material-icons uk-text-success">new_releases</i> <a href="#">New Permissions Assigned</a>
+                                                    </span>
+                                                    {% for pn in added_permissions %}
+                                                    <span class="uk-text-small uk-text-muted uk-text-truncate">
+                                                        <i class="material-icons tiny uk-text-success">done</i>{{pn}}</span>
+                                                    {% endfor %}
+
+                                                    {% endif %}
+                                                    
+                                                    </div>
+
+                                                    <div class="uk-width-large-1-2">
+                                                        {% if removed_permissions %}
+                                                       
+                                                        <span class="heading_c uk-margin-small-bottom"> <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i> <a href="#">Removed Permissions</a></span>
+                                                        {% for pn in removed_permissions %}
+                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">
+                                                            <i class="material-icons tiny uk-text-danger">clear</i>{{pn}}</span>
+                                                        {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+
+                                               
 
 
 
-                                                
                                             </div>
+
+
+                                        </li>
+                                                
+                                          
+                                    </div>
                                    
                     </div>
                 </div>
@@ -630,49 +694,10 @@
                                 <h3 class="heading_c uk-margin-bottom">Alerts</h3>
                                 <ul class="md-list md-list-addon">
                                     
-                                   
-                                   {% if added_permissions or removed_permissions  %}
-                                   <small>Permissoins Updated at: {{updated_time}}</small>
-                                   <small>Comment: {{changes_comment}}</small>
-                                     
-                                   {% endif %}
+                                  
                                        
                                        
-                                        
-                                        {% if added_permissions  %}
-                                        <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-success">new_releases</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">New Permissions Assigned
-                                            </span>
-                                            
-                                           
-                                            {% for pn in added_permissions %}
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">
-                                                <i class="material-icons tiny uk-text-success">done</i>{{pn}}</span>
-                                            {% endfor %}
-                                        </div>
-                                    </li>
-                                        {% endif %}
-
-                                  
-                                  {% if removed_permissions %}
-                                  <li>
-                                    <div class="md-list-addon-element">
-                                        <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
-                                    </div>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading">Removed Permissions</span>
-                                        {% for pn in removed_permissions %}
-                                        <span class="uk-text-small uk-text-muted uk-text-truncate">
-                                            <i class="material-icons tiny uk-text-danger">clear</i>{{pn}}</span>
-                                        {% endfor %}
-                                    </div>
-                                </li>
-                                  {% endif %}
-                                  
+                                      
                                 </ul>
                             </div>
                             
