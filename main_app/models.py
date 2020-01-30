@@ -59,6 +59,7 @@ class UserProfile(models.Model):
     institute = models.ForeignKey(to=Institute, related_name="institute", on_delete=models.PROTECT, null=True, blank=True, default="")
     designation = models.ForeignKey('Institute_levels', on_delete=models.PROTECT, related_name='user_designation', null=True)
     Class = models.ForeignKey(to='Classes', on_delete=models.PROTECT,blank=True, null=True, related_name='student_class')
+    roll_number = models.CharField(max_length=20, null=True, blank=True)
     first_name = models.CharField(max_length=25, null=True, default="")
     middle_name = models.CharField(max_length=20, null=True, default="")
     last_name = models.CharField(max_length= 25, null = True,default="")
@@ -73,7 +74,7 @@ class UserProfile(models.Model):
 
     about = models.CharField(max_length=300, blank=True, null=True, default="write something about yourself ")
     profile_pic = models.ImageField(default="default_profile_pic.jpg", upload_to='UserProfilePictures')
-    mobile_number = models.PositiveIntegerField(null=True, default="999999999")
+    mobile_number = models.PositiveIntegerField(null=True,)
     address_line_1 = models.CharField(max_length= 50 , null= True, default="Address line 1")
     address_line_2 = models.CharField(max_length=50, null = True, default="Address line 2")
     city = models.CharField(max_length=50, null=True, default="City")
@@ -96,7 +97,7 @@ class UserProfile(models.Model):
         return str(self.user)
 
 class App_functions(models.Model):
-    function_name = models.CharField(max_length= 266, null=True, blank=True)
+    function_name = models.CharField(max_length= 266, null=True, blank=True, unique=True)
     def __str__(self):
         return self.function_name
 
@@ -106,7 +107,8 @@ class Institute_levels(models.Model):
     institute= models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institute_levels')
     level_id= models.IntegerField(null=True)
     level_name = models.CharField(max_length=25)
-    permissions = models.ManyToManyField(to=App_functions, related_name='user_permissions')
+    permissions = models.ManyToManyField(to=App_functions, related_name='user_permissions', null=True, blank=True)
+    created_by = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True, blank=True)
     start_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     end_date = models.DateField(null=True, blank= True)
     class Meta:
@@ -148,4 +150,26 @@ class Subjects(models.Model):
 
     def __str__(self):
         return str(self.subject_name)
-        
+
+
+
+
+class Tracking_permission_changes(models.Model):
+    
+    institute = models.ForeignKey(to=Institute, on_delete=models.DO_NOTHING,related_name='institute_role_permission_updated', null=True, blank=True)
+    
+    role =  models.ForeignKey(to=Institute_levels, on_delete=models.DO_NOTHING, related_name='role_permission_updated', null=True, blank=True)
+
+    update_time = models.DateTimeField()
+    changes_made_by = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True, blank=True, related_name='user_made_changes_permission')
+    
+    old_permissions = models.ManyToManyField(to=App_functions, related_name='old_permissions', null=True, blank=True)
+    
+    updated_permissions = models.ManyToManyField(to=App_functions, related_name='new_permissions', null=True, blank=True)
+
+    comment = models.TextField(null=True, blank=True)
+
+
+    def __str__(self):
+        return str(self.update_time)
+            

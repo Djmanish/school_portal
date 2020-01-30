@@ -39,6 +39,12 @@ def schedule(request):
 
     saturday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Saturday" )
 
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    schedule_update_permission = App_functions.objects.get(function_name='Can Update Schedule')
+    update_lecture_timing = App_functions.objects.get(function_name='Can Update Lecture Timing')
+
+
+
 
    
     context = {'all_classes': all_class,
@@ -49,7 +55,10 @@ def schedule(request):
                 'thursday_schedule':thursday_schedule,
                 'friday_schedule':friday_schedule,
                 'saturday_schedule':saturday_schedule,
-                "time_table_for_class": time_table_for_class
+                "time_table_for_class": time_table_for_class,
+                'user_permissions': user_permissions,
+                'schedule_update_permission': schedule_update_permission,
+                'update_lecture_timing':update_lecture_timing
 
                 }
    

@@ -390,12 +390,12 @@
                             </div>
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{object.institute.profile_pic.url}}" alt="user avatar"/>
+                                    <img src="{{request.user.profile.institute.profile_pic.url}}" alt="user avatar"/>
                                 </div>
                             </div>
                             <div class="user_heading_content">
                                 <h2 class="heading_b uk-margin-bottom">
-                                    <span class="uk-text-truncate">{{object.institute.name}}</span>
+                                    <span class="uk-text-truncate">{{request.user.profile.institute.name}}</span>
                                     </span></h2>
                                                             </div>
 
@@ -407,14 +407,50 @@
                             
                         </div>
                         <div class="user_content">
-                            <h4 class="heading_c uk-margin-small-bottom">Update Permissions for the '{{object.level_name}}' Role</h4>
+                            <h4 class="heading_c uk-margin-small-bottom">Update Permissions for the {{role_to_update_permissions.level_name}} Role</h4>
+                             <!-- success message -->
+                             {% if messages %}
+                             <ul class="messages">
+                                 {% for message in messages %}
+                                 <li{% if message.tags %} class=" text-{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                     {% endfor %}
+                             </ul>
+                             {% endif %}
+                           
                             
-                            <small class="text-info">press and hold control to select multiple permissions</small>
-                            <form method="POST" enctype="multipart/form-data" action="">
+                            <form method="POST" >
                                 {% csrf_token %}
-                               {{form | crispy}}
-                                <input type="submit" value="Update" class="md-btn md-btn-primary ">
+                               <div class="form-group">
+                                   <label>Select Multiple Permissions:</label><br>
+                                   <small class="text-info">press and hold control to select multiple permissions</small>
+                                <select multiple class="form-control" name="new_permissions" style="min-height: 300px;">
+                                    
+                                    {% for fun in all_app_functions %}
+                                    <option 
+                                    {% if fun in roles_all_permissions %}
+                                        selected
+                                    {% endif %}
+
+                                         value="{{fun.id}}">{{fun}}</option>
+                                    {% endfor %}
+                                        
+                                    
+                                   
+                                  </select>
+                               </div>
+                               <div class="form-group">
+                                <label>Comment:</label>
+                                
+                                <textarea class="form-control" rows="3" name="pc_comment"></textarea>
+    
+                               </div>
+    
+                                  
+                                  <input type="submit" class="md-btn md-btn-primary btn-small" value="Update Permissions">
                             </form>
+                        
+                            
+                     
                             
                                             </div>
                                    

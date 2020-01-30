@@ -15,6 +15,7 @@ from django.db.models import Q
 from class_schedule.models import *
 from .forms import ClassUpdateForm, InstituteUpdateProfile
 from django.core.mail import send_mail, send_mass_mail
+from django.utils import timezone
 
 
 
@@ -231,7 +232,36 @@ def login(request):
 
 @login_required
 def user_profile(request):
-     return render(request, 'main_app/admin_user_profile.html', )
+    user_permissions_changes = Tracking_permission_changes.objects.filter(institute= request.user.profile.institute, role = request.user.profile.designation).last()
+
+    if user_permissions_changes:
+
+        users_old_permissions = user_permissions_changes.old_permissions.all()
+        users_new_permissions = user_permissions_changes.updated_permissions.all()
+        changes_comment = user_permissions_changes.comment
+        added_permissions = []
+        removed_permissions = []
+    
+        for permission in users_old_permissions:
+            if permission not in users_new_permissions:
+                removed_permissions.append(permission)
+    
+        for permission in users_new_permissions:
+            if permission not in users_old_permissions:
+                added_permissions.append(permission)
+
+
+        update_time = user_permissions_changes.update_time        
+        context = {
+        'added_permissions': added_permissions,
+        'removed_permissions': removed_permissions,
+        'updated_time': update_time,
+        'changes_comment': changes_comment
+        
+        }
+        return render(request, 'main_app/admin_user_profile.html', context )
+    
+    return render(request, 'main_app/admin_user_profile.html' )
     
   
     
@@ -281,6 +311,7 @@ def edit_profile(request, pk):
             user_info.designation = new_level_admin
             user_info.institute= new_create_institute
             user_info.save()
+
             # sending mail to admin on registering
             send_mail('Admin Request Confirmation ',f'Hello {request.user} , Thank you for using our application.  ', 'yourcollegeportal@gmail.com',[f'{request.user.email}'], html_message=f"<h4>Hello {request.user},</h4><p>Thank you for choosing our application.</p><p> You have requested to be an admin profile so you are able to create your own institution profile.once your request is approved you will received a confirmation email.</p>School Portal<br>school_portal@gmail.com<p></p>"
             )
@@ -344,10 +375,25 @@ def edit_profile(request, pk):
 
 @login_required
 def institute_profile(request, pk):
+    
+# starting assigning all functionalities to admin
+    admin_pk = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='admin')
+    
+    checking_for_admin = Role_Description.objects.filter(user=request.user, institute=request.user.profile.institute, level= admin_pk ).first()
+
+
+    if checking_for_admin is not None:
+        all_app_functions = App_functions.objects.all()
+        for function in all_app_functions:
+            request.user.user_institute_role.level.permissions.add(function)
+# ending assigning all functionalities to admin
+
+
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
     
+<<<<<<< HEAD
     
   
     # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
@@ -357,9 +403,15 @@ def institute_profile(request, pk):
  
     context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class, 'institute_teachers':institute_teachers}
 
+=======
+    institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
+    context_data = {'institute_data':institute_data, 
+    'institute_roles':institute_roles,
+     'institute_class':institute_class,
+     'institute_subject':institute_subject,
+      'all_classes':institute_class}
+>>>>>>> 1e4c9006cbd4c105852e788fb1b2f4e4fe4536e5
 
-    
-    
     return render(request, 'main_app/institute_profile.html', context_data)
    
 @login_required
@@ -412,6 +464,7 @@ def add_new_role(request, pk):
         new_role.institute= institute
         new_role.level_id = request.POST['level_id']
         new_role.level_name = request.POST['level_name']
+        new_role.created_by = request.user
         rr= institute.id
         try:
             roles_level_toi = Institute_levels.objects.filter(Q(institute = institute) & Q(level_id__gte =  request.POST['level_id'] )  )
@@ -486,3 +539,53 @@ class Edit_Role_Permissions(LoginRequiredMixin, SuccessMessageMixin, UpdateView)
 
     
 
+def edit_role_permissions(request, pk):
+    role_to_update_permissions = Institute_levels.objects.get(pk=pk)
+    roles_to_update_all_permissions = role_to_update_permissions.permissions.all()
+    all_app_functions = App_functions.objects.all()
+    
+
+    if request.method == "POST":
+        # creating object to to track changes in table
+        tracking_permission_change = Tracking_permission_changes()
+        tracking_permission_change.update_time = timezone.now()
+        tracking_permission_change.changes_made_by = request.user
+        tracking_permission_change.institute = request.user.profile.institute
+        tracking_permission_change.role = role_to_update_permissions
+        tracking_permission_change.comment = request.POST['pc_comment']
+        tracking_permission_change.save()
+        for old_permission in roles_to_update_all_permissions:
+            tracking_permission_change.old_permissions.add(old_permission)
+    
+
+        updated_permissions = request.POST.getlist('new_permissions')
+        role_to_update_permissions.permissions.clear()
+        for permission in updated_permissions:
+            get_permission = App_functions.objects.get(pk = permission)
+            role_to_update_permissions.permissions.add(get_permission)
+        for updated_permissions in updated_permissions:
+
+            tracking_permission_change.updated_permissions.add(updated_permissions)
+        messages.success(request, 'Role Permissions Updated !!!')    
+        rr= request.user.profile.institute.id
+        return HttpResponseRedirect(f'/institute/profile/{rr}/')
+        
+    context= {
+        'role_to_update_permissions': role_to_update_permissions,
+        'roles_all_permissions': roles_to_update_all_permissions,
+        'all_app_functions':all_app_functions
+    }
+    return render(request, 'main_app/role_permissions_edit.html', context)
+
+
+class Permission_Updates_History_list_View(LoginRequiredMixin, ListView):
+    
+    
+    template_name = 'main_app/permissions_update_history.html'
+    paginate_by = 15
+
+    def get_queryset(self):
+        admin_role = Institute_levels.objects.get(institute=self.request.user.profile.institute, level_name="admin") ##skipping admin role changes
+        queryset = Tracking_permission_changes.objects.filter(institute= self.request.user.profile.institute).exclude(role= admin_role).order_by('-update_time')
+       
+        return queryset

@@ -3,7 +3,7 @@ from main_app import views
 from . import views
 
 from django.views.generic.base import RedirectView
-from .views import RegistrationViewUniqueEmail, InstituteUpdateview, ClassUpdateView, Edit_Role_Permissions
+from .views import RegistrationViewUniqueEmail, InstituteUpdateview, ClassUpdateView, Edit_Role_Permissions, Permission_Updates_History_list_View
 
 
 
@@ -46,7 +46,8 @@ urlpatterns = [
  
   path('class/<int:pk>/assign_class_teacher', views.assign_class_teacher, name="assign_class_teacher"),
 
-  path('update_role_permissions/<int:pk>/', Edit_Role_Permissions.as_view(), name="role_permissions")
+  path('update_role_permissions/<int:pk>/', views.edit_role_permissions, name="role_permissions"),
+  path('permisson_update_history/', Permission_Updates_History_list_View.as_view(), name="permission_update_history"),
 
 
 ]

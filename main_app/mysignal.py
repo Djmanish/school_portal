@@ -7,5 +7,10 @@ from django.core.mail import send_mail
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user = instance, first_name = instance.username)
+        UserProfile.objects.create(user = instance)
+
+
+
+        
+
 
