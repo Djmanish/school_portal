@@ -238,7 +238,12 @@
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">About</a></li>
                                  <li><a href="#">Details</a></li>
+                                 
+                                 {% if user.user_institute_role.level.level_name != 'admin' %}
                                  <li><a href="#">My Permissions</a></li>
+                                 {% endif %}
+                                     
+                                
                                 <!-- <li><a href="#">Posts</a></li> -->
                             </ul>
                             <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">

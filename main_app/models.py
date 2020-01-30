@@ -59,6 +59,7 @@ class UserProfile(models.Model):
     institute = models.ForeignKey(to=Institute, related_name="institute", on_delete=models.PROTECT, null=True, blank=True, default="")
     designation = models.ForeignKey('Institute_levels', on_delete=models.PROTECT, related_name='user_designation', null=True)
     Class = models.ForeignKey(to='Classes', on_delete=models.PROTECT,blank=True, null=True, related_name='student_class')
+    roll_number = models.CharField(max_length=20, null=True, blank=True)
     first_name = models.CharField(max_length=25, null=True, default="")
     middle_name = models.CharField(max_length=20, null=True, default="")
     last_name = models.CharField(max_length= 25, null = True,default="")

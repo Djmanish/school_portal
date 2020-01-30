@@ -417,7 +417,7 @@
                     <div style="margin: 2px;">
                           <!-- success message -->
   {% if messages %}
-  <ul class="messages alert">
+  <ul class="messages">
       {% for message in messages %}
       <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
       {% endfor %}
@@ -448,9 +448,10 @@
                             {% for student in all_students %}
                             <tr> 
                                 <td > {{ forloop.counter}} </td>                 
-                                <td> {{ student.first_name }} </td>
-                                <td> {{ student.last_name }} </td>
-                                <td>{{ student.roll_number }}</td>
+                                <td> {{ student.student.profile.first_name }} </td>
+                               
+                                <td> {{ student.student.profile.last_name }}</td>
+                                <td>{{ student.student.profile.roll_number }}</td>
                              
                                
                                 
@@ -460,15 +461,22 @@
         {% csrf_token %}    
         <span class="icheck-inline">
                                       
-            <input type="radio" name="{{student.id|slugify }}"  required class="wizard-icheck" value="present" />
+            <input type="radio" name="{{student.id|slugify }}"  required class="wizard-icheck" value="present" {% if student.attendance_status == 'present' %}
+            checked
+            {% endif %} disabled  >
             <label for="wizard_status_present" class="inline-label">Present</label>
         </span>
         <span class="icheck-inline">
-            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="absent" />
-            <label for="wizard_status_absent" class="inline-label">Absent</label>
+            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="absent" {% if student.attendance_status == 'absent' %}
+            checked
+            {% endif %} disabled />
+            <label for="wizard_status_absent" class="inline-label" >Absent</label>
         </span> 
         <span class="icheck-inline">
-            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="leave" />
+            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="leave"
+            {% if student.attendance_status == 'leave' %}
+            checked
+            {% endif %} disabled    />
             <label for="wizard_status_leave" class="inline-label">Leave</label>
             
         </span>
@@ -477,7 +485,7 @@
     </form>
                                         </td>
                                     </tr>     
-                                    <script>
+                                    <!-- <script>
                                         
                                         $(document).ready(function(){
                                           $('#{{student.id|slugify }}').click(function(){
@@ -486,11 +494,11 @@
                                             
                                     
                                               if (typeof status == 'undefined'){
-                                                  alert('No Value Selected !!!');
+                                                  alert('please select before clicking update');
                                                   return false;
                                               }
                                         
-                                            //   $('#{{student.id|slugify }}').hide();
+                                              $('#{{student.id|slugify }}').hide();
                                               $.ajax({
                                                   type:'POST',
                                                   url:'attendanceupdate/{{student.id}}/',
@@ -500,14 +508,13 @@
                                                    csrfmiddlewaretoken: '{{ csrf_token }}' },
                                                   
                                                   success: function(msg){
-                                    
-                                                    $('#{{student.id|slugify }}').html(msg)
+                                                    alert( msg);
                                                     
                                                   }
                                               })
                                           })
                                         })
-                                        </script>         
+                                        </script>          -->
 
                                     
                                    
