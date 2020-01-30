@@ -383,7 +383,7 @@
                 <li class="current_section" title="ExamSchedule">
 
 
-                    <a href="{% url 'examschedule' user.profile.institute.pk %}">
+                    <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                         <span class="menu_icon"><i class="material-icons">poll</i></span>
                         <span class="menu_title">Exam Schedule</span>
                     </a>
@@ -458,7 +458,6 @@
 
                                             <div class="md-card-content">
                                                 <div class="uk-overflow-container uk-margin-bottom">
-                                                    <button type="button" class="md-btn md-btn-primary md-btn-small " data-uk-modal="{target:'#modal_new_exam'}">Plan Exam Schedule</button>
                                                     <table
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
@@ -469,358 +468,7 @@
                                                             {% endfor %}
                                                         </ul>
                                                         {% endif %}
-                                                        <div class="uk-modal" id="modal_new_exam">
-                                                            <div class="uk-modal-dialog">
-                                                                <div class="uk-modal-header">
-                                                                    <h3 class="uk-modal-title">Plan Exam Schedule</h3>
-                                                                </div>
-                                                                <form method="POST" action="{% url 'examschedule'  user.profile.institute.pk %}">
-                                                                    {% csrf_token %}
-                                                                     <div class=form-group>
-                                                                        <select name="selected_class" class="md-input label-fixed" data-uk-tooltip="{pos:'top'}" >
-                                                                            <option selected disabled value="">--Select Class--</option>
-                                                                            
-                                                                            {% for class in all_classes %}
-                                                                               <option value="{{class.id}}"  > {{class}}</option>
-                                                                            {% endfor %}
-                                                                                
-                                                
-                                                                     </select>
-                                                                     </div>
-
-                                                                    <div class="form-group">
-                                                                      <label>Test Code</label>
-                                                                                                                                  
-                                                                      <input type="text" class="form-control"name='examschedule_code' value=""
-                                                                        >
-                                                                  </div>
-                                                                  
-                                                                  <br>
-                                                                  <div class="form-group">
-                                                                      <label>Exam Type</label>
-                                                                      <select name="examschedule_type" class="md-input label-fixed" data-uk-tooltip="{pos:'top'}"title="Select with tooltip" >
-                                                              
-                                          
-                                                                          <option value="Unit">Unit</option>
-                                                                          <option value="Monthly">Monthly</option>
-                                                                          <option value="Quarterly">Quarterly</option>
-                                                                          <option value="Half Yearly">Half Yearly</option>
-                                                                          <option value="Yearly">Yearly</option>
-                                                                       
-                                          
-                                                                  </select>
-                                                                  </div>
-                                                                  <br>
-                                                                          <div class="form-group">
-                                                                              <label>Subject 1 </label>
-                                                                              <select name="test_subject1" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                               <option selected disabled value="">--Select Subject 1--</option>
-                                                                                 
-                                                                                {% for class_subject1 in all_subject %}
-                                                                                <option value="{{class_subject1}}"> {{class_subject1}}</option>
-                                                                             {% endfor %}
-                                                                                      
-                                                                              </select>
-                                                                          </div>  
-                                                                          <br>
-                                          
-                                                                          <div class="form-group">
-                                                                              <label>Subject 1 Date</label>
-                                                                              <input type="date" class="form-control" name="test_date1">
-                                                                          </div>  
-                                                                          <br>
-                                          
-                                                                          <div class="form-group">
-                                                                              <label>Subject 1 Time</label>
-                                                                              <input type="time" class="form-control" name="test_time1">
-                                                                          </div> 
-                                                                          <br>
-                                          
-                                                                          <div class="">
-                                                                              <label>Subject 1 Teacher: </label>
-                                                                              <select name="subject_teacher1" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
-                                                                        
-                                                                                <option selected disabled value="">--Select Subject 1 Teacher--</option>
-                                                                                 
-                                                                                {% for subject_teacher1 in institute_teachers %}
-                                                                                <option value="{{subject_teacher1}}"> {{subject_teacher1}}</option>
-                                                                             {% endfor %}
-                                                                                      
-                                                                              </select>
-                                                                          </div> 
-                                                                          <br>
-                                                                       
-                                                                          <div class="">
-                                                                              <label>Subject 1 Assign Teacher: </label>
-                                                                              <select name="assign_teacher1" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                                <option selected disabled value="">--Select Subject 1 Assign Teacher--</option>
-                                                                                 
-                                                                                {% for assign_teacher1 in institute_teachers %}
-                                                                                <option value="{{assign_teacher1}}"> {{assign_teacher1}}</option>
-                                                                             {% endfor %}
-                                                                                      
-                                                                              </select>
-                                                                          </div>  
-                                                                  <br>
-                                                                  <div class="form-group">
-                                                                    <label>Subject 2 </label>
-                                                                    <select name="test_subject2" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                     <option selected disabled value="">--Select Subject 2--</option>
-                                                                       
-                                                                      {% for class_subject2 in all_subject %}
-                                                                      <option value="{{class_subject2}}"> {{class_subject2}}</option>
-                                                                   {% endfor %}
-                                                                            
-                                                                    </select>
-                                                                </div>  
-                                                                <br>
-                                
-                                                                <div class="form-group">
-                                                                    <label>Subject 2 Date</label>
-                                                                    <input type="date" class="form-control" name="test_date2">
-                                                                </div>  
-                                                                <br>
-                                
-                                                                <div class="form-group">
-                                                                    <label>Subject 2 Time</label>
-                                                                    <input type="time" class="form-control" name="test_time2">
-                                                                </div> 
-                                                                <br>
-                                
-                                                                <div class="">
-                                                                    <label>Subject 2 Teacher: </label>
-                                                                    <select name="subject_teacher2" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
-                                                              
-                                                                      <option selected disabled value="">--Select Subject 2 Teacher--</option>
-                                                                       
-                                                                      {% for subject_teacher2 in institute_teachers %}
-                                                                      <option value="{{subject_teacher2}}"> {{subject_teacher2}}</option>
-                                                                   {% endfor %}
-                                                                            
-                                                                    </select>
-                                                                </div> 
-                                                                <br>
-                                                             
-                                                                <div class="">
-                                                                    <label>Subject 2 Assign Teacher: </label>
-                                                                    <select name="assign_teacher2" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                      <option selected disabled value="">--Select Subject 2 Assign Teacher--</option>
-                                                                       
-                                                                      {% for assign_teacher2 in institute_teachers %}
-                                                                      <option value="{{assign_teacher2}}"> {{assign_teacher2}}</option>
-                                                                   {% endfor %}
-                                                                            
-                                                                    </select>
-                                                                </div>
-                                                                <br>
-                                                                <div class="form-group">
-                                                                    <label>Subject 3 </label>
-                                                                    <select name="test_subject3" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                     <option selected disabled value="">--Select Subject 3--</option>
-                                                                       
-                                                                      {% for class_subject3 in all_subject %}
-                                                                      <option value="{{class_subject3}}"> {{class_subject3}}</option>
-                                                                   {% endfor %}
-                                                                            
-                                                                    </select>
-                                                                </div>  
-                                                                <br>
-                                
-                                                                <div class="form-group">
-                                                                    <label>Subject 3 Date</label>
-                                                                    <input type="date" class="form-control" name="test_date3">
-                                                                </div>  
-                                                                <br>
-                                
-                                                                <div class="form-group">
-                                                                    <label>Subject 3 Time</label>
-                                                                    <input type="time" class="form-control" name="test_time3">
-                                                                </div> 
-                                                                <br>
-                                
-                                                                <div class="">
-                                                                    <label>Subject 3 Teacher: </label>
-                                                                    <select name="subject_teacher3" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
-                                                              
-                                                                      <option selected disabled value="">--Select Subject Teacher--</option>
-                                                                       
-                                                                      {% for subject_teacher3 in institute_teachers %}
-                                                                      <option value="{{subject_teacher3}}"> {{subject_teacher3}}</option>
-                                                                   {% endfor %}
-                                                                            
-                                                                    </select>
-                                                                </div> 
-                                                                <br>
-                                                             
-                                                                <div class="">
-                                                                    <label>Subject 3 Assign Teacher: </label>
-                                                                    <select name="assign_teacher3" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                      <option selected disabled value="">--Select Assign Teacher--</option>
-                                                                       
-                                                                      {% for assign_teacher3 in institute_teachers %}
-                                                                      <option value="{{assign_teacher3}}"> {{assign_teacher3}}</option>
-                                                                   {% endfor %}
-                                                                            
-                                                                    </select>
-                                                                </div>
-                                                                <br>
-                                                                <div class="form-group">
-                                                                    <label>Subject 4 </label>
-                                                                    <select name="test_subject4" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                     <option selected disabled value="">--Select Subject--</option>
-                                                                       
-                                                                      {% for class_subject4 in all_subject %}
-                                                                      <option value="{{class_subject4}}"> {{class_subject4}}</option>
-                                                                   {% endfor %}
-                                                                            
-                                                                    </select>
-                                                                </div>  
-                                                                <br>
-                                
-                                                                <div class="form-group">
-                                                                    <label>Subject 4 Date</label>
-                                                                    <input type="date" class="form-control" name="test_date4">
-                                                                </div>  
-                                                                <br>
-                                
-                                                                <div class="form-group">
-                                                                    <label>Subject 4 Time</label>
-                                                                    <input type="time" class="form-control" name="test_time4">
-                                                                </div> 
-                                                                <br>
-                                
-                                                                <div class="">
-                                                                    <label>Subject 4 Teacher: </label>
-                                                                    <select name="subject_teacher4" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
-                                                              
-                                                                      <option selected disabled value="">--Select Subject Teacher--</option>
-                                                                       
-                                                                      {% for subject_teacher4 in institute_teachers %}
-                                                                      <option value="{{subject_teacher4}}"> {{subject_teacher4}}</option>
-                                                                   {% endfor %}
-                                                                            
-                                                                    </select>
-                                                                </div> 
-                                                                <br>
-                                                             
-                                                                <div class="">
-                                                                    <label>Subject 4 Assign Teacher: </label>
-                                                                    <select name="assign_teacher4" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                      <option selected disabled value="">--Select Assign Teacher--</option>
-                                                                       
-                                                                      {% for assign_teacher4 in institute_teachers %}
-                                                                      <option value="{{assign_teacher4}}"> {{assign_teacher4}}</option>
-                                                                   {% endfor %}
-                                                                            
-                                                                    </select>
-                                                                </div>
-                                                                <br>
-                                                                   <div class="form-group">
-                                                                              <label>Subject 5</label>
-                                                                              <select name="test_subject5" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                               <option selected disabled value="">--Select Subject--</option>
-                                                                                 
-                                                                                {% for class_subject5 in all_subject %}
-                                                                                <option value="{{class_subject5}}"> {{class_subject5}}</option>
-                                                                             {% endfor %}
-                                                                                      
-                                                                              </select>
-                                                                          </div>  
-                                                                          <br>
-                                          
-                                                                          <div class="form-group">
-                                                                              <label>Subject 5 Date</label>
-                                                                              <input type="date" class="form-control" name="test_date5">
-                                                                          </div>  
-                                                                          <br>
-                                          
-                                                                          <div class="form-group">
-                                                                              <label>Subject 5 Time</label>
-                                                                              <input type="time" class="form-control" name="test_time5">
-                                                                          </div> 
-                                                                          <br>
-                                          
-                                                                          <div class="form-group">
-                                                                              <label>Subject 5 Teacher: </label>
-                                                                              <select name="subject_teacher5" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
-                                                                        
-                                                                                <option selected disabled value="">--Select Subject Teacher--</option>
-                                                                                 
-                                                                                {% for subject_teacher5 in institute_teachers %}
-                                                                                <option value="{{subject_teacher5}}"> {{subject_teacher5}}</option>
-                                                                             {% endfor %}
-                                                                                      
-                                                                              </select>
-                                                                          </div> 
-                                                                          <br>
-                                                                       
-                                                                          <div class="">
-                                                                              <label>Subject 5 Assign Teacher: </label>
-                                                                              <select name="assign_teacher5" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                                <option selected disabled value="">--Select Subject 5 Assign Teacher--</option>
-                                                                                 
-                                                                                {% for assign_teacher5 in institute_teachers %}
-                                                                                <option value="{{assign_teacher5}}"> {{assign_teacher5}}</option>
-                                                                             {% endfor %}
-                                                                                      
-                                                                              </select>
-                                                                          </div>
-                                                                          <br>
-                                                                          <div class="form-group">
-                                                                            <label>Subject 6</label>
-                                                                            <select name="test_subject6" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                             <option selected disabled value="">--Select Subject 6--</option>
-                                                                               
-                                                                              {% for class_subject6 in all_subject %}
-                                                                              <option value="{{class_subject6}}"> {{class_subject6}}</option>
-                                                                           {% endfor %}
-                                                                                    
-                                                                            </select>
-                                                                        </div>  
-                                                                        <br>
-                                        
-                                                                        <div class="form-group">
-                                                                            <label>Subject 6 Date</label>
-                                                                            <input type="date" class="form-control" name="test_date6">
-                                                                        </div>  
-                                                                        <br>
-                                        
-                                                                        <div class="form-group">
-                                                                            <label>Subject 6 Time</label>
-                                                                            <input type="time" class="form-control" name="test_time6">
-                                                                        </div> 
-                                                                        <br>
-                                        
-                                                                        <div class="">
-                                                                            <label>Subject 6 Teacher: </label>
-                                                                            <select name="subject_teacher6" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip">
-                                                                      
-                                                                              <option selected disabled value="">--Select Subject Teacher--</option>
-                                                                               
-                                                                              {% for subject_teacher6 in institute_teachers %}
-                                                                              <option value="{{subject_teacher6}}"> {{subject_teacher6}}</option>
-                                                                           {% endfor %}
-                                                                                    
-                                                                            </select>
-                                                                        </div> 
-                                                                        <br>
-                                                                     
-                                                                        <div class="">
-                                                                            <label>Subject 6 Assign Teacher: </label>
-                                                                            <select name="assign_teacher6" class="form-control" data-uk-tooltip="{pos:'top'}" title="Select with tooltip" >
-                                                                              <option selected disabled value="">--Select Subject 6 Assign Teacher--</option>
-                                                                               
-                                                                              {% for assign_teacher6 in institute_teachers %}
-                                                                              <option value="{{assign_teacher6}}"> {{assign_teacher6}}</option>
-                                                                           {% endfor %}
-                                                                                    
-                                                                            </select>
-                                                                        </div>
-                                                                        <br>
-                                                                  <input type="submit" value="Add Plan" class="md-btn md-btn-primary">
-                                                                  </form>
-                                                                            
-
+                                                      
                                                                        
                                                             </div>
                                                             
@@ -836,12 +484,28 @@
 
                                                             </tr>
                                                             <tr>
+                                                                <td>
+                                                                <form >
+                                                                    <select name="selected_class" style="padding: 2px;" required>
+                                                                        <option selected disabled value="">--Select Class--</option>
+                                                                        
+                                                                        {% for class in exam_class %}
+                                                                           <option value="{{class.id}}"  > {{class}}</option>
+                                                                        {% endfor %}
+                                                                            
+                                            
+                                                                 </select>
+                                                                 <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
+                                                                </form>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
 
 
                                                                 <th class="uk-text-left">
 
-                                                                    <b style="color: #1976d2;"> {{time_table_for_class}}
-                                                                        Exam Schedule</b>
+                                                                    <b style="color: #1976d2;"> 
+                                                                        Exam Schedule for class {{exam_class.exam_class}}</b>
 
 
                                                                 </th>
@@ -852,424 +516,65 @@
 
                                                         <tbody>
                                                             <tr>
-                                                                <!-- <th rowspan="2">Monday</th> -->
-                                                                <th>Subject</th>
-                                                                <td> </td>
-                                                                <td colspan="2">
-
-                                                                    {% if examschedule_detail.test_code %}
-                                                                    {{examschedule_detail.test_code}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_two.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_two.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_three.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_three.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_four.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_four.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_five.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_five.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_six.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_six.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_seven.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_seven.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_eight.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_eight.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-
-                                                                </td>
-
-                                                                <td colspan="2" rowspan="2">
-                                                                    <a class="md-btn md-btn-primary" href="{% url 'update_examschedule' user.profile.institute.pk%}">Update</a>
-                                                                </td>
-
-                                                            </tr>
-                                                            <tr>
-                                                                <!-- <th rowspan="2">Monday</th> -->
-                                                                <th>Date</th>
-                                                                <td> </td>
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_one.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_one.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_two.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_two.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_three.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_three.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_four.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_four.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_five.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_five.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_six.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_six.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_seven.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_seven.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_eight.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_eight.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-
-                                                                </td>
-
                                                                
-
-                                                            </tr>
-                                                            <tr>
-                                                                <!-- <th rowspan="2">Monday</th> -->
-                                                                <th>Start Time</th>
-                                                                <td> </td>
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_one.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_one.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_two.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_two.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_three.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_three.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_four.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_four.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_five.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_five.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_six.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_six.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_seven.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_seven.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_eight.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_eight.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-
-                                                                </td>
-
-                                                                
-
-                                                            </tr>
-                                                            <tr>
-                                                                <!-- <th rowspan="2">Monday</th> -->
+                                                                <th>Subject</th>
                                                                 <th>Subject Teacher</th>
-                                                                <td> </td>
-                                                                <td colspan="2">
+                                                                <th>Date</th>
+                                                                <th>Start Time</th>
+                                                                <th>End Time</th>
+                                                                <th>Assign Teacher</th>
 
-                                                                    {% if monday_schedule.subject_lecture_one.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_one.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_two.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_two.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_three.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_three.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_four.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_four.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_five.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_five.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_six.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_six.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_seven.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_seven.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-
-                                                                </td>
-
-                                                                <td colspan="2">
-
-                                                                    {% if monday_schedule.subject_lecture_eight.subject_name %}
-                                                                    {{monday_schedule.subject_lecture_eight.subject_name}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-
-
-                                                                </td>
 
                                                                 
-
                                                             </tr>
-                                                            <tr>
-                                                                <th>Assign Teacher</th>
-                                                                <td> </td>
-                                                                <td colspan="2">
-                                                                    {% if monday_schedule.subject_teacher_lecture_one %}
-                                                                    {{monday_schedule.subject_teacher_lecture_one}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
+                                                            
+                                                                 <form method='POST' action="">
+                                                                    {% csrf_token %}
+                                                                    {% for exam_subject in exam_class_subject%}
+                                                                    <tr> 
+                                                                        <td>
+                                                                            <input type='', value="{{exam_subject.id}}", name="select_exam_subject"/>  
+                                                                              
+                                                                            
+                                                                        </td>
+                                                                        <td>
+                                                                        <input type='', value="{{exam_subject.subject_teacher.id}}", name="select_exam_subject_teacher"/>  
+                                                                       
+                                                                           </td>
+                                                                        <td><input type='date', value="", name="select_date"/></td>
+                                                                        <td><input type='time', value="", name="select_start_time"/></td>
+                                                                        <td><input type='time', value="", name="select_end_time"/></td>
+                                                                        <td>  <div class="form-group">
+                                                                           
+                                                                            <select class="form-control" name="assign_teacher" required>
+                                                                                <option selected value="{{exam_class_subject.assign_teacher.id}}">{{exam_class_subject.assign_teacher}}</option>
+                                                                              
+                                                                              {% for teacher in institute_teachers %}
+                                                                                  <option value='{{teacher.pk}}'>{{teacher}}</option>
+                                                                              {% endfor %}
+                                                                                  
+                                                                    
+                                                                            </select>
+                                                                        </div></td>
+                                                                       
+                             
+                                
 
-                                                                </td>
-                                                                <td colspan="2">
-                                                                    {% if monday_schedule.subject_teacher_lecture_two %}
-                                                                    {{monday_schedule.subject_teacher_lecture_two}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td colspan="2">
-                                                                    {% if monday_schedule.subject_teacher_lecture_three %}
-                                                                    {{monday_schedule.subject_teacher_lecture_three}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td colspan="2">
-                                                                    {% if monday_schedule.subject_teacher_lecture_four %}
-                                                                    {{monday_schedule.subject_teacher_lecture_four}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td colspan="2">
-                                                                    {% if monday_schedule.subject_teacher_lecture_five %}
-                                                                    {{monday_schedule.subject_teacher_lecture_five}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td colspan="2">
-                                                                    {% if monday_schedule.subject_teacher_lecture_six %}
-                                                                    {{monday_schedule.subject_teacher_lecture_six}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td colspan="2">
-                                                                    {% if monday_schedule.subject_teacher_lecture_seven %}
-                                                                    {{monday_schedule.subject_teacher_lecture_seven}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td colspan="2">
-                                                                    {% if monday_schedule.subject_teacher_lecture_eight %}
-                                                                    {{monday_schedule.subject_teacher_lecture_eight}}
-                                                                    {% else %}
-                                                                    -
-                                                                    {% endif %}
-                                                                </td>
+                                                                        </tr>
+                                                                        
 
-                                                            </tr>
-
-
-
-
-
-
-
+                                                                    {% endfor %}
+                                                                   
+                                                                    <td colspan="6">
+                                                                        <div style="text-align: center;"> 
+                                                                        <input type="submit" class="btn btn-primary" value="Submit">
+                                                                    </div>
+    
+                                                                    </td>
+                                                                </form>
+                                                                 
+                  
+                                                                
                                                         </tbody>
 
                                                     </table>

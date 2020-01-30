@@ -53,16 +53,21 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 # Add Subjects
+
 def add_subjects(request):
+    rr=request.user.profile.institute.id
     if request.method == "POST":
         subject_code= request.POST['subject_code']
         subject_name= request.POST['subject_name']
         new_class= request.POST['new_class']
-        rr=request.user.profile.institute.id
-
+        subject_teacher=request.POST['subject_teacher']
+       
+        # get data from Class Table
         subject_class=Classes.objects.get(id=new_class)
+        # get data from User Table
+        subject_teacher=User.objects.get(id=subject_teacher)
 
-        subject_class = Subjects.objects.create(institute=request.user.profile.institute, subject_class=subject_class, subject_code= subject_code, subject_name= subject_name)
+        subject_class = Subjects.objects.create(institute=request.user.profile.institute, subject_class=subject_class, subject_code= subject_code, subject_name= subject_name,subject_teacher=subject_teacher)
 
         messages.success(request, 'Subject Created successfully !!!')
         
@@ -77,17 +82,25 @@ def add_subjects(request):
 def edit_subject(request, pk):
     subject_to_edit = Subjects.objects.get(pk=pk)
     institute_classes = Classes.objects.filter(institute=request.user.profile.institute )
+    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+ 
 
     if request.method == 'POST':
         # class_id = request.POST.get('new_class')
         
         subject_class = Classes.objects.get(pk= request.POST.get('new_class'))
+        new_subject_teacher = User.objects.get(pk= request.POST.get('subject_teacher'))
+
+
         
         new_subject_code =  request.POST.get('subject_code')
         new_subject_name = request.POST.get('subject_name')
+       
         subject_to_edit.subject_class = subject_class
         subject_to_edit.subject_code = new_subject_code
         subject_to_edit.subject_name = new_subject_name
+        subject_to_edit.subject_teacher=new_subject_teacher
         subject_to_edit.save()
         messages.success(request, 'Subject Updated Successfully !!!')
         institue_pk = request.user.profile.institute.pk
@@ -95,7 +108,8 @@ def edit_subject(request, pk):
   
     context = {
         'all_classes':institute_classes,
-        'subject_info': subject_to_edit
+        'subject_info': subject_to_edit,
+        'institute_teachers':institute_teachers
     }
     return render(request, 'main_app/edit_subject.html', context)
 
@@ -335,10 +349,13 @@ def institute_profile(request, pk):
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
     
     
- 
+  
     # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
+    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
-    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class}
+ 
+    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class, 'institute_teachers':institute_teachers}
 
 
     

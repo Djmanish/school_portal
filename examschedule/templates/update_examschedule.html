@@ -323,7 +323,7 @@
 
                
              
-               <li  class="current_section" title="Institute Schedule">
+               <li  title="Institute Schedule">
                 <a href="{% url 'class_schedule' %}">
                     <span class="menu_icon"><i class="material-icons">assignment</i></span>
                     <span class="menu_title">Schedule</span>
@@ -351,6 +351,15 @@
                     </a>
                     
                 </li> 
+                <li class="current_section" title="ExamSchedule">
+
+
+                    <a href="{% url 'examschedule' user.profile.institute.pk %}">
+                        <span class="menu_icon"><i class="material-icons">poll</i></span>
+                        <span class="menu_title">Exam Schedule</span>
+                    </a>
+
+                </li>
                 {% endif %}
                 
             {% endif %}  
@@ -473,7 +482,7 @@
                                             <option selected disabled value="">--Select Subject 1 Teacher--</option>
                                              
                                             {% for subject_teacher1 in institute_teachers %}
-                                            <option value="{{subject_teacher1}}"> {{subject_teacher1}}</option>
+                                            <option value="{{subject_teacher1.id}}"> {{subject_teacher1}}</option>
                                          {% endfor %}
                                                   
                                           </select>
@@ -486,7 +495,7 @@
                                             <option selected disabled value="">--Select Subject 1 Assign Teacher--</option>
                                              
                                             {% for assign_teacher1 in institute_teachers %}
-                                            <option value="{{assign_teacher1}}"> {{assign_teacher1}}</option>
+                                            <option value="{{assign_teacher1.id}}"> {{assign_teacher1}}</option>
                                          {% endfor %}
                                                   
                                           </select>
@@ -498,7 +507,7 @@
                                  <option selected disabled value="">--Select Subject 2--</option>
                                    
                                   {% for class_subject2 in all_subject %}
-                                  <option value="{{class_subject2}}"> {{class_subject2}}</option>
+                                  <option value="{{class_subject2.id}}"> {{class_subject2}}</option>
                                {% endfor %}
                                         
                                 </select>
@@ -524,7 +533,7 @@
                                   <option selected disabled value="">--Select Subject 2 Teacher--</option>
                                    
                                   {% for subject_teacher2 in institute_teachers %}
-                                  <option value="{{subject_teacher2}}"> {{subject_teacher2}}</option>
+                                  <option value="{{subject_teacher2.id}}"> {{subject_teacher2}}</option>
                                {% endfor %}
                                         
                                 </select>

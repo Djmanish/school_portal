@@ -381,6 +381,15 @@
                     </a>
                     
                 </li> 
+                <li title="ExamSchedule">
+
+
+                    <a href="{% url 'examschedule' user.profile.institute.pk %}">
+                        <span class="menu_icon"><i class="material-icons">poll</i></span>
+                        <span class="menu_title">Exam Schedule</span>
+                    </a>
+
+                </li>
                 {% endif %}
                 
             {% endif %}  
@@ -819,6 +828,19 @@
                                                             <label>Subject Name:</label>
                                                             <input type="text" class="form-control" name="subject_name">
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label for="sel1">Select Subject Teacher</label>
+                                                            <select class="form-control" name="subject_teacher" required>
+                                                                <option selected disabled value="">--select subject
+                                                                    Teacher--</option>
+                                                              
+                                                              {% for teacher in institute_teachers %}
+                                                                  <option value='{{teacher.pk}}'>{{teacher}}</option>
+                                                              {% endfor %}
+                                                                  
+                                                    
+                                                            </select>
+                                                        </div>
                                                         
                                                         <button type="submit" class="md-btn md-btn-primary">Add
                                                             Subject</button>
@@ -844,6 +866,7 @@
                                                                 <th><b>Class</b></th>
                                                                 <th><b>Subject Code</b></th>
                                                                 <th><b>Subject Name</b></th>
+                                                                <th><b>Subject Teacher</b></th>
                                                                 {% if user.profile.designation.level_name == "admin" %}                        
                                                                 <th><b>Edit</b></th>
                                                                 <th><b>Delete</b></th>
@@ -860,6 +883,7 @@
 
                                                                 <td> {{subjects.subject_code}} </td>
                                                                 <td> {{subjects.subject_name}} </td>
+                                                                <td> {{subjects.subject_teacher}} </td>
 
                                             {% if user.profile.designation.level_name == "admin" %}
                                                                 
