@@ -393,7 +393,6 @@ def institute_profile(request, pk):
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
     
-<<<<<<< HEAD
     
   
     # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
@@ -403,14 +402,12 @@ def institute_profile(request, pk):
  
     context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class, 'institute_teachers':institute_teachers}
 
-=======
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
     context_data = {'institute_data':institute_data, 
     'institute_roles':institute_roles,
      'institute_class':institute_class,
      'institute_subject':institute_subject,
       'all_classes':institute_class}
->>>>>>> 1e4c9006cbd4c105852e788fb1b2f4e4fe4536e5
 
     return render(request, 'main_app/institute_profile.html', context_data)
    

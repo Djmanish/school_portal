@@ -8,6 +8,8 @@ from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 
 # Create your views here.
+class MemberList(ListView):
+    model=ExamDetails
 
 def exam_schedule(request,pk):
             designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
