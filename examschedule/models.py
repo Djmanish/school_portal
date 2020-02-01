@@ -9,7 +9,6 @@ from holidaylist.models import *;
 
 class ExamType(models.Model):
   institute=models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='examtype_institute', null=True)
-  exam_class=models.ForeignKey(to=Classes, on_delete=models.CASCADE, related_name='examtype_class', null=True)
   exam_type=models.CharField(max_length=100, null=True)
 
   def __str__(self):
@@ -37,6 +36,6 @@ class ExamDetails(models.Model):
   # class Meta(object):
   #       unique_together = (("exam_subject", "exam_subject_teacher") )
 
-  # def __str__(self):
-  #    return self.exam_subject
+  def __str__(self):
+     return self.exam_subject
    

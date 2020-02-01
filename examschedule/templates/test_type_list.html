@@ -481,7 +481,7 @@
                                                             <div class="uk-modal-header">
                                                                 <h3 class="uk-modal-title">Add Test Type </h3>
                                                             </div>
-                                                            <form  method="POST" action="{% url 'exam_type' %}">
+                                                            <form  method="POST" action="{% url 'exam_type' request.user.profile.institute.id %}">
                                                                 {% csrf_token %}
                                                                 <div class="form-group">
                                                                         <label >Test Type:</label>
@@ -496,153 +496,53 @@
                                                         </div>
                                                     </div>
                                                     <table
-                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                                                        id="ts_issues">
-                                                        {% if messages %}
-                                                        <ul class="messages">
-                                                            {% for message in messages %}
-                                                            <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                                            {% endfor %}
-                                                        </ul>
-                                                        {% endif %}
-                                                      
-                                                            </div>
-                                                                </th>
-                                                                <th> </th>
+                                                    class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                                    id="ts_issues">
+                                                    {% if messages %}
+                                                    <ul class="messages">
+                                                        {% for message in messages %}
+                                                        <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                    {% endif %}
+                                                  
+                                                        </div>
+                                                            </th>
+                                                            <th> </th>
 
-                                                               
+                                                           
 
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                <form >
-                                                                    <select name="selected_class" style="padding: 2px;" required>
-                                                                        <option selected disabled value="">--Select Class--</option>
-                                                                        
-                                                                        {% for class in exam_class %}
-                                                                           <option value="{{class.id}}"  > {{class}}</option>
-                                                                        {% endfor %}
-                                                                            
-                                            
-                                                                 </select>
-                                                                 <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
-                                                                </form>
-                                                                </td>
-                                                                <td>
-                                                                    <form >
-                                                                        <select name="selected_class" style="padding: 2px;" required>
-                                                                            <option selected disabled value="">--Select Test Type--</option>
-                                                                            
-                                                                            <option value="Unit">Unit</option>
-                                                                            <option value="Monthly">Monthly</option>
-                                                                            <option value="Quarterly">Quarterly</option>
-                                                                            <option value="Half Yearly">Half Yearly</option>
-                                                                            <option value="Yearly">Yearly</option>
-                                                                            
-                                                                                
-                                                
-                                                                     </select>
-                                                                     <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
-                                                                    </form>
-                                                                    </td>
-                                                            </tr>
-                                                            <tr>
+                                                        </tr>
+                                                        
+                                                        <tr>
 
 
-                                                                <th class="uk-text-left">
+                                                            <th class="uk-text-left">
 
-                                                                    <b style="color: #1976d2;"> 
-                                                                        Exam Schedule for class {{exam_class.exam_class}}</b>
-
-
-                                                                </th>
+                                                                <b style="color: #1976d2;"> 
+                                                                    Exam Schedule for class {{exam_class.exam_class}}</b>
 
 
-                                                            </tr>
-                                                        </thead>
+                                                            </th>
 
+
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
                                                         <tbody>
+                                                            {% for test_type in institute_exam_test_type %}
                                                             <tr>
-                                                               
-                                                                <th>Subject</th>
-                                                                <th>Subject Teacher</th>
-                                                                <th>Date</th>
-                                                                <th>Start Time</th>
-                                                                <th>End Time</th>
-                                                                <th>Assign Teacher</th>
-
-
-                                                                
-                                                            </tr>
+                                                                <td style="text-align: center;"> {{ forloop.counter}}
+                                                                </td>
+                                                                <td>{{test_type.exam_type}}
+                                                             
+                                                             {% endfor %}
                                                             
-                                                                 <form method='POST' action="">
-                                                                    {% csrf_token %}
-                                                                    {% for exam_subject in exam_class_subject%}
-                                                                    <tr> 
-                                                                        <td>
-                                                                            
-                                                                            
-                                                                            <div class="form-group">
-                                                        
-                                                                                <select class="form-control"  name="select_exam_subject">
-                                                                                  <option  value="{{exam_subject.id}}">{{exam_subject}}</option>
-                                                                                 
-                                                                                </select>
-                                                                              </div>
-                                                                             
+                                                    </tbody>
 
-                                                                              
-                                                                            
-                                                                        </td>
-                                                                        <td>
-                                                                            <div class="form-group">
-                                                        
-                                                                                <select class="form-control"  name="select_exam_subject_teacher">
-                                                                                  <option  value="{{exam_subject.subject_teacher.id}}">{{exam_subject.subject_teacher}}</option>
-                                                                                 
-                                                                                </select>
-                                                                              </div>
-                                                                       
-                                                                           </td>
-                                                                        <td><input type='date', value="", name="select_date"/></td>
-                                                                        <td><input type='time', value="", name="select_start_time"/></td>
-                                                                        <td><input type='time', value="", name="select_end_time"/></td>
-                                                                        <td>  <div class="form-group">
-                                                                           
-                                                                            <select class="form-control" name="assign_teacher" required>
-                                                                                <option selected value="{{exam_class_subject.assign_teacher.id}}">{{exam_class_subject.assign_teacher}}</option>
-                                                                              
-                                                                              {% for teacher in institute_teachers %}
-                                                                                  <option value='{{teacher.pk}}'>{{teacher}}</option>
-                                                                              {% endfor %}
-                                                                                  
-                                                                    
-                                                                            </select>
-                                                                        </div></td>
-                                                                       
-                             
-                                
-
-                                                                        </tr>
-                                                                        
-
-                                                                    {% endfor %}
-                                                                   
-                                                                    <td colspan="6">
-                                                                        <div style="text-align: center;"> 
-                                                                        <input type="submit" class="btn btn-primary" value="Submit">
-                                                                    </div>
-    
-                                                                    </td>
-                                                                </form>
-                                                                 
-                  
-                                                                
-                                                        </tbody>
-
-                                                    </table>
-
-                                                </div>
+                                                </table>
+                                                 </div>
                      
                                 </li>
 
@@ -650,6 +550,7 @@
                             </ul>
 
                         </div>
+                        
 
                     </div>
 
