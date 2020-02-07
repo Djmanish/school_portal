@@ -63,3 +63,16 @@ body{
   padding-top: 2px;
  margin: 0px; 
 }
+
+#attendance_student_table tr td{
+  padding-top: 3px;
+  padding-bottom: 3px;
+  color: gray;
+}
+
+#attendance_student_table tr td select {
+  border: 1px solid lightblue;
+  border-radius: 3px;
+  color: gray;
+  padding: 1px;
+}

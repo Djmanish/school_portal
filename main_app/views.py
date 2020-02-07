@@ -341,6 +341,9 @@ def edit_profile(request, pk):
         if 'student_class' in request.POST: 
             selected_class= request.POST.get('student_class')
             user_info.Class= Classes.objects.get(pk= selected_class)
+        
+        if 'st_roll_number' in request.POST:
+            user_info.roll_number = request.POST['st_roll_number']
 
         user_info.about= request.POST['about']
         if 'profile_pic' in request.FILES:
@@ -392,6 +395,24 @@ def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
+<<<<<<< HEAD
+    institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
+
+    # starting user permission code
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    add_class_permission = App_functions.objects.get(function_name='Can Add Class')
+    add_subject_permission = App_functions.objects.get(function_name='Can Add Subject')
+
+    # ending user permission code
+    context_data = {'institute_data':institute_data, 
+    'institute_roles':institute_roles,
+     'institute_class':institute_class,
+     'institute_subject':institute_subject,
+      'all_classes':institute_class,
+      'user_permissions': user_permissions,
+      'add_class_permission': add_class_permission,
+      'add_subject_permission':add_subject_permission}
+=======
   # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
     designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
     institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
@@ -406,6 +427,7 @@ def institute_profile(request, pk):
     #  'institute_class':institute_class,
     #  'institute_subject':institute_subject,
     #   'all_classes':institute_class}
+>>>>>>> 731bb816429bbb5c13e634a8bfabc3710d7b1747
 
     return render(request, 'main_app/institute_profile.html', context_data)
    

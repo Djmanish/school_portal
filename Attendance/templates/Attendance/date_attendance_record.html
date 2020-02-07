@@ -382,19 +382,19 @@
                     
                           <label style="margin: 4px;">Select Class:  </label>
                         <select name="selected_class_attendance" class="form-control"  required>
-                            <option selected disabled value="" >
                             {% if selected_class_for_attendance %}
-                            {{ selected_class_for_attendance}}
+                            <option selected  value="{{selected_class_for_attendance.id}}" >   {{ selected_class_for_attendance}}</option>
                             {% else %}
-                            -- select a class --
+                            <option selected  value="">-- select a class --</option>
+                            
                             {% endif %}
-                                </option>
+                                
                             {% for class in selected_class %}
                             <option value={{class.id}}>{{class}}</option>
                             {% endfor %}
                      </select>
                       
-                     <label style="margin: 4px;">Select Date:</label>
+                     <label style="margin: 4px;">Attendance Date:</label>
 
 
   <input   type="date" class="form-control" name="attendance_date" 

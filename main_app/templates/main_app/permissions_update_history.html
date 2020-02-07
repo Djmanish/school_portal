@@ -331,7 +331,7 @@
                     </a>    
                 </li>
                 {% if user.profile.institute  %}
-                <li  title="Institute Profile">
+                <li class="current_section" title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">domain</i></span>
                         <span class="menu_title">Institute Profile</span>
@@ -347,7 +347,7 @@
 
                
              
-               <li class="current_section"  title="Institute Schedule">
+               <li   title="Institute Schedule">
                 <a href="{% url 'class_schedule' %}">
                     <span class="menu_icon"><i class="material-icons">assignment</i></span>
                     <span class="menu_title">Schedule</span>
@@ -495,19 +495,22 @@
                                 <!-- starting pagination -->
 <div class="container text-center mb-3">
     {% if is_paginated %}
-          {% if page_obj.has_previous %}
-            <a href="?page=1" class="btn btn-info btn-sm">1</a>
-            <a href="?page={{page_obj.previous_page_number}}" class="btn btn-info btn-sm">Previous</a> 
-          {% endif %}
-
-          <span><a href="?page={{page_obj.number}}" class="btn btn-sm">{{page_obj.number}}</a></span>
-
-    {% if page_obj.has_next %}
-    <a href="?page={{page_obj.next_page_number}}" class="btn btn-info btn-sm" >Next</a>
-    <a href="?page={{page_obj.paginator.num_pages}}" class="btn btn-sm btn-info">Last</a>
-    {% endif %}
-
-    {% endif %}
+    
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="md-btn md-btn-primary md-btn-mini">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}"  class="md-btn md-btn-primary md-btn-mini">previous</a>
+            {% endif %}
+    
+            <span class="current" style="font-weight: bolder;">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}"  class="md-btn md-btn-primary md-btn-mini">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}"  class="md-btn md-btn-primary md-btn-mini">last &raquo;</a>
+            {% endif %}
+       
+  {% endif %}
   </div>
 <!-- ending pagination -->
                                            
