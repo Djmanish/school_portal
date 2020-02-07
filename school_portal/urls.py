@@ -29,6 +29,7 @@ urlpatterns = [
     path('schedule/', include('class_schedule.urls')),
     path('holiday/', include('holidaylist.urls')),
     path('examschedule/', include('examschedule.urls')),
+    path('examresult/',include('exam_result.urls'))
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -151,6 +151,7 @@ class Classes(models.Model):
 class Subjects(models.Model):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='subject_institute', null=True)
     subject_class=models.ForeignKey(to=Classes, on_delete=models.CASCADE, related_name='class_subject', null=True)
+    subject_teacher=models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="subject_teacher", null=True)
     subject_code=models.CharField(max_length=100)
     subject_name=models.CharField(max_length=100)
 

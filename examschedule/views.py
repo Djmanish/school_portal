@@ -8,151 +8,123 @@ from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 
 # Create your views here.
+# class MemberList(ListView):
+#     model=ExamDetails
 
-def examschedule(request,pk):
-    examschedule_institute=Institute.objects.get(pk=pk)
-    examschedule_detail=ExamSchedule.objects.filter(institute=examschedule_institute)
+def exam_schedule(request,pk):
+            institute_exam_schedule = Institute.objects.get(pk=pk)
+            institute_exam_schedule = ExamDetails.objects.filter(institute=institute_exam_schedule)
+            designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+            institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+            select_class_for_schedule = request.GET.get('selected_class') # class selected to view
+            if select_class_for_schedule == None:
+                    first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
+                    first_class_id = first_class.id
+                    select_class_for_schedule= first_class_id
+            selected_class = Classes.objects.get(pk=select_class_for_schedule)
+            #fetching the class instance seleted to view
+            exam_class = Classes.objects.filter(institute=request.user.profile.institute)
+            exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
+            select_exam_type_for_schedule=request.GET.get('selected_exam_type')
+            if select_exam_type_for_schedule == None:
+                    first_class = ExamType.objects.filter(institute= request.user.profile.institute).last()
+                    first_class_id = first_class.id
+                    select_exam_type_for_schedule= first_class_id
+            selected_exam_type=ExamType.objects.get(pk=select_exam_type_for_schedule)
+            # selected_exam_type=request.GET.get('selected_exam_type')
+             
+            exam_type= ExamType.objects.filter(institute=request.user.profile.institute)
 
-#    Select Exam Class
-    if request.method == "POST":
-        select_examschedule_class=request.POST.get('selected_class')
+            if request.method=="POST":
+             
+              for i,j,k,l,m,n in zip(request.POST.getlist('select_exam_subject'),request.POST.getlist('select_exam_subject_teacher'),request.POST.getlist('select_date'), request.POST.getlist('select_start_time'), request.POST.getlist('select_end_time'),request.POST.getlist('assign_teacher')):
+                  
+                selected_class=Classes.objects.get(pk=request.GET.get('selected_class'))
+                select_exam_type= ExamType.objects.get(pk=request.GET.get('selected_exam_type'))
 
-        select_examschedule_code=request.POST.get('examschedule_code')
-        select_examschedule_type=request.POST.get('examschedule_type')
-        examschedule_subject1=request.POST.get('test_subject1')
-        examschedule_date1=request.POST.get('test_date1')
-        examschedule_time1=request.POST.get('test_time1')
-        examschedule_subject_teacher1=request.POST.get('subject_teacher1')
-        examschedule_assign_teacher1=request.POST.get('assign_teacher1')
-        examschedule_subject2=request.POST.get('test_subject2')
-        examschedule_date2=request.POST.get('test_date2')
-        examschedule_time2=request.POST.get('test_time2')
-        examschedule_subject_teacher2=request.POST.get('subject_teacher2')
-        examschedule_assign_teacher2=request.POST.get('assign_teacher2')
-        examschedule_subject3=request.POST.get('test_subject3')
-        examschedule_date3=request.POST.get('test_date3')
-        examschedule_time3=request.POST.get('test_time3')
-        examschedule_subject_teacher3=request.POST.get('subject_teacher3')
-        examschedule_assign_teacher3=request.POST.get('assign_teacher3')
-        examschedule_subject4=request.POST.get('test_subject4')
-        examschedule_date4=request.POST.get('test_date4')
-        examschedule_time4=request.POST.get('test_time4')
-        examschedule_subject_teacher4=request.POST.get('subject_teacher4')
-        examschedule_assign_teacher4=request.POST.get('assign_teacher4')
-        examschedule_subject5=request.POST.get('test_subject5')
-        examschedule_date5=request.POST.get('test_date5')
-        examschedule_time5=request.POST.get('test_time5')
-        examschedule_subject_teacher5=request.POST.get('subject_teacher5')
-        examschedule_assign_teacher5=request.POST.get('assign_teacher5')
-        examschedule_subject6=request.POST.get('test_subject6')
-        examschedule_date6=request.POST.get('test_date6')
-        examschedule_time6=request.POST.get('test_time6')
-        examschedule_subject_teacher6=request.POST.get('subject_teacher6')
-        examschedule_assign_teacher6=request.POST.get('assign_teacher6')
-        examschedule_detail = ExamSchedule.objects.create(institute=request.user.profile.institute, test_code=select_examschedule_code,
-         test_type= select_examschedule_type, test_class=select_examschedule_class,
-         test_subject1=examschedule_subject1,test_date1=examschedule_date1,test_time1=examschedule_time1,subject_teacher1=examschedule_subject_teacher1,assign_teacher1= examschedule_assign_teacher1,
-          test_subject2=examschedule_subject2,test_date2=examschedule_date2,test_time2=examschedule_time2,subject_teacher2=examschedule_subject_teacher2,assign_teacher2= examschedule_assign_teacher2,
-           test_subject3=examschedule_subject3,test_date3=examschedule_date3,test_time3=examschedule_time3,subject_teacher3=examschedule_subject_teacher3,assign_teacher3= examschedule_assign_teacher3,
-            test_subject4=examschedule_subject4,test_date4=examschedule_date4,test_time4=examschedule_time4,subject_teacher4=examschedule_subject_teacher4,assign_teacher4= examschedule_assign_teacher4,
-             test_subject5=examschedule_subject5,test_date5=examschedule_date5,test_time5=examschedule_time5,subject_teacher5=examschedule_subject_teacher5,assign_teacher5= examschedule_assign_teacher5,
-              test_subject6=examschedule_subject6,test_date6=examschedule_date6,test_time6=examschedule_time6,subject_teacher6=examschedule_subject_teacher6,assign_teacher6= examschedule_assign_teacher6,)
+                exam_subjects_list = request.POST.getlist('select_exam_subject')
+                
+                exam_subject_teacher_list=request.POST.getlist('select_exam_subject_teacher')
+                select_date=request.POST.getlist('select_date')
+                select_start_time=request.POST.getlist('select_start_time')
+                select_end_time=request.POST.getlist('select_end_time')
+                assign_teacher=request.POST.getlist('assign_teacher')
+                
+                # for i in exam_subjects_list  :
+                new_exam = ExamDetails() 
+                new_exam.exam_subject = Subjects.objects.get(pk=i)
+                new_exam.exam_subject_teacher =User.objects.get(pk=j)
+                new_exam.exam_date=k
+                new_exam.exam_start_time=l
+                new_exam.exam_end_time=m
 
+                new_exam.exam_assign_teacher=User.objects.get(pk=n)
+                new_exam.institute=request.user.profile.institute
+                new_exam.exam_class=selected_class
+                new_exam.exam_type=select_exam_type
+                new_exam.save()
+                messages.success(request, 'New Exam Schedule Created successfully !!!')
 
-    all_class = Classes.objects.filter(institute=request.user.profile.institute)
-    all_subject=Subjects.objects.filter(institute=request.user.profile.institute)
-    teacher_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
-    institute_teachers = UserProfile.objects.filter(institute=request.user.profile.institute, designation= teacher_designation_pk )
-
-    context={'all_classes':all_class,
-    'examschedule_detail':examschedule_detail,
-    'all_subject':all_subject,
-    'institute_teachers':institute_teachers,}
-    
-    return render(request, 'examschedule.html',context)
-
-def update_examschedule(request,pk):
-    # institute_examschedule = Institute.objects.get(pk=pk)
-    examschedule_update=ExamSchedule.objects.get(pk=pk)
-    
-    if request.method=="POST":
-        select_examschedule_class=request.POST.get('selected_class')
-        select_examschedule_code=request.POST.get('examschedule_code')
-        select_examschedule_type=request.POST.get('examschedule_type')
-        examschedule_subject1=request.POST.get('test_subject1')
-        examschedule_date1=request.POST.get('test_date1')
-        examschedule_time1=request.POST.get('test_time1')
-        examschedule_subject_teacher1=request.POST.get('subject_teacher1')
-        examschedule_assign_teacher1=request.POST.get('assign_teacher1')
-        examschedule_subject2=request.POST.get('test_subject2')
-        examschedule_date2=request.POST.get('test_date2')
-        examschedule_time2=request.POST.get('test_time2')
-        examschedule_subject_teacher2=request.POST.get('subject_teacher2')
-        examschedule_assign_teacher2=request.POST.get('assign_teacher2')
-        examschedule_subject3=request.POST.get('test_subject3')
-        examschedule_date3=request.POST.get('test_date3')
-        examschedule_time3=request.POST.get('test_time3')
-        examschedule_subject_teacher3=request.POST.get('subject_teacher3')
-        examschedule_assign_teacher3=request.POST.get('assign_teacher3')
-        examschedule_subject4=request.POST.get('test_subject4')
-        examschedule_date4=request.POST.get('test_date4')
-        examschedule_time4=request.POST.get('test_time4')
-        examschedule_subject_teacher4=request.POST.get('subject_teacher4')
-        examschedule_assign_teacher4=request.POST.get('assign_teacher4')
-        examschedule_subject5=request.POST.get('test_subject5')
-        examschedule_date5=request.POST.get('test_date5')
-        examschedule_time5=request.POST.get('test_time5')
-        examschedule_subject_teacher5=request.POST.get('subject_teacher5')
-        examschedule_assign_teacher5=request.POST.get('assign_teacher5')
-        examschedule_subject6=request.POST.get('test_subject6')
-        examschedule_date6=request.POST.get('test_date6')
-        examschedule_time6=request.POST.get('test_time6')
-        examschedule_subject_teacher6=request.POST.get('subject_teacher6')
-        examschedule_assign_teacher6=request.POST.get('assign_teacher6')
-        examschedule_update.test_class=select_examschedule_class
-
-        examschedule_update.test_code=select_examschedule_code
-        examschedule_update.test_type=select_examschedule_type
-        examschedule_update.test_subject1=examschedule_subject1
-        examschedule_update.test_date1=examschedule_date1
-        examschedule_update.test_time1=examschedule_time1
-        examschedule_update.subject_teacher1=examschedule_subject_teacher1
-        examschedule_update.assign_teacher1=examschedule_assign_teacher1
-
-        examschedule_update.test_subject2=examschedule_subject2
-        examschedule_update.test_date2=examschedule_date2
-        examschedule_update.test_time2=examschedule_time2
-        examschedule_update.subject_teacher2=examschedule_subject_teacher2
-        examschedule_update.assign_teacher2=examschedule_assign_teacher2
-
-        examschedule_update.test_subject3=examschedule_subject3
-        examschedule_update.test_date3=examschedule_date3
-        examschedule_update.test_time3=examschedule_time3
-        examschedule_update.subject_teacher3=examschedule_subject_teacher3
-        examschedule_update.assign_teacher3=examschedule_assign_teacher3
-
-        examschedule_update.test_subject4=examschedule_subject4
-        examschedule_update.test_date4=examschedule_date4
-        examschedule_update.test_time4=examschedule_time4
-        examschedule_update.subject_teacher4=examschedule_subject_teacher4
-        examschedule_update.assign_teacher4=examschedule_assign_teacher4
-
-        examschedule_update.test_subject5=examschedule_subject5
-        examschedule_update.test_date5=examschedule_date5
-        examschedule_update.test_time5=examschedule_time5
-        examschedule_update.subject_teacher5=examschedule_subject_teacher5
-        examschedule_update.assign_teacher5=examschedule_assign_teacher5
-
-        
-        examschedule_update.test_subject6=examschedule_subject6
-        examschedule_update.test_date6=examschedule_date6
-        examschedule_update.test_time6=examschedule_time6
-        examschedule_update.subject_teacher6=examschedule_subject_teacher6
-        examschedule_update.assign_teacher6=examschedule_assign_teacher6
-
-        examschedule_update.save()
-        messages.success(request, 'Exam Schedule Updated Successfully !!!')
-        rr=request.user.profile.institute.pk
-        return HttpResponseRedirect(f'/examschedule/examschedule/{rr}')
+          
+                
+            context={
+                 'exam_class':exam_class,
+                 'exam_class_subject':exam_class_subject,
+                 'institute_teachers':institute_teachers,
+                 'exam_type':exam_type,
+                                   
+                                    }
        
-    return render(request, 'update_examschedule.html',{'examschedule_update':examschedule_update})
+            return render(request,'examschedule.html',context)
+
+
+def exam_type(request,pk):
+      institute_create_test_type = Institute.objects.get(pk=pk)
+      institute_exam_test_type = ExamType.objects.filter(institute=institute_create_test_type)
+      if request.method=="POST":
+          select_class_for_schedule = request.GET.get('selected_class') # class selected to view
+          exam_type=request.POST['exam_type']
+          exam_max_marks= request.POST['max_marks']
+          new_exam_type=ExamType.objects.create(institute = request.user.profile.institute,exam_type=exam_type,exam_max_marks=exam_max_marks)
+          institute_id=request.user.profile.institute.id
+          return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_id}')
+      context={
+           'institute_exam_test_type':institute_exam_test_type 
+
+         }
+
+      return render(request,'test_type_list.html', context)   
+
+def examschedule_view(request,pk):
+            institute_exam_schedule = Institute.objects.get(pk=pk)
+            institute_exam_schedule = ExamDetails.objects.filter(institute=institute_exam_schedule)
+            designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+            institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+            select_class_for_schedule = request.GET.get('selected_class') # class selected to view
+            if select_class_for_schedule == None:
+                    first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
+                    first_class_id = first_class.id
+                    select_class_for_schedule= first_class_id
+            selected_class = Classes.objects.get(pk=select_class_for_schedule)
+            #fetching the class instance seleted to view
+            exam_class = Classes.objects.filter(institute=request.user.profile.institute)
+            exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
+            select_exam_type_for_schedule=request.GET.get('selected_exam_type')
+            if select_exam_type_for_schedule == None:
+                    first_class = ExamType.objects.filter(institute= request.user.profile.institute).last()
+                    first_class_id = first_class.id
+                    select_exam_type_for_schedule= first_class_id
+            selected_exam_type=ExamType.objects.get(pk=select_exam_type_for_schedule)
+            # selected_exam_type=request.GET.get('selected_exam_type')
+             
+            exam_type= ExamType.objects.filter(institute=request.user.profile.institute)
+
+            context={
+              'exam_class':exam_class,
+              'exam_type':exam_type,
+              'exam_class_subject':exam_class_subject,
+              'institute_exam_schedule':institute_exam_schedule
+
+
+            }
+            return render(request,'update_examschedule.html', context)

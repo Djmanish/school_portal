@@ -2,7 +2,7 @@ from django.urls import path, include
 from django.http import HttpResponse
 
 from . import views
-from .views import examschedule
+from .views import exam_schedule
 
 # from holidaylist.views import add_holiday
 
@@ -11,8 +11,11 @@ from .views import examschedule
 
 urlpatterns = [
   
-  path('examschedule/<int:pk>', views.examschedule, name="examschedule"),
-  path('update_examschedule/<int:pk>', views.update_examschedule, name='update_examschedule'),
+  path('examschedule/<int:pk>', views.exam_schedule, name="examschedule"),
+  path('examtypelist/<int:pk>',views.exam_type, name="create_test_type"),
+  path('examschedule/view/<int:pk>', views.examschedule_view, name='examschedule_view')
+  # path('examtypelist/<int:pk>', views.create_test_type, name="create_test_type")
+
  
 
 
