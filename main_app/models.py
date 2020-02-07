@@ -11,6 +11,13 @@ class State(models.Model):
     def __str__(self):
         return self.name
 
+class App_functions(models.Model):
+    function_name = models.CharField(max_length= 266, null=True, blank=True, unique=True)
+    def __str__(self):
+        return self.function_name
+
+
+
 
 class Institute(models.Model):
     name = models.CharField(max_length=150, unique=True )
@@ -21,6 +28,7 @@ class Institute(models.Model):
     establish_date=models.DateField(null=True, blank=True)
     profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.jpg" )
     principal = models.CharField(max_length=50, null=True)
+    session_start_date = models.DateField(null=True, blank=True)
     about = models.TextField(max_length=300, blank=True, default="This is about Institute" )
     contact_number1 = models.CharField(max_length=12,null=True)
     contact_number2 = models.CharField(max_length=12,null=True, blank=True)
@@ -46,6 +54,24 @@ class Institute(models.Model):
 
 
 
+class Institute_levels(models.Model):
+    institute= models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institute_levels', null=True, blank=True)
+    level_id= models.IntegerField(null=True)
+    level_name = models.CharField(max_length=25, null=True, blank=True)
+    permissions = models.ManyToManyField(to=App_functions, related_name='user_permissions', null=True, blank=True, )
+    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
+    start_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    end_date = models.DateField(null=True, blank= True)
+    class Meta:
+        # unique_together=['institute', 'level_id','level_name']
+        ordering = ['-level_id']
+    
+    def __str__(self):
+        return self.level_name
+
+
+
+
 
 class UserProfile(models.Model):
     Chi1 =[
@@ -57,7 +83,7 @@ class UserProfile(models.Model):
     category_choices =[('','-- select one --'),('Unreserved','Unreserved'),('Sc/St','Sc/St'),('OBC','OBC')]
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='profile')
     institute = models.ForeignKey(to=Institute, related_name="institute", on_delete=models.PROTECT, null=True, blank=True, default="")
-    designation = models.ForeignKey('Institute_levels', on_delete=models.PROTECT, related_name='user_designation', null=True)
+    designation = models.ForeignKey(to=Institute_levels, null=True, on_delete=models.SET_NULL, related_name='user_designation',)
     Class = models.ForeignKey(to='Classes', on_delete=models.PROTECT,blank=True, null=True, related_name='student_class')
     roll_number = models.CharField(max_length=20, null=True, blank=True)
     first_name = models.CharField(max_length=25, null=True, default="")
@@ -96,27 +122,8 @@ class UserProfile(models.Model):
     def __str__(self):
         return str(self.user)
 
-class App_functions(models.Model):
-    function_name = models.CharField(max_length= 266, null=True, blank=True, unique=True)
-    def __str__(self):
-        return self.function_name
 
 
-
-class Institute_levels(models.Model):
-    institute= models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institute_levels')
-    level_id= models.IntegerField(null=True)
-    level_name = models.CharField(max_length=25)
-    permissions = models.ManyToManyField(to=App_functions, related_name='user_permissions', null=True, blank=True)
-    created_by = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True, blank=True)
-    start_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    end_date = models.DateField(null=True, blank= True)
-    class Meta:
-        # unique_together=['institute', 'level_id','level_name']
-        ordering = ['-level_id']
-    
-    def __str__(self):
-        return self.level_name
 
 
 class Role_Description(models.Model):

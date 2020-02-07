@@ -9,7 +9,8 @@ urlpatterns = [
     path('',views.attendance ,name='attendance'),
     # path('attendance_principal',views.attendance_principal ,name='attendance_principal'),
     path('attendanceupdate/<int:pk>/',views.attendance_update ,name='attendanceupdate'),
-    
+    path('update_attendance_record/<int:pk>/', views.update_attendance_record, name="update_attendace_record")
+  
     
 
   

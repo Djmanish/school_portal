@@ -679,11 +679,13 @@
 
 
                                         <div class="md-card">
-                                            {% if user.profile.designation.level_name == "admin" %}
 
+                                            
+                                            {% if add_class_permission in user_permissions %}
                                             <button type="button" class="md-btn md-btn-primary md-btn-small"
-                                                data-uk-modal="{target:'#modal_new_class'}">Add New Class</button>
-                                                {% endif %}
+                                            data-uk-modal="{target:'#modal_new_class'}">Add New Class</button>
+                                            {% endif %}
+                                        
                                             <!-- starting Classes modal themes -->
                                             <div class="uk-modal" id="modal_new_class">
                                                 <div class="uk-modal-dialog">
@@ -786,11 +788,15 @@
                                         <h4 class="heading_c uk-margin-small-bottom">Currently Available Subjects</h4>
 
                                         <div class="md-card">
-                                            {% if user.profile.designation.level_name == "admin" %}
-
+                                            
+                                            {% if add_subject_permission in user_permissions %}
                                             <button type="button" class="md-btn md-btn-primary md-btn-small "
-                                                data-uk-modal="{target:'#modal_new_subject'}">Add New Subject</button>
+                                            data-uk-modal="{target:'#modal_new_subject'}">Add New Subject</button>
                                             {% endif %}
+                                                
+
+                                            
+                                         
                                             <!-- starting subject modal themes -->
                                             <div class="uk-modal" id="modal_new_subject">
                                                 <div class="uk-modal-dialog">
@@ -905,7 +911,7 @@
                                                             <div class="uk-form-row">
                                                                 <label>Level Id</label>
                                                                 <input type="number" class="md-input" name="level_id"
-                                                                    min="0" maxlength="2" / required>
+                                                                    min="2" maxlength="2" / required>
                                                             </div>
                                                             <div class="uk-form-row">
                                                                 <label>Role Name</label>

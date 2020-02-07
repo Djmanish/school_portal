@@ -167,11 +167,12 @@ def class_stage_lecture_time_update(request):
         return render(request, 'class_schedule/update_lecture_time.html')
 
 
-
+from .forms import Update_lecture_time_Form
 class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         model = Lecture
 
-        fields = ['start_time','end_time']
+        # fields = ['start_time','end_time']
+        form_class = Update_lecture_time_Form
         template_name= 'class_schedule/update_timing.html'
         success_message = "Timing Updated Successfully !!!"
 

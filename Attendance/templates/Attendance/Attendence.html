@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+{% load custom_tags %}
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
 
@@ -382,21 +383,19 @@
                     
                           <label style="margin: 4px;">Select Class:  </label>
                         <select name="selected_class_attendance" class="form-control"  required>
-                            <option selected disabled value="" >
+                           
                             {% if selected_class_for_attendance %}
-                            {{ selected_class_for_attendance}}
+                            <option selected  value="{{selected_class_for_attendance.id}}" >   {{ selected_class_for_attendance}}</option>
                             {% else %}
-                            -- select a class --
+                            <option selected  value="">-- select a class --</option>
+                            
                             {% endif %}
-                                </option>
+                                
                             {% for class in selected_class %}
                             <option value={{class.id}}>{{class}}</option>
                             {% endfor %}
                      </select>
-                      
-                     <label style="margin: 4px;">Select Date:</label>
-
-
+                     <label style="margin: 4px;">Attendance Date:</label>
   <input   type="date" class="form-control" name="attendance_date" 
   {% if request.POST.attendance_date %}
   value= {{ request.POST.attendance_date}}
@@ -404,14 +403,10 @@
   value=""
   {% endif %} required="required" max="">
 
-
-
  <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">
-
-
-
        
                     </form>
+                   
                     
                     
                     <div style="margin: 2px;">
@@ -442,7 +437,9 @@
         <th >First Name</th>
         <th >Last Name</th>
         <th>Roll No.</th>
-        <th >Attendance Status</th>
+        <th >Status</th>
+        <th >Summary</th>
+        <th>Attendance %</th>
     </tr>
     </thead>  
 {% endif %}
@@ -460,37 +457,65 @@
                                
                                 
                                         <td > 
+                                        
                            
-    <form id="{{student.id|slugify }}" >
-        {% csrf_token %}    
-        <span class="icheck-inline">
-                                      
-            <input type="radio" name="{{student.id|slugify }}"  required class="wizard-icheck" value="present" />
-            <label for="wizard_status_present" class="inline-label">Present</label>
-        </span>
-        <span class="icheck-inline">
-            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="absent" />
-            <label for="wizard_status_absent" class="inline-label">Absent</label>
-        </span> 
-        <span class="icheck-inline">
-            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="leave" />
-            <label for="wizard_status_leave" class="inline-label">Leave</label>
-            
-        </span>
+    <form id="{{forloop.counter}}" name="{{student.id|slugify }}">
+        {% csrf_token %}   
+        
+        <div class="">
+            <select id="{{student.id|slugify }}" class="" name="{{student.id|slugify }}">
+                <option selected disabled value="">--select--</option>
+              <option value="present" style="color: green;">Present</option>
+              <option value="absent" style="color: red;">Absent</option>
+              <option value="leave" style="color: orange;">Leave</option>
+              
+            </select>
+          </div>
+       
         <input style="display: none;" type="date" value="{{attendance_date}}" class="attendance_date_input">
         
     </form>
                                         </td>
+                                        <td>Total Days Attendance Taken:{{student.total_days_taken_attendance}} | Present:{{student.total_present_count}} | Absent:{{student.total_absent_count}} | Leave: {{student.total_leave_count}}</td>
+                                        <td>
+                                            
+                                            {% if student.total_days_taken_attendance > 0  %}
+                                              
+                                            
+                                            {% get_attendance_percentage student.total_days_taken_attendance student.total_present_count as stdents_percentage   %}
+
+                                            <div class="progress">
+                                                <div class="progress-bar 
+                                                
+                                                {% if stdents_percentage < 50 and stdents_percentage >= 0  %}
+                                                    bg-danger
+                                                    {% elif stdents_percentage < 75 and stdents_percentage >= 50 %}
+bg-warning
+{% elif stdents_percentage >= 75 %}
+bg-success
+{% elif stdents_percentage == 0.0 %}
+bg-danger
+
+                                                {% endif %}
+                                                    
+                                                "      
+                                                style="width:{{stdents_percentage}}%">{{stdents_percentage}}
+                                            </div>
+                                              </div>     
+                                            {% endif %}
+                                                                                         
+                                        </td>
+
+
+
                                     </tr>     
                                     <script>
                                         
                                         $(document).ready(function(){
-                                          $('#{{student.id|slugify }}').click(function(){
+                                          $('#{{student.id|slugify }}').change(function(){
                                               
-                                              var status = $("input[name='{{student.id|slugify }}']:checked").val();
-                                            
-                                    
-                                              if (typeof status == 'undefined'){
+                                              var status = $('#{{student.id|slugify }}').val();
+                                              if ( status == ''){
                                                   alert('No Value Selected !!!');
                                                   return false;
                                               }
@@ -499,14 +524,15 @@
                                               $.ajax({
                                                   type:'POST',
                                                   url:'attendanceupdate/{{student.id}}/',
-                                                  data:{pk_str:$("input[name='{{student.id|slugify }}']:checked").val(),
+                                                  data:{pk_str:$('#{{student.id|slugify }}').val(),
                                                   attendance_date : $(".attendance_date_input").val(),
                                                   
                                                    csrfmiddlewaretoken: '{{ csrf_token }}' },
                                                   
                                                   success: function(msg){
                                     
-                                                    $('#{{student.id|slugify }}').html(msg)
+                                                    $('form[name="{{student.id|slugify }}"]').html(msg + "<a href='{% url 'update_attendace_record' student.id%}' id='update_attendance_button' >Update</a>" );
+                                                    
                                                     
                                                   }
                                               })
@@ -514,7 +540,6 @@
                                         })
                                         </script>         
 
-                                    
                                    
                                 {% endfor %}
                                 
@@ -813,6 +838,7 @@
       return false;
     });
     </script>
+    <script src=" {% static 'main_app/js/script' %}"></script>
     
     </body>
 

@@ -377,123 +377,108 @@
                 
                 <div class="md-card-content"  >
                        
-                    <form  method="POST" action="#" class="form-inline" id="attendance_form">
-                        {% csrf_token %}
                     
-                          <label style="margin: 4px;">Select Class:  </label>
-                        <select name="selected_class_attendance" class="form-control"  required>
-                            {% if selected_class_for_attendance %}
-                            <option selected  value="{{selected_class_for_attendance.id}}" >   {{ selected_class_for_attendance}}</option>
-                            {% else %}
-                            <option selected  value="">-- select a class --</option>
-                            
-                            {% endif %}
-                                
-                            {% for class in selected_class %}
-                            <option value={{class.id}}>{{class}}</option>
-                            {% endfor %}
-                     </select>
-                      
-                     <label style="margin: 4px;">Attendance Date:</label>
-
-
-  <input   type="date" class="form-control" name="attendance_date" 
-  {% if request.POST.attendance_date %}
-  value= {{ request.POST.attendance_date}}
-  {% else %}
-  value=""
-  {% endif %} required="required" max="">
-
-
-
- <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">
-
-
-
-       
-                    </form>
                     
                     
                     <div style="margin: 2px;">
                           <!-- success message -->
-  {% if messages %}
-  <ul class="messages">
-      {% for message in messages %}
-      <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-  </ul>
-  {% endif %}
+                          {% if messages %}
+                          <div class="md-card md-card-success">
+                        <div class=""md-card-content">
+                            <ul class="messages alert">
+                                {% for message in messages %}
+                                <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                          </div>
+                         
+                          {% endif %}
               
                     </div>
 
                         <table class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
 
 
-{% if all_students %}
+
 <thead>
     <tr>
 
-        <th >Sr No.</th>
+        
         <th >First Name</th>
         <th >Last Name</th>
         <th>Roll No.</th>
+        <th>Date</th>
         <th >Attendance Status</th>
     </tr>
-    </thead>  
-{% endif %}
-    
-
-{% if all_students %}
-    {% else %}
-    <div class="md-card md-card-danger">
-        <div class="md-card-content">
-           Couldn't Found Any Records.
-        </div>
-    </div>
-{% endif %}
-    
-                           
+    </thead>    
                             <tbody>
-                            {% for student in all_students %}
                             <tr> 
-                                <td > {{ forloop.counter}} </td>                 
-                                <td> {{ student.student.profile.first_name }} </td>
+                                             
+                                <td> {{student_status.student.profile.first_name}} </td>
                                
-                                <td> {{ student.student.profile.last_name }}</td>
-                                <td>{{ student.student.profile.roll_number }}</td>
+                                <td>{{student_status.student.profile.last_name}} </td>
+                                <td>{{student_status.student.profile.roll_number}}</td>
                              
                                
-                                
-                                        <td > 
-                           
-    <form id="{{student.id|slugify }}" >
-        {% csrf_token %}    
-        <span class="icheck-inline">
-                                      
-            <input type="radio" name="{{student.id|slugify }}"  required class="wizard-icheck" value="present" {% if student.attendance_status == 'present' %}
-            checked
-            {% endif %} disabled  >
-            <label for="wizard_status_present" class="inline-label">Present</label>
-        </span>
-        <span class="icheck-inline">
-            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="absent" {% if student.attendance_status == 'absent' %}
-            checked
-            {% endif %} disabled />
-            <label for="wizard_status_absent" class="inline-label" >Absent</label>
-        </span> 
-        <span class="icheck-inline">
-            <input type="radio" name="{{student.id|slugify }}" class="wizard-icheck" value="leave"
-            {% if student.attendance_status == 'leave' %}
-            checked
-            {% endif %} disabled    />
-            <label for="wizard_status_leave" class="inline-label">Leave</label>
-            
-        </span>
-        <input style="display: none;" type="date" value="{{attendance_date}}" class="attendance_date_input">
-        
-    </form>
+                                <td>{{student_status.date}}</td>
+                                        <td >
+                                            <form id="" method="POST">
+                                                {% csrf_token %}   
+                                                
+                                                <div class="" style="display: inline-block;">
+                                                    <select id="" class="" name="updated_status">
+                                                       
+                                                       {% if student_status.attendance_status %}
+                                                       <option selected disabled value="">{{student_status.attendance_status}}</option>
+                                                       {% endif %}
+                                                           
+                                                      
+                                                      <option value="present" style="color: green;">Present</option>
+                                                      <option value="absent" style="color: red;">Absent</option>
+                                                      <option value="leave" style="color: orange;">Leave</option>
+                                                      
+                                                    </select>
+                                                  </div>
+                                               
+                                                <input class="md-btn md-btn-primary md-btn-mini" style="display: inline-block;" type="submit" value="Update" >
+                                                
+                                            </form> 
+                                        
                                         </td>
-                                    </tr>     
+                                    </tr> 
+                                    <tr>
+                                        <form method="POST" action="{% url 'attendance' %}" style="width: 30px;">
+                                            {% csrf_token %}
+                                            <select style="display: none;" name="selected_class_attendance" class="form-control"  required>
+                           
+                                                <option value={{student_status.student.profile.Class.id}}>{{student_status.student.profile.Class}}</option>
+
+                                         </select>
+                                         <input style="display: none; margin: 5px;" type="date" name="attendance_date"  value="{{student_status.date}}" id="current_date">
+                                       <div class="md-btn md-btn-primary">
+                                        <i class="material-icons">arrow_back</i>
+                                        <input type="submit" value="Go Back" style="border: none;" class=" md-btn-primary" > 
+                                       </div>
+                                          </form>
+                                    </tr>
+                                    <script>
+                                        document.getElementById('current_date').value = new Date().toDateInputValue();
+                                    </script>
+                                    <script>
+                                        document.getElementById('current_date').valueAsDate = new Date();
+                                        $("input[type=date]").datepicker({
+                                      dateFormat: 'yy-mm-dd',
+                                      onSelect: function(dateText, inst) {
+                                        $(inst).val(dateText); // Write the value in the input
+                                      }
+                                    });
+                                    
+                                    // Code below to avoid the classic date-picker
+                                    $("input[type=date]").on('click', function() {
+                                      return false;
+                                    });
+                                    </script>
                                     <!-- <script>
                                         
                                         $(document).ready(function(){
@@ -527,7 +512,7 @@
 
                                     
                                    
-                                {% endfor %}
+                     
                                 
                                 
                                 
