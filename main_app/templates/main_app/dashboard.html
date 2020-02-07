@@ -346,10 +346,12 @@
                         </a>
                         
                     </li> 
+                    {% endif %}
+                
+            {% endif %} 
 
-                    <li class="current_section" title="ExamSchedule">
 
-
+                    <li  title="ExamSchedule">
                         <a href="">
                             <span class="menu_icon"><i class="material-icons">poll</i></span>
                             <span class="menu_title">Exam Details</span>
@@ -379,11 +381,34 @@
                         </ul>
     
                     </li>
+
+                    <li  title="ExamResult">
+                        <a href="">
+                            <span class="menu_icon"><i class="material-icons">poll</i></span>
+                            <span class="menu_title">Result</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="{% url 'examresult' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_title">Teacher View</span>
+                                </a>
+    
+                            </li>
+                            <li>
+                                <a href="{% url 'examview' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_title">Principal View</span>
+                                </a>
+    
+                            </li>
+              
+                        </ul>
+    
+                    </li>
                      
                 
-                {% endif %}
-                
-            {% endif %}  
+                 
             
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">

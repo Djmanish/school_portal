@@ -380,6 +380,9 @@
                     </a>
 
                 </li>
+                {% endif %}
+
+                {% endif %}
                 <li class="current_section" title="ExamSchedule">
 
 
@@ -412,9 +415,32 @@
                     </ul>
 
                 </li>
-                {% endif %}
+                
+                <li  title="ExamResult">
+                    <a href="">
+                        <span class="menu_icon"><i class="material-icons">poll</i></span>
+                        <span class="menu_title">Result</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{% url 'examresult' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Teacher View</span>
+                            </a>
 
-                {% endif %}
+                        </li>
+                        <li>
+                            <a href="{% url 'examschedule' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Principal View</span>
+                            </a>
+
+                        </li>
+          
+                    </ul>
+
+                </li>
+             
                 <li title="Log Out">
                     <a href="{% url 'auth_logout' %}">
                         <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
@@ -520,7 +546,7 @@
                                                                         <select name="selected_exam_type" style="padding: 2px;" required>
                                                                             <option selected disabled value="">--Select Test Type--</option>
                                                                             {% for examtype in exam_type %}
-                                                                            <option value="{{examtype.id}}"  > {{examtype}}</option>
+                                                                            <option value="{{examtype.id}}"> {{examtype}}</option>
                                                                             {% endfor %}
                                                                             
                                                                             

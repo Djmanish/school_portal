@@ -20,7 +20,7 @@ class Lecture(models.Model):
 
 class Schedule(models.Model):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, null=True, related_name="schedule_institute")
-    Class = models.ForeignKey(to=Classes, on_delete=models.PROTECT, null=True, related_name="schedule_class")
+    Class = models.ForeignKey(to=Classes, on_delete=models.CASCADE, null=True, related_name="schedule_class")
     day_choice = [('Monday','Monday'),('Tuesday','Tuesday'),('Wednesday','Wednesday'),('Thursday','Thursday'),('Friday','Friday'),('Saturday','Saturday')]
     day = models.CharField(max_length=30, choices=day_choice)
 

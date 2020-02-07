@@ -412,6 +412,31 @@
                     </ul>
 
                 </li>
+                
+                <li  title="ExamResult">
+                    <a href="">
+                        <span class="menu_icon"><i class="material-icons">poll</i></span>
+                        <span class="menu_title">Result</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{% url 'examresult' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Teacher View</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="{% url 'examschedule' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Principal View</span>
+                            </a>
+
+                        </li>
+          
+                    </ul>
+
+                </li>
                 {% endif %}
 
                 {% endif %}
@@ -532,16 +557,6 @@
                                                                     </td>
                                                             </tr>
                                                             <tr>
-
-
-                                                                <th class="uk-text-left">
-
-                                                                    <b style="color: #1976d2;"> 
-                                                                        Exam Schedule for class {{new_exam.exam_class}}</b>
-
-
-                                                                </th>
-
 
                                                             </tr>
                                                         </thead>

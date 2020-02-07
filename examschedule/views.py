@@ -63,7 +63,7 @@ def exam_schedule(request,pk):
                 new_exam.exam_class=selected_class
                 new_exam.exam_type=select_exam_type
                 new_exam.save()
-                messages.success(request, 'New Exam Schedule Created successfully !!!')
+        #      messages.success(request, 'New Exam Schedule Created successfully !!!')
 
           
                 
@@ -106,7 +106,7 @@ def examschedule_view(request,pk):
                     first_class_id = first_class.id
                     select_class_for_schedule= first_class_id
             selected_class = Classes.objects.get(pk=select_class_for_schedule)
-            #fetching the class instance seleted to view
+            # fetching the class instance selected to view
             exam_class = Classes.objects.filter(institute=request.user.profile.institute)
             exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
             select_exam_type_for_schedule=request.GET.get('selected_exam_type')
