@@ -388,13 +388,7 @@
                         <span class="menu_title">Exam Details</span>
                     </a>
                     <ul>
-                        <li>
-                            <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Create Test Type List</span>
-                            </a>
-
-                        </li>
+  
                         <li>
                             <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
@@ -504,7 +498,7 @@
                                                         </ul>
                                                         {% endif %}
                                                       
-                                                    <form>
+                                                    <!-- <form>
                                                         {% csrf_token %}
      
                                                            
@@ -519,10 +513,15 @@
                                                                 <td>
                                                                     
                                                                         <select name="examview_type" style="padding: 2px;">
-                                                                            <option selected disabled value="">--Select Test Type--</option>
-                                                                            {% for examtype in exam_type %}
-                                                                            <option value="{{examtype.id}}">{{examtype}}</option>
-                                                                            {% endfor %}
+                                                                            <option selected disabled value="">--Select Subject--</option>
+                                                                           
+                                                                           {% for subjects in examview_subject  %}
+                                                                           <option value="{{subjects.exam_subject.id}}"> {{subjects.exam_subject}}</option>
+
+                                                                               
+                                                                           {% endfor %}
+                                                                               
+                                                                            
                                                                         </select>
                                                                    
                                                                 </td>
@@ -533,7 +532,7 @@
                                                             <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
 
                                                         </td>
-                                                    </form>
+                                                    </form> -->
                                                         </thead>
 
                                                         <tbody>
@@ -543,14 +542,20 @@
                                                             <tr>
                                                                
                                                                 <th>S.No.</th>
-                                                                <th>Subject</th>
-                                                                <th>Max. Marks</th>
+                                                                <th>Exam Type</th>
+                                                                <th>Exam Held Time</th>
                                                                 <th>Final Score</th>
                                                                 
                                              
                                                             </tr>
+                                                            <tr>
+                                                                
+                                                            </tr>
+
+
+
                                                             
-                                                                     {% for subjects in examresult_data %}
+                                                                     {% for examview in examview_exam_type %}
                                                             <tr>
                                                                  
 
@@ -559,26 +564,21 @@
                                                                         {{ forloop.counter}}
                                                                      </td>
                                                                     
+                                                                    
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <select class="form-control"  name="examview_subject">
-                                                                                  <option  value="{{subjects.result_subject.id}}">{{subjects.result_subject}}</option>
+                                                                                <select class="form-control"  name="examview_examtype">
+                                                                                  <option  value="{{examview.id}}">{{examview}}</option>
                                                                                 </select>
                                                                               </div>
                                                                               
                                                                         </td>
-                                                                        <td>
-                                                                            <div class="form-group">
-                                                                                <select class="form-control"  name="examview_subject_marks">
-                                                                                  <option  value="{{student.result_max_marks.id}}">{{student.result_max_marks}}</option>
-                                                                                </select>
-                                                                              </div>
-                                                                        </td>
+                                                                     
                                                                     
                                                                         
                                                                         
                                                                        <td>
-                                                                           <input type="text" name="student_marks"></input>
+                                                                           <input type="text" name="per_score"></input>
                                                                        </td>
                                                                     
                                                                         

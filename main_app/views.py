@@ -378,7 +378,6 @@ def edit_profile(request, pk):
 
 @login_required
 def institute_profile(request, pk):
-    
 # starting assigning all functionalities to admin
     admin_pk = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='admin')
     
@@ -395,9 +394,9 @@ def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
-<<<<<<< HEAD
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
-
+    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
     # starting user permission code
     user_permissions = request.user.user_institute_role.level.permissions.all()
     add_class_permission = App_functions.objects.get(function_name='Can Add Class')
@@ -411,25 +410,12 @@ def institute_profile(request, pk):
       'all_classes':institute_class,
       'user_permissions': user_permissions,
       'add_class_permission': add_class_permission,
-      'add_subject_permission':add_subject_permission}
-=======
-  # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
-    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
-    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
-    institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
- 
- 
-    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class, 'institute_teachers':institute_teachers}
-
-    # institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
-    # context_data = {'institute_data':institute_data, 
-    # 'institute_roles':institute_roles,
-    #  'institute_class':institute_class,
-    #  'institute_subject':institute_subject,
-    #   'all_classes':institute_class}
->>>>>>> 731bb816429bbb5c13e634a8bfabc3710d7b1747
+      'add_subject_permission':add_subject_permission,
+      'institute_teachers':institute_teachers,}
 
     return render(request, 'main_app/institute_profile.html', context_data)
+    
+
    
 @login_required
 def edit_institute(request, pk):

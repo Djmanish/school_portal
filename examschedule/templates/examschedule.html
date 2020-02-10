@@ -388,13 +388,7 @@
                         <span class="menu_title">Exam Details</span>
                     </a>
                     <ul>
-                        <li>
-                            <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Create Test Type List</span>
-                            </a>
-
-                        </li>
+                      
                         <li>
                             <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
@@ -526,8 +520,9 @@
 
                                                             </tr>
                                                             <tr>
+                                                                <form  >
                                                                 <td>
-                                                                <form >
+                                                                
                                                                     <select name="selected_class" style="padding: 2px;" required>
                                                                         <option selected disabled value="">--Select Class--</option>
                                                                         
@@ -537,32 +532,34 @@
                                                                             
                                             
                                                                  </select>
+                                                                 
                                                                  <!-- <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
                                                                 </form> -->
                                                                 </td>
                                                                 <td>
-                                                                    <form >
+                                                                    
                                                                         <select name="selected_exam_type" style="padding: 2px;" required>
                                                                             <option selected disabled value="">--Select Test Type--</option>
-                                                                            {% for examtype in exam_type %}
-                                                                            <option value="{{examtype.id}}"  > {{examtype}}</option>
-                                                                            {% endfor %}
+                                                                        {% for examtype in exam_type_schedule %}
+                                                                            <option value="{{examtype.id}}"> {{examtype}}</option>
                                                                             
+                                                                        {% endfor %}
+                                                                       
                                                                             
-                                                                                
-                                                
                                                                      </select>
+                                                                     
+                                                              
+                                                                         
                                                                      <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
-                                                                    </form>
+                                                                    
                                                                     </td>
+                                                                </form>
                                                             </tr>
-                                                            <tr>
-
-                                                            </tr>
+                                                       
                                                         </thead>
 
                                                         <tbody>
-                                                            <tr>
+                                                                                             <tr>
                                                                
                                                                 <th>Subject</th>
                                                                 <th>Subject Teacher</th>
@@ -594,6 +591,20 @@
                                                                         </div>
                                                                         </td>
                                                                     </tr> -->
+                                                                    <tr>
+                                                                        <td>
+                                                                            <th>
+                                                                                <label>Exam Code</label>
+                                                                                <input type="text" value={{institute_exam_schedule_data.code}}-{{selected_class.pk}}-{{exam_type_id.exam_type_id}}-{{sr_no}} name="exam_institute_code"/></th>
+                                                                            
+                                                                          
+                                                                            
+                                                                        </td>
+                                                                      
+        
+            
+                                                                    </tr>
+                                  
                                                                     {% for exam_subject in exam_class_subject%}
                                                                     <tr> 
                                                                         <td>

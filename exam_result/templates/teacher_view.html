@@ -388,13 +388,7 @@
                         <span class="menu_title">Exam Details</span>
                     </a>
                     <ul>
-                        <li>
-                            <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Create Test Type List</span>
-                            </a>
-
-                        </li>
+                       
                         <li>
                             <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
@@ -506,6 +500,7 @@
                                                       
                                                     <form>
                                                         {% csrf_token %}
+                                                       
      
                                                            
                                                         <tr>
@@ -524,15 +519,17 @@
                                                                 </td>
                                                   
                                                                 <td>
-                                                                    <label><b>Exam Type</b></label>
+                                                                    <label><b>Exam Code</b></label>
                                                                 </td>
                                                                 <td>
                                                                     
-                                                                        <select name="result_selected_exam_type" style="padding: 2px;">
-                                                                            <option selected disabled value="">--Select Test Type--</option>
-                                                                            {% for examtype in result_exam_type %}
-                                                                            <option value="{{examtype.id}}"  > {{examtype}}</option>
+                                                                        <select name="result_selected_exam_code" style="padding: 2px;">
+                                                                            <option selected disabled value="">--Select Exam Code--</option>
+                                                                            {% for exam_code in result_exam_code %}
+                                                                            <option value="{{exam_code.id}}"> {{exam_code}}</option>
+                                                                            
                                                                             {% endfor %}
+                                                                            
                                                                         </select>
                                                                    
                                                                 </td>
@@ -549,6 +546,13 @@
                                                         <tbody>
                                                             <form method="POST">
                                                                 {% csrf_token %}
+                                                                <tr>
+                                                                    <td>
+                                                                       <b> <label>Exam Max. Marks</label></b>
+                                                                        <input type="text" name="exam_max_marks"></input>
+                                                                        
+                                                                    </td>
+                                                                </tr>
                                                          
                                                             <tr>
                                                                

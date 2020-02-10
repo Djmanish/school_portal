@@ -304,13 +304,14 @@
                         <span class="menu_title">My Profile</span>
                     </a>    
                 </li>
-                {% if user.profile.institute  %}
+                {% if user.profile.institute %}
                 <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">domain</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
+                
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
@@ -325,9 +326,8 @@
                 </a>
             </li>
                
-                   
+            {% endif %}  
 
-                {% endif %}
                 {% if user.profile.institute %}
                 {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
                     <li  title="Approvals">
@@ -346,9 +346,7 @@
                         </a>
                         
                     </li> 
-                    {% endif %}
-                
-            {% endif %} 
+                   
 
 
                     <li  title="ExamSchedule">
@@ -357,13 +355,7 @@
                             <span class="menu_title">Exam Details</span>
                         </a>
                         <ul>
-                            <li>
-                                <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                    <span class="menu_title">Create Test Type List</span>
-                                </a>
-    
-                            </li>
+                  
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">poll</i></span>
@@ -407,7 +399,9 @@
     
                     </li>
                      
+                    {% endif %}
                 
+                    {% endif %} 
                  
             
                 <li title="Log Out">

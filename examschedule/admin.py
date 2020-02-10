@@ -5,5 +5,5 @@ from examschedule.models import *
 
 # Register your models here.
 admin.site.register(ExamType)
-# admin.site.register(ExamTypeBasicInfo)
+
 admin.site.register(ExamDetails)
