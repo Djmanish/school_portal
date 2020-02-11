@@ -16,6 +16,7 @@ from class_schedule.models import *
 from .forms import ClassUpdateForm, InstituteUpdateProfile
 from django.core.mail import send_mail, send_mass_mail
 from django.utils import timezone
+from Attendance.models import *
 
 
 
@@ -193,7 +194,37 @@ def index(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'main_app/dashboard.html')
+    if request.user.profile.institute:
+        session_start_date = request.user.profile.institute.session_start_date
+
+    # starting attendace data for dashboard
+    all_classes = Classes.objects.filter(institute= request.user.profile.institute)
+    for c in all_classes:
+        total_student_class = UserProfile.objects.filter(institute= request.user.profile.institute, designation__level_name="student", Class= c).count()
+        c.total_student = total_student_class
+
+        present_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="present" , student_class= c , date=  datetime.date.today() ).count()
+        c.total_present = present_student
+
+        # fetching all absent student for class
+        absent_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="absent", student_class = c , date = datetime.date.today() ).count()
+        c.total_absent = absent_student
+
+        leave_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="leave", student_class = c, date = datetime.date.today()).count()
+        c.total_leave = leave_student
+
+      
+
+    
+
+
+
+    # ending attendace data for dashboard
+    context = {
+        'all_classes': all_classes,
+       
+    }
+    return render(request, 'main_app/dashboard.html' , context)
 
 
 

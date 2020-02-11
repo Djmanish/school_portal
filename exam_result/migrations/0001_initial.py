@@ -38,4 +38,13 @@ class Migration(migrations.Migration):
                 ('result_subject_teacher', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='result_subject_teacher', to=settings.AUTH_USER_MODEL)),
             ],
         ),
+        migrations.CreateModel(
+            name='ExamView',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('exam_percent_score', models.CharField(max_length=100, null=True)),
+                ('examview_type', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='examview_type', to='examschedule.ExamType')),
+                ('institute', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='examview_institute', to='main_app.Institute')),
+            ],
+        ),
     ]

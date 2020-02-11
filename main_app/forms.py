@@ -24,6 +24,7 @@ class InstituteUpdateProfile(forms.ModelForm):
         widgets = {
             'establish_date': forms.DateInput(attrs={'type':'date'}),
             'session_start_date' : forms.DateInput(attrs={'type':'date'}),
+            'profile_pic': forms.FileInput()
 
         }
 
