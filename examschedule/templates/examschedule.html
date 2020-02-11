@@ -589,13 +589,13 @@
                        
                                   
                                                                     {% for exam_subject in exam_class_subject%}
-                                                                    <tr> 
+                                                                    <tr style="background-color:#E5E5FF;"> 
                                                                         <td>
                                                                             
                                                                             
                                                                             <div class="form-group">
                                                         
-                                                                                <select class="form-control"  name="select_exam_subject">
+                                                                                <select disabled style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="select_exam_subject">
                                                                                   <option  value="{{exam_subject.id}}">{{exam_subject}}</option>
                                                                                  
                                                                                 </select>
@@ -608,7 +608,7 @@
                                                                         <td>
                                                                             <div class="form-group">
                                                         
-                                                                                <select class="form-control"  name="select_exam_subject_teacher">
+                                                                                <select  disabled style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="select_exam_subject_teacher">
                                                                                   <option  value="{{exam_subject.subject_teacher.id}}">{{exam_subject.subject_teacher}}</option>
                                                                                  
                                                                                 </select>

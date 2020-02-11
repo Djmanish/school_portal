@@ -41,7 +41,9 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" </head>
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" >
+    
+</head>
      <body
         class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -561,7 +563,7 @@
 
                                                             
                                                                      {% for examtype in exam_details %}
-                                                            <tr>
+                                                            <tr style="background-color:#E5E5FF;">
                                                                  
 
                                                                     
@@ -571,8 +573,8 @@
                                                                     
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <select class="form-control"  name="examview_examtype">
-                                                                                  <option  value="{{examtype}}">{{examtype}}</option>
+                                                                                <select disabled style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="examview_examtype">
+                                                                                  <option  value="{{examtype.id}}">{{examtype}}</option>
                                                                                 </select>
                                                                               </div>
                                                                               

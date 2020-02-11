@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import *
 from main_app.models import *
+from examschedule.models import *
 
 
 
@@ -71,24 +72,18 @@ def exam_result(request,pk):
   }
   return render(request, 'teacher_view.html', context)
 
-
+#  Principal View
 def exam_view(request,pk):
 
-
-    institute=Institute.objects.get(pk=pk)
     exam_details=ExamType.objects.all()
- 
-    
-   
     if request.method=="POST":
-      
-
-      for  per_score,exam_type in zip(request.POST.getlist('per_score'),request.GET.getlist('examview_examtype')): 
-        print(exam_type)
+      for  per_score, exam_type in zip(request.POST.getlist('per_score'),request.POST.getlist('examview_examtype')): 
+        exam_type_id=ExamType.objects.get(pk=exam_type)
+        print(exam_type_id)
         examview=ExamView()
-        examview.examview_type=ExamType.objects.get(pk=exam_type)
-        examview.exam_percent_score=per_score
         
+        examview.exam_percent_score=per_score
+        examview.pexamview_type=ExamType.objects.get(pk=exam_type)
         examview.save()
     context={
     'exam_details':exam_details,
@@ -99,7 +94,8 @@ def exam_view(request,pk):
     # Student View
 
 def student_view(request,pk):
-    student_view=ExamResult.objects.get(pk=pk)
+    student_view=ExamResult.objects.all()
+   
     
 
     context={
