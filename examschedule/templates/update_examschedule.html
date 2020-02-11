@@ -380,6 +380,9 @@
                     </a>
 
                 </li>
+                {% endif %}
+
+                {% endif %}
                 <li class="current_section" title="ExamSchedule">
 
 
@@ -388,13 +391,7 @@
                         <span class="menu_title">Exam Details</span>
                     </a>
                     <ul>
-                        <li>
-                            <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Create Test Type List</span>
-                            </a>
-
-                        </li>
+                       
                         <li>
                             <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
@@ -412,9 +409,39 @@
                     </ul>
 
                 </li>
-                {% endif %}
+                
+                <li  title="ExamResult">
+                    <a href="">
+                        <span class="menu_icon"><i class="material-icons">poll</i></span>
+                        <span class="menu_title">Result</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{% url 'examresult' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Teacher View</span>
+                            </a>
 
-                {% endif %}
+                        </li>
+                        <li>
+                            <a href="{% url 'examschedule' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Principal View</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Student View</span>
+                            </a>
+
+                        </li>
+          
+                    </ul>
+
+                </li>
+             
                 <li title="Log Out">
                     <a href="{% url 'auth_logout' %}">
                         <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
@@ -493,66 +520,38 @@
                                                         </ul>
                                                         {% endif %}
                                                       
-                                                            </div>
-                                                                </th>
-                                                                <th> </th>
-
-                                                               
-
-                                                            </tr>
-                                                            <tr>
+                                                           
+              
+                                                            <form >
+                                                            <tr style="background-color:#ADD8E6">
+                                                             
                                                                 <td>
-                                                                <form >
-                                                                    <select name="selected_class" style="padding: 2px;" required>
-                                                                        <option selected disabled value="">--Select Class--</option>
+                                                              
+                                                                    <select name="selected_exam_code" style="padding: 2px;" required>
+                                                                        <option selected disabled value="">--Select Code--</option>
                                                                         
-                                                                        {% for class in exam_class %}
-                                                                           <option value="{{class.id}}"> {{class}}</option>
+                                                                        {% for exam_code in institute_exam_schedule %}
+                                                                           <option value="{{exam_code.id}}"> {{exam_code}}</option>
                                                                         {% endfor %}
                                                                             
                                             
                                                                  </select>
-                                                                 <!-- <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
-                                                                </form> -->
+                                                                 
                                                                 </td>
                                                                 <td>
-                                                                    <form >
-                                                                        <select name="selected_exam_type" style="padding: 2px;" required>
-                                                                            <option selected disabled value="">--Select Test Type--</option>
-                                                                            {% for examtype in exam_type %}
-                                                                            <option value="{{examtype.id}}"  > {{examtype}}</option>
-                                                                            {% endfor %}
-                                                                            
-                                                                            
-                                                                                
-                                                
-                                                                     </select>
-                                                                     <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
-                                                                    </form>
-                                                                    </td>
-                                                            </tr>
+                                                                <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
+                                                            </td>
+                                                               </tr>
+                                                               
+                                                            </form>
                                                             <tr>
-
-<!-- 
-                                                                <th class="uk-text-left">
-
-                                                                    <b style="color: #1976d2;"> 
-                                                                        
-                                                                        
-                                                                        Exam Schedule for class {{institute_exam_schedule.exam_class}}  
-                                                                       
-                                                                          
-                                                                    </b>
-
-
-                                                                </th> -->
 
 
                                                             </tr>
                                                         </thead>
 
                                                         <tbody>
-                                                            <tr>
+                                                            <tr style="background-color: #1976d2; color:white">
                                                                
                                                                 <th>Subject</th>
                                                                 <th>Subject Teacher</th>
@@ -564,7 +563,7 @@
 
                                                                 
                                                             </tr>
-                                                            {% if exam_class_subject%}
+                                                           
 
                                                     
                                                                         {% for institute_exam_schedule in institute_exam_schedule %}
@@ -585,7 +584,7 @@
                                                                          
                                                                          {% endfor %}
 
-                                                                {% endif %}
+                                                               
                                                                         
                                                               
                                   

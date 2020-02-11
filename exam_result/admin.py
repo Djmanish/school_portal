@@ -5,3 +5,4 @@ from exam_result.models import *
 
 # Register your models here.
 admin.site.register(ExamResult)
+admin.site.register(ExamView)

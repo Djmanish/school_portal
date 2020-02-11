@@ -7,7 +7,7 @@ import datetime
 from main_app.models import *
 from Attendance import templates
 from django.contrib import messages
-import requests
+# import requests
 
 # Create your views here.
 def attendance(request):
