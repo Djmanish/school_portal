@@ -427,6 +427,13 @@
                             </a>
 
                         </li>
+                        <li>
+                            <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Student View</span>
+                            </a>
+
+                        </li>
           
                     </ul>
 
@@ -503,9 +510,9 @@
                                                        
      
                                                            
-                                                        <tr>
+                                                        <tr style="background-color:#ADD8E6">
                                                             
-                                                            <div>
+                                                            
                                                                 <td>
                                                                     <label><b>Subject</b></label>
                                                                 </td>
@@ -533,28 +540,33 @@
                                                                         </select>
                                                                    
                                                                 </td>
-                                                            </div>
+                                                                <td>
+                                                                    <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
+        
+                                                                </td> 
                                                         </tr>
 
-                                                        <td>
-                                                            <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
-
-                                                        </td>
+     
                                                     </form>
                                                         </thead>
 
                                                         <tbody>
                                                             <form method="POST">
                                                                 {% csrf_token %}
-                                                                <tr>
-                                                                    <td>
-                                                                       <b> <label>Exam Max. Marks</label></b>
+                                                                <tr >
+                                   
+                                                        
+
+                                                                    <td colspan="6" align="center">
+                                                                        <b> <label>Enter Max. Marks</label></b>
+                                                                    
+                                                                       
                                                                         <input type="text" name="exam_max_marks"></input>
                                                                         
                                                                     </td>
                                                                 </tr>
                                                          
-                                                            <tr>
+                                                            <tr style="background-color: #1976d2; color:white">
                                                                
                                                                 <th>S.No.</th>
                                                                 <th>First Name</th>
@@ -575,7 +587,7 @@
                                                                     
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <select class="form-control"  name="student_first_name">
+                                                                                <select  class="form-control"  name="student_first_name">
                                                                                   <option  value="{{student.id}}">{{student.first_name}}</option>
                                                                                 </select>
                                                                               </div>

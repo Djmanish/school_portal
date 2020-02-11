@@ -3,6 +3,7 @@ from .models import *
 from main_app.models import *
 
 
+
 # Create your views here.
 def exam_result(request,pk):
   # to fetch the current institute
@@ -72,19 +73,36 @@ def exam_result(request,pk):
 
 
 def exam_view(request,pk):
+
+
     institute=Institute.objects.get(pk=pk)
     exam_details=ExamType.objects.all()
+ 
+    
    
     if request.method=="POST":
-      for type, per_score in zip(request.POST.get('examview_examtype'),request.POST.get('per_score'))  
-    examview=ExamView()
-    
-    examview.save()
-    context={
-    # 'examview_exam_type':examview_exam_type,
-    'exam_details':exam_details,
-    'selected_examtype':selected_examtype,
-  
+      
 
+      for  per_score,exam_type in zip(request.POST.getlist('per_score'),request.GET.getlist('examview_examtype')): 
+        print(exam_type)
+        examview=ExamView()
+        examview.examview_type=ExamType.objects.get(pk=exam_type)
+        examview.exam_percent_score=per_score
+        
+        examview.save()
+    context={
+    'exam_details':exam_details,
            }
     return render(request, 'principal_view.html', context)
+
+
+    # Student View
+
+def student_view(request,pk):
+    student_view=ExamResult.objects.get(pk=pk)
+    
+
+    context={
+      'student_view':student_view,
+    }
+    return render(request, 'studentview.html' , context)

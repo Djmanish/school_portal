@@ -427,6 +427,13 @@
                             </a>
 
                         </li>
+                        <li>
+                            <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Student View</span>
+                            </a>
+
+                        </li>
           
                     </ul>
 
@@ -539,23 +546,21 @@
                                                             <form method="POST">
                                                                 {% csrf_token %}
                                                          
-                                                            <tr>
+                                                            <tr style="background-color: #1976d2; color:white">
                                                                
                                                                 <th>S.No.</th>
                                                                 <th>Exam Type</th>
-                                                                <th>Exam Held Time</th>
+                                                               
                                                                 <th>Final Score</th>
                                                                 
                                              
                                                             </tr>
-                                                            <tr>
-                                                                
-                                                            </tr>
+                                                            
 
 
 
                                                             
-                                                                     {% for examview in examview_exam_type %}
+                                                                     {% for examtype in exam_details %}
                                                             <tr>
                                                                  
 
@@ -564,11 +569,10 @@
                                                                         {{ forloop.counter}}
                                                                      </td>
                                                                     
-                                                                    
                                                                         <td>
                                                                             <div class="form-group">
                                                                                 <select class="form-control"  name="examview_examtype">
-                                                                                  <option  value="{{examview.id}}">{{examview}}</option>
+                                                                                  <option  value="{{examtype}}">{{examtype}}</option>
                                                                                 </select>
                                                                               </div>
                                                                               
@@ -581,11 +585,6 @@
                                                                            <input type="text" name="per_score"></input>
                                                                        </td>
                                                                     
-                                                                        
-
-                                                                   
-                                                                   
-                              
                                                               
                                                             </tr>
                                                             {% endfor %}

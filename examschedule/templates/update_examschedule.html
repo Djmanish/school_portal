@@ -430,6 +430,13 @@
                             </a>
 
                         </li>
+                        <li>
+                            <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Student View</span>
+                            </a>
+
+                        </li>
           
                     </ul>
 
@@ -513,15 +520,10 @@
                                                         </ul>
                                                         {% endif %}
                                                       
-                                                            </div>
-                                                                </th>
-                                                                <th> </th>
-
-                                                               
-
-                                                            </tr>
+                                                           
+              
                                                             <form >
-                                                            <tr>
+                                                            <tr style="background-color:#ADD8E6">
                                                              
                                                                 <td>
                                                               
@@ -544,26 +546,12 @@
                                                             </form>
                                                             <tr>
 
-<!-- 
-                                                                <th class="uk-text-left">
-
-                                                                    <b style="color: #1976d2;"> 
-                                                                        
-                                                                        
-                                                                        Exam Schedule for class {{institute_exam_schedule.exam_class}}  
-                                                                       
-                                                                          
-                                                                    </b>
-
-
-                                                                </th> -->
-
 
                                                             </tr>
                                                         </thead>
 
                                                         <tbody>
-                                                            <tr>
+                                                            <tr style="background-color: #1976d2; color:white">
                                                                
                                                                 <th>Subject</th>
                                                                 <th>Subject Teacher</th>

@@ -394,7 +394,6 @@ def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
-<<<<<<< HEAD
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
     designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
     institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
@@ -413,22 +412,6 @@ def institute_profile(request, pk):
       'add_class_permission': add_class_permission,
       'add_subject_permission':add_subject_permission,
       'institute_teachers':institute_teachers,}
-=======
-  # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
-    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
-    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
-    institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
- 
- 
-    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class, 'institute_teachers':institute_teachers}
-
-    # institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
-    # context_data = {'institute_data':institute_data, 
-    # 'institute_roles':institute_roles,
-    #  'institute_class':institute_class,
-    #  'institute_subject':institute_subject,
-    #   'all_classes':institute_class}
->>>>>>> e6fffc4ee951ffc35c749e7f24c77dca5401ab4a
 
     return render(request, 'main_app/institute_profile.html', context_data)
     

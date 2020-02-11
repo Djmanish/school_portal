@@ -23,7 +23,7 @@ class ExamResult(models.Model):
 class ExamView(models.Model):
     institute=models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='examview_institute', null=True)
   
-    examview_type=models.ForeignKey(to=ExamDetails, on_delete=models.CASCADE,related_name='examview_type', null=True)
+    examview_type=models.ForeignKey(to=ExamType, on_delete=models.CASCADE,related_name='examview_type', null=True)
 
     exam_percent_score=models.CharField(max_length=100, null=True)
 
