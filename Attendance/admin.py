@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from Attendance.models import Attendance
+from Attendance.models import Attendance, Daily_Attendance_status
 #  Register your models here.
 
 class AttendanceAdmin(admin.ModelAdmin):
@@ -12,3 +12,4 @@ class AttendanceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Attendance, AttendanceAdmin)
+admin.site.register(Daily_Attendance_status)

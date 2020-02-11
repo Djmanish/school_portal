@@ -35,7 +35,7 @@ def attendance(request):
 
         # starting student statistics calculation
         session_start_date = request.user.profile.institute.session_start_date
-        print(session_start_date)
+        
         
         list_total_days_attendance_taken = []  #total days attendance taken for this session
         list_total_day_present = [] 
@@ -69,17 +69,24 @@ def attendance(request):
             student.total_leave_count = total_leave
 
         # ending student statistics calculation
+
       
         context = {'all_students': all_students,
          'selected_class':all_class,
          'selected_class_for_attendance':students_class,
-         'attendance_date': attendance_date}
+         'attendance_date': attendance_date,
+         'session_start_date':session_start_date}
          
         
-        
-        return render(request, 'Attendance/Attendence.html', context)
-
-
+        if students_class.class_teacher == request.user:
+            return render(request, 'Attendance/Attendence.html', context)
+        else:
+            messages.error(request, "Only Class Teacher can mark attendance")
+            context = {
+                'selected_class':all_class,
+                 'selected_class_for_attendance':students_class,
+            }
+            return render(request, 'Attendance/Attendence.html', context )
 
     all_class = Classes.objects.filter(institute=request.user.profile.institute)  
     context = {'selected_class':all_class}
@@ -142,3 +149,51 @@ def update_attendance_record(request, pk):
     }
     
     return render(request, 'Attendance/updating_attendance.html', context)
+
+
+def current_date_attendance_record(request, pk):
+    students_class = Classes.objects.get(pk=pk)
+    attendance_record = Attendance.objects.filter(institute= request.user.profile.institute, student_class= students_class, date= datetime.date.today()  )
+    session_start_date = request.user.profile.institute.session_start_date
+
+    list_total_days_attendance_taken = []  #total days attendance taken for this session
+    list_total_day_present = [] 
+    list_total_day_absent = []
+    list_total_day_leave = []
+
+    for student in attendance_record:
+        student_id = student.student.pk
+        student = User.objects.get(pk = student_id)
+        total_days_attendance_taken = Attendance.objects.filter(student= student, date__gte= session_start_date ).count()
+        list_total_days_attendance_taken.append(total_days_attendance_taken)
+        
+    for student in attendance_record:
+        
+        student = User.objects.get(pk = student.student.id)
+        total_days_present = Attendance.objects.filter(student= student, attendance_status="present", date__gte= session_start_date ).count()
+        list_total_day_present.append(total_days_present)
+
+    for student in attendance_record:
+        student = User.objects.get(pk = student.student.id)
+        total_day_absent = Attendance.objects.filter(student= student, attendance_status="absent", date__gte= session_start_date ).count()
+        list_total_day_absent.append(total_day_absent)
+        
+    for student in attendance_record:
+        student = User.objects.get(pk = student.student.id)
+        total_day_leave = Attendance.objects.filter(student= student, attendance_status="leave", date__gte= session_start_date ).count()
+        list_total_day_leave.append(total_day_leave)
+        
+    for (student, total_days, total_present, total_absent, total_leave) in zip(attendance_record, list_total_days_attendance_taken, list_total_day_present, list_total_day_absent, list_total_day_leave):
+        student.total_days_taken_attendance = total_days
+        student.total_present_count = total_present
+        student.total_absent_count = total_absent
+        student.total_leave_count = total_leave
+
+  
+    context = {'all_students': attendance_record ,
+                       
+                        'selected_class_for_attendance':students_class,
+                        'attendance_date': datetime.date.today()}
+    return render(request, 'Attendance/current_date_attendance_record.html', context)
+
+    

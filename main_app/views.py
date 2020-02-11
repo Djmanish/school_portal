@@ -16,6 +16,7 @@ from class_schedule.models import *
 from .forms import ClassUpdateForm, InstituteUpdateProfile
 from django.core.mail import send_mail, send_mass_mail
 from django.utils import timezone
+from Attendance.models import *
 
 
 
@@ -193,7 +194,37 @@ def index(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'main_app/dashboard.html')
+    if request.user.profile.institute:
+        session_start_date = request.user.profile.institute.session_start_date
+
+    # starting attendace data for dashboard
+    all_classes = Classes.objects.filter(institute= request.user.profile.institute)
+    for c in all_classes:
+        total_student_class = UserProfile.objects.filter(institute= request.user.profile.institute, designation__level_name="student", Class= c).count()
+        c.total_student = total_student_class
+
+        present_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="present" , student_class= c , date=  datetime.date.today() ).count()
+        c.total_present = present_student
+
+        # fetching all absent student for class
+        absent_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="absent", student_class = c , date = datetime.date.today() ).count()
+        c.total_absent = absent_student
+
+        leave_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="leave", student_class = c, date = datetime.date.today()).count()
+        c.total_leave = leave_student
+
+      
+
+    
+
+
+
+    # ending attendace data for dashboard
+    context = {
+        'all_classes': all_classes,
+       
+    }
+    return render(request, 'main_app/dashboard.html' , context)
 
 
 
@@ -395,7 +426,6 @@ def institute_profile(request, pk):
     institute_data= Institute.objects.get(pk=pk)
     institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
     institute_class = Classes.objects.filter(institute=institute_data).reverse()
-<<<<<<< HEAD
     institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
 
     # starting user permission code
@@ -412,22 +442,6 @@ def institute_profile(request, pk):
       'user_permissions': user_permissions,
       'add_class_permission': add_class_permission,
       'add_subject_permission':add_subject_permission}
-=======
-  # return render(request, 'main_app/institute_profile.html', {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class, 'all_classes':all_classes})
-    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
-    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
-    institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
- 
- 
-    context_data = {'institute_data':institute_data, 'institute_roles':institute_roles, 'institute_class':institute_class,'institute_subject':institute_subject, 'all_classes':institute_class, 'institute_teachers':institute_teachers}
-
-    # institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
-    # context_data = {'institute_data':institute_data, 
-    # 'institute_roles':institute_roles,
-    #  'institute_class':institute_class,
-    #  'institute_subject':institute_subject,
-    #   'all_classes':institute_class}
->>>>>>> 731bb816429bbb5c13e634a8bfabc3710d7b1747
 
     return render(request, 'main_app/institute_profile.html', context_data)
    

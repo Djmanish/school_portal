@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from main_app.models import *
-from class_schedule.models import *;
-from holidaylist.models import *;
+from class_schedule.models import *
+from holidaylist.models import *
 
 
 # Create your models here.

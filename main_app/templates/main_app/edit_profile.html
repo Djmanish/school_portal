@@ -577,7 +577,7 @@
     {% if user_info.Class %}
     <option selected value="{{user_info.Class.id}}">{{user_info.Class}}</option>  
     {% else %}
-    <option  disabled> -- select your class --</option>
+    <option selected  disabled value="" > -- select your class --</option>
     {% endif %}
      {% for class in all_institute_classes %}
      <option value="{{class.id}}">{{class}}</option>
