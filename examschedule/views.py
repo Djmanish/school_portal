@@ -53,7 +53,7 @@ def exam_schedule(request,pk):
             sr_no=ExamDetails.objects.filter(institute=request.user.profile.institute, exam_class=selected_class, exam_type=exam_type_id).count()
             
        
-            if request.method=="POST":
+            if request.method == "POST":
               for i in request.POST.getlist('select_exam_subject'):
                 print(i)
               
