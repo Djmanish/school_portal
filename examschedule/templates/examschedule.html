@@ -518,7 +518,7 @@
                                                             {% endfor %}
                                                         </ul>
                                                         {% endif %}
-                                                        <form>
+                                                        <form method="GET">
                                                         <tr style="background-color:#ADD8E6">
                                                             
                                                                 <td>
@@ -561,63 +561,44 @@
                                                         </thead>
 
                                                         <tbody>
-                                                            <form method='POST' action="">
-
-                                                            {% csrf_token %}
+                                                         <form method="POST" action="">
+                                                                {% csrf_token %}
                                                             <tr >
                                                                 <td ><label><b>Exam Code</b></label></td>
-
                                                                 <td colspan="6">
-                                                                    
-                                                                    <input type="text" value={{institute_exam_schedule_data.code}}-{{selected_class.pk}}-{{exam_type_id.exam_type_id}}-{{sr_no}} name="exam_institute_code"  readonly="readonly" style="text-align: center; font-weight: 500; border: 0ch;"/>
+                                                                    <input type="text" value={{institute_exam_schedule_data.code}}-{{selected_class.pk}}-{{exam_type_id.id}}-{{sr_no}} name="exam_institute_code"  style="text-align: center; font-weight: 500; border: 0ch;"/>
                                                                 </td>
 
                                                             </tr>
                                                              <tr  style="background-color: #1976d2; color:white">
-                                                               
                                                                 <th >Subject</th>
                                                                 <th>Subject Teacher</th>
                                                                 <th>Date</th>
                                                                 <th>Start Time</th>
                                                                 <th>End Time</th>
                                                                 <th>Assign Teacher</th>
-
-
-                                                                
                                                             </tr>
-                                                            
-                       
-                                  
                                                                     {% for exam_subject in exam_class_subject%}
                                                                     <tr style="background-color:#E5E5FF;"> 
                                                                         <td>
-                                                                            
-                                                                            
                                                                             <div class="form-group">
-                                                        
-                                                                                <select disabled style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="select_exam_subject">
+                                                                                <select  style="width:150px; background-color: white;-webkit-appearance:none; border:none;" class="form-control"  name="select_exam_subject">
                                                                                   <option  value="{{exam_subject.id}}">{{exam_subject}}</option>
-                                                                                 
                                                                                 </select>
                                                                               </div>
-                                                                             
-
-                                                                              
                                                                             
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group">
-                                                        
-                                                                                <select  disabled style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="select_exam_subject_teacher">
+                                                                                <select id="hide"  style=" width:150px; background-color: white; -webkit-appearance:none; border:none;" class="form-control"  name="select_exam_subject_teacher">
                                                                                   <option  value="{{exam_subject.subject_teacher.id}}">{{exam_subject.subject_teacher}}</option>
-                                                                                 
                                                                                 </select>
                                                                               </div>
                                                                        
                                                                            </td>
-                                                                        <td><input type='date', value="", name="select_date"/></td>
-                                                                        <td><input type='time', value="", name="select_start_time"/></td>
-                                                                        <td><input type='time', value="", name="select_end_time"/></td>
+                                                                        <td><div class="form-group"><input type='date', class="form-control", value="", name="select_date"/></div></td>
+                                                                        <td><div class="form-group"><input type='time', class="form-control", value="", name="select_start_time"/></div></td>
+                                                                        <td><div class="form-group"><input type='time',  class="form-control", value="", name="select_end_time"/></div></td>
                                                                         <td>  <div class="form-group">
                                                                            
                                                                             <select class="form-control" name="assign_teacher" required>
@@ -638,13 +619,16 @@
                                                                         
 
                                                                     {% endfor %}
+                                                                    <tr>
                                                                    
                                                                     <td colspan="6">
                                                                         <div style="text-align: center;"> 
                                                                         <input type="submit" class="btn btn-primary" value="Submit">
                                                                     </div>
+
     
                                                                     </td>
+                                                                </tr>
                                                                 </form>
                                                                  
                   
