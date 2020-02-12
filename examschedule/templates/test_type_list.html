@@ -391,6 +391,13 @@
                         <span class="menu_title">Exam Details</span>
                     </a>
                     <ul>
+                        <li>
+                            <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Create Exam</span>
+                            </a>
+
+                        </li>
                        
                         <li>
                             <a href="{% url 'examschedule' request.user.profile.institute.id %}">
@@ -399,6 +406,7 @@
                             </a>
 
                         </li>
+                        
                         <li>
                             <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
@@ -509,12 +517,13 @@
                                             <div class="md-card-content">
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <button type="button" class="md-btn md-btn-primary md-btn-small"
-                                                    data-uk-modal="{target:'#modal_new_test_type'}">Add Test Type</button>
+                                                    data-uk-modal="{target:'#modal_new_test_type'}">Create Exam</button>
                                                     <div class="uk-modal" id="modal_new_test_type">
                                                         <div class="uk-modal-dialog">
                                                             <div class="uk-modal-header">
-                                                                <h3 class="uk-modal-title">Add Test Type </h3>
+                                                                <h3 class="uk-modal-title">Create Exam </h3>
                                                             </div>
+                                                            
                                                             <form  method="POST" action="{% url 'create_test_type' request.user.profile.institute.id %}">
                                                                 {% csrf_token %}
                                                                      <div class="form-group">
@@ -523,7 +532,15 @@
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label >Maximum Marks:</label>
-                                                                        <input type="text" class="form-control" name="max_marks" required>
+                                                                        <input type="text" class="form-control" name="exam_max_marks" required>
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                        <label >Maximum Exam Limit:</label>
+                                                                        <input type="text" class="form-control" name="exam_max_limit" required>
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                        <label >% of Final Score:</label>
+                                                                        <input type="text" class="form-control" name="exam_per_final_score" required>
                                                                       </div>
                                                                     
                                                                           <button type="submit" class="md-btn md-btn-primary">Add Test Type</button>
@@ -543,46 +560,33 @@
                                                         {% endfor %}
                                                     </ul>
                                                     {% endif %}
-                                                  
-                                                        </div>
-                                                            </th>
-                                                            <th> </th>
-
-                                                           
-
-                                                        </tr>
-                                                        
-                                                        <tr>
-
-
-                                                            <th class="uk-text-left">
-
-                                                                <b style="color: #1976d2;"> 
-                                                                    Exam Schedule for class {{exam_class.exam_class}}</b>
-
-
-                                                            </th>
-
-
-                                                        </tr>
-                                                        <tr>
-                                                            <th><b>Sr. No.</b></th>
-                                                            <th><b>Exam Type</b></th>
-                                                            <th><b>Maximum Marks</b></th>
-                                                        
-
-                                                        </tr>
-                                                    </thead>
+                                                
 
                                                     <tbody>
+                                                       
                                                         
-                                                            {% for test_type in institute_exam_test_type %}
-                                                            <tr>
+                                                            <tr style="background-color: #1976d2; color:white">
+                                                                <th><b>Sr. No.</b></th>
+                                                                <th><b>Exam Type</b></th>
+                                                                <th><b>Maximum Marks</b></th>
+                                                                <th><b>Maximum Exam limit</b></th>
+                                                                <th><b>% of Final Score </b></th>
+                                                            </tr>
+                                                      
+                                                       
+                                                        
+                                                            {% for test_type in institute_exam_type %}
+                                                            <tr style="background-color:#ADD8E6">
                                                                 <td> {{ forloop.counter}}
                                                                 </td>
                                                                 <td>{{test_type.exam_type}}
                                                                 </td>
                                                                 <td>{{test_type.exam_max_marks}}</td>
+
+                                                                <td>{{test_type.exam_max_limit}}</td>
+
+                                                                <td>{{test_type.exam_per_final_score}}</td>
+
                                                             </tr>
                                                             
                                                              

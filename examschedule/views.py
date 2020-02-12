@@ -10,9 +10,33 @@ from django.contrib import messages
 # Create your views here.
 
 def create_test_type(request,pk):
-  if request.method=="POST":
-    exam_type_name=request.POST.get()
-  return render(request, 'test_type_list.html')
+    institute_exam=Institute.objects.get(pk=pk)
+    institute_exam_type=ExamType.objects.filter(institute=institute_exam)
+    exam_sr_no=ExamType.objects.filter(institute=request.user.profile.institute).count()+1
+   
+    if request.method=="POST":
+          exam_type_name=request.POST.get('exam_type')
+          exam_max_marks= request.POST.get('exam_max_marks')
+          exam_max_limit = request.POST.get('exam_max_limit')
+          exam_per_final_score = request.POST.get('exam_per_final_score')
+        
+
+          examtype= ExamType()
+          examtype.institute=request.user.profile.institute
+          examtype.exam_type=exam_type_name
+          examtype.exam_max_marks=exam_max_marks
+          examtype.exam_max_limit=exam_max_limit
+          examtype.exam_per_final_score=exam_per_final_score
+          examtype.exam_type_sr_no=exam_sr_no
+          examtype.save()
+          messages.success(request, 'New Exam Type Created successfully !!!')
+      # institute_pk = request.user.profile.institute.pk
+      # return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
+    context={
+      'institute_exam_type':institute_exam_type,
+      
+    }
+    return render(request, 'test_type_list.html', context)
 
 def exam_schedule(request,pk):
         # fetch the institute and Exam Details based on the institute
@@ -37,26 +61,18 @@ def exam_schedule(request,pk):
             
         # fetching the value of exam from the given drop down
             exam_type_schedule= ExamType.objects.all()
-            
             select_exam_for_schedule = request.GET.get('selected_exam_type')
             if select_exam_for_schedule==None:
                    etype=ExamType.objects.all().last()
                    exam_type_id=etype.id
                    select_exam_for_schedule=exam_type_id
             exam_type_id=ExamType.objects.get(pk=select_exam_for_schedule)
-                
-        
           #  to fetch the value of Subject and Subject Teacher
             exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
           
           # Count the number if tyoe the exam type selected 
-            sr_no=ExamDetails.objects.filter(institute=request.user.profile.institute, exam_class=selected_class, exam_type=exam_type_id).count()
-            
-       
+            sr_no=ExamDetails.objects.filter(institute=request.user.profile.institute, exam_class=selected_class, exam_type=exam_type_id).count()+1
             if request.method == "POST":
-              for i in request.POST.getlist('select_exam_subject'):
-                print(i)
-              
               for subject,subject_teacher,date,start_time,end_time,assign_teacher,exam_code in zip(request.POST.getlist('select_exam_subject'), request.POST.getlist('select_exam_subject_teacher'),request.POST.getlist('select_date'),request.POST.getlist('select_start_time'),request.POST.getlist('select_end_time'),request.POST.getlist('assign_teacher'),request.POST.getlist('exam_institute_code')):
                 selected_class=Classes.objects.get(pk=request.GET.get('selected_class'))
                 select_exam_type= ExamType.objects.get(pk=request.GET.get('selected_exam_type'))
@@ -100,13 +116,35 @@ def exam_schedule(request,pk):
 def examschedule_view(request,pk):
             institute_exam_schedule = Institute.objects.get(pk=pk)
             institute_exam_schedule = ExamDetails.objects.filter(institute=institute_exam_schedule)
+            institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
 
+            select_exam_type = request.GET.get('selected_exam_type')
+            if select_exam_type == None:
+                    exam_type = ExamType.objects.filter(institute= request.user.profile.institute).last()
+                    exam_type_id = exam_type.id
+                    select_exam_type= exam_type_id
+            selected_exam_type = ExamType.objects.get(pk=select_exam_type)
+            print(selected_exam_type)
+
+            # exam_type_number=ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type=select_exam_type)
+            # exam_type_n=exam_type_number.exam_sr_no
+            # print(exam_type_n)
+
+            select_exam_type_no = request.GET.get('selected_exam_type_no')
+            if select_exam_type_no == None:
+                    exam_type_no = ExamDetails.objects.filter(institute= request.user.profile.institute).last()
+                    exam_type_no_id = exam_type_no.id
+                    select_exam_type_no= exam_type_no_id
+            select_exam_type_no = ExamDetails.objects.filter(exam_sr_no=select_exam_type_no)
+            print(select_exam_type_no)
+            
       
             context={
              
               
-              'institute_exam_schedule':institute_exam_schedule
+              'institute_exam_schedule':institute_exam_schedule,
+              'institute_exam_type':institute_exam_type,
 
 
-            }
+                   }
             return render(request,'update_examschedule.html', context)

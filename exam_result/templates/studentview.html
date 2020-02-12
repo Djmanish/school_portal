@@ -390,6 +390,13 @@
                         <span class="menu_title">Exam Details</span>
                     </a>
                     <ul>
+                        <li>
+                            <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Create Exam</span>
+                            </a>
+
+                        </li>
                        
                         <li>
                             <a href="{% url 'examschedule' request.user.profile.institute.id %}">
