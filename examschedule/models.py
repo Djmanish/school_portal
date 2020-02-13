@@ -8,17 +8,12 @@ from holidaylist.models import *
 # Create your models here.
 
 class ExamType(models.Model):
-  EXAM_TYPE=[
-     ('Class', 'Class'),
-     ('Unit', 'Unit'),
-     ('Monthly', 'Monthly'),
-     ('Quarterly', 'Quarterly'),
-     ('Half Yearly', 'Half Yearly'),
-     ('Yearly', 'Yearly'),
-  ]
+  exam_type_sr_no=models.CharField(max_length=100, null=True)
   institute=models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='examtype_institute', null=True)
-  exam_type=models.CharField(max_length=100, choices=EXAM_TYPE, null= True)
+  exam_type=models.CharField(max_length=100, null= True)
   exam_max_marks=models.CharField(max_length=100, null=True)
+  exam_max_limit= models.CharField(max_length=100, null=True)
+  exam_per_final_score=models.CharField(max_length=100, null=True)
 
   def __str__(self):
     return self.exam_type

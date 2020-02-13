@@ -391,6 +391,13 @@
                         <span class="menu_title">Exam Details</span>
                     </a>
                     <ul>
+                        <li>
+                            <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Create Exam</span>
+                            </a>
+
+                        </li>
                        
                         <li>
                             <a href="{% url 'examschedule' request.user.profile.institute.id %}">
@@ -527,11 +534,24 @@
                                                              
                                                                 <td>
                                                               
-                                                                    <select name="selected_exam_code" style="padding: 2px;" required>
-                                                                        <option selected disabled value="">--Select Code--</option>
+                                                                    <select name="selected_exam_type" style="padding: 2px;" required>
+                                                                        <option selected disabled value="">--Select Exam Type--</option>
                                                                         
-                                                                        {% for exam_code in institute_exam_schedule %}
-                                                                           <option value="{{exam_code.id}}"> {{exam_code}}</option>
+                                                                        {% for exam_type in institute_exam_type %}
+                                                                           <option value="{{exam_type.id}}"> {{exam_type}}</option>
+                                                                        {% endfor %}
+                                                                            
+                                            
+                                                                 </select>
+                                                                 
+                                                                </td>
+                                                                <td>
+                                                              
+                                                                    <select name="selected_exam_type_no" style="padding: 2px;" required>
+                                                                        <option selected disabled value="">--Select Exam Type Number--</option>
+                                                                        
+                                                                        {% for exam_type_number in institute_exam_schedule %}
+                                                                           <option value="{{exam_type_number.exam_sr_no.id}}"> {{exam_type_number.exam_sr_no}}</option>
                                                                         {% endfor %}
                                                                             
                                             
