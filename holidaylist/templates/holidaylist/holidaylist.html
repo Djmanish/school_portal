@@ -405,12 +405,12 @@
                             </div> -->
                         </div>
                         <!-- <div class="md-card"> -->
-                            {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-
-                        <button type="button" class="md-btn md-btn-primary md-btn-small " data-uk-modal="{target:'#modal_new_holiday'}">Add
-                            Holiday</button>
-
+                            
+                            {% if can_add_holiday_permission in user_permissions %}
+                            <button type="button" class="md-btn md-btn-primary md-btn-small " data-uk-modal="{target:'#modal_new_holiday'}">Add
+                                Holiday</button>
                             {% endif %}
+
                               <!-- success message -->
                               {% if messages %}
                               <ul class="messages">
@@ -517,44 +517,23 @@
                                         <th data-priority="2">Name</th>
                                         <th data-priority="3">Applicable</th>
                                         <th data-priority="4">Type</th>
-                                        {% if user.profile.designation.level_name == "admin" %}
-
                                         <th data-priority="5">Email</th>
                                        <th data-priority="6">Content</th> 
                                         <th data-priority="7">SMS</th>
                                         <th data-priority="8">Content</th>
                                         <th data-priority="9">Notification</th>
                                         <th data-priority="10">Content</th>
+
+                                        {% if can_edit_holiday_permission in user_permissions %}
                                         <th data-priority="11">Edit</th>
-                                        <th data-priority="12">Delete</th>
                                         {% endif %}
-                                                           
-                                        
+
+                                        {% if can_delete_holiday_permission in user_permissions %}
+                                        <th data-priority="12">Delete</th>
+                                        {% endif %}            
                                     </tr>
                                 </thead>
-                                <tfoot>
-                                    <tr>
-                                        
-                                       
-
-                                        <th class="filter-false remove sorter-false" data-priority="6">S.No.</th>
-                                        <th data-priority="critical">Date</th>
-                                        <th data-priority="1">Day</th>
-                                        <th data-priority="2">Name</th>
-                                        <th data-priority="3">Applicable</th>
-                                        <th data-priority="4">Type</th>
-                                        {% if user.profile.designation.level_name == "admin" %}
-                                        <th data-priority="5">Email</th>
-                                        <th data-priority="6">Content</th>
-                                        <th data-priority="7">SMS</th>
-                                        <th data-priority="8">Content</th>
-                                        <th data-priority="9">Notification</th>
-                                        <th data-priority="10">Content</th>
-                                        <th data-priority="11">Edit</th>
-                                        <th data-priority="12">Delete</th>
-                                        {% endif %}
-                                    </tr>
-                                </tfoot>
+                          
                                 <tbody>
                                   {% for holiday in institute_holiday_list %}
                                     
@@ -623,10 +602,18 @@
                                             <p>Link</p>
                                         </div>
                                             {% endif %}</td>
-                                        <td><a  class="" href="{% url 'edit_holiday' holiday.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
-                                        </td>
-                                        <td><a  class="" href="{% url 'delete_holiday' holiday.pk %}"><i class="material-icons" style="color: #ff0000;">delete</i></a>
-                                        </td>
+
+                                            {% if can_edit_holiday_permission in user_permissions %}
+                                            <td><a  class="" href="{% url 'edit_holiday' holiday.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                            </td>
+                                            {% endif %}
+
+                                            {% if can_delete_holiday_permission in user_permissions %}
+                                            <td><a  class="" href="{% url 'delete_holiday' holiday.pk %}"><i class="material-icons" style="color: #ff0000;">delete</i></a>
+                                            </td>
+                                            {% endif %}  
+                                       
+                                       
                                         {% endif %}
 
                                     </tr>

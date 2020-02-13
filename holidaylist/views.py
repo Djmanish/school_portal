@@ -41,8 +41,20 @@ def holidaylist(request,pk):
                
                 # institute_holidaylist = HolidayList.objects.filter(institute=institute_holiday).reverse()
     
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_add_holiday_permission = App_functions.objects.get(function_name='Can Add Holiday')
+    can_edit_holiday_permission = App_functions.objects.get(function_name='Can Edit Holiday')
+    can_delete_holiday_permission = App_functions.objects.get(function_name='Can Delete Holiday')
 
-    return render(request, 'holidaylist/holidaylist.html',{'institute_holiday_list':institute_holiday_list})
+    context = {'institute_holiday_list':institute_holiday_list,
+    'user_permissions': user_permissions,
+    'can_add_holiday_permission':can_add_holiday_permission,
+    'can_edit_holiday_permission':can_edit_holiday_permission,
+    'can_delete_holiday_permission': can_delete_holiday_permission
+
+
+    }
+    return render(request, 'holidaylist/holidaylist.html', context)
 
 
                 
