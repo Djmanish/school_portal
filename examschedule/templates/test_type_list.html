@@ -383,14 +383,17 @@
                 {% endif %}
 
                 {% endif %}
-                <li class="current_section" title="ExamSchedule">
+               
 
+                <li  title="Examination">
 
                     <a href="">
                         <span class="menu_icon"><i class="material-icons">poll</i></span>
-                        <span class="menu_title">Exam Details</span>
+                        <span class="menu_title">Examination</span>
                     </a>
                     <ul>
+                        {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
+
                         <li>
                             <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
@@ -398,15 +401,16 @@
                             </a>
 
                         </li>
-                       
+
+              
                         <li>
                             <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Exam Schedule</span>
+                                <span class="menu_title">Create Exam Schedule</span>
                             </a>
 
                         </li>
-                        
+                        {% endif %}
                         <li>
                             <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
@@ -414,41 +418,30 @@
                             </a>
 
                         </li>
-                    </ul>
-
-                </li>
-                
-                <li  title="ExamResult">
-                    <a href="">
-                        <span class="menu_icon"><i class="material-icons">poll</i></span>
-                        <span class="menu_title">Result</span>
-                    </a>
-                    <ul>
+                        {% if user.profile.designation.level_name == "teacher"%}
                         <li>
                             <a href="{% url 'examresult' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Teacher View</span>
+                                <span class="menu_title">Exam Result</span>
                             </a>
 
                         </li>
-                        <li>
-                            <a href="{% url 'examschedule' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Principal View</span>
-                            </a>
-
-                        </li>
+                        {% endif %}
+                        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
+           
                         <li>
                             <a href="{% url 'studentview' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Student View</span>
+                                <span class="menu_title">View Exam Result</span>
                             </a>
 
                         </li>
-          
+                        {% endif %}
                     </ul>
 
                 </li>
+
+               
                
                 <li title="Log Out">
                     <a href="{% url 'auth_logout' %}">

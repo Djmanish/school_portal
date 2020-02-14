@@ -382,14 +382,25 @@
                     </a>
 
                 </li>
-                <li class="current_section" title="ExamSchedule">
+                
+                
+                <li  title="ExamResult">
+                   
+                    
 
+                
+                {% endif %}
+                
+
+                <li  title="Examination">
 
                     <a href="">
                         <span class="menu_icon"><i class="material-icons">poll</i></span>
-                        <span class="menu_title">Exam Details</span>
+                        <span class="menu_title">Examination</span>
                     </a>
                     <ul>
+                        {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
+
                         <li>
                             <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
@@ -397,14 +408,16 @@
                             </a>
 
                         </li>
-                       
+
+              
                         <li>
                             <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Exam Schedule</span>
+                                <span class="menu_title">Create Exam Schedule</span>
                             </a>
 
                         </li>
+                        {% endif %}
                         <li>
                             <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
@@ -412,42 +425,30 @@
                             </a>
 
                         </li>
-                    </ul>
-
-                </li>
-                
-                <li  title="ExamResult">
-                    <a href="">
-                        <span class="menu_icon"><i class="material-icons">poll</i></span>
-                        <span class="menu_title">Result</span>
-                    </a>
-                    <ul>
+                        {% if user.profile.designation.level_name == "teacher"%}
                         <li>
                             <a href="{% url 'examresult' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Teacher View</span>
+                                <span class="menu_title">Exam Result</span>
                             </a>
 
                         </li>
-                        <li>
-                            <a href="{% url 'examview' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Principal View</span>
-                            </a>
-
-                        </li>
+                        {% endif %}
+                        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
+           
                         <li>
                             <a href="{% url 'studentview' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Student View</span>
+                                <span class="menu_title">View Exam Result</span>
                             </a>
 
                         </li>
-          
+                        {% endif %}
                     </ul>
 
                 </li>
-                {% endif %}
+
+               
 
                 {% endif %}
                 <li title="Log Out">
@@ -525,14 +526,14 @@
                                                                
                                                                 type: 'line',
                                                                 data: {
-                                                                    labels: ['Absent', 'Present', 'Present'
-                                                                    , 'Present'
-                                                                    , 'Present'],
+                                                                    labels: ['Subject1', 'Subject2', 'Subject3'
+                                                                    , 'Subject4','Subject5'
+                                                                    ],
                                                                     datasets: [
                                                                         {
                                                                         width:120,
-                                                                        label: 'Chart 1',
-                                                                        data: [10,40,50,60],
+                                                                        label: 'Maximum Marks',
+                                                                        data: [3,5,4,3,7],
                                                        
                                                           
                                                                         
@@ -541,12 +542,10 @@
                                                                         borderColor: 'rgba(0, 200, 0, 1)'
                                                                         },
                                                                     { type: 'bar',
-                                                                        label: 'Chart 2',
+                                                                        label: 'Students Marks',
                                                                     
                                                                         data: [
-                                                                            {% for i in student_view %}
-                                                                            {{i.result_score}},
-                                                                            {% endfor %}
+                                                                           10,20,30,40,50
                                                                         ],
                                                                     
                                                                         showLine: true,
@@ -572,8 +571,8 @@
                                                                         }
                                                                             },
                                                                         { type: 'line',
-                                                                        label: 'Chart 3',
-                                                                        data: [{x: 1, y: 3}, {x: 3, y: 4}, {x: 4, y: 6}, {x: 6, y: 9}],
+                                                                        label: 'Minimum Marks',
+                                                                        data: [15,10,25,30,3],
                                                                         showLine: true,
                                                                         fill: false,
                                                                         borderColor: 'rgba(200, 0, 0, 1)'

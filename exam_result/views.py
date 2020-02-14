@@ -3,6 +3,8 @@ from .models import *
 from main_app.models import *
 from examschedule.models import *
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib import messages
+
 
 
 
@@ -45,7 +47,7 @@ def exam_result(request,pk):
       # select_exam_type = request.POST.get('result_exam_type')
       
       # select_exam_type_no = request.POST.get('fetch_result_sr_no')
-      selected_exam_tyep =  ExamType.objects.filter(institute= request.user.profile.institute, exam_type= result_exam_type).first()
+      selected_exam_type =  ExamType.objects.filter(institute= request.user.profile.institute, exam_type= result_exam_type).first()
       for sdata,score in zip(request.POST.getlist('student_first_name'),request.POST.getlist('student_marks')):
 
          sdata = UserProfile.objects.get(pk=sdata)
@@ -53,7 +55,7 @@ def exam_result(request,pk):
          marks_data=ExamResult()
          marks_data.institute=request.user.profile.institute
          marks_data.exam_sr_no= result_exam_type_sr_no
-         marks_data.exam_type= selected_exam_tyep
+         marks_data.exam_type= selected_exam_type
          marks_data.result_class=selected_subject.subject_class
          marks_data.result_subject=selected_subject
          marks_data.result_subject_teacher=selected_subject.subject_teacher
@@ -61,7 +63,7 @@ def exam_result(request,pk):
          marks_data.result_max_marks=exam_max_marks
          marks_data.result_score=score
          marks_data.save()
-      # messages.success(request, 'Exam Result Stored successfully !!!')
+      messages.success(request, 'Exam Result Stored successfully !!!')
  
 
 
@@ -78,29 +80,12 @@ def exam_result(request,pk):
   }
   return render(request, 'teacher_view.html', context)
 
-#  Principal View
-def exam_view(request,pk):
-
-    exam_details=ExamType.objects.all()
-    if request.method=="POST":
-      for  per_score, exam_type in zip(request.POST.getlist('per_score'),request.POST.getlist('examview_examtype')): 
-        exam_type_id=ExamType.objects.get(pk=exam_type)
-        
-        examview=ExamView()
-        
-        examview.exam_percent_score=per_score
-        examview.pexamview_type=ExamType.objects.get(pk=exam_type)
-        examview.save()
-    context={
-    'exam_details':exam_details,
-           }
-    return render(request, 'principal_view.html', context)
 
 
     # Student View
 
 def student_view(request,pk):
-    student_view=ExamResult.objects.all()
+    student_view=ExamResult.objects.filter(institute=request.user.profile.institute)
    
     
 
