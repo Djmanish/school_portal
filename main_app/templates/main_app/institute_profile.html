@@ -742,14 +742,17 @@
                                                                 <th><b>Class Name</b></th>
                                                                 <!-- <th><b>Class Teacher</b></th> -->
                                                                 <th><b>Class Teacher</b></th>
-                                                                {% if user.profile.designation.level_name == "admin" %} 
-                                                                <th><b>Assign Class Teacher</b></th>
+                                                              
+                                                              {% if assign_class_teacher_permission in user_permissions %}
+                                                              <th><b>Assign Class Teacher</b></th>
+                                                              {% endif %}
+                                                              {% if can_edit_class_permission in user_permissions %}       
                                                                 <th><b>Edit</b></th>
+                                                                {% endif %}
+
+                                                                {% if can_delete_class_permission in user_permissions %} 
                                                                 <th><b>Delete</b></th>
                                                                 {% endif %}
-                                                                
-
-
 
                                                             </tr>
                                                         </thead>
@@ -760,6 +763,7 @@
                                                                 </td>
                                                                 <td> {{classes.name }} </td>
                                                                 <!-- <td>{{classes.class_teacher}}</td> -->
+                                                               
                                                                 <td>
                                                                     {% if classes.class_teacher %}
                                                                     {{classes.class_teacher}}
@@ -767,16 +771,23 @@
                                                                     Not assigned
                                                                     {% endif %}   
                                                                     </td>
-                                            {% if user.profile.designation.level_name == "admin" %}                        
+                                                               
+                                                               
+                                                                  
+                                            {% if assign_class_teacher_permission in user_permissions %}
                                                                     <td class="text-center"><a  class="" href="{% url 'assign_class_teacher' classes.pk %}"><i class="material-icons" style="color: #2196f3;" >person_add</i></a>
                                                                     </td>
-                                            
-                                                               
+                                                                    {% endif %}
+                                                                    {% if can_edit_class_permission in user_permissions %}                                          
                                                                 <td><a  class="" href="{% url 'edit_class' classes.pk %}"> <i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                                 </td>
+                                                                {% endif %}  
+                                                                
+                                                                {% if can_delete_class_permission in user_permissions %} 
                                                                 <td><a  class="" href="{% url 'delete_class' classes.pk %}"><i class="material-icons" style="color: #ff0000;">delete</i></a>
                                                                 </td>
-                                            {% endif %}
+                                                                {% endif %} 
+                                       
                                                             </tr>
                                                             {% endfor %}
                                                         </tbody>
@@ -874,10 +885,14 @@
                                                                 <th><b>Subject Code</b></th>
                                                                 <th><b>Subject Name</b></th>
                                                                 <th><b>Subject Teacher</b></th>
-                                                                {% if user.profile.designation.level_name == "admin" %}                        
+                                                                {% if can_edit_subject_permission in user_permissions %}                    
                                                                 <th><b>Edit</b></th>
+                                                                {% endif %}
+
+                                                                {% if can_delete_subject_permission in user_permissions %} 
                                                                 <th><b>Delete</b></th>
                                                                 {% endif %}
+                                                                
 
                                                             </tr>
                                                         </thead>
@@ -892,13 +907,19 @@
                                                                 <td> {{subjects.subject_name}} </td>
                                                                 <td> {{subjects.subject_teacher}} </td>
 
-                                            {% if user.profile.designation.level_name == "admin" %}
-                                                                
-                                                               <td><a   href="{% url 'edit_subject' subjects.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
-                                                               </td>
-                                                               <td><a  class="" href="{% url 'delete_subject' subjects.pk %}"><i class="material-icons" style="color: #ff0000;">delete</i></a>
-                                                               </td>
-                                            {% endif %}
+                                           
+                                                                {% if can_edit_subject_permission in user_permissions %}                    
+                                                                <td><a   href="{% url 'edit_subject' subjects.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                                </td>
+                                                                {% endif %}
+
+                                                                {% if can_delete_subject_permission in user_permissions %} 
+                                                                <td><a  class="" href="{% url 'delete_subject' subjects.pk %}"><i class="material-icons" style="color: #ff0000;">delete</i></a>
+                                                                </td>
+                                                                {% endif %}
+                                                              
+                                                              
+                                           
 
                                                             </tr>
                                                             {% endfor %}

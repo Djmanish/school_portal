@@ -432,7 +432,13 @@ def institute_profile(request, pk):
     user_permissions = request.user.user_institute_role.level.permissions.all()
     add_class_permission = App_functions.objects.get(function_name='Can Add Class')
     add_subject_permission = App_functions.objects.get(function_name='Can Add Subject')
+    assign_class_teacher_permission = App_functions.objects.get(function_name='Can Assign Class Teacher')
+    can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
+    can_delete_class_permission = App_functions.objects.get(function_name='Can Delete Class')
+    can_edit_subject_permission = App_functions.objects.get(function_name='Can Edit Subject')
+    can_delete_subject_permission = App_functions.objects.get(function_name='Can Delete Subject')
 
+    
     # ending user permission code
     context_data = {'institute_data':institute_data, 
     'institute_roles':institute_roles,
@@ -442,7 +448,13 @@ def institute_profile(request, pk):
       'user_permissions': user_permissions,
       'add_class_permission': add_class_permission,
       'add_subject_permission':add_subject_permission,
-      'institute_teachers':institute_teachers,}
+      'institute_teachers':institute_teachers,
+      'assign_class_teacher_permission':assign_class_teacher_permission,
+      'can_edit_class_permission':can_edit_class_permission,
+      'can_delete_class_permission':can_delete_class_permission,
+      'can_edit_subject_permission':can_edit_subject_permission,
+      'can_delete_subject_permission': can_delete_subject_permission
+      }
 
     return render(request, 'main_app/institute_profile.html', context_data)
     

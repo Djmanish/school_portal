@@ -76,3 +76,7 @@ body{
   color: gray;
   padding: 1px;
 }
+
+.login_page {
+  background: radial-gradient(#2196f35c, transparent) !important;
+}
