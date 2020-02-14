@@ -41,11 +41,13 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"> </head>
      <body
         class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
     <!-- main header -->
+
     <header id="header_main">
         <div class="header_main_content">
             <nav class="uk-navbar">
@@ -529,31 +531,21 @@
                                                       
                                                            
               
-                                                            <form >
+                                                            <form method="POST" >
+                                                                {% csrf_token %}
                                                             <tr style="background-color:#ADD8E6">
-                                                             
-                                                                <td>
-                                                              
-                                                                    <select name="selected_exam_type" style="padding: 2px;" required>
+                                                                <td> <select class="form-control" id="selected_exam_type" name="selected_exam_type" style="padding: 2px;" required>
                                                                         <option selected disabled value="">--Select Exam Type--</option>
                                                                         
                                                                         {% for exam_type in institute_exam_type %}
-                                                                           <option value="{{exam_type.id}}"> {{exam_type}}</option>
+                                                                           <option  > {{exam_type}}</option>
                                                                         {% endfor %}
-                                                                            
-                                            
                                                                  </select>
                                                                  
                                                                 </td>
                                                                 <td>
-                                                              
-                                                                    <select name="selected_exam_type_no" style="padding: 2px;" required>
-                                                                        <option selected disabled value="">--Select Exam Type Number--</option>
-                                                                        
-                                                                        {% for exam_type_number in institute_exam_schedule %}
-                                                                           <option value="{{exam_type_number.exam_sr_no.id}}"> {{exam_type_number.exam_sr_no}}</option>
-                                                                        {% endfor %}
-                                                                            
+                                                                    <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no" style="padding: 2px;" required>
+                                                                        <option selected disabled value=''>--Select Exam Type No.--</option>
                                             
                                                                  </select>
                                                                  
@@ -564,6 +556,24 @@
                                                                </tr>
                                                                
                                                             </form>
+
+                                                            <script>
+                                                                $(document).ready(function(){
+                                                                  $('#selected_exam_type').change(function(){
+                                                                     
+                                                                      $.ajax({
+                                                                          type:'POST',
+                                                                          url:'/examschedule/fetching_max_sr_no/',
+                                                                          data:{exam_type_id:$("#selected_exam_type").val(), 
+                                                                          csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                          
+                                                                          success: function(msg){
+                                                                              $('#fetched_sr_no').html(msg);
+                                                                          }
+                                                                      })
+                                                                  })
+                                                                })
+                                                                </script>
                                                             <tr>
 
 
@@ -571,6 +581,7 @@
                                                         </thead>
 
                                                         <tbody>
+                                                          
                                                             <tr style="background-color: #1976d2; color:white">
                                                                
                                                                 <th>Subject</th>
@@ -586,7 +597,7 @@
                                                            
 
                                                     
-                                                                        {% for institute_exam_schedule in institute_exam_schedule %}
+                                                                        {% for institute_exam_schedule in exam_details %}
                                                                         <tr style="background-color:#E5E5FF;">
                                                                             <td> {{ institute_exam_schedule.exam_subject}}
                                                                             </td>
