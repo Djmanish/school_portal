@@ -43,7 +43,9 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"> </head>
      <body
         class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -505,21 +507,64 @@
                                             <div class="md-card-content">
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <body>
-                                                        <div>
+                                                        <table>
+                                                           <tr>
+                                                               <td>
+                                                                   {{student_view.result_score}}hwll
+                                                               </td>
+
                                                         
-                                                       
-                                                             
-                                                                
-                                                            
-                                                                
+                                                           </tr>
+<th>
+                                                                <form method="GET" >
+                                                                    {% csrf_token %}
+                                                                <tr style="background-color:#ADD8E6">
+                                                                    <td> <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px;" required>
+                                                                        <option selected disabled value="">--Select Exam Type--</option>
+                                                                        {% for exam_type in institute_exam_type %}
+                                                                           <option  > {{exam_type}}</option>
+                                                                        {% endfor %}
+                                                                 </select>
+                                                                 
+                                                                </td>
+                                                                <td>
+                                                                    <select class="form-control" id="fetch_result_sr_no" name="fetch_result_sr_no" style="padding: 2px;">
+                                                                        <option selected disabled value=''> -- Select Exam Type No. --</option>
+                                            
+                                                                 </select>
+                                                                 
+                                                                </td>
+                                                                <td>
+                                                                    <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
+                                                                </td>
+                                                                   </tr>
+                                                                   
+                                                                </form>
+                                                                <script>
+                                                                    $(document).ready(function(){
+                                                                      $('#result_exam_type').change(function(){
+                                                                         
+                                                                          $.ajax({
+                                                                              type:'POST',
+                                                                              url:'/examresult/fetching_sr_no/',
+                                                                              data:{exam_type_id:$("#result_exam_type").val(), 
+                                                                              csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                              
+                                                                              success: function(msg){
+                                                                                  $('#fetch_result_sr_no').html(msg);
+                                                                              }
+                                                                          })
+                                                                      })
+                                                                    })
+                                                                    </script>
+                                                                </th>
                                                            
-                                                        </div>
                                                       
-                                                     
+                                                     <tr>
                                                             <canvas id="myChart" >
                                                             </canvas>
-                                                               
-                                                            
+
+                                                          
                                                             <script>
                                                                 var ctx = document.getElementById('myChart').getContext('2d');
                                                                 var myChart = new Chart(ctx, {
@@ -601,9 +646,9 @@
                                                                     </script>
                                                             
 
-                                                       
+                                                        </tr>
                                                     
-                                                       
+                                                        </table>
                                                         </body>
                                                       
                                                       </html>

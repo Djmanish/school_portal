@@ -15,7 +15,11 @@ urlpatterns = [
   # path('examtypelist/<int:pk>',views.exam_type, name="create_test_type"),
   path('examschedule/view/<int:pk>', views.examschedule_view, name='examschedule_view'),
   path('examtypelist/<int:pk>', views.create_test_type, name="create_test_type"),
-  path('fetching_max_sr_no/', views.fetch_max_sr_no, name='fetch_max_sr_no' )
+  path('fetching_max_sr_no/', views.fetch_max_sr_no, name='fetch_max_sr_no' ),
+  path('examtypelist/edit/<int:pk>/', views.edit_test_type, name='edit_test_type'),
+  path('examtypelist/delete/<int:pk>/', views.delete_test_type, name='delete_test_type'),
+  path('examschedule/edit/<int:pk>/', views.edit_examschedule, name='edit_examschedule'),
+  path('examschedule/delete/<int:pk>/', views.delete_examschedule, name='delete_examschedule'),
 
  
 

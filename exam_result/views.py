@@ -28,13 +28,7 @@ def exam_result(request,pk):
        first_subject_id=first_subject.id 
        result_subject=first_subject_id
   selected_subject= Subjects.objects.get(pk=result_subject)
-  # result_exam_type=request.GET.get('result_exam_type')
-  # if result_exam_type==None:
-  #     result_type=ExamType.objects.filter(institute=request.user.profile.institute).last()
-  #     result_type_id=result_type.id
-  #     result_exam_type=result_type_id
-  # selected_exam_type=ExamType.objects.get(pk=result_exam_type)
-  # print(selected_exam_type)
+ 
   # to fetch the institute students based on selected class 
   student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
   institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
@@ -43,10 +37,6 @@ def exam_result(request,pk):
  # to get the data from the individual row
   if request.method=="POST":
     
-           
-      # select_exam_type = request.POST.get('result_exam_type')
-      
-      # select_exam_type_no = request.POST.get('fetch_result_sr_no')
       selected_exam_type =  ExamType.objects.filter(institute= request.user.profile.institute, exam_type= result_exam_type).first()
       for sdata,score in zip(request.POST.getlist('student_first_name'),request.POST.getlist('student_marks')):
 
@@ -65,16 +55,10 @@ def exam_result(request,pk):
          marks_data.save()
       messages.success(request, 'Exam Result Stored successfully !!!')
  
-
-
-
-
   context={
     'subject_result':subject_result,
     'selected_subject':selected_subject,
     'institute_students':institute_students,
-    # 'result_exam_type':result_exam_type,
-    # 'result_exam_code':result_exam_code,
     'institute_exam_type':institute_exam_type,
    
   }
@@ -85,12 +69,18 @@ def exam_result(request,pk):
     # Student View
 
 def student_view(request,pk):
-    student_view=ExamResult.objects.filter(institute=request.user.profile.institute)
-   
+    student=UserProfile.objects.filter(user=request.user)
+    result_exam_type = request.GET.get('result_exam_type')
+    # print(result_exam_type)
+    result_exam_type_sr_no = request.GET.get('fetch_result_sr_no')
+    student_view=ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=student)
+    institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
+    # student_result=ExamResult.objects.filter(institute=request.user.profile.institute, )
     
-
     context={
       'student_view':student_view,
+      'institute_exam_type':institute_exam_type,
+     
     }
     return render(request, 'studentview.html' , context)
 
@@ -103,3 +93,6 @@ def fetch_sr_no(request):
   for result_sr_no in max_exam_sr_no:
     individual_result_sr_no = individual_result_sr_no + f"<option >"+result_sr_no['exam_sr_no']+"</option>"  
   return HttpResponse(individual_result_sr_no)
+
+
+
