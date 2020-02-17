@@ -335,9 +335,10 @@ def edit_profile(request, pk):
                 return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})
             
             new_level_admin = Institute_levels.objects.create(institute=new_create_institute, level_id=1, level_name='admin')
-            new_level_parent = Institute_levels.objects.create(institute=new_create_institute, level_id=2, level_name='teacher') 
-            new_level_parent = Institute_levels.objects.create(institute=new_create_institute, level_id=3, level_name='parent') 
-            new_level_student = Institute_levels.objects.create(institute=new_create_institute, level_id=4, level_name='student')# creating default level for admin
+            new_level_principal = Institute_levels.objects.create(institute=new_create_institute, level_id=2, level_name='principal')
+            new_level_parent = Institute_levels.objects.create(institute=new_create_institute, level_id=3, level_name='teacher') 
+            new_level_parent = Institute_levels.objects.create(institute=new_create_institute, level_id=4, level_name='parent') 
+            new_level_student = Institute_levels.objects.create(institute=new_create_institute, level_id=5, level_name='student')# creating default level for admin
             role = Role_Description.objects.create(user=request.user, institute=new_create_institute, level= new_level_admin) # creating default role for admin
             user_info.designation = new_level_admin
             user_info.institute= new_create_institute
@@ -531,8 +532,8 @@ def delete_user_role(request, pk):
     
     user_role =  Institute_levels.objects.get(pk=pk, institute= request.user.profile.institute)
     role_id= user_role.level_id
-    if user_role.level_name == 'admin'  or user_role.level_name == 'parent' or user_role.level_name == 'student' or user_role.level_name == 'teacher'  :
-        messages.error(request, 'Admin, teacher, Parent or student roles can not be deleted !!!')
+    if user_role.level_name == 'admin'  or user_role.level_name == 'parent' or user_role.level_name == 'student' or user_role.level_name == 'teacher' or user_role.level_name == 'principal' :
+        messages.error(request, 'Admin, principal,  teacher, Parent or student roles can not be deleted !!!')
         rr= request.user.profile.institute.id
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
     else:
