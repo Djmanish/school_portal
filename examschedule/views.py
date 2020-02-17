@@ -10,8 +10,8 @@ from django.contrib import messages
 # Create your views here.
 
 def create_test_type(request,pk):
-    institute_exam=Institute.objects.get(pk=pk)
-    institute_exam_type=ExamType.objects.filter(institute=institute_exam)
+    
+    institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
     exam_sr_no=ExamType.objects.filter(institute=request.user.profile.institute).count()+1
    
     if request.method=="POST":
@@ -40,6 +40,49 @@ def create_test_type(request,pk):
       
     }
     return render(request, 'test_type_list.html', context)
+
+    
+def edit_test_type(request, pk):
+    test_type_info= ExamType.objects.get(pk=pk)
+    # institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
+    
+
+    if request.method=="POST":
+          exam_type_name=request.POST.get('exam_type')
+          exam_max_marks= request.POST.get('exam_max_marks')
+          exam_max_limit = request.POST.get('exam_max_limit')
+          exam_per_final_score = request.POST.get('exam_per_final_score')
+          
+          test_type_info.institute=request.user.profile.institute
+          test_type_info.exam_type=exam_type_name
+          test_type_info.exam_max_marks=exam_max_marks
+          test_type_info.exam_max_limit=exam_max_limit
+          test_type_info.exam_per_final_score=exam_per_final_score
+          # examtype.exam_type_sr_no=exam_sr_no
+          test_type_info.save()
+          messages.success(request, 'Exam Type Updated Successfully !!!')
+          institute_pk = request.user.profile.institute.pk
+          return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
+    
+    context={
+      # 'institute_exam_type':institute_exam_type,
+      'test_type_info':test_type_info,
+      
+            }
+    return render(request, 'edit_exam_type.html', context)
+
+def delete_test_type(request, pk):
+        test_type_info= ExamType.objects.get(pk=pk)
+      
+        test_type_info.exam_max_marks="null"
+        test_type_info.exam_max_limit="null"
+        test_type_info.exam_per_final_score="null"
+        
+        test_type_info.delete()
+        messages.success(request, 'Exam Type Deleted Successfully !!!')
+        institute_pk = request.user.profile.institute.pk
+        return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
+
 
 def exam_schedule(request,pk):
         # fetch the institute and Exam Details based on the institute
@@ -140,6 +183,59 @@ def examschedule_view(request,pk):
              
                      }
             return render(request,'update_examschedule.html', context)
+
+def edit_examschedule(request,pk):
+    examdetails_info= ExamDetails.objects.get(pk=pk)
+    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+
+    if request.method=="POST":
+          select_exam_subject=request.POST.get('select_exam_subject')
+          select_exam_subject_teacher= request.POST.get('select_exam_subject_teacher')
+          select_date = request.POST.get('select_date')
+          select_start_time = request.POST.get('select_start_time')
+          select_end_time = request.POST.get('select_end_time')
+          assign_teacher = request.POST.get('assign_teacher')
+
+
+          
+          examdetails_info.institute=request.user.profile.institute
+          examdetails_info.exam_subject=select_exam_subject
+          examdetails_info.exam_subject_teacher=select_exam_subject_teacher
+          examdetails_info.exam_date=select_date
+          examdetails_info.exam_start_time=select_start_time
+
+          examdetails_info.exam_end_time=select_end_time
+
+          # examdetails_info.exam_assign_teacher=assign_teacher
+
+
+         
+          examdetails_info.save()
+          messages.success(request, 'Exam Schedule Updated Successfully !!!')
+          institute_pk = request.user.profile.institute.pk
+          return HttpResponseRedirect(f'/examschedule/examschedule/view/{institute_pk}')
+    
+    context={
+      # 'institute_exam_type':institute_exam_type,
+      'examdetails_info':examdetails_info,
+      'institute_teachers':institute_teachers,
+      
+            }
+    return render(request, 'edit_exam_schedule.html', context)
+
+def delete_examschedule(request, pk):
+        examdetails_info= ExamDetails.objects.get(pk=pk)
+      
+        examdetails_info.exam_subject="null"
+        examdetails_info.exam_subject_teacher="null"
+        examdetails_info.exam_start_time="null"
+        examdetails_info.exam_end_time="null"
+        
+        examdetails_info.delete()
+        messages.success(request, 'Exam Schedule Deleted Successfully !!!')
+        institute_pk = request.user.profile.institute.pk
+        return HttpResponseRedirect(f'/examschedule/examschedule/view/{institute_pk}')
 
 
 def fetch_max_sr_no(request):
