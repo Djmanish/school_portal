@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from .models import *
 from main_app.models import *
 from django.contrib.auth.decorators import login_required
@@ -76,91 +76,99 @@ def schedule_update(request, pk):
         context_data = {'schedule_info':schedule_to_update,
                         'all_subjects':institute_subjects,
                         'institute_teachers': institute_teachers}
+
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        schedule_update_permission = App_functions.objects.get(function_name='Can Update Schedule')
+        
+
         if request.method == "POST":
-                
-                try:
-                        schedule_to_update.subject_lecture_one = Subjects.objects.get(pk=request.POST.get('subject_lecture_one'))
-                except:
-                        schedule_to_update.subject_lecture_one =None
+                if schedule_update_permission in user_permissions:
 
-                try:
-                        schedule_to_update.subject_teacher_lecture_one= User.objects.get(pk=request.POST.get('subject_teacher_lecture_one'))
-                except:
-                        schedule_to_update.subject_teacher_lecture_one=None
+                        try:
+                                schedule_to_update.subject_lecture_one = Subjects.objects.get(pk=request.POST.get('subject_lecture_one'))
+                        except:
+                                schedule_to_update.subject_lecture_one =None
 
-                try:
-                        schedule_to_update.subject_lecture_two = Subjects.objects.get(pk=request.POST.get('subject_lecture_two'))
-                except:
-                        schedule_to_update.subject_lecture_two = None
+                        try:
+                                schedule_to_update.subject_teacher_lecture_one= User.objects.get(pk=request.POST.get('subject_teacher_lecture_one'))
+                        except:
+                                schedule_to_update.subject_teacher_lecture_one=None
 
-                try:
-                        schedule_to_update.subject_teacher_lecture_two=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_two'))
-                except:
-                        schedule_to_update.subject_teacher_lecture_two= None
+                        try:
+                                schedule_to_update.subject_lecture_two = Subjects.objects.get(pk=request.POST.get('subject_lecture_two'))
+                        except:
+                                schedule_to_update.subject_lecture_two = None
 
-                try:
-                        schedule_to_update.subject_lecture_three= Subjects.objects.get(pk=request.POST.get('subject_lecture_three'))
-                except:
-                        schedule_to_update.subject_lecture_three=None
+                        try:
+                                schedule_to_update.subject_teacher_lecture_two=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_two'))
+                        except:
+                                schedule_to_update.subject_teacher_lecture_two= None
 
-                try:
-                        schedule_to_update.subject_teacher_lecture_three=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_three'))
-                except:
-                        schedule_to_update.subject_teacher_lecture_three= None
+                        try:
+                                schedule_to_update.subject_lecture_three= Subjects.objects.get(pk=request.POST.get('subject_lecture_three'))
+                        except:
+                                schedule_to_update.subject_lecture_three=None
 
-                try:
-                        schedule_to_update.subject_lecture_four= Subjects.objects.get(pk=request.POST.get('subject_lecture_four'))
-                except:
-                        schedule_to_update.subject_lecture_four= None
+                        try:
+                                schedule_to_update.subject_teacher_lecture_three=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_three'))
+                        except:
+                                schedule_to_update.subject_teacher_lecture_three= None
 
-                try:
-                        schedule_to_update.subject_teacher_lecture_four=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_four'))
-                except:
-                        schedule_to_update.subject_teacher_lecture_four= None
+                        try:
+                                schedule_to_update.subject_lecture_four= Subjects.objects.get(pk=request.POST.get('subject_lecture_four'))
+                        except:
+                                schedule_to_update.subject_lecture_four= None
 
-                try:
-                        schedule_to_update.subject_lecture_five= Subjects.objects.get(pk=request.POST.get('subject_lecture_five'))
-                except:
-                        schedule_to_update.subject_lecture_five= None
+                        try:
+                                schedule_to_update.subject_teacher_lecture_four=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_four'))
+                        except:
+                                schedule_to_update.subject_teacher_lecture_four= None
 
-                try:
-                        schedule_to_update.subject_teacher_lecture_five=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_five'))
-                except:
-                        schedule_to_update.subject_teacher_lecture_five= None
+                        try:
+                                schedule_to_update.subject_lecture_five= Subjects.objects.get(pk=request.POST.get('subject_lecture_five'))
+                        except:
+                                schedule_to_update.subject_lecture_five= None
 
-                try:
-                        schedule_to_update.subject_lecture_six= Subjects.objects.get(pk=request.POST.get('subject_lecture_six'))
-                except:
-                        schedule_to_update.subject_lecture_six= None
+                        try:
+                                schedule_to_update.subject_teacher_lecture_five=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_five'))
+                        except:
+                                schedule_to_update.subject_teacher_lecture_five= None
 
-                try:
-                        schedule_to_update.subject_teacher_lecture_six=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_six'))
-                except:
-                        schedule_to_update.subject_teacher_lecture_six=  None
+                        try:
+                                schedule_to_update.subject_lecture_six= Subjects.objects.get(pk=request.POST.get('subject_lecture_six'))
+                        except:
+                                schedule_to_update.subject_lecture_six= None
 
-                try:
-                        schedule_to_update.subject_lecture_seven= Subjects.objects.get(pk=request.POST.get('subject_lecture_seven'))
-                except:
-                        schedule_to_update.subject_lecture_seven= None
-                
-                try:
-                        schedule_to_update.subject_teacher_lecture_seven=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_seven'))
-                except:
-                        schedule_to_update.subject_teacher_lecture_seven= None
+                        try:
+                                schedule_to_update.subject_teacher_lecture_six=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_six'))
+                        except:
+                                schedule_to_update.subject_teacher_lecture_six=  None
 
-                try:
-                        schedule_to_update.subject_lecture_eight= Subjects.objects.get(pk=request.POST.get('subject_lecture_eight'))
-                except:
-                       schedule_to_update.subject_lecture_eight=None
+                        try:
+                                schedule_to_update.subject_lecture_seven= Subjects.objects.get(pk=request.POST.get('subject_lecture_seven'))
+                        except:
+                                schedule_to_update.subject_lecture_seven= None
                         
-                try:
-                        schedule_to_update.subject_teacher_lecture_eight=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_eight'))
-                except:
-                        schedule_to_update.subject_teacher_lecture_eight=None
-                
-                messages.success(request, "Class Schedule Updated Successfully !!!")
-                schedule_to_update.save()
-       
+                        try:
+                                schedule_to_update.subject_teacher_lecture_seven=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_seven'))
+                        except:
+                                schedule_to_update.subject_teacher_lecture_seven= None
+
+                        try:
+                                schedule_to_update.subject_lecture_eight= Subjects.objects.get(pk=request.POST.get('subject_lecture_eight'))
+                        except:
+                                schedule_to_update.subject_lecture_eight=None
+                                
+                        try:
+                                schedule_to_update.subject_teacher_lecture_eight=  User.objects.get(pk=request.POST.get('subject_teacher_lecture_eight'))
+                        except:
+                                schedule_to_update.subject_teacher_lecture_eight=None
+                        
+                        messages.success(request, "Class Schedule Updated Successfully !!!")
+                        schedule_to_update.save()
+                else:
+                        messages.info(request, "You don't have permission to update class Schedule")
+                        return redirect('not_found')
         return render(request, 'class_schedule/update_schedule.html', context_data )
 @login_required
 def class_stage_lecture_time_update(request):
@@ -168,13 +176,22 @@ def class_stage_lecture_time_update(request):
 
 
 from .forms import Update_lecture_time_Form
-class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView):
         model = Lecture
 
         # fields = ['start_time','end_time']
         form_class = Update_lecture_time_Form
         template_name= 'class_schedule/update_timing.html'
         success_message = "Timing Updated Successfully !!!"
+
+        def test_func(self):
+                user_permissions = self.request.user.user_institute_role.level.permissions.all()
+                update_lecture_timing = App_functions.objects.get(function_name='Can Update Lecture Timing')
+                if update_lecture_timing in user_permissions:
+                        return True
+                else:
+                        return False
+                
 
         def get_success_url(self, **kwargs):
                 current_object = self.get_object()

@@ -22,8 +22,11 @@ from django.core.mail import send_mail, send_mass_mail, mail_admins, mail_manage
 def holidaylist(request,pk):
     institute_holiday = Institute.objects.get(pk=pk)
     institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_add_holiday_permission = App_functions.objects.get(function_name='Can Add Holiday')
 
     if request.method == "POST":
+        if can_add_holiday_permission in user_permissions:
                 holiday_date= request.POST.get('holiday_date')
                 holiday_day= request.POST.get('holiday_day')
                 holiday_name= request.POST.get('holiday_name')
@@ -60,30 +63,39 @@ def holidaylist(request,pk):
                 
 def edit_holiday(request, pk):
     edit_holiday= HolidayList.objects.get(pk=pk)
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_edit_holiday_permission = App_functions.objects.get(function_name='Can Edit Holiday')
+
     
     if request.method == 'POST':
-         holiday_date=request.POST.get('holiday_date') 
-         holiday_day = request.POST.get('holiday_day')
-         holiday_name =  request.POST.get('holiday_name')
-         holiday_applicable =  request.POST.get('holiday_applicable')
-         holiday_type =  request.POST.get('holiday_type')
-         holiday_email =  request.POST.get('holiday_email')
-         holiday_sms =  request.POST.get('holiday_sms')
-         holiday_notification =  request.POST.get('holiday_notification')
+        if can_edit_holiday_permission in user_permissions:
 
-         edit_holiday.date=holiday_date
-         edit_holiday.days=holiday_day
-         edit_holiday.name=holiday_name
-         edit_holiday.applicable=holiday_applicable
-         edit_holiday.holiday_type=holiday_type
-         edit_holiday.holiday_email=holiday_email
-         edit_holiday.holiday_sms=holiday_sms
-         edit_holiday.holiday_notification=holiday_notification
 
-         edit_holiday.save()
-         messages.success(request, 'Holiday Updated Successfully !!!')
-         rr=request.user.profile.institute.pk
-         return HttpResponseRedirect(f'/holiday/holiday/{rr}')
+            holiday_date=request.POST.get('holiday_date') 
+            holiday_day = request.POST.get('holiday_day')
+            holiday_name =  request.POST.get('holiday_name')
+            holiday_applicable =  request.POST.get('holiday_applicable')
+            holiday_type =  request.POST.get('holiday_type')
+            holiday_email =  request.POST.get('holiday_email')
+            holiday_sms =  request.POST.get('holiday_sms')
+            holiday_notification =  request.POST.get('holiday_notification')
+
+            edit_holiday.date=holiday_date
+            edit_holiday.days=holiday_day
+            edit_holiday.name=holiday_name
+            edit_holiday.applicable=holiday_applicable
+            edit_holiday.holiday_type=holiday_type
+            edit_holiday.holiday_email=holiday_email
+            edit_holiday.holiday_sms=holiday_sms
+            edit_holiday.holiday_notification=holiday_notification
+
+            edit_holiday.save()
+            messages.success(request, 'Holiday Updated Successfully !!!')
+            rr=request.user.profile.institute.pk
+            return HttpResponseRedirect(f'/holiday/holiday/{rr}')
+        else:
+            messages.info(request, "you don't have permission to edit holiday info")
+            return redirect('not_found')
 
     return render(request, 'holidaylist/edit_holiday.html', {'edit_holiday':edit_holiday})
 
