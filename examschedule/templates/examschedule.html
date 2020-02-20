@@ -531,7 +531,7 @@
                                                             <td>{{sr_no}}</td>                                                            
                                                                 <td>
                                                                 
-                                                                    <select name="selected_class" style="padding: 2px;" required>
+                                                                    <select class="form-control" name="selected_class" style="padding: 2px;" required>
                                                                         <option selected disabled value="">--Select Class--</option>
                                                                         
                                                                         {% for class in exam_class %}
@@ -544,7 +544,7 @@
                                                                 </td>
                                                                 <td>
                                                                     
-                                                                        <select name="selected_exam_type" style="padding: 2px;" required>
+                                                                        <select class="form-control"name="selected_exam_type" style="padding: 2px;" required>
                                                                             <option selected disabled value="">--Select Exam Type--</option>
                                                                         {% for examtype in exam_type_schedule %}
                                                                             <option value="{{examtype.id}}"> {{examtype}}</option>
@@ -632,7 +632,7 @@
                                                                    
                                                                     <td colspan="6">
                                                                         <div style="text-align: center;"> 
-                                                                        <input type="submit" class="btn btn-primary" value="Submit">
+                                                                        <input type="submit" class="md-btn md-btn-primary " value="Submit">
                                                                     </div>
 
     

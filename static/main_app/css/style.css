@@ -84,3 +84,10 @@ body{
 #login_form {
   box-shadow: 5px 10px 10px gray;
 }
+#not_found_page{
+  background-image: url('../images/not_found.jpg');
+  background-size: cover;
+  height: 100% ;
+  background-repeat: no-repeat;
+ color: white;
+}

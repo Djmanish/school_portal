@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, Http404
 from registration.backends.default.views import RegistrationView
 from registration.forms import RegistrationFormUniqueEmail
 from django.contrib import auth
@@ -25,6 +25,10 @@ from Attendance.models import *
 # Create your views here.
 
 def add_classes(request):
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    add_class_permission = App_functions.objects.get(function_name='Can Add Class')
+    if add_class_permission in user_permissions:
+
        if request.method == "POST":
         class_name= request.POST['class_name']
         class_stage= request.POST.get('class_stage')
@@ -36,49 +40,58 @@ def add_classes(request):
             create_schedule = Schedule.objects.create(institute=request.user.profile.institute, Class= new_class, day= day )
         messages.success(request, 'Class Created successfully !!!')
         rr=request.user.profile.institute.id
-    
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
+    else:
+        messages.info(request, "you don't have permission to add class")
+        return redirect('not_found')
 
 
 class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
- model = Classes
- form_class = ClassUpdateForm
- template_name="main_app/edit_class.html"
- success_message = "Details were updated successfully !!!"
- 
 
- def form_valid(self, form):
-        form.instance.created_by = self.request.user
-        return super().form_valid(form)
- def get_success_url(self, **kwargs):         
-        return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
+    model = Classes
+    form_class = ClassUpdateForm
+    template_name="main_app/edit_class.html"
+    success_message = "Details were updated successfully !!!"
+    
+
+    def form_valid(self, form):
+            form.instance.created_by = self.request.user
+            return super().form_valid(form)
+    def test_func(self):
+        user_permissions = self.request.user.user_institute_role.level.permissions.all()
+        can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
+        if can_edit_class_permission in user_permissions:
+            return True
+        else:
+            return False
+    def get_success_url(self, **kwargs):         
+            return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
 
 
 # Add Subjects
 
 def add_subjects(request):
-    rr=request.user.profile.institute.id
-    if request.method == "POST":
-        subject_code= request.POST['subject_code']
-        subject_name= request.POST['subject_name']
-        new_class= request.POST['new_class']
-        subject_teacher=request.POST['subject_teacher']
-       
-        # get data from Class Table
-        subject_class=Classes.objects.get(id=new_class)
-        # get data from User Table
-        subject_teacher=User.objects.get(id=subject_teacher)
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    add_subject_permission = App_functions.objects.get(function_name='Can Add Subject')
+    if add_subject_permission in user_permissions:
 
-        subject_class = Subjects.objects.create(institute=request.user.profile.institute, subject_class=subject_class, subject_code= subject_code, subject_name= subject_name,subject_teacher=subject_teacher)
-
-        messages.success(request, 'Subject Created successfully !!!')
+        rr=request.user.profile.institute.id
+        if request.method == "POST":
+            subject_code= request.POST['subject_code']
+            subject_name= request.POST['subject_name']
+            new_class= request.POST['new_class']
+            subject_teacher=request.POST['subject_teacher']
         
-    return HttpResponseRedirect(f'/institute/profile/{rr}/')
+            # get data from Class Table
+            subject_class=Classes.objects.get(id=new_class)
+            # get data from User Table
+            subject_teacher=User.objects.get(id=subject_teacher)
 
-       
+            subject_class = Subjects.objects.create(institute=request.user.profile.institute, subject_class=subject_class, subject_code= subject_code, subject_name= subject_name,subject_teacher=subject_teacher)
 
-       
-
+            messages.success(request, 'Subject Created successfully !!!')
+            
+        return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
 
 def edit_subject(request, pk):
@@ -86,28 +99,35 @@ def edit_subject(request, pk):
     institute_classes = Classes.objects.filter(institute=request.user.profile.institute )
     designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
     institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_edit_subject_permission = App_functions.objects.get(function_name='Can Edit Subject')
  
+    if can_edit_subject_permission in user_permissions:
 
-    if request.method == 'POST':
-        # class_id = request.POST.get('new_class')
+        if request.method == 'POST':
+            # class_id = request.POST.get('new_class')
+            
+            subject_class = Classes.objects.get(pk= request.POST.get('new_class'))
+            new_subject_teacher = User.objects.get(pk= request.POST.get('subject_teacher'))
+
+
+            
+            new_subject_code =  request.POST.get('subject_code')
+            new_subject_name = request.POST.get('subject_name')
         
-        subject_class = Classes.objects.get(pk= request.POST.get('new_class'))
-        new_subject_teacher = User.objects.get(pk= request.POST.get('subject_teacher'))
-
-
-        
-        new_subject_code =  request.POST.get('subject_code')
-        new_subject_name = request.POST.get('subject_name')
-       
-        subject_to_edit.subject_class = subject_class
-        subject_to_edit.subject_code = new_subject_code
-        subject_to_edit.subject_name = new_subject_name
-        subject_to_edit.subject_teacher=new_subject_teacher
-        subject_to_edit.save()
-        messages.success(request, 'Subject Updated Successfully !!!')
-        institue_pk = request.user.profile.institute.pk
-        return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
-  
+            subject_to_edit.subject_class = subject_class
+            subject_to_edit.subject_code = new_subject_code
+            subject_to_edit.subject_name = new_subject_name
+            subject_to_edit.subject_teacher=new_subject_teacher
+            subject_to_edit.save()
+            messages.success(request, 'Subject Updated Successfully !!!')
+            institue_pk = request.user.profile.institute.pk
+            return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
+    else:
+        messages.info(request, "You Don't have permission to update subjects")
+        return redirect('not_found')
+    
     context = {
         'all_classes':institute_classes,
         'subject_info': subject_to_edit,
@@ -126,37 +146,46 @@ def delete_subject(request, pk):
 
 
 def edit_class(request, pk):
-    class_to_edit = Classes.objects.get(pk=pk)
-    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
-    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
-    # institute_classes = Classes.objects.filter(institute=request.user.profile.institute)
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
+    if can_edit_class_permission in user_permissions:
 
-    if request.method == 'POST':
+
+
+        class_to_edit = Classes.objects.get(pk=pk)
+        designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+        institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+        # institute_classes = Classes.objects.filter(institute=request.user.profile.institute)
+
+        if request.method == 'POST':
+                
             
-        
-            new_class_teacher = User.objects.get(pk= request.POST.get('class_teacher'))
-            class_to_edit.class_teacher = new_class_teacher
-            new_edit_class =  request.POST.get('class_name')
-            new_class_stage = request.POST.get('class_stage')
-            class_to_edit.name = new_edit_class
-            class_to_edit.class_stage = new_class_stage
-            institue_pk = request.user.profile.institute.pk
-            try:
-                class_to_edit.save()
-            except:
-                messages.error(request, 'Teacher already assigned to a class !!!')
+                new_class_teacher = User.objects.get(pk= request.POST.get('class_teacher'))
+                class_to_edit.class_teacher = new_class_teacher
+                new_edit_class =  request.POST.get('class_name')
+                new_class_stage = request.POST.get('class_stage')
+                class_to_edit.name = new_edit_class
+                class_to_edit.class_stage = new_class_stage
+                institue_pk = request.user.profile.institute.pk
+                try:
+                    class_to_edit.save()
+                except:
+                    messages.error(request, 'Teacher already assigned to a class !!!')
+                    return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
+                messages.success(request, 'Class Updated Successfully !!!')
+                
                 return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
-            messages.success(request, 'Class Updated Successfully !!!')
-            
-            return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
-  
-    context = {
+    
+        context = {
 
-        # 'all_classes':institute_classes,
-        'class_info': class_to_edit,
-        'institute_teachers':institute_teachers
-    }
-    return render(request, 'main_app/edit_class.html', context)
+            # 'all_classes':institute_classes,
+            'class_info': class_to_edit,
+            'institute_teachers':institute_teachers
+        }
+        return render(request, 'main_app/edit_class.html', context)
+    else:
+        messages.info(request, 'May be you do not permission to edit classes')
+        return redirect('not_found')
 
 def delete_class(request, pk):
         class_to_delete = Classes.objects.get(pk=pk)
@@ -335,9 +364,10 @@ def edit_profile(request, pk):
                 return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})
             
             new_level_admin = Institute_levels.objects.create(institute=new_create_institute, level_id=1, level_name='admin')
-            new_level_parent = Institute_levels.objects.create(institute=new_create_institute, level_id=2, level_name='teacher') 
-            new_level_parent = Institute_levels.objects.create(institute=new_create_institute, level_id=3, level_name='parent') 
-            new_level_student = Institute_levels.objects.create(institute=new_create_institute, level_id=4, level_name='student')# creating default level for admin
+            new_level_principal = Institute_levels.objects.create(institute=new_create_institute, level_id=2, level_name='principal')
+            new_level_parent = Institute_levels.objects.create(institute=new_create_institute, level_id=3, level_name='teacher') 
+            new_level_parent = Institute_levels.objects.create(institute=new_create_institute, level_id=4, level_name='parent') 
+            new_level_student = Institute_levels.objects.create(institute=new_create_institute, level_id=5, level_name='student')# creating default level for admin
             role = Role_Description.objects.create(user=request.user, institute=new_create_institute, level= new_level_admin) # creating default role for admin
             user_info.designation = new_level_admin
             user_info.institute= new_create_institute
@@ -466,7 +496,7 @@ def edit_institute(request, pk):
     return render(request, 'main_app/edit_institute.html', {'edit_institute':edit_institute})
    
 
-class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     model = Institute
     
     form_class = InstituteUpdateProfile
@@ -477,6 +507,14 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
+    
+    def test_func(self):
+        if self.request.user.profile.designation.level_name == "admin" or self.request.user.profile.designation.level_name == "principal":
+            return True
+        else:
+            return False
+
+
     def get_success_url(self, **kwargs):         
         return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
 
@@ -531,8 +569,8 @@ def delete_user_role(request, pk):
     
     user_role =  Institute_levels.objects.get(pk=pk, institute= request.user.profile.institute)
     role_id= user_role.level_id
-    if user_role.level_name == 'admin'  or user_role.level_name == 'parent' or user_role.level_name == 'student' or user_role.level_name == 'teacher'  :
-        messages.error(request, 'Admin, teacher, Parent or student roles can not be deleted !!!')
+    if user_role.level_name == 'admin'  or user_role.level_name == 'parent' or user_role.level_name == 'student' or user_role.level_name == 'teacher' or user_role.level_name == 'principal' :
+        messages.error(request, 'Admin, principal,  teacher, Parent or student roles can not be deleted !!!')
         rr= request.user.profile.institute.id
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
     else:
@@ -556,24 +594,31 @@ def selecting_class(request):
     return redirect('user_profile')
 
 def assign_class_teacher(request, pk):
-    selected_class = Classes.objects.get(pk=pk)
-    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
-    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
-    context_data= {'selected_class':selected_class, 'institute_teachers':institute_teachers}
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    assign_class_teacher_permission = App_functions.objects.get(function_name='Can Assign Class Teacher')
 
-    if request.method == 'POST':
-        
-        new_class_teacher = request.POST.get('class_teacher')
-    
-        selected_class.class_teacher = User.objects.get(pk= new_class_teacher)
-        try:
-            selected_class.save()
-            messages.success(request, 'Class Teacher assigned successfully!!!')
-        except:
-            messages.error(request,'Something went wrong !!!')
+    if assign_class_teacher_permission in user_permissions:
+        selected_class = Classes.objects.get(pk=pk)
+        designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+        institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+        context_data= {'selected_class':selected_class, 'institute_teachers':institute_teachers}
 
-    return render(request, 'main_app/assign_class_teacher.html', context_data)
+        if request.method == 'POST':
+            new_class_teacher = request.POST.get('class_teacher')
+            selected_class.class_teacher = User.objects.get(pk= new_class_teacher)
+            try:
+                selected_class.save()
+                messages.success(request, 'Class Teacher assigned successfully!!!')
+            except:
+                messages.error(request,'Something went wrong !!!')
 
+        return render(request, 'main_app/assign_class_teacher.html', context_data)
+    else:
+        messages.info(request, "You Don't have permission to assign Class Teacher")
+        return redirect('not_found')
+
+def not_found_page(request):
+    return render(request, 'main_app/404.html')
 
 class Edit_Role_Permissions(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Institute_levels
@@ -590,38 +635,45 @@ def edit_role_permissions(request, pk):
     roles_to_update_all_permissions = role_to_update_permissions.permissions.all()
     all_app_functions = App_functions.objects.all()
     
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_edit_role_permissions_permission = App_functions.objects.get(function_name='Can Edit Role Permissions')
 
-    if request.method == "POST":
-        # creating object to to track changes in table
-        tracking_permission_change = Tracking_permission_changes()
-        tracking_permission_change.update_time = timezone.now()
-        tracking_permission_change.changes_made_by = request.user
-        tracking_permission_change.institute = request.user.profile.institute
-        tracking_permission_change.role = role_to_update_permissions
-        tracking_permission_change.comment = request.POST['pc_comment']
-        tracking_permission_change.save()
-        for old_permission in roles_to_update_all_permissions:
-            tracking_permission_change.old_permissions.add(old_permission)
-    
+    if can_edit_role_permissions_permission in user_permissions:
 
-        updated_permissions = request.POST.getlist('new_permissions')
-        role_to_update_permissions.permissions.clear()
-        for permission in updated_permissions:
-            get_permission = App_functions.objects.get(pk = permission)
-            role_to_update_permissions.permissions.add(get_permission)
-        for updated_permissions in updated_permissions:
-
-            tracking_permission_change.updated_permissions.add(updated_permissions)
-        messages.success(request, 'Role Permissions Updated !!!')    
-        rr= request.user.profile.institute.id
-        return HttpResponseRedirect(f'/institute/profile/{rr}/')
+        if request.method == "POST":
+            # creating object to to track changes in table
+            tracking_permission_change = Tracking_permission_changes()
+            tracking_permission_change.update_time = timezone.now()
+            tracking_permission_change.changes_made_by = request.user
+            tracking_permission_change.institute = request.user.profile.institute
+            tracking_permission_change.role = role_to_update_permissions
+            tracking_permission_change.comment = request.POST['pc_comment']
+            tracking_permission_change.save()
+            for old_permission in roles_to_update_all_permissions:
+                tracking_permission_change.old_permissions.add(old_permission)
         
-    context= {
-        'role_to_update_permissions': role_to_update_permissions,
-        'roles_all_permissions': roles_to_update_all_permissions,
-        'all_app_functions':all_app_functions
-    }
-    return render(request, 'main_app/role_permissions_edit.html', context)
+
+            updated_permissions = request.POST.getlist('new_permissions')
+            role_to_update_permissions.permissions.clear()
+            for permission in updated_permissions:
+                get_permission = App_functions.objects.get(pk = permission)
+                role_to_update_permissions.permissions.add(get_permission)
+            for updated_permissions in updated_permissions:
+
+                tracking_permission_change.updated_permissions.add(updated_permissions)
+            messages.success(request, 'Role Permissions Updated !!!')    
+            rr= request.user.profile.institute.id
+            return HttpResponseRedirect(f'/institute/profile/{rr}/')
+            
+        context= {
+            'role_to_update_permissions': role_to_update_permissions,
+            'roles_all_permissions': roles_to_update_all_permissions,
+            'all_app_functions':all_app_functions
+        }
+        return render(request, 'main_app/role_permissions_edit.html', context)
+    else:
+        messages.info(request, "You Don't have permission to edit permissions")
+        return redirect('not_found')
 
 
 class Permission_Updates_History_list_View(LoginRequiredMixin, ListView):

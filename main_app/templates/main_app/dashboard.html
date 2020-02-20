@@ -300,14 +300,14 @@
                 
                 <li title="User Profile">
                     <a href="{% url 'user_profile' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">My Profile</span>
                     </a>    
                 </li>
                 {% if user.profile.institute %}
                 <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">domain</i></span>
+                        <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
@@ -321,7 +321,7 @@
                 </li>
                <li  title="Institute Schedule">
                 <a href="{% url 'class_schedule' %}">
-                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                    <span class="menu_icon"><i class="material-icons">schedule</i></span>
                     <span class="menu_title">Schedule</span>
                 </a>
             </li>
@@ -341,7 +341,7 @@
                     <li  title="Attendance">
                     
                     <a href="{% url 'attendance' %}">
-                            <span class="menu_icon"><i class="material-icons">poll</i></span>
+                            <span class="menu_icon"><i class="material-icons">people</i></span>
                             <span class="menu_title">Attendance</span>
                         </a>
                         
@@ -353,7 +353,7 @@
                     <li  title="Examination">
 
                         <a href="">
-                            <span class="menu_icon"><i class="material-icons">poll</i></span>
+                            <span class="menu_icon"><i class="material-icons">assignment</i></span>
                             <span class="menu_title">Examination</span>
                         </a>
                         <ul>
@@ -361,7 +361,7 @@
 
                             <li>
                                 <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
                                     <span class="menu_title">Create Exam</span>
                                 </a>
     
@@ -370,7 +370,7 @@
                   
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
                                     <span class="menu_title">Create Exam Schedule</span>
                                 </a>
     
@@ -378,7 +378,7 @@
                             {% endif %}
                             <li>
                                 <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
                                     <span class="menu_title">View ExamSchedule</span>
                                 </a>
     
@@ -421,7 +421,7 @@
             
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
-                            <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
+                            <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
                             <span class="menu_title">Log Out</span>
                         </a>
                     </li>
