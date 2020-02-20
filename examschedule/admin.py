@@ -7,3 +7,4 @@ from examschedule.models import *
 admin.site.register(ExamType)
 
 admin.site.register(ExamDetails)
+

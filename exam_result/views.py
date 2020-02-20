@@ -70,16 +70,20 @@ def exam_result(request,pk):
 
 def student_view(request,pk):
     student=UserProfile.objects.filter(user=request.user)
-    result_exam_type = request.GET.get('result_exam_type')
-    # print(result_exam_type)
-    result_exam_type_sr_no = request.GET.get('fetch_result_sr_no')
-    student_view=ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=student)
+    print(student)
+    # result_exam_type = request.GET.get('result_exam_type')
+    
+    # result_exam_type_sr_no = request.GET.get('fetch_result_sr_no')
+    student_view=ExamResult.objects.filter(institute=request.user.profile.institute)
+    # for i in student_view:
+    #   student_data=i
+   
     institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
-    # student_result=ExamResult.objects.filter(institute=request.user.profile.institute, )
     
     context={
-      'student_view':student_view,
+      'student_view':student_view, 
       'institute_exam_type':institute_exam_type,
+      
      
     }
     return render(request, 'studentview.html' , context)
@@ -91,8 +95,28 @@ def fetch_sr_no(request):
   max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
   individual_result_sr_no = ""
   for result_sr_no in max_exam_sr_no:
-    individual_result_sr_no = individual_result_sr_no + f"<option >"+result_sr_no['exam_sr_no']+"</option>"  
+    individual_result_sr_no = individual_result_sr_no + f"<option>"+result_sr_no['exam_sr_no']+"</option>"  
   return HttpResponse(individual_result_sr_no)
 
 
+def report_card(request,pk):
+  institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
+  select_exam_for_schedule = request.GET.get('selected_exam_type')
+  if select_exam_for_schedule==None:
+     etype=ExamType.objects.filter(institute= request.user.profile.institute).last()
+     exam_type=etype.id
+     select_exam_for_schedule=exam_type
+  exam_type_id=ExamType.objects.get(pk=select_exam_for_schedule)
 
+  exam_type_sr=request.GET.get('fetch_result_sr_no')
+  
+
+  
+  
+  exam_type_sr_no=ExamDetails.objects.filter(institute=request.user.profile.institute, exam_sr_no=exam_type_sr)
+  print(exam_type_sr_no)
+  context={
+    'institute_exam_type':institute_exam_type,
+    # 'exam_type_sr_no':exam_type_sr_no,
+          }
+  return render(request, 'report_card.html',context)

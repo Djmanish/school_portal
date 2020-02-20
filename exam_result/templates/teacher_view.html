@@ -416,6 +416,13 @@
                             </a>
 
                         </li>
+                        <li>
+                            <a href="report_card">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Report Card</span>
+                            </a>
+
+                        </li>
                         {% if user.profile.designation.level_name == "teacher"%}
                         <li>
                             <a href="{% url 'examresult' request.user.profile.institute.id %}">

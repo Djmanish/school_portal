@@ -385,7 +385,7 @@
                 <li  title="Examination">
 
                     <a href="">
-                        <span class="menu_icon"><i class="material-icons">poll</i></span>
+                        <span class="menu_icon"><i class="material-icons">spellcheck</i></span>
                         <span class="menu_title">Examination</span>
                     </a>
                     <ul>
@@ -412,6 +412,13 @@
                             <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
                                 <span class="menu_icon"><i class="material-icons">poll</i></span>
                                 <span class="menu_title">View ExamSchedule</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="{% url 'report_card' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                <span class="menu_title">Report Card</span>
                             </a>
 
                         </li>
@@ -521,7 +528,7 @@
                                                         {% endif %}
                                                         <form method="GET">
                                                         <tr style="background-color:#ADD8E6">
-                                                            
+                                                            <td>{{sr_no}}</td>                                                            
                                                                 <td>
                                                                 
                                                                     <select name="selected_class" style="padding: 2px;" required>
