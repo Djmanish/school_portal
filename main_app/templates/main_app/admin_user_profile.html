@@ -500,6 +500,9 @@
                                  {% if user.user_institute_role.level.level_name != 'admin' %}
                                  <li><a href="#">My Permissions</a></li>
                                  {% endif %}
+                                 {% if user.profile.designation.level_name == "parent" %}
+                                 <li><a href="#">My Child</a></li>
+                                 {% endif %}
                                      
                                 
                                 <!-- <li><a href="#">Posts</a></li> -->
@@ -757,7 +760,40 @@
 
 
                                         </li>
-                                                
+                                        <li>
+                                            <div class="uk-width-medium-1-5">
+                                                <a class="md-btn md-btn-primary md-btn-wave-light" href="{% url 'addchild' %}">Add Child</a>
+                                            </div>
+                                                <div class="md-card uk-margin-medium-bottom">
+                                                    <div class="md-card-content">
+                                                        <div class="uk-overflow-container">
+                                                            <table class="uk-table uk-table-hover">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Sr No.</th>
+                                                                    <th>Child Name</th>
+                                                                    <th>Class</th>
+                                                                    <th>Institute</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                {% for student in parent_children %}
+                                                                <tr>
+                                                                    <td>{{ forloop.counter}}</td>
+                                                                    <td><a href="#">{{student.child.first_name}}</a></td>
+                                                                    <td>{{student.child.Class}}</td>
+                                                                    <td>{{student.child.institute}}</td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                               
+                                                              
+                                                                
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    
+                                                </div>                                        
+                                            </li>        
                                           
                                     </div>
                                    

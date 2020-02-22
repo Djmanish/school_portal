@@ -17,6 +17,7 @@ from .forms import ClassUpdateForm, InstituteUpdateProfile
 from django.core.mail import send_mail, send_mass_mail
 from django.utils import timezone
 from Attendance.models import *
+from AddChild.models import *
 
 
 
@@ -206,6 +207,8 @@ def approvals(request,pk):
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
     if request.user.profile.designation.level_name=='teacher':
          pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval, designation=student_designation_id).reverse()
+         parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute)
+         parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute)
          active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id).reverse()
          inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval, designation=student_designation_id).reverse()
 
@@ -216,13 +219,16 @@ def approvals(request,pk):
         inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval).order_by('id')
 
    
-    return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
+    return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'parent_request_active':parent_request_active,'parent_request_inactive':parent_request_inactive,'Active_user':active_users,'Inactive_user':inactive_users})
 
 def index(request):
     return HttpResponseRedirect(request, 'main_app/index.html')
 
 @login_required
 def dashboard(request):
+    # starting parent child data for dashboard
+    parent_children = AddChild.objects.filter(parent= request.user.profile,status="active")
+    # ending parent child data for dashboard
     if request.user.profile.institute:
         session_start_date = request.user.profile.institute.session_start_date
 
@@ -241,17 +247,10 @@ def dashboard(request):
 
         leave_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="leave", student_class = c, date = datetime.date.today()).count()
         c.total_leave = leave_student
-
-      
-
-    
-
-
-
     # ending attendace data for dashboard
     context = {
         'all_classes': all_classes,
-       
+       'parent_children': parent_children,
     }
     return render(request, 'main_app/dashboard.html' , context)
 
@@ -293,7 +292,7 @@ def login(request):
 @login_required
 def user_profile(request):
     user_permissions_changes = Tracking_permission_changes.objects.filter(institute= request.user.profile.institute, role = request.user.profile.designation).last()
-
+    parent_children = AddChild.objects.filter(parent= request.user.profile,status="active")
     if user_permissions_changes:
 
         users_old_permissions = user_permissions_changes.old_permissions.all()
@@ -321,7 +320,7 @@ def user_profile(request):
         }
         return render(request, 'main_app/admin_user_profile.html', context )
     
-    return render(request, 'main_app/admin_user_profile.html' )
+    return render(request, 'main_app/admin_user_profile.html',{'parent_children':parent_children} )
     
   
     

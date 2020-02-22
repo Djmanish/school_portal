@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'class_schedule.apps.ClassScheduleConfig',
     'registration',
     'Attendance',
+    'AddChild',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
