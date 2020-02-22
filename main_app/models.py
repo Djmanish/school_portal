@@ -107,7 +107,7 @@ class UserProfile(models.Model):
     state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True)
     pin_code = models.CharField(max_length=10, null=True, blank=True)
     facebook_link = models.URLField(null=True, blank=True, default="https://www.facebook.com/")
-    status = models.CharField(max_length=25,choices=Chi1,default="pending")
+    status = models.CharField(max_length=25,choices=Chi1, null=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,null=True)
 
@@ -116,7 +116,7 @@ class UserProfile(models.Model):
         self.save()
     
     def disapprove(self):
-        self.status= 'dissapprove'
+        self.status= None
         self.save()
 
     def __str__(self):

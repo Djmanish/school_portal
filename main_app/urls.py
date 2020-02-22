@@ -48,6 +48,7 @@ urlpatterns = [
 
   path('update_role_permissions/<int:pk>/', views.edit_role_permissions, name="role_permissions"),
   path('permisson_update_history/', Permission_Updates_History_list_View.as_view(), name="permission_update_history"),
+  path('fetch_classes/', views.fetch_classes),
 
 
 ]

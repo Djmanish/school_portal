@@ -474,27 +474,27 @@
 
                             <div class="form-group">
                                 <label >First Name:</label>
-                                <input type="text" value="{{user_info.first_name}}" class="form-control" name='first_name'  pattern="^[A-Za-z ]+$"  oninvalid="setCustomValidity('Please enter alphabets only')"  required>
+                                <input type="text" value="{{user_info.first_name}}" class="form-control" name='first_name'   required>
                               </div>
 
                               <div class="form-group">
                                 <label >Middle Name:</label>
-                                <input type="text" class="form-control" pattern="^[A-Za-z ]+$"  oninvalid="setCustomValidity('Please enter alphabets only')" name='middle_name'  value="{{user_info.middle_name}}">
+                                <input type="text" class="form-control" name='middle_name'  value="{{user_info.middle_name}}">
                               </div>
 
                               <div class="form-group">
                                 <label >Last Name:</label>
-                                <input type="text" class="form-control" pattern="^[A-Za-z ]+$"  oninvalid="setCustomValidity('Please enter alphabets only')" name='last_name'  value="{{user_info.last_name}}">
+                                <input type="text" class="form-control" name='last_name'  value="{{user_info.last_name}}">
                               </div>
 
                               <div class="form-group">
                                 <label >Father's Name:</label>
-                                <input type="text" class="form-control" pattern="^[A-Za-z ]+$"  oninvalid="setCustomValidity('Please enter alphabets only')" name='father_name'  value="{{user_info.father_name}}">
+                                <input type="text" class="form-control" name='father_name'  value="{{user_info.father_name}}">
                               </div>
 
                               <div class="form-group">
                                 <label >Mother's Name:</label>
-                                <input type="text" class="form-control" pattern="^[A-Za-z ]+$"  oninvalid="setCustomValidity('Please enter alphabets only')" name='mother_name'  value="{{user_info.mother_name}}">
+                                <input type="text" class="form-control" name='mother_name'  value="{{user_info.mother_name}}">
                               </div>
     
                               <div class="form-group">
@@ -539,9 +539,16 @@
       </div>
       <div class="form-group">
         <label>Join as:</label>
-        <select class="form-control" name="user_designation" id="fdata">
-    
+        <select class="form-control" name="user_designation" id="fdata" required='required'>
+    <option selected disabled value="">-- first select your school -- </option>
         </select>
+    </div>
+
+    <div class="form-group" id="user_class"  style="display: none;">
+<label>Select Your Class:</label>
+<select id="selected_designaion_clas" name="student_class" class="form-control">
+
+</select>
     </div>
    
     
@@ -550,8 +557,47 @@
 {% endif %}
     
  
+<script>
+     $(document).ready(function(){
+        $('input[type="checkbox"]').click(function(){
+            if($(this).is(":checked")){
+               $('#fdata').removeAttr('required');
+               $('#new_institute_id').attr('required','required')
+               $('#new_institute_phone_id').attr('required','required')
+            }
+            else if($(this).is(":not(:checked)")){
+                $('#fdata').attr('required','required');
+            }
+        });
+    });
+</script>
 
- 
+<script>
+$('document').ready(function(){
+$('#fdata').change(function(){
+    var selected_designation = $('#fdata option:selected').html();
+    var selected_designation_id = $('#select_school').val();
+    if (selected_designation == "student"){
+        $('#user_class').css('display','block');
+        $('#selected_designaion_clas').attr('required','required');
+
+        $.ajax({
+              type:'POST',
+              url:'/fetch_classes/',
+              data:{school_id:selected_designation_id, csrfmiddlewaretoken: '{{ csrf_token }}' },
+              
+              success: function(msg){
+                $('#selected_designaion_clas').html(msg);
+              }
+          })
+    }
+    else{
+        $('#user_class').css('display','none');
+    }
+});
+});
+</script>
+
 
 
 
@@ -559,11 +605,11 @@
   <div id="institute-options" style="display: none;">
     <div class="form-group">
         <label >Institute Name:</label>
-        <input type="text" class="form-control" name='new_institute_name' placeholder="New institute name here" >
+        <input type="text" class="form-control" name='new_institute_name' placeholder="New institute name here" id="new_institute_id" >
       </div>
       <div class="form-group">
         <label>Institute Phone:</label>
-        <input type="text" class="form-control" name="new_institute_phone" pattern="[1-9]{1}[0-9]{9}" placeholder="Enter 10 digit mobile number">
+        <input type="text" id="new_institute_phone_id" class="form-control" name="new_institute_phone" pattern="[1-9]{1}[0-9]{9}" placeholder="Enter 10 digit mobile number">
       </div>
 
       <div class="form-group">
@@ -618,21 +664,7 @@
 
 
                               {% if user.user_institute_role.level.level_name == "student" %}
-<div class="form-group">
-    <label for="sel1">Select Your Class:</label>
-    <select class="form-control" name="student_class">
-    
-    {% if user_info.Class %}
-    <option selected value="{{user_info.Class.id}}">{{user_info.Class}}</option>  
-    {% else %}
-    <option selected  disabled value="" > -- select your class --</option>
-    {% endif %}
-     {% for class in all_institute_classes %}
-     <option value="{{class.id}}">{{class}}</option>
-     {% endfor %}
-         
-    </select>
-  </div>
+
 
 
   <div class="form-group">
@@ -665,7 +697,7 @@
 
                               <div class="form-group">
                                 <label >Mobile:</label>
-                                <input type="text" class="form-control" name='mobile_number' value="{{user_info.mobile_number}}" pattern="[1-9]{1}[0-9]{9}">
+                                <input type="text" class="form-control" name='mobile_number' value="{{user_info.mobile_number}}" pattern="[1-9]{1}[0-9]{9}" required='required'>
                               </div>
                             
                               <div class="form-group">
@@ -709,8 +741,11 @@
                                 <label >Facebook Profile link:</label>
                                 <input type="url" class="form-control" name='facebook_link' value="{{user_info.facebook_link}}">
                               </div>
+                              <div>
+                                  <input class="form-control" type="hidden" name="user_status" value="{{user_info.status}}">
+                              </div>
                       
-                              <input  class="md-btn md-btn-primary" type="submit" value="Update" >
+                              <input   class="md-btn md-btn-primary" type="submit" value="Update" >
 
 
                         </form>

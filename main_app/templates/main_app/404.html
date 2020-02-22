@@ -17,7 +17,15 @@
         <div class="col-md-2"><img src=""></div>
         <div class="col-md-8">
             <p class="text-center " style="font-size: 30px; font-weight: bolder; font-family:  'Bad Script', cursive ;"> Something Went Wrong !!!</p>
-<a href="{% url 'user_dashboard' %}" class="btn btn-info">Go To Dashboard</a>
+            
+            {% if user.profile.status == "approve" %}
+            <a href="{% url 'user_dashboard' %}" class="btn btn-info">Go To Dashboard</a>
+            {% else %}
+            <a href="{% url 'auth_logout' %}" class="btn btn-danger">Logout</a>
+            {% endif %}
+                
+            
+            
 <br>
 
 {% if messages %}
