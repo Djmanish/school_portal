@@ -211,6 +211,7 @@ def approvals(request,pk):
          parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute)
          active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id).reverse()
          inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval, designation=student_designation_id).reverse()
+         return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'parent_request_active':parent_request_active,'parent_request_inactive':parent_request_inactive,'Active_user':active_users,'Inactive_user':inactive_users})
 
 
     else:
@@ -219,7 +220,7 @@ def approvals(request,pk):
         inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval).order_by('id')
 
    
-    return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'parent_request_active':parent_request_active,'parent_request_inactive':parent_request_inactive,'Active_user':active_users,'Inactive_user':inactive_users})
+    return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
 
 def index(request):
     return HttpResponseRedirect(request, 'main_app/index.html')
