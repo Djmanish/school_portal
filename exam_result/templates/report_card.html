@@ -531,53 +531,61 @@
                                                             <form method="POST" >
                                                                 {% csrf_token %}
                                                             <tr style="background-color:#ADD8E6">
-                                                                <td> <select class="form-control" id="selected_exam_type" name="selected_exam_type" style="padding: 2px;" required>
-                                                                        <option selected disabled value="">--Select Exam Type--</option>
-                                                                        
-                                                                        {% for exam_type in institute_exam_type %}
-                                                                           <option  > {{exam_type}}</option>
-                                                                        {% endfor %}
-                                                                 </select>
-                                                                 
-                                                                </td>
+                                                                <td> <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px;" required>
+                                                                    <option selected disabled value="">--Select Exam Type--</option>
+                                                                    {% for exam_type in institute_exam_type %}
+                                                                       <option  > {{exam_type}}</option>
+                                                                    {% endfor %}
+                                                             </select>
+                                                             
+                                                            </td>
                                                                 <td>
-                                                                    <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no" style="padding: 2px;" required>
-                                                                        <option selected disabled value=''>--Select Exam Type No.--</option>
+                                                                    <select class="form-control" id="fetch_result_sr_no" name="fetch_result_sr_no" style="padding: 2px;">
+                                                                        <option selected disabled value=''> -- Select Exam Type No. --</option>
                                             
-                                                                 </select>
+                                                                    </select>
                                                                  
                                                                 </td>
+                                                         
                                                                 <td>
                                                                 <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
                                                             </td>
                                                                </tr>
                                                                
                                                             </form>
+                                                               
+                                                               
+                                                                   
+                                                               
+<!--                                                                     
                                                             <tr>
-                                                                
-                                                            </tr>
-
+                                                                <td>
+                                                                    <select class="form-control" id="fetch_result_sr_no" name="fetch_result_sr_no" style="padding: 2px;">
+                                                                        <option selected disabled value=''> -- Select Exam Type No. --</option>
+                                            
+                                                                 </select>
+                                                                </td>
+                                                            </tr> -->
+                                                            
+                                                            
                                                             <script>
                                                                 $(document).ready(function(){
-                                                                  $('#selected_exam_type').change(function(){
+                                                                  $('#result_exam_type').change(function(){
                                                                      
                                                                       $.ajax({
                                                                           type:'POST',
-                                                                          url:'/examschedule/fetching_max_sr_no/',
-                                                                          data:{exam_type_id:$("#selected_exam_type").val(), 
+                                                                          url:'/examresult/fetching_sr_no/',
+                                                                          data:{exam_type_id:$("#result_exam_type").val(), 
                                                                           csrfmiddlewaretoken: '{{ csrf_token }}' },
                                                                           
                                                                           success: function(msg){
-                                                                              $('#fetched_sr_no').html(msg);
+                                                                              $('#fetch_result_sr_no').html(msg);
                                                                           }
                                                                       })
                                                                   })
                                                                 })
                                                                 </script>
-                                                            <tr>
-
-
-                                                            </tr>
+     
                                                         </thead>
 
                                                         <tbody>

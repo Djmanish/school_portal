@@ -497,14 +497,8 @@
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <body>
                                                         <table>
-                                                           <tr>
-                                                               <td>
-                                                                   {{student_view.result_score}}hwll
-                                                               </td>
-
-                                                        
-                                                           </tr>
-<th>
+                                                            <thead>
+                                                                
                                                                 <form method="GET" >
                                                                     {% csrf_token %}
                                                                 <tr style="background-color:#ADD8E6">
@@ -527,31 +521,52 @@
                                                                     <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
                                                                 </td>
                                                                    </tr>
+                                                                 
                                                                    
                                                                 </form>
-                                                                <script>
-                                                                    $(document).ready(function(){
-                                                                      $('#result_exam_type').change(function(){
-                                                                         
-                                                                          $.ajax({
-                                                                              type:'POST',
-                                                                              url:'/examresult/fetching_sr_no/',
-                                                                              data:{exam_type_id:$("#result_exam_type").val(), 
-                                                                              csrfmiddlewaretoken: '{{ csrf_token }}' },
-                                                                              
-                                                                              success: function(msg){
-                                                                                  $('#fetch_result_sr_no').html(msg);
-                                                                              }
+                                                                <tr>
+                                                   
+                                                                    <script>
+                                                                        $(document).ready(function(){
+                                                                          $('#result_exam_type').change(function(){
+                                                                             
+                                                                              $.ajax({
+                                                                                  type:'POST',
+                                                                                  url:'/examresult/fetching_sr_no/',
+                                                                                  data:{exam_type_id:$("#result_exam_type").val(), 
+                                                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                                  
+                                                                                  success: function(msg){
+                                                                                      $('#fetch_result_sr_no').html(msg);
+                                                                                  }
+                                                                              })
                                                                           })
-                                                                      })
-                                                                    })
-                                                                    </script>
-                                                                </th>
-                                                           
+                                                                        })
+                                                                        </script>
+                                                                    
+                                                                </tr> 
+                                                          </thead>
+                                                        </table>
+                                                                
+                                                             
+                                                             {% for i in student_view %}
+                                                             '{{i.result_subject}}'
+                                                                 
+                                                             {% endfor %}
+                                                                 
+                                                               
+
+                                                            <table>  
+                                                                    
+                                                          <tbody>  
+                                                       
+                                                                
+                                   
                                                       
                                                      <tr>
                                                             <canvas id="myChart" >
                                                             </canvas>
+                                                            
 
                                                           
                                                             <script>
@@ -560,27 +575,39 @@
                                                                
                                                                 type: 'line',
                                                                 data: {
-                                                                    labels: ['Subject1', 'Subject2', 'Subject3'
-                                                                    , 'Subject4','Subject5'
+                                                                    {% for subject_label in student_view%}
+                                                                       
+                                                                    labels: 
+                                                                    [
+                                                                   ' {{subject_label.result_subject|safe}}'
+                                                                    
                                                                     ],
+                                                                    
+                                                                    {% endfor %}
                                                                     datasets: [
                                                                         {
                                                                         width:120,
                                                                         label: 'Maximum Marks',
-                                                                        data: [3,5,4,3,7],
+                                                                        {% for subject_max in student_view%}
+
+                                                                        
+                                                                        data: ['{{subject_max.result_score}}'],
                                                        
-                                                          
+                                                                            {%endfor%}
                                                                         
                                                                         showLine: true,
                                                                         fill: false,
                                                                         borderColor: 'rgba(0, 200, 0, 1)'
                                                                         },
                                                                     { type: 'bar',
-                                                                        label: 'Students Marks',
+                                                                        label:'Student Marks', 
+                                                                           
+                                                                        {% for student_max in student_view%}
                                                                     
                                                                         data: [
-                                                                           10,20,30,40,50
+                                                                        {{student_max.result_score}}
                                                                         ],
+                                                                        {% endfor%}
                                                                     
                                                                         showLine: true,
                                                                         
@@ -636,7 +663,8 @@
                                                             
 
                                                         </tr>
-                                                    
+                                                   
+                                                    </tbody>
                                                         </table>
                                                         </body>
                                                       

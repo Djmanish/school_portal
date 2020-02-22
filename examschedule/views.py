@@ -7,6 +7,7 @@ from django.views.generic import *
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 
+
 # Create your views here.
 
 def create_test_type(request,pk):
@@ -98,7 +99,7 @@ def exam_schedule(request,pk):
             exam_class = Classes.objects.filter(institute=request.user.profile.institute)
             select_class_for_schedule = request.GET.get('selected_class')
             if select_class_for_schedule == None:
-                    first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
+                    first_class = Classes.objects.filter(institute= request.user.profile.institute)
                     first_class_id = first_class.id
                     select_class_for_schedule= first_class_id
             selected_class = Classes.objects.get(pk=select_class_for_schedule)
@@ -109,15 +110,23 @@ def exam_schedule(request,pk):
             exam_type_schedule= ExamType.objects.all()
             select_exam_for_schedule = request.GET.get('selected_exam_type')
             if select_exam_for_schedule==None:
-                   etype=ExamType.objects.filter(institute= request.user.profile.institute).last()
+                   etype=ExamType.objects.filter(institute= request.user.profile.institute)
                    exam_type=etype.id
                    select_exam_for_schedule=exam_type
             exam_type_id=ExamType.objects.get(pk=select_exam_for_schedule)
           #  to fetch the value of Subject and Subject Teacher
             exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
+
+           
           
-          # Count the number if tyoe the exam type selected 
-            sr_no=ExamDetails.objects.filter(institute=request.user.profile.institute, exam_class=selected_class, exam_type=exam_type_id).count()
+          # Count the number if tyoe the exam type selected
+           
+            sr_no=ExamDetails.objects.values('exam_sr_no').distinct().count()
+            print(sr_no)
+            # max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
+            # print(max_exam_sr_no)
+
+           
             if request.method == "POST":
               for subject,subject_teacher,date,start_time,end_time,assign_teacher in zip(request.POST.getlist('select_exam_subject'), request.POST.getlist('select_exam_subject_teacher'),request.POST.getlist('select_date'),request.POST.getlist('select_start_time'),request.POST.getlist('select_end_time'),request.POST.getlist('assign_teacher')):
                   selected_class=Classes.objects.get(pk=request.GET.get('selected_class'))
