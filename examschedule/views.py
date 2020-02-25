@@ -122,7 +122,6 @@ def exam_schedule(request,pk):
           # Count the number if tyoe the exam type selected
            
             sr_no=ExamDetails.objects.values('exam_sr_no').distinct().count()
-            print(sr_no)
             # max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
             # print(max_exam_sr_no)
 

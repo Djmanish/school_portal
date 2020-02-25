@@ -205,22 +205,27 @@ def delete_class(request, pk):
 def approvals(request,pk):
     institute_approval = Institute.objects.get(pk=pk)
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
-    if request.user.profile.designation.level_name=='teacher':
-         pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval, designation=student_designation_id).reverse()
-         parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute)
-         parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute)
-         active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id).reverse()
-         inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval, designation=student_designation_id).reverse()
-         return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'parent_request_active':parent_request_active,'parent_request_inactive':parent_request_inactive,'Active_user':active_users,'Inactive_user':inactive_users})
+    if request.user.profile.designation.level_name=='teacher' or request.user.profile.designation.level_name=='principal' or request.user.profile.designation.level_name=='admin':
+
+        if request.user.profile.designation.level_name=='teacher':
+            pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval, designation=student_designation_id).reverse()
+            parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute)
+            parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute)
+            active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id).reverse()
+            inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval, designation=student_designation_id).reverse()
+            return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'parent_request_active':parent_request_active,'parent_request_inactive':parent_request_inactive,'Active_user':active_users,'Inactive_user':inactive_users})
 
 
+        else:
+            pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval).order_by('id')
+            active_users= UserProfile.objects.filter(status='approve', institute=institute_approval).order_by('id')
+            inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval).order_by('id')
+
+    
+        return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
     else:
-        pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval).order_by('id')
-        active_users= UserProfile.objects.filter(status='approve', institute=institute_approval).order_by('id')
-        inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval).order_by('id')
-
-   
-    return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
+        messages.info(request, "You don't have permission to approve/disapprove requests.")
+        return redirect('not_found')
 
 def index(request):
     return HttpResponseRedirect(request, 'main_app/index.html')
