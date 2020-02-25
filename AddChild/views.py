@@ -3,6 +3,7 @@ from main_app.models import*
 from .models import *
 from django.contrib import messages
 from Attendance.models import *
+from exam_result.models import *
 # Create your views here.
 def addchild(request):
     institutes=Institute.objects.all()
@@ -60,7 +61,7 @@ def approve_child_request(request,pk):
 
 def disapprove_child_request(request,pk):
     user = AddChild.objects.get(pk=pk)
-    user.approve()
+    user.delete()
     rr= request.user.profile.institute.id
     return HttpResponseRedirect(f'/user/approvals/{rr}/')
 
@@ -73,6 +74,8 @@ def childview(request,pk):
     child_total_absent=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="absent").count()
     present=(child_total_present/child_total_attendance)*100
     absent=(child_total_absent/child_total_attendance)*100
+    child_result=ExamResult.objects.filter(result_student_data=child.child)
+    print(child_result)
     context={
         'present':present,
         'absent':absent,
