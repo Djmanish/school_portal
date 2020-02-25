@@ -77,7 +77,7 @@ def childview(request,pk):
     absent=(child_total_absent/child_total_attendance)*100
     exam_t=ExamType.objects.filter(institute=request.user.profile.institute)
     exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
-    child_result=ExamResult.objects.filter(exam_type=exam_type_child,result_student_data=child.child)
+    child_result=ExamResult.objects.filter(exam_type=exam_type_child,result_student_data=child_user)
     if request.method == "POST":
         child = AddChild.objects.get(parent=request.user.profile,pk=pk)
         child_subjects=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class)
@@ -89,7 +89,7 @@ def childview(request,pk):
         absent=(child_total_absent/child_total_attendance)*100
         examty=request.POST.get("selected_exam_type")
         ty=ExamType.objects.get(id=examty)
-        child_result_p=ExamResult.objects.filter(exam_type=examty,result_student_data=child.child)        
+        child_result_p=ExamResult.objects.filter(exam_type=examty,result_student_data=child_user)        
         print("hello")
         print(ty)
         context={
