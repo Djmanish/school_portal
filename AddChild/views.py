@@ -4,6 +4,7 @@ from .models import *
 from django.contrib import messages
 from Attendance.models import *
 from exam_result.models import *
+from examschedule.models import *
 # Create your views here.
 def addchild(request):
     institutes=Institute.objects.all()
@@ -74,9 +75,38 @@ def childview(request,pk):
     child_total_absent=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="absent").count()
     present=(child_total_present/child_total_attendance)*100
     absent=(child_total_absent/child_total_attendance)*100
-    child_result=ExamResult.objects.filter(result_student_data=child.child)
-    print(child_result)
+    exam_t=ExamType.objects.filter(institute=request.user.profile.institute)
+    exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
+    child_result=ExamResult.objects.filter(exam_type=exam_type_child,result_student_data=child_user)
+    if request.method == "POST":
+        child = AddChild.objects.get(parent=request.user.profile,pk=pk)
+        child_subjects=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class)
+        child_user=User.objects.get(username=child.child)
+        child_total_attendance=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class).count()
+        child_total_present=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="present").count()
+        child_total_absent=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="absent").count()
+        present=(child_total_present/child_total_attendance)*100
+        absent=(child_total_absent/child_total_attendance)*100
+        examty=request.POST.get("selected_exam_type")
+        ty=ExamType.objects.get(id=examty)
+        child_result_p=ExamResult.objects.filter(exam_type=examty,result_student_data=child_user)        
+        print("hello")
+        print(ty)
+        context={
+            'ty':ty,
+            'child_result_p':child_result_p,
+            'exam_t':exam_t,
+        'exam_type_child':exam_type_child,
+        'present':present,
+        'absent':absent,
+        'child_subjects':child_subjects,
+        'child':child,
+        }
+        return render(request, 'AddChild/viewchild.html',context)
     context={
+        'exam_t':exam_t,
+        'exam_type_child':exam_type_child,
+        'child_result':child_result,
         'present':present,
         'absent':absent,
         'child_subjects':child_subjects,

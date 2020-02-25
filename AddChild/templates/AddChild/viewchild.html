@@ -4,6 +4,23 @@
 <!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
 
 <head>
+    <style>
+        #child_result_form {
+        
+        border: 2px solid 
+        
+        lightgray;
+        
+        padding: 10px;
+        
+        border-radius: 10px;
+        
+        background-color:
+        
+        aliceblue;
+        
+        }
+        </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -540,331 +557,98 @@
                             </div>
                             
                         </li>
-                        <li style="width: 200px;height: 200px;">
+                        <li style="width: 350px;height: 350px;">
                             <canvas id="myChart" width="200px" height="200px"></canvas>                           
                         </li>
                         <li>
+                            <form  method="POST" action="#" class="form-inline" id="child_result_form">
+                                {% csrf_token %}
+                                  <label style="margin: 4px;">Select Exam:  </label>
+                                <select id="selected_institute" name="selected_exam_type" class="form-control"  required>
+                                    <option selected disabled value=""  >                     
+                                    {{exam_type_child}}
+                                    </option>
+                                    {% for examtype in exam_t %}
+                                    <option value={{examtype.id}}>{{examtype}}</option>
+                                    {% endfor %}
+                             </select>
+                            <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">
+                            </form>
                             <ul class="md-list">
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Dignissimos laborum illum aut quia dolor similique consequatur.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">18 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">3</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">992</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Ratione rem fugiat aut vel sed neque ad deserunt.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">02 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">4</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">289</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Aperiam rem cumque quas reprehenderit.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">15 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">11</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">332</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Laborum et qui rerum dolorum consectetur repellendus necessitatibus iure.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">03 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">22</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">150</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Qui est atque suscipit.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">21 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">7</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">122</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Qui ut similique delectus ea labore reiciendis.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">05 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">5</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">626</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Quibusdam ut autem ipsum magnam enim error ut sapiente.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">20 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">10</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">397</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Sapiente animi quos qui in repellendus.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">17 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">18</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">148</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Illo ut est aut est reprehenderit neque.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">24 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">20</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">944</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Non rerum corporis beatae ratione iste vel ipsum excepturi.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">03 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">1</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">108</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Quaerat laudantium delectus et voluptates.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">24 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">24</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">843</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Dolorum consequatur sequi quia ut explicabo.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">11 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">15</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">430</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Perspiciatis aliquam aperiam doloremque doloremque.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">25 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">13</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">364</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Nobis quis minus voluptas odit ex.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">28 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">9</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">388</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Similique asperiores quia libero rerum ab perferendis voluptatum.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">06 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">12</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">721</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Eligendi aliquid qui sapiente pariatur natus asperiores neque in.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">05 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">20</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">763</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Ea delectus pariatur et molestiae quas iusto similique.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">23 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">25</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">457</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Repudiandae id minima inventore sit.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">24 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">5</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">562</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Aut sint a consectetur saepe.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">06 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">15</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">337</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="md-list-content">
-                                        <span class="md-list-heading"><a href="#">Esse quo quidem et esse voluptatem ipsa nulla.</a></span>
-                                        <div class="uk-margin-small-top">
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">11 Mar 2019</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">7</span>
-                                        </span>
-                                        <span class="uk-margin-right">
-                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">181</span>
-                                        </span>
-                                        </div>
-                                    </div>
-                                </li>
+                                <table class="uk-table" {% if request.POST %}
+                                style="display: none;"
+                                {% endif %}>
+                                    
+                                    <thead>
+                                   
+                                    <tr>
+                                        <th style="text-align: center;"><b>Class</b></th>
+                                        <th></th>
+                                        <th style="text-align: center;">{{child.child.Class}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center;"><b>Result</b></th>
+                                        <th></th>
+                                        <th style="text-align: center;">Pass</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center;"><b>Exam Type</b></th>
+                                        <th></th>
+                                        <th style="text-align: center;">{{exam_type_child}}</th>
+                                    </tr>
+                                   <tr style="background-color: #B0E0E6;">
+                                    <th style="text-align: center;"><b>Sr No.</th>
+                                    <th style="text-align: center;"><b>Subjects</th>
+                                    <th style="text-align: center;"><b>Marks</th>
+                                   </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for results in child_result %}
+                                        <tr style="text-align: center;">
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{results.result_subject}}</td>
+                                            <td>{{results.result_score}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% if request.POST %}
+                                <table class="uk-table">
+                                    
+                                    <thead>
+                                   
+                                    <tr>
+                                        <th style="text-align: center;"><b>Class</b></th>
+                                        <th></th>
+                                        <th style="text-align: center;">{{child.child.Class}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center;"><b>Result</b></th>
+                                        <th></th>
+                                        <th style="text-align: center;">Pass</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center;"><b>Exam Type</b></th>
+                                        <th></th>
+                                        <th style="text-align: center;">{{ty}}</th>
+                                    </tr>
+                                   <tr style="background-color: #B0E0E6;">
+                                    <th style="text-align: center;"><b>Sr No.</th>
+                                    <th style="text-align: center;"><b>Subjects</th>
+                                    <th style="text-align: center;"><b>Marks</th>
+                                   </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for results in child_result_p %}
+                                        <tr style="text-align: center;">
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{results.result_subject}}</td>
+                                            <td>{{results.result_score}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% endif %}
                             </ul>
                         </li>
                     </ul>
@@ -1757,7 +1541,7 @@
                 labels: ['Absent', 'Present'],
                 datasets: [{
                     label: '# of Votes',
-                    data: [{{absent}}, {{present}}],
+                    data: [{{absent|floatformat:2}}, {{present|floatformat:2}}],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
