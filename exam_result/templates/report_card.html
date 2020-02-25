@@ -41,13 +41,13 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"> </head>
+ </head>
      <body
         class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
     <!-- main header -->
-
     <header id="header_main">
         <div class="header_main_content">
             <nav class="uk-navbar">
@@ -318,142 +318,134 @@
 
         <div class="menu_section">
             <ul>
-                <li title="Dashboard">
+                <li class="current_section" title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
                     </a>
-
+                    
                 </li>
-
-
-
+                
                 <li title="User Profile">
                     <a href="{% url 'user_profile' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">My Profile</span>
-                    </a>
+                    </a>    
                 </li>
-                {% if user.profile.institute  %}
-                <li title="Institute Profile">
+                {% if user.profile.institute %}
+                <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">domain</i></span>
+                        <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>
-                    </a>
+                    </a>    
                 </li>
-                <li title="Holiday List">
+                
+                <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
                     </a>
-
+                    
                 </li>
-
-
-
-                <li title="Institute Schedule">
-                    <a href="{% url 'class_schedule' %}">
-                        <span class="menu_icon"><i class="material-icons">assignment</i></span>
-                        <span class="menu_title">Schedule</span>
-                    </a>
-
-                </li>
-
-
-
-                {% endif %}
-                {% if user.profile.institute  %}
-                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin"  or user.profile.designation.level_name == "principal"%}
-
-                <li title="Approvals">
-                    <a href="{% url 'approvals' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
-                        <span class="menu_title">Approvals</span>
-                    </a>
-
-                </li>
-
-
-
-                <li title="Attendance">
-                    <a href="{% url 'attendance' %}">
-                        <span class="menu_icon"><i class="material-icons">poll</i></span>
-                        <span class="menu_title">Attendance</span>
-                    </a>
-
-                </li>
-                
-                {% endif %}
-                <li  title="Examination">
-
-                    <a href="">
-                        <span class="menu_icon"><i class="material-icons">poll</i></span>
-                        <span class="menu_title">Examination</span>
-                    </a>
-                    <ul>
-                        {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
-
-                        <li>
-                            <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Create Exam</span>
-                            </a>
-
-                        </li>
-
-              
-                        <li>
-                            <a href="{% url 'examschedule' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Create Exam Schedule</span>
-                            </a>
-
-                        </li>
-                        {% endif %}
-                        <li>
-                            <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">View ExamSchedule</span>
-                            </a>
-
-                        </li>
-                        {% if user.profile.designation.level_name == "teacher"%}
-                        <li>
-                            <a href="{% url 'examresult' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Exam Result</span>
-                            </a>
-
-                        </li>
-                        {% endif %}
-                        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
-           
-                        <li>
-                            <a href="{% url 'studentview' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">View Exam Result</span>
-                            </a>
-
-                        </li>
-                        {% endif %}
-                    </ul>
-
-                </li>
-
+               <li  title="Institute Schedule">
+                <a href="{% url 'class_schedule' %}">
+                    <span class="menu_icon"><i class="material-icons">schedule</i></span>
+                    <span class="menu_title">Schedule</span>
+                </a>
+            </li>
                
-                
+            {% endif %}  
 
-                {% endif %}
-                
+                {% if user.profile.institute %}
+                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+                    <li  title="Approvals">
+                        <a href="{% url 'approvals' user.profile.institute.pk %}">
+                            <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
+                            <span class="menu_title">Approvals</span>
+                        </a>
+                        
+                    </li>
+                    
+                    <li  title="Attendance">
+                    
+                    <a href="{% url 'attendance' %}">
+                            <span class="menu_icon"><i class="material-icons">people</i></span>
+                            <span class="menu_title">Attendance</span>
+                        </a>
+                        
+                    </li> 
 
+                    {% endif %}
+                   
+
+                    <li  title="Examination">
+
+                        <a href="">
+                            <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                            <span class="menu_title">Examination</span>
+                        </a>
+                        <ul>
+                            {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
+
+                            <li>
+                                <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                                    <span class="menu_title">Create Exam</span>
+                                </a>
+    
+                            </li>
+
+                  
+                            <li>
+                                <a href="{% url 'examschedule' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                                    <span class="menu_title">Create Exam Schedule</span>
+                                </a>
+    
+                            </li>
+                            {% endif %}
+                            <li>
+                                <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                                    <span class="menu_title">View ExamSchedule</span>
+                                </a>
+    
+                            </li>
+                            {% if user.profile.designation.level_name == "teacher"%}
+                            <li>
+                                <a href="{% url 'examresult' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_title">Exam Result</span>
+                                </a>
+    
+                            </li>
+                            {% endif %}
+                            {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
+               
+                            <li>
+                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_title">View Exam Result</span>
+                                </a>
+    
+                            </li>
+                            {% endif %}
+                        </ul>
+    
+                    </li>
+
+                   
+                    
                 
-             
+                    {% endif %} 
+                 
+            
                 <li title="Log Out">
-                    <a href="{% url 'auth_logout' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
-                        <span class="menu_title">Log Out</span>
-                    </a>
-                </li>
+                        <a href="{% url 'auth_logout' %}">
+                            <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
+                            <span class="menu_title">Log Out</span>
+                        </a>
+                    </li>
 
             </ul>
         </div>
@@ -489,32 +481,18 @@
                                         class="sub-heading"></span></h2>
 
                             </div>
-                            <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
-                                <i class="material-icons">&#xE150;</i>
-                            </a> -->
                         </div>
                         <div class="user_content">
                             <ul id="user_profile_tabs" class="uk-tab"
                                 data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}"
                                 data-uk-sticky="{ top: 48, media: 960 }">
-
-
-
                             </ul>
                             <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
-
-
-
-
                                 <li>
                                     <div id="page_content_inner">
-
-
                                         <div class="md-card">
-
                                             <div class="md-card-content">
                                                 <div class="uk-overflow-container uk-margin-bottom">
-                                                   
                                                     <table
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
@@ -525,171 +503,127 @@
                                                             {% endfor %}
                                                         </ul>
                                                         {% endif %}
-                                                      
-                                                           
-              
-                                                            <form method="POST" >
-                                                                {% csrf_token %}
-                                                            <tr style="background-color:#ADD8E6">
-                                                                <td> <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px;" required>
+                                                        
+                                                        <form method="POST" >
+                                                            {% csrf_token %}
+                                                        <tr style="background-color:#ADD8E6">
+                                                            
+                                                            <td> <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px;" required>
                                                                     <option selected disabled value="">--Select Exam Type--</option>
-                                                                    {% for exam_type in institute_exam_type %}
-                                                                       <option  > {{exam_type}}</option>
+                                                                    {% for exam_type in exam_type_list %}
+                                                                       <option>{{exam_type}}</option>
                                                                     {% endfor %}
                                                              </select>
                                                              
                                                             </td>
-                                                                <td>
-                                                                    <select class="form-control" id="fetch_result_sr_no" name="fetch_result_sr_no" style="padding: 2px;">
-                                                                        <option selected disabled value=''> -- Select Exam Type No. --</option>
-                                            
-                                                                    </select>
-                                                                 
-                                                                </td>
-                                                         
-                                                                <td>
-                                                                <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
+                                                            <td>
+                                                                <select class="form-control" id="exam_sr_no" name="exam_sr_no" style="padding: 2px;">
+                                                                    <option selected disabled value=''>--Select Exam Type No.--</option>
+                                        
+                                                             </select>
+                                                             
                                                             </td>
-                                                               </tr>
-                                                               
-                                                            </form>
-                                                               
-                                                               
-                                                                   
-                                                               
-<!--                                                                     
-                                                            <tr>
-                                                                <td>
-                                                                    <select class="form-control" id="fetch_result_sr_no" name="fetch_result_sr_no" style="padding: 2px;">
-                                                                        <option selected disabled value=''> -- Select Exam Type No. --</option>
-                                            
-                                                                 </select>
-                                                                </td>
-                                                            </tr> -->
-                                                            
-                                                            
-                                                            <script>
-                                                                $(document).ready(function(){
-                                                                  $('#result_exam_type').change(function(){
-                                                                     
-                                                                      $.ajax({
-                                                                          type:'POST',
-                                                                          url:'/examresult/fetching_sr_no/',
-                                                                          data:{exam_type_id:$("#result_exam_type").val(), 
-                                                                          csrfmiddlewaretoken: '{{ csrf_token }}' },
-                                                                          
-                                                                          success: function(msg){
-                                                                              $('#fetch_result_sr_no').html(msg);
-                                                                          }
-                                                                      })
+                                                            <td>
+                                                            <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
+                                                        </td>
+                                                           </tr>
+                                                           
+                                                        </form>
+                                                        <script>
+                                                            $(document).ready(function(){
+                                                              $('#result_exam_type').change(function(){
+                                                                 
+                                                                  $.ajax({
+                                                                      type:'POST',
+                                                                      url:'/examresult/exam_sr_no/',
+                                                                      data:{exam_id:$("#result_exam_type").val(), 
+                                                                      csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                      
+                                                                      success: function(msg){
+                                                                          $('#exam_sr_no').html(msg);
+                                                                      }
                                                                   })
-                                                                })
-                                                                </script>
-     
+                                                              })
+                                                            })
+                                                            </script>
+                                                      
+                                                    
                                                         </thead>
 
                                                         <tbody>
-                                                          
+                                                            <form method="POST">
+                                                                {% csrf_token %}
+                                                                <tr>
+                                                                  <td></td>
+                                                                </tr>
+                                                         
                                                             <tr style="background-color: #1976d2; color:white">
                                                                
-                                                                <th>Subject</th>
-                                                                <th>Subject Teacher</th>
-                                                                <th>Date</th>
-                                                                <th>Start Time</th>
-                                                                <th>End Time</th>
-                                                                <th>Assign Teacher</th>
-                                                                {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
-
-                                                                <th><b>Edit </b></th>
-                                                                <th><b>Delete</b></th>
-
-                                                                {% endif %}
+                                                                <th>S.No.</th>
+                                                                <th>Subject Name</th>
+                                                                <th>Marks Obtain</th>
+                                                                <th>Max. Marks</th>
+                                                                <th>Min. Marks</th>
+                                                                <th>Avg. Marks</th>
                                                                 
+
+                                             
                                                             </tr>
-                                                           
-
-                                                    
-                                                                        {% for institute_exam_schedule in exam_details %}
-                                                                        <tr style="background-color:#E5E5FF;">
-                                                                            <td> {{ institute_exam_schedule.exam_subject}}
-                                                                            </td>
-                                                                            <td>{{institute_exam_schedule.exam_subject_teacher}}
-                                                                            </td>
-                                                                            <td>{{institute_exam_schedule.exam_date}}</td>
-                                                                            <td>{{institute_exam_schedule.exam_start_time}}</td>
-
-                                                                            <td>{{institute_exam_schedule.exam_end_time}}</td>
-                                                                            <td>{{institute_exam_schedule.exam_assign_teacher}}</td>
-                                                                            <td><a   href="{% url 'edit_examschedule' institute_exam_schedule.pk%}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
-                                                                            </td>
-                                                                            <td><a  href="{% url 'delete_examschedule' institute_exam_schedule.pk %}"><i class="material-icons" style="color: #ff0000;">delete</i></a>
-                                                                            </td>
-
-                                                                        </tr>
+                                                            
+                                                                     {% for exam_data in examresult_data %}
+                                                            <tr>
+                                              
+                                                                     <td>
+                                                                        {{ forloop.counter}}
+                                                                     </td>
+                                                                    
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_subject">
+                                                                                  
+                                                                                  <option  value="{{exam_data.result_subject.id}}">{{exam_data.result_subject}}</option>
+                                                                                </select>
+                                                                              </div>
+                                                                              
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_obtain">
+                                                                                  <option  value="">{{exam_data.result_score}}</option>
+                                                                                </select>
+                                                                              </div>
+                                                                        </td>
+                                                                      
+                                                                       
+                                                                       
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="_max_marks_obtain">
+                                                                                  <option  value=""></option>
+                                                                                </select>
+                                                                              </div>
+                                                                        </td>
                                                                         
-                                                                         
-                                                                         {% endfor %}
-
-                                                               
                                                                         
-                                                              
-                                  
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="min_marks_obtain">
+                                                                                  <option  value=""></option>
+                                                                                </select>
+                                                                              </div>
+                                                                        </td>
+                                                                    
+                                                            </tr>
+                                                            {% endfor %}
+                                                            
+                                                        </form>
                                                         </tbody>
-
                                                     </table>
-
                                                 </div>
-                     
                                 </li>
-
-
                             </ul>
-
                         </div>
-
                     </div>
-
-
-                    <!-- <div class="uk-width-large-3-10 hidden-print">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <div class="uk-margin-medium-bottom">
-                                <h3 class="heading_c uk-margin-bottom">Alerts</h3>
-                                <ul class="md-list md-list-addon">
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Ullam dolor praesentium.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Et voluptatum cumque excepturi dolores.</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Veniam fuga sed.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Quia similique autem aut eaque qui.</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Voluptatem voluptatem veritatis.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Iure autem asperiores numquam rerum ut sunt.</span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div> -->
-
-                    <!-- <a class="md-btn md-btn-flat md-btn-flat-primary" href="#">Show all</a>
-                        </div> -->
-                    <!-- </div> -->
-
                 </div>
             </div>
         </div>

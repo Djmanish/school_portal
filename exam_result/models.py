@@ -11,7 +11,7 @@ class ExamResult(models.Model):
     result_class=models.ForeignKey(to=Classes, on_delete=models.CASCADE,related_name='result_class', null=True)
     result_subject=models.ForeignKey(to=Subjects, on_delete=models.CASCADE,related_name='result_subject', null=True)
     result_subject_teacher=models.ForeignKey(to=User, on_delete=models.CASCADE,related_name='result_subject_teacher', null=True)
-    result_student_data=models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='result_student_data',null=True)
+    result_student_data=models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='result_student_data',null=True)
     result_score=models.CharField(max_length=100, null=True)
 
     def __str__(self):

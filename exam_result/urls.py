@@ -14,7 +14,8 @@ urlpatterns = [
   path('examresult/<int:pk>', views.exam_result, name="examresult"),
   path('studentview/<int:pk>', views.student_view, name="studentview"),
   path('fetching_sr_no/', views.fetch_sr_no, name='fetch_result_sr_no' ),
-  path('report_card/<int:pk>',views.report_card, name='report_card')
+  path('report_card/<int:pk>',views.report_card, name='report_card'),
+  path('exam_sr_no/', views.exam_sr_no,name='exam_sr_no'),
 
   
  
