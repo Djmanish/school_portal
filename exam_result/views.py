@@ -4,6 +4,7 @@ from main_app.models import *
 from examschedule.models import *
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
+from django.db.models import Count
 
 
 
@@ -70,7 +71,7 @@ def exam_result(request,pk):
 
 def student_view(request,pk):
     student=UserProfile.objects.filter(user=request.user)
-    print(student)
+    
     # result_exam_type = request.GET.get('result_exam_type')
     
     # result_exam_type_sr_no = request.GET.get('fetch_result_sr_no')
@@ -93,30 +94,84 @@ def fetch_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
   
   max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
-  individual_result_sr_no = ""
+  individual_result_sr_no = "<option>--Select Exam Type No.--</option>"
   for result_sr_no in max_exam_sr_no:
-    individual_result_sr_no = individual_result_sr_no + f"<option>"+result_sr_no['exam_sr_no']+"</option>"  
+    individual_result_sr_no = individual_result_sr_no + f"<option>"+result_sr_no['exam_sr_no']+"</option>" 
+    
+  return HttpResponse(individual_result_sr_no)
+
+def exam_sr_no(request):
+  exam_type_id = request.POST.get('exam_id')
+  
+  max_exam_sr_no = ExamResult.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
+  
+  individual_result_sr_no = "<option>--Select Exam Type No.--</option>"
+  for result_sr_no in max_exam_sr_no:
+    individual_result_sr_no = individual_result_sr_no + f"<option>"+result_sr_no['exam_sr_no']+"</option>" 
+    
   return HttpResponse(individual_result_sr_no)
 
 
 def report_card(request,pk):
-  institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
-  select_exam_for_schedule = request.GET.get('selected_exam_type')
-  if select_exam_for_schedule==None:
-     etype=ExamType.objects.filter(institute= request.user.profile.institute).last()
-     exam_type=etype.id
-     select_exam_for_schedule=exam_type
-  exam_type_id=ExamType.objects.get(pk=select_exam_for_schedule)
 
-  exam_type_sr=request.GET.get('fetch_result_sr_no')
-  
+# get Exam Type
+  exam_type_list =ExamType.objects.filter(institute=request.user.profile.institute)
 
-  
-  
-  exam_type_sr_no=ExamDetails.objects.filter(institute=request.user.profile.institute, exam_sr_no=exam_type_sr)
-  print(exam_type_sr_no)
+
+
+  if request.method=="POST":
+      select_exam_type = request.POST.get('result_exam_type')
+      select_exam_type_no = request.POST.get('exam_sr_no')
+      
+               
+      examresult_data = ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=request.user, exam_type__exam_type= select_exam_type , exam_sr_no= select_exam_type_no  )
+      all_students_data=ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type , exam_sr_no= select_exam_type_no  )
+     
+      marks_list=[]
+      for data in all_students_data:
+          subject_marks=ExamResult.objects.filter(institute=request.user.profile.institute,result_subject=data.result_subject, exam_type__exam_type= select_exam_type , exam_sr_no= select_exam_type_no)
+          for sub in subject_marks:
+            sub=sub.result_subject
+          print(sub)
+          for marks in subject_marks:
+              marks=marks.result_score
+              marks_list.append(marks)
+          print(marks_list)
+
+      # all_students_data=ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type , exam_sr_no= select_exam_type_no  )
+      # all_marks_list=[]
+      # for marks_data in all_students_data:
+      #   all_marks_list.append(marks_data.result_score)
+      
+
+      # all_marks_subjects=[]
+      # for subjects in all_students_data:
+          # all_marks_subjects.append(subjects.result_subject)
+     
+
+      
+
+
+
+
+
+          
+      
+      
+
+      
+      context={
+        'exam_type_list':exam_type_list,
+        'examresult_data':examresult_data,
+        
+        
+              }
+
+      return render(request, 'report_card.html', context)        
   context={
-    'institute_exam_type':institute_exam_type,
-    # 'exam_type_sr_no':exam_type_sr_no,
-          }
-  return render(request, 'report_card.html',context)
+        'exam_type_list':exam_type_list,
+        
+        
+      }
+
+  return render(request, 'report_card.html', context)

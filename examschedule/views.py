@@ -99,7 +99,7 @@ def exam_schedule(request,pk):
             exam_class = Classes.objects.filter(institute=request.user.profile.institute)
             select_class_for_schedule = request.GET.get('selected_class')
             if select_class_for_schedule == None:
-                    first_class = Classes.objects.filter(institute= request.user.profile.institute)
+                    first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
                     first_class_id = first_class.id
                     select_class_for_schedule= first_class_id
             selected_class = Classes.objects.get(pk=select_class_for_schedule)
@@ -110,7 +110,7 @@ def exam_schedule(request,pk):
             exam_type_schedule= ExamType.objects.all()
             select_exam_for_schedule = request.GET.get('selected_exam_type')
             if select_exam_for_schedule==None:
-                   etype=ExamType.objects.filter(institute= request.user.profile.institute)
+                   etype=ExamType.objects.filter(institute= request.user.profile.institute).last()
                    exam_type=etype.id
                    select_exam_for_schedule=exam_type
             exam_type_id=ExamType.objects.get(pk=select_exam_for_schedule)
@@ -119,12 +119,10 @@ def exam_schedule(request,pk):
 
            
           
-          # Count the number if tyoe the exam type selected
+          # Count the number if type the exam type selected
            
-            sr_no=ExamDetails.objects.values('exam_sr_no').distinct().count()
-            print(sr_no)
-            # max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
-            # print(max_exam_sr_no)
+            sr_no=ExamDetails.objects.values('exam_sr_no').distinct().count()+1
+          
 
            
             if request.method == "POST":
@@ -205,9 +203,7 @@ def edit_examschedule(request,pk):
           select_start_time = request.POST.get('select_start_time')
           select_end_time = request.POST.get('select_end_time')
           assign_teacher = request.POST.get('assign_teacher')
-
-
-          
+     
           examdetails_info.institute=request.user.profile.institute
           examdetails_info.exam_subject=select_exam_subject
           examdetails_info.exam_subject_teacher=select_exam_subject_teacher
@@ -251,8 +247,10 @@ def fetch_max_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
   
   max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
+ 
   individual_sr_no = "<option>--Select Exam Type No.--</option>"
   for sr_no in max_exam_sr_no:
-    individual_sr_no = individual_sr_no + f"<option >"+sr_no['exam_sr_no']+"</option>"  
+    individual_sr_no = individual_sr_no + f"<option >"+sr_no['exam_sr_no']+"</option>" 
+     
   return HttpResponse(individual_sr_no)
     
