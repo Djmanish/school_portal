@@ -17,6 +17,7 @@ from .forms import ClassUpdateForm, InstituteUpdateProfile
 from django.core.mail import send_mail, send_mass_mail
 from django.utils import timezone
 from Attendance.models import *
+from AddChild.models import *
 
 
 
@@ -204,25 +205,36 @@ def delete_class(request, pk):
 def approvals(request,pk):
     institute_approval = Institute.objects.get(pk=pk)
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
-    if request.user.profile.designation.level_name=='teacher':
-         pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval, designation=student_designation_id)
-         active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id)
-         inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval, designation=student_designation_id)
+    if request.user.profile.designation.level_name=='teacher' or request.user.profile.designation.level_name=='principal' or request.user.profile.designation.level_name=='admin':
+
+        if request.user.profile.designation.level_name=='teacher':
+            pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval, designation=student_designation_id).reverse()
+            parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute)
+            parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute)
+            active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id).reverse()
+            inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval, designation=student_designation_id).reverse()
+            return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'parent_request_active':parent_request_active,'parent_request_inactive':parent_request_inactive,'Active_user':active_users,'Inactive_user':inactive_users})
 
 
+        else:
+            pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval).order_by('id')
+            active_users= UserProfile.objects.filter(status='approve', institute=institute_approval).order_by('id')
+            inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval).order_by('id')
+
+    
+        return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
     else:
-        pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval)
-        active_users= UserProfile.objects.filter(status='approve', institute=institute_approval)
-        inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval)
-
-   
-    return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
+        messages.info(request, "You don't have permission to approve/disapprove requests.")
+        return redirect('not_found')
 
 def index(request):
     return HttpResponseRedirect(request, 'main_app/index.html')
 
 @login_required
 def dashboard(request):
+    # starting parent child data for dashboard
+    parent_children = AddChild.objects.filter(parent= request.user.profile,status="active")
+    # ending parent child data for dashboard
     if request.user.profile.institute:
         session_start_date = request.user.profile.institute.session_start_date
 
@@ -241,17 +253,10 @@ def dashboard(request):
 
         leave_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="leave", student_class = c, date = datetime.date.today()).count()
         c.total_leave = leave_student
-
-      
-
-    
-
-
-
     # ending attendace data for dashboard
     context = {
         'all_classes': all_classes,
-       
+       'parent_children': parent_children,
     }
     return render(request, 'main_app/dashboard.html' , context)
 
@@ -293,7 +298,7 @@ def login(request):
 @login_required
 def user_profile(request):
     user_permissions_changes = Tracking_permission_changes.objects.filter(institute= request.user.profile.institute, role = request.user.profile.designation).last()
-
+    parent_children = AddChild.objects.filter(parent= request.user.profile,status="active")
     if user_permissions_changes:
 
         users_old_permissions = user_permissions_changes.old_permissions.all()
@@ -321,7 +326,7 @@ def user_profile(request):
         }
         return render(request, 'main_app/admin_user_profile.html', context )
     
-    return render(request, 'main_app/admin_user_profile.html' )
+    return render(request, 'main_app/admin_user_profile.html',{'parent_children':parent_children} )
     
   
     
@@ -329,7 +334,7 @@ def user_profile(request):
 def fetch_levels(request):
     id = request.POST['school_id']
     levels = Institute_levels.objects.filter( institute = id)
-    nlevels=""
+    nlevels="<option selected disabled value=''> -- select one --</option>"
     for t in levels:
         nlevels= nlevels+ f"<option value='{t.id}' >"+str(t)+"</option>"
     return HttpResponse(nlevels)
@@ -371,6 +376,7 @@ def edit_profile(request, pk):
             role = Role_Description.objects.create(user=request.user, institute=new_create_institute, level= new_level_admin) # creating default role for admin
             user_info.designation = new_level_admin
             user_info.institute= new_create_institute
+            user_info.status = 'approve'
             user_info.save()
 
             # sending mail to admin on registering
@@ -389,6 +395,14 @@ def edit_profile(request, pk):
         user_info.category= request.POST.get('category_')
         user_info.aadhar_card_number = request.POST.get('adhar_number')
         user_info.qualification= request.POST.get('user_qualification')
+        if not new_admin:
+            user_info.status = 'pending'
+
+        if 'user_status' in request.POST:
+            if request.POST['user_status'] == "approve" or request.POST['user_status'] == 'Approve':
+                user_info.status="approve"
+        
+        
         if 'select_school' in request.POST: # checking if new admin select box is checked and selected institute
             selected_institute_pk = request.POST['select_school']
             updated_institute = Institute.objects.get(pk=selected_institute_pk) #fetching the selected institutes list
@@ -535,7 +549,17 @@ def disapprove_request(request,pk):
     
 
     user = UserProfile.objects.get(pk=pk)
+
+    user.designation = None #user_designation set to null
+    user.institute = None # user_institute set to null
+    
+    
+
+    disapproved_user_role_description = Role_Description.objects.get(user = user.user)
+    disapproved_user_role_description.delete()
+
     user.disapprove()
+    user.status= 'Pending'
     rr= request.user.profile.institute.id
     return HttpResponseRedirect(f'/user/approvals/{rr}/')
     
@@ -687,3 +711,11 @@ class Permission_Updates_History_list_View(LoginRequiredMixin, ListView):
         queryset = Tracking_permission_changes.objects.filter(institute= self.request.user.profile.institute).exclude(role= admin_role).order_by('-update_time')
        
         return queryset
+
+def fetch_classes(request):
+    instiute_id = Institute.objects.get(pk=request.POST.get('school_id'))
+    institute_all_classes = Classes.objects.filter(institute=instiute_id)
+    all_classes = "<option selected disabled value=''> -- select your class -- </option>"
+    for c in institute_all_classes:
+        all_classes= all_classes+ f"<option value='{c.id}' >"+str(c)+"</option>"
+    return HttpResponse(all_classes)

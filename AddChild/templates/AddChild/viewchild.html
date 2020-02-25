@@ -44,7 +44,7 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-
+    <script type="text/javascript" src=https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js></script>
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -447,71 +447,428 @@
         <div id="page_content_inner">
             {% if user.profile.institute %}
             {% if user.profile.designation.level_name == "parent"%}
-            <div class="uk-grid uk-grid-medium uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-                {% for student in parent_children %}<div>
-                    <div class="md-card">
-                        <div class="md-card-head md-bg-light-blue-600">
-                            <div class="md-card-head-menu" data-uk-dropdown="{pos:'bottom-right'}">
-                                <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
-                                <div class="uk-dropdown uk-dropdown-small">
-                                    <ul class="uk-nav">
-                                        <li><a href="#">User profile</a></li>
-                                        <li><a href="#">User permissions</a></li>
-                                        <li><a href="#" class="uk-text-danger">Delete user</a></li>
+            
+            <div class="md-card">
+                <div class="user_heading">
+                    <div class="user_heading_menu hidden-print">
+                        <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
+                            <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
+                            <div class="uk-dropdown uk-dropdown-small">
+                                <ul class="uk-nav">
+                                    <li><a href="#">Action 1</a></li>
+                                    <li><a href="#">Action 2</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="uk-display-inline-block"><i class="md-icon md-icon-light material-icons" id="page_print">&#xE8ad;</i></div>
+                    </div>
+                    <div class="user_heading_avatar">
+                        <div class="thumbnail">
+                            <img src="{{child.child.profile_pic.url}}" alt="user avatar"/>
+                        </div>
+                    </div>
+                    <div class="user_heading_content">
+                        <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{child.child.first_name}} {{child.child.last_name}}</span><span class="sub-heading">{{child.child.institute}}</span></h2>
+                        
+                    </div>
+                    
+                </div>
+                <div class="user_content">
+                    <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
+                        <li class="uk-active"><a href="#">About</a></li>
+                        <li><a href="#">Attendance</a></li>
+                        <li><a href="#">Results</a></li>
+                    </ul>
+                    <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
+                        <li>
+                            {{child.child.about}}                                   <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom">Child Info</h4>
+                                    <ul class="md-list md-list-addon">
+                                        <li>
+                                            <div class="md-list-addon-element">
+                                                <i class="md-list-addon-icon material-icons">class</i>
+                                            </div>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{child.child.Class}}</span>
+                                                <span class="uk-text-small uk-text-muted">Class</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="md-list-addon-element">
+                                                <i class="md-list-addon-icon material-icons">&#xE0CD;</i>
+                                            </div>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{child.child.mobile_number}}</span>
+                                                <span class="uk-text-small uk-text-muted">Phone</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="md-list-addon-element">
+                                                <i class="md-list-addon-icon material-icons">people</i>
+                                            </div>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{child.parent.first_name}}</span>
+                                                <span class="uk-text-small uk-text-muted">Parents</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="md-list-addon-element">
+                                                <i class="md-list-addon-icon material-icons">school</i>
+                                            </div>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{child.child.institute}}</span>
+                                                <span class="uk-text-small uk-text-muted">Institute</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom">Child Subjects</h4>
+                                    <ul class="md-list">
+                                        {% for sub in child_subjects %}
+                                        <li>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading"><a href="#">{{sub.subject_name}}</a></span>
+                                                <span class="uk-text-small uk-text-muted">{{sub.subject_teacher}}</span>
+                                            </div>
+                                        </li>
+                                        
+                                        {% endfor %}
                                     </ul>
                                 </div>
                             </div>
-                            <div class="uk-text-center">
-                                <img class="md-card-head-avatar" src="{{student.child.profile_pic.url}}" alt=""/>
-                            </div>
-                            <h3 class="md-card-head-text uk-text-center md-color-white">
-                                <a href="{% url 'childview' student.pk %}" style="color: white;">{{student.child.first_name}}&nbsp;{{student.child.last_name}}</a> <span>{{student.child.institute}}</span>
-                            </h3>
-                        </div>
-                        <div class="md-card-content">
-                            <ul class="md-list md-list-addon">
+                            
+                        </li>
+                        <li style="width: 200px;height: 200px;">
+                            <canvas id="myChart" width="200px" height="200px"></canvas>                           
+                        </li>
+                        <li>
+                            <ul class="md-list">
                                 <li>
-                                    <div class="md-list-addon-element">
-                                        <i class="md-list-addon-icon material-icons">&#xE158;</i>
-                                    </div>
                                     <div class="md-list-content">
-                                        <span class="md-list-heading">eflatley@hotmail.com</span>
-                                        <span class="uk-text-small uk-text-muted">Email</span>
+                                        <span class="md-list-heading"><a href="#">Dignissimos laborum illum aut quia dolor similique consequatur.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">18 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">3</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">992</span>
+                                        </span>
+                                        </div>
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="md-list-addon-element">
-                                        <i class="md-list-addon-icon material-icons">&#xE0CD;</i>
-                                    </div>
                                     <div class="md-list-content">
-                                        <span class="md-list-heading">095.324.4929x176</span>
-                                        <span class="uk-text-small uk-text-muted">Phone</span>
+                                        <span class="md-list-heading"><a href="#">Ratione rem fugiat aut vel sed neque ad deserunt.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">02 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">4</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">289</span>
+                                        </span>
+                                        </div>
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="md-list-addon-element">
-                                        <i class="md-list-addon-icon uk-icon-facebook-official"></i>
-                                    </div>
                                     <div class="md-list-content">
-                                        <span class="md-list-heading">facebook.com/envato</span>
-                                        <span class="uk-text-small uk-text-muted">Facebook</span>
+                                        <span class="md-list-heading"><a href="#">Aperiam rem cumque quas reprehenderit.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">15 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">11</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">332</span>
+                                        </span>
+                                        </div>
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="md-list-addon-element">
-                                        <i class="md-list-addon-icon uk-icon-twitter"></i>
-                                    </div>
                                     <div class="md-list-content">
-                                        <span class="md-list-heading">twitter.com/envato</span>
-                                        <span class="uk-text-small uk-text-muted">Twitter</span>
+                                        <span class="md-list-heading"><a href="#">Laborum et qui rerum dolorum consectetur repellendus necessitatibus iure.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">03 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">22</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">150</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Qui est atque suscipit.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">21 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">7</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">122</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Qui ut similique delectus ea labore reiciendis.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">05 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">5</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">626</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Quibusdam ut autem ipsum magnam enim error ut sapiente.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">20 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">10</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">397</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Sapiente animi quos qui in repellendus.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">17 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">18</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">148</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Illo ut est aut est reprehenderit neque.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">24 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">20</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">944</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Non rerum corporis beatae ratione iste vel ipsum excepturi.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">03 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">1</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">108</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Quaerat laudantium delectus et voluptates.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">24 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">24</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">843</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Dolorum consequatur sequi quia ut explicabo.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">11 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">15</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">430</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Perspiciatis aliquam aperiam doloremque doloremque.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">25 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">13</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">364</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Nobis quis minus voluptas odit ex.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">28 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">9</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">388</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Similique asperiores quia libero rerum ab perferendis voluptatum.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">06 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">12</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">721</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Eligendi aliquid qui sapiente pariatur natus asperiores neque in.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">05 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">20</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">763</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Ea delectus pariatur et molestiae quas iusto similique.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">23 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">25</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">457</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Repudiandae id minima inventore sit.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">24 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">5</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">562</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Aut sint a consectetur saepe.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">06 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">15</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">337</span>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading"><a href="#">Esse quo quidem et esse voluptatem ipsa nulla.</a></span>
+                                        <div class="uk-margin-small-top">
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">11 Mar 2019</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE0B9;</i> <span class="uk-text-muted uk-text-small">7</span>
+                                        </span>
+                                        <span class="uk-margin-right">
+                                            <i class="material-icons">&#xE417;</i> <span class="uk-text-muted uk-text-small">181</span>
+                                        </span>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
-                        </div>
-                    </div></a>
-                </div>{% endfor %}
-                
-                
+                        </li>
+                    </ul>
+                </div>
             </div>
             {% endif %}{% endif %}
 
@@ -641,39 +998,77 @@
                 <div class="uk-width-medium-1-2">
                     <div class="md-card">
                         <div class="md-card-content">
-                            <h4>Today's Class Status</h4>
                             <div class="uk-overflow-container">
                                 <table class="uk-table">
                                     <thead>
                                         <tr>
-                                            <th class="uk-text-nowrap">Class</th>
-                                            <th class="uk-text-nowrap">Students</th>
-                                            <th class="uk-text-nowrap">Present</th>
-                                            <th class="uk-text-nowrap">Absent</th>
-                                            <th class="uk-text-nowrap">Leave</th>
-                                          
+                                            <th class="uk-text-nowrap">Role</th>
+                                            <th class="uk-text-nowrap">Status</th>
+                                            <th class="uk-text-nowrap">Total Approve</th>
+                                            <th class="uk-text-nowrap uk-text-right">Due Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for class in all_classes %}
                                         <tr class="uk-table-middle">
-                                            <td class="uk-width-3-10"><a href="{% url 'current_attendance_record' class.pk %}">{{class}}</a></td>
-                                            <td class="uk-width-2-10"><span>{{class.total_student}}</span></td>
-                                            <td class="uk-width-2-10"><span >{{class.total_present}}</span></td>
-                                            <td class="uk-width-2-10"><span >{{class.total_absent}}</span></td>
-                                            <td class="uk-width-2-10"><span >{{class.total_leave}}</span></td>
-                                           
-                                            
-
-                                           
-                                           
-                                          
+                                            <td class="uk-width-3-10 uk-text-nowrap"><a href="page_scrum_board.html">ALTR-231</a></td>
+                                            <td class="uk-width-2-10 uk-text-nowrap"><span class="uk-badge">In progress</span></td>
+                                            <td class="uk-width-3-10">
+                                                <div class="uk-progress uk-progress-mini uk-progress-warning uk-margin-remove">
+                                                    <div class="uk-progress-bar" style="width: 40%;"></div>
+                                                </div>
+                                            </td>
+                                            <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">24.11.2015</td>
                                         </tr>
-                                      
-                                        {% endfor %}
-                                      
-                                 
-                                      
+                                        <tr class="uk-table-middle">
+                                            <td class="uk-width-3-10 uk-text-nowrap"><a href="page_scrum_board.html">ALTR-82</a></td>
+                                            <td class="uk-width-2-10 uk-text-nowrap"><span class="uk-badge uk-badge-warning">Open</span></td>
+                                            <td class="uk-width-3-10">
+                                                <div class="uk-progress uk-progress-mini uk-progress-success uk-margin-remove">
+                                                    <div class="uk-progress-bar" style="width: 82%;"></div>
+                                                </div>
+                                            </td>
+                                            <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">21.11.2015</td>
+                                        </tr>
+                                        <tr class="uk-table-middle">
+                                            <td class="uk-width-3-10 uk-text-nowrap"><a href="page_scrum_board.html">ALTR-123</a></td>
+                                            <td class="uk-width-2-10 uk-text-nowrap"><span class="uk-badge uk-badge-primary">New</span></td>
+                                            <td class="uk-width-3-10">
+                                                <div class="uk-progress uk-progress-mini uk-margin-remove">
+                                                    <div class="uk-progress-bar" style="width: 0;"></div>
+                                                </div>
+                                            </td>
+                                            <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">12.11.2015</td>
+                                        </tr>
+                                        <tr class="uk-table-middle">
+                                            <td class="uk-width-3-10 uk-text-nowrap"><a href="page_scrum_board.html">ALTR-164</a></td>
+                                            <td class="uk-width-2-10 uk-text-nowrap"><span class="uk-badge uk-badge-success">Resolved</span></td>
+                                            <td class="uk-width-3-10">
+                                                <div class="uk-progress uk-progress-mini uk-progress-primary uk-margin-remove">
+                                                    <div class="uk-progress-bar" style="width: 61%;"></div>
+                                                </div>
+                                            </td>
+                                            <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">17.11.2015</td>
+                                        </tr>
+                                        <tr class="uk-table-middle">
+                                            <td class="uk-width-3-10 uk-text-nowrap"><a href="page_scrum_board.html">ALTR-123</a></td>
+                                            <td class="uk-width-2-10 uk-text-nowrap"><span class="uk-badge uk-badge-danger">Overdue</span></td>
+                                            <td class="uk-width-3-10">
+                                                <div class="uk-progress uk-progress-mini uk-progress-danger uk-margin-remove">
+                                                    <div class="uk-progress-bar" style="width: 10%;"></div>
+                                                </div>
+                                            </td>
+                                            <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">12.11.2015</td>
+                                        </tr>
+                                        <tr class="uk-table-middle">
+                                            <td class="uk-width-3-10"><a href="page_scrum_board.html">ALTR-92</a></td>
+                                            <td class="uk-width-2-10"><span class="uk-badge uk-badge-success">Open</span></td>
+                                            <td class="uk-width-3-10">
+                                                <div class="uk-progress uk-progress-mini uk-margin-remove">
+                                                    <div class="uk-progress-bar" style="width: 90%;"></div>
+                                                </div>
+                                            </td>
+                                            <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">08.11.2015</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1354,5 +1749,44 @@
 
         });
     </script>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Absent', 'Present'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [{{absent}}, {{present}}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        // 'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        // 'rgba(153, 102, 255, 0.2)',
+                        // 'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        </script>
 </body>
 </html>

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'class_schedule.apps.ClassScheduleConfig',
     'registration',
     'Attendance',
+    'AddChild',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
-     'django_extensions',
+    'django_extensions',
    
     
 ]
@@ -60,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'school_portal.middlewares.user_approve_middleware'
+
     
 ]
 

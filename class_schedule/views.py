@@ -15,6 +15,11 @@ def schedule(request):
     select_class_for_schedule = request.GET.get('selected_class') # class selected to view
     if select_class_for_schedule == None:
             first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
+            if first_class:
+                    pass
+            else:
+                    messages.info(request, 'It seems there are no classes in the institute. First create the classes then you can access schedule')
+                    return redirect('not_found')
             first_class_id = first_class.id
             select_class_for_schedule= first_class_id
             
