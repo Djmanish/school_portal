@@ -44,6 +44,7 @@ def exam_result(request,pk):
          student_data = User.objects.get(pk=sdata)
          
          exam_max_marks=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=result_exam_type)
+         print(exam_max_marks)
          marks_data=ExamResult()
          marks_data.institute=request.user.profile.institute
          marks_data.exam_sr_no= result_exam_type_sr_no
@@ -72,18 +73,22 @@ def exam_result(request,pk):
 
 def student_view(request,pk):
     student=UserProfile.objects.filter(user=request.user)
-    
-    # result_exam_type = request.GET.get('result_exam_type')
-    
-    # result_exam_type_sr_no = request.GET.get('fetch_result_sr_no')
-    student_view=ExamResult.objects.filter(institute=request.user.profile.institute)
+    if request.method=="POST":
+        result_exam_type = request.POST.get('chart_exam_type')
+        result_exam_type_sr_no = request.POST.get('chart_sr_no')
+       
+        student_view=ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=request.user, exam_type__exam_type=result_exam_type,exam_sr_no=result_exam_type_sr_no)
+        context={
+              'student_view':student_view,
+                }
+        return render(request, 'studentview.html', context)
     # for i in student_view:
     #   student_data=i
    
     institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
     
     context={
-      'student_view':student_view, 
+       
       'institute_exam_type':institute_exam_type,
       
      
@@ -101,7 +106,15 @@ def fetch_sr_no(request):
     
   return HttpResponse(individual_result_sr_no)
 
-
+def chart_sr_no(request):
+  exam_type_id = request.POST.get('exam_type_id')
+  
+  max_exam_sr_no = ExamResult.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
+  chart_result_sr_no = "<option>--Select Exam Type No.--</option>"
+  for result_sr_no in max_exam_sr_no:
+    chart_result_sr_no = chart_result_sr_no + f"<option>"+result_sr_no['exam_sr_no']+"</option>" 
+    
+  return HttpResponse(chart_result_sr_no)
 
 def report_card(request,pk):
 
@@ -207,3 +220,4 @@ def report_card(request,pk):
       }
 
   return render(request, 'report_card.html', context)
+
