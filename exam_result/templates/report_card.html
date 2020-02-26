@@ -516,36 +516,14 @@
                                                              </select>
                                                              
                                                             </td>
-                                                            <td>
-                                                                <select class="form-control" id="exam_sr_no" name="exam_sr_no" style="padding: 2px;">
-                                                                    <option selected disabled value=''>--Select Exam Type No.--</option>
-                                        
-                                                             </select>
-                                                             
-                                                            </td>
+                                                    
                                                             <td>
                                                             <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
                                                         </td>
                                                            </tr>
                                                            
                                                         </form>
-                                                        <script>
-                                                            $(document).ready(function(){
-                                                              $('#result_exam_type').change(function(){
-                                                                 
-                                                                  $.ajax({
-                                                                      type:'POST',
-                                                                      url:'/examresult/exam_sr_no/',
-                                                                      data:{exam_id:$("#result_exam_type").val(), 
-                                                                      csrfmiddlewaretoken: '{{ csrf_token }}' },
-                                                                      
-                                                                      success: function(msg){
-                                                                          $('#exam_sr_no').html(msg);
-                                                                      }
-                                                                  })
-                                                              })
-                                                            })
-                                                            </script>
+                                                       
                                                       
                                                     
                                                         </thead>
@@ -553,31 +531,37 @@
                                                         <tbody>
                                                             <form method="POST">
                                                                 {% csrf_token %}
-                                                                <tr>
-                                                                  <td></td>
-                                                                </tr>
                                                          
                                                             <tr style="background-color: #1976d2; color:white">
                                                                
-                                                                <th>S.No.</th>
+                                                                
                                                                 <th>Subject Name</th>
                                                                 <th>Marks Obtain</th>
                                                                 <th>Max. Marks</th>
-                                                                <th>Min. Marks</th>
-                                                                <th>Avg. Marks</th>
-                                                                
-
-                                             
+                              
                                                             </tr>
+                                                            <tr>{{max_marks.exam_max_marks}}</tr>
                                                             
+                                                            
+                                                 {% if examresult_data %}
+                                                            {% for exam_sr_no in exam_sr_no %}
+                                                            
+                                                                
+                                                            <tr >
+                                                                
+                                                                
+                                                                <th >
+                                                                     {{select_exam_type}} {{exam_sr_no.exam_sr_no}}
+                                                                </th>
+                                                            
+                                                            </tr>
                                                                      {% for exam_data in examresult_data %}
+                                                                             {% if exam_data.exam_sr_no == exam_sr_no.exam_sr_no%}
+                                                                        
                                                             <tr>
-                                              
-                                                                     <td>
-                                                                        {{ forloop.counter}}
-                                                                     </td>
+                                                                   
                                                                     
-                                                                        <td>
+                                                                     <td>
                                                                             <div class="form-group">
                                                                                 <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_subject">
                                                                                   
@@ -596,25 +580,32 @@
                                                                       
                                                                        
                                                                        
+                                                                       
+                                                                           
+                                                                       
+                                                                           
                                                                         <td>
                                                                             <div class="form-group">
                                                                                 <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="_max_marks_obtain">
-                                                                                  <option  value=""></option>
+                                                                                  <option  value="">{{exam_data.result_max_marks}}</option>
                                                                                 </select>
                                                                               </div>
                                                                         </td>
                                                                         
                                                                         
-                                                                        <td>
-                                                                            <div class="form-group">
-                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="min_marks_obtain">
-                                                                                  <option  value=""></option>
-                                                                                </select>
-                                                                              </div>
-                                                                        </td>
+                                                                      
+                                                                    
+                                                                    
                                                                     
                                                             </tr>
-                                                            {% endfor %}
+                                                                             {% endif %}
+                                                                             
+                                                           
+                                                                        {% endfor %}
+                                                                {% endfor %}
+                                                        {% endif %}
+                                                   
+                                                    </tr>
                                                             
                                                         </form>
                                                         </tbody>

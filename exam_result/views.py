@@ -41,8 +41,9 @@ def exam_result(request,pk):
       selected_exam_type =  ExamType.objects.filter(institute= request.user.profile.institute, exam_type= result_exam_type).first()
       for sdata,score in zip(request.POST.getlist('student_first_name'),request.POST.getlist('student_marks')):
 
-         sdata = UserProfile.objects.get(pk=sdata)
-         exam_max_marks=request.POST.get('exam_max_marks')
+         student_data = User.objects.get(pk=sdata)
+         
+         exam_max_marks=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=result_exam_type)
          marks_data=ExamResult()
          marks_data.institute=request.user.profile.institute
          marks_data.exam_sr_no= result_exam_type_sr_no
@@ -50,8 +51,8 @@ def exam_result(request,pk):
          marks_data.result_class=selected_subject.subject_class
          marks_data.result_subject=selected_subject
          marks_data.result_subject_teacher=selected_subject.subject_teacher
-         marks_data.result_student_data=sdata
-         marks_data.result_max_marks=exam_max_marks
+         marks_data.result_student_data=student_data
+         marks_data.result_max_marks=selected_exam_type.exam_max_marks
          marks_data.result_score=score
          marks_data.save()
       messages.success(request, 'Exam Result Stored successfully !!!')
@@ -100,16 +101,6 @@ def fetch_sr_no(request):
     
   return HttpResponse(individual_result_sr_no)
 
-def exam_sr_no(request):
-  exam_type_id = request.POST.get('exam_id')
-  
-  max_exam_sr_no = ExamResult.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
-  
-  individual_result_sr_no = "<option>--Select Exam Type No.--</option>"
-  for result_sr_no in max_exam_sr_no:
-    individual_result_sr_no = individual_result_sr_no + f"<option>"+result_sr_no['exam_sr_no']+"</option>" 
-    
-  return HttpResponse(individual_result_sr_no)
 
 
 def report_card(request,pk):
@@ -117,56 +108,97 @@ def report_card(request,pk):
 # get Exam Type
   exam_type_list =ExamType.objects.filter(institute=request.user.profile.institute)
 
-
-
   if request.method=="POST":
       select_exam_type = request.POST.get('result_exam_type')
-      select_exam_type_no = request.POST.get('exam_sr_no')
-      
-               
-      examresult_data = ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=request.user, exam_type__exam_type= select_exam_type , exam_sr_no= select_exam_type_no  )
-      all_students_data=ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type , exam_sr_no= select_exam_type_no  )
-     
-      marks_list=[]
-      for data in all_students_data:
-          subject_marks=ExamResult.objects.filter(institute=request.user.profile.institute,result_subject=data.result_subject, exam_type__exam_type= select_exam_type , exam_sr_no= select_exam_type_no)
-          for sub in subject_marks:
-            sub=sub.result_subject
-          print(sub)
-          for marks in subject_marks:
-              marks=marks.result_score
-              marks_list.append(marks)
-          print(marks_list)
-
-      # all_students_data=ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type , exam_sr_no= select_exam_type_no  )
-      # all_marks_list=[]
-      # for marks_data in all_students_data:
-      #   all_marks_list.append(marks_data.result_score)
-      
-
-      # all_marks_subjects=[]
-      # for subjects in all_students_data:
-          # all_marks_subjects.append(subjects.result_subject)
-     
-
-      
+      examresult_data = ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=request.user, exam_type__exam_type= select_exam_type)
+      exam_dataresult = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
 
 
 
 
+      # get the value of exam serial number
+      exam_sr_no=ExamResult.objects.values('exam_sr_no').distinct()
+      # for exam_no in exam_sr_no:
+      #   result_sr_no=exam_no['exam_sr_no']
+      #   for subjects in exam_dataresult:
+      #       max_marks=[]
+      #       exam_score = ExamResult(institute=request.user.profile.institute, result_subject=subjects.result_subject)
+      #       for exam_score in exam_dataresult:
+      #         # max_marks.append(exam_score)
+      #         if exam_score.result_subject==subjects.result_subject:
+                 
+      #           max_marks.append(exam_score.result_score)
+      #           marks=max(max_marks)
+      #           print(marks)
+      #           context ={
+      #             'marks':marks,
+      #           }
+      #           return render(request, 'report_card.html', context)
 
+                # context={
+                #   'marks':marks,
+                # }
+                # return render(request, 'report_card.html', context)        
+
+                # print(max(max_marks))
+
+
+                # marks_list=list(max_marks)
+                # print(max(max_marks))
+                # value=max(max_marks)
+                # print(value)
+                
+
+                #  print(exam_score.result_score)
+          # exam_score=ExamResult.objects.filter(institute=request.user.profile.institute,exam_type__exam_type=select_exam_type, result_subject=subjects.result_subject, exam_sr_no=result_sr_no)
           
-      
-      
+        #     print(subjects.result_subject)
+        # print(result_sr_no)
+          # print(subjects.result_score)
+        
+     
+      exam_data = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
+      max_marks=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=select_exam_type)
+      for i in max_marks:
+        print()
+      exam_subject = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
+      # for exam_sr_no in exam_data:
+      #   print(exam_sr_no.exam_sr_no)
+      #   for student_subject in exam_subject:
+      #     # student_subject_score=ExamResult.objects.filter(institute=request.user.profile.institute, result_subject=student_subject.result_subject)
+        
+      #     for student_score in exam_subject:
+      #       student_subject_score=ExamResult.objects.filter(institute=request.user.profile.institute, result_subject=student_subject.result_subject)
+      #       print(student_subject_score.result_score)
 
-      
+
+      #     print(student_subject.result_subject)
+      #   print(exam_no)
+      all_students_data=ExamResult.objects.filter(institute=request.user.
+      profile.institute, exam_type__exam_type= select_exam_type )
+      # subjects=Subjects.objects.filter(institute=request.user.profile.institute, subject_name=all_students_data.result_subject)
+      # print(subjects.subject_name)
+      # marks_list=[]
+      # for data in all_students_data:
+        # print(data.result_subject)
+        
+          # subject_marks=ExamResult.objects.filter(institute=request.user.profile.institute,result_subject=data.result_subject, exam_type__exam_type= select_exam_type)
+          # print(subject_marks)
+          # for marks in subject_marks:
+          #     marks=marks.result_score
+          #     marks_list.append(marks)
+      # print(marks_list)
+
+
       context={
         'exam_type_list':exam_type_list,
         'examresult_data':examresult_data,
-        
-        
+        'exam_sr_no':exam_sr_no,
+        'select_exam_type':select_exam_type,
+        'exam_subject':exam_subject,
+        'all_students_data':all_students_data,
+        'max_marks':max_marks,
               }
-
       return render(request, 'report_card.html', context)        
   context={
         'exam_type_list':exam_type_list,
