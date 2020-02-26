@@ -13,6 +13,7 @@ class ExamResult(models.Model):
     result_subject_teacher=models.ForeignKey(to=User, on_delete=models.CASCADE,related_name='result_subject_teacher', null=True)
     result_student_data=models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='result_student_data',null=True)
     result_score=models.CharField(max_length=100, null=True)
+    result_max_marks=models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return str(self.result_student_data)

@@ -531,17 +531,17 @@
                                                         <tbody>
                                                             <form method="POST">
                                                                 {% csrf_token %}
-                                                                <tr>
-                                                                  <td></td>
-                                                                </tr>
                                                          
                                                             <tr style="background-color: #1976d2; color:white">
                                                                
                                                                 
                                                                 <th>Subject Name</th>
                                                                 <th>Marks Obtain</th>
+                                                                <th>Max. Marks</th>
                               
                                                             </tr>
+                                                            <tr>{{max_marks.exam_max_marks}}</tr>
+                                                            
                                                             
                                                  {% if examresult_data %}
                                                             {% for exam_sr_no in exam_sr_no %}
@@ -580,27 +580,26 @@
                                                                       
                                                                        
                                                                        
+                                                                       
+                                                                           
+                                                                       
+                                                                           
                                                                         <td>
                                                                             <div class="form-group">
                                                                                 <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="_max_marks_obtain">
-                                                                                  <option  value=""></option>
+                                                                                  <option  value="">{{exam_data.result_max_marks}}</option>
                                                                                 </select>
                                                                               </div>
                                                                         </td>
                                                                         
                                                                         
-                                                                        <td>
-                                                                            <div class="form-group">
-                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="min_marks_obtain">
-                                                                                  <option  value=""></option>
-                                                                                </select>
-                                                                              </div>
-                                                                        </td>
+                                                                      
                                                                     
                                                                     
                                                                     
                                                             </tr>
                                                                              {% endif %}
+                                                                             
                                                            
                                                                         {% endfor %}
                                                                 {% endfor %}
