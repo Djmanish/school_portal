@@ -66,6 +66,12 @@ def disapprove_child_request(request,pk):
     rr= request.user.profile.institute.id
     return HttpResponseRedirect(f'/user/approvals/{rr}/')
 
+def delete_child_request(request,pk):
+    user = AddChild.objects.get(pk=pk)
+    user.delete()
+    rr= request.user.profile.institute.id
+    return render(request, 'main_app/dashboard.html')
+
 def childview(request,pk):
     child = AddChild.objects.get(parent=request.user.profile,pk=pk)
     child_subjects=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class)

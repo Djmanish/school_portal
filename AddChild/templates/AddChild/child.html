@@ -321,7 +321,7 @@ aliceblue;
                 
                  
 
-                <li title="User Profile">
+                <li class="current_section" title="User Profile">
                     <a href="{% url 'user_profile' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
                         <span class="menu_title">My Profile</span>
@@ -453,7 +453,7 @@ aliceblue;
                                 <td style="text-align:center;">
                                     <img class="md-card-head-avatar" src="{{student.profile_pic.url}}" style="width: 40px; height: 40px; margin-top: 0%;" alt=""/>
                                 </td>
-                                <td style="text-align:center; vertical-align: middle;">{{student.first_name}} </td>
+                                <td style="text-align:center; vertical-align: middle;">{{student.first_name}} {{student.last_name}} </td>
                                 <td style="text-align:center; vertical-align: middle;">{{student.roll_number}}</td>
                                 <td style="text-align:center; vertical-align: middle;">{{student.Class}}</td>
                                 <td style="text-align:center; vertical-align: middle;">{{student.institute}}</td>
