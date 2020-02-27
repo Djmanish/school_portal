@@ -35,6 +35,7 @@ def admission_home(request):
         new_request.State = State.objects.get(pk=request.POST.get('state'))
         new_request.Pin_Code = request.POST.get('pin_code')
         new_request.Student_Photo= request.FILES['student_pic']
+        new_request.request_by = request.user
         try:
             new_request.save()
             messages.success(request, 'We have received your data. We will get back to you soon.')

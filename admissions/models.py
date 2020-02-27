@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import validate_email, RegexValidator
 from main_app.models import *
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -24,6 +25,7 @@ class Admission_Query(models.Model):
     State = models.ForeignKey(to= State, on_delete = models.SET_NULL, null=True )
     Pin_Code = models.IntegerField(null=True)
     Student_Photo = models.ImageField( upload_to='Student_Photos', null=True)
+    request_by = models.ForeignKey(to=User, null=True, on_delete=models.SET_NULL, related_name='admission_request')
     
    
     def __str__(self):
