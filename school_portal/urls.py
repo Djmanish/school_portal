@@ -31,7 +31,8 @@ urlpatterns = [
     path('holiday/', include('holidaylist.urls')),
     path('examschedule/', include('examschedule.urls')),
     path('examresult/',include('exam_result.urls')),
-    path('not_found/', main_app_views.not_found_page, name="not_found" )
+    path('not_found/', main_app_views.not_found_page, name="not_found" ),
+    path('admission_process/', include('admissions.urls')),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
