@@ -531,6 +531,19 @@
                                                             <form method="POST" >
                                                                 {% csrf_token %}
                                                             <tr style="background-color:#ADD8E6">
+                                                                <td>
+                                                                
+                                                                    <select class="form-control" name="selected_class" style="padding: 2px;" required>
+                                                                        <option selected disabled value="">--Select Class--</option>
+                                                                        
+                                                                        {% for class in exam_class %}
+                                                                           <option value="{{class.id}}"> {{class}}</option>
+                                                                        {% endfor %}
+                                                                            
+                                            
+                                                                    </select>
+                                                                
+                                                                </td>
                                                                 <td> <select class="form-control" id="selected_exam_type" name="selected_exam_type" style="padding: 2px;" required>
                                                                         <option selected disabled value="">--Select Exam Type--</option>
                                                                         

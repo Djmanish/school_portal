@@ -33,6 +33,7 @@ def exam_result(request,pk):
   # to fetch the institute students based on selected class 
   student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
   institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
+ 
   # to store the value of Exam Type
   
  # to get the data from the individual row
@@ -44,7 +45,7 @@ def exam_result(request,pk):
          student_data = User.objects.get(pk=sdata)
          
          exam_max_marks=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=result_exam_type)
-         print(exam_max_marks)
+        #  print(exam_max_marks)
          marks_data=ExamResult()
          marks_data.institute=request.user.profile.institute
          marks_data.exam_sr_no= result_exam_type_sr_no
@@ -56,6 +57,50 @@ def exam_result(request,pk):
          marks_data.result_max_marks=selected_exam_type.exam_max_marks
          marks_data.result_score=score
          marks_data.save()
+         marks_list=[]
+         exam_result_data=ExamResult.objects.filter(institute=request.user.profile.institute,exam_type__exam_type=result_exam_type,result_subject=selected_subject,exam_sr_no=result_exam_type_sr_no)
+         for max_value in exam_result_data:
+           print(max_value.result_score)
+           marks_list.append(max_value.result_score)
+         maxValue=marks_list[0]
+         minValue=marks_list[0]
+         sum_value=0         
+         for i in range(0, len(marks_list),1):
+          #  if maxValue<marks_list[i]:
+              maxValue=max(maxValue, marks_list[i])
+              minValue=min(maxValue, marks_list[i])
+              sumValue=sum(marks_list[i])
+
+         primt(sumValue)
+          #  for i in sum_score:
+          #     sum_value=sum(sum_value,i)
+             
+             
+
+
+         
+        
+          # score=(max_value.result_score)
+          # max_score=score[0]
+          # for i in range(0, len(score),1):
+          #   if max_score < score[i]:
+          #      max_score=score[i]
+          # print(max_score)
+
+          
+        
+        
+         calculate_result=CalculateResult()
+         calculate_result.institute=request.user.profile.institute
+         calculate_result.calc_result_subject=selected_subject
+         for data in exam_result_data:
+           
+          calculate_result.calc_result_score=data.result_score
+          calculate_result.calc_result_max=maxValue
+          calculate_result.calc_result_min=minValue
+          
+
+         calculate_result.save()
       messages.success(request, 'Exam Result Stored successfully !!!')
  
   context={
@@ -82,17 +127,11 @@ def student_view(request,pk):
               'student_view':student_view,
                 }
         return render(request, 'studentview.html', context)
-    # for i in student_view:
-    #   student_data=i
    
     institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
-    
     context={
-       
       'institute_exam_type':institute_exam_type,
-      
-     
-    }
+            }
     return render(request, 'studentview.html' , context)
 
 
@@ -125,12 +164,16 @@ def report_card(request,pk):
       select_exam_type = request.POST.get('result_exam_type')
       examresult_data = ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=request.user, exam_type__exam_type= select_exam_type)
       exam_dataresult = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
-
-
+      exam_sr_no=ExamResult.objects.values('exam_sr_no').distinct()
+      exam_data = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
+      max_marks=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=select_exam_type)
+      exam_subject = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
+      all_students_data=ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type )
+    
 
 
       # get the value of exam serial number
-      exam_sr_no=ExamResult.objects.values('exam_sr_no').distinct()
+     
       # for exam_no in exam_sr_no:
       #   result_sr_no=exam_no['exam_sr_no']
       #   for subjects in exam_dataresult:
@@ -170,11 +213,6 @@ def report_card(request,pk):
           # print(subjects.result_score)
         
      
-      exam_data = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
-      max_marks=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=select_exam_type)
-      for i in max_marks:
-        print()
-      exam_subject = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
       # for exam_sr_no in exam_data:
       #   print(exam_sr_no.exam_sr_no)
       #   for student_subject in exam_subject:
@@ -187,9 +225,7 @@ def report_card(request,pk):
 
       #     print(student_subject.result_subject)
       #   print(exam_no)
-      all_students_data=ExamResult.objects.filter(institute=request.user.
-      profile.institute, exam_type__exam_type= select_exam_type )
-      # subjects=Subjects.objects.filter(institute=request.user.profile.institute, subject_name=all_students_data.result_subject)
+    # subjects=Subjects.objects.filter(institute=request.user.profile.institute, subject_name=all_students_data.result_subject)
       # print(subjects.subject_name)
       # marks_list=[]
       # for data in all_students_data:

@@ -19,10 +19,16 @@ class ExamResult(models.Model):
         return str(self.result_student_data)
 
 
-class ExamView(models.Model):
- pexamview_type=models.CharField(max_length=100, null=True)
- exam_percent_score=models.CharField(max_length=100, null=True)
+class CalculateResult(models.Model):
+    institute= models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='calc_result_institute', null=True)
+    calc_result_subject=models.CharField(max_length=50, null=True)
 
+    calc_result_score = models.CharField(max_length=100, null=True)
+    calc_result_min=models.CharField(max_length=10, null=True)
+    calc_result_max = models.CharField(max_length=10, null=True)
+    calc_result_total=models.CharField(max_length=10,null=True) 
+    calc_result_avg=models.CharField(max_length=10, null=True)
 
- def __str__(self):
-        return str(self.pexamview_type)
+    def __str__(self):
+        return str(self.calc_result_subject)
+

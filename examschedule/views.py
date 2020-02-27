@@ -168,13 +168,22 @@ def exam_schedule(request,pk):
 def examschedule_view(request,pk):
             institute_exam_schedule = ExamDetails.objects.filter(institute=request.user.profile.institute)
             institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
+            exam_class = Classes.objects.filter(institute=request.user.profile.institute)
+
             if request.method=="POST":
                 select_exam_type = request.POST.get('selected_exam_type')
                 select_exam_type_no = request.POST.get('selected_exam_type_no')
+                select_class_for_schedule = request.POST.get('selected_class')
+                if select_class_for_schedule == None:
+                        first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
+                        first_class_id = first_class.id
+                        select_class_for_schedule= first_class_id
+                selected_class = Classes.objects.get(pk=select_class_for_schedule)
+                exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
                
-                exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type , exam_sr_no= select_exam_type_no  )
                
                 context = {
+                  
                   'exam_details': exam_details,
                   'institute_exam_schedule':institute_exam_schedule,
                   'institute_exam_type':institute_exam_type,
@@ -185,6 +194,7 @@ def examschedule_view(request,pk):
 
             
             context={
+              'exam_class':exam_class,
               'institute_exam_schedule':institute_exam_schedule,
               'institute_exam_type':institute_exam_type,
              
