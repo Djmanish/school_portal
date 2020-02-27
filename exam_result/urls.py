@@ -15,6 +15,8 @@ urlpatterns = [
   path('studentview/<int:pk>', views.student_view, name="studentview"),
   path('fetching_sr_no/', views.fetch_sr_no, name='fetch_result_sr_no' ),
   path('report_card/<int:pk>',views.report_card, name='report_card'),
+  path('chart_sr_no/', views.chart_sr_no, name='chart_sr_no')
+ 
 
 
   

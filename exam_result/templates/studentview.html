@@ -499,10 +499,10 @@
                                                         <table>
                                                             <thead>
                                                                 
-                                                                <form method="GET" >
+                                                                <form method="POST" >
                                                                     {% csrf_token %}
                                                                 <tr style="background-color:#ADD8E6">
-                                                                    <td> <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px;" required>
+                                                                    <td> <select class="form-control" id="chart_exam_type" name="chart_exam_type" style="padding: 2px;" required>
                                                                         <option selected disabled value="">--Select Exam Type--</option>
                                                                         {% for exam_type in institute_exam_type %}
                                                                            <option  > {{exam_type}}</option>
@@ -511,8 +511,8 @@
                                                                  
                                                                 </td>
                                                                 <td>
-                                                                    <select class="form-control" id="fetch_result_sr_no" name="fetch_result_sr_no" style="padding: 2px;">
-                                                                        <option selected disabled value=''> -- Select Exam Type No. --</option>
+                                                                    <select class="form-control" id="chart_sr_no" name="chart_sr_no" style="padding: 2px;">
+                                                                        <option selected disabled value=''>--Select Exam Type No.--</option>
                                             
                                                                  </select>
                                                                  
@@ -528,16 +528,16 @@
                                                    
                                                                     <script>
                                                                         $(document).ready(function(){
-                                                                          $('#result_exam_type').change(function(){
+                                                                          $('#chart_exam_type').change(function(){
                                                                              
                                                                               $.ajax({
                                                                                   type:'POST',
-                                                                                  url:'/examresult/fetching_sr_no/',
-                                                                                  data:{exam_type_id:$("#result_exam_type").val(), 
+                                                                                  url:'/examresult/chart_sr_no/',
+                                                                                  data:{exam_type_id:$("#chart_exam_type").val(), 
                                                                                   csrfmiddlewaretoken: '{{ csrf_token }}' },
                                                                                   
                                                                                   success: function(msg){
-                                                                                      $('#fetch_result_sr_no').html(msg);
+                                                                                      $('#chart_sr_no').html(msg);
                                                                                   }
                                                                               })
                                                                           })
@@ -591,7 +591,7 @@
                                                                         {% for subject_max in student_view%}
 
                                                                         
-                                                                        data: ['{{subject_max.result_score}}'],
+                                                                        data: ['{{subject_max.result_score|safe}}'],
                                                        
                                                                             {%endfor%}
                                                                         

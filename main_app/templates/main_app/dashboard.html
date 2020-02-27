@@ -420,6 +420,14 @@
                                 </a>
     
                             </li>
+                            
+                            <li>
+                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_title">Marks Chart</span>
+                                </a>
+    
+                            </li>
                             {% endif %}
                         </ul>
     
@@ -466,9 +474,9 @@
                                 <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
                                 <div class="uk-dropdown uk-dropdown-small">
                                     <ul class="uk-nav">
-                                        <li><a href="#">User profile</a></li>
-                                        <li><a href="#">User permissions</a></li>
-                                        <li><a href="#" class="uk-text-danger">Delete user</a></li>
+                                        <!-- <li><a href="#">User profile</a></li>
+                                        <li><a href="#">User permissions</a></li> -->
+                                        <li><a href="{% url 'delete_child_request' student.pk %}" class="uk-text-danger">Delete user</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -483,38 +491,38 @@
                             <ul class="md-list md-list-addon">
                                 <li>
                                     <div class="md-list-addon-element">
-                                        <i class="md-list-addon-icon material-icons">&#xE158;</i>
+                                        <i class="md-list-addon-icon material-icons">class</i>
                                     </div>
                                     <div class="md-list-content">
-                                        <span class="md-list-heading">eflatley@hotmail.com</span>
-                                        <span class="uk-text-small uk-text-muted">Email</span>
+                                        <span class="md-list-heading">{{student.Class}}</span>
+                                        <span class="uk-text-small uk-text-muted">Class</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="md-list-addon-element">
-                                        <i class="md-list-addon-icon material-icons">&#xE0CD;</i>
+                                        <i class="md-list-addon-icon material-icons">format_list_numbered</i>
                                     </div>
                                     <div class="md-list-content">
-                                        <span class="md-list-heading">095.324.4929x176</span>
-                                        <span class="uk-text-small uk-text-muted">Phone</span>
+                                        <span class="md-list-heading">{{student.child.roll_number}}</span>
+                                        <span class="uk-text-small uk-text-muted">Roll No.</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="md-list-addon-element">
-                                        <i class="md-list-addon-icon uk-icon-facebook-official"></i>
+                                        <i class="md-list-addon-icon material-icons">people</i>
                                     </div>
                                     <div class="md-list-content">
-                                        <span class="md-list-heading">facebook.com/envato</span>
-                                        <span class="uk-text-small uk-text-muted">Facebook</span>
+                                        <span class="md-list-heading">{{student.parent.first_name}} {{student.parent.last_name}}</span>
+                                        <span class="uk-text-small uk-text-muted">Parents</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="md-list-addon-element">
-                                        <i class="md-list-addon-icon uk-icon-twitter"></i>
+                                        <i class="md-list-addon-icon material-icons">school</i>
                                     </div>
                                     <div class="md-list-content">
-                                        <span class="md-list-heading">twitter.com/envato</span>
-                                        <span class="uk-text-small uk-text-muted">Twitter</span>
+                                        <span class="md-list-heading">{{student.child.institute}}</span>
+                                        <span class="uk-text-small uk-text-muted">Institute</span>
                                     </div>
                                 </li>
                             </ul>
