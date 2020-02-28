@@ -60,18 +60,28 @@ def exam_result(request,pk):
          marks_list=[]
          exam_result_data=ExamResult.objects.filter(institute=request.user.profile.institute,exam_type__exam_type=result_exam_type,result_subject=selected_subject,exam_sr_no=result_exam_type_sr_no)
          for max_value in exam_result_data:
-           print(max_value.result_score)
+           
            marks_list.append(max_value.result_score)
          maxValue=marks_list[0]
          minValue=marks_list[0]
-         sum_value=0         
+         sumVal=0
+        #  sum_value=marks_list[0]         
          for i in range(0, len(marks_list),1):
           #  if maxValue<marks_list[i]:
               maxValue=max(maxValue, marks_list[i])
               minValue=min(maxValue, marks_list[i])
-              sumValue=sum(marks_list[i])
+              # sumValue=sum(marks_list[i])
+        #  print(maxValue)
 
-         primt(sumValue)
+         for j in range(0,len(marks_list), 1):
+            minValue=min(minValue,marks_list[j])
+        #  print(minValue)
+
+        #  for n in range(len(marks_list)):
+        #     sumValue=sum(sumVal, marks_list[n])
+        #  print(sumValue)
+
+        #  print(sumValue)
           #  for i in sum_score:
           #     sum_value=sum(sum_value,i)
              
@@ -94,10 +104,9 @@ def exam_result(request,pk):
          calculate_result.institute=request.user.profile.institute
          calculate_result.calc_result_subject=selected_subject
          for data in exam_result_data:
-           
           calculate_result.calc_result_score=data.result_score
-          calculate_result.calc_result_max=maxValue
-          calculate_result.calc_result_min=minValue
+         calculate_result.calc_result_max=maxValue
+         calculate_result.calc_result_min=minValue
           
 
          calculate_result.save()
