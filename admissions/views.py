@@ -4,6 +4,8 @@ from django.shortcuts import redirect
 from main_app.models import *
 from .models import *
 from django.contrib import messages
+from django.views.generic import ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
 
@@ -59,4 +61,35 @@ def fetch_institute_class_admission(request):
     for Class in schools_all_classes:
         classes= classes+ f"<option value='{Class.id}' >"+str(Class)+"</option>"
     return HttpResponse(classes)
+    
+
+class Admission_Requests_View(LoginRequiredMixin, UserPassesTestMixin,  ListView ):
+    model = Admission_Query
+    template_name = "admissions/admission_requests.html"
+    paginate_by = 20
+
+    def test_func(self):
+        if self.request.user.profile.designation.level_name == "admin" or self.request.user.profile.designation.level_name == "principal":
+            return True
+        else:
+            return False
+    
+    def get_queryset(self):
+        return Admission_Query.objects.filter(school_name= self.request.user.profile.institute)
+
+class Admission_Request_Detail_View(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model= Admission_Query
+    template_name = "admissions/admission_request_detail_view.html"
+    def test_func(self):
+        if self.request.user.profile.designation.level_name == "admin" or self.request.user.profile.designation.level_name == "principal":
+            return True
+        else:
+            return False
+
+
+
+
+
+
+
     

@@ -479,6 +479,7 @@
                                 {% if all_students %}
                                 <h3>All Students of {{showing_student_for_class}}</h3>
                                 <tr>
+                                    <th><b>Sr. No.</b></th>
                                     <th><b>Full Name</b></th>
                                   
                                     <th><b>Roll No.</b></th>
@@ -497,6 +498,7 @@
                                   
                                   {% for student in all_students %}
                                   <tr>
+                                      <td>{{forloop.counter}}</td>
                                     <td>{{student.first_name}}
                                         
                                         {% if student.middle_name %}
