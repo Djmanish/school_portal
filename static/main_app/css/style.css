@@ -48,8 +48,9 @@ body{
 #attendance_form{
   border: 1px solid lightgray;
   padding: 10px;
-  border-radius: 10px;
-  background-color: aliceblue;
+
+
+  box-shadow: 3px 3px 10px lightgray !important ;
 }
 #attendance_student_table tr td{
   padding: 0px;
@@ -129,3 +130,4 @@ border-bottom: 2px solid white;
 .aftr:hover{
 background-color: lightgray;
 }
+
