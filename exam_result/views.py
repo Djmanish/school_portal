@@ -6,6 +6,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.db.models import Count
 
+import statistics      
+
+
+
 
 
 
@@ -38,14 +42,11 @@ def exam_result(request,pk):
   
  # to get the data from the individual row
   if request.method=="POST":
-    
       selected_exam_type =  ExamType.objects.filter(institute= request.user.profile.institute, exam_type= result_exam_type).first()
       for sdata,score in zip(request.POST.getlist('student_first_name'),request.POST.getlist('student_marks')):
-
          student_data = User.objects.get(pk=sdata)
-         
          exam_max_marks=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=result_exam_type)
-        #  print(exam_max_marks)
+        
          marks_data=ExamResult()
          marks_data.institute=request.user.profile.institute
          marks_data.exam_sr_no= result_exam_type_sr_no
@@ -57,74 +58,46 @@ def exam_result(request,pk):
          marks_data.result_max_marks=selected_exam_type.exam_max_marks
          marks_data.result_score=score
          marks_data.save()
-         marks_list=[]
-         exam_result_data=ExamResult.objects.filter(institute=request.user.profile.institute,exam_type__exam_type=result_exam_type,result_subject=selected_subject,exam_sr_no=result_exam_type_sr_no)
-         for max_value in exam_result_data:
-           
-           marks_list.append(max_value.result_score)
-         maxValue=marks_list[0]
-         minValue=marks_list[0]
-         sumVal=0
-        #  sum_value=marks_list[0]         
-         for i in range(0, len(marks_list),1):
-          #  if maxValue<marks_list[i]:
-              maxValue=max(maxValue, marks_list[i])
-              minValue=min(maxValue, marks_list[i])
-              # sumValue=sum(marks_list[i])
-        #  print(maxValue)
+      marks_list=[]
+      exam_result_data=ExamResult.objects.filter(institute=request.user.profile.institute,exam_type__exam_type=result_exam_type,result_subject=selected_subject,exam_sr_no=result_exam_type_sr_no)
+      
 
-         for j in range(0,len(marks_list), 1):
-            minValue=min(minValue,marks_list[j])
-        #  print(minValue)
-
-        #  for n in range(len(marks_list)):
-        #     sumValue=sum(sumVal, marks_list[n])
-        #  print(sumValue)
-
-        #  print(sumValue)
-          #  for i in sum_score:
-          #     sum_value=sum(sum_value,i)
-             
-             
-
-
-         
-        
-          # score=(max_value.result_score)
-          # max_score=score[0]
-          # for i in range(0, len(score),1):
-          #   if max_score < score[i]:
-          #      max_score=score[i]
-          # print(max_score)
-
+      for marks in exam_result_data:
+          marks_list.append(marks.result_score)
+     
+      data_list=list(marks_list)
+     
+      maxValue=max(data_list)
+      minValue=min(data_list)
+  
+      for calc_data in exam_result_data:
+          calculate_result=CalculateResult()
+          calculate_result.institute=calc_data.institute
+          calculate_result.calc_result_student_data=calc_data.result_student_data
+          calculate_result.calc_result_subject=calc_data.result_subject
+          calculate_result.calc_result_class=calc_data.result_class
+          calculate_result.calc_result_exam_type=calc_data.exam_type
+          calculate_result.calc_result_exam_sr_no=calc_data.exam_sr_no
+          calculate_result.calc_result_score=calc_data.result_score
+          calculate_result.calc_result_max=maxValue
+          calculate_result.calc_result_min=minValue
+          calculate_result.save()
           
-        
-        
-         calculate_result=CalculateResult()
-         calculate_result.institute=request.user.profile.institute
-         calculate_result.calc_result_subject=selected_subject
-         for data in exam_result_data:
-          calculate_result.calc_result_score=data.result_score
-         calculate_result.calc_result_max=maxValue
-         calculate_result.calc_result_min=minValue
-          
-
-         calculate_result.save()
       messages.success(request, 'Exam Result Stored successfully !!!')
- 
+  calc_result=CalculateResult.objects.filter(institute=request.user.profile.institute,calc_result_student_data=request.user )
+
   context={
+
     'subject_result':subject_result,
     'selected_subject':selected_subject,
     'institute_students':institute_students,
     'institute_exam_type':institute_exam_type,
-   
-  }
+    'calc_result':calc_result,
+    }
   return render(request, 'teacher_view.html', context)
 
 
-
-    # Student View
-
+# Student View
 def student_view(request,pk):
     student=UserProfile.objects.filter(user=request.user)
     if request.method=="POST":
@@ -172,12 +145,13 @@ def report_card(request,pk):
   if request.method=="POST":
       select_exam_type = request.POST.get('result_exam_type')
       examresult_data = ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=request.user, exam_type__exam_type= select_exam_type)
-      exam_dataresult = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
+      # exam_dataresult = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
       exam_sr_no=ExamResult.objects.values('exam_sr_no').distinct()
       exam_data = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
       max_marks=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=select_exam_type)
       exam_subject = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
       all_students_data=ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type )
+      examresult_data=CalculateResult.objects.filter(institute=request.user.profile.institute,calc_result_student_data=request.user,calc_result_exam_type=select_exam_type)
     
 
 
