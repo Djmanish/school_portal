@@ -21,8 +21,11 @@ class ExamResult(models.Model):
 
 class CalculateResult(models.Model):
     institute= models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='calc_result_institute', null=True)
+    calc_result_student_data=models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='calc_result_student_data', null=True)
     calc_result_subject=models.CharField(max_length=50, null=True)
-
+    calc_result_exam_type=models.CharField(max_length=50, null=True)
+    calc_result_exam_sr_no=models.CharField(max_length=50, null=True)
+    calc_result_class=models.CharField(max_length=50, null=True)
     calc_result_score = models.CharField(max_length=100, null=True)
     calc_result_min=models.CharField(max_length=10, null=True)
     calc_result_max = models.CharField(max_length=10, null=True)
