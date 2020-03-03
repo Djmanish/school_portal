@@ -14,7 +14,11 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
     <title>User Dashboard</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    
+ 
 
     <!-- additional styles for plugins -->
         <!-- weather icons -->
@@ -47,6 +51,8 @@
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
 
+    
+   
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -581,9 +587,69 @@
                                             </ul>
                                         </div>
                                     </div>
-                                <a href="{% url 'admission_requests' %}" class="md-btn md-btn-primary" style="margin: auto;"> <i class="material-icons">keyboard_backspace</i> Go Back</a>
+
+
+                                    <div style="text-align: center;">
+                                        <a href="{% url 'admission_requests' %}" class="md-btn md-btn-primary" ><i class="material-icons">keyboard_backspace</i> Go Back</a>
+
+                                        <a href="{% url 'approve_admission_request' object.id %}" class="md-btn md-btn-success" style="margin: auto;"><i class="material-icons">check</i> Approve</a>
+        
+                                        <a id="disapprove_admission"   class="md-btn md-btn-danger" ><i class="material-icons">closest</i> Disapprove</a>
+                                    </div>
+                                
+                                    <script>
+                                        $(document).ready(function(){
+                                          $('#disapprove_admission').click(function(){
+                                             
+                                              $.ajax({
+                                                  type:'POST',
+                                                  url:'{% url "fetch_disapproved_id" object.id %}',
+                                                  data:{school_id:$("#selected_institute").val(), 
+                                                
+                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                  
+                                                  success: function(msg){
+
+                                                    $("#dappr").modal("show");
+                                                    $('#dambhm').html(msg)
+                                                  }
+                                              })
+                                          })
+                                        })
+                                        </script>
+                                       
+       
+
                                 </li>
+
+                                  <!-- The Modal -->
+                                  <div class="modal fade" id="dappr">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                      <div class="modal-content">
+                                      
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                          <h4 class="modal-title">Disapprove Admission Request</h4>
+                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                          
+                                        </div>
                                         
+                                        <!-- Modal body -->
+                                        <div class="modal-body" id="dambhm">
+                                         
+                                        </div>
+                                        
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+                                          <a href="{% url 'disapprove_admission_request' object.id %}"  class="md-btn md-btn-danger" >Disapprove</a>
+                                          <button type="button" class="md-btn md-btn-primary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                        
+                                      </div>
+                                    </div>
+                                  </div>
+
+
 
 
                                                                        
@@ -879,5 +945,8 @@
 
         });
     </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    
 </body>
 </html>
