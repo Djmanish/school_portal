@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from main_app.models import *
 from .models import *
@@ -85,6 +85,50 @@ class Admission_Request_Detail_View(LoginRequiredMixin, UserPassesTestMixin, Det
             return True
         else:
             return False
+
+
+def fetching_disapproved_id(request, pk):
+    admission_request = Admission_Query.objects.get(pk=pk)
+    
+    data = {'name':admission_request.first_name, 'id':admission_request.id}
+    return HttpResponse(f"Are you sure to disapprove {admission_request.first_name}")
+
+def disapprove_admission_request(request, pk):
+    to_delete = Admission_Query.objects.get(pk=pk)
+    to_delete.delete()
+    return redirect('admission_requests')
+
+
+def approve_admission_request(request, pk):
+    approved_user = Admission_Query.objects.get(pk=pk)
+    approved_user_class = approved_user.class_name
+    approved_user_first_name = approved_user.first_name
+    
+    
+    approved_user = approved_user.request_by
+    student_designation = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='student')
+    
+    approved_user_profile = UserProfile.objects.get(user= approved_user)
+    approved_user_profile.designation = student_designation
+    approved_user_profile.institute = request.user.profile.institute
+    approved_user_profile.Class = approved_user_class
+    approved_user_profile.status= 'approve'
+    approved_user_profile.first_name = approved_user_first_name
+    
+    
+    try:
+        Role_Description.objects.create(user=approved_user, institute= request.user.profile.institute, level=student_designation)       
+    except:
+        messages.info(request, 'user already exists')
+        return redirect('user_dashboard')
+    try:
+        approved_user_profile.save()
+        Admission_Query.objects.get(pk=pk).delete()
+        messages.success(request, 'Student Approved and Register Successfully')
+        return redirect('admission_requests')
+    except:
+        messages.error(request, "failed to register")
+        return redirect('admission_requests')
 
 
 
