@@ -11,6 +11,34 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 def admission_home(request):
+    try:
+        if_already_user = Role_Description.objects.get(user=request.user)
+        messages.info(request, 'You are not allowed to visit this page')
+        return redirect('not_found')
+    except:
+        pass
+
+    try:
+        if_already_requested = Admission_Query.objects.get(request_by= request.user)
+        if if_already_requested:
+            messages.info(request, 'You have already requested. Please wait till anyresponse')
+            school_list = Institute.objects.all()
+            states_list = State.objects.all()
+            context = {
+                'school_list': school_list,
+                'states_list': states_list,
+                'disable_submit':'disabled'
+            }
+            return render( request , 'admissions/admission_home.html', context)
+
+            
+    except:
+        pass
+    
+
+
+
+
     school_list = Institute.objects.all()
     states_list = State.objects.all()
     context = {
@@ -41,7 +69,7 @@ def admission_home(request):
         try:
             new_request.save()
             messages.success(request, 'We have received your data. We will get back to you soon.')
-            return redirect('admission_home')
+            return redirect('user_dashboard')
         except:
             messages.error(request, 'failed to submit, Please fill all details carefully')
             return redirect('admission_home')

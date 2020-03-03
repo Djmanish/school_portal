@@ -525,7 +525,11 @@
 
                                     <tr class="aftr"><td class="admission_form_label" >Student Photo:</td> <td><input type="file" class="form-control form-control-sm" name="student_pic" required></td></tr>
 
-                                    <tr><td class="admission_form_label" ></td> <td><input type="submit" class="form-control admission_submit_button" value="Submit" ></td></tr>
+                                    <tr><td class="admission_form_label" ></td> <td><input type="submit" class="form-control admission_submit_button" value="Submit" 
+                                    {% if disable_submit %}
+                                        disabled
+                                    {% endif %}
+                                         ></td></tr>
 
 
 
