@@ -61,23 +61,23 @@ def exam_result(request,pk):
       marks_list=[]
       exam_result_data=ExamResult.objects.filter(institute=request.user.profile.institute,exam_type__exam_type=result_exam_type,result_subject=selected_subject,exam_sr_no=result_exam_type_sr_no)
       
-      
+      exam_subject=CalculateResult.objects.filter(institute=request.user.profile.institute, calc_result_student_data=request.user)
+      for subjects in exam_subject:
+        
+        subjects=subjects.result_subject
+        print(subjects)
       
       for marks in exam_result_data:
           marks_list.append(marks.result_score)
      
       data_list=list(marks_list)
-      
-
       marks_list=list(map(int, data_list))
-      
       meanVal=statistics.mean(marks_list)
-      
 
-      # meanValue=statistics.mean(data_list)
-     
       maxValue=max(data_list)
       minValue=min(data_list)
+      avgValue=round(meanVal)
+      sumValue=sum(marks_list)
   
       for calc_data in exam_result_data:
           calculate_result=CalculateResult()
@@ -90,6 +90,8 @@ def exam_result(request,pk):
           calculate_result.calc_result_score=calc_data.result_score
           calculate_result.calc_result_max=maxValue
           calculate_result.calc_result_min=minValue
+          calculate_result.calc_result_avg=avgValue
+          calculate_result.calc_result_total=sumValue
           calculate_result.save()
           
       messages.success(request, 'Exam Result Stored successfully !!!')
@@ -170,16 +172,12 @@ def report_card(request,pk):
       scored_data=list(score_list)
       
 
-      # score_list=list(map(int, scored_data))
+      score_list=list(map(int, scored_data))
       
-      # meanVal=statistics.mean(score_list)
+      
+      meanVal=statistics.mean(score_list)
 
-      # round_score=round(meanVal)
-      
-     
-      
-      
-      
+      round_score=round(meanVal)
       
       context={
         'exam_type_list':exam_type_list,
@@ -189,7 +187,7 @@ def report_card(request,pk):
         'exam_subject':exam_subject,
         'all_students_data':all_students_data,
         'max_marks':max_marks,
-        # 'round_score':round_score,
+        'round_score':round_score,
               }
       return render(request, 'report_card.html', context)        
   context={
@@ -200,3 +198,30 @@ def report_card(request,pk):
 
   return render(request, 'report_card.html', context)
 
+def overall_result(request,pk):
+      exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
+      # exam_type_list = ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=request.user).values('exam_type').distinct()
+      print(exam_type_list)
+      score_list=[]
+
+      overall_result_data = ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=request.user)
+      
+      for score in overall_result_data:
+          score_list.append(score.result_score)
+
+      scored_data=list(score_list)
+      
+
+      score_list=list(map(int, scored_data))
+      
+      
+      meanVal=statistics.mean(score_list)
+
+      round_score=round(meanVal)
+
+      context={
+        'overall_result_data':overall_result_data,
+        'exam_type_list':exam_type_list,
+      }
+
+      return render(request, 'overall.html', context)
