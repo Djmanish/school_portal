@@ -48,8 +48,14 @@ body{
 #attendance_form{
   border: 1px solid lightgray;
   padding: 10px;
+  box-shadow: 3px 3px 10px lightgray !important ;
+}
 
-
+.attendance_form{
+  border: 1px solid lightgray;
+  padding: 10px;
+  border-radius: unset !important ;
+  background-color: white !important ;
   box-shadow: 3px 3px 10px lightgray !important ;
 }
 #attendance_student_table tr td{
@@ -132,4 +138,7 @@ background-color: lightgray;
 }
 #disapprove_admission{
   color: white;
+}
+.md-list-heading a{
+  cursor: default;
 }
