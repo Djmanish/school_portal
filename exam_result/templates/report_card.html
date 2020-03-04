@@ -427,6 +427,14 @@
                                 </a>
     
                             </li>
+                            <li>
+                                <a href="{% url 'overall_result' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_title">overall</span>
+                                </a>
+    
+                            </li>
+                         
                             {% endif %}
                         </ul>
     
@@ -506,11 +514,16 @@
                                                             {% csrf_token %}
                                                         <tr style="background-color:#ADD8E6">
                                                             
-                                                            <td> <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px;" required>
+                                                            <td> <select onchange="location = this.value;" class="form-control" name="result_exam_type" style="padding: 2px;" required>
                                                                     <option selected disabled value="">--Select Exam Type--</option>
-                                                                    <a href="overall.html"> <option>Overall</option></a>
+                                                                    <option  value="{% url 'overall_result' request.user.profile.institute.id %}">
+                                                                            Overall
+                                                                       
+                                                                    </option>
+                                                                    
 
                                                                     {% for exam_type in exam_type_list %}
+                                                                    
                                                                        <option>{{exam_type}}</option>
                                                                     {% endfor %}
                                                              </select>
@@ -546,23 +559,12 @@
                                                             
                                                  {% if examresult_data %}
                                                             {% for exam_sr_no in exam_sr_no %}
-                                                            
-                                                                
                                                             <tr >
-                                                                
-                                                                
                                                                 <th >
                                                                     
                                                                         {{select_exam_type}} {{exam_sr_no.exam_sr_no}}
-                                                                        
-
-                                                                    
-                                                                    
-                                                                     
-
-                                                                     
+                                  
                                                                 </th>
-                                                            
                                                             </tr>
                                                                      {% for exam_data in examresult_data %}
                                                                              {% if exam_data.calc_result_exam_sr_no == exam_sr_no.exam_sr_no%}
@@ -639,6 +641,7 @@
 
     <!-- google web fonts -->
     <script>
+        
         WebFontConfig = {
             google: {
                 families: [
