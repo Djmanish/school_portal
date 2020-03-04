@@ -48,8 +48,15 @@ body{
 #attendance_form{
   border: 1px solid lightgray;
   padding: 10px;
-  border-radius: 10px;
-  background-color: aliceblue;
+  box-shadow: 3px 3px 10px lightgray !important ;
+}
+
+.attendance_form{
+  border: 1px solid lightgray;
+  padding: 10px;
+  border-radius: unset !important ;
+  background-color: white !important ;
+  box-shadow: 3px 3px 10px lightgray !important ;
 }
 #attendance_student_table tr td{
   padding: 0px;
@@ -105,4 +112,33 @@ body{
 .disapprove_btn:hover{
   border: 1px solid red;
   transition: 1s;
+}
+#page_content_inner{
+  background-color:#ececec ;
+}
+
+#admission_form_table{
+  width: 65%;
+  margin: auto;
+}
+.admission_form_label{
+  text-align: center;
+  font-weight: 400;
+  
+}
+.admission_submit_button{
+  background-color: #1976d2 !important;
+  color: white;
+}
+.aftr{
+border-bottom: 2px solid white;
+}
+.aftr:hover{
+background-color: lightgray;
+}
+#disapprove_admission{
+  color: white;
+}
+.md-list-heading a{
+  cursor: default;
 }

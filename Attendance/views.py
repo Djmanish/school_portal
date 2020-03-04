@@ -196,4 +196,32 @@ def current_date_attendance_record(request, pk):
                         'attendance_date': datetime.date.today()}
     return render(request, 'Attendance/current_date_attendance_record.html', context)
 
+
+
+def class_students_list(request):
+    all_classes = Classes.objects.filter(institute= request.user.profile.institute)
+    
+    if request.method == "POST":
+        selected_class = Classes.objects.get(pk = request.POST.get('selected_class_'))
+        all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
+        if len(all_students)<1:
+            messages.error(request, 'No student found in the selected class')
+            return redirect('class_students_list')
+
+        context= {'all_students':all_students,
+         'all_classes': all_classes,
+         'showing_student_for_class':selected_class
+         }
+        return render(request, 'Attendance/class_students.html', context)
+        
+
+
+
+    context= {
+        'all_classes': all_classes
+    }
+
+
+    return render(request, 'Attendance/class_students.html', context)
+
     
