@@ -780,7 +780,7 @@
                                                                 {% for student in parent_children %}
                                                                 <tr>
                                                                     <td>{{ forloop.counter}}</td>
-                                                                    <td><a href="#">{{student.child.first_name}}</a></td>
+                                                                    <td><a href="{% url 'childview' student.pk %}">{{student.child.first_name}}</a></td>
                                                                     <td>{{student.child.Class}}</td>
                                                                     <td>{{student.child.institute}}</td>
                                                                 </tr>
