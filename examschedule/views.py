@@ -107,7 +107,9 @@ def exam_schedule(request,pk):
             
             
         # fetching the value of exam from the given drop down
-            exam_type_schedule= ExamType.objects.all()
+            
+            exam_type_schedule= ExamType.objects.filter(institute=request.user.profile.institute)
+            
             select_exam_for_schedule = request.GET.get('selected_exam_type')
             if select_exam_for_schedule==None:
                    etype=ExamType.objects.filter(institute= request.user.profile.institute).last()

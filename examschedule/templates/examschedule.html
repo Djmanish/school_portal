@@ -16,7 +16,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
 
-    <title>Institute Schedule</title>
+    <title>Examination</title>
 
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
@@ -316,145 +316,187 @@
 
         <div class="menu_section">
             <ul>
-                <li title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
                     </a>
-
+                    
                 </li>
-
-
-
+                
                 <li title="User Profile">
                     <a href="{% url 'user_profile' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xE87C;</i></span>
+                        <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">My Profile</span>
-                    </a>
+                    </a>    
                 </li>
-                {% if user.profile.institute  %}
-                <li title="Institute Profile">
+                
+                {% if user.profile.institute == None %}
+                <li title="Admission Query">
+                    <a href="{% url 'admission_home' %}">
+                        <span class="menu_icon"><i class="material-icons">person</i></span>
+                        <span class="menu_title">Admission Query</span>
+                    </a>    
+                </li>
+                {% endif %}
+                    
+
+                {% if user.profile.institute %}
+                <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">domain</i></span>
+                        <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>
-                    </a>
+                    </a>    
                 </li>
-                <li title="Holiday List">
+                
+                <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
                     </a>
-
+                    
                 </li>
+                
+               <li  title="Institute Schedule">
+                <a href="{% url 'class_schedule' %}">
+                    <span class="menu_icon"><i class="material-icons">schedule</i></span>
+                    <span class="menu_title">Schedule</span>
+                </a>
+            </li>
+               
+            {% endif %}  
 
+            
+            {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+            <li  title="Admission Requests">
+                <a href="{% url 'admission_requests' %}">
+                    <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
+                    <span class="menu_title">Admission Requests</span>
+                </a>
+                
+            </li>
 
+        {% endif %}
+            
 
-                <li title="Institute Schedule">
-                    <a href="{% url 'class_schedule' %}">
-                        <span class="menu_icon"><i class="material-icons">assignment</i></span>
-                        <span class="menu_title">Schedule</span>
-                    </a>
-
-                </li>
-
-
-
-                {% endif %}
-                {% if user.profile.institute  %}
-                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin"  or user.profile.designation.level_name == "principal"%}
-
-                <li title="Approvals">
-                    <a href="{% url 'approvals' user.profile.institute.pk %}">
-                        <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
-                        <span class="menu_title">Approvals</span>
-                    </a>
-
-                </li>
-
-
-
-                <li title="Attendance">
+                {% if user.profile.institute %}
+                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+                    <li  title="Approvals">
+                        <a href="{% url 'approvals' user.profile.institute.pk %}">
+                            <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
+                            <span class="menu_title">Approvals</span>
+                        </a>
+                        
+                    </li>
+                    
+                    <li  title="Attendance">
+                    
                     <a href="{% url 'attendance' %}">
-                        <span class="menu_icon"><i class="material-icons">poll</i></span>
-                        <span class="menu_title">Attendance</span>
-                    </a>
+                            <span class="menu_icon"><i class="material-icons">people</i></span>
+                            <span class="menu_title">Attendance</span>
+                        </a>
+                        
+                    </li> 
 
-                </li>
+                    <li  title="Class Students">
+                    
+                        <a href="{% url 'class_students_list' %}">
+                                <span class="menu_icon"><i class="material-icons">people</i></span>
+                                <span class="menu_title">Class Students</span>
+                            </a>
+                            
+                        </li> 
+
+                    {% endif %}
+                   
+
+                    <li class="current_section" title="Examination">
+
+                        <a href="">
+                            <span class="menu_icon"><i class="material-icons">trending_up</i></span>
+                            <span class="menu_title">Examination</span>
+                        </a>
+                        <ul>
+                            {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
+
+                            <li>
+                                <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                                    <span class="menu_title">Create Exam</span>
+                                </a>
+    
+                            </li>
+                            
+                  
+                            <li >
+                                <a href="{% url 'examschedule' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">add_box</i></span>
+                                    <span class="menu_title">Create Exam Schedule</span>
+                                </a>
+    
+                            </li>
+                            {% endif %}
+                            <li>
+                                <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
+                                    <span class="menu_title">View Exam Schedule</span>
+                                </a>
+    
+                            </li>
+                            <li>
+                                <a href="{% url 'report_card' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">file_copy</i></span>
+                                    <span class="menu_title">Report Card</span>
+                                </a>
+    
+                            </li>
+                            {% if user.profile.designation.level_name == "teacher"%}
+                            <li>
+                                <a href="{% url 'examresult' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">receipt</i></span>
+                                    <span class="menu_title">Exam Result</span>
+                                </a>
+    
+                            </li>
+                            {% endif %}
+                            {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                
+                            <li>
+                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
+                                    <span class="menu_title">View Exam Result</span>
+                                </a>
+    
+                            </li>
+                            
+                            <li>
+                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_title">Marks Chart</span>
+                                </a>
+    
+                            </li>
+                            <li>
+                                <a href="{% url 'overall_result' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_title">overall</span>
+                                </a>
+    
+                            </li>
+                            {% endif %}
+                        </ul>
+    
+                    </li>
 
-                <li  title="Examination">
-
-                    <a href="">
-                        <span class="menu_icon"><i class="material-icons">spellcheck</i></span>
-                        <span class="menu_title">Examination</span>
-                    </a>
-                    <ul>
-                        {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
-
-                        <li>
-                            <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Create Exam</span>
-                            </a>
-
-                        </li>
-
-              
-                        <li>
-                            <a href="{% url 'examschedule' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Create Exam Schedule</span>
-                            </a>
-
-                        </li>
-                        {% endif %}
-                        <li>
-                            <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">View ExamSchedule</span>
-                            </a>
-
-                        </li>
-                        <li>
-                            <a href="{% url 'report_card' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Report Card</span>
-                            </a>
-
-                        </li>
-                        {% if user.profile.designation.level_name == "teacher"%}
-                        <li>
-                            <a href="{% url 'examresult' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">Exam Result</span>
-                            </a>
-
-                        </li>
-                        {% endif %}
-                        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
-           
-                        <li>
-                            <a href="{% url 'studentview' request.user.profile.institute.id %}">
-                                <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                <span class="menu_title">View Exam Result</span>
-                            </a>
-
-                        </li>
-                        {% endif %}
-                    </ul>
-
-                </li>
-
-               
-                {% endif %}
-
-                {% endif %}
+                    {% endif %} 
+                 
+            
                 <li title="Log Out">
-                    <a href="{% url 'auth_logout' %}">
-                        <span class="menu_icon"><i class="material-icons">&#xe853;</i></span>
-                        <span class="menu_title">Log Out</span>
-                    </a>
-                </li>
+                        <a href="{% url 'auth_logout' %}">
+                            <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
+                            <span class="menu_title">Log Out</span>
+                        </a>
+                    </li>
 
             </ul>
         </div>

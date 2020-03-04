@@ -509,7 +509,7 @@
                                       </div>
                                     <div class="form-group">
                                             <label>Holiday Type:</label>
-                                            <input type="text" class="form-control" name="holiday_type">
+                                            <input type="text" class="form-control" name="holiday_type" >
                                         </div>
                                         <div class="form-group">
                                             <label for="sel2">Email Send:</label>
@@ -602,16 +602,16 @@
                                             
                                         </td>
                                        
-                                        <td>
+                                        <td >
                                             
                                             {% if holiday.holiday_email == "Yes" %}
                                             <a href="{% url 'emailView' user.profile.institute.id %}">Link</a>
                                             
                                             {% else %}
-                                            <div>
-                                            <p>Link</p>
+                                            
+                                            Link
                                             {% endif %}
-                                        </div>
+                                        
                                                 
                                               
                                              </td>
@@ -625,9 +625,7 @@
                                             {% if holiday.holiday_sms == "Yes" %}
                                             <a href="#">Link</a>
                                             {% else %}
-                                            <div>
-                                            <p>Link</p>
-                                            </div>
+                                           Link
                                             {% endif %}
                                         </td>
                                         <td>
@@ -643,9 +641,7 @@
 
                                             <a href="#">Link</a>
                                             {% else %}
-                                            <div>
-                                            <p>Link</p>
-                                        </div>
+                                           Link
                                             {% endif %}</td>
 
                                             {% if can_edit_holiday_permission in user_permissions %}
