@@ -566,23 +566,20 @@
                                                                 {% csrf_token %}
                                                          
                                                             <tr style="background-color: #1976d2; color:white">
-                                                               
-                                                                
-                                                                <th>Subject Name</th>
-                                                                
-                                                                
-                              
-                                                           
+                                  <th>Subject</th>
+                                  <th>Average Marks</th>
+
                                                           
                                                         </tr>
+                                                        
+                                                        
+                                                            
+                                                        
+                                                            
                                                         
                                                         {% for exam_type in exam_type_list %}
                                                             
                                                         
-                                                            
-                                                        
-                                                        
-                                                            
                                                        
                                                             
                                                         <tr>
@@ -592,22 +589,20 @@
                                                            
                                                         </tr>
                                                        
-                                                          
-                                                          {% for overall_data in calculated_overall_data %}
+                                                       
+                                                       
                                                               
-                                                          
-                                                              
-                                                                    
+                                                        {% for test_data in test_data %}
+                                                               
+                                                                
+                                                            
                                                             <tr>
                                                                
-                                                           {{exam_type_list}}{{sr_no}}
-                                                               
-                                                                    
                                                                      <td>
                                                                             <div class="form-group">
                                                                                 <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_subject">
                                                                                   
-                                                                                  <option  value="{{exam_data.result_subject.id}}">{{overall_data.calc_result_subject}}</option>
+                                                                                  <option  value="{{exam_data.result_subject.id}}">{{test_data.result_subject}}</option>
                                                                                 </select>
                                                                               </div>
                                                                               
@@ -615,45 +610,23 @@
                                                                         <td>
                                                                             <div class="form-group">
                                                                                 <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_obtain">
-                                                                                  <option  value="">{{exam_data.calc_result_score}}</option>
+                                                                                  <option  value="">{{test_data.marks}}</option>
                                                                                 </select>
                                                                               </div>
                                                                         </td>
                                                                       
-                                                                           
-                                                                        <td>
-                                                                            <div class="form-group">
-                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="_max_marks_obtain">
-                                                                                  <option  value="">{{exam_data.calc_result_max}}</option>
-                                                                                </select>
-                                                                              </div>
-                                                                        </td>
-                                                                        <td>
-                                                                            <div class="form-group">
-                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="_max_marks_obtain">
-                                                                                  <option  value="">{{exam_data.calc_result_min}}</option>
-                                                                                </select>
-                                                                              </div>
-                                                                        </td>
-                                                                        
-                                                            
-                                                                        
                                                                     
                                                             </tr>
+                                                            
+                                                            
                                                             {% endfor %}
                                                             
-                                                            
+                                                           
                                                             {% endfor %}           
                                                         
                                                    
                                                     </tr>
-                                                    {% if examresult_data %}
-                                                    <tr>
-                                                        <td><b>Average</b></td>
-                                                        <td><b>{{round_score}}</b></td>
-
-                                                    </tr>
-                                                    {%endif%}
+                                                   
                                                             
                                                         </form>    
                                                         </tbody>

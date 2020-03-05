@@ -33,6 +33,7 @@ def exam_result(request,pk):
        first_subject_id=first_subject.id 
        result_subject=first_subject_id
   selected_subject= Subjects.objects.get(pk=result_subject)
+  
  
   # to fetch the institute students based on selected class 
   student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
@@ -196,26 +197,57 @@ def report_card(request,pk):
       }
 
   return render(request, 'report_card.html', context)
+  
 
 def overall_result(request,pk):
     exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
-    exam_sr_no=ExamResult.objects.values('exam_sr_no').distinct()
-    exam_data=CalculateResult.objects.filter(institute=request.user.profile.institute, calc_result_student_data=request.user)
-    calc_subject=[]
-    for subject in exam_data:
-       calc_subject.append(subject.calc_result_subject)
-       for subject in calc_subject:
+    exam_subjects=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user)
+    for exam_sub in exam_subjects:
+            subject=exam_sub.result_subject
             for exam_type in exam_type_list:
-                  for exam_sr_no in exam_sr_no:
-                      overall_data=CalculateResult.objects.filter(institute=request.user.profile.institute, calc_result_student_data=request.user, calc_result_subject=subject, calc_result_exam_type=exam_type, calc_result_exam_sr_no=exam_sr_no)
+                    etype=exam_type.exam_type
+                    exam_sr_no=ExamResult.objects.filter(exam_type__exam_type=etype).values('exam_sr_no').distinct()
+                    for sr_no in exam_sr_no:
+                      for key,value in sr_no.items():
                       
-                    
- 
-          
+                                overall_data=ExamResult.objects.filter(institute=request.user.profile.institute, result_subject=subject,result_student_data=request.user, exam_sr_no=value)
+                                for overall in overall_data:
+                                    overall_subject=overall.result_subject
+                                    
+                                    if overall_subject==subject:
+                                    
+                                      overall_score=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user,exam_sr_no=value, result_subject=overall_subject)
+                                      score_list=[]
+                                      for overall in overall_score:
+                                          score_list.append(overall.result_score)
+                                      
+                                      
+                                      scored_data=list(score_list)
+                                    
+                                      score_list=list(map(int, scored_data))
+                                      
+                                      meanVal=statistics.mean(score_list)
+                                      
+                                      round_score=round(meanVal)
+                                      
+                            
+    test_data=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user, result_score=round_score)
+    for sub in test_data:
+                  subject=sub.result_subject
+                                        # print(subject)                                            
+    for i in test_data:
+                  i.marks=round_score
+                                      
+                                          
+                                  
+         
     context={
       
       'exam_sr_no':exam_sr_no,
       'exam_type_list':exam_type_list,
+      "round_score":round_score,
+      'test_data':test_data,
+      'overall_data':overall_score
 
-     }
+      }
     return render(request, 'overall.html', context)

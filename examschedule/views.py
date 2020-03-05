@@ -111,6 +111,11 @@ def exam_schedule(request,pk):
             exam_type_schedule= ExamType.objects.filter(institute=request.user.profile.institute)
             
             select_exam_for_schedule = request.GET.get('selected_exam_type')
+            if select_exam_for_schedule:
+                    pass
+            else:
+                    messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can access schedule')
+                    return redirect('not_found')
             if select_exam_for_schedule==None:
                    etype=ExamType.objects.filter(institute= request.user.profile.institute).last()
                    exam_type=etype.id
@@ -262,7 +267,7 @@ def fetch_max_sr_no(request):
  
   individual_sr_no = "<option>--Select Exam Type No.--</option>"
   for sr_no in max_exam_sr_no:
-    individual_sr_no = individual_sr_no + f"<option >"+sr_no['exam_sr_no']+"</option>" 
+    individual_sr_no = individual_sr_no + f"<option>"+sr_no['exam_sr_no']+"</option>" 
      
   return HttpResponse(individual_sr_no)
     
