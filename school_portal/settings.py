@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_extensions',
     'admissions.apps.AdmissionsConfig',
+    'notices.apps.NoticesConfig'
    
     
 ]
