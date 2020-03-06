@@ -503,6 +503,9 @@
                                  {% if user.profile.designation.level_name == "parent" %}
                                  <li><a href="#">My Child</a></li>
                                  {% endif %}
+                                 {% if user.profile.designation.level_name == "student" %}
+                                 <li><a href="#">My Institute</a></li>
+                                 {% endif %}
                                      
                                 
                                 <!-- <li><a href="#">Posts</a></li> -->
@@ -786,7 +789,11 @@
 
 
                                         </li>
+                                        
+                                 
+                                        {% if user.profile.designation.level_name == "parent" %}
                                         <li>
+                                            <!-- Add Child Here -->
                                             <div class="uk-width-medium-1-5">
                                                 <a class="md-btn md-btn-primary md-btn-wave-light" href="{% url 'addchild' %}">Add Child</a>
                                             </div>
@@ -806,7 +813,7 @@
                                                                 {% for student in parent_children %}
                                                                 <tr>
                                                                     <td>{{ forloop.counter}}</td>
-                                                                    <td><a href="#">{{student.child.first_name}}</a></td>
+                                                                    <td><a href="{% url 'childview' student.pk %}">{{student.child.first_name}}</a></td>
                                                                     <td>{{student.child.Class}}</td>
                                                                     <td>{{student.child.institute}}</td>
                                                                 </tr>
@@ -819,8 +826,10 @@
                                                         </div>
                                                     
                                                 </div>                                        
-                                            </li>        
-                                          
+                                            </li>{% endif %}        
+                                        <li>
+                                            <!-- My Insitute Here -->
+                                        </li> 
                                     </div>
                                    
                     </div>
