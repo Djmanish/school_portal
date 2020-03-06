@@ -33,6 +33,7 @@ urlpatterns = [
     path('examresult/',include('exam_result.urls')),
     path('not_found/', main_app_views.not_found_page, name="not_found" ),
     path('admission_process/', include('admissions.urls')),
+    path('notice/', include('notices.urls') )
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
