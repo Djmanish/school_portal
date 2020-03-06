@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse, redirect
 from .models import *
 from main_app.models import *
 from examschedule.models import *
@@ -34,8 +34,9 @@ def exam_result(request,pk):
        result_subject=first_subject_id
   selected_subject= Subjects.objects.get(pk=result_subject)
   
- 
-  # to fetch the institute students based on selected class 
+  
+  # to fetch the institute students based on selected class
+   
   student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
   institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
  
@@ -97,7 +98,7 @@ def exam_result(request,pk):
       messages.success(request, 'Exam Result Stored successfully !!!')
 
   context={
-
+    'result_subject':result_subject,
     'subject_result':subject_result,
     'selected_subject':selected_subject,
     'institute_students':institute_students,
@@ -168,6 +169,12 @@ def report_card(request,pk):
       
       for score in exam_rdata:
           score_list.append(score.result_score)
+      
+      if score_list:
+                    pass
+      else:
+                    messages.info(request, 'It seems there are no Exam Result of this Exam Type in the institute.')
+                    return redirect('not_found')
 
       scored_data=list(score_list)
       
@@ -200,54 +207,98 @@ def report_card(request,pk):
   
 
 def overall_result(request,pk):
+    sr_no=ExamDetails.objects.filter(institute=request.user.profile.institute)
     exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
-    exam_subjects=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user)
-    for exam_sub in exam_subjects:
-            subject=exam_sub.result_subject
-            for exam_type in exam_type_list:
-                    etype=exam_type.exam_type
-                    exam_sr_no=ExamResult.objects.filter(exam_type__exam_type=etype).values('exam_sr_no').distinct()
-                    for sr_no in exam_sr_no:
-                      for key,value in sr_no.items():
-                      
-                                overall_data=ExamResult.objects.filter(institute=request.user.profile.institute, result_subject=subject,result_student_data=request.user, exam_sr_no=value)
-                                for overall in overall_data:
-                                    overall_subject=overall.result_subject
-                                    
-                                    if overall_subject==subject:
-                                    
-                                      overall_score=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user,exam_sr_no=value, result_subject=overall_subject)
-                                      score_list=[]
-                                      for overall in overall_score:
-                                          score_list.append(overall.result_score)
-                                      
-                                      
-                                      scored_data=list(score_list)
-                                    
-                                      score_list=list(map(int, scored_data))
-                                      
-                                      meanVal=statistics.mean(score_list)
-                                      
-                                      round_score=round(meanVal)
-                                      
+   
+
+    exam_sr_no=ExamResult.objects.values('exam_sr_no').distinct()
+    for sr_no in exam_sr_no:
+                for key,value in sr_no.items():
+                                  result_type=ExamResult.objects.filter(institute=request.user.profile.institute)
+                                  for rtype in result_type:
+                                      r_type=rtype.exam_type
+                                      exam_subjects=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user, exam_type=r_type)
+                                                      
+                                      for exam_sub in exam_subjects:
+                                        subject=exam_sub.result_subject
                             
-    test_data=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user, result_score=round_score)
-    for sub in test_data:
-                  subject=sub.result_subject
-                                        # print(subject)                                            
-    for i in test_data:
-                  i.marks=round_score
                                       
-                                          
+                                        overall_data=ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=request.user,exam_type__exam_type=r_type, exam_sr_no=value)
+                                        for overall in overall_data:
+                                            overall_subject=overall.result_subject
+                                           
+                                            if overall_subject==subject:
+                                              overall_score=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user,exam_sr_no=value, result_subject=overall_subject)
+                                              score_list=[]
+                                              for overall in overall_score:
+                                                  score_list.append(overall.result_score)
+                                              
+                                              scored_data=list(score_list)
+                                              print(scored_data)
+                                              print(overall_subject)
+                                              score_list=list(map(int, scored_data))
+                                              meanVal=statistics.mean(score_list)
+                                              round_score=round(meanVal)
+                                              
+                                              test_data=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user,  exam_type=r_type,exam_sr_no=value)
+                                              for subject_marks in test_data:
+                                                    subject_marks.marks=round_score
+                                                   
+                                              
+                    
+                                              context={
+                                                'test_data':test_data,
+                                                'exam_type_list':exam_type_list,
+                                                 
+                                                 'overall_subject':overall_subject,
+                                              } 
+                                              return render(request, 'overall.html', context)                         
+                                                  
                                   
          
     context={
       
-      'exam_sr_no':exam_sr_no,
+      'sr_no':sr_no,
       'exam_type_list':exam_type_list,
-      "round_score":round_score,
-      'test_data':test_data,
-      'overall_data':overall_score
-
       }
     return render(request, 'overall.html', context)
+  
+  
+def class_promotion(request):
+                                            
+    all_classes = Classes.objects.filter(institute= request.user.profile.institute)
+    
+    
+    if request.method == "POST":
+        selected_class = Classes.objects.get(pk = request.POST.get('selected_class_promotion'))
+        
+
+
+        all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
+        
+
+        
+        if len(all_students)<1:
+            messages.error(request, 'No student found in the selected class')
+            return redirect('class_promotion')
+        for student_class in all_students:
+          stu_class=student_class.Class
+         
+
+        print(stu_class)
+
+        context= {'all_students':all_students,
+         'all_classes': all_classes,
+         'showing_student_for_class':selected_class
+         }
+        return render(request, 'class_promotion.html', context)
+        
+
+
+
+    context= {
+        'all_classes': all_classes
+    }
+
+
+    return render(request, 'class_promotion.html', context)

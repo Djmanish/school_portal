@@ -555,10 +555,6 @@
                                                         </ul>
                                                         {% endif %}
                                                         
-                                                     
-                                                       
-                                                      
-                                                    
                                                         </thead>
 
                                                         <tbody>
@@ -571,31 +567,18 @@
 
                                                           
                                                         </tr>
-                                                        
-                                                        
-                                                            
-                                                        
-                                                            
-                                                        
-                                                        {% for exam_type in exam_type_list %}
-                                                            
-                                                        
-                                                       
-                                                            
+                                                {% for exam_type in exam_type_list %}
+                                               
                                                         <tr>
                                                             <th>
                                                                 {{exam_type}}
                                                             </th>
                                                            
                                                         </tr>
-                                                       
-                                                       
-                                                       
-                                                              
-                                                        {% for test_data in test_data %}
-                                                               
-                                                                
-                                                            
+
+                                                       {% for test_data in test_data %}
+                                                        {% ifequal test_data.exam_type exam_type%}
+                                                           
                                                             <tr>
                                                                
                                                                      <td>
@@ -607,6 +590,7 @@
                                                                               </div>
                                                                               
                                                                         </td>
+                                                                       
                                                                         <td>
                                                                             <div class="form-group">
                                                                                 <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_obtain">
@@ -618,11 +602,11 @@
                                                                     
                                                             </tr>
                                                             
-                                                            
-                                                            {% endfor %}
-                                                            
-                                                           
-                                                            {% endfor %}           
+                                                          
+                                                            {% endifequal %}
+                                                            {% endfor %}  
+                                                            {% endfor %}         
+
                                                         
                                                    
                                                     </tr>
