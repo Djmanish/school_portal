@@ -34,9 +34,8 @@ def exam_result(request,pk):
        result_subject=first_subject_id
   selected_subject= Subjects.objects.get(pk=result_subject)
   
-  
-  # to fetch the institute students based on selected class
-   
+ 
+  # to fetch the institute students based on selected class 
   student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
   institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
  
@@ -98,7 +97,7 @@ def exam_result(request,pk):
       messages.success(request, 'Exam Result Stored successfully !!!')
 
   context={
-    'result_subject':result_subject,
+
     'subject_result':subject_result,
     'selected_subject':selected_subject,
     'institute_students':institute_students,
