@@ -504,7 +504,7 @@
                                  <li><a href="#">My Child</a></li>
                                  {% endif %}
                                  {% if user.profile.designation.level_name == "student" %}
-                                 <li><a href="#">My Institute</a></li>
+                                 <li><a href="#">My Institutes</a></li>
                                  {% endif %}
                                      
                                 
@@ -829,6 +829,40 @@
                                             </li>{% endif %}        
                                         <li>
                                             <!-- My Insitute Here -->
+                                            <div class="uk-width-medium-1-5">
+                                                <a class="md-btn md-btn-primary md-btn-wave-light" href="{% url 'secondry_institute' %}">Add Institute</a>
+                                            </div>
+                                            <div class="md-card uk-margin-medium-bottom">
+                                                <div class="md-card-content">
+                                                    <div class="uk-overflow-container">
+                                                        <table class="uk-table uk-table-hover">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Sr No.</th>
+                                                                <th>Institute Name</th>
+                                                                <th>Class</th>
+                                                                <th>Roll No.</th>
+                                                                <th>Institute Type</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for institute in institute %}
+                                                                <tr>
+                                                                    <td>{{ forloop.counter}}</td>
+                                                                    <td><a href="#">{{institute.student_institute}}</a></td>
+                                                                    <td>{{institute.student_Class}}</td>
+                                                                    <td>{{institute.student_rollno}}</td>
+                                                                    <td>{{institute.institute_type}}</td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                           
+                                                          
+                                                            
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                
+                                            </div>
                                         </li> 
                                     </div>
                                    

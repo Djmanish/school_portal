@@ -576,8 +576,8 @@
                                                              
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" id="fetch_result_sr_no" name="fetch_result_sr_no" style="padding: 2px;">
-                                                                    <option selected disabled value=''> -- Select Exam Type No. --</option>
+                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px;">
+                                                                    <option selected disabled value=''>--Select Exam Type No.--</option>
                                         
                                                              </select>
                                                              
@@ -599,7 +599,7 @@
                                                                       csrfmiddlewaretoken: '{{ csrf_token }}' },
                                                                       
                                                                       success: function(msg){
-                                                                          $('#fetch_result_sr_no').html(msg);
+                                                                          $('#fetch_sr_no').html(msg);
                                                                       }
                                                                   })
                                                               })
@@ -610,6 +610,11 @@
                                                         </thead>
 
                                                         <tbody>
+                                                            
+                                                            
+                                                                
+                                                            
+                                                                
                                                             <form method="POST">
                                                                 {% csrf_token %}
                                                                 <tr>
@@ -625,14 +630,12 @@
                                                                 <th>Marks</th>
                                              
                                                             </tr>
-                                                            
+                                                                        
                                                                      {% for student in institute_students %}
                                                                      
+                                                                     
                                                             <tr>
-                                                                 
-                                                                    
-                                                                    
-                                                                     <td>
+                                                                  <td>
                                                                         {{ forloop.counter}}
                                                                      </td>
                                                                     
@@ -665,7 +668,9 @@
                                                                        </td>
                                                                     
                                                             </tr>
+                                                            
                                                             {% endfor %}
+                                                            
                                                             <tr>
                                                                 <td colspan="6">
                                                                     <div style="text-align: center;"> 
@@ -675,6 +680,7 @@
                                                                 </td>
                                                             </tr>
                                                         </form>
+                                                       
                                                         </tbody>
                                                     </table>
                                                 </div>
