@@ -297,10 +297,23 @@ def login(request):
 
 @login_required
 def user_profile(request):
+    # Secondry Institute Checkpoint Start
+    if request.user.profile.designation.level_name == "student":
+        try:
+            chk_inst=SecondryInstitute.objects.get(student_name=request.user.profile,institute_type="primary")
+            pass
+        except SecondryInstitute.DoesNotExist:
+            add_institute = SecondryInstitute.objects.create(student_name=request.user.profile, student_institute=request.user.profile.institute, student_Class=request.user.profile.Class,student_rollno=request.user.profile.roll_number,institute_type="primary",status="active")
+    # Secondry Institute Checkpoint End
+    # User Permission 
     user_permissions_changes = Tracking_permission_changes.objects.filter(institute= request.user.profile.institute, role = request.user.profile.designation).last()
+    
+    # Parent_childern Checkpoint Start
     parent_children = AddChild.objects.filter(parent= request.user.profile,status="active")
+    
+    # Secondry Institute
+    institute=SecondryInstitute.objects.filter(student_name=request.user.profile,status="active")
     if user_permissions_changes:
-
         users_old_permissions = user_permissions_changes.old_permissions.all()
         users_new_permissions = user_permissions_changes.updated_permissions.all()
         changes_comment = user_permissions_changes.comment
@@ -321,12 +334,19 @@ def user_profile(request):
         'added_permissions': added_permissions,
         'removed_permissions': removed_permissions,
         'updated_time': update_time,
-        'changes_comment': changes_comment
+        'changes_comment': changes_comment,
+        'parent_children':parent_children,
+        'institute':institute
+
         
         }
         return render(request, 'main_app/admin_user_profile.html', context )
-    
-    return render(request, 'main_app/admin_user_profile.html',{'parent_children':parent_children} )
+    context={
+        'parent_children':parent_children,
+        'institute':institute
+
+    }
+    return render(request, 'main_app/admin_user_profile.html', context )
     
   
     

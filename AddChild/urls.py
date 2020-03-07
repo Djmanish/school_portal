@@ -13,6 +13,7 @@ urlpatterns = [
     path('disapprove/<int:pk>/', views.disapprove_child_request, name="child_disapproval"),
     path('delete/<int:pk>/', views.delete_child_request, name="delete_child_request"),
     path('childview/<int:pk>/',views.childview,name="childview"),
+    path('secondry_institute',views.secondry_institute,name="secondry_institute"),
     
     
     
