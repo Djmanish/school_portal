@@ -334,12 +334,19 @@ def user_profile(request):
         'added_permissions': added_permissions,
         'removed_permissions': removed_permissions,
         'updated_time': update_time,
-        'changes_comment': changes_comment
+        'changes_comment': changes_comment,
+        'parent_children':parent_children,
+        'institute':institute
+
         
         }
         return render(request, 'main_app/admin_user_profile.html', context )
-    
-    return render(request, 'main_app/admin_user_profile.html',{'parent_children':parent_children,'institute':institute} )
+    context={
+        'parent_children':parent_children,
+        'institute':institute
+
+    }
+    return render(request, 'main_app/admin_user_profile.html', context )
     
   
     
