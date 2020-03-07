@@ -617,8 +617,16 @@
                                                                 
                                                             <form method="POST">
                                                                 {% csrf_token %}
+                                                               
                                                                 <tr>
-                                                                  <td></td>
+                                                                    
+                                                                    {% for sub_class in subject_class %}
+                                                                        
+                                                                    
+                                                                        
+                                                                    <th>Students of Class: {{sub_class.subject_class}}</th>
+                                                                    {% endfor %}    
+                                                                    
                                                                 </tr>
                                                          
                                                             <tr style="background-color: #1976d2; color:white">

@@ -560,6 +560,8 @@
                                         <th data-priority="2">Name</th>
                                         <th data-priority="3">Applicable</th>
                                         <th data-priority="4">Type</th>
+                                        {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+
                                         <th data-priority="5">Email</th>
                                        <th data-priority="6">Content</th> 
                                         <th data-priority="7">SMS</th>
@@ -573,7 +575,10 @@
 
                                         {% if can_delete_holiday_permission in user_permissions %}
                                         <th data-priority="12">Delete</th>
-                                        {% endif %}            
+                                        {% endif %}  
+                                        {% endif %}  
+
+
                                     </tr>
                                 </thead>
                           

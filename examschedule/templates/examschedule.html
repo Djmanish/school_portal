@@ -646,13 +646,12 @@
                                                                        
                                                                            </td>
                                                                         <td><div class="form-group"><input type='date', class="form-control", value="", name="select_date"/></div></td>
-                                                                        <td><div class="form-group"><input type='time', class="form-control", value="", name="select_start_time"/></div></td>
-                                                                        <td><div class="form-group"><input type='time',  class="form-control", value="", name="select_end_time"/></div></td>
+                                                                        <td><div class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value="", name="select_start_time"/></div></td>
+                                                                        <td><div class="form-group"><input type='time', onchange="onTimeChange()" ,  class="form-control", value="", name="select_end_time"/></div></td>
                                                                         <td>  <div class="form-group">
                                                                            
                                                                             <select class="form-control" name="assign_teacher" required>
-                                                                                <option selected value="{{exam_class_subject.assign_teacher.id}}">{{exam_class_subject.assign_teacher}}</option>
-                                                                              
+                                                                                <option selected disabled>--Assign Teacher--</option>
                                                                               {% for teacher in institute_teachers %}
                                                                                   <option value='{{teacher.pk}}'>{{teacher}}</option>
                                                                               {% endfor %}
