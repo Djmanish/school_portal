@@ -23,3 +23,23 @@ class AddChild(models.Model):
 
    def __str__(self):
       return str(self.parent)
+
+class SecondryInstitute(models.Model):
+   CHOICES = (
+      ("primary", "primary"),
+      ("secondry", "secondry"),)
+   STATUS_CHOICES = (
+      ("pending", "pending"),
+      ("active", "active"),)
+   student_name = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE,null=True, related_name="student_name")
+   student_institute = models.ForeignKey(to=Institute, related_name="student_institute", on_delete=models.PROTECT, null=True, blank=True, default="")
+   student_Class = models.ForeignKey(to=Classes, on_delete=models.PROTECT,blank=True, null=True, related_name='student_Class')
+   student_rollno=models.IntegerField(null=True)
+   institute_type = models.CharField(max_length=9,choices=CHOICES,default="secondry")
+   status = models.CharField(max_length=9,choices=STATUS_CHOICES,default="pending")
+   def active(self):
+        self.status= 'active'
+        self.save()
+
+   def __str__(self):
+      return str(self.student_name)

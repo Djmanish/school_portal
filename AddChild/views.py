@@ -119,3 +119,34 @@ def childview(request,pk):
         'child':child,
     }
     return render(request, 'AddChild/viewchild.html',context)
+
+def secondry_institute(request):
+    institutes=Institute.objects.all()
+    
+    
+    if request.method == "POST":
+        selected_institute= Institute.objects.get(pk=request.POST.get("selected_institute"))
+        selected_class = Classes.objects.get(pk=request.POST.get('selected_class'))
+        roll_number=request.POST.get('roll_number')
+        add_child = SecondryInstitute.objects.create(student_name=request.user.profile, student_institute=selected_institute, student_Class=selected_class,student_rollno=roll_number)
+        messages.success(request, 'Request has sent to add Institute.')
+        return redirect('user_profile')
+        # student = UserProfile.objects.get(institute=selected_institute,Class=selected_class,roll_number=roll_number)
+        
+        # starting checking if already selected as child
+        # parent_child_check = AddChild.objects.filter(parent= request.user.profile, child = student)
+        # if len(parent_child_check) > 0 :
+        #     student.is_already_listed = True
+        # else:
+        #     student.is_already_listed = False
+            
+        # ending checking if already selected as child
+        
+
+    context = {
+            'institutes':institutes,
+          
+
+    }    
+        
+    return render(request, 'AddChild/secondry.html', context)
