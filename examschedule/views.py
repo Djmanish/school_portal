@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 
 from main_app.models import *
@@ -111,11 +111,17 @@ def exam_schedule(request,pk):
             exam_type_schedule= ExamType.objects.filter(institute=request.user.profile.institute)
             
             select_exam_for_schedule = request.GET.get('selected_exam_type')
+         
             if select_exam_for_schedule==None:
                    etype=ExamType.objects.filter(institute= request.user.profile.institute).last()
                    exam_type=etype.id
                    select_exam_for_schedule=exam_type
             exam_type_id=ExamType.objects.get(pk=select_exam_for_schedule)
+            if exam_type_id:
+                    pass
+            else:
+                    messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can create Exam Cchedule')
+                    return redirect('not_found')
           #  to fetch the value of Subject and Subject Teacher
             exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
 
@@ -262,7 +268,7 @@ def fetch_max_sr_no(request):
  
   individual_sr_no = "<option>--Select Exam Type No.--</option>"
   for sr_no in max_exam_sr_no:
-    individual_sr_no = individual_sr_no + f"<option >"+sr_no['exam_sr_no']+"</option>" 
+    individual_sr_no = individual_sr_no + f"<option>"+sr_no['exam_sr_no']+"</option>" 
      
   return HttpResponse(individual_sr_no)
     

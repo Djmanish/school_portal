@@ -21,7 +21,7 @@ def admission_home(request):
     try:
         if_already_requested = Admission_Query.objects.get(request_by= request.user)
         if if_already_requested:
-            messages.info(request, 'You have already requested. Please wait till anyresponse')
+            messages.info(request, 'You have already requested. Please wait till any response from your school')
             school_list = Institute.objects.all()
             states_list = State.objects.all()
             context = {
