@@ -24,8 +24,9 @@ def exam_result(request,pk):
   #  to fetch the logged in  subject teacher
   subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
   
+  
  # to fetch the value of selected subject
-  result_subject=request.GET.get('result_selected_subject')
+  result_subject_name=request.GET.get('result_selected_subject')
   
 
   result_exam_type = request.GET.get('result_exam_type')
@@ -40,12 +41,12 @@ def exam_result(request,pk):
       check_limit=score_limit
   
       
-  result_exam_type_sr_no = request.GET.get('fetch_result_sr_no')
-  if result_subject== None:
+  result_exam_type_sr_no = request.GET.get('fetch_sr_no')
+  if result_subject_name== None:
        first_subject=Subjects.objects.filter(institute= request.user.profile.institute).last()
        first_subject_id=first_subject.id 
-       result_subject=first_subject_id
-  selected_subject= Subjects.objects.get(pk=result_subject)
+       result_subject_name=first_subject_id
+  selected_subject= Subjects.objects.get(pk=result_subject_name)
   
   subject_class=Subjects.objects.filter(institute=request.user.profile.institute, subject_name=selected_subject)
 

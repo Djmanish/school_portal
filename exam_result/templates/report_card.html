@@ -594,24 +594,17 @@
                                                                 <th>Min. Marks</th>
                               
                                                             </tr>
-                                                            <tr>{{max_marks.exam_max_marks}}</tr>
-                                                            
-                                                            
-                                                 {% if examresult_data %}
+                                                           
                                                             {% for exam_sr_no in exam_sr_no %}
                                                             <tr >
                                                                 <th >
-                                                                    
                                                                         {{select_exam_type}} {{exam_sr_no.exam_sr_no}}
                                   
                                                                 </th>
                                                             </tr>
                                                                      {% for exam_data in examresult_data %}
                                                                              {% if exam_data.calc_result_exam_sr_no == exam_sr_no.exam_sr_no%}
-                                                                        
                                                             <tr>
-                                                                   
-                                                                    
                                                                      <td>
                                                                             <div class="form-group">
                                                                                 <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_subject">
@@ -650,12 +643,14 @@
                                                                     
                                                             </tr>
                                                             
+                                                                             
                                                                              {% endif %}
+                                                                         
                                                                              
                                                            
                                                                         {% endfor %}
                                                                 {% endfor %}
-                                                        {% endif %}
+                                                       
                                                    
                                                     </tr>
                                                     {% if examresult_data %}

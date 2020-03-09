@@ -514,10 +514,7 @@
                                 <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
                                     <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
                                     <div class="uk-dropdown uk-dropdown-small">
-                                        <ul class="uk-nav">
-                                            <li><a href="{% url 'lectures_list' %}">Update Lecture Timing</a></li>
-
-                                        </ul>
+                                     
                                     </div>
                                 </div>
                             </div>
@@ -547,6 +544,7 @@
                                                     <table
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
+                                                        <thead>
                                                         {% if messages %}
                                                         <ul class="messages">
                                                             {% for message in messages %}
@@ -608,24 +606,26 @@
                                                     
                                                     
                                                         </thead>
+                                                        </table>
 
                                                         <tbody>
                                                             
-                                                            
-                                                                
-                                                            
+                                                            <table
+                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                                        id="ts_issues">                                                           
                                                                 
                                                             <form method="POST">
                                                                 {% csrf_token %}
                                                                
                                                                 <tr>
                                                                     
-                                                                    {% for sub_class in subject_class %}
-                                                                        
+                                                                    {% if subject_class %}
                                                                     
-                                                                        
-                                                                    <th>Students of Class: {{sub_class.subject_class}}</th>
-                                                                    {% endfor %}    
+                                                                    {% for sub_class in subject_class %}
+                                                                       
+                                                                    <th>Students of Class: {{subject_class.subject_class}}</th>
+                                                                    {% endfor %} 
+                                                                    {% endif %}   
                                                                     
                                                                 </tr>
                                                          
@@ -638,6 +638,7 @@
                                                                 <th>Marks</th>
                                              
                                                             </tr>
+                                                           
                                                                         
                                                                      {% for student in institute_students %}
                                                                      
@@ -679,6 +680,7 @@
                                                             
                                                             {% endfor %}
                                                             
+                                                            
                                                             <tr>
                                                                 <td colspan="6">
                                                                     <div style="text-align: center;"> 
@@ -691,6 +693,7 @@
                                                        
                                                         </tbody>
                                                     </table>
+                                                    
                                                 </div>
                                 </li>
                             </ul>

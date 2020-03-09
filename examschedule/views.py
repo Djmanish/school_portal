@@ -213,11 +213,12 @@ def examschedule_view(request,pk):
                
                
                 context = {
-                  
+                  'exam_class':exam_class,
                   'exam_details': exam_details,
                   'institute_exam_schedule':institute_exam_schedule,
                   'institute_exam_type':institute_exam_type,
                 }
+               
                 return render(request,'update_examschedule.html', context)
 
 
