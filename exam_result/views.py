@@ -260,8 +260,7 @@ def overall_result(request,pk):
                                                   score_list.append(overall.result_score)
                                               
                                               scored_data=list(score_list)
-                                              print(scored_data)
-                                              print(overall_subject)
+                                              
                                               score_list=list(map(int, scored_data))
                                               meanVal=statistics.mean(score_list)
                                               round_score=round(meanVal)
@@ -269,6 +268,7 @@ def overall_result(request,pk):
                                               test_data=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user,  exam_type=r_type,exam_sr_no=value)
                                               for subject_marks in test_data:
                                                     subject_marks.marks=round_score
+                                                    
                                                    
                                               
                     
@@ -297,7 +297,7 @@ def class_promotion(request):
     
     for student_class in all_students:
           stu_class=student_class.Class
-    print(stu_class)
+    
   
     # to get the list of all  classes                                        
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
