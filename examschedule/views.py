@@ -86,7 +86,10 @@ def delete_test_type(request, pk):
 
 
 def exam_schedule(request,pk):
+
+  
         # fetch the institute and Exam Details based on the institute
+        
             institute_exam_schedule_data = Institute.objects.get(pk=pk)
             institute_exam_schedule = ExamDetails.objects.filter(institute=institute_exam_schedule_data)
     
@@ -113,10 +116,20 @@ def exam_schedule(request,pk):
             select_exam_for_schedule = request.GET.get('selected_exam_type')
          
             if select_exam_for_schedule==None:
-                   etype=ExamType.objects.filter(institute= request.user.profile.institute).last()
+                   etype=ExamType.objects.filter(institute= request.user.profile.institute).first()
                    exam_type=etype.id
                    select_exam_for_schedule=exam_type
             exam_type_id=ExamType.objects.get(pk=select_exam_for_schedule)
+            
+              #  to fetch the length of exam limit from exam type
+            exam_type_limit=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=exam_type_id)
+            for exam_limit in exam_type_limit:
+                limit=exam_limit.exam_max_limit
+                limit_exam=int(limit)
+
+            
+            print(type(limit_exam))
+
             if exam_type_id:
                     pass
             else:
@@ -129,12 +142,19 @@ def exam_schedule(request,pk):
           
           # Count the number if type the exam type selected
            
-            sr_no=ExamDetails.objects.values('exam_sr_no').distinct().count()+1
-          
+            sr_no=ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct().count()+1
+            print(type(sr_no))
+            if sr_no<=limit_exam:
+                    pass
+            else:
+                    messages.info(request, 'Exam Limit has exceeded')
+                    return redirect('not_found')
 
            
             if request.method == "POST":
               for subject,subject_teacher,date,start_time,end_time,assign_teacher in zip(request.POST.getlist('select_exam_subject'), request.POST.getlist('select_exam_subject_teacher'),request.POST.getlist('select_date'),request.POST.getlist('select_start_time'),request.POST.getlist('select_end_time'),request.POST.getlist('assign_teacher')):
+                  
+                  
                   selected_class=Classes.objects.get(pk=request.GET.get('selected_class'))
                   select_exam_type= ExamType.objects.get(pk=request.GET.get('selected_exam_type'))
                   exam_code=request.POST.get('exam_institute_code')
@@ -171,6 +191,8 @@ def exam_schedule(request,pk):
             return render(request,'examschedule.html',context)
 
 
+
+
  
 
 def examschedule_view(request,pk):
@@ -191,11 +213,12 @@ def examschedule_view(request,pk):
                
                
                 context = {
-                  
+                  'exam_class':exam_class,
                   'exam_details': exam_details,
                   'institute_exam_schedule':institute_exam_schedule,
                   'institute_exam_type':institute_exam_type,
                 }
+               
                 return render(request,'update_examschedule.html', context)
 
 

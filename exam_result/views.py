@@ -24,16 +24,32 @@ def exam_result(request,pk):
   #  to fetch the logged in  subject teacher
   subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
   
+  
  # to fetch the value of selected subject
-  result_subject=request.GET.get('result_selected_subject')
+  result_subject_name=request.GET.get('result_selected_subject')
+  
+
   result_exam_type = request.GET.get('result_exam_type')
-  result_exam_type_sr_no = request.GET.get('fetch_result_sr_no')
-  if result_subject== None:
+
+  exam_marks_limit=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=result_exam_type)
+  exam_max_marks=[]
+  for marks_limit in exam_marks_limit:
+      exam_max_marks.append(marks_limit.exam_max_marks)
+  max_marks_limit=list(exam_max_marks)
+  check_max_marks=list(map(int, max_marks_limit))
+  for score_limit in check_max_marks:
+      check_limit=score_limit
+  
+      
+  result_exam_type_sr_no = request.GET.get('fetch_sr_no')
+  if result_subject_name== None:
        first_subject=Subjects.objects.filter(institute= request.user.profile.institute).last()
        first_subject_id=first_subject.id 
-       result_subject=first_subject_id
-  selected_subject= Subjects.objects.get(pk=result_subject)
+       result_subject_name=first_subject_id
+  selected_subject= Subjects.objects.get(pk=result_subject_name)
   
+  subject_class=Subjects.objects.filter(institute=request.user.profile.institute, subject_name=selected_subject)
+
  
   # to fetch the institute students based on selected class 
   student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
@@ -69,9 +85,19 @@ def exam_result(request,pk):
      
       data_list=list(marks_list)
       marks_list=list(map(int, data_list))
+      for score in marks_list:
+      
+        if score<check_limit or score==check_limit:
+          
+                    pass
+        else:
+                    messages.info(request, 'Entered Scored has exceeded the max marks limit defined by the institute')
+                    return redirect('not_found')
+      
+
       for subject in exam_result_data:
         subject=subject.result_subject
-        print(subject)
+        
       meanVal=statistics.mean(marks_list)
 
       maxValue=max(data_list)
@@ -98,10 +124,11 @@ def exam_result(request,pk):
 
   context={
 
-    'subject_result':subject_result,
+    'subject_result':subject_class,
     'selected_subject':selected_subject,
     'institute_students':institute_students,
     'institute_exam_type':institute_exam_type,
+    'subject_class':subject_class,
     
     }
   return render(request, 'teacher_view.html', context)
@@ -233,8 +260,7 @@ def overall_result(request,pk):
                                                   score_list.append(overall.result_score)
                                               
                                               scored_data=list(score_list)
-                                              print(scored_data)
-                                              print(overall_subject)
+                                              
                                               score_list=list(map(int, scored_data))
                                               meanVal=statistics.mean(score_list)
                                               round_score=round(meanVal)
@@ -242,6 +268,7 @@ def overall_result(request,pk):
                                               test_data=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user,  exam_type=r_type,exam_sr_no=value)
                                               for subject_marks in test_data:
                                                     subject_marks.marks=round_score
+                                                    
                                                    
                                               
                     
@@ -264,40 +291,42 @@ def overall_result(request,pk):
   
   
 def class_promotion(request):
-                                            
+
+    selected_class=request.GET.get('selected_class_promotion')
+    all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
+    
+    for student_class in all_students:
+          stu_class=student_class.Class
+    
+  
+    # to get the list of all  classes                                        
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
-    
-    
+
+    # to ge the data through POST method
     if request.method == "POST":
         selected_class = Classes.objects.get(pk = request.POST.get('selected_class_promotion'))
-        
-
-
+        #  to get the list of all students of selected class
         all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
-        
-
-        
+        # check student length
         if len(all_students)<1:
             messages.error(request, 'No student found in the selected class')
             return redirect('class_promotion')
+
         for student_class in all_students:
           stu_class=student_class.Class
-         
+        
 
-        print(stu_class)
-
+        # promoted_class=Classes.objects.get(pk=request.POST.get('promoted_to_class'))
+        # print(promoted_class)
+        # Inner Context
         context= {'all_students':all_students,
          'all_classes': all_classes,
          'showing_student_for_class':selected_class
          }
         return render(request, 'class_promotion.html', context)
-        
 
-
-
+    # Outer Context
     context= {
         'all_classes': all_classes
     }
-
-
     return render(request, 'class_promotion.html', context)

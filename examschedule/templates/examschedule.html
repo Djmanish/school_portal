@@ -314,7 +314,7 @@
 
         <div class="menu_section">
             <ul>
-                <li  title="Dashboard">
+                <li class="current_section" title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -405,10 +405,19 @@
                             
                         </li> 
 
+                        <li  title="Class Students">
+                    
+                            <a href="{% url 'class_promotion' %}">
+                                    <span class="menu_icon"><i class="material-icons">people</i></span>
+                                    <span class="menu_title">Class Promotion</span>
+                                </a>
+                                
+                            </li> 
+
                     {% endif %}
                    
 
-                    <li class="current_section" title="Examination">
+                    <li  title="Examination">
 
                         <a href="">
                             <span class="menu_icon"><i class="material-icons">trending_up</i></span>
@@ -426,7 +435,7 @@
                             </li>
                             
                   
-                            <li >
+                            <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">add_box</i></span>
                                     <span class="menu_title">Create Exam Schedule</span>
@@ -441,13 +450,7 @@
                                 </a>
     
                             </li>
-                            <li>
-                                <a href="{% url 'report_card' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">file_copy</i></span>
-                                    <span class="menu_title">Report Card</span>
-                                </a>
-    
-                            </li>
+                           
                             {% if user.profile.designation.level_name == "teacher"%}
                             <li>
                                 <a href="{% url 'examresult' request.user.profile.institute.id %}">
@@ -458,22 +461,29 @@
                             </li>
                             {% endif %}
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
-               
-                            <li>
+                            
+                            <!-- <li>
                                 <a href="{% url 'studentview' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">visibility</i></span>
                                     <span class="menu_title">View Exam Result</span>
                                 </a>
     
+                            </li> -->
+                            <li>
+                                <a href="{% url 'report_card' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">file_copy</i></span>
+                                    <span class="menu_title">Report Card</span>
+                                </a>
+    
                             </li>
                             
-                            <li>
+                            <!-- <li>
                                 <a href="{% url 'studentview' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">poll</i></span>
                                     <span class="menu_title">Marks Chart</span>
                                 </a>
     
-                            </li>
+                            </li> -->
                             <li>
                                 <a href="{% url 'overall_result' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">poll</i></span>
@@ -646,13 +656,12 @@
                                                                        
                                                                            </td>
                                                                         <td><div class="form-group"><input type='date', class="form-control", value="", name="select_date"/></div></td>
-                                                                        <td><div class="form-group"><input type='time', class="form-control", value="", name="select_start_time"/></div></td>
-                                                                        <td><div class="form-group"><input type='time',  class="form-control", value="", name="select_end_time"/></div></td>
+                                                                        <td><div class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value="", name="select_start_time"/></div></td>
+                                                                        <td><div class="form-group"><input type='time', onchange="onTimeChange()" ,  class="form-control", value="", name="select_end_time"/></div></td>
                                                                         <td>  <div class="form-group">
                                                                            
                                                                             <select class="form-control" name="assign_teacher" required>
-                                                                                <option selected value="{{exam_class_subject.assign_teacher.id}}">{{exam_class_subject.assign_teacher}}</option>
-                                                                              
+                                                                                <option selected disabled>--Assign Teacher--</option>
                                                                               {% for teacher in institute_teachers %}
                                                                                   <option value='{{teacher.pk}}'>{{teacher}}</option>
                                                                               {% endfor %}
