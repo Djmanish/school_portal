@@ -3,6 +3,8 @@ from .models import *
 import datetime
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # Create your views here.
 
 def all_notices(request):
@@ -31,6 +33,16 @@ def all_notices(request):
 
 
 def create_notice(request):
+    user_notices = Notice.objects.filter(author= request.user)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(user_notices, 20)
+    try:
+        user_notices = paginator.page(page)
+    except PageNotAnInteger:
+        user_notices = paginator.page(1)
+    except EmptyPage:
+        user_notices = paginator.page(paginator.num_pages)
+
     
     # if request.method == "POST":
     #     subject = request.POST.get('notice_subject')
@@ -47,7 +59,10 @@ def create_notice(request):
     #         all_users = UserProfile.objects.all()
     #         for u in all_users:
     #             new_notice.recipients_list.add(u)
-    return render(request, 'notices/create_notice.html')
+    context = {
+        'user_notices':user_notices
+    }
+    return render(request, 'notices/create_notice.html', context)
 
 
 
@@ -62,9 +77,9 @@ def creating_new_notice(request):
         new_notice.subject = subject
         new_notice.content = content
         new_notice.publish_date = datetime.date.today()
+        new_notice.author = request.user
         new_notice.save()
         recipients_valid_list = []
-        print(request.user.user_institute_role.level.level_id)
         all_recipients = Role_Description.objects.filter(institute= request.user.profile.institute)
         for recipient in all_recipients:
             if request.user.user_institute_role.level.level_id <  recipient.level.level_id:
@@ -73,14 +88,44 @@ def creating_new_notice(request):
         for u in recipients_valid_list:
             user_name = u.user.profile
             new_notice.recipients_list.add(user_name)
+        return HttpResponse('Notice Published Successfully !')
+        
+
         
 
 
+class Edit_Notice_view(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model= Notice
+    fields = ['subject','content']
+    template_name = 'notices/update_notice.html'
+    success_url ="/notice/create/"
+
+    def test_func(self):
+        notice = self.get_object()
+        if self.request.user == notice.author:
+            return True
+        return False
+
+
+def fetch_deleted_id(request,pk):
+    notice_id = request.POST.get('notice_id')
+    return HttpResponse(notice_id)
+
+def delete_notice(request):
+ 
+    deleted_notice = Notice.objects.get(pk= request.POST.get('notice_id'))
+    try:
+        deleted_notice.delete()
+        return HttpResponse('True')
+    except:
+        return HttpResponse('False')
 
 
 
 
-    return HttpResponse('this is from ajax')
+
+
+
 
             
         

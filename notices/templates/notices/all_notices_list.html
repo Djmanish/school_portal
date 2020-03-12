@@ -509,12 +509,19 @@
                             <li>
                                 <div id="page_content_inner">
                                     <div class="uk-accordion" data-uk-accordion>
+                                        
+                                        {% if all_notices %}
                                         {% for notice in all_notices  %}
                                         <h3 class="uk-accordion-title"><b>{{notice.subject}} </b> Date:<small>{{notice.publish_date}}</small></h3>
                                         <div class="uk-accordion-content"> 
                                             <p>{{notice.content}}</p>
                                         </div>
                                         {% endfor %}
+                                        {% else %}
+                                        <h3>No Notice Published !!!</h3>
+                                        {% endif %}
+                                            
+                                      
                                        
                                     </div>
                                    
@@ -548,12 +555,6 @@
                                 {% endif %}
                             </span>
                         </div>
-
-
-                      
-
-
-
 
                         <!-- ending pagination -->
 
