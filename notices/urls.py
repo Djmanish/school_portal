@@ -8,7 +8,8 @@ urlpatterns = [
     path('notice/new/' , views.creating_new_notice, name="creating_new_notice"),
     path('update/<int:pk>/', Edit_Notice_view.as_view(), name="notice_update"),
     path('fetch_deleted_id/<int:pk>/', views.fetch_deleted_id, name="fetch_delete_id"),
-    path('delete_notice/', views.delete_notice, name="delete_notice")
+    path('delete_notice/', views.delete_notice, name="delete_notice"),
+    path('notice_to/', views.fetch_notice_audience, name="fetch_notice_audience")
 
 
     

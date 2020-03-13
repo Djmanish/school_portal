@@ -14,6 +14,8 @@
 
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
+    <script src="{% static 'main_app/js/jquery.js' %}"></script>
+
 
 
     <title>Institute Schedule</title>
@@ -21,6 +23,8 @@
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
         media="all">
+
+    <link rel="stylesheet" href="{% static 'main_app/bower_components/select2/dist/css/select2.min.css' %}" >
 
     <!-- flag icons -->
     <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
@@ -42,7 +46,7 @@
     <![endif]-->
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" >
-    <script src="{% static 'main_app/js/jquery.js' %}"></script>
+    
  
    
 </head> 
@@ -474,10 +478,6 @@
                                         <ul class="uk-nav">
 
 
-{% if update_lecture_timing in user_permissions %}
-<li><a href="{% url 'lectures_list' %}">Update Lecture Timing</a></li>
-{% endif %}
-    
 
                                            
                                   
@@ -517,6 +517,71 @@
                                                 <form id="notice_form" method="POST" action="{% url 'create_notice' %}" >
                                                     {% csrf_token %}
                                                     <div class="form-group">
+                                                        <label for="sel1">To:</label>
+  <select class="form-control" id="to_select_class" name="notice_class" required >
+      <option selected disabled value=""> -- Select a class -- </option>
+      
+      {% for class in author_classes %}
+      <option value="{{class.id}}">{{class}}</option>
+      {% endfor %}
+    
+  </select>
+  <div class="form-check" style="margin: 2px;">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" value="">Select Individual
+    </label>
+  </div>
+
+
+<script>
+    $(document).ready(function(){
+       $('input[type="checkbox"]').click(function(){
+           if($(this).is(":checked")){
+              
+             $('#select_individual').css('display','block')
+             $('#select_individual').css('class','form-group')
+           }
+           else if($(this).is(":not(:checked)")){
+            $('#select_individual').css("display", "none");
+           }
+       });
+   });
+</script>
+
+  <div class="form-group" id="select_individual" style="display: none;" >
+    <select class="Individual_option form-control" id="select_individual" multiple="multiple"  class="selectpicker" data-live-search="true" name="selected_individual">
+       <option selected disabled value=""> -- first select a class </option>
+      </select>
+  </div>
+
+  <script>
+    $(document).ready(function(){
+   
+       
+        $("#to_select_class").change(function(){
+            
+            $.ajax({
+type:'POST',
+url: "{% url 'fetch_notice_audience' %}" ,
+data:{class_id: $('#to_select_class').val(),
+   
+
+csrfmiddlewaretoken: '{{ csrf_token }}' },
+
+success: function(msg){
+    $('.Individual_option').html(msg);
+
+}
+})
+    
+  });
+    })
+     
+</script>
+  
+                
+
+                                                    <div class="form-group">
                                                       <label for="usr">Subject:</label>
                                                       <input type="text" class="form-control" maxlength="150" name="notice_subject" id="notice_subject"  required>
                                                     </div>
@@ -528,16 +593,25 @@
                                                   </form>
             
             
-                                                <script>
+                                                <!-- <script>
+
+
+
+
+
                                                     $(document).ready(function(){
                                                        
                                                         $("#notice_form").submit(function(){
                                                             $.ajax({
+                                                              
                                               type:'POST',
                                               url: "{% url 'creating_new_notice' %}" ,
                                               data:{notice_subject:$("#notice_subject").val(),
                                               notice_body:$("#notice_body").val(),
+                                              notice_class: $('#to_select_class').val(),
+                                              audience: $('input[name="select_individual"]').val(),
                                               
+                                             
                                               csrfmiddlewaretoken: '{{ csrf_token }}' },
                                               
                                               success: function(msg){
@@ -548,7 +622,7 @@
                                                   });
                                                     })
                                                      
-                                                </script>
+                                                </script> -->
             
             
                                                
@@ -565,7 +639,7 @@
                                                    <div>
                                                     <a class="md-btn md-btn-flat md-btn-flat-primary " href="{% url 'notice_update' notice.id %}">Edit</a>
                                                 
-                                                    <a class="md-btn md-btn-flat-danger md-btn-flat" id="{{notice.id | slugify}}">Delete</a>
+                                                    <!-- <a class="md-btn md-btn-flat-danger md-btn-flat" id="{{notice.id | slugify}}">Delete</a> -->
 
                                                     <script>
                                                        $('#{{notice.id | slugify}}').click(function(){
@@ -774,6 +848,7 @@ alert('not deleted')
         });
     </script>
 
+<script src="{% static 'main_app/bower_components/select2/dist/js/select2.min.js' %}" ></script>
 
     
     

@@ -320,6 +320,30 @@
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
+
+                
+<!-- starting notice menu -->
+<li  title="Notices">
+    <a href="">
+        <span class="menu_icon"><i class="material-icons">trending_up</i></span>
+        <span class="menu_title">Notices</span>
+    </a>
+    <ul>
+        <li>
+            <a href="{% url 'all_notice_list'  %}">
+                <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                <span class="menu_title">My Notices</span>
+            </a>
+        </li> 
+        <li>
+            <a href="{% url 'create_notice'  %}">
+                <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                <span class="menu_title">Create a Notice</span>
+            </a>
+        </li> 
+    </ul>
+</li>
+<!-- ending notice menu -->
                 
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
@@ -479,6 +503,21 @@
                             <span class="menu_title">Log Out</span>
                         </a>
                     </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             </ul>
         </div>

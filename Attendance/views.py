@@ -7,6 +7,8 @@ import datetime
 from main_app.models import *
 from Attendance import templates
 from django.contrib import messages
+from notices.models import *
+from AddChild.models import *
 # import requests
 
 # Create your views here.
@@ -117,6 +119,22 @@ def attendance_update(request, pk):
                 if student_status == "present":
                     return HttpResponse(f'<span style="color:green; padding:0px; margin:0px; font-weight:bolder">{student_status} </span>')
                 elif student_status == 'absent':
+                    
+                    # starting student absent notice
+                    absent_notice = Notice()
+                    absent_notice.institute = request.user.profile.institute
+                    absent_notice.subject = f"{student} Marked absent on {attendance_date}"
+                    absent_notice.content = f"{student} Marked absent on {attendance_date}"
+                    absent_notice.publish_date = attendance_date
+                    absent_notice.author = request.user
+                    absent_notice.save()
+                    absent_student = UserProfile.objects.get(user= student)
+                    student_parent = AddChild.objects.get(child= absent_student )
+                    print(student_parent.parent)
+                    absent_notice.recipients_list.add(student_parent.parent)
+
+
+                    # ending student absent notice
                     return HttpResponse(f'<span style="color:red; padding:0px; margin:0px; font-weight:bolder">{student_status} </span>')
                 else:
                     return HttpResponse(f'<span style="color:orange; padding:0px; margin:0px; font-weight:bolder">{student_status} </span>')

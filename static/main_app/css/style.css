@@ -144,3 +144,9 @@ background-color: lightgray;
 .select_all_checkbox{
   text-align: center;
 }
+/* #select_individual{
+  height: 250px;
+} */
+.chosen-container, .chosen-container-multi{
+  width: 100% !important ;
+}
