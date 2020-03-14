@@ -75,6 +75,13 @@ def create_notice(request):
             subject = request.POST.get('notice_subject')
             content = request.POST.get('notice_body')
             selected_class = request.POST.get('notice_class')
+            notice_refrence_no = request.POST.get('notice_refrence_no').strip()
+            try:
+                check_notice_no = Notice.objects.get(reference_no= notice_refrence_no)
+                messages.info(request, 'Notice with this reference no. already exists. ')
+                return redirect('create_notice')
+            except:
+                pass
             
 
             
@@ -85,6 +92,7 @@ def create_notice(request):
             new_notice.content = content
             new_notice.publish_date = datetime.date.today()
             new_notice.author = request.user
+            new_notice.reference_no= notice_refrence_no
             new_notice.save()
             recipients_valid_list = []
 
