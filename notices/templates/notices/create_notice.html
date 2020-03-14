@@ -543,16 +543,43 @@
       {% endfor %}
     
   </select>
-  <div class="form-check" style="margin: 2px;">
+
+
+  <div class="form-check" style="margin: 2px;" >
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" value="">Select Individual
+      <input type="checkbox" class="form-check-input" value="" name="all_classes_check">Select All Classes
     </label>
   </div>
 
 
+  <div class="form-check" style="margin: 2px;" id="sel_al_c">
+    <label class="form-check-label">
+      <input type="checkbox" name="if_ind_s" class="form-check-input" value="">Select Individual
+    </label>
+  </div>
+
+  <script>
+    $(document).ready(function(){
+       $('input[name="all_classes_check"]').click(function(){
+           if($(this).is(":checked")){
+              
+             $('#to_select_class').css('display','none')
+             $('#to_select_class').removeAttr('required')
+             $('#select_individual').css("display", "none");
+             $('#sel_al_c').css('display','none')
+           }
+           else if($(this).is(":not(:checked)")){
+            $('#to_select_class').css('display','block')
+             $('#to_select_class').attr('required','required')
+             $('#select_individual').css("display", "block");
+             $('#sel_al_c').css('display','block')
+           }
+       });
+   });
+</script>
 <script>
     $(document).ready(function(){
-       $('input[type="checkbox"]').click(function(){
+       $('input[name="if_ind_s"]').click(function(){
            if($(this).is(":checked")){
               
              $('#select_individual').css('display','block')
@@ -565,7 +592,9 @@
    });
 </script>
 
+
   <div class="form-group" id="select_individual" style="display: none;" >
+    <small style="color: #1976d2;"> press and hold control to select multiple </small>
     <select class="Individual_option form-control" id="select_individual" multiple="multiple"  class="selectpicker" data-live-search="true" name="selected_individual">
        <option selected disabled value=""> -- first select a class </option>
       </select>
@@ -597,7 +626,8 @@ success: function(msg){
 </script>
   
 <div class="form-group">
-    <label for="usr">Notice Refernce No. <small>(optional)</small>:</label>
+    <label for="usr">Notice Refernce No. <small style="color: #1976d2;"> (Optional) </small> :</label><br>
+    
     <input type="text" class="form-control" maxlength="15" name="notice_refrence_no"  >
   </div>                
 

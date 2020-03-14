@@ -76,6 +76,7 @@ def create_notice(request):
             content = request.POST.get('notice_body')
             selected_class = request.POST.get('notice_class')
             notice_refrence_no = request.POST.get('notice_refrence_no').strip()
+
             try:
                 check_notice_no = Notice.objects.get(reference_no= notice_refrence_no)
                 messages.info(request, 'Notice with this reference no. already exists. ')
@@ -104,6 +105,20 @@ def create_notice(request):
                     selected_individuals_list.append(UserProfile.objects.get(pk=i))
                 for i in selected_individuals_list:
                     new_notice.recipients_list.add(i)
+
+            elif 'all_classes_check' in request.POST:
+                all_students = UserProfile.objects.filter(designation__level_name='student', institute= request.user.profile.institute)
+                all_parents = UserProfile.objects.filter(designation__level_name='parent', institute= request.user.profile.institute )
+
+                for st in all_students:
+                    recipients_valid_list.append(st)
+                for pt in all_parents:
+                    recipients_valid_list.append(pt)
+                
+                for i in recipients_valid_list:
+                    new_notice.recipients_list.add(i)
+                return redirect('create_notice')
+
             else:
                 class_student = UserProfile.objects.filter(Class= selected_class, institute= request.user.profile.institute)
                 class_parent = AddChild.objects.filter(Class= selected_class, institute= request.user.profile.institute, status='active')
