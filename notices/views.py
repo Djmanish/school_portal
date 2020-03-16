@@ -22,7 +22,7 @@ def all_notices(request):
     all_notices = Notice.objects.all().order_by('id')
     user_notices = []
     if user_role_level < teacher_role_level:
-        user_notices = all_notices.reverse()
+        user_notices = all_notices.exclude(category="absent").reverse()
     else:
         for notice in all_notices:
             notice_recipients = notice.recipients_list.all()

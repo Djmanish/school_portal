@@ -274,7 +274,7 @@
         
         <div class="sidebar_main_header">
             <div class="sidebar_logo">
-                <a href="index.html" class="sSidebar_hide sidebar_logo_large">
+                <a href="{% url 'user_dashboard' %}" class="sSidebar_hide sidebar_logo_large">
                     <img class="logo_regular img-fluid " id="slogo" src="{% static 'main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
                     <img class="logo_light img-fluid " id="slogo" src="{% static 'main_app/img/main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
                 </a>
@@ -335,12 +335,19 @@
                 <span class="menu_title">My Notices</span>
             </a>
         </li> 
+
+        
+        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" %}
+        {% else %}
         <li>
             <a href="{% url 'create_notice'  %}">
                 <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                 <span class="menu_title">Create a Notice</span>
             </a>
         </li> 
+        {% endif %}
+            
+       
     </ul>
 </li>
 <!-- ending notice menu -->

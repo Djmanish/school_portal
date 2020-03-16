@@ -127,11 +127,14 @@ def attendance_update(request, pk):
                     absent_notice.content = f"{student} Marked absent on {attendance_date}"
                     absent_notice.publish_date = attendance_date
                     absent_notice.author = request.user
+                    absent_notice.category="absent"
                     absent_notice.save()
                     absent_student = UserProfile.objects.get(user= student)
                     student_parent = AddChild.objects.get(child= absent_student )
-                    print(student_parent.parent)
+                
                     absent_notice.recipients_list.add(student_parent.parent)
+                    absent_notice.recipients_list.add(absent_student)
+                    
 
 
                     # ending student absent notice

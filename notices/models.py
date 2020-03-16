@@ -10,6 +10,7 @@ class Notice(models.Model):
     subject = models.CharField(max_length=150)
     content = models.TextField()
     publish_date = models.DateTimeField()
+    category = models.CharField(max_length=15, null=True, blank=True, choices=[('absent','absent')])
     recipients_list = models.ManyToManyField(to=UserProfile )
     author = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, related_name='user_notices')
 
