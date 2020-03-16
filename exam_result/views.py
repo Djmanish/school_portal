@@ -325,6 +325,7 @@ def class_promotion(request):
     # to ge the data through POST method
     if request.method == "POST":
         selected_class = Classes.objects.get(pk = request.POST.get('selected_class_promotion'))
+        print(selected_class)
         #  to get the list of all students of selected class
         all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
         # check student length

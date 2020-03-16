@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 
 class Notice(models.Model):
+    reference_no = models.CharField(max_length=15, null=True, blank=True)
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institute_notices', null=True)
     subject = models.CharField(max_length=150)
     content = models.TextField()

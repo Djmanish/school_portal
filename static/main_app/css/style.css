@@ -144,14 +144,12 @@ background-color: lightgray;
 .select_all_checkbox{
   text-align: center;
 }
-/* #select_individual{
+#select_individual{
   height: 250px;
-} */
-.chosen-container, .chosen-container-multi{
-  width: 100% !important ;
 }
-
-.logo_regular, .logo_light{
-  width: 100% !important;
-  height: 100% !important;
+img#slogo{
+ height: 46px !important;
+}
+#sidebar_main .sidebar_main_header{
+  padding: 12px !important;
 }

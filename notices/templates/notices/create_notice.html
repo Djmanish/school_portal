@@ -18,7 +18,7 @@
 
 
 
-    <title>Institute Schedule</title>
+    <title>Create a Notice</title>
 
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
@@ -123,8 +123,8 @@
                     <ul class="uk-navbar-nav user_actions">
                         <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i
                                     class="material-icons md-24 md-light">fullscreen</i></a></li>
-                        <li><a href="#" id="main_search_btn" class="user_action_icon"><i
-                                    class="material-icons md-24 md-light">&#xE8B6;</i></a></li>
+                        <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i
+                                    class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                             <a href="#" class="user_action_icon"><i
                                     class="material-icons md-24 md-light">&#xE7F4;</i><span
@@ -459,6 +459,10 @@
     <div id="page_content">
 
         <div id="page_content_inner">
+
+
+
+            
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">      
                 
        
@@ -500,6 +504,19 @@
                         </div>
                         <div class="user_content">
 
+
+                            {% if messages %}
+            <div class="md-card md-card-danger">
+          <div class=""md-card-content">
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+           
+            {% endif %}
                             <div class="md-card">
                                 <div class="md-card-content">
                                     <div class="uk-tab-center">
@@ -526,16 +543,43 @@
       {% endfor %}
     
   </select>
-  <div class="form-check" style="margin: 2px;">
+
+
+  <div class="form-check" style="margin: 2px;" >
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" value="">Select Individual
+      <input type="checkbox" class="form-check-input" value="" name="all_classes_check">Select All Classes
     </label>
   </div>
 
 
+  <div class="form-check" style="margin: 2px;" id="sel_al_c">
+    <label class="form-check-label">
+      <input type="checkbox" name="if_ind_s" class="form-check-input" value="">Select Individual
+    </label>
+  </div>
+
+  <script>
+    $(document).ready(function(){
+       $('input[name="all_classes_check"]').click(function(){
+           if($(this).is(":checked")){
+              
+             $('#to_select_class').css('display','none')
+             $('#to_select_class').removeAttr('required')
+             $('#select_individual').css("display", "none");
+             $('#sel_al_c').css('display','none')
+           }
+           else if($(this).is(":not(:checked)")){
+            $('#to_select_class').css('display','block')
+             $('#to_select_class').attr('required','required')
+             $('#select_individual').css("display", "block");
+             $('#sel_al_c').css('display','block')
+           }
+       });
+   });
+</script>
 <script>
     $(document).ready(function(){
-       $('input[type="checkbox"]').click(function(){
+       $('input[name="if_ind_s"]').click(function(){
            if($(this).is(":checked")){
               
              $('#select_individual').css('display','block')
@@ -548,7 +592,9 @@
    });
 </script>
 
+
   <div class="form-group" id="select_individual" style="display: none;" >
+    <small style="color: #1976d2;"> press and hold control to select multiple </small>
     <select class="Individual_option form-control" id="select_individual" multiple="multiple"  class="selectpicker" data-live-search="true" name="selected_individual">
        <option selected disabled value=""> -- first select a class </option>
       </select>
@@ -579,7 +625,11 @@ success: function(msg){
      
 </script>
   
-                
+<div class="form-group">
+    <label for="usr">Notice Refernce No. <small style="color: #1976d2;"> (Optional) </small> :</label><br>
+    
+    <input type="text" class="form-control" maxlength="15" name="notice_refrence_no"  >
+  </div>                
 
                                                     <div class="form-group">
                                                       <label for="usr">Subject:</label>
