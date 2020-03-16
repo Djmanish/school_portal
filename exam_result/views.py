@@ -140,10 +140,26 @@ def student_view(request,pk):
     if request.method=="POST":
         result_exam_type = request.POST.get('chart_exam_type')
         result_exam_type_sr_no = request.POST.get('chart_sr_no')
-       
+        student_marks=[]
+        student_subject=[]
         student_view=ExamResult.objects.filter(institute=request.user.profile.institute,result_student_data=request.user, exam_type__exam_type=result_exam_type,exam_sr_no=result_exam_type_sr_no)
+        for marks in student_view:
+            student_marks.append(marks.result_score)
+        student_marks_data=list(student_marks)
+       
+        for subjects in student_view:
+          student_subject.append(subjects.result_subject)
+        student_subject_data=list(student_subject)
+
+        print(student_subject)
+
+
         context={
               'student_view':student_view,
+              'student_marks':student_marks_data,
+              'student_subject':student_subject_data,
+              
+
                 }
         return render(request, 'studentview.html', context)
    
@@ -178,9 +194,13 @@ def report_card(request,pk):
 
 # get Exam Type
   exam_type_list =ExamType.objects.filter(institute=request.user.profile.institute)
+  exam_id=request.user.profile.institute.id
 
   if request.method=="POST":
       select_exam_type = request.POST.get('result_exam_type')
+      print(select_exam_type)
+      if select_exam_type=="Overall":
+         return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/')
       # exam_dataresult = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
       exam_sr_no=ExamResult.objects.values('exam_sr_no').distinct()
       exam_data = ExamResult.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type)
@@ -235,8 +255,6 @@ def report_card(request,pk):
 def overall_result(request,pk):
     sr_no=ExamDetails.objects.filter(institute=request.user.profile.institute)
     exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
-   
-
     exam_sr_no=ExamResult.objects.values('exam_sr_no').distinct()
     for sr_no in exam_sr_no:
                 for key,value in sr_no.items():
@@ -262,6 +280,8 @@ def overall_result(request,pk):
                                               scored_data=list(score_list)
                                               
                                               score_list=list(map(int, scored_data))
+                                              sum_score_list=sum(score_list)
+                                              print(sum_score_list)
                                               meanVal=statistics.mean(score_list)
                                               round_score=round(meanVal)
                                               
@@ -305,6 +325,7 @@ def class_promotion(request):
     # to ge the data through POST method
     if request.method == "POST":
         selected_class = Classes.objects.get(pk = request.POST.get('selected_class_promotion'))
+        print(selected_class)
         #  to get the list of all students of selected class
         all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
         # check student length

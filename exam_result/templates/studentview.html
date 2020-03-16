@@ -608,67 +608,47 @@
                                                                 </tr> 
                                                           </thead>
                                                         </table>
-                                                                
-                                                             
-                                                             {% for i in student_view %}
-                                                             '{{i.result_subject}}'
-                                                                 
-                                                             {% endfor %}
-                                                                 
-                                                               
-
+                                                        {% for data in student_subject_data%}
+                                                        {{data}}
+                                                        {% endfor %}
                                                             <table>  
-                                                                    
                                                           <tbody>  
-                                                       
-                                                                
-                                   
-                                                      
                                                      <tr>
                                                             <canvas id="myChart" >
                                                             </canvas>
-                                                            
-
-                                                          
                                                             <script>
+                                                                 
+                                                              
                                                                 var ctx = document.getElementById('myChart').getContext('2d');
                                                                 var myChart = new Chart(ctx, {
-                                                               
                                                                 type: 'line',
                                                                 data: {
-                                                                    {% for subject_label in student_view%}
+                                                                    {% for data in student_subject_data%}
+                                                                  
+                                                                    labels:[
                                                                        
-                                                                    labels: 
-                                                                    [
-                                                                   ' {{subject_label.result_subject|safe}}'
+                                                                  
+                                                                        {{data}}
+                                                                       
+                                                                        ],
+                                                                        {% endfor %}
+                                                                       
                                                                     
-                                                                    ],
                                                                     
-                                                                    {% endfor %}
                                                                     datasets: [
                                                                         {
                                                                         width:120,
                                                                         label: 'Maximum Marks',
-                                                                        {% for subject_max in student_view%}
-
-                                                                        
-                                                                        data: ['{{subject_max.result_score|safe}}'],
-                                                       
-                                                                            {%endfor%}
-                                                                        
+                                                                       
+                                                                        data: [25,20,5,3,30],
                                                                         showLine: true,
                                                                         fill: false,
                                                                         borderColor: 'rgba(0, 200, 0, 1)'
                                                                         },
                                                                     { type: 'bar',
                                                                         label:'Student Marks', 
-                                                                           
-                                                                        {% for student_max in student_view%}
-                                                                    
-                                                                        data: [
-                                                                        {{student_max.result_score}}
-                                                                        ],
-                                                                        {% endfor%}
+                                                                        
+                                                                        
                                                                     
                                                                         showLine: true,
                                                                         
@@ -678,7 +658,7 @@
                                                                                     'rgba(255, 206, 86, 1)',
                                                                                     'rgba(75, 192, 192, 1)',
                                                                                     'rgba(153, 102, 255, 1)',
-                                                                                    'rgba(255, 159, 64, 1)'
+                                                                                    'rgba(255, 159, 64, 1)',
                                                                                 ],
                                                                                 borderWidth: 1,
                                                                                 

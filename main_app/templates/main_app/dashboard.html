@@ -393,14 +393,7 @@
                             
                         </li> 
 
-                        <li  title="Class Students">
-                    
-                            <a href="{% url 'class_promotion' %}">
-                                    <span class="menu_icon"><i class="material-icons">people</i></span>
-                                    <span class="menu_title">Class Promotion</span>
-                                </a>
-                                
-                            </li> 
+                        
 
                     {% endif %}
                    
@@ -425,7 +418,7 @@
                   
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">add_box</i></span>
+                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam Schedule</span>
                                 </a>
     
@@ -447,6 +440,14 @@
                                 </a>
     
                             </li>
+                            <li  title="Class Students">
+                    
+                                <a href="{% url 'class_promotion' %}">
+                                        <span class="menu_icon"><i class="material-icons">verified_user</i></span>
+                                        <span class="menu_title">Class Promotion</span>
+                                    </a>
+                                    
+                                </li> 
                             {% endif %}
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
@@ -472,13 +473,7 @@
                                 </a>
     
                             </li> -->
-                            <li>
-                                <a href="{% url 'overall_result' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                    <span class="menu_title">overall</span>
-                                </a>
-    
-                            </li>
+                          
                             {% endif %}
                         </ul>
     
