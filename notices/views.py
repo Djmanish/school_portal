@@ -52,7 +52,7 @@ def create_notice(request):
         return redirect('not_found')
     else:
 
-        user_notices = Notice.objects.filter(author= request.user).order_by('-publish_date')
+        user_notices = Notice.objects.filter(author= request.user).order_by('-id')
         author_classes=[]
         if request.user.user_institute_role.level.level_name == 'teacher':
             teacher_classes = Subjects.objects.filter(subject_teacher= request.user)

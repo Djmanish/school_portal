@@ -522,10 +522,10 @@
                                         <td > 
                                         
                            
-    <form id="{{forloop.counter}}" name="{{student.id|slugify }}">
+    <form id="{{forloop.counter}}" name="{{student.id|slugify }}" style="display: inline;">
         {% csrf_token %}   
         
-        <div class="">
+        <div class="" style="display: inline;">
             <select id="{{student.id|slugify }}" class="" name="{{student.id|slugify }}">
                 <option selected disabled value="">--select--</option>
               <option value="present" style="color: green;">Present</option>
@@ -577,11 +577,7 @@ bg-danger
                                         $(document).ready(function(){
                                           $('#{{student.id|slugify }}').change(function(){
                                               
-                                              var status = $('#{{student.id|slugify }}').val();
-                                              if ( status == ''){
-                                                  alert('No Value Selected !!!');
-                                                  return false;
-                                              }
+                                             
                                         
                                             //   $('#{{student.id|slugify }}').hide();
                                               $.ajax({
@@ -593,8 +589,12 @@ bg-danger
                                                    csrfmiddlewaretoken: '{{ csrf_token }}' },
                                                   
                                                   success: function(msg){
-                                    
-                                                    $('form[name="{{student.id|slugify }}"]').html(msg + "<a href='{% url 'update_attendace_record' student.id%}' id='update_attendance_button' >Update</a>" );
+                                                    if (msg === '<span style="color:red; padding:0px; margin:0px;">Taken already </span>'){
+                                                        $('form[name="{{student.id|slugify }}"]').html( msg + "<a href='{% url 'update_attendace_record' student.id%}' id='update_attendance_button' >Update</a>" );
+                                                    }else{
+                                                        $('form[name="{{student.id|slugify }}"]').append( "<a href='{% url 'update_attendace_record' student.id%}' id='update_attendance_button' >Update</a>" );
+                                                    }
+                                                    
                                                     
                                                     
                                                   }
