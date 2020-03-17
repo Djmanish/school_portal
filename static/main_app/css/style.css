@@ -150,3 +150,6 @@ background-color: lightgray;
 img#slogo{
  height: 46px !important;
 }
+#sidebar_main .sidebar_main_header{
+  padding: 12px !important;
+}

@@ -340,6 +340,37 @@ aliceblue;
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
+
+                
+<!-- starting notice menu -->
+<li  title="Notices">
+    <a href="">
+        <span class="menu_icon"><i class="material-icons">notifications_active</i></span>
+        <span class="menu_title">Notifications</span>
+    </a>
+    <ul>
+        <li>
+            <a href="{% url 'all_notice_list'  %}">
+                <span class="menu_icon"><i class="material-icons">notifications</i></span>
+                <span class="menu_title">My Notifications</span>
+            </a>
+        </li> 
+
+        
+        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" %}
+        {% else %}
+        <li>
+            <a href="{% url 'create_notice'  %}">
+                <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                <span class="menu_title">Create a Notification</span>
+            </a>
+        </li> 
+        {% endif %}
+            
+       
+    </ul>
+</li>
+<!-- ending notice menu -->
                 
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
@@ -384,7 +415,7 @@ aliceblue;
                     <li  title="Attendance">
                     
                     <a href="{% url 'attendance' %}">
-                            <span class="menu_icon"><i class="material-icons">people</i></span>
+                            <span class="menu_icon"><i class="material-icons">done_all</i></span>
                             <span class="menu_title">Attendance</span>
                         </a>
                         
@@ -399,14 +430,7 @@ aliceblue;
                             
                         </li> 
 
-                        <li  title="Class Students">
-                    
-                            <a href="{% url 'class_promotion' %}">
-                                    <span class="menu_icon"><i class="material-icons">people</i></span>
-                                    <span class="menu_title">Class Promotion</span>
-                                </a>
-                                
-                            </li> 
+                        
 
                     {% endif %}
                    
@@ -431,7 +455,7 @@ aliceblue;
                   
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">add_box</i></span>
+                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam Schedule</span>
                                 </a>
     
@@ -453,6 +477,14 @@ aliceblue;
                                 </a>
     
                             </li>
+                            <li  title="Class Students">
+                    
+                                <a href="{% url 'class_promotion' %}">
+                                        <span class="menu_icon"><i class="material-icons">verified_user</i></span>
+                                        <span class="menu_title">Class Promotion</span>
+                                    </a>
+                                    
+                                </li> 
                             {% endif %}
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
@@ -478,13 +510,7 @@ aliceblue;
                                 </a>
     
                             </li> -->
-                            <li>
-                                <a href="{% url 'overall_result' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                    <span class="menu_title">overall</span>
-                                </a>
-    
-                            </li>
+                          
                             {% endif %}
                         </ul>
     
@@ -499,6 +525,21 @@ aliceblue;
                             <span class="menu_title">Log Out</span>
                         </a>
                     </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             </ul>
         </div>

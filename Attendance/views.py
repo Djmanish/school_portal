@@ -117,7 +117,7 @@ def attendance_update(request, pk):
                 student_class = student_class,
                 attendance_status=student_status, date=attendance_date )
                 if student_status == "present":
-                    return HttpResponse(f'<span style="color:green; padding:0px; margin:0px; font-weight:bolder">{student_status} </span>')
+                    return HttpResponse('<span style="color:green; padding:0px; margin:0px; font-weight:bolder">Present </span>')
                 elif student_status == 'absent':
                     
                     # starting student absent notice
@@ -126,18 +126,21 @@ def attendance_update(request, pk):
                     absent_notice.subject = f"{student} Marked absent on {attendance_date}"
                     absent_notice.content = f"{student} Marked absent on {attendance_date}"
                     absent_notice.publish_date = attendance_date
-                    absent_notice.author = request.user
+                    # absent_notice.author = request.user
+                    absent_notice.category="absent"
                     absent_notice.save()
                     absent_student = UserProfile.objects.get(user= student)
                     student_parent = AddChild.objects.get(child= absent_student )
-                    print(student_parent.parent)
+                
                     absent_notice.recipients_list.add(student_parent.parent)
+                    absent_notice.recipients_list.add(absent_student)
+                    
 
 
                     # ending student absent notice
-                    return HttpResponse(f'<span style="color:red; padding:0px; margin:0px; font-weight:bolder">{student_status} </span>')
+                    return HttpResponse('<span style="color:red; padding:0px; margin:0px; font-weight:bolder">Absent </span>')
                 else:
-                    return HttpResponse(f'<span style="color:orange; padding:0px; margin:0px; font-weight:bolder">{student_status} </span>')
+                    return HttpResponse('<span style="color:orange; padding:0px; margin:0px; font-weight:bolder">Leave </span>')
                 
         except:
             pass
