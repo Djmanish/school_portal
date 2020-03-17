@@ -304,7 +304,7 @@ def user_profile(request):
     #         pass
     #     except SecondryInstitute.DoesNotExist:
     #         add_institute = SecondryInstitute.objects.create(student_name=request.user.profile, student_institute=request.user.profile.institute, student_Class=request.user.profile.Class,student_rollno=request.user.profile.roll_number,institute_type="primary",status="active")
-    # Secondry Institute Checkpoint End
+    # # Secondry Institute Checkpoint End
     # User Permission 
     user_permissions_changes = Tracking_permission_changes.objects.filter(institute= request.user.profile.institute, role = request.user.profile.designation).last()
     

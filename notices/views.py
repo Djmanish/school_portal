@@ -52,7 +52,7 @@ def create_notice(request):
         return redirect('not_found')
     else:
 
-        user_notices = Notice.objects.filter(author= request.user).order_by('-publish_date')
+        user_notices = Notice.objects.filter(author= request.user).order_by('-id')
         author_classes=[]
         if request.user.user_institute_role.level.level_name == 'teacher':
             teacher_classes = Subjects.objects.filter(subject_teacher= request.user)
@@ -94,7 +94,13 @@ def create_notice(request):
             new_notice.publish_date = datetime.date.today()
             new_notice.author = request.user
             new_notice.reference_no= notice_refrence_no
-            new_notice.save()
+            try:
+                new_notice.save()
+                messages.success(request, "Notice Created Successfully !!!")
+            except:
+                messages.error(request, 'Could not Create Notice, Try again !!!')
+                return redirect('create_notice')
+
             recipients_valid_list = []
 
             if 'selected_individual' in request.POST:
@@ -229,7 +235,9 @@ def fetch_notice_audience(request):
     
     individual_options = ''
     for individual in notice_audience:
-        individual_options = individual_options+f"<option value='{individual.id}'>{individual}</option>"
+        individual_options = individual_options+f"<option value='{individual.id}'>{individual}  ({individual.designation})</option>"
+    
+    
     return HttpResponse(individual_options)
     
     
