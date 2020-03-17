@@ -298,13 +298,13 @@ def login(request):
 @login_required
 def user_profile(request):
     # Secondry Institute Checkpoint Start
-    if request.user.profile.designation.level_name == "student":
-        try:
-            chk_inst=SecondryInstitute.objects.get(student_name=request.user.profile,institute_type="primary")
-            pass
-        except SecondryInstitute.DoesNotExist:
-            add_institute = SecondryInstitute.objects.create(student_name=request.user.profile, student_institute=request.user.profile.institute, student_Class=request.user.profile.Class,student_rollno=request.user.profile.roll_number,institute_type="primary",status="active")
-    # Secondry Institute Checkpoint End
+    # if request.user.profile.designation.level_name == "student":
+    #     try:
+    #         chk_inst=SecondryInstitute.objects.get(student_name=request.user.profile,institute_type="primary")
+    #         pass
+    #     except SecondryInstitute.DoesNotExist:
+    #         add_institute = SecondryInstitute.objects.create(student_name=request.user.profile, student_institute=request.user.profile.institute, student_Class=request.user.profile.Class,student_rollno=request.user.profile.roll_number,institute_type="primary",status="active")
+    # # Secondry Institute Checkpoint End
     # User Permission 
     user_permissions_changes = Tracking_permission_changes.objects.filter(institute= request.user.profile.institute, role = request.user.profile.designation).last()
     
