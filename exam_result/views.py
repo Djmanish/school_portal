@@ -5,7 +5,7 @@ from examschedule.models import *
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.db.models import Count
-
+import datetime
 import statistics      
 
 
@@ -253,6 +253,7 @@ def report_card(request,pk):
   
 
 def overall_result(request,pk):
+   
     sr_no=ExamDetails.objects.filter(institute=request.user.profile.institute)
     exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
     exam_sr_no=ExamResult.objects.values('exam_sr_no').distinct()
@@ -281,9 +282,10 @@ def overall_result(request,pk):
                                               
                                               score_list=list(map(int, scored_data))
                                               sum_score_list=sum(score_list)
-                                              print(sum_score_list)
+                                              
                                               meanVal=statistics.mean(score_list)
                                               round_score=round(meanVal)
+                                              
                                               
                                               test_data=ExamResult.objects.filter(institute=request.user.profile.institute, result_student_data=request.user,  exam_type=r_type,exam_sr_no=value)
                                               for subject_marks in test_data:
@@ -301,7 +303,7 @@ def overall_result(request,pk):
                                               return render(request, 'overall.html', context)                         
                                                   
                                   
-         
+        
     context={
       
       'sr_no':sr_no,
