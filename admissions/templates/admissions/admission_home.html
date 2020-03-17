@@ -518,7 +518,7 @@
 
                             {% if messages %}
                             <div class="md-card md-card-danger">
-                          <div class=""md-card-content">
+                          <div class="md-card-content">
                               <ul class="messages alert">
                                   {% for message in messages %}
                                   <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
@@ -579,7 +579,7 @@
                                           </select>
                                     </td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label" >Mobile Number:</td> <td><input type="number" class="form-control form-control-sm" name="mobile_number" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" >Mobile Number:</td> <td><input type="number" class="form-control form-control-sm" name="mobile_number" pattern="[1-9]{1}[0-9]{9}" required></td></tr>
 
                                     <tr class="aftr"><td class="admission_form_label" >Email:</td> <td><input type="email" class="form-control form-control-sm" name="email"></td></tr>
 
@@ -596,7 +596,7 @@
 
                                     <tr class="aftr"><td class="admission_form_label" >Address:</td> <td><textarea name="address" class="form-control form-control-sm" rows="2" required></textarea></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label" >District:</td> <td><input type="text" class="form-control form-control-sm" name="district" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" >District:</td> <td><input type="text" class="form-control form-control-sm n_i" name="district" required></td></tr>
 
                                     <tr class="aftr"><td class="admission_form_label" >State:</td> <td>
                                         <select class="form-control form-control-sm" name="state" required >

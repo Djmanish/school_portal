@@ -525,7 +525,7 @@
     <div id="page_content">
         <div id="page_content_inner">
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
-                <div class="uk-width-large-7-10">
+                <div class="uk-width-large">
                     <div class="md-card">
                         <div class="user_heading">
                             <div class="user_heading_menu hidden-print">
@@ -804,7 +804,7 @@ $('#fdata').change(function(){
                             
                               <div class="form-group">
                                 <label >Aadhaar Card Number:</label>
-                                <input type="text" class="form-control" name='adhar_number' value="{{user_info.aadhar_card_number}}"  >
+                                <input type="text" class="form-control n_a" name='adhar_number' value="{{user_info.aadhar_card_number}}">
                               </div>
 
                               <div class="form-group">
@@ -819,7 +819,7 @@ $('#fdata').change(function(){
 
                               <div class="form-group">
                                 <label >City:</label>
-                                <input type="text" class="form-control" name='city' value="{{user_info.city}}">
+                                <input type="text" class="form-control n_i" name='city' value="{{user_info.city}}">
                               </div>
 
                               <div class="form-group" >
@@ -860,7 +860,7 @@ $('#fdata').change(function(){
                                    
                     </div>
                 </div>
-                <div class="uk-width-large-3-10 hidden-print">
+                <!-- <div class="uk-width-large-3-10 hidden-print">
                     <div class="md-card">
                         <div class="md-card-content">
                             <div class="uk-margin-medium-bottom">
@@ -899,7 +899,7 @@ $('#fdata').change(function(){
                             <a class="md-btn md-btn-flat md-btn-flat-primary" href="#">Show all</a>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
