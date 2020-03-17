@@ -9,7 +9,7 @@ $(document).ready(function(){
             
             return true;
         }
-        
+        alert('Only Characters Allowed');
         return false
       });
   

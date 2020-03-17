@@ -297,24 +297,23 @@
     <!-- main sidebar -->
     <!-- main sidebar -->
     <aside id="sidebar_main">
-
         <div class="sidebar_main_header">
             <div class="sidebar_logo">
-                <a href="index.html" class="sSidebar_hide sidebar_logo_large">
-                    <img class="logo_regular" src="assets/img/logo_main.png" alt="" height="15" width="71" />
-                    <img class="logo_light" src="assets/img/logo_main_white.png" alt="" height="15" width="71" />
+                <a href="{% url 'user_dashboard' %}" class="sSidebar_hide sidebar_logo_large">
+                    <img class="logo_regular img-fluid " id="slogo" src="{% static 'main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
+                    <img class="logo_light img-fluid " id="slogo" src="{% static 'main_app/img/main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
                 </a>
-                <a href="index.html" class="sSidebar_show sidebar_logo_small">
-                    <img class="logo_regular" src="assets/img/logo_main_small.png" alt="" height="32" width="32" />
-                    <img class="logo_light" src="assets/img/logo_main_small_light.png" alt="" height="32" width="32" />
+                <a href="{% url 'user_dashboard' %}" class="sSidebar_show sidebar_logo_small">
+                    <img class="logo_regular" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
+                    <img class="logo_light" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
                 </a>
             </div>
-
+            
         </div>
 
         <div class="menu_section">
             <ul>
-                <li class="current_section" title="Dashboard">
+                <li title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -346,6 +345,37 @@
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
+
+                
+<!-- starting notice menu -->
+<li  title="Notices">
+    <a href="">
+        <span class="menu_icon"><i class="material-icons">notifications_active</i></span>
+        <span class="menu_title">Notifications</span>
+    </a>
+    <ul>
+        <li>
+            <a href="{% url 'all_notice_list'  %}">
+                <span class="menu_icon"><i class="material-icons">notifications</i></span>
+                <span class="menu_title">My Notifications</span>
+            </a>
+        </li> 
+
+        
+        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" %}
+        {% else %}
+        <li>
+            <a href="{% url 'create_notice'  %}">
+                <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                <span class="menu_title">Create a Notification</span>
+            </a>
+        </li> 
+        {% endif %}
+            
+       
+    </ul>
+</li>
+<!-- ending notice menu -->
                 
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
@@ -390,7 +420,7 @@
                     <li  title="Attendance">
                     
                     <a href="{% url 'attendance' %}">
-                            <span class="menu_icon"><i class="material-icons">people</i></span>
+                            <span class="menu_icon"><i class="material-icons">done_all</i></span>
                             <span class="menu_title">Attendance</span>
                         </a>
                         
@@ -405,19 +435,12 @@
                             
                         </li> 
 
-                        <li  title="Class Students">
-                    
-                            <a href="{% url 'class_promotion' %}">
-                                    <span class="menu_icon"><i class="material-icons">people</i></span>
-                                    <span class="menu_title">Class Promotion</span>
-                                </a>
-                                
-                            </li> 
+                        
 
                     {% endif %}
                    
 
-                    <li  title="Examination">
+                    <li  class="current_section" title="Examination">
 
                         <a href="">
                             <span class="menu_icon"><i class="material-icons">trending_up</i></span>
@@ -437,7 +460,7 @@
                   
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">add_box</i></span>
+                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam Schedule</span>
                                 </a>
     
@@ -459,6 +482,14 @@
                                 </a>
     
                             </li>
+                            <li  title="Class Students">
+                    
+                                <a href="{% url 'class_promotion' %}">
+                                        <span class="menu_icon"><i class="material-icons">verified_user</i></span>
+                                        <span class="menu_title">Class Promotion</span>
+                                    </a>
+                                    
+                                </li> 
                             {% endif %}
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
@@ -484,13 +515,7 @@
                                 </a>
     
                             </li> -->
-                            <li>
-                                <a href="{% url 'overall_result' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                    <span class="menu_title">overall</span>
-                                </a>
-    
-                            </li>
+                          
                             {% endif %}
                         </ul>
     
@@ -505,6 +530,21 @@
                             <span class="menu_title">Log Out</span>
                         </a>
                     </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             </ul>
         </div>
