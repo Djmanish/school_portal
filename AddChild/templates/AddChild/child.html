@@ -614,6 +614,8 @@ aliceblue;
                                     {% if student.is_already_listed == True %}
                                     
                                         <h4 style="color: red; margin-top: 10px;"> Already Selected </h4>
+                                    {% elif student.is_already_listed == None %}
+                                        <h5 style="color: red; margin-top: 10px;"> No Student Found </h3>
                                    
                                     {% else %} 
                                         <a href="{% url 'addchildtolist' student.pk %}" style=" margin-left:0%;vertical-align:middle; font-size: 16px; font-weight: bold;">Add Child</a>

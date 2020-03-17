@@ -14,14 +14,21 @@ def addchild(request):
         selected_institute= Institute.objects.get(pk=request.POST.get("selected_institute"))
         selected_class = Classes.objects.get(pk=request.POST.get('selected_class'))
         roll_number=request.POST.get('roll_number')
-        student = UserProfile.objects.get(institute=selected_institute,Class=selected_class,roll_number=roll_number)
-        
+        try:
+            student = UserProfile.objects.get(institute=selected_institute,Class=selected_class,roll_number=roll_number)
+        except UserProfile.DoesNotExist:
+            messages.success(request, 'Request Child Not Found')
+            student=None
         # starting checking if already selected as child
-        parent_child_check = AddChild.objects.filter(parent= request.user.profile, child = student)
-        if len(parent_child_check) > 0 :
-            student.is_already_listed = True
-        else:
-            student.is_already_listed = False
+        try:
+            parent_child_check = AddChild.objects.filter(parent= request.user.profile, child = student)
+
+            if len(parent_child_check) > 0 :
+                    student.is_already_listed = True
+            else:
+                student.is_already_listed = False
+        except:
+            pass   
             
         # ending checking if already selected as child
         context = {'institutes':institutes,
