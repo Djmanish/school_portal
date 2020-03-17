@@ -833,7 +833,7 @@
                                                                 {% endif %}  
                                                                 
                                                                 {% if can_delete_class_permission in user_permissions %} 
-                                                                <td><a  class="" href="{% url 'delete_class' classes.pk %}"><i class="material-icons" style="color: #ff0000;">delete</i></a>
+                                                                <td><a  class="" href="{% url 'delete_class' classes.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                                 </td>
                                                                 {% endif %} 
                                        
@@ -963,7 +963,7 @@
                                                                 {% endif %}
 
                                                                 {% if can_delete_subject_permission in user_permissions %} 
-                                                                <td><a  class="" href="{% url 'delete_subject' subjects.pk %}"><i class="material-icons" style="color: #ff0000;">delete</i></a>
+                                                                <td><a  class="" href="{% url 'delete_subject' subjects.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                                 </td>
                                                                 {% endif %}
                                                               
@@ -1055,9 +1055,8 @@
                                                             
                                                                 <td>
 
-                                                                    <i class="material-icons "><a class="text-danger"
-                                                                            href="{% url 'delete_user_role' role.pk %}">
-                                                                            delete_forever</a></i>
+                                                                    <a class="" href="{% url 'delete_user_role' role.pk %}"><i class="material-icons" style="color: #ff0000;">
+                                                                        delete_forever</i></a>
                                                                 </td>
 
 

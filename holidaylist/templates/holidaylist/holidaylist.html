@@ -14,9 +14,9 @@
 
     <link rel="icon" type="image/png" href="{% static 'holidaylist/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'holidaylist/img/favicon-32x32.png' %}" sizes="32x32">
-
+    <script src="{% static 'main_app/js/script.js' %}"></script>
     <title>HolidayList</title>
-
+    
     <!-- bootstrap -->
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
 
@@ -557,8 +557,7 @@
 
                                     <div class="form-group">
                                         <label>Holiday Name:</label>
-                                        
-                                        <input type="text" class="form-control" pattern="^[a-zA-Z0-9]+$" min="0" name="holiday_name">
+                                        <input type="text" class="form-control n_i"  name='holiday_name' required="required">
                                     </div>
                                     <div class="form-group">
                                         <label for="sel1">Applicable:</label>
@@ -570,7 +569,7 @@
                                       </div>
                                     <div class="form-group">
                                             <label>Holiday Type:</label>
-                                            <input type="text" class="form-control" pattern="^[a-zA-Z0-9]+$" min="0" name="holiday_type" >
+                                            <input type="text" class="form-control n_i" name='holiday_type' >
                                         </div>
                                         <div class="form-group">
                                             <label for="sel2">Email Send:</label>
@@ -716,7 +715,7 @@
                                             {% endif %}
 
                                             {% if can_delete_holiday_permission in user_permissions %}
-                                            <td><a  class="" href="{% url 'delete_holiday' holiday.pk %}"><i class="material-icons" style="color: #ff0000;">delete</i></a>
+                                            <td><a  class="" href="{% url 'delete_holiday' holiday.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                             </td>
                                             {% endif %}  
                                        

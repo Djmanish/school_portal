@@ -19,7 +19,7 @@
 
     <title>HolidayList</title>
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
-
+    <script src="{% static 'main_app/js/script.js' %}"></script>
     <!-- bootstrap -->
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
     <!-- uikit -->
@@ -44,7 +44,8 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" </head> <body
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" </head>
+     <body
         class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
     <header id="header_main">
@@ -587,8 +588,8 @@
                                     
 
                                     <div class="form-group">
-                                        <label>Name:</label>
-                                        <input type="text" class="form-control" name='holiday_name'
+                                        <label>Holiday Name:</label>
+                                        <input type="text" class="form-control n_i"  name='holiday_name'
                                             value="{{edit_holiday.name}}" required="required">
                                     </div>
                                     <div class="form-group">
@@ -605,7 +606,7 @@
 
                                     <div class="form-group">
                                         <label>Holiday Type</label>
-                                        <input type="text" class="form-control" name='holiday_type'
+                                        <input type="text" class="form-control n_i" name='holiday_type'
                                             value="{{edit_holiday.holiday_type}}">
                                     </div>
                                     <div class="form-group">
