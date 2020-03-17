@@ -315,11 +315,14 @@ def overall_result(request,pk):
 def class_promotion(request):
 
     selected_class=request.GET.get('selected_class_promotion')
+    current_year=datetime.date.today().year+1
+    print(current_year)
     all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
+    print(all_students)
     
     for student_class in all_students:
           stu_class=student_class.Class
-    
+          
   
     # to get the list of all  classes                                        
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
@@ -327,7 +330,7 @@ def class_promotion(request):
     # to ge the data through POST method
     if request.method == "POST":
         selected_class = Classes.objects.get(pk = request.POST.get('selected_class_promotion'))
-        print(selected_class)
+        
         #  to get the list of all students of selected class
         all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
         # check student length

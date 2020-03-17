@@ -838,7 +838,7 @@ $('#fdata').change(function(){
                               {% if user.profile.designation.level_name == "student"%}
                               <div class="form-group">
                                 <label >Class Session:</label>
-                                <input type="text" class="form-control" name='student_class_session' value="{{user_info.class_current_year.year}}-{{user_info.class_next_year.year}}"></input>
+                                <input type="text" class="form-control" name='student_class_session' value="{{user_info.class_current_year}}-{{user_info.class_next_year}}"></input>
                               </div>
                               {% endif %}
                               <div>
