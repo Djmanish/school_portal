@@ -315,39 +315,68 @@ def overall_result(request,pk):
 def class_promotion(request):
 
     selected_class=request.GET.get('selected_class_promotion')
-    current_year=datetime.date.today().year+1
-    print(current_year)
-    all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
-    print(all_students)
+    current_year=datetime.date.today().year
     
-    for student_class in all_students:
-          stu_class=student_class.Class
-          
-  
     # to get the list of all  classes                                        
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
 
     # to ge the data through POST method
-    if request.method == "POST":
-        selected_class = Classes.objects.get(pk = request.POST.get('selected_class_promotion'))
+    
+    selected_class = request.GET.get('selected_class_promotion')
+    if selected_class == None:
+                    first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
+                    first_class_id = first_class.id
+                    selected_class= first_class_id
+                   
+    selected_class = Classes.objects.get(pk=selected_class)
+    
         
-        #  to get the list of all students of selected class
-        all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
-        # check student length
-        if len(all_students)<1:
+        
+    #  to get the list of all students of selected class
+    all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student', class_current_year=current_year)
+   
+    # check student length
+    if len(all_students)<1:
             messages.error(request, 'No student found in the selected class')
             return redirect('class_promotion')
 
-        for student_class in all_students:
+    for student_class in all_students:
           stu_class=student_class.Class
-        
+          
+    promotion_status = UserProfile._meta.get_field('class_promotion_status').choices
+    promotion_choices=dict(promotion_status)
+    list_promotion_choices=list(promotion_choices)     
+      
+    if request.method=="POST":
+        selected_promotion_status=request.POST.get('promotion_status')
 
-        # promoted_class=Classes.objects.get(pk=request.POST.get('promoted_to_class'))
-        # print(promoted_class)
-        # Inner Context
+        for students in all_students:
+              pr_status=students.class_promotion_status
+              for rollno in all_students:
+                  student_rollno=rollno.roll_number
+               
+                  user_data=UserProfile(Class=selected_class, roll_number=student_rollno)
+                  user_data.class_promotion_status=selected_promotion_status
+                  # user_data.save()
+              print(selected_class)
+              print(student_rollno)
+              print(pr_status)
+              print(selected_promotion_status)
+              # status=pr_status
+            # print(status)
+
+          
+            # status.save()
+
+       
+
+           
+    # Inner Context
         context= {'all_students':all_students,
          'all_classes': all_classes,
-         'showing_student_for_class':selected_class
+         'showing_student_for_class':selected_class,
+         'list_promotion_choices':list_promotion_choices,
+         
          }
         return render(request, 'class_promotion.html', context)
 

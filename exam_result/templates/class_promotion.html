@@ -568,11 +568,11 @@
                             {% if all_students %}
                                 <tr> 
                                     <td>
-                                    <h3>All Students of {{showing_student_for_class}} Promotes to</h3>
+                                    <h3>Promotes to {{showing_student_for_class}}</h3>
                                     </td>
                                     <td>
                                     
-                                    <select name="promoted_to_class" class="form-control"  required>
+                                    <select name="promoted_to_class" class="form-control" >
                                        <option selected disabled value=""><b>Promote Class</b></option>
             
                                             {% for class in all_classes %}
@@ -585,15 +585,16 @@
                                 {% endif %}
                               <tbody>
                                 <tr>
-                                    <th><b>Sr. No.</b></th>
+                                    <th  width="10%"><b>Sr. No.</b></th>
                                     <th><b>Full Name</b></th>
                                     <th><b>Roll No.</b></th>
                                     <th><b>Status</b></th>
 
                                 </tr>
+                                
                                   {% for student in all_students %}
                                   <tr>
-                                      <td>{{forloop.counter}}</td>
+                                      <td  width="20%">{{forloop.counter}}</td>
                                     <td >{{student.first_name}}
                                         
                                         {% if student.middle_name %}
@@ -606,13 +607,15 @@
                                             
                                     </td>
                                   
-                                    <td>{{student.roll_number}}</td>
+                                    <td>{{student.roll_number}}
+                                        
+                                    </td>
                                     <td>
                                         <div class="form-group">
-                                            <select  class="form-control"  name="marks_subject">
-                                              
-                                              <option selected>Promoted</option>
-                                              <option>Not Promoted</option>
+                                            <select  class="form-control"  name="promotion_status">
+                                              {% for status in list_promotion_choices %}
+                                                 <option value='{{status}}'>{{status}}</option>
+                                              {% endfor %}
                                             </select>
                                           </div>
                                           
