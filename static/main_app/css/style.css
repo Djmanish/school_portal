@@ -153,3 +153,8 @@ img#slogo{
 #sidebar_main .sidebar_main_header{
   padding: 12px !important;
 }
+
+#schedule_table .uk-table td, .uk-table th{
+  padding: 3px 1px;
+  
+}
