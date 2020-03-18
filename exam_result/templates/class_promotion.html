@@ -548,51 +548,36 @@
                     <form method="POST" action="{% url 'class_promotion' %}">
                         {% csrf_token %}
                         <table class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
-                            <thead>
+                            {% if all_students %}
                                 <tr> 
-                                    {% if all_students %}
                                     <td>
                                     <h3>All Students of {{showing_student_for_class}} Promotes to</h3>
-                                </td>
-                                <td>
+                                    </td>
+                                    <td>
                                     
                                     <select name="promoted_to_class" class="form-control"  required>
                                        <option selected disabled value=""><b>Promote Class</b></option>
             
-            {% for class in all_classes %}
-            <option value="{{class.id}}">{{class}}</option>
-            {% endfor %}
-                           
-                                 </select>
-                                </td>
-                                
+                                            {% for class in all_classes %}
+                                            <option value="{{class.id}}">{{class}}</option>
+                                            {% endfor %}
+                                                        
+                                    </select>
+                                    </td>
                                 </tr>
-                                
-                               
+                                {% endif %}
+                              <tbody>
                                 <tr>
                                     <th><b>Sr. No.</b></th>
                                     <th><b>Full Name</b></th>
-                                  
                                     <th><b>Roll No.</b></th>
                                     <th><b>Status</b></th>
 
                                 </tr>
-                                
-                                {% endif %}
-                                    
-                                
-                               
-                              </thead>
-                      
-                              <tbody>
-                                  
-                                 
-                                      
-                                  
                                   {% for student in all_students %}
                                   <tr>
                                       <td>{{forloop.counter}}</td>
-                                    <td>{{student.first_name}}
+                                    <td >{{student.first_name}}
                                         
                                         {% if student.middle_name %}
                                         {{student.middle_name}}
@@ -627,8 +612,6 @@
 
                                     </td>
                                 </tr>
-                                
-                                
                               </tbody>
                         </table>
                     </form>

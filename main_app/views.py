@@ -373,10 +373,24 @@ def fetch_levels(request):
 def edit_profile(request, pk):
     user_info = UserProfile.objects.get(pk=pk)
     all_institutes = Institute.objects.all()
+    # to get all the states
     all_states = State.objects.all()
-    all_institute_classes = Classes.objects.filter(institute= request.user.profile.institute)
     
+    # to get all the classes
+    all_institute_classes = Classes.objects.filter(institute= request.user.profile.institute)
+    # Store the value of current year
+    current_year=datetime.date.today().year
+    
+    # Store the value of next year
+    next_year = datetime.date.today().year+1
+    print(next_year)
+   
+        
+    
+    # Occurence of POST method
     if request.method == "POST":
+        
+        
         new_admin = 'admin_check'  in request.POST
         if new_admin: #if admin checkbox is checked
             try:
@@ -431,7 +445,7 @@ def edit_profile(request, pk):
             level_id = request.POST['user_designation']
             up_level= Institute_levels.objects.get(pk=level_id) # fetching the selected level the levels list
             user_info.designation = up_level
-            new_level = Role_Description.objects.create(user=request.user, institute= updated_institute, level= up_level  )
+            new_level = Role_Description.objects.create(user=request.user, institute= updated_institute, level= up_level)
 
         if 'student_class' in request.POST: 
             selected_class= request.POST.get('student_class')
@@ -453,7 +467,9 @@ def edit_profile(request, pk):
             user_info.state= updated_state 
         
         user_info.facebook_link= request.POST['facebook_link']
-        
+        user_info.class_current_year=current_year
+        user_info.class_next_year=next_year
+   
         try:
             user_info.save()
             messages.success(request, 'Profile details updated !!!')
@@ -466,7 +482,7 @@ def edit_profile(request, pk):
         
         return redirect('user_profile')
         
-    return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,'all_institute_classes':all_institute_classes})
+    return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,'all_institute_classes':all_institute_classes,})
 
 
   

@@ -143,7 +143,7 @@ def exam_schedule(request,pk):
           # Count the number if type the exam type selected
            
             sr_no=ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct().count()+1
-            print(type(sr_no))
+           
             if sr_no<=limit_exam:
                     pass
             else:

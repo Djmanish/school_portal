@@ -701,14 +701,6 @@ $('#fdata').change(function(){
       </div>
   </div>
 
-
-
-    
-
-
-
- 
-
                               <div class="form-group">
                                 <label >Date of Birth:</label>
                                 
@@ -824,6 +816,12 @@ $('#fdata').change(function(){
                                 <label >Facebook Profile link:</label>
                                 <input type="url" class="form-control" name='facebook_link' value="{{user_info.facebook_link}}">
                               </div>
+                              {% if user.profile.designation.level_name == "student"%}
+                              <div class="form-group">
+                                <label >Class Session:</label>
+                                <input type="text" class="form-control" name='student_class_session' value="{{user_info.class_current_year}}-{{user_info.class_next_year}}"></input>
+                              </div>
+                              {% endif %}
                               <div>
                                   <input class="form-control" type="hidden" name="user_status" value="{{user_info.status}}">
                               </div>
