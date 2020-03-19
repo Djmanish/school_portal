@@ -17,7 +17,7 @@ def addchild(request):
         try:
             student = UserProfile.objects.get(institute=selected_institute,Class=selected_class,roll_number=roll_number)
         except UserProfile.DoesNotExist:
-            messages.success(request, 'Request Child Not Found')
+            messages.success(request, 'Requested Child Not Found')
             student=None
         # starting checking if already selected as child
         try:
