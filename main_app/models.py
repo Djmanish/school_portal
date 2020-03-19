@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from datetime import date
+from django.core.validators import MinValueValidator, MaxValueValidator
+import datetime
 
 
 
@@ -78,6 +80,10 @@ class UserProfile(models.Model):
         ('pending', 'Pending'),('approve', 'Approve'),
         ('dissapprove', 'Dissapprove'),
     ]
+    Promotion=[
+        ('Promoted', 'Promoted'),
+        ('Not Promoted', 'Not Promoted'),
+    ]
     gender_choices = [('', '-- select one --'),('Male', 'Male'), ('Female','Female'),('Other','Other')]
     marital_choices = [('','-- select one --'),('Married','Married'),('Unmarried','Unmarried')]
     category_choices =[('','-- select one --'),('Unreserved','Unreserved'),('Sc/St','Sc/St'),('OBC','OBC')]
@@ -108,6 +114,9 @@ class UserProfile(models.Model):
     pin_code = models.CharField(max_length=10, null=True, blank=True)
     facebook_link = models.URLField(null=True, blank=True, default="https://www.facebook.com/")
     status = models.CharField(max_length=25,choices=Chi1, null=True)
+    class_promotion_status=models.CharField(max_length=30, choices=Promotion, null=True, default="Promoted")
+    class_current_year=models.CharField(max_length=30,null=True)
+    class_next_year=models.CharField(max_length=30,null=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,null=True)
 

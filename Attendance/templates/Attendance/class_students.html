@@ -66,7 +66,7 @@
                     <span class="sSwitchIcon"></span>
                 </a>
                 
-                    <div id="menu_top_dropdown" class="uk-float-left uk-hidden-small">
+                    <!-- <div id="menu_top_dropdown" class="uk-float-left uk-hidden-small">
                         <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
                             <a href="#" class="top_menu_toggle"><i class="material-icons md-24">&#xE8F0;</i></a>
                             <div class="uk-dropdown uk-dropdown-width-3">
@@ -124,33 +124,33 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 
                 <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav user_actions">
                         <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
                         <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">16</span></a>
+                            <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
                             <div class="uk-dropdown uk-dropdown-xlarge">
                                 <div class="md-card-content">
                                     <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
-                                        <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Messages (12)</a></li>
-                                        <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li>
+                                        <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
+                                        <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
                                     </ul>
                                     <ul id="header_alerts" class="uk-switcher uk-margin">
                                         <li>
                                             <ul class="md-list md-list-addon">
                                                 <li>
                                                     <div class="md-list-addon-element">
-                                                        <span class="md-user-letters md-bg-cyan">ng</span>
+                                                        <span class="md-user-letters md-bg-cyan">N</span>
                                                     </div>
                                                     <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="page_mailbox.html">Doloribus quod.</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Quas quisquam commodi provident dolorem et perferendis ut corrupti rerum.</span>
+                                                        <span class="md-list-heading"><a href="{% url 'all_notice_list' %}"> All Notifiactions</a></span>
+                                                        <span class="uk-text-small uk-text-muted">Click Here to see all your Notifications.</span>
                                                     </div>
                                                 </li>
-                                                <li>
+                                                <!-- <li>
                                                     <div class="md-list-addon-element">
                                                         <img class="md-user-image md-list-addon-avatar" src="{% static 'main_app/img/avatars/avatar_07_tn.png' %}" alt=""/>
                                                     </div>
@@ -158,8 +158,8 @@
                                                         <span class="md-list-heading"><a href="page_mailbox.html">Esse similique et.</a></span>
                                                         <span class="uk-text-small uk-text-muted">Nam molestiae architecto maxime dicta qui esse consequatur dignissimos rem.</span>
                                                     </div>
-                                                </li>
-                                                <li>
+                                                </li> -->
+                                                <!-- <li>
                                                     <div class="md-list-addon-element">
                                                         <span class="md-user-letters md-bg-light-green">qm</span>
                                                     </div>
@@ -167,29 +167,12 @@
                                                         <span class="md-list-heading"><a href="page_mailbox.html">Eaque autem.</a></span>
                                                         <span class="uk-text-small uk-text-muted">Aspernatur in quod distinctio est id provident nihil quam fugit inventore.</span>
                                                     </div>
-                                                </li>
-                                                <li>
-                                                    <div class="md-list-addon-element">
-                                                        <img class="md-user-image md-list-addon-avatar" src="{% static 'main_app/img/avatars/avatar_02_tn.png' %}" alt=""/>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="page_mailbox.html">Unde dolorem.</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Sunt sed et libero natus asperiores et consequuntur.</span>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="md-list-addon-element">
-                                                        <img class="md-user-image md-list-addon-avatar" src="{% static 'main_app/img/avatars/avatar_09_tn.png' %}" alt=""/>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="page_mailbox.html">Eius enim.</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Alias quis ea eaque dolore recusandae tempore delectus rerum ab.</span>
-                                                    </div>
-                                                </li>
+                                                </li> -->
+                                             
                                             </ul>
-                                            <div class="uk-text-center uk-margin-top uk-margin-small-bottom">
+                                            <!-- <div class="uk-text-center uk-margin-top uk-margin-small-bottom">
                                                 <a href="page_mailbox.html" class="md-btn md-btn-flat md-btn-flat-primary js-uk-prevent">Show All</a>
-                                            </div>
+                                            </div> -->
                                         </li>
                                         <li>
                                             <ul class="md-list md-list-addon">
@@ -277,16 +260,15 @@
     </header><!-- main header end -->
     <!-- main sidebar -->
     <aside id="sidebar_main">
-        
         <div class="sidebar_main_header">
             <div class="sidebar_logo">
-                <a href="index.html" class="sSidebar_hide sidebar_logo_large">
-                    <img class="logo_regular" src="{% static 'main_app/img/logo_main.png' %}" alt="" height="15" width="71"/>
-                    <img class="logo_light" src="{% static 'main_app/img/logo_main_white.png' %}" alt="" height="15" width="71"/>
+                <a href="{% url 'user_dashboard' %}" class="sSidebar_hide sidebar_logo_large">
+                    <img class="logo_regular img-fluid " id="slogo" src="{% static 'main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
+                    <img class="logo_light img-fluid " id="slogo" src="{% static 'main_app/img/main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
                 </a>
-                <a href="index.html" class="sSidebar_show sidebar_logo_small">
-                    <img class="logo_regular" src="{% static 'main_app/img/logo_main_small.png' %}" alt="" height="32" width="32"/>
-                    <img class="logo_light" src="{% static 'main_app/img/logo_main_small_light.png' %}" alt="" height="32" width="32"/>
+                <a href="{% url 'user_dashboard' %}" class="sSidebar_show sidebar_logo_small">
+                    <img class="logo_regular" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
+                    <img class="logo_light" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
                 </a>
             </div>
             
@@ -294,7 +276,7 @@
         
         <div class="menu_section">
             <ul>
-                <li title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -308,6 +290,17 @@
                         <span class="menu_title">My Profile</span>
                     </a>    
                 </li>
+                
+                {% if user.profile.institute == None %}
+                <li title="Admission Query">
+                    <a href="{% url 'admission_home' %}">
+                        <span class="menu_icon"><i class="material-icons">person</i></span>
+                        <span class="menu_title">Admission Query</span>
+                    </a>    
+                </li>
+                {% endif %}
+                    
+
                 {% if user.profile.institute %}
                 <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
@@ -315,6 +308,37 @@
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
+
+                
+<!-- starting notice menu -->
+<li  title="Notices">
+    <a href="">
+        <span class="menu_icon"><i class="material-icons">notifications_active</i></span>
+        <span class="menu_title">Notifications</span>
+    </a>
+    <ul>
+        <li>
+            <a href="{% url 'all_notice_list'  %}">
+                <span class="menu_icon"><i class="material-icons">notifications</i></span>
+                <span class="menu_title">My Notifications</span>
+            </a>
+        </li> 
+
+        
+        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" %}
+        {% else %}
+        <li>
+            <a href="{% url 'create_notice'  %}">
+                <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                <span class="menu_title">Create a Notification</span>
+            </a>
+        </li> 
+        {% endif %}
+            
+       
+    </ul>
+</li>
+<!-- ending notice menu -->
                 
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
@@ -323,6 +347,7 @@
                     </a>
                     
                 </li>
+                
                <li  title="Institute Schedule">
                 <a href="{% url 'class_schedule' %}">
                     <span class="menu_icon"><i class="material-icons">schedule</i></span>
@@ -331,6 +356,19 @@
             </li>
                
             {% endif %}  
+
+            
+            {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+            <li  title="Admission Requests">
+                <a href="{% url 'admission_requests' %}">
+                    <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
+                    <span class="menu_title">Admission Requests</span>
+                </a>
+                
+            </li>
+
+        {% endif %}
+            
 
                 {% if user.profile.institute %}
                 {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
@@ -342,14 +380,25 @@
                         
                     </li>
                     
-                    <li class="current_section"   title="Attendance">
+                    <li  title="Attendance">
                     
                     <a href="{% url 'attendance' %}">
-                            <span class="menu_icon"><i class="material-icons">people</i></span>
+                            <span class="menu_icon"><i class="material-icons">done_all</i></span>
                             <span class="menu_title">Attendance</span>
                         </a>
                         
                     </li> 
+
+                    <li class="current_section" title="Class Students">
+                    
+                        <a href="{% url 'class_students_list' %}">
+                                <span class="menu_icon"><i class="material-icons">people</i></span>
+                                <span class="menu_title">Class Students</span>
+                            </a>
+                            
+                        </li> 
+
+                        
 
                     {% endif %}
                    
@@ -357,7 +406,7 @@
                     <li  title="Examination">
 
                         <a href="">
-                            <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                            <span class="menu_icon"><i class="material-icons">trending_up</i></span>
                             <span class="menu_title">Examination</span>
                         </a>
                         <ul>
@@ -365,16 +414,16 @@
 
                             <li>
                                 <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam</span>
                                 </a>
     
                             </li>
-
+                            
                   
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
+                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam Schedule</span>
                                 </a>
     
@@ -382,37 +431,59 @@
                             {% endif %}
                             <li>
                                 <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">assignment</i></span>
-                                    <span class="menu_title">View ExamSchedule</span>
+                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
+                                    <span class="menu_title">View Exam Schedule</span>
                                 </a>
     
                             </li>
+                           
                             {% if user.profile.designation.level_name == "teacher"%}
                             <li>
                                 <a href="{% url 'examresult' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_icon"><i class="material-icons">receipt</i></span>
                                     <span class="menu_title">Exam Result</span>
                                 </a>
     
                             </li>
+                            <li  title="Class Students">
+                    
+                                <a href="{% url 'class_promotion' %}">
+                                        <span class="menu_icon"><i class="material-icons">verified_user</i></span>
+                                        <span class="menu_title">Class Promotion</span>
+                                    </a>
+                                    
+                                </li> 
                             {% endif %}
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
-               
-                            <li>
+                            
+                            <!-- <li>
                                 <a href="{% url 'studentview' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
                                     <span class="menu_title">View Exam Result</span>
                                 </a>
     
+                            </li> -->
+                            <li>
+                                <a href="{% url 'report_card' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">file_copy</i></span>
+                                    <span class="menu_title">Report Card</span>
+                                </a>
+    
                             </li>
+                            
+                            <!-- <li>
+                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_title">Marks Chart</span>
+                                </a>
+    
+                            </li> -->
+                          
                             {% endif %}
                         </ul>
     
                     </li>
 
-                   
-                    
-                
                     {% endif %} 
                  
             
@@ -422,6 +493,21 @@
                             <span class="menu_title">Log Out</span>
                         </a>
                     </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             </ul>
         </div>
