@@ -125,7 +125,7 @@ def exam_result(request,pk):
       messages.success(request, 'Exam Result Stored successfully !!!')
 
   context={
-
+    
     'subject_result':subject_class,
     'selected_subject':selected_subject,
     'institute_students':institute_students,
