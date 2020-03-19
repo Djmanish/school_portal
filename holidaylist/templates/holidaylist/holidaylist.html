@@ -587,19 +587,20 @@
                         </div>
 
                         <div class="uk-overflow-container uk-margin-bottom">
+                            <br>
                             <table
-                                class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                 id="ts_pager_filter">
                                 <thead>
                                     <tr>
                                        
 
-                                        <th class="filter-false remove sorter-false" data-priority="6">S.No.</th>
-                                        <th data-priority="critical">Date</th>
-                                        <th data-priority="1">Day</th>
-                                        <th data-priority="2">Name</th>
-                                        <th data-priority="3">Applicable</th>
-                                        <th data-priority="4">Type</th>
+                                        <th class="text-bold">Sr.No.</th>
+                                        <th >Date</th>
+                                        <th>Day</th>
+                                        <th >Name</th>
+                                        <th >Applicable</th>
+                                        <th >Type</th>
                                         {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
 
                                         <th data-priority="5">Email</th>
