@@ -514,10 +514,7 @@
                                 <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
                                     <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
                                     <div class="uk-dropdown uk-dropdown-small">
-                                        <ul class="uk-nav">
-                                            <li><a href="{% url 'lectures_list' %}">Update Lecture Timing</a></li>
-
-                                        </ul>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -568,10 +565,12 @@
                                                             {% endfor %}
                                                         </ul>
                                                         {% endif %}
+                                                        
                                                         <form method="GET">
-                                                            <tr style="background-color:#ADD8E6; ">
+                                                            
+                                                            <tr >
                                                                                                                         
-                                                                <td>
+                                                                <td style="background-color:#ADD8E6;">
                                                                 
                                                                     <select class="form-control" name="selected_class" style="padding: 2px;" required>
                                                                         <option selected disabled value="">--Select Class--</option>
@@ -585,7 +584,7 @@
                                                                     </select>
                                                                 
                                                                 </td>
-                                                                <td>
+                                                                <td style="background-color:#ADD8E6;">
                                                                     
                                                                         <select class="form-control"name="selected_exam_type" style="padding: 2px;" required>
                                                                             <option selected disabled value="">--Select Exam Type--</option>
@@ -601,8 +600,8 @@
                                                                          
                                                                     
                                                                 </td>
-                                                                <td>
-                                                                    <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
+                                                                <td style="background-color:#ADD8E6; width:10px;">
+                                                                    <input type="submit" value="View" class="md-btn md-btn-primary">
                                                                     
                                                                 </td>
                                                                 
@@ -622,13 +621,13 @@
 
                                                             </tr>
                                                           
-                                                             <tr  style="background-color: #1976d2; color:white">
-                                                                <th >Subject</th>
-                                                                <th>Subject Teacher</th>
-                                                                <th>Date</th>
-                                                                <th>Start Time</th>
-                                                                <th>End Time</th>
-                                                                <th>Assign Teacher</th>
+                                                             <tr style="background-color: #2196f3; color:white; ">
+                                                                <td>Subject</td>
+                                                                <td>Subject Teacher</td>
+                                                                <td>Date</td>
+                                                                <td>Start Time</td>
+                                                                <td>End Time</td>
+                                                                <td>Assign Teacher</td>
                                                             </tr>
                                                                     {% for exam_subject in exam_class_subject%}
                                                                     <tr style="background-color:#E5E5FF;"> 

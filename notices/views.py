@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from .models import *
 import datetime
 from django.http import HttpResponse
@@ -91,7 +92,7 @@ def create_notice(request):
             new_notice.institute = request.user.profile.institute
             new_notice.subject = subject
             new_notice.content = content
-            new_notice.publish_date = datetime.date.today()
+            new_notice.publish_date = timezone.now()
             new_notice.author = request.user
             new_notice.reference_no= notice_refrence_no
             try:

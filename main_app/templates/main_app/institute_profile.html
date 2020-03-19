@@ -780,7 +780,7 @@
                                 <!-- ending details tab content -->
                                 <!-- Starting Classes Tab Content -->
                                 <li>
-                                    <div id="page_content_inner">
+                                    <div id="">
                                         <h4 class="heading_c uk-margin-small-bottom">Currently Available Classes</h4>
 
 
@@ -831,7 +831,7 @@
                                                 <div class="uk-overflow-container uk-margin-bottom">
 
                                                     <table
-                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair table table-hover table-sm"
+                                                        class="uk-table uk-table-condensed uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-hover"
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
@@ -901,7 +901,7 @@
                                 <!-- End Classes Tab Content -->
                                 <!-- starting subjects tab content -->
                                 <li>
-                                    <div id="page_content_inner">
+                                    <div id="">
                                         <h4 class="heading_c uk-margin-small-bottom">Currently Available Subjects</h4>
 
                                         <div class="md-card">
@@ -973,7 +973,7 @@
                                                 <div class="uk-overflow-container uk-margin-bottom">
 
                                                     <table
-                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair table table-hover table-sm"
+                                                        class="uk-table uk-table-condensed uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-hover"
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr >
@@ -1035,7 +1035,7 @@
                                 
                                 {% if  user.user_institute_role.level.level_name == 'admin' or user.user_institute_role.level.level_name == 'principal' %}
                                 <li>
-                                    <div id="page_content_inner">
+                                    <div id="">
                                         <div class="md-card">
                                             <div class="md-card-content">
                                                 <!-- starting add new role modal and button -->
@@ -1074,7 +1074,7 @@
                                                 <div class="uk-overflow-container uk-margin-bottom">
 
                                                     <table
-                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                                        class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
@@ -1131,14 +1131,14 @@
     <!-- starting roles permissions tab content -->
     {% if  user.user_institute_role.level.level_name == 'admin' or user.user_institute_role.level.level_name == 'principal' %}
     <li>
-        <div id="page_content_inner">
+        <div id="">
             <a href="{% url 'permission_update_history' %}" ><strong> <i class="material-icons uk-text-success">history</i> Permission Updates(Full History)</strong></a>
             <div class="md-card">
                 <div class="md-card-content">
                     <div class="uk-overflow-container uk-margin-bottom">
 
                         <table
-                            class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                            class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-condensed uk-table-hover"
                             id="ts_issues">
                             <thead>
                                 <tr>

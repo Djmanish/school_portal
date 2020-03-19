@@ -570,8 +570,8 @@
               
                                                             <form method="POST" >
                                                                 {% csrf_token %}
-                                                            <tr style="background-color:#ADD8E6">
-                                                                <td>
+                                                            <tr style="background-color:#ADD8E6; border-radius: 70px;">
+                                                                <td > 
                                                                 
                                                                     <select class="form-control" name="selected_class" style="padding: 2px;" required>
                                                                         <option selected disabled value="">--Select Class--</option>
@@ -584,28 +584,28 @@
                                                                     </select>
                                                                 
                                                                 </td>
-                                                                <td> <select class="form-control" id="selected_exam_type" name="selected_exam_type" style="padding: 2px;" required>
+                                                                <td >
+                                                                    <select class="form-control" id="selected_exam_type" name="selected_exam_type" style="padding: 2px;" required>
                                                                         <option selected disabled value="">--Select Exam Type--</option>
                                                                         
                                                                         {% for exam_type in institute_exam_type %}
                                                                            <option  > {{exam_type}}</option>
                                                                         {% endfor %}
-                                                                 </select>
+                                                                    </select>
                                                                  
                                                                 </td>
-                                                                <td>
+                                                                <td >
                                                                     <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no" style="padding: 2px;" required>
                                                                         <option selected disabled value=''>--Select Exam Type No.--</option>
                                             
                                                                  </select>
                                                                  
                                                                 </td>
-                                                                <td>
-                                                                <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
+                                                                <td > 
+                                                                <input type="submit" value="View" class="md-btn md-btn-primary">
                                                             </td>
                                                                </tr>
-                                                               
-                                                            </form>
+                                                              </form>
                                                             <tr>
                                                                 
                                                             </tr>
@@ -632,21 +632,29 @@
 
                                                             </tr>
                                                         </thead>
-
+                       
                                                         <tbody>
-                                                          
-                                                            <tr style="background-color: #1976d2; color:white">
+                                                            
+
+                                                                <tr >
+                                                                    
+                                                                    <td colspan="3">
+                                                                    </td>
+    
+                                                                </tr>
+                                                            
+                                                            <tr style="background-color: #2196f3; color:white">
                                                                
-                                                                <th>Subject</th>
-                                                                <th>Subject Teacher</th>
-                                                                <th>Date</th>
-                                                                <th>Start Time</th>
-                                                                <th>End Time</th>
-                                                                <th>Assign Teacher</th>
+                                                                <td>Subject</td>
+                                                                <td>Subject Teacher</td>
+                                                                <td>Date</td>
+                                                                <td>Start Time</td>
+                                                                <td>End Time</td>
+                                                                <td>Assign Teacher</td>
                                                                 {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
 
-                                                                <th><b>Edit </b></th>
-                                                                <th><b>Delete</b></th>
+                                                                <td>Edit</td>
+                                                                <td>Delete</td>
 
                                                                 {% endif %}
                                                                 
@@ -656,21 +664,25 @@
                                                     
                                                                         {% for institute_exam_schedule in exam_details %}
                                                                         <tr style="background-color:#E5E5FF;">
-                                                                            <td> {{ institute_exam_schedule.exam_subject}}
-                                                                            </td>
-                                                                            <td>{{institute_exam_schedule.exam_subject_teacher}}
-                                                                            </td>
+                                                                            <td> {{ institute_exam_schedule.exam_subject}}</td>
+                                                                            <td>{{institute_exam_schedule.exam_subject_teacher}}</td>
                                                                             <td>{{institute_exam_schedule.exam_date}}</td>
                                                                             <td>{{institute_exam_schedule.exam_start_time}}</td>
-
                                                                             <td>{{institute_exam_schedule.exam_end_time}}</td>
                                                                             <td>{{institute_exam_schedule.exam_assign_teacher}}</td>
+                                                                            
+
+                                                                            
+                                                                {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
+
                                                                             <td><a   href="{% url 'edit_examschedule' institute_exam_schedule.pk%}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                                             </td>
                                                                             <td><a  href="{% url 'delete_examschedule' institute_exam_schedule.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                                             </td>
-
+                                                                            {% endif %}
                                                                         </tr>
+                                                                
+
                                                                         
                                                                          
                                                                          {% endfor %}
