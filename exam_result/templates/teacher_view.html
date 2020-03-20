@@ -514,9 +514,9 @@
                             <div class="user_heading_menu hidden-print">
                                 <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
                                     <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
-                                    <div class="uk-dropdown uk-dropdown-small">
+                                    <!-- <div class="uk-dropdown uk-dropdown-small">
                                      
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="user_heading_avatar">
@@ -556,7 +556,11 @@
                                                         
                                                         <form method="GET" >
                                                             {% csrf_token %}
+<<<<<<< HEAD
+                                                        <tr>
+=======
                                                         <tr >
+>>>>>>> 5538eb0b8ea364e88add1052d9187c5db545cf90
                                                             
                                                             <td style="background-color:#ADD8E6">
                                                                 <select class="form-control" name="result_selected_subject" style="padding: 2px;">
@@ -631,13 +635,13 @@
                                                                     
                                                                 </tr>
                                                          
-                                                            <tr style="background-color: #1976d2; color:white">
+                                                            <tr style="background-color: #2196f3; color:white">
                                                                
-                                                                <th>S.No.</th>
-                                                                <th>First Name</th>
-                                                                <th>Last Name</th>
-                                                                <th>Roll No.</th>
-                                                                <th>Marks</th>
+                                                                <td>S.No.</td>
+                                                                <td>First Name</td>
+                                                                <td>Last Name</td>
+                                                                <td>Roll No.</td>
+                                                                <td>Marks</td>
                                              
                                                             </tr>
                                                            
@@ -690,7 +694,7 @@
                                                             <tr>
                                                                 <td colspan="6">
                                                                     <div style="text-align: center;"> 
-                                                                    <input type="submit" class="btn btn-primary" value="Submit">
+                                                                    <input type="submit" class="md-btn md-btn-primary" value="Submit">
                                                                     </div>
 
                                                                 </td>

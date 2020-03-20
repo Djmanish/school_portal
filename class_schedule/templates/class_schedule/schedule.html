@@ -549,12 +549,10 @@
                             </a> -->
                         </div>
                         <div class="user_content">
-                            <ul id="user_profile_tabs" class="uk-tab"
+                            <ul id="" class=""
                                 data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}"
                                 data-uk-sticky="{ top: 48, media: 960 }">
                       
-                          
-                               
                             </ul>
                             <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
                            
@@ -574,16 +572,15 @@
                                                     id="ts_issues ">
                                                     <thead>
                                                         <tr>
-                                                            <th class="uk-text-center" colspan="2"><b></b>
+                                                            <th class="" colspan="2">
                     <form >
-                        <select name="selected_class" style="padding: 2px;" required>
-                            <option selected disabled value="">--Select Class--</option>
+                        <select name="selected_class" id="sche_sel_class"  required>
+                            <option selected disabled value="">-- Select Class --</option>
                             
                             {% for class in all_classes %}
                                <option value="{{class.id}}"  > {{class}}</option>
                             {% endfor %}
                                 
-
                      </select>
                      <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
                     </form>
@@ -595,6 +592,7 @@
                                                             <th colspan="2">{{lecture}}</th>
                                                             {% endfor %}
                                                            
+                                                            <th colspan="2" ></th>
                                                         </tr>
                                                         <tr>
                                             
@@ -610,6 +608,8 @@
                                                              <th colspan="2">{{lecture.start_time}} - 
                                                         {{lecture.end_time}}</th>
                                                              {% endfor %}
+
+                                                           <th colspan="2"></th>
         
                                                         </tr>
                                                     </thead>

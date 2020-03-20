@@ -36,6 +36,10 @@
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
 
+    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}" media="all">
+
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" media="all">
+
     <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.js' %}"></script>
@@ -726,28 +730,22 @@
                     <table class="uk-table uk-table-condensed uk-table-hover">
                         <thead>
                             <tr>
-                                <th class="uk-text-nowrap">Class</th>
-                                <th class="uk-text-nowrap">Students</th>
-                                <th class="uk-text-nowrap">Present</th>
-                                <th class="uk-text-nowrap">Absent</th>
-                                <th class="uk-text-nowrap">Leave</th>
+                                <th >Class</th>
+                                <th >Students</th>
+                                <th >Present</th>
+                                <th >Absent</th>
+                                <th >Leave</th>
                               
                             </tr>
                         </thead>
                         <tbody>
                             {% for class in all_classes %}
                             <tr class="uk-table-middle">
-                                <td class="uk-width-3-10"><a href="{% url 'current_attendance_record' class.pk %}">{{class}}</a></td>
-                                <td class="uk-width-2-10"><span>{{class.total_student}}</span></td>
-                                <td class="uk-width-2-10"><span >{{class.total_present}}</span></td>
-                                <td class="uk-width-2-10"><span >{{class.total_absent}}</span></td>
-                                <td class="uk-width-2-10"><span >{{class.total_leave}}</span></td>
-                               
-                                
-
-                               
-                               
-                              
+                                <td ><a href="{% url 'current_attendance_record' class.pk %}">{{class}}</a></td>
+                                <td >{{class.total_student}}</td>
+                                <td >{{class.total_present}}</td>
+                                <td >{{class.total_absent}}</td>
+                                <td >{{class.total_leave}}</td>
                             </tr>
                           
                             {% endfor %}

@@ -519,20 +519,12 @@
                         <div class="user_heading">
                             <div class="user_heading_menu hidden-print">
                                 <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
-                                    <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
-                                    <div class="uk-dropdown uk-dropdown-small">
+                                    <!-- <i class="md-icon material-icons md-icon-light">&#xE5D4;</i> -->
+                                    <!-- <div class="uk-dropdown uk-dropdown-small">
                                         <ul class="uk-nav">
 
-
-{% if update_lecture_timing in user_permissions %}
-<li><a href="{% url 'lectures_list' %}">Update Lecture Timing</a></li>
-{% endif %}
-    
-
-                                           
-                                  
                                         </ul>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="user_heading_avatar">
@@ -549,10 +541,10 @@
                             </a> -->
                         </div>
                         <div class="user_content">
-                            <ul id="user_profile_tabs" class="uk-tab"
+                            <ul id="user_profile_tabs" class="uk-tab uk-tab-center"
                                 data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}"
                                 data-uk-sticky="{ top: 48, media: 960 }">
-                      
+                                <li class="uk-active"><a href="#">All Notices</a></li>
                           
                                
                             </ul>
@@ -567,7 +559,7 @@
                                         
                                         {% if all_notices %}
                                         {% for notice in all_notices  %}
-                                        <h3 class="uk-accordion-title"><b>{{notice.subject}} </b> Date:<small>{{notice.publish_date}}</small></h3>
+                                        <h3 class="uk-accordion-title"><b>{{notice.subject}} </b> <small style="color: #1976d2;">{{notice.publish_date}}</small></h3>
                                         <div class="uk-accordion-content"> 
                                             <p>{{notice.content}}</p>
                                         </div>

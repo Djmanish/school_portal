@@ -512,13 +512,13 @@
                         <div class="user_heading">
                             <div class="user_heading_menu hidden-print">
                                 <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
-                                    <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
-                                    <div class="uk-dropdown uk-dropdown-small">
+                                    <!-- <i class="md-icon material-icons md-icon-light">&#xE5D4;</i> -->
+                                    <!-- <div class="uk-dropdown uk-dropdown-small">
                                         <ul class="uk-nav">
                                             <li><a href="#">Action 1</a></li>
                                             <li><a href="#">Action 2</a></li>
                                         </ul>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="user_heading_avatar">
@@ -835,20 +835,20 @@
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th><b>Sr. No.</b></th>
-                                                                <th><b>Class Name</b></th>
+                                                                <th>Sr. No.</th>
+                                                                <th>Class Name</th>
                                                                 <!-- <th><b>Class Teacher</b></th> -->
-                                                                <th><b>Class Teacher</b></th>
+                                                                <th>Class Teacher</th>
                                                               
                                                               {% if assign_class_teacher_permission in user_permissions %}
-                                                              <th><b>Assign Class Teacher</b></th>
+                                                              <th>Assign class Teacher</th>
                                                               {% endif %}
                                                               {% if can_edit_class_permission in user_permissions %}       
-                                                                <th><b>Edit</b></th>
+                                                                <th>Edit Class</th>
                                                                 {% endif %}
 
                                                                 {% if can_delete_class_permission in user_permissions %} 
-                                                                <th><b>Delete</b></th>
+                                                                <th>Delete Class</th>
                                                                 {% endif %}
 
                                                             </tr>
@@ -856,7 +856,7 @@
                                                         <tbody>
                                                             {% for classes in institute_class %}
                                                             <tr>
-                                                                <td style="text-align: center;"> {{ forloop.counter}}
+                                                                <td > {{ forloop.counter}}
                                                                 </td>
                                                                 <td> {{classes.name }} </td>
                                                                 <!-- <td>{{classes.class_teacher}}</td> -->
@@ -868,15 +868,12 @@
                                                                     Not assigned
                                                                     {% endif %}   
                                                                     </td>
-                                                               
-                                                               
-                                                                  
                                             {% if assign_class_teacher_permission in user_permissions %}
-                                                                    <td class="text-center"><a  class="" href="{% url 'assign_class_teacher' classes.pk %}"><i class="material-icons" style="color: #2196f3;" >person_add</i></a>
+                                                                    <td ><a  class="" href="{% url 'assign_class_teacher' classes.pk %}"><i class="material-icons" style="color: #2196f3;" >person_add</i> </a>
                                                                     </td>
                                                                     {% endif %}
                                                                     {% if can_edit_class_permission in user_permissions %}                                          
-                                                                <td><a  class="" href="{% url 'edit_class' classes.pk %}"> <i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                                <td><a  href="{% url 'edit_class' classes.pk %}"> <i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                                 </td>
                                                                 {% endif %}  
                                                                 
@@ -977,17 +974,17 @@
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr >
-                                                                <th><b>Sr. No.</b></th>
-                                                                <th><b>Class</b></th>
-                                                                <th><b>Subject Code</b></th>
-                                                                <th><b>Subject Name</b></th>
-                                                                <th><b>Subject Teacher</b></th>
+                                                                <th>Sr. No.</th>
+                                                                <th>Class</th>
+                                                                <th>Subject Code</th>
+                                                                <th>Subject Name</th>
+                                                                <th>Subject Teacher</th>
                                                                 {% if can_edit_subject_permission in user_permissions %}                    
-                                                                <th><b>Edit</b></th>
+                                                                <th>Edit</th>
                                                                 {% endif %}
 
                                                                 {% if can_delete_subject_permission in user_permissions %} 
-                                                                <th><b>Delete</b></th>
+                                                                <th>Delete</th>
                                                                 {% endif %}
                                                                 
 
@@ -996,7 +993,7 @@
                                                         <tbody>
                                                             {% for subjects in institute_subject %}
                                                             <tr>
-                                                                <td style="text-align: center;"> {{ forloop.counter}}
+                                                                <td > {{ forloop.counter}}
                                                                 </td>
                                                                 <td> {{subjects.subject_class}} </td>
 
@@ -1014,9 +1011,6 @@
                                                                 <td><a  class="" href="{% url 'delete_subject' subjects.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                                 </td>
                                                                 {% endif %}
-                                                              
-                                                              
-                                           
 
                                                             </tr>
                                                             {% endfor %}
@@ -1036,11 +1030,13 @@
                                 {% if  user.user_institute_role.level.level_name == 'admin' or user.user_institute_role.level.level_name == 'principal' %}
                                 <li>
                                     <div id="">
+                                        <h4 class="heading_c uk-margin-small-bottom">Created Roles</h4>
                                         <div class="md-card">
+                                            <button class="md-btn md-btn-primary md-btn-small "
+                                            data-uk-modal="{target:'#add_new_role'}">Add New Role</button>
                                             <div class="md-card-content">
                                                 <!-- starting add new role modal and button -->
-                                                <button class="md-btn md-btn-primary md-btn-small "
-                                                    data-uk-modal="{target:'#add_new_role'}">Add New Role</button>
+                                               
                                                 <div class="uk-modal" id="add_new_role">
                                                     <div class="uk-modal-dialog">
                                                         <div class="uk-modal-header">
@@ -1078,12 +1074,10 @@
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th class="uk-text-center">Level</th>
+                                                                <th >Level</th>
                                                                 <th>Role</th>
                                                                 <th>Start Date</th>
-                                                              
                                                                 <th>Action</th>
-
                                                             </tr>
                                                         </thead>
 
@@ -1091,30 +1085,21 @@
 
                                                             {% for role in institute_roles %}
                                                             <tr>
-                                                                <td class="uk-text-center"><span
+                                                                <td ><span
                                                                         class="uk-text-small uk-text-muted uk-text-nowrap">{{role.level_id}}</span>
                                                                 </td>
                                                                 <td>
-                                                                    <a href="#">
-                                                                        {{role.level_name}}</a>
+                                                                        {{role.level_name}}
                                                                 </td>
 
-                                                                <td class="uk-text-small">{{role.start_date}}</td>
-                                                            
+                                                                <td >{{role.start_date}}</td>
                                                                 <td>
 
                                                                     <a class="" href="{% url 'delete_user_role' role.pk %}"><i class="material-icons" style="color: #ff0000;">
                                                                         delete_forever</i></a>
                                                                 </td>
-
-
                                                             </tr>
                                                             {% endfor %}
-
-
-
-
-
                                                         </tbody>
 
                                                     </table>

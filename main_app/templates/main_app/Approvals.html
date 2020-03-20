@@ -516,21 +516,21 @@
                                     <div id="">
                                         <div class="md-card">
                                             <div class="md-card-content">
-                                                <h4>Child Requests</h4>
+                                                <h4>Institute Requests</h4>
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <table
                                                         class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair "
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
+                                                                <th >Sr. No.</th>
                                                                 <th>Name</th>
                                                                 <th>Designation</th>
                         
                                                                 <th>Request Date</th>
                                                                 <th>Action Date</th>
                                                                 
-                                                                <th style="text-align: center;">Permission</th>
+                                                                <th >Permission</th>
                                                             </tr>
                                                         </thead>
                                                     
@@ -540,13 +540,13 @@
                                                             
                                                                 {% for pending in Pending_user %}
                                                                         <tr>
-                                                                            <th style="text-align: center;"> {{ forloop.counter}} </th>
+                                                                            <td > {{ forloop.counter}} </td>
                                                                             <td> {{pending.first_name }} {{pending.last_name }}</td>
                                                                             <td> {{pending.designation }} </td>
                                                                             <td> {{pending.created_at}} </td>
                                                                             <td> {{pending.updated_at}} </td>
                                                                            
-                                                                            <td style="text-align: right;"> <div class="uk-width-medium-1-6">
+                                                                            <td > <div>
                                                                                 <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave approve_btn" href="{% url 'user_approval' pending.pk %}">Approve</a>
                                                                                 <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave disapprove_btn" href="{% url 'user_disapproval' pending.pk %}">Disapprove</a>
                                                                             </div> </td>
@@ -576,14 +576,13 @@
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
+                                                                <th >Sr. No.</th>
                                                                 <th>Name</th>
                                                                 <th>Comment</th>
-                        
                                                                 <th>Request Date</th>
                                                                 <th>Action Date</th>
                                                                 
-                                                                <th style="text-align: center;">Permission</th>
+                                                                <th>Permission</th>
                                                             </tr>
                                                         </thead>
                                                     
@@ -593,13 +592,13 @@
                                                             
                                                                 {% for pending in parent_request_inactive %}
                                                                         <tr>
-                                                                            <th style="text-align: center;"> {{ forloop.counter}} </th>
+                                                                            <th > {{ forloop.counter}} </th>
                                                                             <td> {{pending.parent.first_name }}</td>
                                                                             <td> Requested <b>{{pending.child.first_name }}</b> as Child </td>
                                                                             <td> {{pending.created_at}} </td>
                                                                             <td> {{pending.updated_at}} </td>
                                                                            
-                                                                            <td style="text-align: right;"> <div class="uk-width-medium-1-6">
+                                                                            <td> <div class="uk-width-medium-1-6">
                                                                                 <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave approve_btn" href="{% url 'child_approval' pending.pk %}">Approve</a>
                                                                                 <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave disapprove_btn" href="{% url 'child_disapproval' pending.pk %}">Disapprove</a>
                                                                             </div> </td>
@@ -634,35 +633,26 @@
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
+                                                                <th >Sr. No.</th>
                                                                 <th>Name</th>
                                                                 <th>Designation</th>
                         
                                                                 <th>Request Date</th>
                                                                 <th>Action Date</th>
-                                                                <th style="text-align: center;">Status</th>
+                                                                <th >Status</th>
                                                             </tr>
                                                         </thead>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
-                                                                <th>Name</th>
-                                                                <th>Designation</th>
-                                                                <th>Request Date</th>
-                                                                <th>Action Date</th>
-                                                                <th style="text-align: center;">Action</th>
-                                                            </tr>
-                                                        </tfoot>
+                                                     
                                                         <tbody>
                         
                                                             {% for active in Active_user %}
                                                             <tr>
-                                                                <th style="text-align: center;"> {{ forloop.counter}} </th>
+                                                                <th > {{ forloop.counter}} </th>
                                                                 <td> {{active.first_name }} {{active.last_name }}</td>
                                                                 <td> {{active.designation }} </td>
                                                                 <td> {{active.created_at}} </td>
                                                                 <td> {{active.updated_at}} </td>
-                                                                <td style="text-align: center;">  <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave disapprove_btn" href="{% url 'user_disapproval' active.pk %}">Disapprove</a>   </td>
+                                                                <td >  <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave disapprove_btn" href="{% url 'user_disapproval' active.pk %}">Disapprove</a>   </td>
                         
                                                             </tr>
                                                             {% endfor %}

@@ -104,7 +104,7 @@ body{
   border: 1px solid green;
   color: green;
   padding: 0px 6px !important;
-  transition: 1s;
+
   box-shadow: 0px 0px 5px green !important;
   box-sizing: border-box;
 }
@@ -115,7 +115,6 @@ body{
 .disapprove_btn:hover{
   border: 1px solid red;
   padding: 0px 6px !important;
-  transition: 1s;
   box-shadow: 0px 0px 5px  red !important;
   box-sizing: border-box;
 }
@@ -167,4 +166,7 @@ img#slogo{
 #schedule_table .uk-table td, .uk-table th{
   padding: 3px 1px;
   
+}
+#sche_sel_class{
+  height: 24px;
 }
