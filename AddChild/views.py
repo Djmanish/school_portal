@@ -90,7 +90,21 @@ def childview(request,pk):
     absent=(child_total_absent/child_total_attendance)*100
     exam_t=ExamType.objects.filter(institute=request.user.profile.institute)
     exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
+    max_marks=exam_type_child.exam_max_marks
+    total_marks=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class).count()*int(max_marks)
     child_result=ExamResult.objects.filter(exam_type=exam_type_child,result_student_data=child_user)
+    total_sum = 0
+    for i in child_result:
+        i = i.result_score
+        total_sum = total_sum + int(i)
+    m=int(total_marks)
+    avg=((total_sum/m)*100)
+    print(avg)
+    if (avg<33):
+        result="Fail"
+    else:
+        result="Pass"
+    
     if request.method == "POST":
         child = AddChild.objects.get(parent=request.user.profile,pk=pk)
         child_subjects=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class)
@@ -102,9 +116,21 @@ def childview(request,pk):
         absent=(child_total_absent/child_total_attendance)*100
         examty=request.POST.get("selected_exam_type")
         ty=ExamType.objects.get(id=examty)
+        exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
+        max_marks=exam_type_child.exam_max_marks
+        total_marks=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class).count()*int(max_marks)
         child_result_p=ExamResult.objects.filter(exam_type=examty,result_student_data=child_user)        
-        print("hello")
-        print(ty)
+        total_sum = 0
+        for i in child_result_p:
+            i = i.result_score
+            total_sum = total_sum + int(i)
+        m=int(total_marks)
+        avg=(total_sum/m)*100
+        if (avg<33):
+            result="Fail"
+        else:
+            result="Pass"
+        
         context={
             'ty':ty,
             'child_result_p':child_result_p,
@@ -114,6 +140,7 @@ def childview(request,pk):
         'absent':absent,
         'child_subjects':child_subjects,
         'child':child,
+        'result':result,
         }
         return render(request, 'AddChild/viewchild.html',context)
     context={
@@ -124,6 +151,7 @@ def childview(request,pk):
         'absent':absent,
         'child_subjects':child_subjects,
         'child':child,
+        'result':result,
     }
     return render(request, 'AddChild/viewchild.html',context)
 
