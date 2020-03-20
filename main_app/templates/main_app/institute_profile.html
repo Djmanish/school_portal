@@ -1128,9 +1128,9 @@
                             <thead>
                                 <tr>
                                   
-                                    <th class="text-center">Role</th>
+                                    <th >Role</th>
                                  
-                                    <th class="text-center">Edit Role Permissions</th>
+                                    <th >Edit Role Permissions</th>
                                 </tr>
                             </thead>
 
@@ -1139,12 +1139,12 @@
                                 {% for role in institute_roles %}
                                 <tr>
                                   
-                                    <td class="text-center">
-                                        <a href="#">
-                                            {{role.level_name}}</a>
+                                    <td >
+                                 
+                                            {{role.level_name}}
                                     </td>
                                 
-                                    <td class="text-center">
+                                    <td >
                                      <a href="{% url 'role_permissions' role.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i> </a>
                                     </td>
 
