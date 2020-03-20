@@ -442,7 +442,7 @@
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion' %}">
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -723,7 +723,7 @@
             <div class="md-card-content">
                 <h4>Today's Class Status</h4>
                 <div class="uk-overflow-container">
-                    <table class="uk-table">
+                    <table class="uk-table uk-table-condensed uk-table-hover">
                         <thead>
                             <tr>
                                 <th class="uk-text-nowrap">Class</th>

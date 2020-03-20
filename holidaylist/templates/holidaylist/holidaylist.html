@@ -513,13 +513,13 @@
                                     {% csrf_token %}
                                     <div class="form-group">
                                             <label>Date</label>
-                                            <input type="date" class="form-control" name="holiday_date">
+                                            <input type="date" class="form-control form-control-sm" name="holiday_date">
                                         </div>
                                         
                                         
                                         <div class="form-group">
                                                 <label for="sel7">Select Day:</label>
-                                                <select class="form-control" id="sel7" name="holiday_day">
+                                                <select class="form-control form-control-sm" id="sel7" name="holiday_day">
                                                     
                                                     <option value="Monday">Monday</option>
                                                     <option value="Tuesday">Tuesday</option>
@@ -535,11 +535,11 @@
 
                                     <div class="form-group">
                                         <label>Holiday Name:</label>
-                                        <input type="text" class="form-control n_i"  name='holiday_name' required="required">
+                                        <input type="text" class="form-control n_i form-control-sm"  name='holiday_name' required="required">
                                     </div>
                                     <div class="form-group">
                                         <label for="sel1">Applicable:</label>
-                                        <select class="form-control" id="sel1" name="holiday_applicable">
+                                        <select class="form-control form-control-sm" id="sel1" name="holiday_applicable">
                                           <option value="Yes">Yes</option>
                                           <option value="No">No</option>
                                           
@@ -547,11 +547,11 @@
                                       </div>
                                     <div class="form-group">
                                             <label>Holiday Type:</label>
-                                            <input type="text" class="form-control n_i" name='holiday_type' >
+                                            <input type="text" class="form-control n_i form-control-sm" name='holiday_type' >
                                         </div>
                                         <div class="form-group">
                                             <label for="sel2">Email Send:</label>
-                                            <select class="form-control" id="sel2" name="holiday_email_send">
+                                            <select class="form-control form-control-sm" id="sel2" name="holiday_email_send">
                                                 <option value="No">No</option>
                                                 <option value="Yes">Yes</option>
                                                
@@ -560,7 +560,7 @@
                                           </div>
                                           <div class="form-group">
                                             <label for="sel3">SMS Send:</label>
-                                            <select class="form-control" id="sel3" name="holiday_sms_send">
+                                            <select class="form-control form-control-sm" id="sel3" name="holiday_sms_send">
                                                 <option value="No">No</option>
                                                 <option value="Yes">Yes</option>
                                               
@@ -569,7 +569,7 @@
                                           </div>
                                           <div class="form-group">
                                             <label for="sel4">Notification Send:</label>
-                                            <select class="form-control" id="sel4" name="holiday_notification_send">
+                                            <select class="form-control form-control-sm" id="sel4" name="holiday_notification_send">
                                                 <option value="No">No</option>
                                                 <option value="Yes">Yes</option>
                                               
@@ -587,34 +587,35 @@
                         </div>
 
                         <div class="uk-overflow-container uk-margin-bottom">
+                            <br>
                             <table
-                                class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                 id="ts_pager_filter">
                                 <thead>
                                     <tr>
                                        
 
-                                        <th class="filter-false remove sorter-false" data-priority="6">S.No.</th>
-                                        <th data-priority="critical">Date</th>
-                                        <th data-priority="1">Day</th>
-                                        <th data-priority="2">Name</th>
-                                        <th data-priority="3">Applicable</th>
-                                        <th data-priority="4">Type</th>
+                                        <th ><b>Sr.No.</b></th>
+                                        <th ><b>Date</b></th>
+                                        <th><b>Day</b></th>
+                                        <th ><b>Name</b></th>
+                                        <th ><b>Applicable</b></th>
+                                        <th ><b>Type</b></th>
                                         {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
 
-                                        <th data-priority="5">Email</th>
-                                       <th data-priority="6">Content</th> 
-                                        <th data-priority="7">SMS</th>
-                                        <th data-priority="8">Content</th>
-                                        <th data-priority="9">Notification</th>
-                                        <th data-priority="10">Content</th>
+                                        <th data-priority="5"><b>Email</b></th>
+                                       <th data-priority="6"><b>Content</b></th> 
+                                        <th data-priority="7"><b>SMS</b></th>
+                                        <th data-priority="8"><b>Content</b></th>
+                                        <th data-priority="9"><b>Notification</b></th>
+                                        <th data-priority="10"><b>Content</b></th>
 
                                         {% if can_edit_holiday_permission in user_permissions %}
-                                        <th data-priority="11">Edit</th>
+                                        <th data-priority="11"><b>Edit</b></th>
                                         {% endif %}
 
                                         {% if can_delete_holiday_permission in user_permissions %}
-                                        <th data-priority="12">Delete</th>
+                                        <th data-priority="12"><b>Delete</b></th>
                                         {% endif %}  
                                         {% endif %}  
 

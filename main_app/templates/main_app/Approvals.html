@@ -519,18 +519,18 @@
                                                 <h4>Child Requests</h4>
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <table
-                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair table-hover table-sm"
+                                                        class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair "
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
-                                                                <th>Name</th>
-                                                                <th>Designation</th>
+                                                                <th class="uk-text-center"><b>Sr No.</b></th>
+                                                                <th><b>Name</b></th>
+                                                                <th><b>Designation</b></th>
                         
-                                                                <th>Request Date</th>
-                                                                <th>Action Date</th>
+                                                                <th><b>Request Date</b></th>
+                                                                <th><b>Action Date</b></th>
                                                                 
-                                                                <th style="text-align: center;">Permission</th>
+                                                                <th style="text-align: center;"><b>Permission</b></th>
                                                             </tr>
                                                         </thead>
                                                     
@@ -540,7 +540,7 @@
                                                             
                                                                 {% for pending in Pending_user %}
                                                                         <tr>
-                                                                            <th style="text-align: center;"> {{ forloop.counter}} </th>
+                                                                            <td style="text-align: center;"> {{ forloop.counter}} </td>
                                                                             <td> {{pending.first_name }} {{pending.last_name }}</td>
                                                                             <td> {{pending.designation }} </td>
                                                                             <td> {{pending.created_at}} </td>
@@ -572,18 +572,18 @@
                                                 <h4>Parents Requests</h4>
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <table
-                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair table-hover table-sm"
+                                                        class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair "
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
-                                                                <th>Name</th>
-                                                                <th>Comment</th>
+                                                                <th class="uk-text-center"><b>Sr. No.</b></th>
+                                                                <th><b>Name</b></th>
+                                                                <th><b>Comment</b></th>
                         
-                                                                <th>Request Date</th>
-                                                                <th>Action Date</th>
+                                                                <th><b>Request Date</b></th>
+                                                                <th><b>Action Date</b></th>
                                                                 
-                                                                <th style="text-align: center;">Permission</th>
+                                                                <th style="text-align: center;"><b>Permission</b></th>
                                                             </tr>
                                                         </thead>
                                                     
@@ -630,29 +630,20 @@
                                             <div class="md-card-content">
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <table
-                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                                        class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
-                                                                <th>Name</th>
-                                                                <th>Designation</th>
+                                                                <th class="uk-text-center"><b>Sr No.</b></th>
+                                                                <th><b>Name</b></th>
+                                                                <th><b>Designation</b></th>
                         
-                                                                <th>Request Date</th>
-                                                                <th>Action Date</th>
-                                                                <th style="text-align: center;">Status</th>
+                                                                <th><b>Request Date</b></th>
+                                                                <th><b>Action Date</b></th>
+                                                                <th style="text-align: center;"><b>Status</b></th>
                                                             </tr>
                                                         </thead>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
-                                                                <th>Name</th>
-                                                                <th>Designation</th>
-                                                                <th>Request Date</th>
-                                                                <th>Action Date</th>
-                                                                <th style="text-align: center;">Action</th>
-                                                            </tr>
-                                                        </tfoot>
+                                                     
                                                         <tbody>
                         
                                                             {% for active in Active_user %}
@@ -687,7 +678,7 @@
                                             <div class="md-card-content">
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <table
-                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                                        class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
@@ -722,7 +713,7 @@
                                                                     <td> {{inactive.updated_at}} </td>
                                                                     <td style="text-align: left;"> {{inactive.status}}  </td>
                                                                     <td style="text-align: left;"> <div class="uk-width-medium-1-6">
-                                                                            <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave" href="{% url 'user_approval' inactive.pk %}">Approve</a>
+                                                                            <a class="md-btn md-btn-flat approve_btn md-btn-flat-primary md-btn-wave" href="{% url 'user_approval' inactive.pk %}">Approve</a>
                                                                         </div>
                                                                         </td>
                                                                 </tr>

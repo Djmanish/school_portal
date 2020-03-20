@@ -437,7 +437,7 @@
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion' %}">
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -514,9 +514,9 @@
                             <div class="user_heading_menu hidden-print">
                                 <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
                                     <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
-                                    <div class="uk-dropdown uk-dropdown-small">
+                                    <!-- <div class="uk-dropdown uk-dropdown-small">
                                      
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="user_heading_avatar">
@@ -556,9 +556,13 @@
                                                         
                                                         <form method="GET" >
                                                             {% csrf_token %}
+<<<<<<< HEAD
                                                         <tr>
+=======
+                                                        <tr >
+>>>>>>> 5538eb0b8ea364e88add1052d9187c5db545cf90
                                                             
-                                                            <td>
+                                                            <td style="background-color:#ADD8E6">
                                                                 <select class="form-control" name="result_selected_subject" style="padding: 2px;">
                                                                     <option selected disabled value="">--Select Subject--</option>
                                                                     {% for subject in subject_result %}
@@ -566,7 +570,7 @@
                                                                     {% endfor %}
                                                                  </select>
                                                             </td>
-                                                            <td> <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px;" required>
+                                                            <td style="background-color:#ADD8E6"> <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px;" required>
                                                                     <option selected disabled value="">--Select Exam Type--</option>
                                                                     {% for exam_type in institute_exam_type %}
                                                                        <option  > {{exam_type}}</option>
@@ -574,7 +578,7 @@
                                                              </select>
                                                              
                                                             </td>
-                                                            <td>
+                                                            <td style="background-color:#ADD8E6">
                                                                 <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px;">
                                                                     <option selected disabled value=''>--Select Exam Type No.--</option>
                                         
@@ -624,7 +628,7 @@
                                                                     
                                                                     {% for sub_class in subject_class %}
                                                                        
-                                                                    <th>Students of Class: {{subject_class.subject_class}}</th>
+                                                                    <th>Students of Class: {{sub_class.subject_class}}</th>
                                                                     {% endfor %} 
                                                                     {% endif %}   
                                                                     
@@ -640,8 +644,10 @@
                                              
                                                             </tr>
                                                            
-                                                                        
+                                                                  
                                                                      {% for student in institute_students %}
+                                                                     {% if selected_subject %}
+                                                                     
                                                                      
                                                                      
                                                             <tr>
@@ -678,8 +684,10 @@
                                                                        </td>
                                                                     
                                                             </tr>
-                                                            
+                                                            {% endif %}
                                                             {% endfor %}
+                                                            
+                                                            
                                                             
                                                             
                                                             <tr>
