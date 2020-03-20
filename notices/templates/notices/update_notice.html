@@ -526,7 +526,7 @@
                         <div class="user_heading">
                             <div class="user_heading_menu hidden-print">
                                 <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
-                                    <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
+                                    <!-- <i class="md-icon material-icons md-icon-light">&#xE5D4;</i> -->
                                     <!-- <div class="uk-dropdown uk-dropdown-small">
                                         <ul class="uk-nav">
 
@@ -549,25 +549,25 @@
                         </div>
                         <div class="user_content">
 
-                            <div class="md-card">
-                              <form method="POST" style="padding: 20px;">
-                                {% csrf_token %}
-{{form | crispy }}
-<input type="submit" value="Update" class="md-btn md-btn-success">
-                              </form>
-                            </div>
+                            
 
 
                             <ul id="user_profile_tabs" class="uk-tab"
                                 data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}"
                                 data-uk-sticky="{ top: 48, media: 960 }">
                       
-                          
+                                <li><a href="#">Updating Notice</a></li>
                                
                             </ul>
                             <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
                            
-
+                                <div class="md-card">
+                                    <form method="POST" style="padding: 20px;">
+                                      {% csrf_token %}
+      {{form | crispy }}
+      <input type="submit" value="Update" class="md-btn md-btn-success">
+                                    </form>
+                                  </div>
                                
                         
                             <li>
