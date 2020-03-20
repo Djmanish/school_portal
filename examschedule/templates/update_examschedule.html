@@ -570,8 +570,9 @@
               
                                                             <form method="POST" >
                                                                 {% csrf_token %}
-                                                            <tr>
-                                                                <td > 
+                                                            <tr >
+                                                                {% if user.profile.designation.level_name != "student"%}
+                                                                <td style="background-color:#ADD8E6;"> 
                                                                 
                                                                     <select class="form-control" name="selected_class" style="padding: 2px;" required>
                                                                         <option selected disabled value="">--Select Class--</option>
