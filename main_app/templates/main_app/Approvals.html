@@ -523,14 +523,14 @@
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
-                                                                <th>Name</th>
-                                                                <th>Designation</th>
+                                                                <th class="uk-text-center"><b>Sr No.</b></th>
+                                                                <th><b>Name</b></th>
+                                                                <th><b>Designation</b></th>
                         
-                                                                <th>Request Date</th>
-                                                                <th>Action Date</th>
+                                                                <th><b>Request Date</b></th>
+                                                                <th><b>Action Date</b></th>
                                                                 
-                                                                <th style="text-align: center;">Permission</th>
+                                                                <th style="text-align: center;"><b>Permission</b></th>
                                                             </tr>
                                                         </thead>
                                                     
@@ -540,7 +540,7 @@
                                                             
                                                                 {% for pending in Pending_user %}
                                                                         <tr>
-                                                                            <th style="text-align: center;"> {{ forloop.counter}} </th>
+                                                                            <td style="text-align: center;"> {{ forloop.counter}} </td>
                                                                             <td> {{pending.first_name }} {{pending.last_name }}</td>
                                                                             <td> {{pending.designation }} </td>
                                                                             <td> {{pending.created_at}} </td>
@@ -576,14 +576,14 @@
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
-                                                                <th>Name</th>
-                                                                <th>Comment</th>
+                                                                <th class="uk-text-center"><b>Sr. No.</b></th>
+                                                                <th><b>Name</b></th>
+                                                                <th><b>Comment</b></th>
                         
-                                                                <th>Request Date</th>
-                                                                <th>Action Date</th>
+                                                                <th><b>Request Date</b></th>
+                                                                <th><b>Action Date</b></th>
                                                                 
-                                                                <th style="text-align: center;">Permission</th>
+                                                                <th style="text-align: center;"><b>Permission</b></th>
                                                             </tr>
                                                         </thead>
                                                     
@@ -634,25 +634,16 @@
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
-                                                                <th>Name</th>
-                                                                <th>Designation</th>
+                                                                <th class="uk-text-center"><b>Sr No.</b></th>
+                                                                <th><b>Name</b></th>
+                                                                <th><b>Designation</b></th>
                         
-                                                                <th>Request Date</th>
-                                                                <th>Action Date</th>
-                                                                <th style="text-align: center;">Status</th>
+                                                                <th><b>Request Date</b></th>
+                                                                <th><b>Action Date</b></th>
+                                                                <th style="text-align: center;"><b>Status</b></th>
                                                             </tr>
                                                         </thead>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
-                                                                <th>Name</th>
-                                                                <th>Designation</th>
-                                                                <th>Request Date</th>
-                                                                <th>Action Date</th>
-                                                                <th style="text-align: center;">Action</th>
-                                                            </tr>
-                                                        </tfoot>
+                                                     
                                                         <tbody>
                         
                                                             {% for active in Active_user %}
