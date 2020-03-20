@@ -436,7 +436,7 @@
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion' %}">
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -600,11 +600,7 @@
                                                                          
                                                                     
                                                                 </td>
-<<<<<<< HEAD
                                                                 <td>
-=======
-                                                                <td >
->>>>>>> 5538eb0b8ea364e88add1052d9187c5db545cf90
                                                                     <input type="submit" value="View" class="md-btn md-btn-primary">
                                                                     
                                                                 </td>
