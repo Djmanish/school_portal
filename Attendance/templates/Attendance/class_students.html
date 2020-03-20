@@ -563,10 +563,10 @@
                                 {% if all_students %}
                                 <h3>All Students of {{showing_student_for_class}}</h3>
                                 <tr>
-                                    <th class="text-center"><b>Sr. No.</b></th>
-                                    <th class="text-center"><b>Full Name</b></th>
+                                    <th >Sr. No.</th>
+                                    <th >Full Name</th>
                                   
-                                    <th class="text-center"><b>Roll No.</b></th>
+                                    <th >Roll No.</th>
                                 </tr>
                                 
                                 {% endif %}
@@ -582,8 +582,8 @@
                                   
                                   {% for student in all_students %}
                                   <tr>
-                                      <td class="text-center">{{forloop.counter}}</td>
-                                    <td class="text-center" >{{student.first_name}}
+                                      <td >{{forloop.counter}}</td>
+                                    <td  >{{student.first_name}}
                                         
                                         {% if student.middle_name %}
                                         {{student.middle_name}}
@@ -595,7 +595,7 @@
                                             
                                     </td>
                                   
-                                    <td class="text-center" >{{student.roll_number}}</td>
+                                    <td  >{{student.roll_number}}</td>
                                   </tr>
                                  
                                   {% endfor %}
