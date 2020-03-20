@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, Http404
 from .models import *
 from main_app.models import *
 from examschedule.models import *
@@ -6,7 +6,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.db.models import Count
 import datetime
-import statistics      
+import statistics 
+from django.core.cache import cache 
+import random    
 
 
 
@@ -123,7 +125,7 @@ def exam_result(request,pk):
       messages.success(request, 'Exam Result Stored successfully !!!')
 
   context={
-
+    
     'subject_result':subject_class,
     'selected_subject':selected_subject,
     'institute_students':institute_students,
@@ -312,76 +314,73 @@ def overall_result(request,pk):
     return render(request, 'overall.html', context)
   
   
-def class_promotion(request):
+def class_promotion(request,pk):
 
-    selected_class=request.GET.get('selected_class_promotion')
+    
     current_year=datetime.date.today().year
+    next_year=datetime.date.today().year+1
     
     # to get the list of all  classes                                        
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
 
     # to ge the data through POST method
-    
-    selected_class = request.GET.get('selected_class_promotion')
-    if selected_class == None:
-                    first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
-                    first_class_id = first_class.id
-                    selected_class= first_class_id
-                   
-    selected_class = Classes.objects.get(pk=selected_class)
-    
-        
-        
-    #  to get the list of all students of selected class
-    all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student', class_current_year=current_year)
-   
-    # check student length
-    if len(all_students)<1:
-            messages.error(request, 'No student found in the selected class')
-            return redirect('class_promotion')
-
-    for student_class in all_students:
-          stu_class=student_class.Class
-          
-    promotion_status = UserProfile._meta.get_field('class_promotion_status').choices
-    promotion_choices=dict(promotion_status)
-    list_promotion_choices=list(promotion_choices)     
-      
     if request.method=="POST":
-        selected_promotion_status=request.POST.get('promotion_status')
+        selected_class =Classes.objects.get(pk=request.POST.get('selected_class_promotion'))
+     
+            
+            
+        #  to get the list of all students of selected class
+        all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student', class_current_year=current_year)
+      
+      
+        for student_class in all_students:
+              stu_class=student_class.Class
+              
+        promotion_status = UserProfile._meta.get_field('class_promotion_status').choices
+        promotion_choices=dict(promotion_status)
+        list_promotion_choices=list(promotion_choices)
+        institute=request.user.profile.institute
+        if request.method=="POST":
+                  promoted_to_class=request.POST.get('promoted_to_class')
+                  if promoted_to_class == None:
+                        first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
+                        first_class_id = first_class.id
+                        promoted_to_class= first_class_id
+                      
+                  promoted_to_class = Classes.objects.get(pk=promoted_to_class)
+                  print(promoted_to_class)
+              #  to get the students data from the UserProfile
+                  user_data=UserProfile.objects.filter(institute=institute, Class=selected_class)
+                
+                  #   get the list of users from the UserProfile
+                  for user_d in user_data:
+                      user_da=user_d.user
+                  #  fetch the data from the front end
+                      for sdata,status in zip(request.POST.getlist('student_roll_no'),request.POST.getlist('student_promotion_status')):
+                        student_data = User.objects.get(pk=sdata)
 
-        for students in all_students:
-              pr_status=students.class_promotion_status
-              for rollno in all_students:
-                  student_rollno=rollno.roll_number
-               
-                  user_data=UserProfile(Class=selected_class, roll_number=student_rollno)
-                  user_data.class_promotion_status=selected_promotion_status
-                  # user_data.save()
-              print(selected_class)
-              print(student_rollno)
-              print(pr_status)
-              print(selected_promotion_status)
-              # status=pr_status
-            # print(status)
+                        if student_data==user_da:
+                            
 
-          
-            # status.save()
+                              user_d.class_promotion_status=status
+                              user_d.Class=promoted_to_class
+                              user_d.class_current_year=current_year+1
+                              user_d.class_next_year=next_year+1
 
-       
-
-           
-    # Inner Context
-        context= {'all_students':all_students,
-         'all_classes': all_classes,
-         'showing_student_for_class':selected_class,
-         'list_promotion_choices':list_promotion_choices,
-         
-         }
+                              user_d.save()
+           # Inner Context
+        context= {
+            'all_classes': all_classes,
+            'all_students':all_students,
+            'list_promotion_choices':list_promotion_choices,
+        }
         return render(request, 'class_promotion.html', context)
 
+
+                          
     # Outer Context
     context= {
-        'all_classes': all_classes
+        'all_classes': all_classes,
+        
     }
     return render(request, 'class_promotion.html', context)
