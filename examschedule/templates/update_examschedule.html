@@ -438,7 +438,7 @@
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion' %}">
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -571,6 +571,7 @@
                                                             <form method="POST" >
                                                                 {% csrf_token %}
                                                             <tr >
+                                                                {% if user.profile.designation.level_name != "student"%}
                                                                 <td style="background-color:#ADD8E6;"> 
                                                                 
                                                                     <select class="form-control" name="selected_class" style="padding: 2px;" required>
@@ -584,6 +585,7 @@
                                                                     </select>
                                                                 
                                                                 </td>
+                                                                {% endif %}
                                                                 <td style="background-color:#ADD8E6;">
                                                                     <select class="form-control" id="selected_exam_type" name="selected_exam_type" style="padding: 2px;" required>
                                                                         <option selected disabled value="">--Select Exam Type--</option>

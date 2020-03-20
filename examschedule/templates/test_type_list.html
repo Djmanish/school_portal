@@ -436,7 +436,7 @@
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion' %}">
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -569,19 +569,19 @@
                                                                 {% csrf_token %}
                                                                      <div class="form-group">
                                                                         <label >Exam Type:</label>
-                                                                        <input type="text" class="form-control" name="exam_type" required>
+                                                                        <input type="text" class="form-control n_i" name="exam_type" required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label >Maximum Marks:</label>
-                                                                        <input type="text" class="form-control" name="exam_max_marks" required>
+                                                                        <input type="number" class="form-control" name="exam_max_marks" required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label >Maximum Exam Limit:</label>
-                                                                        <input type="text" class="form-control" name="exam_max_limit" required>
+                                                                        <input type="number" class="form-control" name="exam_max_limit" required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label >% of Final Score:</label>
-                                                                        <input type="text" class="form-control" name="exam_per_final_score" required>
+                                                                        <input type="number" class="form-control" name="exam_per_final_score" required>
                                                                       </div>
                                                                     
                                                                           <button type="submit" class="md-btn md-btn-primary">Add Exam Type</button>
@@ -598,7 +598,7 @@
                                                     {% if messages %}
                                                     <ul class="messages">
                                                         {% for message in messages %}
-                                                        <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                                        <li style="list-style-type: disc" {% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
                                                         {% endfor %}
                                                     </ul>
                                                     {% endif %}
@@ -724,6 +724,8 @@
 
     <!-- common functions -->
     <script src="{% static 'main_app/js/common.min.js' %}"></script>
+    <script src="{% static 'main_app/js/script.js' %}"></script>
+
     <!-- uikit functions -->
     <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
     <!-- altair common functions/helpers -->
