@@ -20,10 +20,6 @@ def create_test_type(request,pk):
           exam_max_marks= request.POST.get('exam_max_marks')
           exam_max_limit = request.POST.get('exam_max_limit')
           exam_per_final_score = request.POST.get('exam_per_final_score')
-         
-          
-        
-
           examtype= ExamType()
           examtype.institute=request.user.profile.institute
           examtype.exam_type=exam_type_name
@@ -97,7 +93,7 @@ def exam_schedule(request,pk):
             designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
             institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
 
-      
+            
         #  fetch the value of selected class from the dropdown menu
             exam_class = Classes.objects.filter(institute=request.user.profile.institute)
             select_class_for_schedule = request.GET.get('selected_class')
@@ -128,7 +124,7 @@ def exam_schedule(request,pk):
                 limit_exam=int(limit)
 
             
-            print(type(limit_exam))
+            
 
             if exam_type_id:
                     pass
@@ -142,7 +138,7 @@ def exam_schedule(request,pk):
           
           # Count the number if type the exam type selected
            
-            sr_no=ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct().count()+1
+            sr_no=ExamDetails.objects.filter(exam_type__exam_type=exam_type_id,exam_class=selected_class).values('exam_sr_no').distinct().count()+1
            
             if sr_no<=limit_exam:
                     pass
@@ -203,26 +199,36 @@ def examschedule_view(request,pk):
             if request.method=="POST":
                 select_exam_type = request.POST.get('selected_exam_type')
                 select_exam_type_no = request.POST.get('selected_exam_type_no')
-                select_class_for_schedule = request.POST.get('selected_class')
-                if select_class_for_schedule == None:
-                        first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
-                        first_class_id = first_class.id
-                        select_class_for_schedule= first_class_id
-                selected_class = Classes.objects.get(pk=select_class_for_schedule)
-                exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
-               
-               
-                context = {
-                  'exam_class':exam_class,
-                  'exam_details': exam_details,
-                  'institute_exam_schedule':institute_exam_schedule,
-                  'institute_exam_type':institute_exam_type,
-                }
-               
-                return render(request,'update_examschedule.html', context)
-
-
-
+                if request.user.profile.designation.level_name=='student':
+                        selected_class = request.user.profile.Class
+                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
+                        context = {
+                        
+                        'exam_details': exam_details,
+                        'institute_exam_schedule':institute_exam_schedule,
+                        'institute_exam_type':institute_exam_type,
+                        }
+                
+                        return render(request,'update_examschedule.html', context)
+                        
+                else:
+                        select_class_for_schedule = request.POST.get('selected_class')
+                        if select_class_for_schedule == None:
+                                first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
+                                first_class_id = first_class.id
+                                select_class_for_schedule= first_class_id
+                        selected_class = Classes.objects.get(pk=select_class_for_schedule)
+                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
+                
+                
+                        context = {
+                        'exam_class':exam_class,
+                        'exam_details': exam_details,
+                        'institute_exam_schedule':institute_exam_schedule,
+                        'institute_exam_type':institute_exam_type,
+                        }
+                
+                        return render(request,'update_examschedule.html', context)
             
             context={
               'exam_class':exam_class,

@@ -88,15 +88,13 @@ def exam_result(request,pk):
       data_list=list(marks_list)
       marks_list=list(map(int, data_list))
       for score in marks_list:
-      
         if score<check_limit or score==check_limit:
-          
-                    pass
-        else:
-                    messages.info(request, 'Entered Scored has exceeded the max marks limit defined by the institute')
-                    return redirect('not_found')
-      
 
+                    pass
+         
+        else:
+                    messages.info(request, 'Not Approriate Marks')
+                    return redirect('not_found')
       for subject in exam_result_data:
         subject=subject.result_subject
         

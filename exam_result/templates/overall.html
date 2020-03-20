@@ -438,7 +438,7 @@
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion' %}">
+                                <a href="{% url 'class_promotion'  request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -563,18 +563,18 @@
                                                             <form method="POST">
                                                                 {% csrf_token %}
                                                          
-                                                            <tr style="background-color: #1976d2; color:white">
-                                  <th>Subject</th>
-                                  <th>Average Marks</th>
+                                                            <tr style="background-color: #2196f3; color:white">
+                                  <td>Subject</td>
+                                  <td>Average Marks</td>
 
                                                           
                                                         </tr>
                                                 {% for exam_type in exam_type_list %}
                                                
                                                         <tr>
-                                                            <th>
+                                                            <td>
                                                                 {{exam_type}}
-                                                            </th>
+                                                            </td>
                                                            
                                                         </tr>
 
