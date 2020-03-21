@@ -556,21 +556,17 @@
                                                         
                                                         <form method="GET" >
                                                             {% csrf_token %}
-<<<<<<< HEAD
-                                                        <tr>
-=======
                                                         <tr >
->>>>>>> 5538eb0b8ea364e88add1052d9187c5db545cf90
                                                             
-                                                            <td style="background-color:#ADD8E6">
-                                                                <select class="form-control" name="result_selected_subject" style="padding: 2px;">
+                                                            <td >
+                                                                <select class="form-control" name="result_selected_subject" style="padding: 2px; height:38px">
                                                                     <option selected disabled value="">--Select Subject--</option>
                                                                     {% for subject in subject_result %}
                                                                     <option value="{{subject.id}}">{{subject}}</option>
                                                                     {% endfor %}
                                                                  </select>
                                                             </td>
-                                                            <td style="background-color:#ADD8E6"> <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px;" required>
+                                                            <td > <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px; height:38px" required>
                                                                     <option selected disabled value="">--Select Exam Type--</option>
                                                                     {% for exam_type in institute_exam_type %}
                                                                        <option  > {{exam_type}}</option>
@@ -579,8 +575,8 @@
                                                              
                                                             </td>
                                                             
-                                                            <td style="background-color:#ADD8E6">
-                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px;">
+                                                            <td >
+                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px; height:38px">
                                                                     <option selected disabled value=''>--Select Exam Type No.--</option>
                                         
                                                              </select>

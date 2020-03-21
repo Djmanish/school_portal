@@ -29,8 +29,8 @@ def create_test_type(request,pk):
           examtype.exam_type_sr_no=exam_sr_no
           examtype.save()
           messages.success(request, 'New Exam Type Created successfully !!!')
-      # institute_pk = request.user.profile.institute.pk
-      # return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
+          institute_pk = request.user.profile.institute.pk
+          return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
     
     context={
       'institute_exam_type':institute_exam_type,

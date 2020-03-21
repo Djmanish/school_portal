@@ -561,7 +561,7 @@
                                                         {% if messages %}
                                                         <ul class="messages">
                                                             {% for message in messages %}
-                                                            <li{% if message.tags %} class="text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                                            <li style="list-style-type: disc" {% if message.tags %} class="text-{{ message.tags }}"{% endif %}>{{ message }}</li>
                                                             {% endfor %}
                                                         </ul>
                                                         {% endif %}
@@ -572,7 +572,7 @@
                                                                                                                         
                                                                 <td>
                                                                 
-                                                                    <select class="form-control" name="selected_class" style="padding: 2px;" required>
+                                                                    <select class="form-control" name="selected_class" style="padding: 2px; height:38px;" required>
                                                                         <option selected disabled value="">--Select Class--</option>
                                                                         
                                                                         {% for class in exam_class %}
@@ -586,7 +586,7 @@
                                                                 </td>
                                                                 <td>
                                                                     
-                                                                        <select class="form-control"name="selected_exam_type" style="padding: 2px;" required>
+                                                                        <select class="form-control"name="selected_exam_type" style="padding: 2px; height:38px" required>
                                                                             <option selected disabled value="">--Select Exam Type--</option>
                                                                         {% for examtype in exam_type_schedule %}
                                                                             <option value="{{examtype.id}}"> {{examtype}}</option>

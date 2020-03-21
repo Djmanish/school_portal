@@ -512,15 +512,6 @@
                         <div class="user_heading">
                             <div class="user_heading_menu hidden-print">
                                 <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
-<<<<<<< HEAD
-                                  <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
-                                     <!-- <div class="uk-dropdown uk-dropdown-small">
-                                       <ul class="uk-nav">
-                                            <li><a href="{% url 'lectures_list' %}">Update Lecture Timing</a></li>
-
-                                        </ul>--> 
-                                    </div>
-=======
                                     <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
                                     <!-- <div class="uk-dropdown uk-dropdown-small">
                                         <ul class="uk-nav">
@@ -528,7 +519,6 @@
 
                                         </ul>
                                     </div> -->
->>>>>>> 5538eb0b8ea364e88add1052d9187c5db545cf90
                                 </div>
                             </div>
                             <div class="user_heading_avatar">
@@ -575,28 +565,29 @@
                                                                 <h3 class="uk-modal-title">Create Exam </h3>
                                                             </div>
                                                             
-                                                            <form  method="POST" action="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                                            <form  method="POST"  action="{% url 'create_test_type' request.user.profile.institute.id %}">
                                                                 {% csrf_token %}
                                                                      <div class="form-group">
                                                                         <label >Exam Type:</label>
-                                                                        <input type="text" class="form-control n_i" name="exam_type" required>
+                                                                        <input type="text" class="form-control n_i" name="exam_type"  required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label >Maximum Marks:</label>
-                                                                        <input type="number" class="form-control" name="exam_max_marks" required>
+                                                                        <input type="number" class="form-control" name="exam_max_marks"  min="0" required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label >Maximum Exam Limit:</label>
-                                                                        <input type="number" class="form-control" name="exam_max_limit" required>
+                                                                        <input type="number" class="form-control" name="exam_max_limit" min="0" required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label >% of Final Score:</label>
-                                                                        <input type="number" class="form-control" name="exam_per_final_score" required>
+                                                                        <input type="number" class="form-control" name="exam_per_final_score" min="0" required>
                                                                       </div>
                                                                     
-                                                                          <button type="submit" class="md-btn md-btn-primary">Add Exam Type</button>
+                                                                          <button type="submit"  class="md-btn md-btn-primary">Add Exam Type</button>
                                                                           
                                                                     </form>
+                                                                   
                                                             <div class="uk-modal-footer uk-text-right">
                                                                 <button type="button" class="md-btn md-btn-flat uk-modal-close">Cancel</button>
                                                             </div>
@@ -630,7 +621,7 @@
                                                        
                                                         
                                                             {% for test_type in institute_exam_type %}
-                                                            <tr style="background-color:#ADD8E6">
+                                                            <tr >
                                                                 <td> {{ forloop.counter}}
                                                                 </td>
                                                                 <td>{{test_type.exam_type}}

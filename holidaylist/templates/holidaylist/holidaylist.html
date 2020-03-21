@@ -595,27 +595,27 @@
                                     <tr>
                                        
 
-                                        <th >Sr.No.</th>
-                                        <th >Date</th>
-                                        <th>Day</th>
-                                        <th >Name</th>
-                                        <th >Applicable</th>
-                                        <th >Type</th>
+                                        <th style="text-align:center;" data-priority="1">Sr.No.</th>
+                                        <th style="text-align:center;" data-priority="2">Date</th>
+                                        <th style="text-align:center;" data-priority="3">Day</th>
+                                        <th style="text-align:center;" data-priority="4">Name</th>
+                                        <th  style="text-align:center;"data-priority="5">Applicable</th>
+                                        <th  style="text-align:center;"data-priority="6">Type</th>
                                         {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
 
-                                        <th data-priority="5"><b>Email</b></th>
-                                       <th data-priority="6"><b>Content</b></th> 
-                                        <th data-priority="7"><b>SMS</b></th>
-                                        <th data-priority="8"><b>Content</b></th>
-                                        <th data-priority="9"><b>Notification</b></th>
-                                        <th data-priority="10"><b>Content</b></th>
+                                        <th style="text-align:center;" data-priority="7">Email</th>
+                                       <th  style="text-align:center;"data-priority="8">Content</th> 
+                                        <th style="text-align:center;" data-priority="9">SMS</th>
+                                        <th style="text-align:center;" data-priority="10">Content</th>
+                                        <th style="text-align:center;" data-priority="11">Notification</th>
+                                        <th style="text-align:center;" data-priority="12">Content</th>
 
                                         {% if can_edit_holiday_permission in user_permissions %}
-                                        <th data-priority="11"><b>Edit</b></th>
+                                        <th style="text-align:center;" data-priority="13">Edit</th>
                                         {% endif %}
 
                                         {% if can_delete_holiday_permission in user_permissions %}
-                                        <th data-priority="12"><b>Delete</b></th>
+                                        <th style="text-align:center;" data-priority="14">Delete</th>
                                         {% endif %}  
                                         {% endif %}  
 
@@ -627,26 +627,26 @@
                                   {% for holiday in institute_holiday_list %}
                                     
                                     <tr>
-                                        <td>{{ forloop.counter}}</td>
-                                        <td>
+                                        <td style="text-align:center;">{{ forloop.counter}}</td>
+                                        <td style="text-align:center;" >
                                             {{holiday.date}}
 
                                         </td>
-                                        <td>{{holiday.days}}</td>
-                                        <td>{{holiday.name}}</td>
-                                        <td>{{holiday.applicable}}
+                                        <td style="text-align:center;">{{holiday.days}}</td>
+                                        <td style="text-align:center;">{{holiday.name}}</td>
+                                        <td style="text-align:center;">{{holiday.applicable}}
 
                                         
                                         </td>
-                                        <td>{{holiday.holiday_type}}</td>
+                                        <td style="text-align:center;">{{holiday.holiday_type}}</td>
                                         {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
 
-                                        <td>
+                                        <td style="text-align:center;">
                                             {{holiday.holiday_email}}
                                             
                                         </td>
                                        
-                                        <td >
+                                        <td style="text-align:center;">
                                             
                                             {% if holiday.holiday_email == "Yes" %}
                                             <a href="{% url 'emailView' user.profile.institute.id %}">Link</a>
@@ -660,19 +660,19 @@
                                               
                                              </td>
                                         
-                                        <td>
+                                        <td style="text-align:center;">
                                             
                                             {{holiday.holiday_sms}}
                                            
                                         </td>
-                                        <td>
+                                        <td style="text-align:center;">
                                             {% if holiday.holiday_sms == "Yes" %}
                                             <a href="#">Link</a>
                                             {% else %}
                                            Link
                                             {% endif %}
                                         </td>
-                                        <td>
+                                        <td style="text-align:center;">
                                             {{holiday.holiday_notification}}
                                             <!-- <select>
                                                 <option value="yes">Yes</option>
@@ -680,21 +680,22 @@
         
                                             </select> -->
                                         </td>
-                                        <td>
+                                        <td style="text-align:center;">
                                             {% if holiday.holiday_notification == "Yes" %}
 
                                             <a href="#">Link</a>
                                             {% else %}
                                            Link
-                                            {% endif %}</td>
+                                            {% endif %}
+                                        </td>
 
                                             {% if can_edit_holiday_permission in user_permissions %}
-                                            <td><a  class="" href="{% url 'edit_holiday' holiday.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                            <td style="text-align:center;"><a  class="" href="{% url 'edit_holiday' holiday.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
                                             </td>
                                             {% endif %}
 
                                             {% if can_delete_holiday_permission in user_permissions %}
-                                            <td><a  class="" href="{% url 'delete_holiday' holiday.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                            <td style="text-align:center;"><a  class="" href="{% url 'delete_holiday' holiday.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                             </td>
                                             {% endif %}  
                                        
