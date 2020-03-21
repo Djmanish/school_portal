@@ -542,18 +542,17 @@
                     
                     <div style="margin: 2px;">
                           <!-- success message -->
-  {% if messages %}
-  <div class="md-card md-card-danger">
-<div class=""md-card-content">
-    <ul class="messages alert">
-        {% for message in messages %}
-        <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-</div>
-  </div>
- 
-  {% endif %}
+                          {% if messages %}
+                          <div class="md-card md-card-primary">
+                        <div class=""md-card-content">
+                            <ul class="messages alert">
+                                {% for message in messages %}
+                                <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                          </div>
+                          {% endif %}
               
                     </div>
 
