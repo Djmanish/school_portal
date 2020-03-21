@@ -507,16 +507,15 @@
       
         <div id="page_content_inner">
             {% if messages %}
-            <div class="">
+            <div class="md-card md-card-primary">
           <div class=""md-card-content">
               <ul class="messages alert">
                   {% for message in messages %}
-                  <li class="text-success">{{ message }}</li>
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
                   {% endfor %}
               </ul>
           </div>
             </div>
-           
             {% endif %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
                 <div class="uk-width-large">

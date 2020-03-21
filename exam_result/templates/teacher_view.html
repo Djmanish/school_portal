@@ -546,21 +546,21 @@
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
                                                         <thead>
-                                                        {% if messages %}
-                                                        <ul class="messages">
-                                                            {% for message in messages %}
-                                                            <li  style="list-style-type: disc" {% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                                            {% endfor %}
-                                                        </ul>
-                                                        {% endif %}
+                                                            {% if messages %}
+                                                            <div class="md-card md-card-primary">
+                                                          <div class=""md-card-content">
+                                                              <ul class="messages alert">
+                                                                  {% for message in messages %}
+                                                                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                                                  {% endfor %}
+                                                              </ul>
+                                                          </div>
+                                                            </div>
+                                                            {% endif %}
                                                         
                                                         <form method="GET" >
                                                             {% csrf_token %}
-<<<<<<< HEAD
-                                                        <tr>
-=======
                                                         <tr >
->>>>>>> 5538eb0b8ea364e88add1052d9187c5db545cf90
                                                             
                                                             <td style="background-color:#ADD8E6">
                                                                 <select class="form-control" name="result_selected_subject" style="padding: 2px;">

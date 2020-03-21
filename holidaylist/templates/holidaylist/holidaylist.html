@@ -497,11 +497,15 @@
 
                               <!-- success message -->
                               {% if messages %}
-                              <ul class="messages">
-                                  {% for message in messages %}
-                                  <li{% if message.tags %} class=" text-{{ message.tags }}" {% endif %}>{{ message }}</li>
-                                      {% endfor %}
-                              </ul>
+                              <div class="md-card md-card-primary">
+                            <div class=""md-card-content">
+                                <ul class="messages alert">
+                                    {% for message in messages %}
+                                    <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                              </div>
                               {% endif %}
                         <!-- starting Holiday modal themes -->
                         <div class="uk-modal" id="modal_new_holiday">
@@ -597,11 +601,7 @@
 
                                         <th >Sr.No.</th>
                                         <th >Date</th>
-<<<<<<< HEAD
-                                        <th >Day</th>
-=======
                                         <th>Day</th>
->>>>>>> 726570afb9f18fbef072005637306671aed397f3
                                         <th >Name</th>
                                         <th >Applicable</th>
                                         <th >Type</th>

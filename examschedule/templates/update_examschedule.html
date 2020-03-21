@@ -559,25 +559,23 @@
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
                                                         {% if messages %}
-                                                        <ul class="messages">
-                                                            {% for message in messages %}
-                                                            <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                                            {% endfor %}
-                                                        </ul>
+                                                        <div class="md-card md-card-primary">
+                                                      <div class=""md-card-content">
+                                                          <ul class="messages alert">
+                                                              {% for message in messages %}
+                                                              <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                                              {% endfor %}
+                                                          </ul>
+                                                      </div>
+                                                        </div>
                                                         {% endif %}
-                                                      
                                                            
               
                                                             <form method="POST" >
                                                                 {% csrf_token %}
-<<<<<<< HEAD
-                                                            <tr>
-                                                                <td > 
-=======
                                                             <tr >
                                                                 {% if user.profile.designation.level_name != "student"%}
                                                                 <td style="background-color:#ADD8E6;"> 
->>>>>>> 726570afb9f18fbef072005637306671aed397f3
                                                                 
                                                                     <select class="form-control" name="selected_class" style="padding: 2px;" required>
                                                                         <option selected disabled value="">--Select Class--</option>

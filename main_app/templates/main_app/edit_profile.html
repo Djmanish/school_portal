@@ -543,12 +543,16 @@
                        
                             <!-- messages -->
                             {% if messages %}
-                            <ul class="messages">
-                                {% for message in messages %}
-                                <li{% if message.tags %} class="text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
+        <div class="md-card md-card-primary">
+      <div class=""md-card-content">
+          <ul class="messages alert">
+              {% for message in messages %}
+              <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+              {% endfor %}
+          </ul>
+      </div>
+        </div>
+        {% endif %}
 
                             <h3 class="uk-text-primary">Update Your Information</h3>
                         <!-- starting user form  -->

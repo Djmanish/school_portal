@@ -27,13 +27,16 @@
             
             
 <br>
-
 {% if messages %}
-<ul class="messages alert alert-info" style="margin-top: 30px;">
-    {% for message in messages %}
-    <li{% if message.tags %} class=" text-{{ message.tags }}" {% endif %}>{{ message }}</li>
-        {% endfor %}
-</ul>
+<div class="md-card md-card-primary">
+<div class=""md-card-content">
+  <ul class="messages alert">
+      {% for message in messages %}
+      <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+</div>
+</div>
 {% endif %}
         </div>
         <div class="col-md-2"></div>
