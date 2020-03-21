@@ -491,7 +491,7 @@
                         <!-- <div class="md-card"> -->
                             
                             {% if can_add_holiday_permission in user_permissions %}
-                            <button type="button" class="md-btn md-btn-primary md-btn-small " data-uk-modal="{target:'#modal_new_holiday'}">Add
+                            <button type="button" class="md-btn md-btn-primary" data-uk-modal="{target:'#modal_new_holiday'}">Add
                                 Holiday</button>
                             {% endif %}
 
@@ -575,7 +575,7 @@
                                               
                                             </select>
                                           </div>
-                                    <button type="submit" class="md-btn md-btn-primary md-btn-small ">Add
+                                    <button type="submit" class="md-btn md-btn-primary">Add
                                         Holiday</button>
                                 </form> 
                                 <div class="uk-modal-footer uk-text-right">
@@ -592,30 +592,34 @@
                                 class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                 id="ts_pager_filter">
                                 <thead>
-                                    <tr>
+                                    <tr >
                                        
 
                                         <th >Sr.No.</th>
                                         <th >Date</th>
+<<<<<<< HEAD
+                                        <th >Day</th>
+=======
                                         <th>Day</th>
+>>>>>>> 726570afb9f18fbef072005637306671aed397f3
                                         <th >Name</th>
                                         <th >Applicable</th>
                                         <th >Type</th>
                                         {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
 
-                                        <th data-priority="5"><b>Email</b></th>
-                                       <th data-priority="6"><b>Content</b></th> 
-                                        <th data-priority="7"><b>SMS</b></th>
-                                        <th data-priority="8"><b>Content</b></th>
-                                        <th data-priority="9"><b>Notification</b></th>
-                                        <th data-priority="10"><b>Content</b></th>
+                                        <th data-priority="5">Email</th>
+                                       <th data-priority="6">Content</th> 
+                                        <th data-priority="7">SMS</th>
+                                        <th data-priority="8">Content</th>
+                                        <th data-priority="9">Notification</th>
+                                        <th data-priority="10">Content</th>
 
                                         {% if can_edit_holiday_permission in user_permissions %}
-                                        <th data-priority="11"><b>Edit</b></th>
+                                        <th data-priority="11">Edit</th>
                                         {% endif %}
 
                                         {% if can_delete_holiday_permission in user_permissions %}
-                                        <th data-priority="12"><b>Delete</b></th>
+                                        <th data-priority="12">Delete</th>
                                         {% endif %}  
                                         {% endif %}  
 
