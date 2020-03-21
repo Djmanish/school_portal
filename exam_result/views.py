@@ -55,7 +55,7 @@ def exam_result(request,pk):
  
   # to fetch the institute students based on selected class 
   student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
-  institute_students = UserProfile.objects.filtyer(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
+  institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
  
   # to store the value of Exam Type
 
