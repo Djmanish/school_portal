@@ -562,15 +562,15 @@
                                                             {% csrf_token %}
                                                         <tr >
                                                             
-                                                            <td style="background-color:#ADD8E6">
-                                                                <select class="form-control" name="result_selected_subject" style="padding: 2px;">
+                                                            <td >
+                                                                <select class="form-control" name="result_selected_subject" style="padding: 2px; height:38px">
                                                                     <option selected disabled value="">--Select Subject--</option>
                                                                     {% for subject in subject_result %}
                                                                     <option value="{{subject.id}}">{{subject}}</option>
                                                                     {% endfor %}
                                                                  </select>
                                                             </td>
-                                                            <td style="background-color:#ADD8E6"> <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px;" required>
+                                                            <td > <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px; height:38px" required>
                                                                     <option selected disabled value="">--Select Exam Type--</option>
                                                                     {% for exam_type in institute_exam_type %}
                                                                        <option  > {{exam_type}}</option>
@@ -579,8 +579,8 @@
                                                              
                                                             </td>
                                                             
-                                                            <td style="background-color:#ADD8E6">
-                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px;">
+                                                            <td >
+                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px; height:38px">
                                                                     <option selected disabled value=''>--Select Exam Type No.--</option>
                                         
                                                              </select>
@@ -629,7 +629,7 @@
                                                                     
                                                                     {% for sub_class in subject_class %}
                                                                        
-                                                                    <th>Students of Class: {{sub_class.subject_class}}</th>
+                                                                    <th style="text-align: center;">Selected Subject Class: {{sub_class.subject_class}}</th>
                                                                     {% endfor %} 
                                                                     {% endif %}   
                                                                     
@@ -637,11 +637,11 @@
                                                          
                                                             <tr style="background-color: #2196f3; color:white">
                                                                
-                                                                <td>S.No.</td>
-                                                                <td>First Name</td>
-                                                                <td>Last Name</td>
-                                                                <td>Roll No.</td>
-                                                                <td>Marks</td>
+                                                                <td id="text_center">S.No.</td>
+                                                                <td id="text_center" >First Name</tdid="text_center">
+                                                                <td id="text_center">Last Name</td>
+                                                                <td id="text_center">Roll No.</td>
+                                                                <td id="text_center">Marks</td>
                                              
                                                             </tr>
                                                            
@@ -656,7 +656,7 @@
                                                                         {{ forloop.counter}}
                                                                      </td>
                                                                     
-                                                                        <td>
+                                                                        <td id="text_center">
                                                                             <div class="form-group">
                                                                                 <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="student_first_name">
                                                                                   <option  value="{{student.id}}">{{student.first_name}}</option>
@@ -664,14 +664,14 @@
                                                                               </div>
                                                                               
                                                                         </td>
-                                                                        <td>
+                                                                        <td id="text_center">
                                                                             <div class="form-group">
                                                                                 <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="student_last_name">
                                                                                   <option  value="{{student.id}}">{{student.last_name}}</option>
                                                                                 </select>
                                                                               </div>
                                                                         </td>
-                                                                        <td>
+                                                                        <td id="text_center">
                                                                             <div class="form-group">
                                                                                 <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="student_roll_no">
                                                                                   <option  value="{{student.id}}">{{student.roll_number}}</option>
@@ -680,8 +680,8 @@
                                                                         </td>
                                                                         
                                                                         
-                                                                       <td>
-                                                                           <input type="text" name="student_marks" min="0" max="9999"></input>
+                                                                       <td id="text_center">
+                                                                           <input type="text" name="student_marks" min="0" max="999999"></input>
                                                                        </td>
                                                                     
                                                             </tr>

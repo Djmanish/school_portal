@@ -170,3 +170,8 @@ img#slogo{
 #sche_sel_class{
   height: 24px;
 }
+
+#text_center{
+  text-align: center;
+
+}

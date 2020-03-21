@@ -565,28 +565,29 @@
                                                                 <h3 class="uk-modal-title">Create Exam </h3>
                                                             </div>
                                                             
-                                                            <form  method="POST" action="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                                            <form  method="POST"  action="{% url 'create_test_type' request.user.profile.institute.id %}">
                                                                 {% csrf_token %}
                                                                      <div class="form-group">
                                                                         <label >Exam Type:</label>
-                                                                        <input type="text" class="form-control n_i" name="exam_type" required>
+                                                                        <input type="text" class="form-control n_i" name="exam_type"  required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label >Maximum Marks:</label>
-                                                                        <input type="number" class="form-control" name="exam_max_marks" required>
+                                                                        <input type="number" class="form-control" name="exam_max_marks"  min="0" required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label >Maximum Exam Limit:</label>
-                                                                        <input type="number" class="form-control" name="exam_max_limit" required>
+                                                                        <input type="number" class="form-control" name="exam_max_limit" min="0" required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label >% of Final Score:</label>
-                                                                        <input type="number" class="form-control" name="exam_per_final_score" required>
+                                                                        <input type="number" class="form-control" name="exam_per_final_score" min="0" required>
                                                                       </div>
                                                                     
-                                                                          <button type="submit" class="md-btn md-btn-primary">Add Exam Type</button>
+                                                                          <button type="submit"  class="md-btn md-btn-primary">Add Exam Type</button>
                                                                           
                                                                     </form>
+                                                                   
                                                             <div class="uk-modal-footer uk-text-right">
                                                                 <button type="button" class="md-btn md-btn-flat uk-modal-close">Cancel</button>
                                                             </div>
