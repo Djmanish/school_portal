@@ -454,21 +454,6 @@
                         </a>
                     </li>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </ul>
         </div>
     </aside><!-- main sidebar end -->
@@ -491,7 +476,7 @@
                         <!-- <div class="md-card"> -->
                             
                             {% if can_add_holiday_permission in user_permissions %}
-                            <button type="button" class="md-btn md-btn-primary md-btn-small " data-uk-modal="{target:'#modal_new_holiday'}">Add
+                            <button type="button" class="md-btn md-btn-primary" data-uk-modal="{target:'#modal_new_holiday'}">Add
                                 Holiday</button>
                             {% endif %}
 
@@ -575,12 +560,21 @@
                                               
                                             </select>
                                           </div>
-                                    <button type="submit" class="md-btn md-btn-primary md-btn-small ">Add
+                                    <table>
+                                        <tr>
+                                            <td>
+                                    <button type="submit" class="md-btn md-btn-primary">Add
                                         Holiday</button>
-                                </form> 
-                                <div class="uk-modal-footer uk-text-right">
-                                    <button type="button" class="md-btn md-btn-flat uk-modal-close">Cancel</button>
-                                </div>
+                                    </td>
+                                    <td style="padding-left: 342px;">
+                                
+                                    <button  type="button" class="md-btn md-btn-primary uk-modal-close">Cancel</button>
+                                </td>
+                                </tr>
+                                </table>
+
+                            </form>
+
                             </div>
                             <!-- </div> -->
 
@@ -592,7 +586,7 @@
                                 class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                 id="ts_pager_filter">
                                 <thead>
-                                    <tr>
+                                    <tr >
                                        
 
                                         <th style="text-align:center;" data-priority="1">Sr.No.</th>
@@ -612,12 +606,13 @@
 
                                         {% if can_edit_holiday_permission in user_permissions %}
                                         <th style="text-align:center;" data-priority="13">Edit</th>
+                                        <th style="text-align:center;" data-priority="14">Delete</th>
+
+                                        {% endif %}
                                         {% endif %}
 
-                                        {% if can_delete_holiday_permission in user_permissions %}
-                                        <th style="text-align:center;" data-priority="14">Delete</th>
-                                        {% endif %}  
-                                        {% endif %}  
+
+  
 
 
                                     </tr>
