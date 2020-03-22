@@ -551,7 +551,7 @@
                                                           <div class=""md-card-content">
                                                               <ul class="messages alert">
                                                                   {% for message in messages %}
-                                                                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                                                  <li {% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
                                                                   {% endfor %}
                                                               </ul>
                                                           </div>
@@ -625,13 +625,16 @@
                                                                
                                                                 <tr>
                                                                     
-                                                                    {% if subject_class %}
+                                                                   
                                                                     
-                                                                    {% for sub_class in subject_class %}
+                                                                    {% if selected_subject %}
+                                                                        
+                                                                    
+                                                                        
                                                                        
-                                                                    <th style="text-align: center;">Selected Subject Class: {{sub_class.subject_class}}</th>
-                                                                    {% endfor %} 
-                                                                    {% endif %}   
+                                                                    <th style="text-align: center;">Selected Subject Class: {{selected_subject.subject_class}}</th>
+                                                                    
+                                                                    {% endif %}
                                                                     
                                                                 </tr>
                                                          

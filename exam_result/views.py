@@ -50,6 +50,7 @@ def exam_result(request,pk):
        result_subject_name=first_subject_id
   selected_subject= Subjects.objects.get(pk=result_subject_name)
   
+  
   subject_class=Subjects.objects.filter(institute=request.user.profile.institute, subject_name=selected_subject)
 
  
