@@ -21,115 +21,115 @@ def exam_result(request,pk):
   result_institute=Institute.objects.get(pk=pk)
   exam_result_institute=ExamResult.objects.filter(institute=result_institute)
   institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
-
-  
   #  to fetch the logged in  subject teacher
   subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
   
-  print(subject_result)
- # to fetch the value of selected subject
-  result_subject_name=request.GET.get('result_selected_subject')
-  
-
-  result_exam_type = request.GET.get('result_exam_type')
-
-  exam_marks_limit=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=result_exam_type)
-  exam_max_marks=[]
-  for marks_limit in exam_marks_limit:
-      exam_max_marks.append(marks_limit.exam_max_marks)
-  max_marks_limit=list(exam_max_marks)
-  check_max_marks=list(map(int, max_marks_limit))
-  for score_limit in check_max_marks:
-      check_limit=score_limit
-  
-      
-  result_exam_type_sr_no = request.GET.get('fetch_sr_no')
-  if result_subject_name== None:
-       first_subject=Subjects.objects.filter(institute= request.user.profile.institute).last()
-       first_subject_id=first_subject.id 
-       result_subject_name=first_subject_id
-  selected_subject= Subjects.objects.get(pk=result_subject_name)
-  
-  
-  subject_class=Subjects.objects.filter(institute=request.user.profile.institute, subject_name=selected_subject)
-
- 
-  # to fetch the institute students based on selected class 
-  student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
-  institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
- 
-  # to store the value of Exam Type
-
-  
  # to get the data from the individual row
   if request.method=="POST":
-      selected_exam_type =  ExamType.objects.filter(institute= request.user.profile.institute, exam_type= result_exam_type).first()
-      for sdata,score in zip(request.POST.getlist('student_first_name'),request.POST.getlist('student_marks')):
-         student_data = User.objects.get(pk=sdata)
-         exam_max_marks=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=result_exam_type)
-        
-         marks_data=ExamResult()
-         marks_data.institute=request.user.profile.institute
-         marks_data.exam_sr_no= result_exam_type_sr_no
-         marks_data.exam_type= selected_exam_type
-         marks_data.result_class=selected_subject.subject_class
-         marks_data.result_subject=selected_subject
-         marks_data.result_subject_teacher=selected_subject.subject_teacher
-         marks_data.result_student_data=student_data
-         marks_data.result_max_marks=selected_exam_type.exam_max_marks
-         marks_data.result_score=score
-         marks_data.save()
-      marks_list=[]
-      exam_result_data=ExamResult.objects.filter(institute=request.user.profile.institute,exam_type__exam_type=result_exam_type,result_subject=selected_subject,exam_sr_no=result_exam_type_sr_no)
-      exam_subject=CalculateResult.objects.filter(institute=request.user.profile.institute, calc_result_student_data=request.user)
+    # get the subjects
+      result_subject_name=request.POST.get('result_selected_subject')
+      selected_subject= Subjects.objects.get(pk=result_subject_name)
       
-      for marks in exam_result_data:
-          marks_list.append(marks.result_score)
+
+      # get the Exam Type
+      result_exam_type = request.POST.get('result_exam_type')
+      exam_marks_limit=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=result_exam_type)
      
-      data_list=list(marks_list)
-      marks_list=list(map(int, data_list))
-      for score in marks_list:
-        if score<check_limit or score==check_limit:
+    #  Check Exam Limit
+      exam_max_marks=[]
+      for marks_limit in exam_marks_limit:
+            exam_max_marks.append(marks_limit.exam_max_marks)
+      max_marks_limit=list(exam_max_marks)
+      check_max_marks=list(map(int, max_marks_limit))
+      for score_limit in check_max_marks:
+            check_limit=score_limit
+      result_exam_type_sr_no = request.POST.get('fetch_sr_no')
+      subject_class=Subjects.objects.filter(institute=request.user.profile.institute, subject_name=selected_subject)
 
-                    pass
-         
-        else:
-                    messages.info(request, 'Not Approriate Marks')
-                    return redirect('not_found')
-      for subject in exam_result_data:
-        subject=subject.result_subject
-        
-      meanVal=statistics.mean(marks_list)
+      # to fetch the institute students based on selected class 
+      student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
+      institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
+      if request.method=="POST":
+          result_subject_name=request.POST.get('result_selected_subject')
+          selected_subject= Subjects.objects.get(pk=result_subject_name)
 
-      maxValue=max(data_list)
-      minValue=min(data_list)
-      avgValue=round(meanVal)
-      sumValue=sum(marks_list)
-  
-      for calc_data in exam_result_data:
-          calculate_result=CalculateResult()
-          calculate_result.institute=calc_data.institute
-          calculate_result.calc_result_student_data=calc_data.result_student_data
-          calculate_result.calc_result_subject=calc_data.result_subject
-          calculate_result.calc_result_class=calc_data.result_class
-          calculate_result.calc_result_exam_type=calc_data.exam_type
-          calculate_result.calc_result_exam_sr_no=calc_data.exam_sr_no
-          calculate_result.calc_result_score=calc_data.result_score
-          calculate_result.calc_result_max=maxValue
-          calculate_result.calc_result_min=minValue
-          calculate_result.calc_result_avg=avgValue
-          calculate_result.calc_result_total=sumValue
-          calculate_result.save()
+          selected_exam_type =  ExamType.objects.filter(institute= request.user.profile.institute, exam_type= result_exam_type).first()
+          for sdata,score in zip(request.POST.getlist('student_first_name'),request.POST.getlist('student_marks')):
+            student_data = User.objects.get(pk=sdata)
+            exam_max_marks=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=result_exam_type)
+            
+            marks_data=ExamResult()
+            marks_data.institute=request.user.profile.institute
+            marks_data.exam_sr_no= result_exam_type_sr_no
+            marks_data.exam_type= selected_exam_type
+            marks_data.result_class=selected_subject.subject_class
+            marks_data.result_subject=selected_subject
+            marks_data.result_subject_teacher=selected_subject.subject_teacher
+            marks_data.result_student_data=student_data
+            marks_data.result_max_marks=selected_exam_type.exam_max_marks
+            marks_data.result_score=score
+            marks_data.save()
+          marks_list=[]
+          exam_result_data=ExamResult.objects.filter(institute=request.user.profile.institute,exam_type__exam_type=result_exam_type,result_subject=selected_subject,exam_sr_no=result_exam_type_sr_no)
+          exam_subject=CalculateResult.objects.filter(institute=request.user.profile.institute, calc_result_student_data=request.user)
           
-      messages.success(request, 'Exam Result Stored successfully !!!')
+          for marks in exam_result_data:
+              marks_list.append(marks.result_score)
+        
+          data_list=list(marks_list)
+          marks_list=list(map(int, data_list))
+          for score in marks_list:
+            if score<check_limit or score==check_limit:
+
+                        pass
+            
+            else:
+                        messages.info(request, 'Not Approriate Marks')
+                        return redirect('not_found')
+          for subject in exam_result_data:
+            subject=subject.result_subject
+            
+          # meanVal=statistics.mean(marks_list)
+
+          # maxValue=max(data_list)
+          # minValue=min(data_list)
+          # avgValue=round(meanVal)
+          # sumValue=sum(marks_list)
+      
+          for calc_data in exam_result_data:
+              calculate_result=CalculateResult()
+              calculate_result.institute=calc_data.institute
+              calculate_result.calc_result_student_data=calc_data.result_student_data
+              calculate_result.calc_result_subject=calc_data.result_subject
+              calculate_result.calc_result_class=calc_data.result_class
+              calculate_result.calc_result_exam_type=calc_data.exam_type
+              calculate_result.calc_result_exam_sr_no=calc_data.exam_sr_no
+              calculate_result.calc_result_score=calc_data.result_score
+              calculate_result.calc_result_max=maxValue
+              calculate_result.calc_result_min=minValue
+              calculate_result.calc_result_avg=avgValue
+              calculate_result.calc_result_total=sumValue
+              calculate_result.save()
+              
+          # messages.success(request, 'Exam Result Stored successfully !!!')
+          context={
+        
+            
+            'selected_subject':selected_subject,
+            'institute_students':institute_students,
+            'institute_exam_type':institute_exam_type,
+            'subject_class':subject_class,
+            
+            }
+          return render(request, 'teacher_view.html', context)
+
 
   context={
     
-    'subject_result':subject_class,
-    'selected_subject':selected_subject,
-    'institute_students':institute_students,
-    'institute_exam_type':institute_exam_type,
-    'subject_class':subject_class,
+   
+        'subject_result':subject_result,
+        'institute_exam_type':institute_exam_type,
+    
     
     }
   return render(request, 'teacher_view.html', context)
@@ -175,7 +175,7 @@ def fetch_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
   
   max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
-  individual_result_sr_no = "<option>--Select Exam Type No.--</option>"
+  individual_result_sr_no = "<option>--Exam Type No.--</option>"
   for result_sr_no in max_exam_sr_no:
     individual_result_sr_no = individual_result_sr_no + f"<option>"+result_sr_no['exam_sr_no']+"</option>" 
     
@@ -185,7 +185,7 @@ def chart_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
   
   max_exam_sr_no = ExamResult.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
-  chart_result_sr_no = "<option>--Select Exam Type No.--</option>"
+  chart_result_sr_no = "<option>--Exam Type No.--</option>"
   for result_sr_no in max_exam_sr_no:
     chart_result_sr_no = chart_result_sr_no + f"<option>"+result_sr_no['exam_sr_no']+"</option>" 
     
@@ -347,7 +347,7 @@ def class_promotion(request,pk):
                         promoted_to_class= first_class_id
                       
                   promoted_to_class = Classes.objects.get(pk=promoted_to_class)
-                  print(promoted_to_class)
+                
               #  to get the students data from the UserProfile
                   user_data=UserProfile.objects.filter(institute=institute, Class=selected_class)
                 

@@ -505,65 +505,20 @@
 
     <div id="page_content">
         <div id="page_content_inner">
-            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
-                <div class="uk-width-large">
-
-                    <div class="md-card">
-                        <div class="user_heading">
-                           <div class="user_heading_menu hidden-print">
-                               <!--<div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
-                                  <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
-                                      <div class="uk-dropdown uk-dropdown-small">
-                                       <ul class="uk-nav">
-                                            <li><a href="{% url 'lectures_list' %}">Update Lecture Timing</a></li>
-
-                                        </ul>
-                                    </div>
-                                </div>--> 
-                            </div>
-                            <div class="user_heading_avatar">
-                                <div class="thumbnail">
-                                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
-                                </div>
-                            </div>
-                            <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span
-                                        class="uk-text-truncate">{{user.profile.institute}}</span><span
-                                        class="sub-heading"></span></h2>
-
-                            </div>
-                            <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
-                                <i class="material-icons">&#xE150;</i>
-                            </a> -->
-                        </div>
-                        <div class="user_content">
-                            <ul id="user_profile_tabs" class="uk-tab"
-                                data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}"
-                                data-uk-sticky="{ top: 48, media: 960 }">
-
-
-
-                            </ul>
-                            <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
-
-
-
-
-                                <li>
-                                    <div id="">
-
-
+            
                                         <div class="md-card">
-
+                                           
                                             <div class="md-card-content">
-                                                <div class="uk-overflow-container uk-margin-bottom">
-                                                    <button type="button" class="md-btn md-btn-primary md-btn-small"
+                                                
+                                                <div class="form-inline" id="attendance_form">
+                                                    <button type="button" class="md-btn md-btn-primary " style="background-color: #1976d2;"
                                                     data-uk-modal="{target:'#modal_new_test_type'}">Create Exam</button>
                                                     <div class="uk-modal" id="modal_new_test_type">
                                                         <div class="uk-modal-dialog">
                                                             <div class="uk-modal-header">
                                                                 <h3 class="uk-modal-title">Create Exam </h3>
                                                             </div>
+                                                        </div>
                                                             
                                                             <form  method="POST"  action="{% url 'create_test_type' request.user.profile.institute.id %}">
                                                                 {% csrf_token %}
@@ -589,33 +544,34 @@
                                                                           <button type="submit"  class="md-btn md-btn-primary">Add Exam Type</button>
                                                                         </td>
                                                                         <td style="padding-left: 323px;">
-                                                                <button type="button" class="md-btn md-btn-primary uk-modal-close">Cancel</button>
+                                                                <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: #1976d2;">Cancel</button>
                                                             </td>
                                                         </tr>
                                                         </table>
                                                         </form>
+                                                        {% if messages %}
+                                                <div class="md-card md-card-primary">
+                                             
+                                                  <ul class="messages alert">
+                                                      {% for message in messages %}
+                                                      <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                                      {% endfor %}
+                                                  </ul>
+                                              
+                                                </div>
+                                                {% endif %}
                                                         </div>
                                                     </div>
                                                     <table
                                                     class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                     id="ts_issues">
-                                                    {% if messages %}
-                                                    <div class="md-card md-card-primary">
-                                                  <div class=""md-card-content">
-                                                      <ul class="messages alert">
-                                                          {% for message in messages %}
-                                                          <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                                          {% endfor %}
-                                                      </ul>
-                                                  </div>
-                                                    </div>
-                                                    {% endif %}
+                                                   
                                                 
 
                                                     <tbody>
                                                        
                                                         
-                                                            <tr style="background-color: #2196f3; color:white">
+                                                            <tr style="background-color: #1976d2; color:white">
                                                                 <td>Sr. No.</td>
                                                                 <td>Exam Type</td>
                                                                 <td>Maximum Marks</td>
@@ -653,10 +609,6 @@
                                                 </table>
                                                  </div>
                      
-                                </li>
-
-
-                            </ul>
 
                         </div>
                         

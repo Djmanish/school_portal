@@ -108,6 +108,12 @@ def exam_schedule(request,pk):
         # fetching the value of exam from the given drop down
             
             exam_type_schedule= ExamType.objects.filter(institute=request.user.profile.institute)
+            if exam_type_schedule:
+                     pass
+            else:
+                    messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can create Exam Cchedule')
+                    return redirect('not_found')
+                    
             
             select_exam_for_schedule = request.GET.get('selected_exam_type')
          
@@ -126,11 +132,11 @@ def exam_schedule(request,pk):
             
             
 
-            if exam_type_id:
-                    pass
-            else:
-                    messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can create Exam Cchedule')
-                    return redirect('not_found')
+        #     if exam_type_id:
+        #             pass
+        #     else:
+        #             messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can create Exam Cchedule')
+        #             return redirect('not_found')
           #  to fetch the value of Subject and Subject Teacher
             exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
 
@@ -295,7 +301,7 @@ def fetch_max_sr_no(request):
   
   max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
  
-  individual_sr_no = "<option>--Select Exam Type No.--</option>"
+  individual_sr_no = "<option>--Exam Type No.--</option>"
   for sr_no in max_exam_sr_no:
     individual_sr_no = individual_sr_no + f"<option>"+sr_no['exam_sr_no']+"</option>" 
      

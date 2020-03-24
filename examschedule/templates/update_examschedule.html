@@ -484,22 +484,6 @@
                             <span class="menu_title">Log Out</span>
                         </a>
                     </li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </ul>
         </div>
     </aside><!-- main sidebar end -->
@@ -507,122 +491,63 @@
 
     <div id="page_content">
         <div id="page_content_inner">
-            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
-                <div class="uk-width-large">
+            <div class="md-card">
 
-                    <div class="md-card">
-                        <div class="user_heading">
-                            <!--<div class="user_heading_menu hidden-print">
-                                <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
-                                    <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
-                                    
-                                </div>
-                            </div>-->
-                            <div class="user_heading_avatar">
-                                <div class="thumbnail">
-                                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
-                                </div>
-                            </div>
-                            <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span
-                                        class="uk-text-truncate">{{user.profile.institute}}</span><span
-                                        class="sub-heading"></span></h2>
-
-                            </div>
-                            <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
-                                <i class="material-icons">&#xE150;</i>
-                            </a> -->
-                        </div>
-                        <div class="user_content">
-                            <ul id="user_profile_tabs" class="uk-tab"
-                                data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}"
-                                data-uk-sticky="{ top: 48, media: 960 }">
-
-
-
-                            </ul>
-                            <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
-
-
-
-
-                                <li>
-                                    <div id="">
-
-
-                                        <div class="md-card">
-
-                                            <div class="md-card-content">
-                                                <div class="uk-overflow-container uk-margin-bottom">
-                                                   
-                                                    <table
-                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                                                        id="ts_issues">
-                                                        {% if messages %}
-                                                        <div class="md-card md-card-primary">
-                                                      <div class="md-card-content">
-                                                          <ul class="messages alert">
-                                                              {% for message in messages %}
-                                                              <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                                              {% endfor %}
-                                                          </ul>
-                                                      </div>
-                                                        </div>
-                                                        {% endif %}
-                                                           
-              
-                                                            <form method="POST" >
+                <div class="md-card-content">
+            
+                                              
+                                                            <form method="POST" class="form-inline" id="attendance_form">
                                                                 {% csrf_token %}
-
-                                                            <tr>
-                                                                <td > 
-
-                                                            <tr >
+                                                           
                                                                 {% if user.profile.designation.level_name != "student"%}
-                                                                <td > 
-
-                                                                
-                                                                    <select class="form-control" name="selected_class" style="padding: 2px; height:38px" required>
-                                                                        <option selected disabled value="">--Select Class--</option>
+                                  
+                                                                <label style="margin: 4px;">Select Class</label>
+                                                                    <select class="form-control" name="selected_class"  required>
+                                                                        <option selected disabled value="">--Class--</option>
                                                                         
                                                                         {% for class in exam_class %}
                                                                            <option value="{{class.id}}"> {{class}}</option>
                                                                         {% endfor %}
-                                                                            
-                                            
                                                                     </select>
-                                                                
-                                                                </td>
-
-                                                              
 
                                                                 {% endif %}
-                                                                <td>
-                                                                    <select class="form-control" id="selected_exam_type" name="selected_exam_type" style="padding: 2px; height:38px" required>
+                                                                <label style="margin: 4px;">Select Exam Type</label>
+                                                                    <select class="form-control" id="selected_exam_type" name="selected_exam_type"  required>
                                                     
-                                                                        <option selected disabled value="">--Select Exam Type--</option>
+                                                                        <option selected disabled value="">--Exam Type--</option>
                                                                         
                                                                         {% for exam_type in institute_exam_type %}
                                                                            <option  > {{exam_type}}</option>
                                                                         {% endfor %}
                                                                     </select>
                                                                  
-                                                                </td>
-                                                                <td >
-                                                                    <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no" style="padding: 2px;" required>
-                                                                        <option selected disabled value=''>--Select Exam Type No.--</option>
+                                                                    <label style="margin: 4px;">Select Exam Type No.</label>
+                                                                
+                                                                    <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no"  required>
+                                                                        <option selected disabled value=''>--Exam Type No.--</option>
                                             
                                                                  </select>
                                                                  
-                                                                </td>
-                                                                <td > 
-                                                                <input type="submit" value="View" class="md-btn md-btn-primary">
-                                                            </td>
-                                                               </tr>
+                                                              
+                                                                <input type="submit" value="View" style="margin: 4px; background-color: #1976d2;" class="md-btn md-btn-primary">
+                                                            
                                                               </form>
-                                                            <tr>
-                                                                
-                                                            </tr>
+    
+              
+
+                                                              {% if messages %}
+                                                              <div class="md-card md-card-primary">
+                                                            <div class="md-card-content">
+                                                                <ul class="messages alert">
+                                                                    {% for message in messages %}
+                                                                    <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+                                                              </div>
+                                                              {% endif %}
+                                                           
+                                                           
 
                                                             <script>
                                                                 $(document).ready(function(){
@@ -641,23 +566,25 @@
                                                                   })
                                                                 })
                                                                 </script>
-                                                            <tr>
-
-
-                                                            </tr>
-                                                        </thead>
-                       
+                                      </div>
+                                                        
+                                                        <table
+                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                                        id="ts_issues">
                                                         <tbody>
-                                                            
-
                                                                 <tr >
                                                                     
                                                                     <td colspan="3">
                                                                     </td>
     
                                                                 </tr>
+                                                                
+                                                                {% if exam_details %}
+                                                                    
+                                                               
+                                                                    
                                                             
-                                                            <tr style="background-color: #2196f3; color:white">
+                                                            <tr style="background-color: #1976d2; color:white">
                                                                
                                                                 <td>Subject</td>
                                                                 <td>Subject Teacher</td>
@@ -673,6 +600,7 @@
                                                                 {% endif %}
                                                                 
                                                             </tr>
+                                                            {% endif %}
                                                            
 
                                                     
@@ -700,71 +628,19 @@
                                                                         
                                                                          
                                                                          {% endfor %}
-
-                                                               
-                                                                        
-                                                              
                                   
                                                         </tbody>
 
                                                     </table>
 
                                                 </div>
+              
+                                            </div>
+                                        </div>         
+
                      
-                                </li>
 
 
-                            </ul>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- <div class="uk-width-large-3-10 hidden-print">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <div class="uk-margin-medium-bottom">
-                                <h3 class="heading_c uk-margin-bottom">Alerts</h3>
-                                <ul class="md-list md-list-addon">
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Ullam dolor praesentium.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Et voluptatum cumque excepturi dolores.</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Veniam fuga sed.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Quia similique autem aut eaque qui.</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Voluptatem voluptatem veritatis.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Iure autem asperiores numquam rerum ut sunt.</span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div> -->
-
-                    <!-- <a class="md-btn md-btn-flat md-btn-flat-primary" href="#">Show all</a>
-                        </div> -->
-                    <!-- </div> -->
-
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- google web fonts -->
     <script>
