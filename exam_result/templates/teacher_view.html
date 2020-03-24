@@ -513,7 +513,7 @@
                                                         <form method="POST" action="{% url 'examresult' request.user.profile.institute.id %}" class="form-inline" id="attendance_form">
                                                             {% csrf_token %}
                                                             <label style="margin: 4px;">Select Class</label>
-                                                                <select class="form-control" name="result_selected_subject" style="padding: 2px; text-align-last: center; height:38px">
+                                                                <select class="form-control" name="result_selected_subject" style="padding: 2px;  height:38px">
                                                                     <option selected disabled value="">--Subject--</option>
                                                                     {% for subject in subject_result %}
                                                                     <option value="{{subject.id}}">{{subject}}</option>
@@ -521,7 +521,7 @@
                                                                  </select>
                                                                  
                                                             <label style="margin: 4px;">Select Exam Type</label>
-                                                             <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px;text-align-last: center; height:38px" required>
+                                                             <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px; height:38px" required>
                                                                     <option selected disabled value="">--Exam Type--</option>
                                                                     {% for exam_type in institute_exam_type %}
                                                                        <option  > {{exam_type}}</option>
@@ -529,7 +529,7 @@
                                                              </select>
                                                            
                                                             <label style="margin: 4px;">Select Exam Type No.</label>
-                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px;text-align-last: center; height:38px">
+                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px; height:38px">
                                                                     <option selected disabled value=''>--Exam Type No.--</option>
                                         
                                                              </select>

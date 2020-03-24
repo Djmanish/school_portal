@@ -26,11 +26,6 @@ def exam_result(request,pk):
   
  # to get the data from the individual row
   if request.method=="POST":
-    # get the subjects
-      result_subject_name=request.POST.get('result_selected_subject')
-      selected_subject= Subjects.objects.get(pk=result_subject_name)
-      
-
       # get the Exam Type
       result_exam_type = request.POST.get('result_exam_type')
       exam_marks_limit=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=result_exam_type)
@@ -44,16 +39,21 @@ def exam_result(request,pk):
       for score_limit in check_max_marks:
             check_limit=score_limit
       result_exam_type_sr_no = request.POST.get('fetch_sr_no')
-      subject_class=Subjects.objects.filter(institute=request.user.profile.institute, subject_name=selected_subject)
 
-      # to fetch the institute students based on selected class 
-      student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
-      institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
+
       if request.method=="POST":
           result_subject_name=request.POST.get('result_selected_subject')
-          selected_subject= Subjects.objects.get(pk=result_subject_name)
-
-          selected_exam_type =  ExamType.objects.filter(institute= request.user.profile.institute, exam_type= result_exam_type).first()
+          if result_subject_name == None:
+                                first_class = Subjects.objects.filter(institute= request.user.profile.institute).last()
+                                first_class_id = first_class.id
+                                result_subject_name= first_class_id
+          selected_subject = Subjects.objects.get(pk=result_subject_name)
+          # selected_subject= Subjects.objects.get(pk=result_subject_name)
+          subject_class=Subjects.objects.filter(institute=request.user.profile.institute, subject_name=selected_subject)
+          # to fetch the institute students based on selected class 
+          student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
+          institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
+          selected_exam_type =  ExamType.objects.filter(institute= request.user.profile.institute, exam_type= result_exam_type)
           for sdata,score in zip(request.POST.getlist('student_first_name'),request.POST.getlist('student_marks')):
             student_data = User.objects.get(pk=sdata)
             exam_max_marks=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=result_exam_type)

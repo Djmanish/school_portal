@@ -509,16 +509,22 @@
                                         <div class="md-card">
                                            
                                             <div class="md-card-content">
+                                                <div class="uk-margin-bottom">
+                                                    <!-- <a href="#" class="md-btn uk-margin-right" id="printTable">Print Table</a> -->
+                                                    <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
                                                 
-                                                <div class="form-inline" id="attendance_form">
+                                                
+                                                
+                                               
                                                     <button type="button" class="md-btn md-btn-primary " style="background-color: #1976d2;"
                                                     data-uk-modal="{target:'#modal_new_test_type'}">Create Exam</button>
+
                                                     <div class="uk-modal" id="modal_new_test_type">
                                                         <div class="uk-modal-dialog">
                                                             <div class="uk-modal-header">
                                                                 <h3 class="uk-modal-title">Create Exam </h3>
                                                             </div>
-                                                        </div>
+                                                        
                                                             
                                                             <form  method="POST"  action="{% url 'create_test_type' request.user.profile.institute.id %}">
                                                                 {% csrf_token %}
@@ -541,14 +547,16 @@
                                                                       <table>
                                                                         <tr>
                                                                             <td>
-                                                                          <button type="submit"  class="md-btn md-btn-primary">Add Exam Type</button>
+                                                                          <button type="submit"  class="md-btn md-btn-primary" style="background-color: #1976d2;">Add Exam Type</button>
                                                                         </td>
                                                                         <td style="padding-left: 323px;">
                                                                 <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: #1976d2;">Cancel</button>
-                                                            </td>
-                                                        </tr>
+                                                                        </td>
+                                                                    </tr>
                                                         </table>
                                                         </form>
+                                                    </div>
+                                                </div>
                                                         {% if messages %}
                                                 <div class="md-card md-card-primary">
                                              
@@ -607,59 +615,19 @@
                                                     </tbody>
 
                                                 </table>
-                                                 </div>
+                                                </div>
                      
 
-                        </div>
+                                            </div>
                         
 
-                    </div>
+                                        </div>
 
 
-                    <!-- <div class="uk-width-large-3-10 hidden-print">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <div class="uk-margin-medium-bottom">
-                                <h3 class="heading_c uk-margin-bottom">Alerts</h3>
-                                <ul class="md-list md-list-addon">
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Ullam dolor praesentium.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Et voluptatum cumque excepturi dolores.</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Veniam fuga sed.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Quia similique autem aut eaque qui.</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Voluptatem voluptatem veritatis.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Iure autem asperiores numquam rerum ut sunt.</span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div> -->
-
-                    <!-- <a class="md-btn md-btn-flat md-btn-flat-primary" href="#">Show all</a>
-                        </div> -->
-                    <!-- </div> -->
 
                 </div>
             </div>
-        </div>
-    </div>
+       
 
     <!-- google web fonts -->
     <script>

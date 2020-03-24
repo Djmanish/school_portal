@@ -129,14 +129,6 @@ def exam_schedule(request,pk):
                 limit=exam_limit.exam_max_limit
                 limit_exam=int(limit)
 
-            
-            
-
-        #     if exam_type_id:
-        #             pass
-        #     else:
-        #             messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can create Exam Cchedule')
-        #             return redirect('not_found')
           #  to fetch the value of Subject and Subject Teacher
             exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
 
