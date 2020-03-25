@@ -535,7 +535,7 @@
                
                             </select>
                 
-                        <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">          
+                        <input type="submit" value="View" style="margin: 4px; background-color: #1976d2; " class="md-btn md-btn-primary ">          
                     </form>
                    
                     
@@ -567,6 +567,11 @@
                                 </tr>
                                 {% endif %}
                               <tbody>
+                                  
+                                  {% if all_students %}
+                                      
+                                 
+                                      
                                 <tr>
                                     <th  width="10%"><b>Sr. No.</b></th>
                                     <th><b>First Name</b></th>
@@ -576,6 +581,7 @@
                                     <th><b>Status</b></th>
 
                                 </tr>
+                                {% endif %}
                                 
                                   {% for student in all_students %}
                                   <tr>
@@ -616,14 +622,20 @@
                                  
                                  
                                   {% endfor %}
+                                  
+                                  {% if all_students %}
+                                      
+                                 
+                                      
                                   <tr>
                                     <td colspan="6">
                                         <div style="text-align: center;"> 
-                                        <input type="submit" class="btn btn-primary" value="Submit">
+                                        <input type="submit" style="background-color: #1976d2;" class="btn btn-primary" value="Submit">
                                         </div>
 
                                     </td>
                                 </tr>
+                                {% endif %}
                               </tbody>
                         </table>
                     </form>
