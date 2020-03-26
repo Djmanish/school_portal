@@ -567,6 +567,10 @@
                                                                 })
                                                                 </script>
                                       </div>
+                                      <div class="md-card-content">
+                                                
+
+                                        <div class="uk-overflow-container uk-margin-bottom">
                                                         
                                                         <table
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
@@ -584,7 +588,7 @@
                                                                
                                                                     
                                                             
-                                                            <tr style="background-color: #1976d2; color:white">
+                                                            <tr  style="background-color: #1976d2; color:white; text-align:center; text-align:center;">
                                                                
                                                                 <td>Subject</td>
                                                                 <td>Subject Teacher</td>
@@ -599,13 +603,13 @@
 
                                                                 {% endif %}
                                                                 
-                                                            </tr>
+                                                            </tr >
                                                             {% endif %}
                                                            
 
                                                     
                                                                         {% for institute_exam_schedule in exam_details %}
-                                                                        <tr>
+                                                                        <tr style="text-align:center;">
                                                                             <td> {{ institute_exam_schedule.exam_subject}}</td>
                                                                             <td>{{institute_exam_schedule.exam_subject_teacher}}</td>
                                                                             <td>{{institute_exam_schedule.exam_date}}</td>
@@ -632,6 +636,8 @@
                                                         </tbody>
 
                                                     </table>
+                                                    </div>
+                                                    </div>
 
                                                 </div>
               

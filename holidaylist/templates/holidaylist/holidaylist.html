@@ -477,7 +477,7 @@
                         <!-- <div class="md-card"> -->
                             
                             {% if can_add_holiday_permission in user_permissions %}
-                            <button type="button" class="md-btn md-btn-primary" data-uk-modal="{target:'#modal_new_holiday'}">Add
+                            <button type="button" class="md-btn md-btn-primary" style="background-color: #1976d2;" data-uk-modal="{target:'#modal_new_holiday'}">Add
                                 Holiday</button>
                             {% endif %}
 
@@ -568,12 +568,12 @@
                                     <table>
                                         <tr>
                                             <td>
-                                    <button type="submit" class="md-btn md-btn-primary">Add
+                                    <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add
                                         Holiday</button>
                                     </td>
-                                    <td style="padding-left: 342px;">
+                                    <td style="padding-left: 20px;">
                                 
-                                    <button  type="button" class="md-btn md-btn-primary uk-modal-close">Cancel</button>
+                                    <button  type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: #1976d2;width: 140px;">Cancel</button>
                                 </td>
                                 </tr>
                                 </table>
@@ -592,7 +592,7 @@
                                 id="ts_pager_filter">
                                 <thead>
                                     <tr>
-                                        <th style="text-align:center;" data-priority="1">Sr.No.</th>
+                                        <th id="text_center" data-priority="1">Sr.No.</th>
                                         <th style="text-align:center;" data-priority="2">Date</th>
                                         <th style="text-align:center;" data-priority="3">Day</th>
                                         <th style="text-align:center;" data-priority="4">Name</th>

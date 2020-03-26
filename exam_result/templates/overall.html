@@ -510,17 +510,29 @@
                 
             <div class="md-card">
                 <div class="md-card-content">
-                    {% if messages %}
-        <div class="md-card md-card-primary">
-      <div class="md-card-content">
-          <ul class="messages alert">
-              {% for message in messages %}
-              <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-              {% endfor %}
-          </ul>
-      </div>
-        </div>
-        {% endif %}
+          
+        <form method="POST" class="form-inline" id="attendance_form" >
+            {% csrf_token %}
+        <tr>
+            
+            <td> <select class="form-control" name="result_exam_type" style="padding: 2px;" required>
+                    <option selected disabled value="">--Select Exam Type--</option>
+                    <option ><a href="{% url 'overall_result' request.user.profile.institute.id %}">Overall</a></option>
+
+                    {% for exam_type in exam_type_list %}
+                    
+                       <option>{{exam_type}}</option>
+                    {% endfor %}
+             </select>
+             
+            </td>
+    
+            <td>
+            <input type="submit" value="View" style="margin: 4px; background-color: #1976d2;" class="md-btn md-btn-primary">
+        </td>
+           </tr>
+           
+        </form>
         <table
         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
         id="ts_issues">
@@ -535,7 +547,7 @@
                                                                
                                    <th>                                
                                                          
-                                                            <tr style="background-color: #1976d2; color:white">
+                                                            <tr style="background-color: #1976d2; color:white; text-align:center;">
                                   <td>Subject</td>
                                   <td>Average Marks</td>
 
@@ -557,7 +569,7 @@
                                                        {% for test_data in test_data %}
                                                         {% ifequal test_data.exam_type exam_type%}
                                                            
-                                                            <tr>
+                                                            <tr style="text-align:center;">
                                                                
                                                                      <td>
                                                                             <div class="form-group">

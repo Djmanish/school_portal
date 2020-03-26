@@ -171,7 +171,11 @@ img#slogo{
   height: 24px;
 }
 
-#text_center{
+.text_center{
   text-align: center;
 
+}
+
+.head_center{
+  align:center;
 }
