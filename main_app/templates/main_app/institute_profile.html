@@ -602,8 +602,9 @@
                                                         <i class="md-list-addon-icon material-icons">&#xE158;</i>
                                                     </div>
                                                     <div class="md-list-content">
-                                                        <span class="md-list-heading">{{institute_data.email}}</span>
-                                                        <span class="uk-text-small uk-text-muted">Email</span>
+                                                        <span class="md-list-heading"><a href="">Email</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{institute_data.email}}</span>
+                                                       
                                                     </div>
                                                 </li>
                                                 <li>
@@ -611,8 +612,9 @@
                                                         <i class="md-list-addon-icon material-icons">&#xE0CD;</i>
                                                     </div>
                                                     <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="">Phone</a></span>
                                                         <span
-                                                            class="md-list-heading">
+                                                            class="uk-text-small uk-text-muted">
                                                         
                                                         {% if institute_data.contact_number1 %}
                                                         {{institute_data.contact_number1}},
@@ -628,7 +630,7 @@
                                                         {% endif %}
                                                         
                                                         </span>
-                                                        <span class="uk-text-small uk-text-muted">Phone</span>
+                                                       
                                                     </div>
                                                 </li>
                                                 <li>
@@ -636,9 +638,10 @@
                                                         <i class="md-list-addon-icon uk-icon-facebook-official"></i>
                                                     </div>
                                                     <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="">Facebook</a></span>
                                                         <span
-                                                            class="md-list-heading"><a href="{{institute_data.facebook_link}}" target="_blank">{{institute_data.facebook_link}}</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Facebook</span>
+                                                            class="uk-text-small uk-text-muted"><a href="{{institute_data.facebook_link}}" target="_blank">{{institute_data.facebook_link}}</a></span>
+                                                        
                                                     </div>
                                                 </li>
 
