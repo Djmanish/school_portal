@@ -175,3 +175,6 @@ img#slogo{
   text-align: center;
 
 }
+.alert_notice_list li{
+  min-height: 0px;
+}

@@ -18,6 +18,7 @@ from django.core.mail import send_mail, send_mass_mail
 from django.utils import timezone
 from Attendance.models import *
 from AddChild.models import *
+from notices.models import *
 
 
 
@@ -275,9 +276,25 @@ def dashboard(request):
 
     # ending students attendance status
 
+    # starting user notice
+    teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+    teacher_role_level = teacher_role_level.level_id
+    user_role_level = request.user.profile.designation.level_id
+    users_notice = []
+    all_notices = Notice.objects.all().order_by('id')
+    if user_role_level < teacher_role_level:
+        users_notice = all_notices.exclude(category="absent").reverse()
+    else:
+        for notice in all_notices:
+            notice_recipients = notice.recipients_list.all()
+            if request.user.profile in notice_recipients:
+                users_notice.insert(0, notice)
+    # ending user notice
+
     context = {
         'all_classes': all_classes,
        'parent_children': parent_children,
+       'users_notice':users_notice
     }
     return render(request, 'main_app/dashboard.html' , context)
 

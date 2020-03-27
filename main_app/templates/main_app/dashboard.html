@@ -136,18 +136,30 @@
                                         <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
                                         <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
                                     </ul>
-                                    <ul id="header_alerts" class="uk-switcher uk-margin">
+                                    <ul id="header_alerts"  class="uk-switcher uk-margin">
                                         <li>
-                                            <ul class="md-list md-list-addon">
+                                            <ul class="md-list md-list-addon alert_notice_list">
+                                                {% for notice in users_notice|slice:":5" %}
+                                                
+                                             
+                                                    
                                                 <li>
-                                                    <div class="md-list-addon-element">
-                                                        <span class="md-user-letters md-bg-cyan">N</span>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="{% url 'all_notice_list' %}"> All Notifiactions</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Click Here to see all your Notifications.</span>
-                                                    </div>
+                                                    <a href="{% url 'all_notice_list' %}">
+
+                                                        <div class="md-list-addon-element">
+                                                            <span class="md-user-letters md-bg-cyan">N</span>
+                                                        </div>
+                                                       
+                                                        <div class="md-list-content">
+                                                            
+                                                            <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
+                                                            
+                                                        </div>
+                                                    </a>
+                                                   
+                                                   
                                                 </li>
+                                                {% endfor %}
                                                 <!-- <li>
                                                     <div class="md-list-addon-element">
                                                         <img class="md-user-image md-list-addon-avatar" src="{% static 'main_app/img/avatars/avatar_07_tn.png' %}" alt=""/>
