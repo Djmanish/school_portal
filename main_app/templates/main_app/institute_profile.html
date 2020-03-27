@@ -652,6 +652,9 @@
                                             <ul class="md-list">
 
                                                 <li>
+                                                    <div class="md-list-addon-element">
+                                                        <i class="md-list-addon-icon material-icons">face</i>
+                                                    </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Name</a></span>
                                                         <span
@@ -659,6 +662,9 @@
                                                     </div>
                                                 </li>
                                                 <li>
+                                                    <div class="md-list-addon-element">
+                                                        <i class="md-list-addon-icon material-icons">business</i>
+                                                    </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Address</a></span>
                                                         <span
@@ -693,6 +699,9 @@
                                                     </div>
                                                 </li>
                                                 <li>
+                                                    <div class="md-list-addon-element">
+                                                        <i class="md-list-addon-icon material-icons">fingerprint</i>
+                                                    </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Code</a></span>
                                                         <span
@@ -710,7 +719,7 @@
                                 <li>
                                     <div class="uk-width-large-1-2">
                                         <h4 class="heading_c uk-margin-small-bottom">Personal Details</h4>
-                                        <ul class="md-list">
+                                        <ul class="md-list md-list-addon">
                                             <li>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Organization
@@ -799,7 +808,7 @@
 
                                             
                                             {% if add_class_permission in user_permissions %}
-                                            <button type="button" class="md-btn md-btn-primary md-btn-small"
+                                            <button type="button" class="md-btn md-btn-primary" style="background-color: #1976d2;"
                                             data-uk-modal="{target:'#modal_new_class'}">Add New Class</button>
                                             {% endif %}
                                         
@@ -830,11 +839,10 @@
                                                               <table>
                                                                 <tr>
                                                                     <td> 
-                                                                  <button type="submit" class="md-btn md-btn-primary">Add Class</button>
+                                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add Class</button>
                                                                 </td>
-                                                                <td style="padding-left: 342px;">
-                                                    
-                                                        <button type="button" class="md-btn md-btn-primary uk-modal-close">Cancel</button>
+                                                                <td style="padding-left:20px;">
+                                                        <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: #1976d2;width: 140px;">Cancel</button>
                                                     </td>
                                                 </tr>
                                                 </table>
@@ -850,27 +858,27 @@
                                                     <table
                                                         class="uk-table uk-table-condensed uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-hover"
                                                         id="ts_issues">
-                                                        <thead>
+                                                        <thead >
                                                             <tr>
-                                                                <th>Sr. No.</th>
-                                                                <th>Class Name</th>
+                                                                <th style="text-align:center;">Sr. No.</th>
+                                                                <th style="text-align:center;">Class Name</th>
                                                                 <!-- <th><b>Class Teacher</b></th> -->
-                                                                <th>Class Teacher</th>
+                                                                <th style="text-align:center;">Class Teacher</th>
                                                               
                                                               {% if assign_class_teacher_permission in user_permissions %}
-                                                              <th>Assign class Teacher</th>
+                                                              <th style="text-align:center;">Assign class Teacher</th>
                                                               {% endif %}
                                                               {% if can_edit_class_permission in user_permissions %}       
-                                                                <th>Edit Class</th>
+                                                                <th style="text-align:center;">Edit Class</th>
                                                                 {% endif %}
 
                                                                 {% if can_delete_class_permission in user_permissions %} 
-                                                                <th>Delete Class</th>
+                                                                <th style="text-align:center;">Delete Class</th>
                                                                 {% endif %}
 
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody class="text_center">
                                                             {% for classes in institute_class %}
                                                             <tr>
                                                                 <td > {{ forloop.counter}}
@@ -886,11 +894,11 @@
                                                                     {% endif %}   
                                                                     </td>
                                             {% if assign_class_teacher_permission in user_permissions %}
-                                                                    <td ><a  class="" href="{% url 'assign_class_teacher' classes.pk %}"><i class="material-icons" style="color: #2196f3;" >person_add</i> </a>
+                                                                    <td ><a  class="" href="{% url 'assign_class_teacher' classes.pk %}"><i class="material-icons" style="color: #1976d2;" >person_add</i> </a>
                                                                     </td>
                                                                     {% endif %}
                                                                     {% if can_edit_class_permission in user_permissions %}                                          
-                                                                <td><a  href="{% url 'edit_class' classes.pk %}"> <i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                                <td><a  href="{% url 'edit_class' classes.pk %}"> <i class="material-icons" style="color: #1976d2;">edit</i></a>
                                                                 </td>
                                                                 {% endif %}  
                                                                 
@@ -921,7 +929,7 @@
                                         <div class="md-card">
                                             
                                             {% if add_subject_permission in user_permissions %}
-                                            <button type="button" class="md-btn md-btn-primary md-btn-small "
+                                            <button type="button" class="md-btn md-btn-primary " style="background-color: #1976d2;"
                                             data-uk-modal="{target:'#modal_new_subject'}">Add New Subject</button>
                                             {% endif %}
                                                 
@@ -973,12 +981,12 @@
                                                         <table>
                                                             <tr>
                                                                 <td>
-                                                        <button type="submit" class="md-btn md-btn-primary">Add
+                                                        <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add
                                                             Subject</button>
                                                         </td>
-                                                        <td style="padding-left: 340px;">
+                                                        <td style="padding-left: 20px;">
                                                         <button type="button"
-                                                            class="md-btn md-btn-primary uk-modal-close">Cancel</button>
+                                                            class="md-btn md-btn-primary uk-modal-close" style="background-color: #1976d2;width: 140px;">Cancel</button>
                                                         </td>
                                                     </tr>
                                                     </table>
@@ -994,27 +1002,27 @@
                                                     <table
                                                         class="uk-table uk-table-condensed uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-hover"
                                                         id="ts_issues">
-                                                        <thead>
-                                                            <tr >
-                                                                <th>Sr. No.</th>
-                                                                <th>Class</th>
-                                                                <th>Subject Code</th>
-                                                                <th>Subject Name</th>
-                                                                <th>Subject Teacher</th>
+                                                        <thead >
+                                                            
+                                                                <th style="text-align:center;">Sr. No.</th>
+                                                                <th style="text-align:center;">Class</th>
+                                                                <th style="text-align:center;">Subject Code</th>
+                                                                <th style="text-align:center;">Subject Name</th>
+                                                                <th style="text-align:center;">Subject Teacher</th>
                                                                 {% if can_edit_subject_permission in user_permissions %}                    
-                                                                <th>Edit</th>
+                                                                <th style="text-align:center;">Edit</th>
                                                                 {% endif %}
 
                                                                 {% if can_delete_subject_permission in user_permissions %} 
-                                                                <th>Delete</th>
+                                                                <th style="text-align:center;">Delete</th>
                                                                 {% endif %}
                                                                 
 
-                                                            </tr>
+                                                           
                                                         </thead>
                                                         <tbody>
                                                             {% for subjects in institute_subject %}
-                                                            <tr>
+                                                            <tr style="text-align:center;">
                                                                 <td > {{ forloop.counter}}
                                                                 </td>
                                                                 <td> {{subjects.subject_class}} </td>
@@ -1025,7 +1033,7 @@
 
                                            
                                                                 {% if can_edit_subject_permission in user_permissions %}                    
-                                                                <td><a   href="{% url 'edit_subject' subjects.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                                <td><a   href="{% url 'edit_subject' subjects.pk %}"><i class="material-icons" style="color: #1976d2;">edit</i></a>
                                                                 </td>
                                                                 {% endif %}
 
@@ -1054,7 +1062,7 @@
                                     <div id="">
                                         <h4 class="heading_c uk-margin-small-bottom">Created Roles</h4>
                                         <div class="md-card">
-                                            <button class="md-btn md-btn-primary md-btn-small "
+                                            <button class="md-btn md-btn-primary" style="background-color: #1976d2;"
                                             data-uk-modal="{target:'#add_new_role'}">Add New Role</button>
                                             <div class="md-card-content">
                                                 <!-- starting add new role modal and button -->
@@ -1083,12 +1091,12 @@
                                                                 <tr>
                                                                     <td>
                                                             <button class="md-btn md-btn-primary "
-                                                                type="submit">Add Role</button>
+                                                                type="submit" style="background-color: #1976d2;width: 140px;">Add Role</button>
                                                       
                                                             </td>
-                                                            <td style="padding-left: 370px;">
+                                                            <td style="padding-left: 20px;">
                                                             <button type="button"
-                                                                class="md-btn md-btn-primary uk-modal-close">Close</button>
+                                                                class="md-btn md-btn-primary uk-modal-close" style="background-color: #1976d2;width: 140px;">Close</button>
                                                             </td>
                                                         </tr>
                                                         </table>
@@ -1104,17 +1112,17 @@
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th >Level</th>
-                                                                <th>Role</th>
-                                                                <th>Start Date</th>
-                                                                <th>Action</th>
+                                                                <th style="text-align:center;">Level</th>
+                                                                <th style="text-align:center;">Role</th>
+                                                                <th style="text-align:center;">Start Date</th>
+                                                                <th style="text-align:center;">Action</th>
                                                             </tr>
                                                         </thead>
 
                                                         <tbody>
 
                                                             {% for role in institute_roles %}
-                                                            <tr>
+                                                            <tr style="text-align:center;">
                                                                 <td ><span
                                                                         class="uk-text-small uk-text-muted uk-text-nowrap">{{role.level_id}}</span>
                                                                 </td>
@@ -1147,7 +1155,7 @@
     {% if  user.user_institute_role.level.level_name == 'admin' or user.user_institute_role.level.level_name == 'principal' %}
     <li>
         <div id="">
-            <a href="{% url 'permission_update_history' %}" ><strong> <i class="material-icons uk-text-success">history</i> Permission Updates(Full History)</strong></a>
+            <a href="{% url 'permission_update_history' %}" style="color: #1976d2;"><strong> <i class="material-icons uk-text-success">history</i> Permission Updates(Full History)</strong></a>
             <div class="md-card">
                 <div class="md-card-content">
                     <div class="uk-overflow-container uk-margin-bottom">
@@ -1158,16 +1166,16 @@
                             <thead>
                                 <tr>
                                   
-                                    <th >Role</th>
+                                    <th style="text-align:center;">Role</th>
                                  
-                                    <th >Edit Role Permissions</th>
+                                    <th style="text-align:center;">Edit Role Permissions</th>
                                 </tr>
                             </thead>
 
                             <tbody>
 
                                 {% for role in institute_roles %}
-                                <tr>
+                                <tr style="text-align:center;">
                                   
                                     <td >
                                  
@@ -1175,7 +1183,7 @@
                                     </td>
                                 
                                     <td >
-                                     <a href="{% url 'role_permissions' role.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i> </a>
+                                     <a href="{% url 'role_permissions' role.pk %}"><i class="material-icons" style="color: #1976d2;">edit</i> </a>
                                     </td>
 
 

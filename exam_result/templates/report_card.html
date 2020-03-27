@@ -545,7 +545,7 @@
                                                                 
                                                                 {% if examresult_data %}
                                                                     
-                                                            <tr style="background-color: #1976d2; color:white">
+                                                            <tr style="background-color: #1976d2; color:white; text-align:center;">
                                                                
                                                                 
                                                                 <td>Subject Name</td>
@@ -565,7 +565,7 @@
                                                             </tr>
                                                                      {% for exam_data in examresult_data %}
                                                                              {% if exam_data.calc_result_exam_sr_no == exam_sr_no.exam_sr_no%}
-                                                            <tr>
+                                                            <tr style="text-align:center;">
                                                                      <td>
                                                                             <div class="form-group">
                                                                                 <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_subject">
