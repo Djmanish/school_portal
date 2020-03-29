@@ -170,3 +170,18 @@ img#slogo{
 #sche_sel_class{
   height: 24px;
 }
+
+.text_center{
+  text-align: center;
+
+}
+<<<<<<< HEAD
+.alert_notice_list li{
+  min-height: 0px;
+}
+=======
+
+.head_center{
+  align:center;
+}
+>>>>>>> 3bf6cb8db309333e2fcc97a4bd6613970c6c7258

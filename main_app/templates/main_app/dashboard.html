@@ -136,18 +136,30 @@
                                         <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
                                         <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
                                     </ul>
-                                    <ul id="header_alerts" class="uk-switcher uk-margin">
+                                    <ul id="header_alerts"  class="uk-switcher uk-margin">
                                         <li>
-                                            <ul class="md-list md-list-addon">
+                                            <ul class="md-list md-list-addon alert_notice_list">
+                                                {% for notice in users_notice|slice:":5" %}
+                                                
+                                             
+                                                    
                                                 <li>
-                                                    <div class="md-list-addon-element">
-                                                        <span class="md-user-letters md-bg-cyan">N</span>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="{% url 'all_notice_list' %}"> All Notifiactions</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Click Here to see all your Notifications.</span>
-                                                    </div>
+                                                    <a href="{% url 'all_notice_list' %}">
+
+                                                        <div class="md-list-addon-element">
+                                                            <span class="md-user-letters md-bg-cyan">N</span>
+                                                        </div>
+                                                       
+                                                        <div class="md-list-content">
+                                                            
+                                                            <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
+                                                            
+                                                        </div>
+                                                    </a>
+                                                   
+                                                   
                                                 </li>
+                                                {% endfor %}
                                                 <!-- <li>
                                                     <div class="md-list-addon-element">
                                                         <img class="md-user-image md-list-addon-avatar" src="{% static 'main_app/img/avatars/avatar_07_tn.png' %}" alt=""/>
@@ -514,7 +526,7 @@
 
     <div id="page_content">
         {% if messages %}
-        <div class="md-card md-card-danger">
+        <div class="md-card md-card-primary">
       <div class=""md-card-content">
           <ul class="messages alert">
               {% for message in messages %}
@@ -523,9 +535,7 @@
           </ul>
       </div>
         </div>
-       
         {% endif %}
-
 
 
         <div id="page_content_inner">
@@ -719,6 +729,62 @@
             <!-- circular charts -->
             
             {% if user.profile.designation.level_name == "parent" or user.profile.designation.level_name == "student"  %}
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                <div class="uk-width-medium-1-2">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <h4>My Attendance</h4>
+                            <div class="uk-overflow-container">
+                                <table class="uk-table uk-table-condensed uk-table-hover">
+                                    <thead>
+                                       
+                                    </thead>
+                                    <tbody>
+                                        <br>
+                                      
+                                        <tr>
+                                            <td>Total Days Attendance Taken</td>
+                                             <td>{{user.student_total_days_school_open}}</td>
+                                           </tr>
+
+                                           <tr>
+                                            <td>Total Days Present</td>
+                                             <td>{{user.student_total_days_present}}</td>
+                                           </tr>
+
+                                           <tr>
+                                            <td>Total Days Absent</td>
+                                             <td>{{user.student_total_days_absent}}</td>
+                                           </tr>
+
+                                           <tr>
+                                            <td>Total Days leave Taken</td>
+                                             <td>{{user.student_total_days_leave}}</td>
+                                           </tr>
+
+                                           <tr>
+                                            <td>Attendance Percentage</td>
+                                             <td>{{user.student_attendance_percentage}}%</td>
+                                           </tr>
+                                 
+                                 
+                                      
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <h3 class="heading_a uk-margin-bottom">Statistics</h3>
+                            <div id="ct-chart" class="chartist"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                      
             {% else %}
    <!-- tasks -->
    <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">

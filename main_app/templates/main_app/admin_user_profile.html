@@ -385,6 +385,7 @@
                         </a>
                         
                     </li> 
+                    
 
                     <li  title="Class Students">
                     
@@ -567,11 +568,15 @@
                             <!-- success message -->
   <!-- success message -->
   {% if messages %}
-  <ul class="messages">
-      {% for message in messages %}
-      <li{% if message.tags %} class=" text-{{message.tags}}" {% endif %}>{{ message }}</li>
-          {% endfor %}
-  </ul>
+  <div class="md-card md-card-primary">
+<div class=""md-card-content">
+    <ul class="messages alert">
+        {% for message in messages %}
+        <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+  </div>
   {% endif %}
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">About</a></li>
@@ -601,8 +606,9 @@
                                                         <i class="md-list-addon-icon material-icons">&#xE158;</i>
                                                     </div>
                                                     <div class="md-list-content">
-                                                        <span class="md-list-heading">{{user.email}}</span>
-                                                        <span class="uk-text-small uk-text-muted">Email</span>
+                                                        <span class="md-list-heading"><a href="">Email</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{user.email}}</span>
+                                                       
                                                     </div>
                                                 </li>
                                                 <li>
@@ -610,8 +616,9 @@
                                                         <i class="md-list-addon-icon material-icons">&#xE0CD;</i>
                                                     </div>
                                                     <div class="md-list-content">
-                                                        <span class="md-list-heading">{{user.profile.mobile_number}}</span>
-                                                        <span class="uk-text-small uk-text-muted">Phone</span>
+                                                        <span class="md-list-heading"><a href="">Phone</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{user.profile.mobile_number}}</span>
+                                                       
                                                     </div>
                                                 </li>
                                                 <li>
@@ -619,24 +626,32 @@
                                                         <i class="md-list-addon-icon uk-icon-facebook-official"></i>
                                                     </div>
                                                     <div class="md-list-content">
-                                                        <span class="md-list-heading">{{user.profile.facebook_link}}</span>
-                                                        <span class="uk-text-small uk-text-muted">Facebook</span>
+                                                        <span class="md-list-heading"><a href="">Facebook</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{user.profile.facebook_link}}</span>
+                                                        
                                                     </div>
                                                 </li>
                                                 
                                             </ul>
                                         </div>
+
                                         <div class="uk-width-large-1-2">
                                             <h4 class="heading_c uk-margin-small-bottom">Organization Details</h4>
-                                            <ul class="md-list">
+                                            <ul class="md-list md-list-addon">
                                                 
                                                 <li>
+                                                    <div class="md-list-addon-element">
+                                                        <i class="md-list-addon-icon material-icons">face</i>
+                                                    </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Name</a></span>
                                                         <span class="uk-text-small uk-text-muted">{{user.profile.institute}}</span>
                                                     </div>
                                                 </li>
                                                 <li>
+                                                    <div class="md-list-addon-element">
+                                                        <i class="md-list-addon-icon material-icons">business</i>
+                                                    </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Address</a></span>
                                                         <span class="uk-text-small uk-text-muted">{{user.profile.institute.address1}},
@@ -666,6 +681,9 @@
                                                     </div>
                                                 </li>
                                                 <li>
+                                                    <div class="md-list-addon-element">
+                                                        <i class="md-list-addon-icon material-icons">fingerprint</i>
+                                                    </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Code</a></span>
                                                         <span class="uk-text-small uk-text-muted">{{user.profile.institute.code}}</span>

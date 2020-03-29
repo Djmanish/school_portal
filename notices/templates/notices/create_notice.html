@@ -444,7 +444,7 @@
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion' %}">
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -553,20 +553,17 @@
                             </a> -->
                         </div>
                         <div class="user_content">
-
-
                             {% if messages %}
-            <div class="md-card md-card-danger">
-          <div class=""md-card-content">
-              <ul class="messages alert">
-                  {% for message in messages %}
-                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                  {% endfor %}
-              </ul>
-          </div>
-            </div>
-           
-            {% endif %}
+                            <div class="md-card md-card-primary">
+                          <div class=""md-card-content">
+                              <ul class="messages alert">
+                                  {% for message in messages %}
+                                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                  {% endfor %}
+                              </ul>
+                          </div>
+                            </div>
+                            {% endif %}
                             <div class="">
                                 <div class="md-card-content">
                                     <div class="">

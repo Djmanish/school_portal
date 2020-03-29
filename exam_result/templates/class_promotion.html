@@ -535,7 +535,7 @@
                
                             </select>
                 
-                        <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">          
+                        <input type="submit" value="View" style="margin: 4px; background-color: #1976d2; " class="md-btn md-btn-primary ">          
                     </form>
                    
                     
@@ -545,8 +545,10 @@
 
               
                     </div>
+                   
                     <form method="POST" action="">
                         {% csrf_token %}
+                    
                         <table class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
                             {% if all_students %}
                                 <tr> 
@@ -566,45 +568,54 @@
                                     </td>
                                 </tr>
                                 {% endif %}
-                              <tbody>
-                                <tr>
-                                    <th  width="10%"><b>Sr. No.</b></th>
-                                    <th><b>First Name</b></th>
-                                    <th><b>Last Name</b></th>
+                               
 
-                                    <th><b>Roll No.</b></th>
-                                    <th><b>Status</b></th>
+                                    <div class="uk-overflow-container uk-margin-bottom">
+                              <tbody>
+                                  
+                                  {% if all_students %}
+                                      
+                                 
+                                      
+                                <tr>
+                                    <th style="text-align:center;" width="10%"><b>Sr. No.</b></th>
+                                    <th style="text-align:center; background-color: white;"><b>First Name</b></th>
+                                    <th style="text-align:center;"><b>Last Name</b></th>
+
+                                    <th style="text-align:center;"><b>Roll No.</b></th>
+                                    <th style="text-align:center;"><b>Status</b></th>
 
                                 </tr>
+                                {% endif %}
                                 
                                   {% for student in all_students %}
-                                  <tr>
-                                      <td  width="20%">{{forloop.counter}}</td>
-                                      <td>
-                                        <div class="form-group">
-                                            <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="student_first_name">
-                                              <option  value="{{student.id}}">{{student.first_name}}</option>
+                                  <tr style="text-align-last: center;">
+                                      <td >{{forloop.counter}}</td>
+                                      <td >
+                                        <div   class="form-group">
+                                            <select style="overflow:hidden; -webkit-appearance: none; text-align: center;  background-color: white; border:none;" class="form-control"  name="student_first_name">
+                                              <option value="{{student.id}}">{{student.first_name}}</option>
                                             </select>
                                           </div>
                                           
                                     </td>
                                     <td>
-                                        <div class="form-group">
-                                            <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="student_last_name">
+                                        <div style="text-align: center;"  class="form-group">
+                                            <select style="overflow:hidden; -webkit-appearance: none;  text-align: center; background-color: white; border:none;" class="form-control"  name="student_last_name">
                                               <option  value="{{student.id}}">{{student.last_name}}</option>
                                             </select>
                                           </div>
                                     </td>
                                     <td>
-                                        <div class="form-group">
-                                            <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="student_roll_no">
+                                        <div style="text-align: center;"  class="form-group">
+                                            <select style="overflow:hidden; -webkit-appearance: none; text-align: center; background-color: white; border:none;" class="form-control"  name="student_roll_no">
                                               <option  value="{{student.id}}">{{student.roll_number}}</option>
                                             </select>
                                           </div>
                                     </td>
                                     <td>
-                                        <div class="form-group">
-                                            <select  class="form-control"  name="student_promotion_status">
+                                        <div  class="form-group">
+                                            <select style="width:100px;text-align: center;"  name="student_promotion_status">
                                               {% for status in list_promotion_choices %}
                                                  <option value='{{status}}'>{{status}}</option>
                                               {% endfor %}
@@ -616,17 +627,28 @@
                                  
                                  
                                   {% endfor %}
+                                  
+                                  {% if all_students %}
+                                      
+                                 
+                                      
                                   <tr>
                                     <td colspan="6">
                                         <div style="text-align: center;"> 
-                                        <input type="submit" class="btn btn-primary" value="Submit">
+                                        <input type="submit" style="background-color: #1976d2;" class="btn btn-primary" value="Submit">
                                         </div>
 
                                     </td>
                                 </tr>
+                                {% endif %}
                               </tbody>
+                           
+                        </div>
                         </table>
+                   
+
                     </form>
+               
                     </div>
               
                 </div>

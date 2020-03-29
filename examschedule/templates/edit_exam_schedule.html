@@ -524,11 +524,15 @@
 
  <!-- messages -->
  {% if messages %}
- <ul class="messages">
-     {% for message in messages %}
-     <li{% if message.tags %} class="text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-     {% endfor %}
- </ul>
+ <div class="md-card md-card-primary">
+<div class=""md-card-content">
+   <ul class="messages alert">
+       {% for message in messages %}
+       <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+       {% endfor %}
+   </ul>
+</div>
+ </div>
  {% endif %}
  
  <!-- Subject form -->
@@ -555,12 +559,12 @@
           </div>
           <div class="form-group">
             <label >Start Time:</label>
-            <input type="text" class="form-control" name='select_start_time'  placeholder="hrs:mins"  value="{{examdetails_info.exam_start_time}}" required="required">
+            <input type="time" class="form-control" name='select_start_time'   value="{{examdetails_info.exam_start_time}}" required="required">
 
           </div>
           <div class="form-group">
             <label >End Time:</label>
-            <input type="text" class="form-control" name='select_end_time' value="{{examdetails_info.exam_end_time}}" required="required">
+            <input type="time" class="form-control" name='select_end_time'  value="{{examdetails_info.exam_end_time}}" required="required">
 
           </div>
           <div class="form-group">
