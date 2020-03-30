@@ -139,10 +139,8 @@
                                     <ul id="header_alerts"  class="uk-switcher uk-margin">
                                         <li>
                                             <ul class="md-list md-list-addon alert_notice_list">
-                                                {% for notice in users_notice|slice:":5" %}
+                                                {% for notice in user.users_notice|slice:":5" %}
                                                 
-                                             
-                                                    
                                                 <li>
                                                     <a href="{% url 'all_notice_list' %}">
 
