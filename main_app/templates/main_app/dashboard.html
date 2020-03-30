@@ -726,6 +726,7 @@
 
             <!-- circular charts -->
             
+            {% if user.profile.designation %}
             {% if user.profile.designation.level_name == "parent" or user.profile.designation.level_name == "student"  %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
                 <div class="uk-width-medium-1-2">
@@ -832,7 +833,11 @@
     </div>
 </div>
             {% endif %}
-
+ 
+            {% endif %}
+                
+            
+           
          
 
             <!-- info cards -->
