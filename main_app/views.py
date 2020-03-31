@@ -18,6 +18,7 @@ from django.core.mail import send_mail, send_mass_mail
 from django.utils import timezone
 from Attendance.models import *
 from AddChild.models import *
+from notices.models import *
 
 
 
@@ -256,28 +257,48 @@ def dashboard(request):
     # ending attendace data for dashboard
 
     # starting students attendance status
-    if request.user.profile.designation.level_name == "student":
-        total_days_open = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date ).count()
-        
-        total_days_present= Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='present' ).count()
-        
-        total_days_absent = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='absent' ).count()
+    if request.user.profile.designation:
 
-        total_days_leave = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='leave' ).count()
-        student_attendance_percentage = (total_days_present/total_days_open)*100
-        student_attendance_percentage = round(student_attendance_percentage, 2)
+        if request.user.profile.designation.level_name == "student":
+            total_days_open = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date ).count()
+            
+            total_days_present= Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='present' ).count()
+            
+            total_days_absent = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='absent' ).count()
 
-        request.user.student_total_days_school_open = total_days_open
-        request.user.student_total_days_present = total_days_present
-        request.user.student_total_days_absent = total_days_absent
-        request.user.student_total_days_leave = total_days_leave
-        request.user.student_attendance_percentage = student_attendance_percentage
+            total_days_leave = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='leave' ).count()
+            student_attendance_percentage = (total_days_present/total_days_open)*100
+            student_attendance_percentage = round(student_attendance_percentage, 2)
+
+            request.user.student_total_days_school_open = total_days_open
+            request.user.student_total_days_present = total_days_present
+            request.user.student_total_days_absent = total_days_absent
+            request.user.student_total_days_leave = total_days_leave
+            request.user.student_attendance_percentage = student_attendance_percentage
 
     # ending students attendance status
+
+    # starting user notice
+    if request.user.profile.designation:
+
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.all().order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice
 
     context = {
         'all_classes': all_classes,
        'parent_children': parent_children,
+  
     }
     return render(request, 'main_app/dashboard.html' , context)
 

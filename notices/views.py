@@ -16,9 +16,6 @@ def all_notices(request):
     
 
     user_role_level = request.user.profile.designation.level_id
-    
-
-
 
     all_notices = Notice.objects.all().order_by('id')
     user_notices = []
