@@ -572,8 +572,58 @@
   {% endif %}
               
                     </div>
-<div class="md-card-content">
-    <div class="uk-overflow-container">
+                    <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                    <div class="uk-overflow-container">
+
+                        <table  class="uk-table uk-text-nowrap"  id="attendance_student_table">
+                            
+
+
+{% if all_students %}
+<thead>
+    <tr>
+
+        <th >Sr No.</th>
+        <th >First Name</th>
+        <th >Last Name</th>
+        <th>Roll No.</th>
+        <th >Status</th>
+        <th >Summary</th>
+        <th>Attendance %</th>
+    </tr>
+    </thead>  
+{% endif %}
+    
+
+                           
+                            <tbody>
+                            {% for student in all_students %}
+                            <tr> 
+                                <td > {{ forloop.counter}} </td>                 
+                                <td> {{ student.first_name }} </td>
+                                <td> {{ student.last_name }} </td>
+                                <td>{{ student.roll_number }}</td>
+                             
+                               
+                                
+                                        <td > 
+                                        
+                           
+    <form id="{{forloop.counter}}" name="{{student.id|slugify }}" style="display: inline;">
+        {% csrf_token %}   
+        
+        <div class="" style="display: inline;">
+            <select id="{{student.id|slugify }}" class="" name="{{student.id|slugify }}">
+                <option selected disabled value="">--select--</option>
+              <option value="present" style="color: green;">Present</option>
+              <option value="absent" style="color: red;">Absent</option>
+              <option value="leave" style="color: orange;">Leave</option>
+              
+            </select>
+          </div>
+       
+        <input style="display: none;" type="date" value="{{attendance_date}}" class="attendance_date_input">
         
         <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap"  id="attendance_student_table">
 
@@ -692,13 +742,6 @@
                                                
                                             {% endfor %}
                                             
-                                            
-                                            
-                                            
-                                            
-                                            
-                                      
-                                        
                                         
                                         </tbody>
                                     </table>

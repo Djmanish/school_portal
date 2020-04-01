@@ -139,10 +139,8 @@
                                     <ul id="header_alerts"  class="uk-switcher uk-margin">
                                         <li>
                                             <ul class="md-list md-list-addon alert_notice_list">
-                                                {% for notice in users_notice|slice:":5" %}
+                                                {% for notice in user.users_notice|slice:":5" %}
                                                 
-                                             
-                                                    
                                                 <li>
                                                     <a href="{% url 'all_notice_list' %}">
 
@@ -728,6 +726,7 @@
 
             <!-- circular charts -->
             
+            {% if user.profile.designation %}
             {% if user.profile.designation.level_name == "parent" or user.profile.designation.level_name == "student"  %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
                 <div class="uk-width-medium-1-2">
@@ -834,7 +833,11 @@
     </div>
 </div>
             {% endif %}
-
+ 
+            {% endif %}
+                
+            
+           
          
 
             <!-- info cards -->
