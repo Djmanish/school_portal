@@ -189,17 +189,17 @@ def fetch_students_tags_mapped(request):
         if student_tags:
             student_tags_list = ""
             for tag in student_tags.tags.all():
-                student_tags_list = student_tags_list + f"<tr><td>{tag.fees_code}</td><td>{tag.description}</td></tr>"
+                student_tags_list = student_tags_list + f"<tr><td colspan='2' >{tag.fees_code}</td><td colspan='2' >{tag.description}</td></tr>"
             if student_tags_list =="":
-                student_tags_list = "<tr><td colspan='2'>No Tags Found for the selected student</td></tr>"
+                student_tags_list = "<tr><td colspan='4'>No Tags Found for the selected student</td></tr>"
                 return HttpResponse(student_tags_list)
 
             return HttpResponse(student_tags_list)
         else:
-            student_tags_list = "<tr><td colspan='2'>No Tags Found for the selected student</td></tr>"
+            student_tags_list = "<tr colspan='4'><td >No Tags Found for the selected student</td></tr>"
             return HttpResponse(student_tags_list)
     except:
-        student_tags_list = "<tr><td colspan='2'>No Tags Found for the selected student</td></tr>"
+        student_tags_list = "<tr><td colspan='4' >No Tags Found for the selected student</td></tr>"
         return HttpResponse(student_tags_list)
 
                 

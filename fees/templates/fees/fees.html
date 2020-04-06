@@ -841,53 +841,72 @@
                                 </li> 
                                 
                                 <li>
-                                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
-                                   
-                                        
-<div class="uk-width-large">
- <div class="form-group">
-        <label style="margin: 4px;">Select Class:  </label>
-        <select name="selected_class_" class="form-control" id="tags_student_C"  required>
-            <option selected disabled value=""> -- select a class -- </option>
-            {% for class in all_classes %}
-            <option value="{{class.id}}">{{class}}</option>
-            {% endfor %}
-     </select>
-       </div>
-
-       
-     
-
-  <div class="form-group">
-<label>Select a Student:</label>
-<select id="class_students_list_t" class=" form-control students_response_select"  >
-  
-</select>
-  </div>
-
-  
- 
-
-</div>
-
-<table class="table table-hover" id="st_tags_table" >
-    <thead>
-      <tr>
-        <th>Fees Code</th>
-        <th>Fees Description</th>
-  
-       
-      </tr>
-    </thead>
-    <tbody id="student_tags_res">
-
-    </tbody>
-  </table>
-
-                              </div>
-                                
+                                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" >
+                                       
+                                       
+                                       <div class="uk-width-large">
+                                        <div class="form-group">
+                                            <label style="margin: 4px;">Select Class:  </label>
+                                            <select name="selected_class_" class="form-control" id="tags_student_C"  required>
+                                                <option selected disabled value=""> -- select a class -- </option>
+                                                {% for class in all_classes %}
+                                                <option value="{{class.id}}">{{class}}</option>
+                                                {% endfor %}
+                                         </select>
+                                           </div>
                                     
-                                </li>
+                                           
+                                         
+                                    
+                                      <div class="form-group">
+                                    <label>Select a Student:</label>
+                                    <select id="class_students_list_t" class=" form-control students_response_select"  >
+                                      
+                                    </select>
+                                      </div>
+                                    
+                                      
+                                    
+                                         
+               <div class="md-card uk-margin-medium-bottom">
+                   
+                   <div class="md-card-content">
+                       
+                       <div class="uk-overflow-container">
+                           <table class="uk-table uk-table-nowrap " id="students_tags_table" style="visibility: hidden" >
+                               <thead>
+                               <tr>
+                                  
+                                   <th colspan="2" >Fee Code</th>
+                                   <th colspan="2" >Description</th>
+                              
+                                   
+                               </tr>
+                               </thead>
+                               <tbody id="student_tags_res">
+                                 
+                               
+                                     
+                                  
+                                  
+                               </tbody>
+                           </table>
+                       </div>
+                    
+                   </div>
+               </div> 
+                                    </div></div>
+                                      
+                               
+                                                 
+       
+                                               
+                                               
+                                           
+                                       
+                                   </li>
+
+
                             </ul>
                         </div>
 
@@ -902,13 +921,13 @@
     <script>
         $(document).ready(function(){
           $('#class_students_list_t').change(function(){
+              $('#students_tags_table').css('visibility','visible')
               $.ajax({
                   type:'POST',
                   url:"{% url 'fetch_students_tags_mapped' %}" ,
                   data:{student_id:$("#class_students_list_t").val(), 
                   csrfmiddlewaretoken: '{{ csrf_token }}' },
                   success: function(msg){
-                      $('#st_tags_table').css("display", "block");
                       $('#student_tags_res').html(msg)
                      
                   }
