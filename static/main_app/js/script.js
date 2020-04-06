@@ -39,6 +39,9 @@ $(document).ready(function(){
      });
   });
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 70430377c9b768db09386402d74ff7f6b3a9fe71
   
