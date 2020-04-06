@@ -54,6 +54,8 @@ class Account_details(models.Model):
     institute = models.OneToOneField(to=Institute, on_delete=models.CASCADE, related_name="institute_account_details")
     merchant_id = models.CharField(max_length=25)
     merchant_key = models.CharField(max_length=25)
+    def __str__(self):
+        return str(self.institute)
    
 
 

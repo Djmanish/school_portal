@@ -148,7 +148,6 @@ def Map_Tag_Students(request):
         selected_tag = School_tags.objects.get(pk = request.POST.get('selected_tag'))
         students_list = [] # list of all students selected
         students_class = Classes.objects.get(pk= request.POST.get('students_class'))
-        print(students_class)
         
         selected_students = request.POST.getlist('selected_students')
         for student in selected_students:
@@ -191,15 +190,15 @@ def fetch_students_tags_mapped(request):
             for tag in student_tags.tags.all():
                 student_tags_list = student_tags_list + f"<tr><td colspan='2' >{tag.fees_code}</td><td colspan='2' >{tag.description}</td></tr>"
             if student_tags_list =="":
-                student_tags_list = "<tr><td colspan='4'>No Tags Found for the selected student</td></tr>"
+                student_tags_list = "<tr><td colspan='4' style='color:red;'>No Tags Found for the selected student</td></tr>"
                 return HttpResponse(student_tags_list)
 
             return HttpResponse(student_tags_list)
         else:
-            student_tags_list = "<tr colspan='4'><td >No Tags Found for the selected student</td></tr>"
+            student_tags_list = "<tr colspan='4'><td style='color:red;' >No Tags Found for the selected student</td></tr>"
             return HttpResponse(student_tags_list)
     except:
-        student_tags_list = "<tr><td colspan='4' >No Tags Found for the selected student</td></tr>"
+        student_tags_list = "<tr><td colspan='4' style='color:red;'>No Tags Found for the selected student</td></tr>"
         return HttpResponse(student_tags_list)
 
                 

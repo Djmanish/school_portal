@@ -625,7 +625,8 @@
     </ul>
    </div>
       </small>
-      <select data-live-search="true"  id="persons" class="form-control mso multiple_student_tag " name="selected_students" multiple style="min-height: 200px; height:{{student_multiple_select_height}}px;"  >
+      <input style="margin-bottom: 5px;" class="form-control" id="myInput" type="text" placeholder="Search a student name ...">
+      <select data-live-search="true"  id="myDIV" class="form-control mso multiple_student_tag persons" name="selected_students" multiple style="min-height: 200px; height:{{student_multiple_select_height}}px;"  >
           <option selected  value=""> --- select students ---</option>
 
         {% for student in all_students %}
@@ -977,11 +978,11 @@
     
     <script>
         $('#selectAll').click(function() {
-  $('#persons option').prop('selected', true);
+  $('.persons option').prop('selected', true);
 });
 
 $('#unselectAll').click(function() {
-  $('#persons option').prop('selected', false);
+  $('.persons option').prop('selected', false);
 });
     </script>
 
@@ -1023,6 +1024,18 @@ $('#unselectAll').click(function() {
       return false;
     });
     </script> -->
+
+
+    <script>
+        $(document).ready(function(){
+          $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myDIV *").filter(function() {
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          });
+        });
+        </script>
 
     <script>
         $(function () {
