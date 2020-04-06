@@ -175,13 +175,36 @@ img#slogo{
   text-align: center;
 
 }
-<<<<<<< HEAD
 .alert_notice_list li{
   min-height: 0px;
 }
-=======
 
 .head_center{
   align:center;
 }
->>>>>>> 3bf6cb8db309333e2fcc97a4bd6613970c6c7258
+.select2 {
+  width: -webkit-fill-available !important;
+}
+.select2-selection, .select2-selection--multiple{
+  min-height: 0px !important;
+  padding: 2px !important;
+}
+.tag-i{
+  border: none !important;
+  background-color: white !important;
+}
+.tag-i:hover{
+  background-color: #e3f2fd !important;
+}
+#student_list_map_select{
+  border: none !important;
+  font-size: 15px;
+  padding: 0px !important;
+}
+.multiple_student_tag option{
+border-bottom: 1px solid lightgray;
+padding: 2px;
+}
+#st_tags_table{
+  display: none;
+}

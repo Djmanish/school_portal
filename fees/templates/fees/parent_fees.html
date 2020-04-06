@@ -48,10 +48,7 @@
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
-    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="{% static 'main_app/js/script.js' %}"></script>
-    
 </head>
 
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
@@ -493,6 +490,22 @@
                             <span class="menu_title">Log Out</span>
                         </a>
                     </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </ul>
         </div>
 
@@ -533,360 +546,245 @@
                                 <i class="material-icons">&#xE150;</i>
                             </a> -->
                             {% endif %}
+
+
+
+
+
+
                         </div>
                         <div class="user_content">
-<div style="margin: 2px;">
-                                <!-- success message -->
-        {% if messages %}
-        <div class="md-card md-card-primary">
-      <div >
-          <ul class="messages alert">
-              {% for message in messages %}
-              <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-              {% endfor %}
-          </ul>
-      </div>
-        </div>
-        {% endif %}
-                    
-                          </div>
-
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
-                                
-                                <li class="uk-active"><a href="#">Mapping tag</a></li>
-                                <li><a href="#">Fee Setup</a></li>
-                                <li ><a href="#">Schedule</a></li>
-                                <li ><a href="#">Student Tags</a></li>
-                           
+                                <li class="uk-active"><a href="#">Payment Detail</a></li>
+                               
+                                <li><a href="#">Payment History</a></li>
                             </ul>
                             <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
-                                    
-                    
                                 <li>
                                     <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
-                                   
-                                        
-<div class="uk-width-large">
-    <form  method="POST" action="{% url 'fees_home' %}" class="form-inline" id="attendance_form">
-        {% csrf_token %}
-    
-          <label style="margin: 4px;">Select Class:  </label>
-        <select name="selected_class_" class="form-control"  required>
-            
-            
-            {% if showing_student_for_class.id %}
-            <option selected disabled value="{{showing_student_for_class.id}}"> {{showing_student_for_class}} </option>
-            {% else %}
-            <option selected disabled value=""> -- select a class -- </option>
-            {% endif %}
-                
-
-            {% for class in all_classes %}
-            <option value="{{class.id}}">{{class}}</option>
-            {% endfor %}
-     </select>
-
-<input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">          
-    </form>
-</div>
-<div class="uk-width-large">
-    <div class="md-card uk-margin-medium-bottom">
-        <div class="md-card-content">
-            
-
-{% if total_tags_for_s %}
-<form method="POST" action="{% url 'mapping_tags_to_student' %}">
-    {% csrf_token %}
-    <input type="hidden" name="students_class" value="{{showing_student_for_class.id}}">
-    <div class="form-group">
-        <label for="sel1">Select a tag:</label>
-        <select class="form-control" name="selected_tag" id="sel1" required>
-          <option selected disabled value=""> --- select a tag ---</option>
-        
-        {% for tag in total_tags_for_s %}
-            <option value="{{tag.id}}">{{tag.fees_code}} - {{tag.description}}</option>
-        {% endfor %}
-            
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="sel1">Select students to apply this tag:</label><br>
-       
-        
-
-        <input class="md-btn md-btn-primary md-btn-mini" type="button" id="selectAll" name="selectAll" value="Select All">
-<input class="md-btn md-btn-primary md-btn-mini" type="button" id="unselectAll" name="unselectAll" value="Unselect All">
-
-<small class="uk-text-primary " >
-   <div style="padding: 5px;">
-    <ul>
-        <li>Hold ctrl or shift (or drag with the mouse) to select more than one</li>
-        <li>Type a letter to search in the list</li>
-    </ul>
-   </div>
-      </small>
-      <select data-live-search="true"  id="persons" class="form-control mso multiple_student_tag " name="selected_students" multiple style="min-height: 200px; height:{{student_multiple_select_height}}px;"  >
-          <option selected  value=""> --- select students ---</option>
-
-        {% for student in all_students %}
-            <option value="{{student.id}}">{{student.first_name}}
-                                        
-                {% if student.middle_name %}
-                {{student.middle_name}}
-                {% endif %}
-
-                {% if student.last_name %}
-                {{student.last_name}}
-                {% endif %}
-                  </option>
-        {% endfor %}
-        </select>
-      </div>
-      <input type="submit" value="Update" class="md-btn md-btn-primary">
-</form>
-{% endif %}
-    
-
-
-
-
-            <div class="uk-overflow-container">
-               
-            </div>
-        </div>
-    </div>
-</div>
-                                        </div>
-                                
-                                    
-                                </li>
-                                <li>
-                                 <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" >
-                                    
-                                    
-                                    <div class="uk-width-large">
-                                      
-                                        <button class="md-btn md-btn-primary ml-auto" data-uk-modal="{target:'#modal_new_tag'}">Add New Tag</button>
-                                        <a href="{% url 'fees_tag_history' %}"> <b><i class="material-icons uk-text-primary">history</i> Tag Updates Full History</b></a>
-                                        <div class="uk-modal" id="modal_new_tag">
-                                            <div class="uk-modal-dialog">
-                                                <div class="uk-modal-header">
-                                                    <h3 class="uk-modal-title">Add New Tag </h3>
-                                                </div>
-                                                <form method="POST" action="{% url 'create_fee_tag' %}">
-                                                    {% csrf_token %}
-                                                    <div class="form-group">
-<label>Fees Code: </label>
-<input type="text" class="form-control form-control-sm"  name="fee_code" required>
-                                                    </div>
-                                                      <div class="form-group">
-<label>Description:</label>
-<input type="text" class="form-control form-control-sm"  name="tag_descripton" required>
-                                                      </div>
-                                                        <div class="form-group">
-<label>Type:</label>
-<select class="form-control form-control-sm" required name="tag_type">
-    <option disabled selected value="">-- Select --</option>
-    <option>debit</option>
-    <option>credit</option>
-  
-  
-</select>
-                                                        </div>
-                                        <div class="form-group">
-<label>Active Status:</label>
-<select class="form-control form-control-sm" required name="active_status">
-    <option selected disabled value="">-- Select --</option>
-    <option>yes</option>
-  <option>no</option>
-  
-</select>
-                                        </div>
-                                        <div class="form-group">
-<label>Amount:</label>
-<input type="text" required class="form-control only_decimal form-control-sm" name="amount">
-                                        </div>
-                                        <div class="form-group">
-<label>Tax ( in percent ):</label>
-<input type="text" required class="form-control only_decimal form-control-sm" name="tax_per">
-                                        </div>
-                                <div class="form-group">
-<label>Start Date:</label>
-<input type="date" required class="form-control form-control-sm" name="start_d">
-                                </div>
-                                <div class="form-group">
-<label>End Date:</label>
-<input type="date" required class="form-control form-control-sm" name="end_d">
-
-                                </div>
-                                <input type="submit" class="md-btn md-btn-primary" value="Save">
+                                        <div class="uk-width-large">
+                                            
+                                            <!--<h4 class="heading_a uk-margin-bottom">Payment </h4>-->
+                                            <form>
+                                                <div class="row">
+                                                <div class="col">
+                                                <label for="uk_dp_1">Student</label>
+                                                                     
+                                                 <select name="selected_class_attendance" class="form-control"  required>
                                                     
-                                                 </form>
-                                            </div>
-                                        </div>
-            <div class="md-card uk-margin-medium-bottom">
-                
-                <div class="md-card-content">
-                    
-                    <div class="uk-overflow-container">
-                        <table class="uk-table uk-table-nowrap ">
-                            <thead>
-                            <tr>
-                               
-                                <th >Fee Code</th>
-                                <th >Description</th>
-                                <th >Type</th>
-                                <th >Active</th>
-                                <th >Amount</th>
-                                <th >Tax %</th>
-                                <th >Start Date</th>
-                                <th >End Date</th>
-                                <th>Edit</th>
-                                
-                            </tr>
-                            </thead>
-                            <tbody>
-                              
-                              {% for tag in all_tags %}
-                              <tr>
-                                <td>{{tag.fees_code}}</td>
-                                <td>{{tag.description}}</td>
-                                <td>{{tag.type}}</td>
-                                <td>{{tag.active}}</td>
-                                <td>{{tag.amount}}</td>
-                                <td>{{tag.tax_percentage}}</td>
-                                <td>{{tag.start_date}}</td>
-                                <td>{{tag.end_date}}</td>
-                                <td><a href="{% url 'fees_tag_update_view' tag.id %}"> Edit</a></td>
-                            </tr>
-                            
-                              {% endfor %}
-                                  
-                               
-                               
-                            </tbody>
-                        </table>
-                    </div>
-                 
-                </div>
-            </div> 
-                                 </div></div>
-                                   
-                            
-                                              
-    
-                                            
-                                            
-                                        
-                                    
-                                </li>
-                                <li>
-                                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
-                                        <div class="uk-width-large-1-2" style="padding-right:40px;">
-                                          
-                                              <form method="POST" action="{% url 'fees_schedule' %}" >
-                                                  {% csrf_token %}
-                                                  <div class="form-group">
-                                                      
-                                                     <label>Notification Date</label>
-                                                     <input type="date" class="form-control" name="notification_date" required 
-                                                     {% if user.profile.institute.institute_schedule.notification_date %}
-                                                         value="{{user.profile.institute.institute_schedule.notification_date|date:'Y-m-d'}}"
-                                                     {% endif %}
-                                                           >
+                                                  
+                                                     <option selected  value="{{selected_class_for_attendance.id}}" ></option>
+                                                     
+                                                     <option selected  value="">-- select Student --</option>
+                                                                                 
+                                                     <option>Raresh Singh</option>
+                                                     <option value={{class.id}}>Neha Singh</option>
+                                                     <option value={{class.id}}>Karan Singh</option>
+                                                     </select>
+                                                      </div>               
+                                                                   
+                                                 <div class="col">
+                                                   <label for="uk_dp_1">School/Institute</label>
+                                                                     
+                                                   <select name="selected_class_attendance" class="form-control"  required>
+                                                                                                    
+                                                       <option selected  value="{{selected_class_for_attendance.id}}" ></option>
+                                                     
+                                                       <option selected  value="">-- select School/Institute --</option>
+                                                                                 
+                                                       <option value={{class.id}}>K V NO 1</option>
+                                                       <option value={{class.id}}>School2</option>
+                                                       <option value={{class.id}}>AAdarsh Intitute</option>
+                                                    </select>
+                                                     </div>
+                                                      </div>             
+                                                     
+                                                     </form>               
+                                                                   
+                                                                 
+                         
+                                                                 
+                                                                 
+                                                            
+                                            <br>
+                                            <div class="uk-overflow-container">
+                                                <table class="uk-table uk-table-nowrap table_check">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="uk-width-1-10 uk-text-center small_col"><input type="checkbox" data-md-icheck class="check_all"></th>
+                                                        <th class="uk-width-1-10">View</th>
+                                                        <th class="uk-width-1-10">Invoice No</th>
+                                                        <th class="uk-width-2-10 uk-text-center">Student</th>
+                                                        <th class="uk-width-2-10 uk-text-center">School/Institute Name</th>
+                                                        <th class="uk-width-1-10 uk-text-center">Due Date</th>
+                                                        <th class="uk-width-1-10 uk-text-center">Amount Due</th>
+                                                        <th class="uk-width-1-10 uk-text-center">Amount To Be Paid</th>
+                                                        
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="uk-text-center uk-table-middle small_col"><input type="checkbox" data-md-icheck class="check_row"></td>
+                                                            <td> <a class="uk-text-center md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="page_invoices.html">View</a></td>
+                                                            <td>001</td>
+                                                            <td class="uk-text-center">Ramesh Singh</td>
+                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">Rs. 1500</td>
+                                                        </tr>   
+                                                        <tr>
+                                                            <td class="uk-text-center uk-table-middle small_col"><input type="checkbox" data-md-icheck class="check_row"></td>
+                                                            <td> <a class="uk-text-center md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="page_invoices.html">View</a></td>
+                                                            <td>9090</td>
+                                                            <td class="uk-text-center">Ramesh Singh</td>
+                                                            <td class="uk-text-center">Aakash Intitute Classes</td> 
+                                                            <td class="uk-text-center">10.5.2020</td>
+                                                            <td class="uk-text-center">12.5.2020</td>
+                                                            <td class="uk-text-center">Rs. 800</td>
+                                                        </tr> 
+                                                        <tr>
+                                                            <td class="uk-text-center uk-table-middle small_col"><input type="checkbox" data-md-icheck class="check_row"></td>
+                                                            <td> <a class="uk-text-center md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="page_invoices.html">View</a></td>
+                                                            <td>123</td>
+                                                            <td class="uk-text-center">Neha Singh</td>
+                                                            <td class="uk-text-center">Army Govt School</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">Rs. 1200</td>
+                                                        </tr> 
+                                                        <tr>
+                                                            <td class="uk-text-center uk-table-middle small_col"><input type="checkbox" data-md-icheck class="check_row"></td>
+                                                            <td> <a class="uk-text-center md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="page_invoices.html">View</a></td>                                                            <td>9891</td>
+                                                            <td class="uk-text-center">Neha Singh</td>
+                                                            <td class="uk-text-center">HighTech Computer Institute</td>
+                                                            <td class="uk-text-center">4.5.2020</span></td>
+                                                            <td class="uk-text-center">4.5.2020</span></td>
+                                                            <td class="uk-text-center">Rs. 1000</td>
+                                                        </tr> 
+                                                        <tr>
+                                                            <td class="uk-text-center uk-table-middle small_col"><input type="checkbox" data-md-icheck class="check_row"></td>
+                                                            <td> <a class="uk-text-center md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="page_invoices.html">View</a></td>
+                                                            <td>989</td>
+                                                            <td class="uk-text-center">Karan Singh</td>
+                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
+                                                            <td class="uk-text-center">4.5.2020</span></td>
+                                                            <td class="uk-text-center">4.5.2020</span></td>
+                                                            <td class="uk-text-center">Rs. 1200</td>
+                                                        </tr> 
+                                                        
+                                                        
+                                                    </tbody>
                                                     </div>
-                                                   <div class="form-group">
-                                                     <label>Due Date</label>
-                                                     <input type="date" class="form-control" name="due_date" {% if user.profile.institute.institute_schedule.due_date %}
-                                                     value="{{user.profile.institute.institute_schedule.due_date|date:'Y-m-d'}}"
-                                                 {% endif %}  required>
-                                                   </div>
-                                                    <div class="form-group">
-                                                       <label>Proccessing Date</label>
-                                                       <input type="date" class="form-control" name="processing_date" {% if user.profile.institute.institute_schedule.processing_date %}
-                                                       value="{{user.profile.institute.institute_schedule.processing_date|date:'Y-m-d'}}"
-                                                   {% endif %} required>  
-                                                    </div>
-                                                    <input class="md-btn md-btn-primary"  type="submit"  > 
-                                                
-                                            </form>
-                                        </div>
-                                            <div class="uk-width-large-1-2"  style="border-left: 1px solid lightgray;">
-                                            <form method="POST" action="{% url 'fees_account_details' %}">
-                    {% csrf_token %}
-                                   <div class="form-group">
-                                                 <label>Merchant ID</label>
-                                                 <input type="text" class="form-control" name="merchant_id" required {% if user.profile.institute.institute_account_details.merchant_id %}
-                                                 value='{{ user.profile.institute.institute_account_details.merchant_id }}' 
-                                                 
-                                               {% endif %}
-                                                             >
+                                                </table>
+                                                <div class="uk-width-medium-1-6">
+                                                    <a class="md-btn md-btn-primary md-btn-wave-light" href="fees_payment.html">Pay Fees</a>
                                                 </div>
-                                               <div class="form-group">
-                                                 <label>Merchant Key</label>
-                                                 <input type="text" class="form-control" name="merchant_key" required  {% if user.profile.institute.institute_account_details.merchant_key %}
-                                                 value='{{ user.profile.institute.institute_account_details.merchant_key }}' 
-                                                 
-                                               {% endif %}>
-                                               </div>
-                                               <input type="submit" class="md-btn md-btn-primary">
-                                           
-                                        </form>                                       
-                                            
-                                   </div>
-                                            <!--<h4 class="heading_a uk-margin-bottom">Payment</h4>-->
-                                            
-
-                                       </div>
-                                </li> 
-                                
-                                <li>
-                                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
-                                   
+                                            </div>
+                                             
                                         
-<div class="uk-width-large">
- <div class="form-group">
-        <label style="margin: 4px;">Select Class:  </label>
-        <select name="selected_class_" class="form-control" id="tags_student_C"  required>
-            <option selected disabled value=""> -- select a class -- </option>
-            {% for class in all_classes %}
-            <option value="{{class.id}}">{{class}}</option>
-            {% endfor %}
-     </select>
-       </div>
-
-       
-     
-
-  <div class="form-group">
-<label>Select a Student:</label>
-<select id="class_students_list_t" class=" form-control students_response_select"  >
-  
-</select>
-  </div>
-
-  
- 
-
-</div>
-
-<table class="table table-hover" id="st_tags_table" >
-    <thead>
-      <tr>
-        <th>Fees Code</th>
-        <th>Fees Description</th>
-  
-       
-      </tr>
-    </thead>
-    <tbody id="student_tags_res">
-
-    </tbody>
-  </table>
-
-                              </div>
-                                
                                     
+                                
+                               
+                                
+                                   
+                                        <li>
+                                            <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                                <div class="uk-width-large">
+                                            <h4 class="heading_a uk-margin-bottom">Payment History </h4>
+                                            <div class="uk-overflow-container">
+                                                <table class="uk-table uk-table-nowrap table_check">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="uk-width-1-10">Invoice No</th>
+                                                        <th class="uk-width-1-10 uk-text-center">Student</th>
+                                                        <th class="uk-width-1-10 uk-text-center">School/Institute Name</th>
+                                                        <th class="uk-width-1-10 uk-text-center">Due Date</th>
+                                                        <th class="uk-width-1-10 uk-text-center">Amount Due</th>
+                                                        <th class="uk-width-1-10 uk-text-center">Payment Date</th>
+                                                        <th class="uk-width-1-10 uk-text-center">Mode</th>
+                                                        <th class="uk-width-1-10 uk-text-center">Amount Paid</th>
+                                                        <th class="uk-width-1-10 uk-text-center">Balance</th>
+                                                        <th class="uk-width-1-10 uk-text-center">Status</th>
+                                                        
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            
+                                                            <td class="uk-text-center">001</td>
+                                                            <td class="uk-text-center">Ramesh Singh</td>
+                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">25.03.2020</td>
+                                                            <td class="uk-text-center">Debit Card</td>
+                                                            <td class="uk-text-center">Rs.3000</td>
+                                                            <td class="uk-text-center">Rs.1000</td>
+                                                            <td class="uk-text-center">Success</td>
+                                                        </tr>   
+                                                        <tr>
+                                                            
+                                                            <td class="uk-text-center">001</td>
+                                                            <td class="uk-text-center">Ramesh Singh</td>
+                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">25.03.2020</td>
+                                                            <td class="uk-text-center">Debit Card</td>
+                                                            <td class="uk-text-center">Rs.3000</td>
+                                                            <td class="uk-text-center">Rs.1000</td>
+                                                            <td class="uk-text-center">Success</td>
+                                                        </tr>   
+                                                        <tr>
+                                                            
+                                                            <td class="uk-text-center">001</td>
+                                                            <td class="uk-text-center">Ramesh Singh</td>
+                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">25.03.2020</td>
+                                                            <td class="uk-text-center">Debit Card</td>
+                                                            <td class="uk-text-center">Rs.3000</td>
+                                                            <td class="uk-text-center">Rs.0</td>
+                                                            <td class="uk-text-center">Success</td>
+                                                        </tr>   
+                                                        <tr>
+                                                            
+                                                            <td class="uk-text-center">001</td>
+                                                            <td class="uk-text-center">Ramesh Singh</td>
+                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">25.03.2020</td>
+                                                            <td class="uk-text-center">Debit Card</td>
+                                                            <td class="uk-text-center">Rs.3000</td>
+                                                            <td class="uk-text-center">Rs.1000</td>
+                                                            <td class="uk-text-center">Pending</td>
+                                                        </tr>   
+                                                        <tr>
+                                                            
+                                                            <td class="uk-text-center">001</td>
+                                                            <td class="uk-text-center">Ramesh Singh</td>
+                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">4.5.2020</td>
+                                                            <td class="uk-text-center">25.03.2020</td>
+                                                            <td class="uk-text-center">Debit Card</td>
+                                                            <td class="uk-text-center">Rs.3000</td>
+                                                            <td class="uk-text-center">Rs.0</td>
+                                                            <td class="uk-text-center">Success</td>
+                                                        </tr>   
+                                                        
+                                                    </tbody>
+                                                    </div>
+                                                </table>
+                                                
+                                            </div> 
+                                            
+                                        </li>
+                                        
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
@@ -897,43 +795,6 @@
             </div>
         </div>
     </div>
-   
-
-    <script>
-        $(document).ready(function(){
-          $('#class_students_list_t').change(function(){
-              $.ajax({
-                  type:'POST',
-                  url:"{% url 'fetch_students_tags_mapped' %}" ,
-                  data:{student_id:$("#class_students_list_t").val(), 
-                  csrfmiddlewaretoken: '{{ csrf_token }}' },
-                  success: function(msg){
-                      $('#st_tags_table').css("display", "block");
-                      $('#student_tags_res').html(msg)
-                     
-                  }
-              })
-          })
-        })
-        </script>
-
-    <script>
-        $(document).ready(function(){
-          $('#tags_student_C').change(function(){
-            
-              $.ajax({
-                  type:'POST',
-                  url:"{% url 'student_for_tags' %}" ,
-                  data:{selected_class_:$("#tags_student_C").val(), 
-                  csrfmiddlewaretoken: '{{ csrf_token }}' },
-                  
-                  success: function(msg){
-                      $('.students_response_select').html(msg);
-                  }
-              })
-          })
-        })
-        </script>
 
     <!-- google web fonts -->
     <script>
@@ -956,15 +817,6 @@
         })();
     </script>
     
-    <script>
-        $('#selectAll').click(function() {
-  $('#persons option').prop('selected', true);
-});
-
-$('#unselectAll').click(function() {
-  $('#persons option').prop('selected', false);
-});
-    </script>
 
 
     <!-- common functions -->
@@ -991,19 +843,6 @@ $('#unselectAll').click(function() {
     <!--  forms advanced functions -->
     <script src="{% static 'main_app/js/pages/forms_advanced.min.js' %}" ></script>
 
-    <!-- <script>
-        $("input[type=date]").datepicker({
-      dateFormat: 'yy-mm-dd',
-      onSelect: function(dateText, inst) {
-        $(inst).val(dateText); // Write the value in the input
-      }
-    });
-    
-    // Code below to avoid the classic date-picker
-    $("input[type=date]").on('click', function() {
-      return false;
-    });
-    </script> -->
 
     <script>
         $(function () {
