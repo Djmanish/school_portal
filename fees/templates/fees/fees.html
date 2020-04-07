@@ -18,6 +18,8 @@
 
     <title>Institute Profile</title>
 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'main_app/bower_components/codemirror/lib/codemirror.css' %}">
     <!-- select2 -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/select2/dist/css/select2.min.css' %}">
@@ -622,15 +624,16 @@
     <ul>
         <li>Hold ctrl or shift (or drag with the mouse) to select more than one</li>
         <li>Type a letter to search in the list</li>
+       
     </ul>
    </div>
       </small>
       <input style="margin-bottom: 5px;" class="form-control" id="myInput" type="text" placeholder="Search a student name ...">
       <select data-live-search="true"  id="myDIV" class="form-control mso multiple_student_tag persons" name="selected_students" multiple style="min-height: 200px; height:{{student_multiple_select_height}}px;"  >
-          <option selected  value=""> --- select students ---</option>
+         <option  disabled value="">   --- select students ---</option>
 
         {% for student in all_students %}
-            <option value="{{student.id}}">{{student.first_name}}
+            <option value="{{student.id}}" >{{forloop.counter}}.     {{student.first_name}}
                                         
                 {% if student.middle_name %}
                 {{student.middle_name}}
@@ -639,6 +642,7 @@
                 {% if student.last_name %}
                 {{student.last_name}}
                 {% endif %}
+               
                   </option>
         {% endfor %}
         </select>
@@ -648,6 +652,13 @@
 {% endif %}
     
 
+<script>
+    $('option').mousedown(function(e) {
+    e.preventDefault();
+    $(this).prop('selected', !$(this).prop('selected'));
+    return false;
+});
+</script>
 
 
 
@@ -858,13 +869,27 @@
                                     
                                            
                                          
-                                    
+                                          
                                       <div class="form-group">
                                     <label>Select a Student:</label>
-                                    <select id="class_students_list_t" class=" form-control students_response_select"  >
-                                      
+                                    <input  class="form-control" id="student_search" type="text" placeholder="Search a student name ...">
+                                    <select id="class_students_list_t" class=" form-control students_response_select" size="10" >
+                                     
+                                       
                                     </select>
                                       </div>
+
+
+                                      <script>
+                                        $(document).ready(function(){
+                                          $("#student_search").on("keyup", function() {
+                                            var value = $(this).val().toLowerCase();
+                                            $("#class_students_list_t *").filter(function() {
+                                              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                                            });
+                                          });
+                                        });
+                                        </script>
                                     
                                       
                                     
@@ -918,7 +943,7 @@
         </div>
     </div>
    
-
+<!-- script for tags mapped to a student -->
     <script>
         $(document).ready(function(){
           $('#class_students_list_t').change(function(){
@@ -937,6 +962,7 @@
         })
         </script>
 
+<!-- script a fetching student for a class -->
     <script>
         $(document).ready(function(){
           $('#tags_student_C').change(function(){
