@@ -629,7 +629,7 @@
    </div>
       </small>
       <input style="margin-bottom: 5px;" class="form-control" id="myInput" type="text" placeholder="Search a student name ...">
-      <select data-live-search="true"  id="myDIV" class="form-control mso multiple_student_tag persons" name="selected_students" multiple style="min-height: 200px; height:{{student_multiple_select_height}}px;"  >
+      <select data-live-search="true"  id="myDIV" class="form-control mso multiple_student_tag persons" name="selected_students" multiple style="min-height: 200px; " >
          <option  disabled value="">   --- select students ---</option>
 
         {% for student in all_students %}
@@ -866,8 +866,43 @@
                                                 {% endfor %}
                                          </select>
                                            </div>
-                                    
+                                           <div id="ortag">
+                                            <span  >OR</span>
+                                           </div>
                                            
+                                           <div class="form-group">
+                                            <label style="margin: 4px;">Select a tag:  </label>
+                                            <select name="" class="form-control" id="selected_tag_"  required>
+                                                <option selected disabled value=""> -- select a tag -- </option>
+                                                {% for tag in all_tags %}
+                                                <option value="{{tag.id}}">{{tag}}</option>
+                                                {% endfor %}
+                                         </select>
+                                           </div>
+                                         
+                                           
+                                           <script>
+                                            $(document).ready(function(){
+                                              $('#selected_tag_').change(function(){
+                                                
+                                                 $('#students_tags_table').css('visibility','hidden')
+                                                  $.ajax({
+                                                      type:'POST',
+                                                      url:"{% url 'students_mapped_to_a_tag' %}" ,
+                                                      data:{selected_tag:$("#selected_tag_").val(), 
+                                                      csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                      success: function(msg){
+                                                          $('#class_students_list_t').html(msg)
+                                                         
+                                                      }
+                                                  })
+                                              })
+                                            })
+                                            </script>
+
+
+
+
                                          
                                           
                                       <div class="form-group">

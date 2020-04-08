@@ -22,6 +22,12 @@ def fees_home(request):
         
         student_multiple_select_height = all_students.count()*25 # defining size of student select field
         
+        
+        if selected_class.class_teacher != request.user:
+            messages.error(request, 'Only class teacher can map tags !!!')
+            return redirect('fees_home')
+        
+
         if len(all_students)<1:
             messages.error(request, 'No student found in the selected class')
             return redirect('fees_home')
@@ -201,6 +207,15 @@ def fetch_students_tags_mapped(request):
         student_tags_list = "<tr><td colspan='4' style='color:red;'>No Tags Found for the selected student</td></tr>"
         return HttpResponse(student_tags_list)
 
-                
+
+def students_mapped_to_a_tag(request):
+    
+    selected_tag = School_tags.objects.get(pk= request.POST.get('selected_tag'))
+    all_students =  selected_tag.tags_to_student.all()
+    student_response = ""
+    for student in all_students:
+        student_response = student_response + f"<option>{student.student.first_name} {student.student.middle_name} {student.student.last_name} - {student.student.Class} </option>"   
+    print(all_students)
+    return HttpResponse(student_response)      
     
         

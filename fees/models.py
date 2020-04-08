@@ -61,7 +61,7 @@ class Account_details(models.Model):
 
 class Student_Tags_Record(models.Model):
     student = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name="student_tags")
-    tags = models.ManyToManyField(to=School_tags)
+    tags = models.ManyToManyField(to=School_tags, related_name="tags_to_student")
     student_class = models.ForeignKey(to=Classes, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):

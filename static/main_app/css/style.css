@@ -211,7 +211,11 @@ padding: 2px;
 }
 .md-btn-primary:hover{
   background-color:#1976d2;
-
+}
+#ortag{
+  width: 100%;
+  text-align: center;
+  margin: auto;
 }
 
 
