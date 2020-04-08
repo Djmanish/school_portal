@@ -485,20 +485,6 @@
                     </li>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </ul>
         </div>
     </aside><!-- main sidebar end -->
@@ -510,9 +496,11 @@
                                         <div class="md-card">
                                             <div class="md-card-content">
                                                         
-                                                        <form method="GET"  class="form-inline" id="attendance_form">
+                                                        <form method="POST"  class="form-inline" id="attendance_form">
+                                                            {% csrf_token %}
                                                             
-                                                            <label style="margin: 4px;">Select Class</label>
+                                                            
+                                                            <label style="margin: 4px;">Select Subject</label>
                                                                 <select class="form-control" name="result_selected_subject" style="padding: 2px;  height:38px">
                                                                     <option selected disabled value="">--Subject--</option>
                                                                     {% for subject in subject_result %}
@@ -524,7 +512,7 @@
                                                              <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px; height:38px" required>
                                                                     <option selected disabled value="">--Exam Type--</option>
                                                                     {% for exam_type in institute_exam_type %}
-                                                                       <option  > {{exam_type}}</option>
+                                                                       <option value="{{exam_type}}" > {{exam_type}}</option>
                                                                     {% endfor %}
                                                              </select>
                                                            
@@ -576,17 +564,14 @@
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
                                                         <tbody>
-                                                                
-                                                            <form method="POST" >
+                                                            {% if institute_students %}    
+                                                            <form method="POST" action="{% url 'exam_result' request.user.profile.institute.id %}" >
                                                                 {% csrf_token %}
                                                                
                                                                 <tr >
                                                                     
-                                                                    {% if selected_subject %}
-                                                                     
                                                                     <th style="text-align: center; margin-bottom: 10px;" class="form-inline" id="attendance_form">Selected Subject Class: {{selected_subject.subject_class}}</th>
-                                                                    
-                                                                    {% endif %}
+                                                                   
                                                                 </tr>
                                                                 <tr></tr>
                                                          
@@ -599,12 +584,18 @@
                                                                 <td >Marks</td>
                                              
                                                             </tr>
-                                                            
-                                                           
-                                                                  
+                                                            <tr>
+                                                            <input type="hidden" value="{{selected_subject.id}}" name="selected_subject">
+
+                                                            <input type="hidden" value="{{exam_type_id.id}}" name="exam_type_id">
+                                                            <input type="hidden" value="{{result_exam_type_sr_no}}" name="result_exam_type_sr_no">
+                                                            <input type="hidden" value="{{selected_subject.subject_class.id}}" name="subject_class">
+                                                            <input type="hidden" value="{{selected_subject.subject_teacher.id}}" name="subject_teacher">
+                                                            <input type="hidden" value="{{exam_type_id.exam_max_marks}}" name="exam_max_marks">
+                                                            <input type="hidden" value="{{exam_type_id.exam_max_limit}}" name="exam_max_limit">
+
+                                                        </tr>
                                                                      {% for student in institute_students %}
-                                                                     {% if selected_subject %}
-                                                                     
                                                                      
                                                                      
                                                             <tr style="text-align-last: center;">
@@ -641,7 +632,7 @@
                                                                        </td>
                                                                     
                                                             </tr>
-                                                            {% endif %}
+                                                            
                                                             {% endfor %}
                                                             
                                                             
@@ -661,8 +652,10 @@
                                                             </tr>
                                                             {% endif %}
                                                         </form>
+                                                        {% endif %}
                                                        
                                                         </tbody>
+
                                                     </table>
                                                     </div>
                                                     </div>
