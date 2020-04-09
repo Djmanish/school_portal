@@ -224,7 +224,7 @@ def class_students_list(request):
     
     if request.method == "POST":
         selected_class = Classes.objects.get(pk = request.POST.get('selected_class_'))
-        all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
+        all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student', status="approve")
         if len(all_students)<1:
             messages.error(request, 'No student found in the selected class')
             return redirect('class_students_list')
@@ -236,14 +236,9 @@ def class_students_list(request):
          }
         return render(request, 'Attendance/class_students.html', context)
         
-
-
-
     context= {
         'all_classes': all_classes
     }
-
-
     return render(request, 'Attendance/class_students.html', context)
 
     

@@ -236,11 +236,11 @@ def index(request):
 def dashboard(request):
     # starting student,teacher & class count
     try:
-        total_std=UserProfile.objects.filter(institute=request.user.profile.institute, designation__level_name="student").count()
+        total_std=UserProfile.objects.filter(institute=request.user.profile.institute, designation__level_name="student", status="approve").count()
     except UserProfile.DoesNotExist:
         total_std=0
     try:
-        total_teacher=UserProfile.objects.filter(institute=request.user.profile.institute, designation__level_name="teacher").count()
+        total_teacher=UserProfile.objects.filter(institute=request.user.profile.institute, designation__level_name="teacher", status="approve").count()
     except UserProfile.DoesNotExist:
         total_teacher=0
     try:
