@@ -228,6 +228,7 @@ def class_students_list(request):
         if len(all_students)<1:
             messages.error(request, 'No student found in the selected class')
             return redirect('class_students_list')
+        
 
         context= {'all_students':all_students,
          'all_classes': all_classes,
