@@ -217,5 +217,9 @@ padding: 2px;
   text-align: center;
   margin: auto;
 }
+.search_icon{
+  color: white;
+  background-color:#1976d2 ;
+}
 
 
