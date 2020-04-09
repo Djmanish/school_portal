@@ -23,4 +23,5 @@ admin.site.register(Classes)
 admin.site.register(Subjects)
 admin.site.register(App_functions)
 admin.site.register(Tracking_permission_changes)
+admin.site.register(Institute_disapproved_user)
 

@@ -714,20 +714,20 @@ def approve_request(request,pk):
     
 
 def disapprove_request(request,pk):
-    
-
     user = UserProfile.objects.get(pk=pk)
-
+    
+    Institute_disapproved_user.objects.create(institute = request.user.profile.institute, user = user, applied_role = user.designation, date = datetime.date.today())
     user.designation = None #user_designation set to null
     user.institute = None # user_institute set to null
     
-    
-
     disapproved_user_role_description = Role_Description.objects.get(user = user.user)
     disapproved_user_role_description.delete()
 
     user.disapprove()
     user.status= 'Pending'
+    
+
+    user.save()
     rr= request.user.profile.institute.id
     return HttpResponseRedirect(f'/user/approvals/{rr}/')
     
