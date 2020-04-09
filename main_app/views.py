@@ -19,6 +19,7 @@ from django.utils import timezone
 from Attendance.models import *
 from AddChild.models import *
 from notices.models import *
+from django.contrib.sessions.models import Session
 
 
 
@@ -233,6 +234,72 @@ def index(request):
 
 @login_required
 def dashboard(request):
+    # starting student,teacher & class count
+    try:
+        total_std=UserProfile.objects.filter(institute=request.user.profile.institute, designation__level_name="student").count()
+    except UserProfile.DoesNotExist:
+        total_std=0
+    try:
+        total_teacher=UserProfile.objects.filter(institute=request.user.profile.institute, designation__level_name="teacher").count()
+    except UserProfile.DoesNotExist:
+        total_teacher=0
+    try:
+        total_class=Classes.objects.filter(institute=request.user.profile.institute).count()
+    except Classes.DoesNotExist:
+        total_class=0
+    
+    # Active Users Count
+    time=datetime.datetime.now()- datetime.timedelta(minutes=30)
+    time1=datetime.datetime.now()
+    count=User.objects.filter(last_login__gte=time,last_login__lte=time1)
+    
+    online_user=[]
+    for i_user in count:
+        if i_user.profile.institute==request.user.profile.institute:
+            online_user.append(i_user)
+
+    len_online_user=len(online_user)
+    
+    # Approvals Data Query Start
+    date=datetime.date.today()
+    last1weeks=date - datetime.timedelta(weeks=1)
+    last2weeks=date - datetime.timedelta(weeks=2)
+    last3weeks=date - datetime.timedelta(weeks=3)
+    last4weeks=date - datetime.timedelta(weeks=4)
+    last5weeks=date - datetime.timedelta(weeks=5)
+    active_sessions = Session.objects.filter(expire_date__gte=timezone.now()).count()
+     
+    # Approvals for 5th week
+    approve5=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last5weeks,last4weeks]).count()
+    disapprove5=UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove",updated_at__date__range=[last5weeks,last4weeks]).count()
+    pending5=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last5weeks,last4weeks]).count()
+
+    # Aprrovals for 4th week
+    approve4=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last4weeks,last3weeks]).count()
+    disapprove4=UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove",updated_at__date__range=[last4weeks,last3weeks]).count()
+    pending4=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last4weeks,last3weeks]).count()
+
+    # Approvals for 3rd week
+    approve3=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last3weeks,last2weeks]).count()
+    disapprove3=UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove",updated_at__date__range=[last3weeks,last2weeks]).count()
+    pending3=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last3weeks,last2weeks]).count()
+
+    # Approvals for 2nd week
+    approve2=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last2weeks,last1weeks]).count()
+    disapprove2=UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove",updated_at__date__range=[last2weeks,last1weeks]).count()
+    pending2=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last2weeks,last1weeks]).count()
+
+    # Approvals for current week
+    approve1=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last1weeks,date]).count()
+    disapprove1=UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove",updated_at__date__range=[last1weeks,date]).count()
+    pending1=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last1weeks,date]).count()
+    
+    # Total Approvals Data
+    approve_data= UserProfile.objects.filter(institute=request.user.profile.institute,status="approve").count()
+    disapprove_data= UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove").count()
+    pending_data= UserProfile.objects.filter(institute=request.user.profile.institute,status="pending").count()
+    # Approvals Data Query End
+    
     # starting parent child data for dashboard
     parent_children = AddChild.objects.filter(parent= request.user.profile,status="active")
     # ending parent child data for dashboard
@@ -298,6 +365,29 @@ def dashboard(request):
     context = {
         'all_classes': all_classes,
        'parent_children': parent_children,
+        'total_std':total_std,
+        'total_teacher':total_teacher,
+        'total_class':total_class,
+        'approve_data':approve_data,
+        'disapprove_data':disapprove_data,
+        'pending_data':pending_data,
+        'approve1':approve1,
+        'disapprove1':disapprove1,
+        'pending1':pending1,
+        'approve2':approve2,
+        'disapprove2':disapprove2,
+        'pending2':pending2,
+        'approve3':approve3,
+        'disapprove3':disapprove3,
+        'pending3':pending3,
+        'approve4':approve4,
+        'disapprove4':disapprove4,
+        'pending4':pending4,
+        'approve5':approve5,
+        'disapprove5':disapprove5,
+        'pending5':pending5, 
+        'active_sessions':active_sessions,  
+        'len_online_user':len_online_user,   
   
     }
     return render(request, 'main_app/dashboard.html' , context)
