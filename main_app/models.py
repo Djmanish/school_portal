@@ -118,7 +118,7 @@ class UserProfile(models.Model):
     class_current_year=models.CharField(max_length=30,null=True)
     class_next_year=models.CharField(max_length=30,null=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True)
-    updated_at = models.DateTimeField(auto_now=True,null=True)
+    updated_at = models.DateTimeField(auto_now=True,null=True) # approval date
 
     def approve(self):
         self.status= 'approve'

@@ -107,15 +107,10 @@ def edit_subject(request, pk):
     can_edit_subject_permission = App_functions.objects.get(function_name='Can Edit Subject')
  
     if can_edit_subject_permission in user_permissions:
-
         if request.method == 'POST':
-            # class_id = request.POST.get('new_class')
-            
             subject_class = Classes.objects.get(pk= request.POST.get('new_class'))
             new_subject_teacher = User.objects.get(pk= request.POST.get('subject_teacher'))
 
-
-            
             new_subject_code =  request.POST.get('subject_code')
             new_subject_name = request.POST.get('subject_name')
         
@@ -153,16 +148,12 @@ def edit_class(request, pk):
     can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
     if can_edit_class_permission in user_permissions:
 
-
-
         class_to_edit = Classes.objects.get(pk=pk)
         designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
         institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
         # institute_classes = Classes.objects.filter(institute=request.user.profile.institute)
 
-        if request.method == 'POST':
-                
-            
+        if request.method == 'POST':            
                 new_class_teacher = User.objects.get(pk= request.POST.get('class_teacher'))
                 class_to_edit.class_teacher = new_class_teacher
                 new_edit_class =  request.POST.get('class_name')
@@ -180,8 +171,6 @@ def edit_class(request, pk):
                 return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
     
         context = {
-
-            # 'all_classes':institute_classes,
             'class_info': class_to_edit,
             'institute_teachers':institute_teachers
         }
@@ -201,9 +190,6 @@ def delete_class(request, pk):
         return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
 
 
-
-       
-
 def approvals(request,pk):
     institute_approval = Institute.objects.get(pk=pk)
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
@@ -216,14 +202,10 @@ def approvals(request,pk):
             active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id).reverse()
             inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval, designation=student_designation_id).reverse()
             return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'parent_request_active':parent_request_active,'parent_request_inactive':parent_request_inactive,'Active_user':active_users,'Inactive_user':inactive_users})
-
-
         else:
             pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval).order_by('id')
             active_users= UserProfile.objects.filter(status='approve', institute=institute_approval).order_by('id')
             inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval).order_by('id')
-
-    
         return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
     else:
         messages.info(request, "You don't have permission to approve/disapprove requests.")
@@ -247,6 +229,7 @@ def dashboard(request):
         total_class=Classes.objects.filter(institute=request.user.profile.institute).count()
     except Classes.DoesNotExist:
         total_class=0
+    # ending student,teacher & class count
     
     # Active Users Count
     time=datetime.datetime.now()- datetime.timedelta(minutes=30)
@@ -515,7 +498,7 @@ def edit_profile(request, pk):
     
     # Store the value of next year
     next_year = datetime.date.today().year+1
-    print(next_year)
+    
    
         
     
