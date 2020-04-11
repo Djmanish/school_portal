@@ -232,8 +232,8 @@ def dashboard(request):
     # ending student,teacher & class count
     
     # Active Users Count
-    time=datetime.datetime.now()- datetime.timedelta(minutes=30)
-    time1=datetime.datetime.now()
+    time= timezone.now()- datetime.timedelta(minutes=30)
+    time1= timezone.now()
     count=User.objects.filter(last_login__gte=time,last_login__lte=time1)
     
     online_user=[]
@@ -256,8 +256,7 @@ def dashboard(request):
     approve5=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last5weeks,last4weeks]).count()
     disapprove5=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last5weeks,last4weeks]).count()
     pending5=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last5weeks,last4weeks]).count()
-    print("Hello World")
-    print(disapprove5)
+   
     # Aprrovals for 4th week
     approve4=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last4weeks,last3weeks]).count()
     disapprove4=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last4weeks,last3weeks]).count()
