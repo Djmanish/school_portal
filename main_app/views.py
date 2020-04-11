@@ -254,32 +254,33 @@ def dashboard(request):
      
     # Approvals for 5th week
     approve5=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last5weeks,last4weeks]).count()
-    disapprove5=UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove",updated_at__date__range=[last5weeks,last4weeks]).count()
+    disapprove5=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last5weeks,last4weeks]).count()
     pending5=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last5weeks,last4weeks]).count()
-
+    print("Hello World")
+    print(disapprove5)
     # Aprrovals for 4th week
     approve4=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last4weeks,last3weeks]).count()
-    disapprove4=UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove",updated_at__date__range=[last4weeks,last3weeks]).count()
+    disapprove4=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last4weeks,last3weeks]).count()
     pending4=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last4weeks,last3weeks]).count()
 
     # Approvals for 3rd week
     approve3=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last3weeks,last2weeks]).count()
-    disapprove3=UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove",updated_at__date__range=[last3weeks,last2weeks]).count()
+    disapprove3=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last3weeks,last2weeks]).count()
     pending3=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last3weeks,last2weeks]).count()
 
     # Approvals for 2nd week
     approve2=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last2weeks,last1weeks]).count()
-    disapprove2=UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove",updated_at__date__range=[last2weeks,last1weeks]).count()
+    disapprove2=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last2weeks,last1weeks]).count()
     pending2=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last2weeks,last1weeks]).count()
 
     # Approvals for current week
     approve1=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last1weeks,date]).count()
-    disapprove1=UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove",updated_at__date__range=[last1weeks,date]).count()
+    disapprove1=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last1weeks,date]).count()
     pending1=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last1weeks,date]).count()
     
     # Total Approvals Data
     approve_data= UserProfile.objects.filter(institute=request.user.profile.institute,status="approve").count()
-    disapprove_data= UserProfile.objects.filter(institute=request.user.profile.institute,status="dissapprove").count()
+    disapprove_data= Institute_disapproved_user.objects.filter(institute=request.user.profile.institute).count()
     pending_data= UserProfile.objects.filter(institute=request.user.profile.institute,status="pending").count()
     # Approvals Data Query End
     
@@ -699,7 +700,7 @@ def approve_request(request,pk):
 def disapprove_request(request,pk):
     user = UserProfile.objects.get(pk=pk)
     
-    Institute_disapproved_user.objects.create(institute = request.user.profile.institute, user = user, applied_role = user.designation, date = datetime.date.today())
+    Institute_disapproved_user.objects.create(institute = request.user.profile.institute, user = user, applied_role = user.designation,date=datetime.date.today())
     user.designation = None #user_designation set to null
     user.institute = None # user_institute set to null
     
