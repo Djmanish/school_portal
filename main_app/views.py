@@ -233,8 +233,23 @@ def index(request):
 
 @login_required
 def dashboard(request):
+    # starting assigned teachers
+    user_one = request.user
+    teacher_class = Classes.objects.get(class_teacher= user_one)
+    teacher_subject = Subjects.objects.filter(subject_class= teacher_class) 
+   
+    # starting assigned classes
+    user_institute_one= request.user.profile.institute
+    user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
+    print(user_subject_one)
+    
+    # class attendance status 
+    
+    
+    
     # starting parent child data for dashboard
     parent_children = AddChild.objects.filter(parent= request.user.profile,status="active")
+    
     # ending parent child data for dashboard
     if request.user.profile.institute:
         session_start_date = request.user.profile.institute.session_start_date
@@ -251,7 +266,7 @@ def dashboard(request):
         # fetching all absent student for class
         absent_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="absent", student_class = c , date = datetime.date.today() ).count()
         c.total_absent = absent_student
-
+ 
         leave_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="leave", student_class = c, date = datetime.date.today()).count()
         c.total_leave = leave_student
     # ending attendace data for dashboard
@@ -298,6 +313,9 @@ def dashboard(request):
     context = {
         'all_classes': all_classes,
        'parent_children': parent_children,
+       'teacher_subject': teacher_subject,
+       'user_subject_one':user_subject_one,
+       
   
     }
     return render(request, 'main_app/dashboard.html' , context)
