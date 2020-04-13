@@ -175,16 +175,51 @@ img#slogo{
   text-align: center;
 
 }
+.alert_notice_list li{
+  min-height: 0px;
+}
 
 .head_center{
   align:center;
 }
+.select2 {
+  width: -webkit-fill-available !important;
+}
+.select2-selection, .select2-selection--multiple{
+  min-height: 0px !important;
+  padding: 2px !important;
+}
+.tag-i{
+  border: none !important;
+  background-color: white !important;
+}
+.tag-i:hover{
+  background-color: #e3f2fd !important;
+}
+#student_list_map_select{
+  border: none !important;
+  font-size: 15px;
+  padding: 0px !important;
+}
+.multiple_student_tag option{
+border-bottom: 1px solid lightgray;
+padding: 2px;
+}
+
 .md-btn-primary{
   background-color:#1976d2;
 }
 .md-btn-primary:hover{
   background-color:#1976d2;
-
+}
+#ortag{
+  width: 100%;
+  text-align: center;
+  margin: auto;
+}
+.search_icon{
+  color: white;
+  background-color:#1976d2 ;
 }
 
 

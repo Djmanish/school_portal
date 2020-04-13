@@ -19,6 +19,7 @@ from django.utils import timezone
 from Attendance.models import *
 from AddChild.models import *
 from notices.models import *
+from django.contrib.sessions.models import Session
 
 
 
@@ -106,15 +107,10 @@ def edit_subject(request, pk):
     can_edit_subject_permission = App_functions.objects.get(function_name='Can Edit Subject')
  
     if can_edit_subject_permission in user_permissions:
-
         if request.method == 'POST':
-            # class_id = request.POST.get('new_class')
-            
             subject_class = Classes.objects.get(pk= request.POST.get('new_class'))
             new_subject_teacher = User.objects.get(pk= request.POST.get('subject_teacher'))
 
-
-            
             new_subject_code =  request.POST.get('subject_code')
             new_subject_name = request.POST.get('subject_name')
         
@@ -152,16 +148,12 @@ def edit_class(request, pk):
     can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
     if can_edit_class_permission in user_permissions:
 
-
-
         class_to_edit = Classes.objects.get(pk=pk)
         designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
         institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
         # institute_classes = Classes.objects.filter(institute=request.user.profile.institute)
 
-        if request.method == 'POST':
-                
-            
+        if request.method == 'POST':            
                 new_class_teacher = User.objects.get(pk= request.POST.get('class_teacher'))
                 class_to_edit.class_teacher = new_class_teacher
                 new_edit_class =  request.POST.get('class_name')
@@ -179,8 +171,6 @@ def edit_class(request, pk):
                 return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
     
         context = {
-
-            # 'all_classes':institute_classes,
             'class_info': class_to_edit,
             'institute_teachers':institute_teachers
         }
@@ -200,9 +190,6 @@ def delete_class(request, pk):
         return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
 
 
-
-       
-
 def approvals(request,pk):
     institute_approval = Institute.objects.get(pk=pk)
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
@@ -215,14 +202,10 @@ def approvals(request,pk):
             active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id).reverse()
             inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval, designation=student_designation_id).reverse()
             return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'parent_request_active':parent_request_active,'parent_request_inactive':parent_request_inactive,'Active_user':active_users,'Inactive_user':inactive_users})
-
-
         else:
             pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval).order_by('id')
             active_users= UserProfile.objects.filter(status='approve', institute=institute_approval).order_by('id')
             inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval).order_by('id')
-
-    
         return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
     else:
         messages.info(request, "You don't have permission to approve/disapprove requests.")
@@ -233,6 +216,7 @@ def index(request):
 
 @login_required
 def dashboard(request):
+<<<<<<< HEAD
     # starting assigned teachers
     user_one = request.user
     teacher_class = Classes.objects.get(class_teacher= user_one)
@@ -246,6 +230,107 @@ def dashboard(request):
     # class attendance status 
     
     
+=======
+# starting class teacher's  class status for last six days
+    last_six_days_list = []
+    ct_present_status = []
+    ct_absent_status = []
+    ct_leave_status = []
+    for i in range(0,6): # creating list of last six days
+        last_six_days_list.append(datetime.date.today() - datetime.timedelta(i))
+
+    teacher_class = Classes.objects.filter(class_teacher = request.user).first()
+
+    for i in last_six_days_list:
+        total_present_studentsc = Attendance.objects.filter(attendance_status="present" , student_class= teacher_class , date= i ).count()
+        total_absent_studentsc = Attendance.objects.filter(attendance_status="absent" , student_class= teacher_class , date= i ).count()
+        total_leave_studentsc = Attendance.objects.filter(attendance_status="leave" , student_class= teacher_class , date= i ).count()
+        ct_present_status.append(total_present_studentsc)
+        ct_absent_status.append(total_absent_studentsc)
+        ct_leave_status.append(total_leave_studentsc)
+    
+    final_data = []
+    for i,j,k,l in zip(last_six_days_list, ct_present_status, ct_absent_status, ct_leave_status):
+        one_list = []
+        one_list.append(i)
+        one_list.append(j)
+        one_list.append(k)
+        one_list.append(l)
+        final_data.append(one_list)
+    print(final_data)
+
+
+# ending class teacher's  class status for last six days
+
+   
+
+    # starting student,teacher & class count
+    try:
+        total_std=UserProfile.objects.filter(institute=request.user.profile.institute, designation__level_name="student", status="approve").count()
+    except UserProfile.DoesNotExist:
+        total_std=0
+    try:
+        total_teacher=UserProfile.objects.filter(institute=request.user.profile.institute, designation__level_name="teacher", status="approve").count()
+    except UserProfile.DoesNotExist:
+        total_teacher=0
+    try:
+        total_class=Classes.objects.filter(institute=request.user.profile.institute).count()
+    except Classes.DoesNotExist:
+        total_class=0
+    # ending student,teacher & class count
+    
+    # Active Users Count
+    time= timezone.now()- datetime.timedelta(minutes=30)
+    time1= timezone.now()
+    count=User.objects.filter(last_login__gte=time,last_login__lte=time1)
+    
+    online_user=[]
+    for i_user in count:
+        if i_user.profile.institute==request.user.profile.institute:
+            online_user.append(i_user)
+
+    len_online_user=len(online_user)
+    
+    # Approvals Data Query Start
+    date=datetime.date.today()
+    last1weeks=date - datetime.timedelta(weeks=1)
+    last2weeks=date - datetime.timedelta(weeks=2)
+    last3weeks=date - datetime.timedelta(weeks=3)
+    last4weeks=date - datetime.timedelta(weeks=4)
+    last5weeks=date - datetime.timedelta(weeks=5)
+    active_sessions = Session.objects.filter(expire_date__gte=timezone.now()).count()
+     
+    # Approvals for 5th week
+    approve5=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last5weeks,last4weeks]).count()
+    disapprove5=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last5weeks,last4weeks]).count()
+    pending5=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last5weeks,last4weeks]).count()
+   
+    # Aprrovals for 4th week
+    approve4=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last4weeks,last3weeks]).count()
+    disapprove4=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last4weeks,last3weeks]).count()
+    pending4=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last4weeks,last3weeks]).count()
+
+    # Approvals for 3rd week
+    approve3=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last3weeks,last2weeks]).count()
+    disapprove3=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last3weeks,last2weeks]).count()
+    pending3=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last3weeks,last2weeks]).count()
+
+    # Approvals for 2nd week
+    approve2=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last2weeks,last1weeks]).count()
+    disapprove2=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last2weeks,last1weeks]).count()
+    pending2=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last2weeks,last1weeks]).count()
+
+    # Approvals for current week
+    approve1=UserProfile.objects.filter(institute=request.user.profile.institute,status="approve",updated_at__date__range=[last1weeks,date]).count()
+    disapprove1=Institute_disapproved_user.objects.filter(institute=request.user.profile.institute,date__range=[last1weeks,date]).count()
+    pending1=UserProfile.objects.filter(institute=request.user.profile.institute,status="pending",created_at__date__range=[last1weeks,date]).count()
+    
+    # Total Approvals Data
+    approve_data= UserProfile.objects.filter(institute=request.user.profile.institute,status="approve").count()
+    disapprove_data= Institute_disapproved_user.objects.filter(institute=request.user.profile.institute).count()
+    pending_data= UserProfile.objects.filter(institute=request.user.profile.institute,status="pending").count()
+    # Approvals Data Query End
+>>>>>>> 8b41b5286bd2783689091757cbf188592439f199
     
     # starting parent child data for dashboard
     parent_children = AddChild.objects.filter(parent= request.user.profile,status="active")
@@ -276,26 +361,28 @@ def dashboard(request):
 
         if request.user.profile.designation.level_name == "student":
             total_days_open = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date ).count()
-            
-            total_days_present= Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='present' ).count()
-            
-            total_days_absent = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='absent' ).count()
 
-            total_days_leave = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='leave' ).count()
-            student_attendance_percentage = (total_days_present/total_days_open)*100
-            student_attendance_percentage = round(student_attendance_percentage, 2)
+            if total_days_open == 0:
+                pass
+            else:
+                total_days_present= Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='present' ).count()
+                
+                total_days_absent = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='absent' ).count()
 
-            request.user.student_total_days_school_open = total_days_open
-            request.user.student_total_days_present = total_days_present
-            request.user.student_total_days_absent = total_days_absent
-            request.user.student_total_days_leave = total_days_leave
-            request.user.student_attendance_percentage = student_attendance_percentage
+                total_days_leave = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='leave' ).count()
+                student_attendance_percentage = (total_days_present/total_days_open)*100
+                student_attendance_percentage = round(student_attendance_percentage, 2)
 
-    # ending students attendance status
+                request.user.student_total_days_school_open = total_days_open
+                request.user.student_total_days_present = total_days_present
+                request.user.student_total_days_absent = total_days_absent
+                request.user.student_total_days_leave = total_days_leave
+                request.user.student_attendance_percentage = student_attendance_percentage
+
+        # ending students attendance status
 
     # starting user notice
     if request.user.profile.designation:
-
         teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
         teacher_role_level = teacher_role_level.level_id
         user_role_level = request.user.profile.designation.level_id
@@ -313,10 +400,39 @@ def dashboard(request):
     context = {
         'all_classes': all_classes,
        'parent_children': parent_children,
+<<<<<<< HEAD
        'teacher_subject': teacher_subject,
        'user_subject_one':user_subject_one,
        
   
+=======
+        'total_std':total_std,
+        'total_teacher':total_teacher,
+        'total_class':total_class,
+        'approve_data':approve_data,
+        'disapprove_data':disapprove_data,
+        'pending_data':pending_data,
+        'approve1':approve1,
+        'disapprove1':disapprove1,
+        'pending1':pending1,
+        'approve2':approve2,
+        'disapprove2':disapprove2,
+        'pending2':pending2,
+        'approve3':approve3,
+        'disapprove3':disapprove3,
+        'pending3':pending3,
+        'approve4':approve4,
+        'disapprove4':disapprove4,
+        'pending4':pending4,
+        'approve5':approve5,
+        'disapprove5':disapprove5,
+        'pending5':pending5, 
+        'active_sessions':active_sessions,  
+        'len_online_user':len_online_user,  
+
+        'final_data': final_data
+
+>>>>>>> 8b41b5286bd2783689091757cbf188592439f199
     }
     return render(request, 'main_app/dashboard.html' , context)
 
@@ -357,15 +473,21 @@ def login(request):
 
 @login_required
 def user_profile(request):
-    # Secondry Institute Checkpoint Start
-    # if request.user.profile.designation.level_name == "student":
-    #     try:
-    #         chk_inst=SecondryInstitute.objects.get(student_name=request.user.profile,institute_type="primary")
-    #         pass
-    #     except SecondryInstitute.DoesNotExist:
-    #         add_institute = SecondryInstitute.objects.create(student_name=request.user.profile, student_institute=request.user.profile.institute, student_Class=request.user.profile.Class,student_rollno=request.user.profile.roll_number,institute_type="primary",status="active")
-    # # Secondry Institute Checkpoint End
-    # User Permission 
+      # starting user notice
+    if request.user.profile.designation:
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.all().order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice
     user_permissions_changes = Tracking_permission_changes.objects.filter(institute= request.user.profile.institute, role = request.user.profile.designation).last()
     
     # Parent_childern Checkpoint Start
@@ -443,7 +565,7 @@ def edit_profile(request, pk):
     
     # Store the value of next year
     next_year = datetime.date.today().year+1
-    print(next_year)
+    
    
         
     
@@ -642,20 +764,20 @@ def approve_request(request,pk):
     
 
 def disapprove_request(request,pk):
-    
-
     user = UserProfile.objects.get(pk=pk)
-
+    
+    Institute_disapproved_user.objects.create(institute = request.user.profile.institute, user = user, applied_role = user.designation,date=datetime.date.today())
     user.designation = None #user_designation set to null
     user.institute = None # user_institute set to null
     
-    
-
     disapproved_user_role_description = Role_Description.objects.get(user = user.user)
     disapproved_user_role_description.delete()
 
     user.disapprove()
     user.status= 'Pending'
+    
+
+    user.save()
     rr= request.user.profile.institute.id
     return HttpResponseRedirect(f'/user/approvals/{rr}/')
     

@@ -42,6 +42,7 @@
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
+    <script src="{% static 'main_app/js/script.js' %}"></script>
 
  
 </head>
@@ -507,7 +508,7 @@
                 <div class="uk-width-large">
                     <div class="md-card">
                         <div class="user_heading">
-                            <h2 style="color: white;">Subject Update</h2>
+                            <h2 style="color: white;">Class Update</h2>
                             <div class="user_heading_menu hidden-print">
                                 <!-- <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
                                     <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
@@ -520,77 +521,62 @@
                             
                            
                         </div>
- <div class="user_content">
-
+                        <div class="user_content">
+                        
+                            {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                            <!-- {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %} -->
+                        {% endif %}
  <!-- messages -->
  {% if messages %}
- <div class="md-card md-card-primary">
-<div class=""md-card-content">
-   <ul class="messages alert">
-       {% for message in messages %}
-       <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-       {% endfor %}
-   </ul>
-</div>
- </div>
- {% endif %}
- 
- <!-- Subject form -->
-                       
-    <form method="POST" action="{% url 'edit_subject' subject_info.pk %}">
-    {% csrf_token %}
-  
-    <div>
-
-        <div class="form-group" >
-        <label >Select Class:</label>
-        <select class="form-control" name="new_class" id="new_class">
-        <option selected   value="{{subject_info.subject_class.id}}" >{{subject_info.subject_class}}</option>
-        {% for class in all_classes %}
-        <option value="{{class.id}}">{{class}}</option>
-        {% endfor %}
-            
-       
-        </select>
-        </div>
-        
-        <div class="form-group">
-        <label >Subject Code:</label>
-        <input type="text" class="form-control" name='subject_code' value="{{subject_info.subject_code}}" required="required">
-        </div>
-        
-        <div class="form-group">
-        <label >Subject Name:</label>
-        <input type="text" class="form-control" name='subject_name' value="{{subject_info.subject_name}}" required="required">
-        </div>
-        <div class="form-group">
-            <label for="sel1">Select Subject Teacher</label>
-            <select class="form-control" name="subject_teacher" required>
-                <option selected value="{{subject_info.subject_teacher.id}}">{{subject_info.subject_teacher}}</option>
-              
-              {% for teacher in institute_teachers %}
-                  <option value='{{teacher.pk}}'>{{teacher}}</option>
+        <div class="md-card md-card-primary">
+      <div class=""md-card-content">
+          <ul class="messages alert">
+              {% for message in messages %}
+              <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
               {% endfor %}
-                  
-    
-            </select>
+          </ul>
+      </div>
         </div>
-        
-        <input type="submit" class="md-btn md-btn-primary" value="Update">
-       
-        </div>
-        
+        {% endif %}
+
+<form method="POST" action="">
+{% csrf_token %}
+
+<div>
+
+{{form|crispy}}
+
+<input type="submit" class="md-btn md-btn-primary" value="Update">
+
+</div>
+
 
 
 </form>
 
 
 
+
+
+
+
+
                             
- </div>
+                                            </div>
                                    
-</div>
-</div>
+                    </div>
+                </div>
               
             </div>
         </div>
@@ -646,7 +632,7 @@
 
 
     
-   
+    
 <!-- code to toggle admin options -->
 <script>
         $(document).ready(function(){

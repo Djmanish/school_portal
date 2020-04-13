@@ -118,7 +118,7 @@ class UserProfile(models.Model):
     class_current_year=models.CharField(max_length=30,null=True)
     class_next_year=models.CharField(max_length=30,null=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True)
-    updated_at = models.DateTimeField(auto_now=True,null=True)
+    updated_at = models.DateTimeField(auto_now=True,null=True) # approval date
 
     def approve(self):
         self.status= 'approve'
@@ -171,7 +171,6 @@ class Subjects(models.Model):
 
 
 class Tracking_permission_changes(models.Model):
-    
     institute = models.ForeignKey(to=Institute, on_delete=models.DO_NOTHING,related_name='institute_role_permission_updated', null=True, blank=True)
     
     role =  models.ForeignKey(to=Institute_levels, on_delete=models.DO_NOTHING, related_name='role_permission_updated', null=True, blank=True)
@@ -189,3 +188,10 @@ class Tracking_permission_changes(models.Model):
     def __str__(self):
         return str(self.update_time)
             
+
+
+class Institute_disapproved_user(models.Model):
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='institute_disapproved_user', null=True, blank=True)
+    user = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name="disapproved_from")
+    applied_role = models.ForeignKey(to= Institute_levels, on_delete=models.SET_NULL, null=True)
+    date = models.DateField()

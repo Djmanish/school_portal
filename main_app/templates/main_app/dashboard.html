@@ -46,7 +46,11 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-
+   <script type="text/javascript" src=https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js></script>
+  
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -128,6 +132,8 @@
                     <ul class="uk-navbar-nav user_actions">
                         <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
                         <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
+                        
+                        {% if user.profile.designation %}
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                             <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
                             <div class="uk-dropdown uk-dropdown-xlarge">
@@ -140,47 +146,18 @@
                                         <li>
                                             <ul class="md-list md-list-addon alert_notice_list">
                                                 {% for notice in user.users_notice|slice:":5" %}
-                                                
                                                 <li>
                                                     <a href="{% url 'all_notice_list' %}">
-
                                                         <div class="md-list-addon-element">
                                                             <span class="md-user-letters md-bg-cyan">N</span>
                                                         </div>
-                                                       
                                                         <div class="md-list-content">
-                                                            
                                                             <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
-                                                            
                                                         </div>
                                                     </a>
-                                                   
-                                                   
                                                 </li>
                                                 {% endfor %}
-                                                <!-- <li>
-                                                    <div class="md-list-addon-element">
-                                                        <img class="md-user-image md-list-addon-avatar" src="{% static 'main_app/img/avatars/avatar_07_tn.png' %}" alt=""/>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="page_mailbox.html">Esse similique et.</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Nam molestiae architecto maxime dicta qui esse consequatur dignissimos rem.</span>
-                                                    </div>
-                                                </li> -->
-                                                <!-- <li>
-                                                    <div class="md-list-addon-element">
-                                                        <span class="md-user-letters md-bg-light-green">qm</span>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="page_mailbox.html">Eaque autem.</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Aspernatur in quod distinctio est id provident nihil quam fugit inventore.</span>
-                                                    </div>
-                                                </li> -->
-                                             
                                             </ul>
-                                            <!-- <div class="uk-text-center uk-margin-top uk-margin-small-bottom">
-                                                <a href="page_mailbox.html" class="md-btn md-btn-flat md-btn-flat-primary js-uk-prevent">Show All</a>
-                                            </div> -->
                                         </li>
                                         <li>
                                             <ul class="md-list md-list-addon">
@@ -226,6 +203,8 @@
                                 </div>
                             </div>
                         </li>
+                        {% endif %}
+                            
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                             <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/></a>
                             <div class="uk-dropdown uk-dropdown-small">
@@ -348,7 +327,26 @@
     </ul>
 </li>
 <!-- ending notice menu -->
-                
+
+<li  title="Fees">
+    <a href="{% url 'fees_home' %}">
+        <span class="menu_icon"><i class="material-icons">date_range</i></span>
+        <span class="menu_title">Fees</span>
+    </a>
+    
+</li>
+        
+
+{% if user.profile.designation.level_name == "parent" %}
+<li  title="Fees">
+    <a href="{% url 'parent_fees' %}">
+        <span class="menu_icon"><i class="material-icons">date_range</i></span>
+        <span class="menu_title">Fees Status</span>
+    </a>
+    
+</li>
+{% endif %}
+    
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
@@ -523,20 +521,107 @@
     </aside><!-- main sidebar end -->
 
     <div id="page_content">
-        {% if messages %}
-        <div class="md-card md-card-primary">
-      <div>
-          <ul class="messages alert">
-              {% for message in messages %}
-              <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-              {% endfor %}
-          </ul>
-      </div>
-        </div>
-        {% endif %}
+
+        
+       
 
 
         <div id="page_content_inner">
+
+            {% if user.profile.designation %}
+            {% else %}  
+            <div class="md-card md-card-primary">
+                <div class="md-card-content">
+                    <a href="{% url 'edit_profile' user.profile.pk %}">Click here</a> to select your institute and get started...
+                </div>
+            </div>
+            {% endif %}
+                
+          
+            {% if messages %}
+            <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+            {% endif %}
+            
+            <!-- statistics (small charts) -->
+            {% if user.profile.designation %}
+            <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">people</i></span></div>
+                            <span class="uk-text-muted uk-text-small">Total Students</span>
+                            <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_std}}</noscript></span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">person</i></span></div>
+                            <span class="uk-text-muted uk-text-small">Total Teachers</span>
+                            <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_teacher}}</noscript></span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">school</i></span></div>
+                            <span class="uk-text-muted uk-text-small">Total Classes</span>
+                            <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_class}}</noscript></span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color:#7cb342;">person</i></span></div>
+                            <span class="uk-text-muted uk-text-small">Active Users</span>
+                            <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{len_online_user}}</noscript></span></h2>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            {% endif %}
+                
+
+            
+            
+
+            <!-- large chart -->
+            <div class="uk-grid">
+                <div class="uk-width-1-1">
+                    <div class="md-card">
+                        <!-- <div class="md-card-toolbar">
+                            <div class="md-card-toolbar-actions">
+                                <i class="md-icon material-icons md-card-fullscreen-activate">&#xE5D0;</i>
+                                <i class="md-icon material-icons">&#xE5D5;</i>
+                                <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}">
+                                    <i class="md-icon material-icons">&#xE5D4;</i>
+                                    <div class="uk-dropdown uk-dropdown-small">
+                                        <ul class="uk-nav">
+                                            <li><a href="#">Action 1</a></li>
+                                            <li><a href="#">Action 2</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="md-card-toolbar-heading-text">
+                                Chart
+                            </h3>
+                        </div> -->
+                        <div class="md-card-content">
+                            <!--Child Card For Parents-->
             {% if user.profile.institute %}
             {% if user.profile.designation.level_name == "parent"%}
             <div class="uk-grid uk-grid-medium uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
@@ -606,119 +691,6 @@
                 
             </div>
             {% endif %}{% endif %}
-
-            <!-- statistics (small charts) -->
-            
-            <div class="uk-grid uk-grid-width-large-1-2 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
-                <div>
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_visitors peity_data">5,3,9,6,5,9,7</span></div>
-                            <span class="uk-text-muted uk-text-small">Approved Teachers</span>
-                            <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>12456</noscript></span></h2>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_sale peity_data">5,3,9,6,5,9,7,3,5,2</span></div>
-                            <span class="uk-text-muted uk-text-small">Approved Students</span>
-                            <h2 class="uk-margin-remove">$<span class="countUpMe">0<noscript>142384</noscript></span></h2>
-                        </div>
-                    </div>
-                </div>
-               
-                
-            </div>
-
-            <!-- large chart -->
-            <div class="uk-grid">
-                <div class="uk-width-1-1">
-                    <div class="md-card">
-                        <div class="md-card-toolbar">
-                            <div class="md-card-toolbar-actions">
-                                <i class="md-icon material-icons md-card-fullscreen-activate">&#xE5D0;</i>
-                                <i class="md-icon material-icons">&#xE5D5;</i>
-                                <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}">
-                                    <i class="md-icon material-icons">&#xE5D4;</i>
-                                    <div class="uk-dropdown uk-dropdown-small">
-                                        <ul class="uk-nav">
-                                            <li><a href="#">Action 1</a></li>
-                                            <li><a href="#">Action 2</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <h3 class="md-card-toolbar-heading-text">
-                                Chart
-                            </h3>
-                        </div>
-                        <div class="md-card-content">
-                            <div class="mGraph-wrapper">
-                                <div id="mGraph_sale" class="mGraph" data-uk-check-display></div>
-                            </div>
-                            <div class="md-card-fullscreen-content">
-                                <div class="uk-overflow-container">
-                                    <table class="uk-table uk-table-no-border uk-text-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Best Seller</th>
-                                            <th>Total Sale</th>
-                                            <th>Change</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>January 2014</td>
-                                            <td>Voluptatem et eum qui.</td>
-                                            <td>$3 234 162</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>February 2014</td>
-                                            <td>Et eos ducimus rem veritatis.</td>
-                                            <td>$3 771 083</td>
-                                            <td class="uk-text-success">+2.5%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>March 2014</td>
-                                            <td>Incidunt culpa ea temporibus.</td>
-                                            <td>$2 429 352</td>
-                                            <td class="uk-text-danger">-4.6%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>April 2014</td>
-                                            <td>Tempore ea rerum possimus.</td>
-                                            <td>$4 844 169</td>
-                                            <td class="uk-text-success">+7%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>May 2014</td>
-                                            <td>Dignissimos quia reprehenderit repellat odit.</td>
-                                            <td>$5 284 318</td>
-                                            <td class="uk-text-success">+3.2%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>June 2014</td>
-                                            <td>Est alias aut quis.</td>
-                                            <td>$4 688 183</td>
-                                            <td class="uk-text-danger">-6%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>July 2014</td>
-                                            <td>Delectus reiciendis ea fugit.</td>
-                                            <td>$4 353 427</td>
-                                            <td class="uk-text-success">-5.3%</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                </div>
-                                <p class="uk-margin-large-top uk-margin-small-bottom heading_list uk-text-success">Some Info:</p>
-                                <p class="uk-margin-top-remove">Ut facere eius impedit quaerat ut voluptas aliquid nostrum in fugiat et eum dicta ut quo enim est atque quia non officiis quo minus quisquam consequuntur atque velit architecto et tempore provident nihil aut et reiciendis eos iste quasi explicabo recusandae ipsa natus ipsa repellendus illo illum facere earum tenetur repellat nemo aspernatur vel corporis ut vel quia dolorem mollitia autem magni ducimus nisi laborum deleniti laborum facilis dolores natus quae quia necessitatibus laboriosam repellat minus odio atque et expedita in nihil pariatur quae velit error non culpa unde ut repellendus ut consequuntur et earum corrupti atque earum quisquam dolore totam temporibus consequuntur enim iusto possimus minus nostrum hic incidunt distinctio quae labore repudiandae voluptate.</p>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -727,7 +699,7 @@
             <!-- circular charts -->
             
             {% if user.profile.designation %}
-            {% if user.profile.designation.level_name == "parent" or user.profile.designation.level_name == "student"  %}
+            {% if  user.profile.designation.level_name == "student"  %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
                 <div class="uk-width-medium-1-2">
                     <div class="md-card">
@@ -765,9 +737,6 @@
                                             <td>Attendance Percentage</td>
                                              <td>{{user.student_attendance_percentage}}%</td>
                                            </tr>
-                                 
-                                 
-                                      
                                     </tbody>
                                 </table>
                             </div>
@@ -933,6 +902,75 @@
                 </div>
             </div>
         </div>
+            
+            {% elif  user.profile.designation.level_name == "parent" %}
+
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                <div class="uk-width-medium-1-2">
+                    <div class="">
+                        <div class="md-card-content">
+                           
+                            <div class="md-card uk-margin-medium-bottom">
+                                <div class="md-card-content">
+                                    <div class="uk-overflow-container">
+                                        <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap">
+                                            <h3 class="heading_a uk-margin-bottom">Fees Status</h3>
+                                            <thead>
+                                            <tr>
+                                                <th>Student Name</th>
+                                                <th>Earliest Due Date</th>
+                                                <th>Amount</th>
+                                               
+                                            </tr>
+                                            </thead>
+                                        
+                                            <tbody>
+                                            <tr>
+                                                <td><a href="#" >Student One</a></td>
+                                                <td>Table Data</td>
+                                                <td>Table Data</td>
+                                              
+                                            </tr>
+                                       
+                                            <tr>
+                                                <td><a href="#" >Student One</a></td>
+                                                <td>Table Data</td>
+                                                <td>Table Data</td>
+                                               
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td><a href="#" >Student One</a></td>
+                                                <td>Table Data</td>
+                                                <td>Table Data</td>
+                                               
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td><a href="#" >Student One</a></td>
+                                                <td>Table Data</td>
+                                                <td>Table Data</td>
+                                               
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-medium-1-2">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <h3 class="heading_a uk-margin-bottom">Statistics</h3>
+                            <div id="ct-chart" class="chartist"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+
             {% else %}
    <!-- tasks -->
    <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
@@ -975,8 +1013,14 @@
     <div class="uk-width-medium-1-2">
         <div class="md-card">
             <div class="md-card-content">
-                <h3 class="heading_a uk-margin-bottom">Statistics</h3>
-                <div id="ct-chart" class="chartist"></div>
+                <h3 class="heading_a uk-margin-bottom">Approvals</h3>
+                <!-- <div style="width: 300px;height: 300px;">
+                    <canvas id="myChart" width="200px" height="200px"></canvas>                           
+
+                </div> -->
+                <div id="container" style="width: 100%;height: auto;margin-top: 80px;">
+                    <canvas id="canvas"></canvas>
+                  </div>
             </div>
         </div>
     </div>
@@ -1351,7 +1395,6 @@
                 </li>
             </ul>
         </div>
-
         <button type="button" class="chat_sidebar_close uk-close"></button>
         <div class="chat_submit_box">
             <div class="uk-input-group">
@@ -1363,6 +1406,37 @@
         </div>
 
     </aside>
+
+
+
+    <table class="table table-hover">
+<thead>
+    <th>Date</th>
+    <th>Present</th>
+    <th>Absent</th>
+    <th>Leave</th>
+</thead>
+<tbody>
+    
+    {% for i in final_data %}
+    
+   
+    <tr>
+        {% for j in i %}
+        <td>{{j}}</td>
+        {% endfor %}
+    </tr>
+      
+    
+        
+        
+    {% endfor %}
+        
+    
+   
+</tbody>
+    </table>
+    
     <!-- secondary sidebar end -->
 
     <!-- google web fonts -->
@@ -1405,7 +1479,7 @@
         <script src="{% static 'main_app/bower_components/maplace-js/dist/maplace.min.js' %}"></script>
         <!-- peity (small charts) -->
         <script src="{% static 'main_app/bower_components/peity/jquery.peity.min.js' %}"></script>
-        <!-- easy-pie-chart (circular statistics) -->
+        <!-- easy-pie-chart (circular ) -->
         <script src="{% static 'main_app/bower_components/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js' %}"></script>
         <!-- countUp -->
         <script src="{% static 'main_app/bower_components/countUp.js/dist/countUp.min.js' %}"></script>
@@ -1417,6 +1491,8 @@
 
         <!--  dashbord functions -->
         <script src="{% static 'main_app/js/pages/dashboard.min.js' %}"></script>
+
+       
     
     <script>
         $(function() {
@@ -1436,8 +1512,68 @@
             altair_helpers.ie_fix();
         });
     </script>
+        
+    <script>
+        var barChartData = {
+                        labels: [
+                            "5th Week",
+                            "4th Week",
+                            "3rd Week",
+                            "2nd Week",
+                            "This Week",
+                            "Total"                            
+                        ],
+                        datasets: [
+                            {
+                            label: "Pending",
+                            backgroundColor: '#ff7f0e',
+                            borderColor: '#ff7f0e',
+                            borderWidth: 1,
+                            data: [{{pending5}}, {{pending4}}, {{pending3}}, {{pending2}},{{pending1}},{{pending_data}}]
+                            },
+                            {
+                            label: "Approved",
+                            backgroundColor: '#2ca02c',
+                            borderColor: '#2ca02c',
+                            borderWidth: 1,
+                            data: [{{approve5}}, {{approve4}}, {{approve3}}, {{approve2}}, {{approve1}},{{approve_data}}]
+                            },
+                            {
+                            label: "Disapproved",
+                            backgroundColor: '#d62728',
+                            borderColor: '#d62728',
+                            borderWidth: 1,
+                            data: [{{disapprove5}},{{disapprove4}},{{disapprove3}},{{disapprove2}},{{disapprove1}},{{disapprove_data}}]
+                            },
+                            
+                        ]
+                        };
 
+                        var chartOptions = {
+                        responsive: true,
+                        legend: {
+                            position: "bottom"
+                        },
+                        
+                        scales: {
+                            yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                            }]
+                        }
+                        }
 
+                        window.onload = function() {
+                        var ctx = document.getElementById("canvas").getContext("2d");
+                        window.myBar = new Chart(ctx, {
+                            type: "bar",
+                            data: barChartData,
+                            options: chartOptions
+                        });
+                        };
+
+    </script>
     
     
 </body>
