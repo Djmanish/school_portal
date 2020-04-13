@@ -41,7 +41,7 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
 
  
 </head>
@@ -545,7 +545,7 @@
         <div class="form-group" >
         <label >Select Class:</label>
         <select class="form-control" name="new_class" id="new_class">
-        <option selected  value="{{subject_info.subject_class.id}}" >{{subject_info.subject_class}}</option>
+        <option selected   value="{{subject_info.subject_class.id}}" >{{subject_info.subject_class}}</option>
         {% for class in all_classes %}
         <option value="{{class.id}}">{{class}}</option>
         {% endfor %}
