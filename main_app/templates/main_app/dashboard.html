@@ -775,8 +775,6 @@
                                     <tr class="uk-table-middle">
                                         <td class="uk-width-3-10 uk-text-nowrap">{{teacher1.subject_class}}</td>
                                         <td class="uk-width-3-10 uk-text-nowrap">{{teacher1.subject_name}}</td>
-                                             
-                                        
                                     </tr>
                                     {% endfor %}
                             
@@ -807,7 +805,7 @@
                                 <tbody>
                                     {% for teachers in teacher_subject %}
                                     <tr class="uk-table-middle">
-                                        <td class="uk-width-3-10 uk-text-nowrap">{{teachers.subject_teacher}}</td>
+                                        <td class="uk-width-3-10 uk-text-nowrap"><a href ="#">{{teachers.subject_teacher}}</a></td>
                                         <td class="uk-width-3-10 uk-text-nowrap">{{teachers.subject_name}}</td>
                                                                           
                                     </tr>
@@ -832,57 +830,19 @@
                                         </div>
                                         <tr>
                                          <th class="uk-text-nowrap">Date</th>
-                                         <th class="uk-text-nowrap">Total</th>
                                          <th class="uk-text-nowrap">Present</th>
                                          <th class="uk-text-nowrap">Absent</th>
                                          <th class="uk-text-nowrap">Leave</th>
                                         </tr>
                                 </thead>
                                 <tbody>
+                                    {% for i in final_data %}
                                     <tr class="uk-table-middle">
-                                        <td class="uk-width-3-10 uk-text-nowrap">02/05/2020</td>
-                                        <td class="uk-width-3-10 uk-text-nowrap">50</td>
-                                        <td class="uk-width-3-10 uk-text-nowrap">45</td>
-                                        <td class="uk-width-3-10 uk-text-nowrap">3</td>
-                                        <td class="uk-width-3-10 uk-text-nowrap">2</td>
-                                             
-                                        
+                                        {% for j in i %}
+                                        <td class="uk-width-3-10 uk-text-nowrap">{{j}}</td>
+                                        {% endfor %}
                                     </tr>
-                                    <tr class="uk-table-middle">
-                                        <td class="uk-width-3-10 uk-text-nowrap"><a href="fees.html">Tuesday</a></td>
-                                        <td class="uk-width-3-10 uk-text-nowrap">36</td>
-                                        <td class="uk-width-3-10 uk-text-nowrap">4</td>
-                                                            
-                                    </tr>
-
-                                    <tr class="uk-table-middle">
-                                        <td class="uk-width-3-10 uk-text-nowrap"><a href="#">wednesday</a></td>
-                                        <td class="uk-width-3-10 uk-text-nowrap">31</td>
-                                        <td class="uk-width-3-10 uk-text-nowrap">9</td>
-
-                                                                  
-                                    </tr>
-                                </tr>
-                                <tr class="uk-table-middle">
-                                    <td class="uk-width-3-10 uk-text-nowrap"><a href="fees.html">Thursday</a></td>
-                                    <td class="uk-width-3-10 uk-text-nowrap">38</td>
-                                    <td class="uk-width-3-10 uk-text-nowrap">2</td>
-                                                        
-                                </tr>
-                            </tr>
-                            <tr class="uk-table-middle">
-                                <td class="uk-width-3-10 uk-text-nowrap"><a href="fees.html">Friday</a></td>
-                                <td class="uk-width-3-10 uk-text-nowrap">35</td>
-                                <td class="uk-width-3-10 uk-text-nowrap">5</td>
-                                                    
-                            </tr>
-                        </tr>
-                        <tr class="uk-table-middle">
-                            <td class="uk-width-3-10 uk-text-nowrap"><a href="fees.html">Saturday</a></td>
-                            <td class="uk-width-3-10 uk-text-nowrap">37</td>
-                            <td class="uk-width-3-10 uk-text-nowrap">3</td>
-                                                
-                        </tr>
+                                    {% endfor %}
                                        
                                 </tbody>
                             </table>
@@ -1409,33 +1369,6 @@
 
 
 
-    <table class="table table-hover">
-<thead>
-    <th>Date</th>
-    <th>Present</th>
-    <th>Absent</th>
-    <th>Leave</th>
-</thead>
-<tbody>
-    
-    {% for i in final_data %}
-    
-   
-    <tr>
-        {% for j in i %}
-        <td>{{j}}</td>
-        {% endfor %}
-    </tr>
-      
-    
-        
-        
-    {% endfor %}
-        
-    
-   
-</tbody>
-    </table>
     
     <!-- secondary sidebar end -->
 

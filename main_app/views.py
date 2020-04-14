@@ -216,12 +216,16 @@ def index(request):
 
 @login_required
 def dashboard(request):
-<<<<<<< HEAD
     # starting assigned teachers
     user_one = request.user
-    teacher_class = Classes.objects.get(class_teacher= user_one)
-    teacher_subject = Subjects.objects.filter(subject_class= teacher_class) 
-   
+    if user_one.profile.designation.level_name == "teacher":
+        teacher_class = Classes.objects.get(class_teacher= user_one)
+    
+        teacher_subject = Subjects.objects.filter(subject_class= teacher_class) 
+    else:
+        teacher_class = None
+        teacher_subject = None
+       
     # starting assigned classes
     user_institute_one= request.user.profile.institute
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
@@ -230,7 +234,6 @@ def dashboard(request):
     # class attendance status 
     
     
-=======
 # starting class teacher's  class status for last six days
     last_six_days_list = []
     ct_present_status = []
@@ -330,7 +333,6 @@ def dashboard(request):
     disapprove_data= Institute_disapproved_user.objects.filter(institute=request.user.profile.institute).count()
     pending_data= UserProfile.objects.filter(institute=request.user.profile.institute,status="pending").count()
     # Approvals Data Query End
->>>>>>> 8b41b5286bd2783689091757cbf188592439f199
     
     # starting parent child data for dashboard
     parent_children = AddChild.objects.filter(parent= request.user.profile,status="active")
@@ -400,12 +402,10 @@ def dashboard(request):
     context = {
         'all_classes': all_classes,
        'parent_children': parent_children,
-<<<<<<< HEAD
        'teacher_subject': teacher_subject,
        'user_subject_one':user_subject_one,
        
   
-=======
         'total_std':total_std,
         'total_teacher':total_teacher,
         'total_class':total_class,
@@ -432,7 +432,6 @@ def dashboard(request):
 
         'final_data': final_data
 
->>>>>>> 8b41b5286bd2783689091757cbf188592439f199
     }
     return render(request, 'main_app/dashboard.html' , context)
 
