@@ -13,5 +13,6 @@ urlpatterns = [
     path('fees/account/details/', views.institute_account_details, name="fees_account_details"),
     path('mapping/tags/', views.Map_Tag_Students, name="mapping_tags_to_student"),
     path('fetch/class/student/tags/', views.Fetch_student_for_tags, name="student_for_tags"),
-    path('fetch/student/tags/', views.fetch_students_tags_mapped, name="fetch_students_tags_mapped")
+    path('fetch/student/tags/', views.fetch_students_tags_mapped, name="fetch_students_tags_mapped"),
+    path('students_mapped_to_a_tag/', views.students_mapped_to_a_tag, name="students_mapped_to_a_tag")
 ]

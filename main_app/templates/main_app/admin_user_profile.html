@@ -136,39 +136,20 @@
                                     </ul>
                                     <ul id="header_alerts" class="uk-switcher uk-margin">
                                         <li>
-                                            <ul class="md-list md-list-addon">
+                                            <ul class="md-list md-list-addon alert_notice_list">
+                                                {% for notice in user.users_notice|slice:":5" %}
                                                 <li>
-                                                    <div class="md-list-addon-element">
-                                                        <span class="md-user-letters md-bg-cyan">N</span>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="{% url 'all_notice_list' %}"> All Notifiactions</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Click Here to see all your Notifications.</span>
-                                                    </div>
+                                                    <a href="{% url 'all_notice_list' %}">
+                                                        <div class="md-list-addon-element">
+                                                            <span class="md-user-letters md-bg-cyan">N</span>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
+                                                        </div>
+                                                    </a>
                                                 </li>
-                                                <!-- <li>
-                                                    <div class="md-list-addon-element">
-                                                        <img class="md-user-image md-list-addon-avatar" src="{% static 'main_app/img/avatars/avatar_07_tn.png' %}" alt=""/>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="page_mailbox.html">Esse similique et.</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Nam molestiae architecto maxime dicta qui esse consequatur dignissimos rem.</span>
-                                                    </div>
-                                                </li> -->
-                                                <!-- <li>
-                                                    <div class="md-list-addon-element">
-                                                        <span class="md-user-letters md-bg-light-green">qm</span>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="page_mailbox.html">Eaque autem.</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Aspernatur in quod distinctio est id provident nihil quam fugit inventore.</span>
-                                                    </div>
-                                                </li> -->
-                                             
+                                                {% endfor %}
                                             </ul>
-                                            <!-- <div class="uk-text-center uk-margin-top uk-margin-small-bottom">
-                                                <a href="page_mailbox.html" class="md-btn md-btn-flat md-btn-flat-primary js-uk-prevent">Show All</a>
-                                            </div> -->
                                         </li>
                                         <li>
                                             <ul class="md-list md-list-addon">
@@ -553,7 +534,7 @@
                                 {% if user.profile.designation %}
                                 {{user.profile.designation}}
                                 {% else %}
-                                Edit and Complete your profile to select role
+                               Click on edit button to find your institute and get started.
                                 {% endif %}
                                 </span></h2>
                                                             </div>

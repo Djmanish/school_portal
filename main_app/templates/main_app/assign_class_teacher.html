@@ -15,7 +15,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
-    <title>Update Profile</title>
+    <title>Assigning Class Teacher</title>
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
 
     <link href="{% static 'main_app/bower_components/uikit/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
@@ -261,17 +261,15 @@
                     <img class="logo_light" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
                 </a>
             </div>
-            
         </div>
         
         <div class="menu_section">
             <ul>
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
                     </a>
-                    
                 </li>
                 
                 <li title="User Profile">
@@ -290,9 +288,8 @@
                 </li>
                 {% endif %}
                     
-
                 {% if user.profile.institute %}
-                <li  title="Institute Profile">
+                <li class="current_section" title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>

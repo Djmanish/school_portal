@@ -531,11 +531,11 @@
                                     </div>
                                 {% endfor %}
                             {% endfor %}
-                            {% for error in form.non_field_errors %}
+                            <!-- {% for error in form.non_field_errors %}
                                 <div class="alert alert-danger">
                                     <strong>{{ error|escape }}</strong>
                                 </div>
-                            {% endfor %}
+                            {% endfor %} -->
                         {% endif %}
  <!-- messages -->
  {% if messages %}
@@ -557,7 +557,7 @@
 
 {{form|crispy}}
 
-<input type="submit" class="btn btn-primary" value="Update">
+<input type="submit" class="md-btn md-btn-primary" value="Update">
 
 </div>
 

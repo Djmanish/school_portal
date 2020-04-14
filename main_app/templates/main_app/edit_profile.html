@@ -526,7 +526,15 @@
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.first_name}}
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">
+                                    
+                                    {% if user.profile.first_name %}
+                                    {{user.profile.first_name}}
+                                        {% else %}
+                                    Fill Your Information Correctly
+                                    {% endif %}
+                                        
+                                   
                                     
                                     {% if user.profile.middle_name %}
                                        {{user.profile.middle_name}} 
@@ -535,7 +543,15 @@
                                     
                                     {% if user.profile.last_name %}
                                         {{user.profile.last_name}}
-                                    {% endif %}</span><span class="sub-heading">{{user.profile.designation}}</span></h2>
+                                    {% endif %}</span><span class="sub-heading">
+                                        
+                                        {% if user.profile.designation %}
+                                        {{user.profile.designation}} 
+                                        {% else %}
+                                        No role selected    
+                                        {% endif %}
+                                            
+                                       </span></h2>
                                                             </div>
                            
                         </div>

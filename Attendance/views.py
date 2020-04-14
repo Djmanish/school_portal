@@ -209,6 +209,22 @@ def current_date_attendance_record(request, pk):
         student.total_present_count = total_present
         student.total_absent_count = total_absent
         student.total_leave_count = total_leave
+       # starting user notice
+    if request.user.profile.designation:
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.all().order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice
+
 
   
     context = {'all_students': attendance_record ,
@@ -224,7 +240,7 @@ def class_students_list(request):
     
     if request.method == "POST":
         selected_class = Classes.objects.get(pk = request.POST.get('selected_class_'))
-        all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
+        all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student', status="approve")
         if len(all_students)<1:
             messages.error(request, 'No student found in the selected class')
             return redirect('class_students_list')
@@ -236,14 +252,9 @@ def class_students_list(request):
          }
         return render(request, 'Attendance/class_students.html', context)
         
-
-
-
     context= {
         'all_classes': all_classes
     }
-
-
     return render(request, 'Attendance/class_students.html', context)
 
     

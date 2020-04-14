@@ -20,11 +20,9 @@ class School_tags(models.Model):
         try:
             super(School_tags,self).validate_unique()
         except ValidationError as e:
-            raise ValidationError(self.fees_code+" Tag with this fees code already exists !!! ")
-    
+            raise ValidationError(self.fees_code+" Tag with this fees code already exists !!! ") 
     class Meta:
         unique_together = ('institute','fees_code')
-    
 
     def __str__(self):
         return self.description
@@ -39,7 +37,6 @@ class Fees_tag_update_history(models.Model):
     
     def __str__(self):
         return str(self.fees_tag)
-
 
 class Fees_Schedule(models.Model):
     institute = models.OneToOneField(to=Institute, on_delete=models.CASCADE, related_name="institute_schedule")
@@ -58,11 +55,20 @@ class Account_details(models.Model):
         return str(self.institute)
    
 
-
 class Student_Tags_Record(models.Model):
     student = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name="student_tags")
-    tags = models.ManyToManyField(to=School_tags)
+    tags = models.ManyToManyField(to=School_tags, related_name="tags_to_student")
     student_class = models.ForeignKey(to=Classes, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return str(self.student)
+
+class Student_Tag_Processed_Record(models.Model):
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE)
+    schedule_date = models.DateField()
+    process_date = models.DateField()
+    due_date = models.DateField()
+    student = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, )
+    tags = models.ForeignKey(to=School_tags,  on_delete=models.CASCADE, )
+
+    
