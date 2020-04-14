@@ -264,7 +264,6 @@
             </div>
             
         </div>
-
         <div class="menu_section">
             <ul>
                 <li title="Dashboard">
@@ -486,23 +485,11 @@
                     </li>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </ul>
         </div>
-    </aside><!-- main sidebar end -->
+
+
+           </aside><!-- main sidebar end -->
 
 
     <div id="page_content">
@@ -512,119 +499,87 @@
                                                 
                                                    
                                                         
-                                                        <form method="POST" class="form-inline" id="attendance_form" >
-                                                            {% csrf_token %}
-                                                        <tr>
-                                                            
-                                                            <td> <select class="form-control" name="result_exam_type" style="padding: 2px;" required>
-                                                                    <option selected disabled value="">--Select Exam Type--</option>
-                                                                    <option ><a href="{% url 'overall_result' request.user.profile.institute.id %}">Overall</a></option>
-
-                                                                    {% for exam_type in exam_type_list %}
-                                                                    
-                                                                       <option>{{exam_type}}</option>
-                                                                    {% endfor %}
-                                                             </select>
-                                                             
-                                                            </td>
+                                                <form method="POST" class="form-inline" id="attendance_form" >
+                                                    {% csrf_token %}
+                                                <tr>
                                                     
-                                                            <td>
-                                                            <input type="submit" value="View" class="md-btn md-btn-primary">
-                                                        </td>
-                                                           </tr>
-                                                           
-                                                        </form>
+                                                    <td> <select class="form-control" name="result_exam_type" style="padding: 2px;" required>
+                                                            <option selected disabled value="">--Select Exam Type--</option>
+                                                            <option ><a href="{% url 'overall_result' request.user.profile.institute.id %}">Overall</a></option>
+
+                                                            {% for exam_type in exam_type_list %}
+                                                            
+                                                               <option value={{exam_type.id}}>{{exam_type}}</option>
+                                                            {% endfor %}
+                                                     </select>
+                                                     
+                                                    </td>
+                                            
+                                                    <td>
+                                                    <input type="submit" value="View" class="md-btn md-btn-primary">
+                                                </td>
+                                                   </tr>
+                                                </form>
+                                                  
+                                                   
+                                             
+                                            
+                                             
                                                     
                                                         <table
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                                                        id="ts_issues">
-
-                                                        <tbody>
-                                                            <form method="POST">
-                                                                {% csrf_token %}
-                                                                
-                                                                {% if examresult_data %}
-                                                                    
-                                                            <tr style="background-color: #1976d2; color:white; text-align:center;">
-                                                               
-                                                                
-                                                                <td>Subject Name</td>
-                                                                <td>Marks Obtain</td>
-                                                                <td>Max. Marks</td>
-                                                                <td>Min. Marks</td>
-                              
-                                                            </tr>
-                                                            {% endif %}
-                                                           
-                                                            {% for exam_sr_no in exam_sr_no %}
-                                                            <tr >
-                                                                <th >
-                                                                        {{select_exam_type}} {{exam_sr_no.exam_sr_no}}
-                                  
-                                                                </th>
-                                                            </tr>
-                                                                     {% for exam_data in examresult_data %}
-                                                                             {% if exam_data.calc_result_exam_sr_no == exam_sr_no.exam_sr_no%}
-                                                            <tr style="text-align:center;">
-                                                                     <td>
-                                                                            <div class="form-group">
-                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_subject">
-                                                                                  
-                                                                                  <option  value="{{exam_data.result_subject.id}}">{{exam_data.calc_result_subject}}</option>
-                                                                                </select>
-                                                                              </div>
-                                                                              
-                                                                        </td>
-                                                                        <td>
-                                                                            <div class="form-group">
-                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_obtain">
-                                                                                  <option  value="">{{exam_data.calc_result_score}}</option>
-                                                                                </select>
-                                                                              </div>
-                                                                        </td>
-                                                                      
-                                                                           
-                                                                        <td>
-                                                                            <div class="form-group">
-                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="_max_marks_obtain">
-                                                                                  <option  value="">{{exam_data.calc_result_max}}</option>
-                                                                                </select>
-                                                                              </div>
-                                                                        </td>
-                                                                        <td>
-                                                                            <div class="form-group">
-                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="_max_marks_obtain">
-                                                                                  <option  value="">{{exam_data.calc_result_min}}</option>
-                                                                                </select>
-                                                                              </div>
-                                                                        </td>
-                                                                        
-                                                            
-                                                                        
-                                                                    
-                                                            </tr>
-                                                            
-                                                                             
-                                                                             {% endif %}
-                                                                         
-                                                                             
-                                                           
-                                                                        {% endfor %}
-                                                                {% endfor %}
+                                                        id="ts_issues" >
                                                        
-                                                   
-                                                    </tr>
-                                                    {% if examresult_data %}
-                                                    <tr>
-                                                        <td>Average</td>
-                                                        <td>{{round_score}}</td>
+                                                          
+                                                {% if result_data %}
+                                                <tr>
+                                                    <td>
+                                                    <button id="savePDFbutton" class="md-btn md-btn-primary" onclick="savePDF()">
+                                                        <span class="menu_icon"><i class="material-icons" style="color: white ;">print</i></span>
+                                                        Save as PDF
+                                                    </button>
+                                                    </td>
+                                                </tr>
+                                                {% endif %}
+                                                        
+                                                    <tbody id="myresult">
+                                                        <tr colspan="10">
+                                                            <td style="color: #1976d2; "><b>{{select_exam_type}}</b></td>
 
-                                                    </tr>
-                                                    {%endif%}
-                                                            
-                                                        </form>
-                                                        </tbody>
+                                                        </tr>
+                                                       
+                                                        {% if result_data %}
+                                                        <tr >
+                                                            <td><b>Subjects</b></td>
+                                                            {% for e_no in exam_no %}
+                                                            <td><b>
+                                                                {{e_no}} 
+                                                            </b>   
+                                                            </td>
+                                                            {% endfor%}
+                                                        </tr>
+                                                        {% endif %}
+                                                       
+                                                                  
+                                                                           {% for data in result_data %}
+                                                                           <tr>
+                                                                               
+                                                                               {% for k,v in data.items %}
+                                                                               <td>
+                                                                                   {{v}}
+                                                                               </td>
+                                                                                   
+                                                                               {% endfor %}
+                                                                                   
+                                                                          
+                                                                            </tr>
+                                                                {% endfor %}
+                                                               
+                                                    </tbody>
+                                                    
+                                                     
                                                     </table>
+
                                                 </div>
                                 </li>
                             </ul>
@@ -663,6 +618,11 @@
     <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
     <!-- altair common functions/helpers -->
     <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+    <script src="{% static 'main_app/js/script.js' %}"></script>
+
 
 
     <script>

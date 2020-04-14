@@ -260,21 +260,24 @@ def dashboard(request):
     if request.user.profile.designation:
 
         if request.user.profile.designation.level_name == "student":
-            total_days_open = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date ).count()
-            
-            total_days_present= Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='present' ).count()
-            
-            total_days_absent = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='absent' ).count()
+            try:
+                total_days_open = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date ).count()
+                
+                total_days_present= Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='present' ).count()
+                
+                total_days_absent = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='absent' ).count()
 
-            total_days_leave = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='leave' ).count()
-            student_attendance_percentage = (total_days_present/total_days_open)*100
-            student_attendance_percentage = round(student_attendance_percentage, 2)
+                total_days_leave = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='leave' ).count()
+                student_attendance_percentage = (total_days_present/total_days_open)*100
+                student_attendance_percentage = round(student_attendance_percentage, 2)
 
-            request.user.student_total_days_school_open = total_days_open
-            request.user.student_total_days_present = total_days_present
-            request.user.student_total_days_absent = total_days_absent
-            request.user.student_total_days_leave = total_days_leave
-            request.user.student_attendance_percentage = student_attendance_percentage
+                request.user.student_total_days_school_open = total_days_open
+                request.user.student_total_days_present = total_days_present
+                request.user.student_total_days_absent = total_days_absent
+                request.user.student_total_days_leave = total_days_leave
+                request.user.student_attendance_percentage = student_attendance_percentage
+            except:
+                pass
 
     # ending students attendance status
 

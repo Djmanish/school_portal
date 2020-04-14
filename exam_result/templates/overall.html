@@ -536,73 +536,32 @@
         <table
         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
         id="ts_issues">
-         
-
                                                         <tbody>
-                                                            <form method="POST">
-                                                                {% csrf_token %}
+                                                            <tr >
+                                                                <td></td>
                                                                 
+                                                                {% for exam_type in exam_type_list %}
                                                                
+                                                                <td><b>
+                                                                    {{exam_type}}
+                                                                </b>
+                                                                </td>
                                                                     
-                                                               
-                                   <th>                                
-                                                         
-                                                            <tr style="background-color: #1976d2; color:white; text-align:center;">
-                                  <td>Subject</td>
-                                  <td>Average Marks</td>
-
-                                                          
-                                                        </tr>
-                                                    </th> 
-                                                        
-                                                {% for exam_type in exam_type_list %}
-                                               
-                                                        <tr>
-                                                            {% if test_data %}
-                                                            <th>
-                                                                {{exam_type}}
-                                                            </th>
-                                                            {% endif %}
-                                                           
-                                                        </tr>
-
-                                                       {% for test_data in test_data %}
-                                                        {% ifequal test_data.exam_type exam_type%}
-                                                           
-                                                            <tr style="text-align:center;">
-                                                               
-                                                                     <td>
-                                                                            <div class="form-group">
-                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_subject">
-                                                                                  
-                                                                                  <option  value="{{exam_data.result_subject.id}}">{{test_data.result_subject}}</option>
-                                                                                </select>
-                                                                              </div>
-                                                                              
-                                                                        </td>
-                                                                       
-                                                                        <td>
-                                                                            <div class="form-group">
-                                                                                <select style="overflow:hidden; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="marks_obtain">
-                                                                                  <option  value="">{{test_data.marks}}</option>
-                                                                                </select>
-                                                                              </div>
-                                                                        </td>
-                                                                      
+                                                                {% endfor %}
                                                                     
                                                             </tr>
-                                                            
-                                                          
-                                                            {% endifequal %}
-                                                            {% endfor %}  
-                                                            {% endfor %}         
-
-                                                        
-                                                   
+                                                            {% for exam_overall_data in student_subjects %}
+                                                            <tr >
+                                                               <td>{{exam_overall_data}}</td>
+                                                               {% for exam_data in result_data %}
+                                                               {% for k,v in  exam_data.items%}
+                                                               <td>
+                                                               {{v}}
+                                                    </td>
+                                                    {% endfor %}
+                                                        {% endfor %}
                                                     </tr>
-                                                   
-                                                            
-                                                        </form>    
+                                                        {% endfor %}
                                                         </tbody>
                                                     </table>
                                                 </div>
