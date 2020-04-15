@@ -242,8 +242,18 @@ def report_card(request,pk):
             student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
             
             data_marks[e_no]=student_data.result_score
-            
+        marks_data=[]
+        for key,value in data_marks.items():
+            if key=="subj":
+              pass
+            else:
+              marks_data.append(value)
+        
+        avg=statistics.mean(marks_data)
+        data_marks['avg']=avg
+
         result_data.append(data_marks)
+      
       
       context={
         

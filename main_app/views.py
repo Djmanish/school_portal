@@ -217,8 +217,10 @@ def index(request):
 @login_required
 def dashboard(request):
     # starting assigned teachers
+
+   
     user_one = request.user
-    if user_one.profile.designation.level_name == "teacher":
+    if request.user.profile.designation.level_name == "teacher":
         teacher_class = Classes.objects.get(class_teacher= user_one)
     
         teacher_subject = Subjects.objects.filter(subject_class= teacher_class) 
@@ -229,7 +231,7 @@ def dashboard(request):
     # starting assigned classes
     user_institute_one= request.user.profile.institute
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
-    print(user_subject_one)
+    
     
     # class attendance status 
     
@@ -260,7 +262,7 @@ def dashboard(request):
         one_list.append(k)
         one_list.append(l)
         final_data.append(one_list)
-    print(final_data)
+    
 
 
 # ending class teacher's  class status for last six days
