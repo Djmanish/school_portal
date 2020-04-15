@@ -1,6 +1,7 @@
 
 
 $(document).ready(function(){
+  
     $('.n_i').keypress(function (e) {
         var regex = new RegExp("^[a-zA-Z ]+$");
         var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
@@ -39,9 +40,6 @@ $(document).ready(function(){
      });
   });
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 70430377c9b768db09386402d74ff7f6b3a9fe71
   

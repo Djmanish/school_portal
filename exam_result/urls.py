@@ -18,6 +18,10 @@ urlpatterns = [
   path('report_card/<int:pk>',views.report_card, name='report_card'),
   path('chart_sr_no/', views.chart_sr_no, name='chart_sr_no'),
   path('overall_result/<int:pk>/', views.overall_result, name='overall_result'),
-  path('class_promotion/<int:pk>/', views.class_promotion, name="class_promotion")
+  path('class_promotion/<int:pk>/', views.class_promotion, name="class_promotion"),
+  
+
+
+  path('result/', views.st_result, name="st_result")
  
               ]

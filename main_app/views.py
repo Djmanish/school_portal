@@ -242,7 +242,7 @@ def dashboard(request):
         one_list.append(k)
         one_list.append(l)
         final_data.append(one_list)
-    print(final_data)
+    
 
 
 # ending class teacher's  class status for last six days

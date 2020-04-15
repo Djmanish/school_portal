@@ -146,11 +146,6 @@ def examresult(request,pk):
           messages.success(request, 'Exam Result Stored successfully !!!')  
           return redirect(f'/examresult/examresult/{inst_id}') 
 
-
-
-
-
-
       
 # Student View
 def student_view(request,pk):
@@ -209,7 +204,6 @@ def chart_sr_no(request):
   return HttpResponse(chart_result_sr_no)
 
 def report_card(request,pk):
-
 # get Exam Type
   exam_type_list =ExamType.objects.filter(institute=request.user.profile.institute)
   exam_id=request.user.profile.institute.id
@@ -241,13 +235,8 @@ def report_card(request,pk):
                     return redirect('not_found')
 
       scored_data=list(score_list)
-      
-
       score_list=list(map(int, scored_data))
-      
-      
       meanVal=statistics.mean(score_list)
-
       round_score=round(meanVal)
       
       context={
@@ -263,8 +252,6 @@ def report_card(request,pk):
       return render(request, 'report_card.html', context)        
   context={
         'exam_type_list':exam_type_list,
-        
-        
       }
 
   return render(request, 'report_card.html', context)
@@ -400,3 +387,8 @@ def class_promotion(request,pk):
         
     }
     return render(request, 'class_promotion.html', context)
+
+
+
+def st_result(request):
+  pass
