@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from main_app.models import Classes, UserProfile
 from django.contrib import messages
-from .models import School_tags, Fees_tag_update_history, Fees_Schedule, Account_details, Student_Tags_Record
+from .models import School_tags, Fees_tag_update_history, Fees_Schedule, Account_details, Student_Tags_Record, Student_Tag_Processed_Record
 from django.views.generic import UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import Fees_tag_update_form
@@ -10,38 +10,42 @@ from django.contrib.messages.views import SuccessMessageMixin
 # Create your views here.
 
 def fees_home(request):
-    
     total_tags = School_tags.objects.filter(institute= request.user.profile.institute) # total tags of the school
-    
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
 
     if request.method == "POST":
         total_tags_for_s = School_tags.objects.filter(institute= request.user.profile.institute)
         selected_class = Classes.objects.get(pk = request.POST.get('selected_class_'))
         all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student')
-        
-        student_multiple_select_height = all_students.count()*25 # defining size of student select field
-        
+        selected_tag = School_tags.objects.get(pk=request.POST.get('selected_tag'))
         
         if selected_class.class_teacher != request.user:
             messages.error(request, 'Only class teacher can map tags !!!')
             return redirect('fees_home')
+        if len(total_tags_for_s)<= 0:
+             messages.error(request, 'No tags for this institute. First Create a tag.')
+             return redirect('fees_home')
         
-
         if len(all_students)<1:
             messages.error(request, 'No student found in the selected class')
             return redirect('fees_home')
-        
+
+        for student in all_students:
+            try:
+                student_all_tags = student.student_tags.tags.all()
+                if selected_tag in student_all_tags:
+                    student.already= "true"
+            except:
+                pass
+
         context= {'all_students':all_students,
         'all_tags': total_tags,
          'all_classes': all_classes,
          'showing_student_for_class':selected_class,
-         'total_tags_for_s':total_tags_for_s,
-         'student_multiple_select_height':student_multiple_select_height
+         'selected_tag':selected_tag,
          }
         return render(request, 'fees/fees.html', context)
-        
-        
+
     context= {
         'all_classes': all_classes,
         'all_tags': total_tags
@@ -53,18 +57,18 @@ def parent_fees(request):
     return render(request, 'fees/parent_fees.html')
 
 
-
-
 def creating_tags(request):
     if request.method == "POST":
         fee_code = request.POST.get('fee_code').strip()
         description = request.POST.get('tag_descripton').strip()
         type = request.POST.get('tag_type').strip()
         active_status = request.POST.get('active_status').strip()
-        amount = request.POST.get('amount').strip()
+        amount = float( request.POST.get('amount').strip())
         tax_percentage = request.POST.get('tax_per').strip()
         start_date = request.POST.get('start_d').strip()
         end_date = request.POST.get('end_d').strip()
+        tax_value = (float(amount)*float(tax_percentage))/100
+        amount_with_tax = float(amount) + float(tax_value)
         
         try:
             School_tags.objects.get(fees_code=fee_code)
@@ -72,7 +76,7 @@ def creating_tags(request):
             return redirect('fees_home')
         except:
             try:
-                School_tags.objects.create(institute= request.user.profile.institute, fees_code= fee_code, description= description, type= type, active=active_status, amount= amount, tax_percentage= tax_percentage, start_date= start_date, end_date= end_date)
+                School_tags.objects.create(institute= request.user.profile.institute, fees_code= fee_code, description= description, type= type, active=active_status, amount= amount, tax_percentage= tax_percentage, amount_including_tax= amount_with_tax, start_date= start_date, end_date= end_date)
                 messages.success(request, 'Tag Created Successfully !!!')
                 return redirect('fees_home')
             except:
@@ -89,6 +93,11 @@ class Fees_tag_update_view(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "Fees Tag information updated successfully !!!"
     
     def form_valid(self, form):
+        print(self.get_object().amount_including_tax)
+        new_amount= form.instance.amount + ((form.instance.amount*form.instance.tax_percentage)/100) # updating amount with tax in case of tag update    
+        form.instance.amount_including_tax = new_amount
+
+        # creating history update
         tag_id = self.get_object().id
         old_tag = School_tags.objects.get(pk=tag_id)
         old_tag_values = f"Fees Code: {old_tag.fees_code}, Description: {old_tag.description}, Type: {old_tag.type}, Active_status:{old_tag.active}, Amount: {old_tag.amount}, Tax Percentage:{old_tag.tax_percentage}, Start Date: {old_tag.start_date}, End Date:{old_tag.end_date}"
@@ -151,7 +160,7 @@ def institute_account_details(request):
 
 def Map_Tag_Students(request):
     if request.method == "POST":
-        selected_tag = School_tags.objects.get(pk = request.POST.get('selected_tag'))
+        selected_tag = School_tags.objects.get(pk = request.POST.get('selected_taga'))
         students_list = [] # list of all students selected
         students_class = Classes.objects.get(pk= request.POST.get('students_class'))
         
@@ -164,12 +173,12 @@ def Map_Tag_Students(request):
             try:
                 Student_Tags_Record.objects.get(student= student)
             except:
-                Student_Tags_Record.objects.create(student= student, student_class= student.Class)
+                Student_Tags_Record.objects.create(institute= request.user.profile.institute, student= student, student_class= student.Class)
 
     #    removing this tag from all students in case of update
-        students_with_this_tag = Student_Tags_Record.objects.filter(student_class= students_class)
-        for student in students_with_this_tag:
-            student.tags.remove(selected_tag)
+        # students_with_this_tag = Student_Tags_Record.objects.filter(student_class= students_class)
+        # for student in students_with_this_tag:
+        #     student.tags.remove(selected_tag)
         
         
         for student in students_list:
@@ -218,4 +227,30 @@ def students_mapped_to_a_tag(request):
     print(all_students)
     return HttpResponse(student_response)      
     
-        
+
+def processing_fees(request):
+    try:
+        school_students = Student_Tags_Record.objects.filter(institute= request.user.profile.institute)
+    except:
+        messages.info(request, "No student to process fees")
+    
+    for st in school_students:
+         
+        for tag in st.tags.all():
+            try:
+                Student_Tag_Processed_Record.objects.get(institute= st.student.institute, 
+                notification_date = st.student.institute.institute_schedule.notification_date, 
+                process_date = st.student.institute.institute_schedule.processing_date,
+                due_date = st.student.institute.institute_schedule.due_date,
+                student= st.student,
+                tag = tag)
+            except:
+
+                Student_Tag_Processed_Record.objects.create(institute= st.student.institute, 
+                notification_date = st.student.institute.institute_schedule.notification_date, 
+                process_date = st.student.institute.institute_schedule.processing_date,
+                due_date = st.student.institute.institute_schedule.due_date,
+                student= st.student,
+                tag = tag
+                )
+    

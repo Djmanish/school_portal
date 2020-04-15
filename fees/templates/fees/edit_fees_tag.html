@@ -42,7 +42,7 @@
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
-    <script src="{% static 'main_app/js/script.js' %}"></script>
+    
 
  
 </head>
@@ -540,7 +540,7 @@
  <!-- messages -->
  {% if messages %}
         <div class="md-card md-card-primary">
-      <div class=""md-card-content">
+      <div >
           <ul class="messages alert">
               {% for message in messages %}
               <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
@@ -602,7 +602,7 @@
             s.parentNode.insertBefore(wf, s);
         })();
     </script>
-
+<script src="{% static 'main_app/js/script.js' %}"></script>
     <!-- common functions -->
     <script src="{% static 'main_app/js/common.min.js' %}"></script>
     <!-- uikit functions -->

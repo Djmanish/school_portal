@@ -146,11 +146,6 @@ def examresult(request,pk):
           messages.success(request, 'Exam Result Stored successfully !!!')  
           return redirect(f'/examresult/examresult/{inst_id}') 
 
-
-
-
-
-
       
 # Student View
 def student_view(request,pk):
@@ -387,3 +382,8 @@ def class_promotion(request,pk):
         
     }
     return render(request, 'class_promotion.html', context)
+
+
+
+def st_result(request):
+  pass
