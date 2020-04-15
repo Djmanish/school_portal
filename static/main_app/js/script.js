@@ -28,7 +28,7 @@ $(document).ready(function(){
   
   });
 
-  $(document).ready(function () {
+$(document).ready(function () {
     //called when key is pressed in textbox
     $('.n_a').keypress(function (e) {
        //if the letter is not digit then display error and don't type anything
@@ -41,5 +41,24 @@ $(document).ready(function(){
   });
 
 
+//result print
+  var testDivElement = document.getElementById('myresult');
+
+  function savePDF() {
+    
+      var imgData;
+      html2canvas($("#myresult"), {
+          
+          useCORS: true,
+          onrendered: function (canvas) {
+              imgData = canvas.toDataURL(
+                 'image/png');
+              var doc = new jsPDF('l', 'in', [10, 12]);
+              doc.addImage(imgData, 'PNG', 0,0);
+              doc.save('sample-file.pdf');
+             
+          }
+      });
+  }
 
   

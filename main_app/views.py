@@ -216,6 +216,24 @@ def index(request):
 
 @login_required
 def dashboard(request):
+    # starting assigned teachers
+    user_one = request.user
+    if user_one.profile.designation.level_name == "teacher":
+        teacher_class = Classes.objects.get(class_teacher= user_one)
+    
+        teacher_subject = Subjects.objects.filter(subject_class= teacher_class) 
+    else:
+        teacher_class = None
+        teacher_subject = None
+       
+    # starting assigned classes
+    user_institute_one= request.user.profile.institute
+    user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
+    print(user_subject_one)
+    
+    # class attendance status 
+    
+    
 # starting class teacher's  class status for last six days
     last_six_days_list = []
     ct_present_status = []
@@ -318,6 +336,7 @@ def dashboard(request):
     
     # starting parent child data for dashboard
     parent_children = AddChild.objects.filter(parent= request.user.profile,status="active")
+    
     # ending parent child data for dashboard
     if request.user.profile.institute:
         session_start_date = request.user.profile.institute.session_start_date
@@ -334,7 +353,7 @@ def dashboard(request):
         # fetching all absent student for class
         absent_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="absent", student_class = c , date = datetime.date.today() ).count()
         c.total_absent = absent_student
-
+ 
         leave_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="leave", student_class = c, date = datetime.date.today()).count()
         c.total_leave = leave_student
     # ending attendace data for dashboard
@@ -343,11 +362,9 @@ def dashboard(request):
     if request.user.profile.designation:
 
         if request.user.profile.designation.level_name == "student":
-            total_days_open = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date ).count()
-
-            if total_days_open == 0:
-                pass
-            else:
+            try:
+                total_days_open = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date ).count()
+                
                 total_days_present= Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='present' ).count()
                 
                 total_days_absent = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date, attendance_status='absent' ).count()
@@ -361,6 +378,8 @@ def dashboard(request):
                 request.user.student_total_days_absent = total_days_absent
                 request.user.student_total_days_leave = total_days_leave
                 request.user.student_attendance_percentage = student_attendance_percentage
+            except:
+                pass
 
         # ending students attendance status
 
@@ -383,6 +402,10 @@ def dashboard(request):
     context = {
         'all_classes': all_classes,
        'parent_children': parent_children,
+       'teacher_subject': teacher_subject,
+       'user_subject_one':user_subject_one,
+       
+  
         'total_std':total_std,
         'total_teacher':total_teacher,
         'total_class':total_class,

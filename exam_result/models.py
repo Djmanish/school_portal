@@ -19,6 +19,10 @@ class ExamResult(models.Model):
         return str(self.result_student_data)
 
 
+
+
+
+
 class CalculateResult(models.Model):
     institute= models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='calc_result_institute', null=True)
     calc_result_student_data=models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='calc_result_student_data', null=True)
