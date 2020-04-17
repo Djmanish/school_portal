@@ -56,6 +56,24 @@
     width: 14.28%;
     text-align: center;
   }
+  .cld-day:nth-child(1) {
+    color: red;
+  }
+  .cld-day:nth-child(8) {
+    color: red;
+  }
+  .cld-day:nth-child(15) {
+    color: red;
+  }
+  .cld-day:nth-child(22) {
+    color: red;
+  }
+  .cld-day:nth-child(29) {
+    color: red;
+  }
+  .cld-day:nth-child(36) {
+    color: red;
+  }
   .cld-day{
     border: 1px solid #eee;
   }

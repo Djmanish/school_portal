@@ -1016,7 +1016,9 @@
                             <script>
                                 var events = [{% for h in holiday %}
                                             {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}'},
-                                            {% endfor %}    
+                                            {% endfor %}
+                                            {'Date': new Date(2020, 4-1, 17), 'Title': 'test kar raha hu'},
+
                                         ];
                                             var settings = {};
                                             var element = document.getElementById('caleandar');
