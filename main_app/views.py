@@ -224,8 +224,10 @@ def dashboard(request):
     
 
     # starting assigned teachers
+
+   
     user_one = request.user
-    if user_one.profile.designation.level_name == "teacher":
+    if request.user.profile.designation.level_name == "teacher":
         teacher_class = Classes.objects.get(class_teacher= user_one)
     
         teacher_subject = Subjects.objects.filter(subject_class= teacher_class) 

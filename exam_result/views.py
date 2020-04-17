@@ -146,11 +146,6 @@ def examresult(request,pk):
           messages.success(request, 'Exam Result Stored successfully !!!')  
           return redirect(f'/examresult/examresult/{inst_id}') 
 
-
-
-
-
-
       
 # Student View
 def student_view(request,pk):
@@ -242,8 +237,18 @@ def report_card(request,pk):
             student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
             
             data_marks[e_no]=student_data.result_score
-            
+        marks_data=[]
+        for key,value in data_marks.items():
+            if key=="subj":
+              pass
+            else:
+              marks_data.append(value)
+        
+        avg=statistics.mean(marks_data)
+        data_marks['avg']=avg
+
         result_data.append(data_marks)
+      
       
       context={
         
@@ -377,3 +382,8 @@ def class_promotion(request,pk):
         
     }
     return render(request, 'class_promotion.html', context)
+
+
+
+def st_result(request):
+  pass

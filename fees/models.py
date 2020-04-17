@@ -13,6 +13,7 @@ class School_tags(models.Model):
     active = models.CharField(max_length=5, choices = [('yes','yes'),('no','no')], null=True)
     amount = models.DecimalField(decimal_places=2, max_digits=20, null=True)
     tax_percentage = models.DecimalField(decimal_places=2, max_digits=20, null=True)
+    amount_including_tax = models.DecimalField(decimal_places=2, max_digits=20, null=True)
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
 
@@ -56,6 +57,7 @@ class Account_details(models.Model):
    
 
 class Student_Tags_Record(models.Model):
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, null=True)
     student = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name="student_tags")
     tags = models.ManyToManyField(to=School_tags, related_name="tags_to_student")
     student_class = models.ForeignKey(to=Classes, on_delete=models.SET_NULL, null=True)
@@ -64,11 +66,20 @@ class Student_Tags_Record(models.Model):
         return str(self.student)
 
 class Student_Tag_Processed_Record(models.Model):
-    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE)
-    schedule_date = models.DateField()
-    process_date = models.DateField()
-    due_date = models.DateField()
-    student = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, )
-    tags = models.ForeignKey(to=School_tags,  on_delete=models.CASCADE, )
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, null=True)
+    notification_date = models.DateField(null=True) # notification date
+    process_date = models.DateField(null=True)
+    due_date = models.DateField(null=True)
+    student = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, null=True )
+    tag = models.ForeignKey(to=School_tags,  on_delete=models.CASCADE, null=True )
 
-    
+    class Meta:
+        unique_together = ('institute','process_date','student','tag')
+    def __str__(self):
+        return str(self.student.first_name) +" "+ str(self.student.last_name) 
+
+class Students_Fees_table(models.Model):
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, null=True)
+    invoice_no = models.CharField(max_length=40)
+    student = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, null=True )
+    total_amount = models.DecimalField(decimal_places=2, max_digits=10)
