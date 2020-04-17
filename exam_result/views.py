@@ -274,11 +274,16 @@ def report_card(request,pk):
     
 
 def overall_result(request,pk):
+  exam_type_data=[]
   exam_type_list =ExamType.objects.filter(institute=request.user.profile.institute)
+  for exam_type in exam_type_list:
+          exam_type_data.append(exam_type.exam_type)
+
   exam_id=request.user.profile.institute.id
 
-  for exam_type in exam_type_list:
-      all_exam=ExamResult.objects.filter(exam_type=exam_type,result_student_data=request.user)
+  for exam_type in exam_type_data:
+      all_exam=ExamResult.objects.filter(exam_type__exam_type=exam_type,result_student_data=request.user)
+     
       exam_no=[]
       for data in all_exam:
         if data.exam_sr_no in exam_no:
@@ -291,40 +296,40 @@ def overall_result(request,pk):
           pass
         else:
           resultsubject.append(sub.result_subject)
-      # print(resultsubject)
-
-          # print(data.exam_type, data.exam_sr_no, data.result_student_data, data.result_subject, data.result_score)
-      # print(exam_no)
+  
       result_data=[]
-      
-      for sub_data in resultsubject:
-        
-        data_marks={}
-        data_marks['subj']=sub_data
-        for e_no in exam_no:
-            student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
-            
-            marks=student_data.result_score
-           
-            data_marks[e_no]=student_data.result_score
-            data_marks['avg']=statistics.mean(data_marks[e_no])
-        result_data.append(data_marks)
+      for exam in exam_type_data:
+        for sub_data in resultsubject:
+          data_marks={}
+          data_marks['subj']=sub_data
+          marks_data=[]
+          for e_no in exam_no:
+                student_data=ExamResult.objects.get(exam_type__exam_type=exam,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
+                data_marks[e_no]=student_data.result_score
+                for key,value in data_marks.items():
+                    if key=="subj":
+                        pass
+                    else:
+                        marks_data.append(value)
+                avg=statistics.mean(marks_data)
+                data_marks['avg']=avg
+      result_data.append(data_marks)
       context={
-        
-       
-        'select_exam_type':exam_type,
-        'all_exam':all_exam,
-        'exam_no':exam_no,
-        'resultsubject':resultsubject,
-        'result_data':result_data,
-        # 'round_score':round_score,
-              }
-      return render(request, 'report_card.html', context)        
+          'select_exam_type':exam_type,
+          'all_exam':all_exam,
+          'exam_no':exam_no,
+          'resultsubject':resultsubject,
+          'result_data':result_data,
+          'exam_type_data':exam_type_data,
+          # 'round_score':round_score,
+          'data_marks':data_marks,
+                }
+      return render(request, 'overall.html', context)        
   context={
         'exam_type_list':exam_type_list,
       }
 
-  return render(request, 'report_card.html', context)
+  return render(request, 'overall.html', context)
   
  
 

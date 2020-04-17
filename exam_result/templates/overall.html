@@ -511,58 +511,52 @@
             <div class="md-card">
                 <div class="md-card-content">
           
-        <form method="POST" class="form-inline" id="attendance_form" >
-            {% csrf_token %}
-        <tr>
-            
-            <td> <select class="form-control" name="result_exam_type" style="padding: 2px;" required>
-                    <option selected disabled value="">--Select Exam Type--</option>
-                    <option ><a href="{% url 'overall_result' request.user.profile.institute.id %}">Overall</a></option>
-
-                    {% for exam_type in exam_type_list %}
-                    
-                       <option>{{exam_type}}</option>
-                    {% endfor %}
-             </select>
-             
-            </td>
-    
-            <td>
-            <input type="submit" value="View" class="md-btn md-btn-primary">
-        </td>
-           </tr>
+      
            
-        </form>
+        
         <table
         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
         id="ts_issues">
-                                                        <tbody>
-                                                            <tr >
-                                                                <td></td>
-                                                                
-                                                                {% for exam_type in exam_type_list %}
-                                                               
-                                                                <td><b>
-                                                                    {{exam_type}}
-                                                                </b>
-                                                                </td>
-                                                                    
-                                                                {% endfor %}
-                                                                    
-                                                            </tr>
-                                                            {% for exam_overall_data in student_subjects %}
-                                                            <tr >
-                                                               <td>{{exam_overall_data}}</td>
-                                                               {% for exam_data in result_data %}
-                                                               {% for k,v in  exam_data.items%}
-                                                               <td>
-                                                               {{v}}
-                                                    </td>
-                                                    {% endfor %}
-                                                        {% endfor %}
-                                                    </tr>
-                                                        {% endfor %}
-                                                        </tbody>
+        <tbody id="myresult">
+           
+           
+            {% if result_data %}
+            <tr >
+                <td><b>Subjects</b></td>
+                {% for e_type in exam_type_data %}
+                <td><b>
+                    {{e_type}} 
+                </b>   
+                </td>
+                {% endfor%}
+                
+            </tr>
+            {% endif %}
+           
+                      
+                               {% for data in result_data %}
+                               <tr>
+                                   
+                                   {% for k,v in data.items %}
+                                    
+                                   
+                                   {% if k == "subj" %}
+                                    <td>
+                                        {{v}}
+                                    </td>
+                                    {% endif %}
+                                    {% if  k == "avg" %}
+                                    <td>
+                                        {{v}}
+                                    </td>
+                                    {% endif %}
+                                    
+                                        
+                                       
+                                   {% endfor %}
+                                </tr>
+                    {% endfor %}
+        </tbody>
                                                     </table>
                                                 </div>
                                             </div>
