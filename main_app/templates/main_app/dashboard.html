@@ -18,6 +18,12 @@
     <!-- clnde -->
     <link rel="stylesheet" href="{% static 'main_app/clndr/calendar.css' %}">
     
+    <!-- new calender -->
+    <link href="{% static 'main_app/new/css/demo.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="{% static 'main_app/new/css/theme1.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'main_app/new/css/theme2.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'main_app/new/css/theme3.css' %}"> -->
+    <script src="{% static 'main_app/new/js/caleandar.js' %}"></script>
     
 
     <!-- additional styles for plugins -->
@@ -997,7 +1003,28 @@
             
             <!-- info cards -->
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                
                 <div class="uk-width-medium-1-2">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <h3 class="heading_a uk-margin-bottom">Events & Calendar </h3>
+                            <div id="caleandar">
+                            </div>
+                            <script>
+                                var events = [{% for h in holiday %}
+                                            {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}'},
+                                            {% endfor %}    
+                                        ];
+                                            var settings = {};
+                                            var element = document.getElementById('caleandar');
+                                            caleandar(element, events, settings);
+
+
+                            </script>                      
+                        </div>
+                    </div>
+                </div> 
+                <!-- <div class="uk-width-medium-1-2">
                     <div class="md-card">
                         <div class="md-card-content">
                             <h4>Calendar</h4>
@@ -1035,22 +1062,7 @@
                             <script src="{% static 'main_app/clndr/calendar.js' %}" type="text/javascript"></script>
                         </div>
                     </div>
-                </div>
-                <div class="uk-width-medium-1-2">
-                    <div class="md-card">
-                        <!-- <div class="md-card-content">
-                            <h3 class="heading_a uk-margin-bottom">Approvals</h3>
-                            
-                            <!-- <div style="width: 300px;height: 300px;">
-                                <canvas id="myChart" width="200px" height="200px"></canvas>                           
-            
-                            </div>
-                            <div id="container" style="width: 100%;height: auto;margin-top: 80px;">
-                                <canvas id="canvas"></canvas>
-                              </div>
-                        </div>
-                    </div>
-                </div> --> 
+                </div> -->
             </div>   
 
             

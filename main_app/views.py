@@ -19,7 +19,9 @@ from django.utils import timezone
 from Attendance.models import *
 from AddChild.models import *
 from notices.models import *
+from holidaylist.models import *
 from django.contrib.sessions.models import Session
+
 
 
 
@@ -216,9 +218,16 @@ def index(request):
 
 @login_required
 def dashboard(request):
+    # Events & Calendars
+    # date_month=datetime.datetime.now().month
+    holiday=HolidayList.objects.filter(institute=request.user.profile.institute,applicable="Yes")
+    
+
     # starting assigned teachers
+
+   
     user_one = request.user
-    if user_one.profile.designation.level_name == "teacher":
+    if request.user.profile.designation == "teacher":
         teacher_class = Classes.objects.get(class_teacher= user_one)
     
         teacher_subject = Subjects.objects.filter(subject_class= teacher_class) 
@@ -229,6 +238,7 @@ def dashboard(request):
     # starting assigned classes
     user_institute_one= request.user.profile.institute
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
+        
     # class attendance status 
     
     
@@ -402,8 +412,7 @@ def dashboard(request):
        'parent_children': parent_children,
        'teacher_subject': teacher_subject,
        'user_subject_one':user_subject_one,
-       
-  
+       'holiday':holiday, 
         'total_std':total_std,
         'total_teacher':total_teacher,
         'total_class':total_class,
@@ -427,7 +436,7 @@ def dashboard(request):
         'pending5':pending5, 
         'active_sessions':active_sessions,  
         'len_online_user':len_online_user,  
-
+        'holiday':holiday,
         'final_data': final_data
 
     }
