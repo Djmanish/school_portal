@@ -229,8 +229,6 @@ def dashboard(request):
     # starting assigned classes
     user_institute_one= request.user.profile.institute
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
-    print(user_subject_one)
-    
     # class attendance status 
     
     
