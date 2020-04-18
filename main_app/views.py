@@ -216,20 +216,31 @@ def index(request):
 
 @login_required
 def dashboard(request):
-    # starting assigned teachers
     user_one = request.user
-    if user_one.profile.designation.level_name == "teacher":
-        teacher_class = Classes.objects.get(class_teacher= user_one)
-    
-        teacher_subject = Subjects.objects.filter(subject_class= teacher_class) 
-    else:
-        teacher_class = None
-        teacher_subject = None
-       
-    # starting assigned classes
+     # starting assigned classes
     user_institute_one= request.user.profile.institute
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
     print(user_subject_one)
+
+    # starting assigned teachers
+    
+    if request.user.profile.designation:
+
+        if request.user.profile.designation.level_name == "teacher":  
+                        
+            teacher_class = Classes.objects.get(class_teacher= user_one)
+            
+            teacher_subject = Subjects.objects.filter(subject_class= teacher_class)
+        else:
+            
+            teacher_class = None
+            teacher_subject = None    
+    else:
+
+        teacher_class = None
+        teacher_subject = None
+        
+   
     
     # class attendance status 
     
@@ -430,7 +441,7 @@ def dashboard(request):
         'active_sessions':active_sessions,  
         'len_online_user':len_online_user,  
 
-        'final_data': final_data
+        'final_data': final_data,
 
     }
     return render(request, 'main_app/dashboard.html' , context)
