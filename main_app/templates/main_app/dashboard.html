@@ -770,10 +770,10 @@
                 <div class="md-card">
                     <div class="md-card-content">
                         <div class="uk-overflow-container">
-                            <table class="uk-table">
+                            <table class="uk-table uk-table-condensed uk-table-hover">
                                 <thead>
-                                       <div class="md-card-content">
-                                         <h3 class="heading_a uk-margin-bottom">All Assigned Classes</h3>
+                                       <div>
+                                         <h3 class="heading_a">All Assigned Classes</h3>
                                         </div>
                                         <tr>
                                          <th class="uk-text-nowrap">Assigned Classes</th>
@@ -797,14 +797,17 @@
                     </div>
                 </div>
             </div>
+            
             <div class="uk-width-medium-1-2">
+                
                 <div class="md-card">
                     <div class="md-card-content">
                         <div class="uk-overflow-container">
-                            <table class="uk-table">
+                           
+                            <table class="uk-table uk-table-condensed uk-table-hover">
                                 <thead>
-                                       <div class="md-card-content">
-                                         <h3 class="heading_a uk-margin-bottom">All Assigned Teachers</h3>
+                                       <div>
+                                         <h3 class="heading_a">All Assigned Teachers</h3>
                                         </div>
                                         <tr>
                                          <th class="uk-text-nowrap">Teachers Name</th>
@@ -814,14 +817,15 @@
                                         </tr>
                                 </thead>
                                 <tbody>
-                                    {% for teachers in teacher_subject %}
-                                    <tr class="uk-table-middle">
+                                    
+                                         {% for teachers in teacher_subject %}
+                                        <tr class="uk-table-middle">
                                         <td class="uk-width-3-10 uk-text-nowrap"><a href ="#">{{teachers.subject_teacher}}</a></td>
                                         <td class="uk-width-3-10 uk-text-nowrap">{{teachers.subject_name}}</td>
                                                                           
-                                    </tr>
+                                         </tr>
                                   
-                                       {% endfor %}
+                                        {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -834,10 +838,10 @@
                 <div class="md-card">
                     <div class="md-card-content">
                         <div class="uk-overflow-container">
-                            <table class="uk-table">
+                            <table class="uk-table uk-table-hover uk-table-condensed">
                                 <thead>
-                                       <div class="md-card-content">
-                                         <h3 class="heading_a uk-margin-bottom">Class Attendace Status</h3>
+                                       <div>
+                                         <h3 class="heading_a">Class Attendace Status</h3>
                                         </div>
                                         <tr>
                                          <th class="uk-text-nowrap">Date</th>
