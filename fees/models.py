@@ -71,15 +71,29 @@ class Student_Tag_Processed_Record(models.Model):
     process_date = models.DateField(null=True)
     due_date = models.DateField(null=True)
     student = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, null=True )
-    tag = models.ForeignKey(to=School_tags,  on_delete=models.CASCADE, null=True )
-
+    fees_code = models.CharField(max_length=15, null=True)
+    description = models.TextField(null=True)
+    type= models.CharField(max_length=7, null=True)
+    active = models.CharField(max_length=5, null=True)
+    amount = models.DecimalField(decimal_places=2, max_digits=20, null=True)
+    tax_percentage = models.DecimalField(decimal_places=2, max_digits=5, null=True)
+    amount_including_tax = models.DecimalField(decimal_places=2, max_digits=5, null=True)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
     class Meta:
-        unique_together = ('institute','process_date','student','tag')
+        unique_together = ('institute','process_date','student','fees_code')
     def __str__(self):
         return str(self.student.first_name) +" "+ str(self.student.last_name) 
 
-class Students_Fees_table(models.Model):
+# students fees summary table
+class Students_fees_table(models.Model):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, null=True)
-    invoice_no = models.CharField(max_length=40)
-    student = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, null=True )
-    total_amount = models.DecimalField(decimal_places=2, max_digits=10)
+    student = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='studnts_fees_info', null=True)
+    due_date = models.DateField(null=True)
+    invoice_number = models.CharField(max_length=20, null=True)
+    total_due_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
+    total_paid = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
+    
+    def __str__(self):
+        return str(self.student)

@@ -817,11 +817,22 @@
 
 <!-- process button only visible when notificatoin date is set -->
                                         
-                                        {% if user.profile.institute.institute_schedule.notification_date %}
+                                       
                                         <div class="uk-width-large">
+                                            {% if user.profile.institute.institute_schedule.notification_date %}
                                             <a class="md-btn md-btn-primary text-white" id="fee_process_btn">Process Fees</a>
+                                   
+                                        {% else %}
+                                     
+                                            <p>Submit Your Process date to Create Fees For this month</p>
+                                            {% endif %}
+
+
+                                            <a class="md-btn md-btn-primary text-white" href="{% url 'creating_fees_summary' %}" >Create Summary</a>
+                                            
                                         </div>
-                                        {% endif %}
+                                       
+                                        
                                             
 
 
@@ -834,7 +845,7 @@ type:"POST",
 url: "{% url 'processing_fees' %}",
 data:{csrfmiddlewaretoken:'{{csrf_token}}'},
 success: function(msg){
-    alert(msg);
+    window.location.href = msg;
 }
    })
   } else {
@@ -847,6 +858,12 @@ success: function(msg){
                                           
                                               <form method="POST" action="{% url 'fees_schedule' %}" >
                                                   {% csrf_token %}
+                                                  <div class="form-group">
+                                                    <label>Proccessing Date</label>
+                                                    <input type="date" class="form-control" name="processing_date" {% if user.profile.institute.institute_schedule.processing_date %}
+                                                    value="{{user.profile.institute.institute_schedule.processing_date|date:'Y-m-d'}}"
+                                                {% endif %} required>  
+                                                 </div>
                                                   <div class="form-group">
                                                       
                                                      <label>Notification Date</label>
@@ -862,12 +879,7 @@ success: function(msg){
                                                      value="{{user.profile.institute.institute_schedule.due_date|date:'Y-m-d'}}"
                                                  {% endif %}  required>
                                                    </div>
-                                                    <div class="form-group">
-                                                       <label>Proccessing Date</label>
-                                                       <input type="date" class="form-control" name="processing_date" {% if user.profile.institute.institute_schedule.processing_date %}
-                                                       value="{{user.profile.institute.institute_schedule.processing_date|date:'Y-m-d'}}"
-                                                   {% endif %} required>  
-                                                    </div>
+                                                  
                                                     <input class="md-btn md-btn-primary"  type="submit"  > 
                                                 
                                             </form>

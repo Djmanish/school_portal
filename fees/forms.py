@@ -14,6 +14,7 @@ class Fees_tag_update_form(forms.ModelForm):
         fields = ['fees_code','description','type','active','amount','tax_percentage','start_date','end_date']
 
         widgets = {
+             'fees_code': forms.TextInput(attrs={'readonly':'readonly'}),
             'description': forms.TextInput(attrs={'row':'2'}),
             'start_date':forms.TextInput(attrs={'type':'date'}),
             'end_date':forms.TextInput(attrs={'type':'date'}),
