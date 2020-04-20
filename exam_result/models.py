@@ -22,7 +22,6 @@ class ExamResult(models.Model):
 
 
 
-
 class CalculateResult(models.Model):
     institute= models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='calc_result_institute', null=True)
     calc_result_student_data=models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='calc_result_student_data', null=True)
@@ -38,4 +37,16 @@ class CalculateResult(models.Model):
 
     def __str__(self):
         return str(self.calc_result_subject)
+
+
+class Overall_Result(models.Model):
+    overall_institute=models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='overall_institute', null=True)
+    overall_student_data=models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='overall_student_data',null=True)
+    overall_examtype=models.CharField(max_length=50, null=True)
+    overall_srno=models.CharField(max_length=50, null=True)
+    overall_subject=models.CharField(max_length=50, null=True)
+    overall_marks= models.CharField(max_length=50, null=True)
+
+    def __str__(self):
+        return str(self.overall_subject)
 
