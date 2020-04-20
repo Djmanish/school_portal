@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, Http404
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, Http404, get_object_or_404
 from registration.backends.default.views import RegistrationView
 from registration.forms import RegistrationFormUniqueEmail
 from django.contrib import auth
@@ -21,7 +21,22 @@ from AddChild.models import *
 from notices.models import *
 from holidaylist.models import *
 from django.contrib.sessions.models import Session
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from main_app.serializers import UserProfileSerializer
 
+
+
+class userList(APIView):
+
+    def get(self, request):
+        user1= UserProfile.objects.all()
+        serializer = UserProfileSerializer(user1, many=True)
+        return Response(serializer.data)
+    
+    def post(self):
+        pass
 
 
 

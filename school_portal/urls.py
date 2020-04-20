@@ -4,6 +4,8 @@ from django.urls import path, include
 from django.conf import settings 
 from django.conf.urls.static import static 
 from main_app import views as main_app_views
+from rest_framework.urlpatterns import format_suffix_patterns
+from main_app.views import userList
 
 
 urlpatterns = [
@@ -21,4 +23,5 @@ urlpatterns = [
     path('admission_process/', include('admissions.urls')),
     path('notice/', include('notices.urls') ),
     path('fees/', include('fees.urls')),
+    path('users/', userList.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
