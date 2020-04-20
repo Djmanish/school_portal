@@ -60,7 +60,7 @@ class Institute_levels(models.Model):
     institute= models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institute_levels', null=True, blank=True)
     level_id= models.IntegerField(null=True)
     level_name = models.CharField(max_length=25, null=True, blank=True)
-    permissions = models.ManyToManyField(to=App_functions, related_name='user_permissions', null=True, blank=True, )
+    permissions = models.ManyToManyField(to=App_functions, related_name='user_permissions', blank=True, )
     created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
     start_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     end_date = models.DateField(null=True, blank= True)
@@ -178,9 +178,9 @@ class Tracking_permission_changes(models.Model):
     update_time = models.DateTimeField()
     changes_made_by = models.ForeignKey(to=User, on_delete=models.DO_NOTHING, null=True, blank=True, related_name='user_made_changes_permission')
     
-    old_permissions = models.ManyToManyField(to=App_functions, related_name='old_permissions', null=True, blank=True)
+    old_permissions = models.ManyToManyField(to=App_functions, related_name='old_permissions', blank=True)
     
-    updated_permissions = models.ManyToManyField(to=App_functions, related_name='new_permissions', null=True, blank=True)
+    updated_permissions = models.ManyToManyField(to=App_functions, related_name='new_permissions', blank=True)
 
     comment = models.TextField(null=True, blank=True)
 

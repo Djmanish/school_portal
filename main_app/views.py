@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, Http404
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, Http404, get_object_or_404
 from registration.backends.default.views import RegistrationView
 from registration.forms import RegistrationFormUniqueEmail
 from django.contrib import auth
@@ -21,8 +21,26 @@ from AddChild.models import *
 from notices.models import *
 from holidaylist.models import *
 from django.contrib.sessions.models import Session
+<<<<<<< HEAD
 from examschedule.models import *
+=======
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from main_app.serializers import UserProfileSerializer
+>>>>>>> 0303deedc22c96e625e9f3db326d6cf305825432
 
+
+
+class userList(APIView):
+
+    def get(self, request):
+        user1= UserProfile.objects.all()
+        serializer = UserProfileSerializer(user1, many=True)
+        return Response(serializer.data)
+    
+    def post(self):
+        pass
 
 
 
@@ -219,6 +237,13 @@ def index(request):
 
 @login_required
 def dashboard(request):
+    user_one = request.user
+     # starting assigned classes
+    user_institute_one= request.user.profile.institute
+    user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
+    print(user_subject_one)
+
+    # starting assigned teachers
     # Events & Calendars
     holiday=HolidayList.objects.filter(institute=request.user.profile.institute,applicable="Yes")
     exam_she =ExamDetails.objects.filter(institute=request.user.profile.institute)
@@ -231,8 +256,19 @@ def dashboard(request):
     if request.user.profile.designation == "teacher":
         teacher_class = Classes.objects.get(class_teacher= user_one)
     
-        teacher_subject = Subjects.objects.filter(subject_class= teacher_class) 
+    if request.user.profile.designation:
+
+        if request.user.profile.designation.level_name == "teacher":  
+                        
+            teacher_class = Classes.objects.get(class_teacher= user_one)
+            
+            teacher_subject = Subjects.objects.filter(subject_class= teacher_class)
+        else:
+            
+            teacher_class = None
+            teacher_subject = None    
     else:
+
         teacher_class = None
         teacher_subject = None
        
@@ -437,9 +473,15 @@ def dashboard(request):
         'pending5':pending5, 
         'active_sessions':active_sessions,  
         'len_online_user':len_online_user,  
+
+        'final_data': final_data,
         'holiday':holiday,
+<<<<<<< HEAD
         'final_data': final_data,
         'exam_she':exam_she,
+=======
+        
+>>>>>>> 0303deedc22c96e625e9f3db326d6cf305825432
 
     }
     return render(request, 'main_app/dashboard.html' , context)
