@@ -1001,9 +1001,6 @@
             {% endif %}
                 
             
-           
-         
-
             <!-- info cards -->
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
                 
@@ -1016,9 +1013,7 @@
                             <script>
                                 var events = [{% for h in holiday %}
                                             {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}'},
-                                            {% endfor %}
-                                            {'Date': new Date(2020, 4-1, 17), 'Title': 'test kar raha hu'},
-
+                                            {% endfor %}    
                                         ];
                                             var settings = {};
                                             var element = document.getElementById('caleandar');

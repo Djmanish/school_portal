@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import Fees_tag_update_form
 from django.utils import timezone
 from django.contrib.messages.views import SuccessMessageMixin
+import datetime
 # Create your views here.
 
 def fees_home(request):
@@ -124,6 +125,11 @@ def institute_fees_schedule(request):
         notification_date = request.POST.get('notification_date')
         due_date = request.POST.get('due_date')
         processing_date = request.POST.get('processing_date')
+        current_date = str(datetime.date.today())
+        if notification_date< current_date or processing_date < current_date or due_date<current_date:
+            messages.info(request, "Notification, Due or Process dates can not be past dates.")
+            return redirect('fees_home')
+        
 
         try:
             check_existance = Fees_Schedule.objects.get(institute = request.user.profile.institute)
@@ -176,9 +182,9 @@ def Map_Tag_Students(request):
                 Student_Tags_Record.objects.create(institute= request.user.profile.institute, student= student, student_class= student.Class)
 
     #    removing this tag from all students in case of update
-        # students_with_this_tag = Student_Tags_Record.objects.filter(student_class= students_class)
-        # for student in students_with_this_tag:
-        #     student.tags.remove(selected_tag)
+        students_with_this_tag = Student_Tags_Record.objects.filter(student_class= students_class)
+        for student in students_with_this_tag:
+            student.tags.remove(selected_tag)
         
         
         for student in students_list:
@@ -234,23 +240,36 @@ def processing_fees(request):
     except:
         messages.info(request, "No student to process fees")
     
-    for st in school_students:
-         
+    for st in school_students:         
         for tag in st.tags.all():
-            try:
-                Student_Tag_Processed_Record.objects.get(institute= st.student.institute, 
-                notification_date = st.student.institute.institute_schedule.notification_date, 
-                process_date = st.student.institute.institute_schedule.processing_date,
-                due_date = st.student.institute.institute_schedule.due_date,
-                student= st.student,
-                tag = tag)
-            except:
+            if tag.active == "yes":
+                try:
+                    Student_Tag_Processed_Record.objects.get(institute= st.student.institute, 
+                    notification_date = st.student.institute.institute_schedule.notification_date, 
+                    process_date = st.student.institute.institute_schedule.processing_date,
+                    due_date = st.student.institute.institute_schedule.due_date,
+                    student= st.student,
+                    fees_code= tag.fees_code)
+                except:
+                    Student_Tag_Processed_Record.objects.create(institute= st.student.institute, 
+                    notification_date = st.student.institute.institute_schedule.notification_date, 
+                    process_date = st.student.institute.institute_schedule.processing_date,
+                    due_date = st.student.institute.institute_schedule.due_date,
+                    student= st.student,
+                    fees_code = tag.fees_code,
+                    description = tag.description,
+                    type = tag.type,
+                    active= tag.active,
+                    amount = tag.amount,
+                    tax_percentage = tag.tax_percentage,
+                    amount_including_tax = tag.amount_including_tax,
+                    start_date = tag.start_date,
+                    end_date = tag.end_date
+                    )
+    # removing schedule, notification and due date of institute
+    institute_dates = Fees_Schedule.objects.get(institute= request.user.profile.institute)
+    institute_dates.delete()
+    return HttpResponse("")
 
-                Student_Tag_Processed_Record.objects.create(institute= st.student.institute, 
-                notification_date = st.student.institute.institute_schedule.notification_date, 
-                process_date = st.student.institute.institute_schedule.processing_date,
-                due_date = st.student.institute.institute_schedule.due_date,
-                student= st.student,
-                tag = tag
-                )
-    
+def Create_Fees_Summary(request):
+    pass
