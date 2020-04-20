@@ -21,6 +21,7 @@ from AddChild.models import *
 from notices.models import *
 from holidaylist.models import *
 from django.contrib.sessions.models import Session
+from examschedule.models import *
 
 
 
@@ -219,8 +220,8 @@ def index(request):
 @login_required
 def dashboard(request):
     # Events & Calendars
-    # date_month=datetime.datetime.now().month
     holiday=HolidayList.objects.filter(institute=request.user.profile.institute,applicable="Yes")
+    exam_she =ExamDetails.objects.filter(institute=request.user.profile.institute)
     
 
     # starting assigned teachers
@@ -437,7 +438,8 @@ def dashboard(request):
         'active_sessions':active_sessions,  
         'len_online_user':len_online_user,  
         'holiday':holiday,
-        'final_data': final_data
+        'final_data': final_data,
+        'exam_she':exam_she,
 
     }
     return render(request, 'main_app/dashboard.html' , context)
