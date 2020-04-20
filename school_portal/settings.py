@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'admissions.apps.AdmissionsConfig',
     'notices.apps.NoticesConfig',
-    'fees'
+    'fees',
+    'rest_framework'
    
     
 ]
