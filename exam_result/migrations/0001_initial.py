@@ -48,4 +48,19 @@ class Migration(migrations.Migration):
                 ('institute', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='calc_result_institute', to='main_app.Institute')),
             ],
         ),
+        migrations.CreateModel(
+            name='CalculateResult',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('exam_sr_no', models.CharField(max_length=100, null=True)),
+                ('result_score', models.IntegerField(null=True)),
+                ('result_max_marks', models.CharField(max_length=100, null=True)),
+                ('exam_type', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='result_exam_type', to='examschedule.ExamType')),
+                ('institute', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='result_institute', to='main_app.Institute')),
+                ('result_class', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='result_class', to='main_app.Classes')),
+                ('result_student_data', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='result_student_data', to=settings.AUTH_USER_MODEL)),
+                ('result_subject', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='result_subject', to='main_app.Subjects')),
+                ('result_subject_teacher', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='result_subject_teacher', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
     ]
