@@ -573,12 +573,13 @@
     <form  method="POST" action="{% url 'fees_home' %}" class="form-inline" id="attendance_form">
         {% csrf_token %}
     
-          <label style="margin: 4px;">Select Class:  </label>
+     <div class="form-group">
+        <label style="margin: 4px;">Select Class:  </label>
         <select name="selected_class_" class="form-control"  required>
             
             
-            {% if showing_student_for_class.id %}
-            <option selected disabled value="{{showing_student_for_class.id}}"> {{showing_student_for_class}} </option>
+            {% if showing_student_for_class %}
+            <option selected  value="{{showing_student_for_class.id}}"> {{showing_student_for_class}} </option>
             {% else %}
             <option selected disabled value=""> -- select a class -- </option>
             {% endif %}
@@ -588,6 +589,27 @@
             <option value="{{class.id}}">{{class}}</option>
             {% endfor %}
      </select>
+     </div>
+
+     <div class="form-group">
+        <label for="sel1" style="margin: 4px;">Select a tag:</label>
+        <select class="form-control" name="selected_tag" id="sel1" required>
+            
+            {% if selected_tag %}
+            <option selected  value="{{selected_tag.id}}">{{selected_tag}}</option>
+            {% else %}
+            <option selected disabled value=""> --- select a tag ---</option>
+            {% endif %}
+                
+          
+        
+        {% for tag in all_tags %}
+            <option value="{{tag.id}}">{{tag.fees_code}} - {{tag.description}}</option>
+        {% endfor %}
+            
+        </select>
+      </div>
+
 
 <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">          
     </form>
@@ -597,38 +619,24 @@
         <div class="md-card-content">
             
 
-{% if total_tags_for_s %}
+
+{% if selected_tag %}
+     
 <form method="POST" action="{% url 'mapping_tags_to_student' %}">
     {% csrf_token %}
     <input type="hidden" name="students_class" value="{{showing_student_for_class.id}}">
-    <div class="form-group">
-        <label for="sel1">Select a tag:</label>
-        <select class="form-control" name="selected_tag" id="sel1" required>
-          <option selected disabled value=""> --- select a tag ---</option>
-        
-        {% for tag in total_tags_for_s %}
-            <option value="{{tag.id}}">{{tag.fees_code}} - {{tag.description}}</option>
-        {% endfor %}
-            
-        </select>
-      </div>
+    <input type="hidden" value="{{selected_tag.id}}" name="selected_taga">
+
+
       <div class="form-group">
         <label for="sel1">Select students to apply this tag:</label><br>
-       
-        
 
         <input class="md-btn md-btn-primary md-btn-mini" type="button" id="selectAll" name="selectAll" value="Select All">
 <input class="md-btn md-btn-primary md-btn-mini" type="button" id="unselectAll" name="unselectAll" value="Unselect All">
+<br>
+<br>
 
-<small class="uk-text-primary " >
-   <div style="padding: 5px;">
-    <ul>
-        <li>Hold ctrl or shift (or drag with the mouse) to select more than one</li>
-        <li>Type a letter to search in the list</li>
-       
-    </ul>
-   </div>
-      </small>
+
       <div class="input-group  input-group-sm">
         <div class="input-group-prepend">
           <span class="input-group-text search_icon"><i class="material-icons search_icon ">search</i></span>
@@ -639,7 +647,11 @@
          <option  disabled value="">   --- select students ---</option>
 
         {% for student in all_students %}
-            <option value="{{student.id}}" >{{forloop.counter}}.     {{student.first_name}}
+            <option value="{{student.id}}" 
+            {% if student.already == "true" %}
+                selected
+            {% endif %}
+                 >{{forloop.counter}}.     {{student.first_name}}
                                         
                 {% if student.middle_name %}
                 {{student.middle_name}}
@@ -654,8 +666,10 @@
         </select>
       </div>
       <input type="submit" value="Update" class="md-btn md-btn-primary">
-</form>
+</form>   
 {% endif %}
+
+
     
 
 <script>
@@ -800,6 +814,35 @@
                                 </li>
                                 <li>
                                     <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+
+<!-- process button only visible when notificatoin date is set -->
+                                        
+                                        {% if user.profile.institute.institute_schedule.notification_date %}
+                                        <div class="uk-width-large">
+                                            <a class="md-btn md-btn-primary text-white" id="fee_process_btn">Process Fees</a>
+                                        </div>
+                                        {% endif %}
+                                            
+
+
+<script>
+$('#fee_process_btn').click(function(){
+  var entered_val = prompt("Enter 'yes' if you want to process the fees");
+  if (entered_val == 'yes') {
+   $.ajax({
+type:"POST",
+url: "{% url 'processing_fees' %}",
+data:{csrfmiddlewaretoken:'{{csrf_token}}'},
+success: function(msg){
+    alert(msg);
+}
+   })
+  } else {
+    alert('incorrect input');
+  }
+})
+</script>
+
                                         <div class="uk-width-large-1-2" style="padding-right:40px;">
                                           
                                               <form method="POST" action="{% url 'fees_schedule' %}" >
@@ -888,7 +931,6 @@
                                          
 
 <script>
-
 $('#selected_tag_').change(function() {
   
         $('#sttaglab').html('List of students mapped to this tag:')
@@ -903,12 +945,8 @@ $('#selected_tag_').change(function() {
         $('#students_tags_table').css('visibility','hidden')
         $('#class_students_list_t').removeAttr("disabled", "disabled");
     });
-
-
 </script>
-
-
-                                           
+ 
                                            <script>
                                             $(document).ready(function(){
                                               $('#selected_tag_').change(function(){
@@ -927,12 +965,6 @@ $('#selected_tag_').change(function() {
                                               })
                                             })
                                             </script>
-
-
-
-
-                                         
-                                          
                                       <div class="form-group">
                                     <label id="sttaglab">Select a Student:</label>
                                     <div class="input-group  input-group-sm">
