@@ -116,15 +116,16 @@ def examresult(request,pk):
                   else:
                               messages.info(request, 'Not Approriate Marks')
                               return redirect('not_found')
-          
-          overall_data=Overall_Result()
-          overall_data.overall_examtype=examtype
-          overall_data.overall_srno=examsrno
-          overall_data.overall_institute=request.user.profile.institute
-          overall_data.overall_marks=score
-          overall_data.overall_student_data=student_data
-          overall_data.overall_subject=exam_subject
-          overall_data.save()      
+          for calc_data in exam_result_data:
+              overall_data=Overall_Result()
+              overall_data.overall_examtype=calc_data.examtype
+              overall_data.overall_srno=calc_data.examsrno
+              overall_data.overall_institute=request.user.profile.institute
+              overall_data.overall_marks=calc_data.score
+              overall_data.overall_student_data=calc_data.student_data
+              overall_data.overall_subject=calc_data.exam_subject
+              overall_data.save()   
+          return redirect(f'/examresult/examresult/{inst_id}')    
           # for subject in exam_result_data:
           #               subject=subject.result_subject
                         
@@ -151,7 +152,7 @@ def examresult(request,pk):
           #               calculate_result.calc_result_total=sumValue
           #               calculate_result.save()
           # messages.success(request, 'Exam Result Stored successfully !!!')  
-          return redirect(f'/examresult/examresult/{inst_id}') 
+        
 
       
 # Student View
