@@ -270,6 +270,3 @@ def processing_fees(request):
     institute_dates = Fees_Schedule.objects.get(institute= request.user.profile.institute)
     institute_dates.delete()
     return HttpResponse("")
-
-def Create_Fees_Summary(request):
-    pass
