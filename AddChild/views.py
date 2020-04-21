@@ -17,12 +17,25 @@ def addchild(request):
         try:
             student = UserProfile.objects.get(institute=selected_institute,Class=selected_class,roll_number=roll_number)
         except UserProfile.DoesNotExist:
-            messages.success(request, 'Requested Child Not Found')
+            # messages.success(request, 'Requested Child Not Found')
             student=None
+        
+        child_search= None
+        # start chk for student already listed or not
+        if student != None:
+            try:
+                child_search = AddChild.objects.get(child=student)
+                if child_search.parent == request.user.profile:
+                    messages.success(request,'Already added in your list')
+                else:
+                    messages.success(request, 'Requested Child already associated with some other parent')
+            except AddChild.DoesNotExist:
+                child_search=None
+        
         # starting checking if already selected as child
         try:
             parent_child_check = AddChild.objects.filter(parent= request.user.profile, child = student)
-
+            
             if len(parent_child_check) > 0 :
                     student.is_already_listed = True
             else:
@@ -31,9 +44,11 @@ def addchild(request):
             pass   
             
         # ending checking if already selected as child
-        context = {'institutes':institutes,
-        
-        'student':student}
+        context = {
+            'institutes':institutes,
+            'student':student,
+            'child_search':child_search,
+            }
         return render(request, 'AddChild/child.html', context)
 
     context = {

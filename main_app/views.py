@@ -21,14 +21,11 @@ from AddChild.models import *
 from notices.models import *
 from holidaylist.models import *
 from django.contrib.sessions.models import Session
-<<<<<<< HEAD
 from examschedule.models import *
-=======
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from main_app.serializers import UserProfileSerializer
->>>>>>> 0303deedc22c96e625e9f3db326d6cf305825432
 
 
 
@@ -237,21 +234,18 @@ def index(request):
 
 @login_required
 def dashboard(request):
-    user_one = request.user
-     # starting assigned classes
-    user_institute_one= request.user.profile.institute
-    user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
-    print(user_subject_one)
 
-    # starting assigned teachers
+    # random classmates
+    # if request.user.profile.designation == "student":
+    std_random=UserProfile.objects.filter(designation__level_name="student").order_by('?')[:5]
+    print(std_random)
+        
+
     # Events & Calendars
     holiday=HolidayList.objects.filter(institute=request.user.profile.institute,applicable="Yes")
     exam_she =ExamDetails.objects.filter(institute=request.user.profile.institute)
-    
-
+  
     # starting assigned teachers
-
-   
     user_one = request.user
     if request.user.profile.designation == "teacher":
         teacher_class = Classes.objects.get(class_teacher= user_one)
@@ -473,17 +467,11 @@ def dashboard(request):
         'pending5':pending5, 
         'active_sessions':active_sessions,  
         'len_online_user':len_online_user,  
-
-        'final_data': final_data,
         'holiday':holiday,
-<<<<<<< HEAD
         'final_data': final_data,
         'exam_she':exam_she,
-=======
-        
->>>>>>> 0303deedc22c96e625e9f3db326d6cf305825432
-
-    }
+        'std_random':std_random,
+}
     return render(request, 'main_app/dashboard.html' , context)
 
 

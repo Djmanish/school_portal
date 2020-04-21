@@ -754,14 +754,37 @@
                         </div>
                     </div>
                 </div>
+                {% if request.user.profile.designation.level_name == "student" %}
                 <div class="uk-width-medium-1-2">
                     <div class="md-card">
                         <div class="md-card-content">
-                            <h3 class="heading_a uk-margin-bottom">Statistics</h3>
-                            <div id="ct-chart" class="chartist"></div>
+                            <h4>Classmates</h4>
+                            <div class="uk-overflow-container">
+                                <table class="uk-table uk-table-condensed uk-table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="uk-text-nowrap" style="text-align: center;">Sr No.</th>
+                                            <th class="uk-text-nowrap" style="text-align: center;margin-left: 0px;">Image</th>
+                                            <th class="uk-text-nowrap" style="text-align: center;">Student Name</th>                                                                       
+                                        </tr>                                       
+                                    </thead>
+                                    <tbody>
+                                        {% for stdr in std_random %}
+                                        <tr>
+                                        <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;">{{forloop.counter}}</td>
+                                        <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;margin-left: 0px;">
+                                            <img class="md-card-head-avatar" src="{{stdr.profile_pic.url}}" style="width: 40px; height: 40px; margin-top: 0%;" alt=""/>
+                                        </td>
+                                        <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;"><a href="#">{{stdr.first_name}} {{stdr.last_name}}</a></td>
+                                        </tr>   
+                                        {% endfor %}                                    
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
            {% elif user.profile.designation.level_name == "teacher" %}      
 
