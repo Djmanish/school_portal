@@ -84,10 +84,8 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
+
+
             name='Subjects',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -112,8 +110,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
->>>>>>> 157578148ed4de9ebf2d7ae86fedc8a2ae006fb9
->>>>>>> 546b0266f9057ba4f022bae40c69fd274585b3c6
+
             name='UserProfile',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -158,12 +155,6 @@ class Migration(migrations.Migration):
                 ('comment', models.TextField(blank=True, null=True)),
                 ('changes_made_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='user_made_changes_permission', to=settings.AUTH_USER_MODEL)),
                 ('institute', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='institute_role_permission_updated', to='main_app.Institute')),
-<<<<<<< HEAD
-                ('old_permissions', models.ManyToManyField(blank=True, related_name='old_permissions', to='main_app.App_functions')),
-                ('role', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='role_permission_updated', to='main_app.Institute_levels')),
-                ('updated_permissions', models.ManyToManyField(blank=True, related_name='new_permissions', to='main_app.App_functions')),
-            ],
-=======
                 ('old_permissions', models.ManyToManyField(blank=True, null=True, related_name='old_permissions', to='main_app.App_functions')),
                 ('role', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='role_permission_updated', to='main_app.Institute_levels')),
                 ('updated_permissions', models.ManyToManyField(blank=True, null=True, related_name='new_permissions', to='main_app.App_functions')),
@@ -203,7 +194,6 @@ class Migration(migrations.Migration):
             model_name='institute_disapproved_user',
             name='applied_role',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='main_app.Institute_levels'),
->>>>>>> 546b0266f9057ba4f022bae40c69fd274585b3c6
         ),
         migrations.CreateModel(
             name='Subjects',

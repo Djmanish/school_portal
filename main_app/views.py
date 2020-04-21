@@ -246,7 +246,6 @@ def dashboard(request):
     
 
     # starting assigned teachers
-
    
     user_one = request.user
     if request.user.profile.designation == "teacher":
