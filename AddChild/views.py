@@ -56,7 +56,7 @@ def addchildtolist(request,pk):
     student1= UserProfile.objects.get(id=pk)
     parent=request.user.profile
     add_child = AddChild.objects.create(parent=parent, child=student1, institute=student1.institute, Class=student1.Class)
-    messages.success(request, 'Request has sent to add child.')
+    messages.success(request, 'Request has been sent for the selected child')
     return redirect('user_profile')
 
 def approve_child_request(request,pk):
@@ -86,8 +86,12 @@ def childview(request,pk):
     child_total_attendance=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class).count()
     child_total_present=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="present").count()
     child_total_absent=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="absent").count()
-    present=(child_total_present/child_total_attendance)*100
-    absent=(child_total_absent/child_total_attendance)*100
+    try:
+        present=(child_total_present/child_total_attendance)*100
+        absent=(child_total_absent/child_total_attendance)*100
+    except ZeroDivisionError:
+        present=0
+        absent=0
     exam_t=ExamType.objects.filter(institute=request.user.profile.institute)
     exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
     max_marks=exam_type_child.exam_max_marks
@@ -112,8 +116,12 @@ def childview(request,pk):
         child_total_attendance=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class).count()
         child_total_present=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="present").count()
         child_total_absent=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="absent").count()
+    try:
         present=(child_total_present/child_total_attendance)*100
         absent=(child_total_absent/child_total_attendance)*100
+    except ZeroDivisionError:
+        present=0
+        absent=0
         examty=request.POST.get("selected_exam_type")
         ty=ExamType.objects.get(id=examty)
         exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
