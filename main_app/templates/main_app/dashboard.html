@@ -1017,7 +1017,10 @@
                             <script>
                                 var events = [{% for h in holiday %}
                                             {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}'},
-                                            {% endfor %}    
+                                            {% endfor %}
+                                            {% for i in exam_she %}
+                                            {'Date': new Date({{i.exam_date|date:"Y, n-1, j"}}), 'Title': '{{i.exam_type}}'},
+                                            {% endfor %}     
                                         ];
                                             var settings = {};
                                             var element = document.getElementById('caleandar');

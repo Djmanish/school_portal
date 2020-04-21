@@ -21,10 +21,14 @@ from AddChild.models import *
 from notices.models import *
 from holidaylist.models import *
 from django.contrib.sessions.models import Session
+<<<<<<< HEAD
+from examschedule.models import *
+=======
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from main_app.serializers import UserProfileSerializer
+>>>>>>> 0303deedc22c96e625e9f3db326d6cf305825432
 
 
 
@@ -241,8 +245,8 @@ def dashboard(request):
 
     # starting assigned teachers
     # Events & Calendars
-    # date_month=datetime.datetime.now().month
     holiday=HolidayList.objects.filter(institute=request.user.profile.institute,applicable="Yes")
+    exam_she =ExamDetails.objects.filter(institute=request.user.profile.institute)
     
 
     # starting assigned teachers
@@ -472,7 +476,12 @@ def dashboard(request):
 
         'final_data': final_data,
         'holiday':holiday,
+<<<<<<< HEAD
+        'final_data': final_data,
+        'exam_she':exam_she,
+=======
         
+>>>>>>> 0303deedc22c96e625e9f3db326d6cf305825432
 
     }
     return render(request, 'main_app/dashboard.html' , context)
