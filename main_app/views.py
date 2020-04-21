@@ -26,6 +26,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from main_app.serializers import UserProfileSerializer
+<<<<<<< HEAD
+=======
+from fees.models import *
+>>>>>>> a5eec130deaffadd1300e521273ef7d5e161bae9
 
 
 
@@ -438,6 +442,29 @@ def dashboard(request):
                     request.user.users_notice.insert(0, notice)
         # ending user notice
 
+        # starting fees status for parent view
+        if request.user.profile.designation.level_name == "parent":
+            request.user.user_child_fee_status = []
+
+
+            user_children= AddChild.objects.filter(institute= request.user.profile.institute, parent= request.user.profile)
+            parent_student_list = []
+            for st in user_children:
+                student= UserProfile.objects.get(pk=st.child.id)
+                parent_student_list.append(student)
+
+            
+            if(len(user_children)>0):
+                student_fees = Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list )
+                request.user.user_child_fee_status = student_fees
+                
+                          
+            else:
+                print('user has no childer to show')
+            print(request.user.user_child_fee_status)
+
+        # ending fees status for parent view
+
     context = {
         'all_classes': all_classes,
        'parent_children': parent_children,
@@ -467,11 +494,19 @@ def dashboard(request):
         'pending5':pending5, 
         'active_sessions':active_sessions,  
         'len_online_user':len_online_user,  
+<<<<<<< HEAD
         'holiday':holiday,
         'final_data': final_data,
         'exam_she':exam_she,
         'std_random':std_random,
 }
+=======
+        'final_data': final_data,
+        'holiday':holiday,
+        'exam_she':exam_she,
+        
+    }
+>>>>>>> a5eec130deaffadd1300e521273ef7d5e161bae9
     return render(request, 'main_app/dashboard.html' , context)
 
 

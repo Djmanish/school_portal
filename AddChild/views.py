@@ -71,7 +71,7 @@ def addchildtolist(request,pk):
     student1= UserProfile.objects.get(id=pk)
     parent=request.user.profile
     add_child = AddChild.objects.create(parent=parent, child=student1, institute=student1.institute, Class=student1.Class)
-    messages.success(request, 'Request has sent to add child.')
+    messages.success(request, 'Request has been sent for the selected child')
     return redirect('user_profile')
 
 def approve_child_request(request,pk):

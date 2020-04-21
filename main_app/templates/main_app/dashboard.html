@@ -279,8 +279,7 @@
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
-                    </a>
-                    
+                    </a> 
                 </li>
                 
                 <li title="User Profile">
@@ -333,8 +332,6 @@
             </a>
         </li> 
         {% endif %}
-            
-       
     </ul>
 </li>
 <!-- ending notice menu -->
@@ -344,7 +341,6 @@
         <span class="menu_icon"><i class="material-icons">date_range</i></span>
         <span class="menu_title">Fees</span>
     </a>
-    
 </li>
         
 
@@ -354,7 +350,6 @@
         <span class="menu_icon"><i class="material-icons">date_range</i></span>
         <span class="menu_title">Fees Status</span>
     </a>
-    
 </li>
 {% endif %}
     
@@ -362,8 +357,7 @@
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
-                    </a>
-                    
+                    </a>   
                 </li>
                 
                <li  title="Institute Schedule">
@@ -371,18 +365,15 @@
                     <span class="menu_icon"><i class="material-icons">schedule</i></span>
                     <span class="menu_title">Schedule</span>
                 </a>
-            </li>
-               
+            </li>               
             {% endif %}  
 
-            
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
                     <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                     <span class="menu_title">Admission Requests</span>
                 </a>
-                
             </li>
 
         {% endif %}
@@ -395,29 +386,21 @@
                             <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                             <span class="menu_title">Approvals</span>
                         </a>
-                        
                     </li>
                     
                     <li  title="Attendance">
-                    
                     <a href="{% url 'attendance' %}">
                             <span class="menu_icon"><i class="material-icons">done_all</i></span>
                             <span class="menu_title">Attendance</span>
                         </a>
-                        
                     </li> 
 
                     <li  title="Class Students">
-                    
                         <a href="{% url 'class_students_list' %}">
                                 <span class="menu_icon"><i class="material-icons">people</i></span>
                                 <span class="menu_title">Class Students</span>
                             </a>
-                            
                         </li> 
-
-                        
-
                     {% endif %}
                    
 
@@ -435,10 +418,8 @@
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam</span>
                                 </a>
-    
                             </li>
                             
-                  
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
@@ -452,7 +433,6 @@
                                     <span class="menu_icon"><i class="material-icons">visibility</i></span>
                                     <span class="menu_title">View Exam Schedule</span>
                                 </a>
-    
                             </li>
                            
                             {% if user.profile.designation.level_name == "teacher"%}
@@ -461,7 +441,6 @@
                                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                                     <span class="menu_title">Exam Result</span>
                                 </a>
-    
                             </li>
                             <li  title="Class Students">
                     
@@ -488,57 +467,23 @@
                                 </a>
     
                             </li>
-                            
-                            <!-- <li>
-                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                    <span class="menu_title">Marks Chart</span>
-                                </a>
-    
-                            </li> -->
-                          
                             {% endif %}
                         </ul>
-    
                     </li>
 
                     {% endif %} 
-                 
-            
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
                             <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
                             <span class="menu_title">Log Out</span>
                         </a>
                     </li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </ul>
         </div>
     </aside><!-- main sidebar end -->
 
     <div id="page_content">
-
-        
-       
-
-
         <div id="page_content_inner">
-
             {% if user.profile.designation %}
             {% else %}  
             <div class="md-card md-card-primary">
@@ -902,12 +847,10 @@
         </div>
             
             {% elif  user.profile.designation.level_name == "parent" %}
-
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
                 <div class="uk-width-medium-1-2">
                     <div class="">
                         <div class="md-card-content">
-                           
                             <div class="md-card uk-margin-medium-bottom">
                                 <div class="md-card-content">
                                     <div class="uk-overflow-container">
@@ -918,38 +861,20 @@
                                                 <th>Student Name</th>
                                                 <th>Earliest Due Date</th>
                                                 <th>Amount</th>
-                                               
                                             </tr>
                                             </thead>
-                                        
                                             <tbody>
-                                            <tr>
-                                                <td><a href="#" >Student One</a></td>
-                                                <td>Table Data</td>
-                                                <td>Table Data</td>
+                                                
+                                                {% for stfs in user.user_child_fee_status %}
+                                                    <tr>
+                                                        <td><a href="#">{{stfs.student.first_name}}</a></td>
+                                                        <td>{{stfs.due_date}}</td>
+                                                        <td>{{stfs.total_due_amount}}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                    
+                                                
                                               
-                                            </tr>
-                                       
-                                            <tr>
-                                                <td><a href="#" >Student One</a></td>
-                                                <td>Table Data</td>
-                                                <td>Table Data</td>
-                                               
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td><a href="#" >Student One</a></td>
-                                                <td>Table Data</td>
-                                                <td>Table Data</td>
-                                               
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td><a href="#" >Student One</a></td>
-                                                <td>Table Data</td>
-                                                <td>Table Data</td>
-                                               
-                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>

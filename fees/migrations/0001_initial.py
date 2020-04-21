@@ -157,12 +157,13 @@ class Migration(migrations.Migration):
             name='Students_fees_table',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('due_date', models.DateField()),
-                ('invoice_number', models.CharField(max_length=20)),
-                ('total_due_amount', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('total_paid', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('balance', models.DecimalField(decimal_places=2, max_digits=10)),
+                ('due_date', models.DateField(null=True)),
+                ('invoice_number', models.CharField(max_length=20, null=True)),
+                ('total_due_amount', models.DecimalField(decimal_places=2, default=0, max_digits=10, null=True)),
+                ('total_paid', models.DecimalField(decimal_places=2, default=0, max_digits=10, null=True)),
+                ('balance', models.DecimalField(decimal_places=2, default=0, max_digits=10, null=True)),
                 ('institute', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='main_app.Institute')),
+                ('student', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='studnts_fees_info', to='main_app.UserProfile')),
             ],
         ),
         migrations.AddField(
