@@ -17,5 +17,4 @@ urlpatterns = [
     path('students_mapped_to_a_tag/', views.students_mapped_to_a_tag, name="students_mapped_to_a_tag"),
     path('processing/fees/', views.processing_fees, name='processing_fees'),
 
-    path('create/fees/summary/', views.Create_Fees_Summary, name="creating_fees_summary")
 ]

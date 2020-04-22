@@ -17,12 +17,25 @@ def addchild(request):
         try:
             student = UserProfile.objects.get(institute=selected_institute,Class=selected_class,roll_number=roll_number)
         except UserProfile.DoesNotExist:
-            messages.success(request, 'Requested Child Not Found')
+            # messages.success(request, 'Requested Child Not Found')
             student=None
+        
+        child_search= None
+        # start chk for student already listed or not
+        if student != None:
+            try:
+                child_search = AddChild.objects.get(child=student)
+                if child_search.parent == request.user.profile:
+                    messages.success(request,'Already added in your list')
+                else:
+                    messages.success(request, 'Requested Child already associated with some other parent')
+            except AddChild.DoesNotExist:
+                child_search=None
+        
         # starting checking if already selected as child
         try:
             parent_child_check = AddChild.objects.filter(parent= request.user.profile, child = student)
-
+            
             if len(parent_child_check) > 0 :
                     student.is_already_listed = True
             else:
@@ -31,9 +44,11 @@ def addchild(request):
             pass   
             
         # ending checking if already selected as child
-        context = {'institutes':institutes,
-        
-        'student':student}
+        context = {
+            'institutes':institutes,
+            'student':student,
+            'child_search':child_search,
+            }
         return render(request, 'AddChild/child.html', context)
 
     context = {
@@ -56,7 +71,7 @@ def addchildtolist(request,pk):
     student1= UserProfile.objects.get(id=pk)
     parent=request.user.profile
     add_child = AddChild.objects.create(parent=parent, child=student1, institute=student1.institute, Class=student1.Class)
-    messages.success(request, 'Request has sent to add child.')
+    messages.success(request, 'Request has been sent for the selected child')
     return redirect('user_profile')
 
 def approve_child_request(request,pk):
@@ -86,8 +101,12 @@ def childview(request,pk):
     child_total_attendance=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class).count()
     child_total_present=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="present").count()
     child_total_absent=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="absent").count()
-    present=(child_total_present/child_total_attendance)*100
-    absent=(child_total_absent/child_total_attendance)*100
+    try:
+        present=(child_total_present/child_total_attendance)*100
+        absent=(child_total_absent/child_total_attendance)*100
+    except ZeroDivisionError:
+        present=0
+        absent=0
     exam_t=ExamType.objects.filter(institute=request.user.profile.institute)
     exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
     max_marks=exam_type_child.exam_max_marks
@@ -112,8 +131,12 @@ def childview(request,pk):
         child_total_attendance=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class).count()
         child_total_present=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="present").count()
         child_total_absent=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="absent").count()
+    try:
         present=(child_total_present/child_total_attendance)*100
         absent=(child_total_absent/child_total_attendance)*100
+    except ZeroDivisionError:
+        present=0
+        absent=0
         examty=request.POST.get("selected_exam_type")
         ty=ExamType.objects.get(id=examty)
         exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')

@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, Http404
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect, Http404, get_object_or_404
 from registration.backends.default.views import RegistrationView
 from registration.forms import RegistrationFormUniqueEmail
 from django.contrib import auth
@@ -21,7 +21,27 @@ from AddChild.models import *
 from notices.models import *
 from holidaylist.models import *
 from django.contrib.sessions.models import Session
+from examschedule.models import *
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from main_app.serializers import UserProfileSerializer
+<<<<<<< HEAD
+=======
+from fees.models import *
+>>>>>>> a5eec130deaffadd1300e521273ef7d5e161bae9
 
+
+
+class userList(APIView):
+
+    def get(self, request):
+        user1= UserProfile.objects.all()
+        serializer = UserProfileSerializer(user1, many=True)
+        return Response(serializer.data)
+    
+    def post(self):
+        pass
 
 
 
@@ -218,20 +238,35 @@ def index(request):
 
 @login_required
 def dashboard(request):
+
+    # random classmates
+    # if request.user.profile.designation == "student":
+    std_random=UserProfile.objects.filter(designation__level_name="student").order_by('?')[:5]
+    print(std_random)
+        
+
     # Events & Calendars
-    # date_month=datetime.datetime.now().month
     holiday=HolidayList.objects.filter(institute=request.user.profile.institute,applicable="Yes")
-    
-
+    exam_she =ExamDetails.objects.filter(institute=request.user.profile.institute)
+  
     # starting assigned teachers
-
-   
     user_one = request.user
     if request.user.profile.designation == "teacher":
         teacher_class = Classes.objects.get(class_teacher= user_one)
     
-        teacher_subject = Subjects.objects.filter(subject_class= teacher_class) 
+    if request.user.profile.designation:
+
+        if request.user.profile.designation.level_name == "teacher":  
+                        
+            teacher_class = Classes.objects.get(class_teacher= user_one)
+            
+            teacher_subject = Subjects.objects.filter(subject_class= teacher_class)
+        else:
+            
+            teacher_class = None
+            teacher_subject = None    
     else:
+
         teacher_class = None
         teacher_subject = None
        
@@ -407,6 +442,29 @@ def dashboard(request):
                     request.user.users_notice.insert(0, notice)
         # ending user notice
 
+        # starting fees status for parent view
+        if request.user.profile.designation.level_name == "parent":
+            request.user.user_child_fee_status = []
+
+
+            user_children= AddChild.objects.filter(institute= request.user.profile.institute, parent= request.user.profile)
+            parent_student_list = []
+            for st in user_children:
+                student= UserProfile.objects.get(pk=st.child.id)
+                parent_student_list.append(student)
+
+            
+            if(len(user_children)>0):
+                student_fees = Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list )
+                request.user.user_child_fee_status = student_fees
+                
+                          
+            else:
+                print('user has no childer to show')
+            print(request.user.user_child_fee_status)
+
+        # ending fees status for parent view
+
     context = {
         'all_classes': all_classes,
        'parent_children': parent_children,
@@ -436,10 +494,19 @@ def dashboard(request):
         'pending5':pending5, 
         'active_sessions':active_sessions,  
         'len_online_user':len_online_user,  
+<<<<<<< HEAD
         'holiday':holiday,
-        'final_data': final_data
-
+        'final_data': final_data,
+        'exam_she':exam_she,
+        'std_random':std_random,
+}
+=======
+        'final_data': final_data,
+        'holiday':holiday,
+        'exam_she':exam_she,
+        
     }
+>>>>>>> a5eec130deaffadd1300e521273ef7d5e161bae9
     return render(request, 'main_app/dashboard.html' , context)
 
 

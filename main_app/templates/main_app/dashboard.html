@@ -279,8 +279,7 @@
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
-                    </a>
-                    
+                    </a> 
                 </li>
                 
                 <li title="User Profile">
@@ -333,8 +332,6 @@
             </a>
         </li> 
         {% endif %}
-            
-       
     </ul>
 </li>
 <!-- ending notice menu -->
@@ -344,7 +341,6 @@
         <span class="menu_icon"><i class="material-icons">date_range</i></span>
         <span class="menu_title">Fees</span>
     </a>
-    
 </li>
         
 
@@ -354,7 +350,6 @@
         <span class="menu_icon"><i class="material-icons">date_range</i></span>
         <span class="menu_title">Fees Status</span>
     </a>
-    
 </li>
 {% endif %}
     
@@ -362,8 +357,7 @@
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
-                    </a>
-                    
+                    </a>   
                 </li>
                 
                <li  title="Institute Schedule">
@@ -371,18 +365,15 @@
                     <span class="menu_icon"><i class="material-icons">schedule</i></span>
                     <span class="menu_title">Schedule</span>
                 </a>
-            </li>
-               
+            </li>               
             {% endif %}  
 
-            
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
                     <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                     <span class="menu_title">Admission Requests</span>
                 </a>
-                
             </li>
 
         {% endif %}
@@ -395,29 +386,21 @@
                             <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                             <span class="menu_title">Approvals</span>
                         </a>
-                        
                     </li>
                     
                     <li  title="Attendance">
-                    
                     <a href="{% url 'attendance' %}">
                             <span class="menu_icon"><i class="material-icons">done_all</i></span>
                             <span class="menu_title">Attendance</span>
                         </a>
-                        
                     </li> 
 
                     <li  title="Class Students">
-                    
                         <a href="{% url 'class_students_list' %}">
                                 <span class="menu_icon"><i class="material-icons">people</i></span>
                                 <span class="menu_title">Class Students</span>
                             </a>
-                            
                         </li> 
-
-                        
-
                     {% endif %}
                    
 
@@ -435,10 +418,8 @@
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam</span>
                                 </a>
-    
                             </li>
                             
-                  
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
@@ -452,7 +433,6 @@
                                     <span class="menu_icon"><i class="material-icons">visibility</i></span>
                                     <span class="menu_title">View Exam Schedule</span>
                                 </a>
-    
                             </li>
                            
                             {% if user.profile.designation.level_name == "teacher"%}
@@ -461,7 +441,6 @@
                                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                                     <span class="menu_title">Exam Result</span>
                                 </a>
-    
                             </li>
                             <li  title="Class Students">
                     
@@ -488,23 +467,11 @@
                                 </a>
     
                             </li>
-                            
-                            <!-- <li>
-                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                    <span class="menu_title">Marks Chart</span>
-                                </a>
-    
-                            </li> -->
-                          
                             {% endif %}
                         </ul>
-    
                     </li>
 
                     {% endif %} 
-                 
-            
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
                             <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
@@ -516,13 +483,7 @@
     </aside><!-- main sidebar end -->
 
     <div id="page_content">
-
-        
-       
-
-
         <div id="page_content_inner">
-
             {% if user.profile.designation %}
             {% else %}  
             <div class="md-card md-card-primary">
@@ -738,14 +699,37 @@
                         </div>
                     </div>
                 </div>
+                {% if request.user.profile.designation.level_name == "student" %}
                 <div class="uk-width-medium-1-2">
                     <div class="md-card">
                         <div class="md-card-content">
-                            <h3 class="heading_a uk-margin-bottom">Statistics</h3>
-                            <div id="ct-chart" class="chartist"></div>
+                            <h4>Classmates</h4>
+                            <div class="uk-overflow-container">
+                                <table class="uk-table uk-table-condensed uk-table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="uk-text-nowrap" style="text-align: center;">Sr No.</th>
+                                            <th class="uk-text-nowrap" style="text-align: center;margin-left: 0px;">Image</th>
+                                            <th class="uk-text-nowrap" style="text-align: center;">Student Name</th>                                                                       
+                                        </tr>                                       
+                                    </thead>
+                                    <tbody>
+                                        {% for stdr in std_random %}
+                                        <tr>
+                                        <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;">{{forloop.counter}}</td>
+                                        <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;margin-left: 0px;">
+                                            <img class="md-card-head-avatar" src="{{stdr.profile_pic.url}}" style="width: 40px; height: 40px; margin-top: 0%;" alt=""/>
+                                        </td>
+                                        <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;"><a href="#">{{stdr.first_name}} {{stdr.last_name}}</a></td>
+                                        </tr>   
+                                        {% endfor %}                                    
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
            {% elif user.profile.designation.level_name == "teacher" %}      
 
@@ -754,10 +738,10 @@
                 <div class="md-card">
                     <div class="md-card-content">
                         <div class="uk-overflow-container">
-                            <table class="uk-table">
+                            <table class="uk-table uk-table-condensed uk-table-hover">
                                 <thead>
-                                       <div class="md-card-content">
-                                         <h3 class="heading_a uk-margin-bottom">All Assigned Classes</h3>
+                                       <div>
+                                         <h3 class="heading_a">All Assigned Classes</h3>
                                         </div>
                                         <tr>
                                          <th class="uk-text-nowrap">Assigned Classes</th>
@@ -781,14 +765,17 @@
                     </div>
                 </div>
             </div>
+            
             <div class="uk-width-medium-1-2">
+                
                 <div class="md-card">
                     <div class="md-card-content">
                         <div class="uk-overflow-container">
-                            <table class="uk-table">
+                           
+                            <table class="uk-table uk-table-condensed uk-table-hover">
                                 <thead>
-                                       <div class="md-card-content">
-                                         <h3 class="heading_a uk-margin-bottom">All Assigned Teachers</h3>
+                                       <div>
+                                         <h3 class="heading_a">All Assigned Teachers</h3>
                                         </div>
                                         <tr>
                                          <th class="uk-text-nowrap">Teachers Name</th>
@@ -798,14 +785,15 @@
                                         </tr>
                                 </thead>
                                 <tbody>
-                                    {% for teachers in teacher_subject %}
-                                    <tr class="uk-table-middle">
+                                    
+                                         {% for teachers in teacher_subject %}
+                                        <tr class="uk-table-middle">
                                         <td class="uk-width-3-10 uk-text-nowrap"><a href ="#">{{teachers.subject_teacher}}</a></td>
                                         <td class="uk-width-3-10 uk-text-nowrap">{{teachers.subject_name}}</td>
                                                                           
-                                    </tr>
+                                         </tr>
                                   
-                                       {% endfor %}
+                                        {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -818,10 +806,10 @@
                 <div class="md-card">
                     <div class="md-card-content">
                         <div class="uk-overflow-container">
-                            <table class="uk-table">
+                            <table class="uk-table uk-table-hover uk-table-condensed">
                                 <thead>
-                                       <div class="md-card-content">
-                                         <h3 class="heading_a uk-margin-bottom">Class Attendace Status</h3>
+                                       <div>
+                                         <h3 class="heading_a">Class Attendace Status</h3>
                                         </div>
                                         <tr>
                                          <th class="uk-text-nowrap">Date</th>
@@ -859,12 +847,10 @@
         </div>
             
             {% elif  user.profile.designation.level_name == "parent" %}
-
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
                 <div class="uk-width-medium-1-2">
                     <div class="">
                         <div class="md-card-content">
-                           
                             <div class="md-card uk-margin-medium-bottom">
                                 <div class="md-card-content">
                                     <div class="uk-overflow-container">
@@ -875,38 +861,20 @@
                                                 <th>Student Name</th>
                                                 <th>Earliest Due Date</th>
                                                 <th>Amount</th>
-                                               
                                             </tr>
                                             </thead>
-                                        
                                             <tbody>
-                                            <tr>
-                                                <td><a href="#" >Student One</a></td>
-                                                <td>Table Data</td>
-                                                <td>Table Data</td>
+                                                
+                                                {% for stfs in user.user_child_fee_status %}
+                                                    <tr>
+                                                        <td><a href="#">{{stfs.student.first_name}}</a></td>
+                                                        <td>{{stfs.due_date}}</td>
+                                                        <td>{{stfs.total_due_amount}}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                    
+                                                
                                               
-                                            </tr>
-                                       
-                                            <tr>
-                                                <td><a href="#" >Student One</a></td>
-                                                <td>Table Data</td>
-                                                <td>Table Data</td>
-                                               
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td><a href="#" >Student One</a></td>
-                                                <td>Table Data</td>
-                                                <td>Table Data</td>
-                                               
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td><a href="#" >Student One</a></td>
-                                                <td>Table Data</td>
-                                                <td>Table Data</td>
-                                               
-                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -997,7 +965,10 @@
                             <script>
                                 var events = [{% for h in holiday %}
                                             {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}'},
-                                            {% endfor %}    
+                                            {% endfor %}
+                                            {% for i in exam_she %}
+                                            {'Date': new Date({{i.exam_date|date:"Y, n-1, j"}}), 'Title': '{{i.exam_type}}'},
+                                            {% endfor %}     
                                         ];
                                             var settings = {};
                                             var element = document.getElementById('caleandar');

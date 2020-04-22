@@ -17,7 +17,7 @@
 
 
     <title>Institute Profile</title>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'main_app/bower_components/codemirror/lib/codemirror.css' %}">
@@ -51,8 +51,7 @@
     <![endif]-->
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="{% static 'main_app/js/script.js' %}"></script>
+   
     
 </head>
 
@@ -774,7 +773,7 @@
                                 <th>Total Amout</th>
                                 <th >Start Date</th>
                                 <th >End Date</th>
-                                <th>Edit</th>
+                                <th></th>
                                 
                             </tr>
                             </thead>
@@ -791,7 +790,9 @@
                                 <td>{{tag.amount_including_tax}}</td>
                                 <td>{{tag.start_date}}</td>
                                 <td>{{tag.end_date}}</td>
-                                <td><a href="{% url 'fees_tag_update_view' tag.id %}"> Edit</a></td>
+                                <td ><a href="{% url 'fees_tag_update_view' tag.id %}" data-uk-tooltip title="Edit this tag"><i class="material-icons" style="color: #1976d2;">edit</i></a>
+                                
+                                </td>
                             </tr>
                             
                               {% endfor %}
@@ -804,15 +805,7 @@
                  
                 </div>
             </div> 
-                                 </div></div>
-                                   
-                            
-                                              
-    
-                                            
-                                            
-                                        
-                                    
+                                 </div></div>  
                                 </li>
                                 <li>
                                     <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
@@ -830,14 +823,9 @@
                                             {% endif %}
 
 
-                                            <a class="md-btn md-btn-primary text-white" href="{% url 'creating_fees_summary' %}" >Create Summary</a>
-                                            
+                                          
                                         </div>
-                                       
-                                        
-                                            
-
-
+         
 <script>
 $('#fee_process_btn').click(function(){
   var entered_val = prompt("Enter 'yes' if you want to process the fees");
@@ -855,7 +843,6 @@ success: function(msg){
   }
 })
 </script>
-
                                         <div class="uk-width-large-1-2" style="padding-right:40px;">
                                           
                                               <form method="POST" action="{% url 'fees_schedule' %}" >
@@ -1025,9 +1012,6 @@ $('#selected_tag_').change(function() {
                                </thead>
                                <tbody id="student_tags_res">
                                  
-                               
-                                     
-                                  
                                   
                                </tbody>
                            </table>
@@ -1037,13 +1021,6 @@ $('#selected_tag_').change(function() {
                </div> 
                                     </div></div>
                                       
-                               
-                                                 
-       
-                                               
-                                               
-                                           
-                                       
                                    </li>
 
 
@@ -1150,6 +1127,9 @@ $('#unselectAll').click(function() {
 
     <!--  forms advanced functions -->
     <script src="{% static 'main_app/js/pages/forms_advanced.min.js' %}" ></script>
+    
+    <script src="{% static 'main_app/js/script.js' %}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <!-- <script>
         $("input[type=date]").datepicker({
