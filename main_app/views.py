@@ -26,10 +26,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from main_app.serializers import UserProfileSerializer
-<<<<<<< HEAD
-=======
 from fees.models import *
->>>>>>> a5eec130deaffadd1300e521273ef7d5e161bae9
 
 
 
@@ -239,15 +236,24 @@ def index(request):
 @login_required
 def dashboard(request):
 
-    # random classmates
-    # if request.user.profile.designation == "student":
+    # random classmates for student
     std_random=UserProfile.objects.filter(designation__level_name="student").order_by('?')[:5]
-    print(std_random)
+    
         
 
     # Events & Calendars
     holiday=HolidayList.objects.filter(institute=request.user.profile.institute,applicable="Yes")
     exam_she =ExamDetails.objects.filter(institute=request.user.profile.institute)
+    if request.user.profile.designation:    
+        if request.user.profile.designation.level_name == "teacher":  
+            exam_she_teacher_class=Classes.objects.get(class_teacher= request.user)
+            request.user.exam_she_teacher=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_class=exam_she_teacher_class)
+    if request.user.profile.designation:    
+        if request.user.profile.designation.level_name == "student":
+            exam_she_student_class=UserProfile.objects.get(user=request.user)
+            request.user.exam_she_student=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_class=exam_she_student_class.Class)
+            
+    
   
     # starting assigned teachers
     user_one = request.user
@@ -452,15 +458,16 @@ def dashboard(request):
             for st in user_children:
                 student= UserProfile.objects.get(pk=st.child.id)
                 parent_student_list.append(student)
-
+            
             
             if(len(user_children)>0):
                 student_fees = Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list )
+                print(student_fees)
                 request.user.user_child_fee_status = student_fees
                 
                           
             else:
-                print('user has no childer to show')
+                print('user has no childern to show')
             print(request.user.user_child_fee_status)
 
         # ending fees status for parent view
@@ -494,19 +501,12 @@ def dashboard(request):
         'pending5':pending5, 
         'active_sessions':active_sessions,  
         'len_online_user':len_online_user,  
-<<<<<<< HEAD
         'holiday':holiday,
         'final_data': final_data,
         'exam_she':exam_she,
         'std_random':std_random,
-}
-=======
-        'final_data': final_data,
-        'holiday':holiday,
-        'exam_she':exam_she,
         
-    }
->>>>>>> a5eec130deaffadd1300e521273ef7d5e161bae9
+}
     return render(request, 'main_app/dashboard.html' , context)
 
 

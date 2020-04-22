@@ -865,7 +865,7 @@
                                             </thead>
                                             <tbody>
                                                 
-                                                {% for stfs in user.user_child_fee_status %}
+                                                {% for stfs in request.user.user_child_fee_status %}
                                                     <tr>
                                                         <td><a href="#">{{stfs.student.first_name}}</a></td>
                                                         <td>{{stfs.due_date}}</td>
@@ -966,9 +966,21 @@
                                 var events = [{% for h in holiday %}
                                             {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}'},
                                             {% endfor %}
+                                            {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
                                             {% for i in exam_she %}
                                             {'Date': new Date({{i.exam_date|date:"Y, n-1, j"}}), 'Title': '{{i.exam_type}}'},
-                                            {% endfor %}     
+                                            {% endfor %}  
+                                            {% endif %}   
+                                            {% if user.profile.designation.level_name == "teacher" %}
+                                            {% for j in user.exam_she_teacher %}
+                                            {'Date': new Date({{j.exam_date|date:"Y, n-1, j"}}), 'Title': '{{j.exam_type}}<br>{{j.exam_class}}-{{j.exam_subject}}'},
+                                            {% endfor %}  
+                                            {% endif %} 
+                                            {% if user.profile.designation.level_name == "student" %}
+                                            {% for k in user.exam_she_student %}
+                                            {'Date': new Date({{k.exam_date|date:"Y, n-1, j"}}), 'Title': '{{k.exam_type}}<br>{{k.exam_subject}}'},
+                                            {% endfor %}  
+                                            {% endif %} 
                                         ];
                                             var settings = {};
                                             var element = document.getElementById('caleandar');

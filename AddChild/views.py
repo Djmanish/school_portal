@@ -108,7 +108,10 @@ def childview(request,pk):
         present=0
         absent=0
     exam_t=ExamType.objects.filter(institute=request.user.profile.institute)
-    exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
+    try:
+        exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
+    except ExamType.DoesNotExist:
+        pass
     max_marks=exam_type_child.exam_max_marks
     total_marks=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class).count()*int(max_marks)
     child_result=ExamResult.objects.filter(exam_type=exam_type_child,result_student_data=child_user)
@@ -117,8 +120,11 @@ def childview(request,pk):
         i = i.result_score
         total_sum = total_sum + int(i)
     m=int(total_marks)
-    avg=((total_sum/m)*100)
-    print(avg)
+    try:
+        avg=((total_sum/m)*100)
+    except ZeroDivisionError:
+        avg=0
+    
     if (avg<33):
         result="Fail"
     else:
@@ -131,13 +137,15 @@ def childview(request,pk):
         child_total_attendance=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class).count()
         child_total_present=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="present").count()
         child_total_absent=Attendance.objects.filter(student=child_user,institute=child.child.institute,student_class=child.child.Class,attendance_status="absent").count()
-    try:
-        present=(child_total_present/child_total_attendance)*100
-        absent=(child_total_absent/child_total_attendance)*100
-    except ZeroDivisionError:
-        present=0
-        absent=0
+        try:
+            present=(child_total_present/child_total_attendance)*100
+            absent=(child_total_absent/child_total_attendance)*100
+        except ZeroDivisionError:
+            present=0
+            absent=0
+        
         examty=request.POST.get("selected_exam_type")
+        print(examty)
         ty=ExamType.objects.get(id=examty)
         exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
         max_marks=exam_type_child.exam_max_marks
