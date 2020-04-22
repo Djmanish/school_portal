@@ -771,6 +771,7 @@
                                 <th >Active</th>
                                 <th >Amount</th>
                                 <th >Tax %</th>
+                                <th>Total Amout</th>
                                 <th >Start Date</th>
                                 <th >End Date</th>
                                 <th>Edit</th>
@@ -787,6 +788,7 @@
                                 <td>{{tag.active}}</td>
                                 <td>{{tag.amount}}</td>
                                 <td>{{tag.tax_percentage}}</td>
+                                <td>{{tag.amount_including_tax}}</td>
                                 <td>{{tag.start_date}}</td>
                                 <td>{{tag.end_date}}</td>
                                 <td><a href="{% url 'fees_tag_update_view' tag.id %}"> Edit</a></td>
