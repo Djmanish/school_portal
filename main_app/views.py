@@ -238,7 +238,7 @@ def index(request):
 def dashboard(request):
 
     # random classmates for student
-    std_random=UserProfile.objects.filter(designation__level_name="student").exclude(user=request.user).order_by('?')[:5]
+    std_random=UserProfile.objects.filter(institute=request.user.profile.institute,Class=request.user.profile.Class,designation__level_name="student").exclude(user=request.user).order_by('?')[:5]
     
         
 
