@@ -255,10 +255,17 @@ def dashboard(request):
             request.user.exam_she_student=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_class=exam_she_student_class.Class)
     if request.user.profile.designation:    
         if request.user.profile.designation.level_name == "parent":
-            child_par=AddChild.objects.filter(parent=request.user.profile)
-            for eve in child_par:
-                student_she=ExamDetails.objects.filter(institute=eve.child.institute,exam_class=eve.child.Class) 
-                request.user.events_parents=student_she
+            request.user.child_par=AddChild.objects.filter(parent=request.user.profile)
+            request.user.first_child=AddChild.objects.filter(parent=request.user.profile).first()
+            request.user.holiday_child=HolidayList.objects.filter(institute=request.user.first_child.child.institute,applicable="Yes")
+            request.user.exam_she_child=ExamDetails.objects.filter(institute=request.user.first_child.child.institute,exam_class=request.user.first_child.child.Class)
+            
+            if request.method == "POST":
+                request.user.student=request.POST.get('selected_child')
+                std_child=UserProfile.objects.get(id=request.user.student)
+                request.user.post_child=std_child
+                request.user.holiday_child=HolidayList.objects.filter(institute=std_child.institute,applicable="Yes")
+                request.user.exam_she_child=ExamDetails.objects.filter(institute=std_child.institute,exam_class=std_child.Class)
         
     # for student latest exam
     if request.user.profile.designation:    
