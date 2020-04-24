@@ -95,6 +95,7 @@ def delete_child_request(request,pk):
     return render(request, 'main_app/dashboard.html')
 
 def childview(request,pk):
+    
     child = AddChild.objects.get(parent=request.user.profile,pk=pk)
     child_subjects=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class)
     child_user=User.objects.get(username=child.child)
@@ -129,6 +130,8 @@ def childview(request,pk):
         result="Fail"
     else:
         result="Pass"
+    # For events & Calendars
+    child_she=ExamDetails.objects.filter(institute=child.child.institute,exam_class=child.child.Class)
     
     if request.method == "POST":
         child = AddChild.objects.get(parent=request.user.profile,pk=pk)
@@ -161,6 +164,8 @@ def childview(request,pk):
             result="Fail"
         else:
             result="Pass"
+
+        child_she=ExamDetails.objects.filter(institute=child.child.institute,exam_class=child.child.Class)
         
         context={
             'ty':ty,
@@ -172,6 +177,7 @@ def childview(request,pk):
         'child_subjects':child_subjects,
         'child':child,
         'result':result,
+        'child_she':child_she,
         }
         return render(request, 'AddChild/viewchild.html',context)
     context={
@@ -183,6 +189,7 @@ def childview(request,pk):
         'child_subjects':child_subjects,
         'child':child,
         'result':result,
+        'child_she':child_she
     }
     return render(request, 'AddChild/viewchild.html',context)
 

@@ -20,6 +20,7 @@ from Attendance.models import *
 from AddChild.models import *
 from notices.models import *
 from holidaylist.models import *
+from exam_result.models import *
 from django.contrib.sessions.models import Session
 from examschedule.models import *
 from rest_framework.views import APIView
@@ -237,7 +238,7 @@ def index(request):
 def dashboard(request):
 
     # random classmates for student
-    std_random=UserProfile.objects.filter(designation__level_name="student").order_by('?')[:5]
+    std_random=UserProfile.objects.filter(designation__level_name="student").exclude(user=request.user).order_by('?')[:5]
     
         
 
@@ -252,8 +253,38 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "student":
             exam_she_student_class=UserProfile.objects.get(user=request.user)
             request.user.exam_she_student=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_class=exam_she_student_class.Class)
+    if request.user.profile.designation:    
+        if request.user.profile.designation.level_name == "parent":
+            child_par=AddChild.objects.filter(parent=request.user.profile)
+            for eve in child_par:
+                student_she=ExamDetails.objects.filter(institute=eve.child.institute,exam_class=eve.child.Class) 
+                request.user.events_parents=student_she
+        
+    # for student latest exam
+    if request.user.profile.designation:    
+        if request.user.profile.designation.level_name == "student":
+            try:
+                request.user.exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
+            except ExamType.DoesNotExist:
+                pass
+            max_marks=request.user.exam_type_child.exam_max_marks
+            total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
+            request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
+            request.user.total_sum = 0
+            for i in request.user.child_result:
+                i = i.result_score
+                request.user.total_sum = request.user.total_sum + int(i)
+            request.user.m=int(total_marks)
+            try:
+                request.user.avg=((request.user.total_sum/request.user.m)*100)
+            except ZeroDivisionError:
+                request.user.avg=0
             
-    
+            if (request.user.avg<33):
+                request.user.result="Fail"
+            else:
+                request.user.result="Pass" 
+                
   
     # starting assigned teachers
     user_one = request.user
@@ -513,6 +544,7 @@ def dashboard(request):
 
 class RegistrationViewUniqueEmail(RegistrationView):
     form_class = RegistrationFormUniqueEmail
+    
 
 def login(request):
     if request.user.is_authenticated:
