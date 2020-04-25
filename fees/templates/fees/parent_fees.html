@@ -17,7 +17,7 @@
 
 
     <title>Institute Profile</title>
-
+    
     <link rel="stylesheet" href="{% static 'main_app/bower_components/codemirror/lib/codemirror.css' %}">
     <!-- select2 -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/select2/dist/css/select2.min.css' %}">
@@ -564,8 +564,8 @@
                                     <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                         <div class="uk-width-large">
                                             
-                                            <!--<h4 class="heading_a uk-margin-bottom">Payment </h4>-->
-                                            <form>
+                                           
+                                            <!-- <form>
                                                 <div class="row">
                                                 <div class="col">
                                                 <label for="uk_dp_1">Student</label>
@@ -599,95 +599,71 @@
                                                      </div>
                                                       </div>             
                                                      
-                                                     </form>               
-                                                                   
-                                                                 
-                         
-                                                                 
-                                                                 
+                                                     </form>                -->
                                                             
                                             <br>
                                             <div class="uk-overflow-container">
                                                 <table class="uk-table uk-table-nowrap table_check">
                                                     <thead>
                                                     <tr>
-                                                        <th class="uk-width-1-10 uk-text-center small_col"><input type="checkbox" data-md-icheck class="check_all"></th>
-                                                        <th class="uk-width-1-10">View</th>
-                                                        <th class="uk-width-1-10">Invoice No</th>
+<!--                                                       
+                                                        <th class="uk-width-1-10">View</th> -->
+                                                       
                                                         <th class="uk-width-2-10 uk-text-center">Student</th>
-                                                        <th class="uk-width-2-10 uk-text-center">School/Institute Name</th>
+                                                        <th class="uk-width-2-10 uk-text-center">School Name</th>
                                                         <th class="uk-width-1-10 uk-text-center">Due Date</th>
                                                         <th class="uk-width-1-10 uk-text-center">Amount Due</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Amount To Be Paid</th>
-                                                        
+                                                        <th class="uk-width-1-10 uk-text-center">Details</th>
+                                                     
+
+                                                        <th></th>
+                                                      
                                                     </tr>
                                                     </thead>
                                                     <tbody>
+                                                        {% for child in children_fee_status %}
                                                         <tr>
-                                                            <td class="uk-text-center uk-table-middle small_col"><input type="checkbox" data-md-icheck class="check_row"></td>
-                                                            <td> <a class="uk-text-center md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="page_invoices.html">View</a></td>
-                                                            <td>001</td>
-                                                            <td class="uk-text-center">Ramesh Singh</td>
-                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">Rs. 1500</td>
-                                                        </tr>   
-                                                        <tr>
-                                                            <td class="uk-text-center uk-table-middle small_col"><input type="checkbox" data-md-icheck class="check_row"></td>
-                                                            <td> <a class="uk-text-center md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="page_invoices.html">View</a></td>
-                                                            <td>9090</td>
-                                                            <td class="uk-text-center">Ramesh Singh</td>
-                                                            <td class="uk-text-center">Aakash Intitute Classes</td> 
-                                                            <td class="uk-text-center">10.5.2020</td>
-                                                            <td class="uk-text-center">12.5.2020</td>
-                                                            <td class="uk-text-center">Rs. 800</td>
-                                                        </tr> 
-                                                        <tr>
-                                                            <td class="uk-text-center uk-table-middle small_col"><input type="checkbox" data-md-icheck class="check_row"></td>
-                                                            <td> <a class="uk-text-center md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="page_invoices.html">View</a></td>
-                                                            <td>123</td>
-                                                            <td class="uk-text-center">Neha Singh</td>
-                                                            <td class="uk-text-center">Army Govt School</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">Rs. 1200</td>
-                                                        </tr> 
-                                                        <tr>
-                                                            <td class="uk-text-center uk-table-middle small_col"><input type="checkbox" data-md-icheck class="check_row"></td>
-                                                            <td> <a class="uk-text-center md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="page_invoices.html">View</a></td>                                                            <td>9891</td>
-                                                            <td class="uk-text-center">Neha Singh</td>
-                                                            <td class="uk-text-center">HighTech Computer Institute</td>
-                                                            <td class="uk-text-center">4.5.2020</span></td>
-                                                            <td class="uk-text-center">4.5.2020</span></td>
-                                                            <td class="uk-text-center">Rs. 1000</td>
-                                                        </tr> 
-                                                        <tr>
-                                                            <td class="uk-text-center uk-table-middle small_col"><input type="checkbox" data-md-icheck class="check_row"></td>
-                                                            <td> <a class="uk-text-center md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="page_invoices.html">View</a></td>
-                                                            <td>989</td>
-                                                            <td class="uk-text-center">Karan Singh</td>
-                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
-                                                            <td class="uk-text-center">4.5.2020</span></td>
-                                                            <td class="uk-text-center">4.5.2020</span></td>
-                                                            <td class="uk-text-center">Rs. 1200</td>
-                                                        </tr> 
-                                                        
-                                                        
+                                                       
+                                                            <td class="uk-text-center">{{child.student.first_name}}</td>
+                                                            <td class="uk-text-center">{{child.institute}}</td>
+                                                            <td class="uk-text-center">{{child.due_date}}</td>
+                                                            <td class="uk-text-center">{{child.total_due_amount}}</td>
+                                                            <td class="uk-text-center">View Details</td>
+                                                         
+
+
+                                                            <!-- pay btn form -->
+                                                            <td class="uk-text-center">
+                                                             
+                                                                <a href="#" >
+<form method="POST" action="{% url 'pay_fees_page' %}">
+    {% csrf_token %}
+    <input type="hidden" name="s_id" value="{{child.student.pk}}">
+    <input type="hidden" name="s_amount" value="{{child.total_due_amount}}">
+    <input type="hidden" name="s_inv" value="{{child.invoice_number}}">
+
+
+    <input type="submit" value="Pay Now" class="md-btn md-btn-primary md-btn-mini">
+</form>
+
+
+
+                                                            </a></td>
+                                                       
+                                                        </tr>  
+                                                        {% endfor %}
+                                                            
                                                     </tbody>
                                                     </div>
                                                 </table>
-                                                <div class="uk-width-medium-1-6">
+                                                <!-- <div class="uk-width-medium-1-6">
                                                     <a class="md-btn md-btn-primary md-btn-wave-light" href="fees_payment.html">Pay Fees</a>
-                                                </div>
+                                                </div> -->
                                             </div>
-                                             
+
                                         
-                                    
-                                
-                               
-                                
-                                   
+                                             
+                            
                                         <li>
                                             <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                                 <div class="uk-width-large">
@@ -696,85 +672,34 @@
                                                 <table class="uk-table uk-table-nowrap table_check">
                                                     <thead>
                                                     <tr>
-                                                        <th class="uk-width-1-10">Invoice No</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Student</th>
-                                                        <th class="uk-width-1-10 uk-text-center">School/Institute Name</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Due Date</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Amount Due</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Payment Date</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Mode</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Amount Paid</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Balance</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Status</th>
+                                                        <th class="uk-text-center">Student</th>
+                                                        <th class=" uk-text-center">School</th>
+                                                        <th class=" uk-text-center">Due Date</th>
+                                                        <th class=" uk-text-center">Payment Date</th>
+                                                        <th class=" uk-text-center">Invoice N.</th>
+                                                       
+                                                        <th class="uk-text-center">Invoice</th>
+
+                                                       
                                                         
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
+                                                    
                                                             
-                                                            <td class="uk-text-center">001</td>
-                                                            <td class="uk-text-center">Ramesh Singh</td>
-                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">25.03.2020</td>
-                                                            <td class="uk-text-center">Debit Card</td>
-                                                            <td class="uk-text-center">Rs.3000</td>
-                                                            <td class="uk-text-center">Rs.1000</td>
-                                                            <td class="uk-text-center">Success</td>
-                                                        </tr>   
-                                                        <tr>
-                                                            
-                                                            <td class="uk-text-center">001</td>
-                                                            <td class="uk-text-center">Ramesh Singh</td>
-                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">25.03.2020</td>
-                                                            <td class="uk-text-center">Debit Card</td>
-                                                            <td class="uk-text-center">Rs.3000</td>
-                                                            <td class="uk-text-center">Rs.1000</td>
-                                                            <td class="uk-text-center">Success</td>
-                                                        </tr>   
-                                                        <tr>
-                                                            
-                                                            <td class="uk-text-center">001</td>
-                                                            <td class="uk-text-center">Ramesh Singh</td>
-                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">25.03.2020</td>
-                                                            <td class="uk-text-center">Debit Card</td>
-                                                            <td class="uk-text-center">Rs.3000</td>
-                                                            <td class="uk-text-center">Rs.0</td>
-                                                            <td class="uk-text-center">Success</td>
-                                                        </tr>   
-                                                        <tr>
-                                                            
-                                                            <td class="uk-text-center">001</td>
-                                                            <td class="uk-text-center">Ramesh Singh</td>
-                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">25.03.2020</td>
-                                                            <td class="uk-text-center">Debit Card</td>
-                                                            <td class="uk-text-center">Rs.3000</td>
-                                                            <td class="uk-text-center">Rs.1000</td>
-                                                            <td class="uk-text-center">Pending</td>
-                                                        </tr>   
-                                                        <tr>
-                                                            
-                                                            <td class="uk-text-center">001</td>
-                                                            <td class="uk-text-center">Ramesh Singh</td>
-                                                            <td class="uk-text-center">Kendriya Vidyalaya School no 1</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">4.5.2020</td>
-                                                            <td class="uk-text-center">25.03.2020</td>
-                                                            <td class="uk-text-center">Debit Card</td>
-                                                            <td class="uk-text-center">Rs.3000</td>
-                                                            <td class="uk-text-center">Rs.0</td>
-                                                            <td class="uk-text-center">Success</td>
-                                                        </tr>   
+                                                            {% for d in payment_history %}
+                                                            <tr>
+                                                            <td class="uk-text-center">{{d.student}}</td> 
+                                                            <td class="uk-text-center">{{d.student.institute}}</td>
+                                                            <td class="uk-text-center">{{d.due_date}}</td>
+                                                            <td class="uk-text-center">{{d.payment_date}}</td>
+                                                            <td class="uk-text-center">{{d.invoice_number}}</td>
+                                                            <td class="uk-text-center uk-btn uk-btn-primary">view invoice <i style="color: red;" class="far fa-file-pdf"></i></td>
+                                                        </tr>  
+                                                            {% endfor %}
+                                                           
+                                                        
+                                                    
                                                         
                                                     </tbody>
                                                     </div>
@@ -818,7 +743,7 @@
     </script>
     
 
-
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <!-- common functions -->
     <script src="{% static 'main_app/js/common.min.js' %}"></script>
     <!-- uikit functions -->

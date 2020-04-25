@@ -16,5 +16,7 @@ urlpatterns = [
     path('fetch/student/tags/', views.fetch_students_tags_mapped, name="fetch_students_tags_mapped"),
     path('students_mapped_to_a_tag/', views.students_mapped_to_a_tag, name="students_mapped_to_a_tag"),
     path('processing/fees/', views.processing_fees, name='processing_fees'),
+    path('pay/fees/request/', views.fees_pay_page, name="pay_fees_page"),
+    path('handle_requests/', views.handle_requests, name="handle_requests")
 
 ]

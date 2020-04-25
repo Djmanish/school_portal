@@ -833,18 +833,25 @@
                                     <div class="uk-overflow-container">
                                         <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap">
                                             <h3 class="heading_a uk-margin-bottom">Fees Status</h3>
+                                            
+                                            {% if user.user_child_fee_status %}
                                             <thead>
-                                            <tr>
-                                                <th>Student Name</th>
-                                                <th>Earliest Due Date</th>
-                                                <th>Amount</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
+                                                <tr>
+                                                    <th>Student Name</th>
+                                                    <th>Earliest Due Date</th>
+                                                    <th>Amount</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% else %}
+                                                    <h4>No Pending dues...</h4>   
+                                            {% endif %}
+                                                
+                                            
                                                 
                                                 {% for stfs in user.user_child_fee_status %}
                                                     <tr>
-                                                        <td><a href="#">{{stfs.student.first_name}}</a></td>
+                                                        <td><a href="{% url 'parent_fees' %}">{{stfs.student.first_name}}</a></td>
                                                         <td>{{stfs.due_date}}</td>
                                                         <td>{{stfs.total_due_amount}}</td>
                                                     </tr>
@@ -947,7 +954,13 @@
                                             {'Date': new Date({{i.exam_date|date:"Y, n-1, j"}}), 'Title': '{{i.exam_type}}'},
                                             {% endfor %}     
                                         ];
-                                            var settings = {};
+
+    
+
+
+                                            var settings = {
+                                                
+                                            };
                                             var element = document.getElementById('caleandar');
                                             caleandar(element, events, settings);
 
