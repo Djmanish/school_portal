@@ -256,6 +256,8 @@ def dashboard(request):
     if request.user.profile.designation:    
         if request.user.profile.designation.level_name == "parent":
             request.user.child_par=AddChild.objects.filter(parent=request.user.profile)
+            request.user.count=request.user.child_par.count()
+            print(request.user.count)
             request.user.first_child=AddChild.objects.filter(parent=request.user.profile).first()
             request.user.holiday_child=HolidayList.objects.filter(institute=request.user.first_child.child.institute,applicable="Yes")
             request.user.exam_she_child=ExamDetails.objects.filter(institute=request.user.first_child.child.institute,exam_class=request.user.first_child.child.Class)
