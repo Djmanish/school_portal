@@ -368,8 +368,6 @@ def handle_requests(request):
             user.save()
         else:
             print('order was not successfull because ' + response_dict['RESPMSG'])
-
-
     
     user_response_dict = {}
     for k,v in response_dict.items():
@@ -381,3 +379,6 @@ def handle_requests(request):
     return render(request, 'fees/payment_status.html', {'response':user_response_dict, })
         
 
+#function for payment details view link
+def view_invoice(request):
+    return render(request, 'fees/invoice.html')

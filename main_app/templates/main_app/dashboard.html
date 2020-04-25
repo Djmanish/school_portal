@@ -894,7 +894,8 @@
     <div class="uk-width-medium-1-2">
         <div class="md-card">
             <div class="md-card-content">
-                <h4>Today's Class Status</h4>
+              
+                <h3 class="heading_a uk-margin-bottom">Today's Class Status </h3>
                 <div class="uk-overflow-container">
                     <table class="uk-table uk-table-condensed uk-table-hover">
                         <thead>
@@ -931,11 +932,7 @@
         <div class="md-card">
             <div class="md-card-content">
                 <h3 class="heading_a uk-margin-bottom">Approvals</h3>
-                <!-- <div style="width: 300px;height: 300px;">
-                    <canvas id="myChart" width="200px" height="200px"></canvas>                           
-
-                </div> -->
-                <div id="container" style="width: 100%;height: auto;margin-top: 80px;">
+                <div id="container" style="width: 100%;height: auto;">
                     <canvas id="canvas"></canvas>
                   </div>
             </div>
@@ -957,8 +954,8 @@
                             {% if user.count > 1 %}
                             <form  method="POST" action="#" class="form-inline" id="parent_calendar_form">
                                 {% csrf_token %}
-                                  <label style="margin: 4px;">Child:  </label>
-                                    <select id="selected_institute" name="selected_child" class="form-control"  required>
+                                  <label style="margin: 4px;">Select Child:  </label>
+                                    <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
                                     <option selected disabled value=""  >                  
                                     {% if request.POST %}
                                         {{user.post_child}}
@@ -970,7 +967,7 @@
                                     <option value={{child.child.id}}>{{child.child}}</option>
                                     {% endfor %}
                              </select>
-                            <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">
+                            <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary md-btn-mini ">
                             </form>
                             {% endif %}
                             {% endif %}

@@ -609,11 +609,11 @@
 <!--                                                       
                                                         <th class="uk-width-1-10">View</th> -->
                                                        
-                                                        <th class="uk-width-2-10 uk-text-center">Student</th>
-                                                        <th class="uk-width-2-10 uk-text-center">School Name</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Due Date</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Amount Due</th>
-                                                        <th class="uk-width-1-10 uk-text-center">Details</th>
+                                                        <th class="">Student</th>
+                                                        <th class="">School Name</th>
+                                                        <th class="">Due Date</th>
+                                                        <th class="">Amount Due</th>
+                                                        <th class="">Details</th>
                                                      
 
                                                         <th></th>
@@ -624,16 +624,16 @@
                                                         {% for child in children_fee_status %}
                                                         <tr>
                                                        
-                                                            <td class="uk-text-center">{{child.student.first_name}}</td>
-                                                            <td class="uk-text-center">{{child.institute}}</td>
-                                                            <td class="uk-text-center">{{child.due_date}}</td>
-                                                            <td class="uk-text-center">{{child.total_due_amount}}</td>
-                                                            <td class="uk-text-center">View Details</td>
+                                                            <td class="">{{child.student.first_name}}</td>
+                                                            <td class="">{{child.institute}}</td>
+                                                            <td class="">{{child.due_date}}</td>
+                                                            <td class="">{{child.total_due_amount}}</td>
+                                                            <td class=""><a href="{% url 'view_invoice' %}">View Details</a></td>
                                                          
 
 
                                                             <!-- pay btn form -->
-                                                            <td class="uk-text-center">
+                                                            <td class="">
                                                              
                                                                 <a href="#" >
 <form method="POST" action="{% url 'pay_fees_page' %}">
