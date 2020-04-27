@@ -259,8 +259,9 @@ def dashboard(request):
             request.user.count=request.user.child_par.count()
             print(request.user.count)
             request.user.first_child=AddChild.objects.filter(parent=request.user.profile).first()
-            request.user.holiday_child=HolidayList.objects.filter(institute=request.user.first_child.child.institute,applicable="Yes")
-            request.user.exam_she_child=ExamDetails.objects.filter(institute=request.user.first_child.child.institute,exam_class=request.user.first_child.child.Class)
+            if request.user.first_child !=None:
+                request.user.holiday_child=HolidayList.objects.filter(institute=request.user.first_child.child.institute,applicable="Yes")
+                request.user.exam_she_child=ExamDetails.objects.filter(institute=request.user.first_child.child.institute,exam_class=request.user.first_child.child.Class)
             
             if request.method == "POST":
                 request.user.student=request.POST.get('selected_child')
