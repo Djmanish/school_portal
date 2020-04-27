@@ -23,7 +23,7 @@ def create_summary(sender, instance, created, **kwargs):
             new_student = Students_fees_table.objects.create(institute= instance.institute,student= instance.student, due_date= instance.due_date, )
             new_student.total_due_amount = new_student.total_due_amount + instance.amount_including_tax
             # invoice number syntax
-            new_student.invoice_number = str(instance.institute.id)+"-"+str(instance.student.id)+"-"+str(datetime.date.today()) 
+            new_student.invoice_number = (str(instance.institute.id)+"-"+str(instance.student.id)+"-"+str(instance.due_date.strftime("%Y-%d-%m"))).strip() 
             
             new_student.save()
 

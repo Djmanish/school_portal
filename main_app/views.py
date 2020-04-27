@@ -257,7 +257,7 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "parent":
             request.user.child_par=AddChild.objects.filter(parent=request.user.profile)
             request.user.count=request.user.child_par.count()
-            print(request.user.count)
+            
             request.user.first_child=AddChild.objects.filter(parent=request.user.profile).first()
             if request.user.first_child !=None:
                 request.user.holiday_child=HolidayList.objects.filter(institute=request.user.first_child.child.institute,applicable="Yes")
@@ -492,8 +492,6 @@ def dashboard(request):
         # starting fees status for parent view
         if request.user.profile.designation.level_name == "parent":
             request.user.user_child_fee_status = []
-
-
             user_children= AddChild.objects.filter(institute= request.user.profile.institute, parent= request.user.profile)
             parent_student_list = []
             for st in user_children:
@@ -502,14 +500,11 @@ def dashboard(request):
             
             
             if(len(user_children)>0):
-                student_fees = Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list )
-                print(student_fees)
+                student_fees = Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list, total_due_amount__gt=0  )
                 request.user.user_child_fee_status = student_fees
-                
-                          
             else:
                 print('user has no childern to show')
-            print(request.user.user_child_fee_status)
+        
 
         # ending fees status for parent view
 
