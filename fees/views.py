@@ -267,7 +267,7 @@ def processing_fees(request):
     except:
         messages.info(request, "No student to process fees")
     
-    for st in school_students:         
+    for st in school_students:          
         for tag in st.tags.all():
             if tag.active == "yes":
                 if str(tag.start_date)< str(st.student.institute.institute_schedule.due_date) < str(tag.end_date):

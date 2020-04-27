@@ -672,27 +672,27 @@
                                       
                                         <tr>
                                             <td>Total Days Attendance Taken</td>
-                                             <td>{{user.student_total_days_school_open}}</td>
+                                             <td>{{user.student_total_days_school_open|default:"No Data"}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Total Days Present</td>
-                                             <td>{{user.student_total_days_present}}</td>
+                                             <td>{{user.student_total_days_present|default:"No Data"}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Total Days Absent</td>
-                                             <td>{{user.student_total_days_absent}}</td>
+                                             <td>{{user.student_total_days_absent|default:"No Data"}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Total Days leave Taken</td>
-                                             <td>{{user.student_total_days_leave}}</td>
+                                             <td>{{user.student_total_days_leave|default:"No Data"}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Attendance Percentage</td>
-                                             <td>{{user.student_attendance_percentage}}%</td>
+                                             <td>{{user.student_attendance_percentage|default:"No Data"}}%</td>
                                            </tr>
                                     </tbody>
                                 </table>

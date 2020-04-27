@@ -89,6 +89,7 @@ class Student_Tag_Processed_Record(models.Model):
 class Students_fees_table(models.Model):
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, null=True)
     student = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='studnts_fees_info', null=True)
+    student_class = models.ForeignKey(to= Classes, on_delete=models.PROTECT, null=True)
     due_date = models.DateField(null=True)
     payment_date = models.DateTimeField(null=True)
     invoice_number = models.CharField(max_length=20, null=True, unique=True)

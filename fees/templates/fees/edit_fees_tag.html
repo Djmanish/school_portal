@@ -574,7 +574,7 @@ $('#tuub').click(function(){
     tag_start_date = $(".tusd").val();
     tag_end_date = $(".tued").val();
  
-var r = confirm("'Make sure you have updated start and end date. If you wish to continue with current dates click ok...");
+var r = confirm("Your current start and end date for this tag are "+ tag_start_date + " and  " + tag_end_date + " if you wish to change them press cancel and update first. If you want to continue press ok !");
 if (r == true) {
  return true;
 } else {
