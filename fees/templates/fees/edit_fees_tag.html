@@ -16,10 +16,14 @@
 
 
     <title>Update Profile</title>
-    <script src="{% static 'main_app/js/jquery.js' %}"></script>
+  
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js" integrity="sha256-sfG8c9ILUB8EXQ5muswfjZsKICbRIJUG/kBogvvV5sY=" crossorigin="anonymous"></script>
 
    <!-- bootstrap -->
    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}" media="all">
 
@@ -557,13 +561,33 @@
 
 {{form|crispy}}
 
-<input type="submit" class="md-btn md-btn-primary" value="Update">
+<input type="submit" class="md-btn md-btn-primary" id="tuub" value="Update">
 
 </div>
-
-
-
 </form>
+<script>
+    $(document).ready(function(){
+     
+   
+
+$('#tuub').click(function(){
+    tag_start_date = $(".tusd").val();
+    tag_end_date = $(".tued").val();
+ 
+var r = confirm("'Make sure you have updated start and end date. If you wish to continue with current dates click ok...");
+if (r == true) {
+ return true;
+} else {
+    return false;
+
+}  
+})
+    });
+</script>
+
+
+  
+  
 
 
 
@@ -572,7 +596,7 @@
 
 
 
-                            
+                   
                                             </div>
                                    
                     </div>
@@ -581,8 +605,11 @@
             </div>
         </div>
     </div>
+<!-- starting modal for messages -->
+  
 
-    <!-- google web fonts -->
+
+<!-- google web fonts -->
     <script>
         WebFontConfig = {
             google: {
@@ -608,8 +635,11 @@
     <!-- uikit functions -->
     <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
     <!-- altair common functions/helpers -->
+
     <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
     <script>
         $(function() {

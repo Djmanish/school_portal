@@ -18,6 +18,6 @@ urlpatterns = [
     path('processing/fees/', views.processing_fees, name='processing_fees'),
     path('pay/fees/request/', views.fees_pay_page, name="pay_fees_page"),
     path('handle_requests/', views.handle_requests, name="handle_requests"),
-    path('fees/details/', views.view_invoice, name="view_invoice")
+    path('fees/details/<int:pk>/', views.view_invoice, name="view_invoice")
 
 ]

@@ -121,7 +121,7 @@ class Fees_tag_update_view(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "Fees Tag information updated successfully !!!"
     
     def form_valid(self, form):
-        print(self.get_object().amount_including_tax)
+        
         new_amount= form.instance.amount + ((form.instance.amount*form.instance.tax_percentage)/100) # updating amount with tax in case of tag update    
         form.instance.amount_including_tax = new_amount
 
@@ -257,7 +257,7 @@ def students_mapped_to_a_tag(request):
     student_response = ""
     for student in all_students:
         student_response = student_response + f"<option>{student.student.first_name} {student.student.middle_name} {student.student.last_name} - {student.student.Class} </option>"   
-    print(all_students)
+    
     return HttpResponse(student_response)      
     
 
@@ -270,29 +270,30 @@ def processing_fees(request):
     for st in school_students:         
         for tag in st.tags.all():
             if tag.active == "yes":
-                try:
-                    Student_Tag_Processed_Record.objects.get(institute= st.student.institute, 
-                    notification_date = st.student.institute.institute_schedule.notification_date, 
-                    process_date = st.student.institute.institute_schedule.processing_date,
-                    due_date = st.student.institute.institute_schedule.due_date,
-                    student= st.student,
-                    fees_code= tag.fees_code)
-                except:
-                    Student_Tag_Processed_Record.objects.create(institute= st.student.institute, 
-                    notification_date = st.student.institute.institute_schedule.notification_date, 
-                    process_date = st.student.institute.institute_schedule.processing_date,
-                    due_date = st.student.institute.institute_schedule.due_date,
-                    student= st.student,
-                    fees_code = tag.fees_code,
-                    description = tag.description,
-                    type = tag.type,
-                    active= tag.active,
-                    amount = tag.amount,
-                    tax_percentage = tag.tax_percentage,
-                    amount_including_tax = tag.amount_including_tax,
-                    start_date = tag.start_date,
-                    end_date = tag.end_date
-                    )
+                if str(tag.start_date)< str(st.student.institute.institute_schedule.due_date) < str(tag.end_date):
+                    try:
+                        Student_Tag_Processed_Record.objects.get(institute= st.student.institute, 
+                        notification_date = st.student.institute.institute_schedule.notification_date, 
+                        process_date = st.student.institute.institute_schedule.processing_date,
+                        due_date = st.student.institute.institute_schedule.due_date,
+                        student= st.student,
+                        fees_code= tag.fees_code)
+                    except:
+                        Student_Tag_Processed_Record.objects.create(institute= st.student.institute, 
+                        notification_date = st.student.institute.institute_schedule.notification_date, 
+                        process_date = st.student.institute.institute_schedule.processing_date,
+                        due_date = st.student.institute.institute_schedule.due_date,
+                        student= st.student,
+                        fees_code = tag.fees_code,
+                        description = tag.description,
+                        type = tag.type,
+                        active= tag.active,
+                        amount = tag.amount,
+                        tax_percentage = tag.tax_percentage,
+                        amount_including_tax = tag.amount_including_tax,
+                        start_date = tag.start_date,
+                        end_date = tag.end_date
+                        )
     # removing schedule, notification and due date of institute
     institute_dates = Fees_Schedule.objects.get(institute= request.user.profile.institute)
     institute_dates.delete()
@@ -380,5 +381,33 @@ def handle_requests(request):
         
 
 #function for payment details view link
-def view_invoice(request):
-    return render(request, 'fees/invoice.html')
+def view_invoice(request, pk):
+    fee_data = Students_fees_table.objects.get(pk=pk)
+    procees_table_data = Student_Tag_Processed_Record.objects.filter(institute= request.user.profile.institute, due_date = fee_data.due_date, student = fee_data.student)
+
+    total_sum_including_tax = 0
+    total_sum_amount = 0
+    for am in procees_table_data:
+        total_sum_including_tax = total_sum_including_tax + am.amount_including_tax
+        total_sum_amount = total_sum_amount + am.amount
+    
+    tax_amount = total_sum_including_tax - total_sum_amount
+    
+    if fee_data.total_due_amount == 0:
+        payment_status = True
+        payment_date = fee_data.payment_date
+    else:
+        payment_status = False
+        payment_date = None
+    
+
+
+    context = {
+        'fee_data':fee_data,
+        'fee_proce_data':procees_table_data,
+        'tax_amount':tax_amount,
+        'payment_status':payment_status,
+        'payment_date':payment_date
+
+    }
+    return render(request, 'fees/invoice.html', context)

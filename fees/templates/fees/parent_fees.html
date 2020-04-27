@@ -628,7 +628,7 @@
                                                             <td class="">{{child.institute}}</td>
                                                             <td class="">{{child.due_date}}</td>
                                                             <td class="">{{child.total_due_amount}}</td>
-                                                            <td class=""><a href="{% url 'view_invoice' %}">View Details</a></td>
+                                                            <td class=""><a href="{% url 'view_invoice' child.pk %}">View Details</a></td>
                                                          
 
 
@@ -694,7 +694,9 @@
                                                             <td class="uk-text-center">{{d.due_date}}</td>
                                                             <td class="uk-text-center">{{d.payment_date}}</td>
                                                             <td class="uk-text-center">{{d.invoice_number}}</td>
-                                                            <td class="uk-text-center uk-btn uk-btn-primary">view invoice <i style="color: red;" class="far fa-file-pdf"></i></td>
+                                                            <td class="uk-text-center uk-btn uk-btn-primary">
+                                                                <a href="{% url 'view_invoice' d.pk %}">view invoice <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                                                </td>
                                                         </tr>  
                                                             {% endfor %}
                                                            
