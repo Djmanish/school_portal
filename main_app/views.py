@@ -275,25 +275,29 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "student":
             try:
                 request.user.exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
+                print(request.user.exam_type_child)
+                max_marks=request.user.exam_type_child.exam_max_marks
+                total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
+                request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
+                request.user.total_sum = 0
+                for i in request.user.child_result:
+                    i = i.result_score
+                    request.user.total_sum = request.user.total_sum + int(i)
+                request.user.m=int(total_marks)
+                try:
+                    request.user.avg=((request.user.total_sum/request.user.m)*100)
+                except ZeroDivisionError:
+                    request.user.avg=0
+                
+                if (request.user.avg<33):
+                    request.user.result="Fail"
+                else:
+                    request.user.result="Pass" 
+                    
             except ExamType.DoesNotExist:
-                pass
-            max_marks=request.user.exam_type_child.exam_max_marks
-            total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
-            request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
-            request.user.total_sum = 0
-            for i in request.user.child_result:
-                i = i.result_score
-                request.user.total_sum = request.user.total_sum + int(i)
-            request.user.m=int(total_marks)
-            try:
-                request.user.avg=((request.user.total_sum/request.user.m)*100)
-            except ZeroDivisionError:
-                request.user.avg=0
+                    pass
             
-            if (request.user.avg<33):
-                request.user.result="Fail"
-            else:
-                request.user.result="Pass" 
+            
                 
   
     # starting assigned teachers
