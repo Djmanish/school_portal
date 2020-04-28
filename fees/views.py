@@ -36,7 +36,7 @@ def fees_home(request):
             messages.error(request, 'No student found in the selected class')
             return redirect('fees_home')
 
-        for student in all_students:
+        for student in all_students: #highlighting students that already mapped to this tag
             try:
                 student_all_tags = student.student_tags.tags.all()
                 if selected_tag in student_all_tags:
@@ -149,6 +149,14 @@ class Fees_Tag_History_List(LoginRequiredMixin, ListView):
 
 def institute_fees_schedule(request):
     if request.method == "POST":
+
+        #starting checking if account details provided
+        try:
+            accnt_details = Account_details.objects.get(institute = request.user.profile.institute)
+        except:
+            messages.info(request,'please provide your paytm merchant ID and merchant KEY first in order to proceed further !!!')
+            return redirect('fees_home')
+        #ending checking if account details provided
         notification_date = request.POST.get('notification_date')
         due_date = request.POST.get('due_date')
         processing_date = request.POST.get('processing_date')
@@ -174,8 +182,11 @@ def institute_fees_schedule(request):
 
 def institute_account_details(request):
      if request.method == "POST":
-        merchant_id = request.POST.get('merchant_id')
-        merchant_key = request.POST.get('merchant_key')
+        merchant_id = request.POST.get('merchant_id').strip()
+        merchant_key = request.POST.get('merchant_key').strip()
+        if len(merchant_key)<16:
+            messages.info(request, 'please enter 16 character correct merchant key !!! ')
+            return redirect('fees_home')
         try:
             check_existence_ad = Account_details.objects.get(institute = request.user.profile.institute)
             
@@ -300,16 +311,28 @@ def processing_fees(request):
     return HttpResponse("")
 
 
-MERCHANT_KEY = "#OqHWC23DZX1G2LN"
+
 def fees_pay_page(request):
     if request.method == "POST":
+
+        # starting fetching account details
+        try:
+            accnt_details = Account_details.objects.get(institute = request.user.profile.institute)
+        except:
+            messages.info(request,'your Institute has not provided account details to complete this payment!!!   ')
+            return redirect('fees_home')
+        merchant_id = accnt_details.merchant_id
+        MERCHANT_KEY = accnt_details.merchant_key
+        # ending fetching account details
+        
+        
         student_id = request.POST.get('s_id')
       
         amount = request.POST.get('s_amount')
         invoice_no = request.POST.get('s_inv')
         param_dict = {
         # Find your MID in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys
-        "MID" : "Educat66977822263951",
+        "MID" : merchant_id,
 
         # Find your WEBSITE in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys
         "WEBSITE" : "WEBSTAGING",
@@ -337,10 +360,11 @@ def fees_pay_page(request):
         "TXN_AMOUNT" : str(amount),
 
         # on completion of transaction, we will send you the response on this URL
-        "CALLBACK_URL" : "http://trueblueappworks.com/fees/handle_requests/",
+        "CALLBACK_URL" : "http://localhost:8000/fees/handle_requests/",
     }
 
         # MERCHANT_KEY = "#OqHWC23DZX1G2LN"
+        
         param_dict['CHECKSUMHASH'] = checksum.generate_checksum(param_dict, MERCHANT_KEY)
 
         return render(request, 'fees/payment_page.html', {'param_dict':param_dict})
@@ -356,7 +380,15 @@ def handle_requests(request):
         if i == "CHECKSUMHASH":
             Checksum = form[i]
         
-
+     # starting fetching account details
+    institute_id_d = str(response_dict['ORDERID'])
+    new_d = institute_id_d.split('-')
+    school_id = new_d[0]
+    accnt_details = Account_details.objects.get(institute__id = school_id)
+    MERCHANT_KEY = accnt_details.merchant_key
+    # ending fetching account details
+        
+    MERCHANT_KEY = accnt_details.merchant_key
     verify = checksum.verify_checksum(response_dict, MERCHANT_KEY, Checksum )
     if verify:
         if response_dict['RESPCODE'] == '01':
