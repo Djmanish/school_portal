@@ -513,6 +513,8 @@
 
     <div id="page_content">
         <div id="page_content_inner">
+
+          
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
                 <div class="uk-width-large">
                     <div class="md-card">
@@ -554,6 +556,20 @@
 
                         </div>
                         <div class="user_content">
+                            <div style="margin: 2px;">
+                                <!-- success message -->
+                {% if messages %}
+                <div class="md-card md-card-primary">
+                <div >
+                <ul class="messages alert">
+                {% for message in messages %}
+                <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+                </ul>
+                </div>
+                </div>
+                {% endif %}
+                      </div>
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">Payment Detail</a></li>
                                

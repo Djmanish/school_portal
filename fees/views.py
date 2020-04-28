@@ -320,7 +320,7 @@ def fees_pay_page(request):
             accnt_details = Account_details.objects.get(institute = request.user.profile.institute)
         except:
             messages.info(request,'your Institute has not provided account details to complete this payment!!!   ')
-            return redirect('fees_home')
+            return redirect('parent_fees')
         merchant_id = accnt_details.merchant_id
         MERCHANT_KEY = accnt_details.merchant_key
         # ending fetching account details
@@ -360,7 +360,7 @@ def fees_pay_page(request):
         "TXN_AMOUNT" : str(amount),
 
         # on completion of transaction, we will send you the response on this URL
-        "CALLBACK_URL" : "http://localhost:8000/fees/handle_requests/",
+        "CALLBACK_URL" : "http://trueblueappworks.com/fees/handle_requests/",
     }
 
         # MERCHANT_KEY = "#OqHWC23DZX1G2LN"
