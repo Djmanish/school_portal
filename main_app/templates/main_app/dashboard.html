@@ -1017,43 +1017,38 @@
                {% endif %}
                    
                 {% if user.total_sum > 0 %}
+                </div> 
+                
+                {% if user.profile.designation.level_name == "principal" %}
                 <div class="uk-width-medium-1-2">
                     <div class="md-card">
                         <div class="md-card-content">
-                            <h4>Exam</h4>
-                            <table class="uk-table uk-table-condensed uk-table-hover">
-                                <thead>
-                                   
-                                </thead>
-                                <tbody>
-                                    <br>
-                                  
-                                    <tr>
-                                        <td style="color:#0092ff;"><b>Student Name</td>
-                                         <td>{{user.profile.first_name}} {{user.profile.last_name}}</td>
-                                       </tr>
-
-                                       <tr>
-                                        <td style="color:#0092ff;"><b>Exam</td>
-                                         <td>{{user.exam_type_child}}</td>
-                                       </tr>
-
+                          
+                            <h3 class="heading_a uk-margin-bottom">Fess Status </h3>
+                            <div class="uk-overflow-container">
+                                <table class="uk-table uk-table-condensed uk-table-hover">
+                                    <thead>
                                         <tr>
-                                        <td style="color:#0092ff;"><b>Total Marks</td>
-                                         <td>{{user.total_sum}}</td>
-                                       </tr>
-
-                                       <tr>
-                                        <td style="color:#0092ff;"><b>Percentage</td>
-                                         <td>{{user.avg|floatformat:2}}%</td>
-                                       </tr>
-
-                                       <tr>
-                                        <td style="color:#0092ff;"><b>Result</td>
-                                         <td>{{user.result}}</td>
-                                       </tr>
-                                </tbody>
-                            </table>
+                                            <th >Class</th>
+                                            <th >Total Students</th>
+                                            <th >Fees Unpaid</th>                                        
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for cl in request.user.l_classes %}
+                                        <tr class="uk-table-middle">
+                                            <td ><a href="#">{{cl}}</a></td>
+                                            <td >{{cl.total_student_in_class}}</td>
+                                            <td >{{cl.total_unpaid_student}}</td>
+                                        </tr>
+                                      
+                                        {% endfor %}
+                                      
+                                 
+                                      
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

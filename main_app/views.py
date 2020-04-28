@@ -494,6 +494,14 @@ def dashboard(request):
         # ending user notice
 
         # starting fees status for parent view
+        if request.user.profile.designation.level_name == "principal":
+            request.user.l_classes = Classes.objects.filter(institute= request.user.profile.institute)
+            for a in request.user.l_classes:
+                total_unpaid=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=a).count()
+                a.total_unpaid_student=total_unpaid
+                total_student=UserProfile.objects.filter(institute = request.user.profile.institute,Class=a,designation__level_name="student").count()
+                a.total_student_in_class=total_student
+    
         if request.user.profile.designation.level_name == "parent":
             request.user.user_child_fee_status = []
             user_children= AddChild.objects.filter(institute= request.user.profile.institute, parent= request.user.profile)
