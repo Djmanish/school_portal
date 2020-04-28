@@ -13,6 +13,7 @@ from fees.models import *
 from paytm import checksum
 from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 # Create your views here.
 
 def fees_home(request):
@@ -76,8 +77,12 @@ def parent_fees(request):
         # starting those data for payment completed and invoice pdf 
          
             if(len(user_children)>0):
-                payment_history = reversed(Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list, total_due_amount=0))   
-
+                payment_record = list(reversed(Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list, total_due_amount=0)))
+                
+            paginator = Paginator(payment_record, 35)
+            page_number = request.GET.get('page')
+            payment_history = paginator.get_page(page_number)
+                    
 
         # starting those data for payment completed and invoice pdf    
             context = {'children_fee_status':user_child_fee_status,
