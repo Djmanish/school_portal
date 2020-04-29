@@ -1090,46 +1090,45 @@
                 </div>
             </div> 
                {% endif %}
-                   
-              
-                </div> 
+               {% if user.profile.designation.level_name == "principal" %}
+               <div class="uk-width-medium-1-2">
+                   <div class="md-card">
+                       <div class="md-card-content">
+                           <h3 class="heading_a uk-margin-bottom">Fess Status</h3>
+                           <h6 lass="uk-accordion-title" class="on-the">Classes<span class="on-the-fly">Pending Fees</span></h6>
+                           <div class="uk-accordion" data-uk-accordion="{showfirst: false}">
+                               {% for cl in request.user.l_classes %}
+                               <h3 class="uk-accordion-title" style="color: #0080ff;">{{cl}}<span class="on-the-fly-behavior">{{cl.total_unpaid_student}} Student</span></h3>
+                               <div class="uk-accordion-content">
+                                   
+                                   <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap">
+                                       <thead>
+                                           <tr>
+                                               <th>Student Name</th>
+                                               <th>Fee Status</th>
+                                           </tr>
+                                           </thead>
+                                           <tbody>
+                                               {% for i in cl.total_unpaid %}
+                                               <tr>
+                                                   <td><a href="#">{{i}}</a></td>
+                                                   <td>Unpaid</td>
+                                               </tr>
+                                           {% endfor %}
+                                       </tbody>
+                                   </table>
+                               </div>
+                               {% endfor %} 
+                           </div>
+                       </div>
+                   </div>
+               </div>
                
-                {% if user.profile.designation.level_name == "principal" %}
-                {% if user.total_sum > 0 %}
-                <div class="uk-width-medium-1-2">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <h3 class="heading_a uk-margin-bottom">Fess Status</h3>
-                            <h6 lass="uk-accordion-title" class="on-the">Classes<span class="on-the-fly">Pending Fees</span></h6>
-                            <div class="uk-accordion" data-uk-accordion="{showfirst: false}">
-                                {% for cl in request.user.l_classes %}
-                                <h3 class="uk-accordion-title" style="color: #0080ff;">{{cl}}<span class="on-the-fly-behavior">{{cl.total_unpaid_student}} Student</span></h3>
-                                <div class="uk-accordion-content">
-                                    
-                                    <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>Student Name</th>
-                                                <th>Fee Status</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for i in cl.total_unpaid %}
-                                                <tr>
-                                                    <td><a href="#">{{i}}</a></td>
-                                                    <td>Unpaid</td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                {% endfor %} 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-                {% endif %}
+               {% endif %}     
+              
+            </div> 
+               
+                
 
             </div>   
 
