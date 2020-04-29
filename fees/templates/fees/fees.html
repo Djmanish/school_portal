@@ -833,7 +833,7 @@ type:"POST",
 url: "{% url 'processing_fees' %}",
 data:{csrfmiddlewaretoken:'{{csrf_token}}'},
 success: function(msg){
-    alert('hello');
+    
     window.location.href = msg;
 }
    })
