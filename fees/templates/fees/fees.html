@@ -866,6 +866,7 @@ type:"POST",
 url: "{% url 'processing_fees' %}",
 data:{csrfmiddlewaretoken:'{{csrf_token}}'},
 success: function(msg){
+    $("#myModal").modal("hide");
     if (msg == 'fees already processed for this due date'){
         alert('Fees for this due date already processed');
         location.reload();
