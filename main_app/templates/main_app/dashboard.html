@@ -1105,6 +1105,7 @@
                                        <thead>
                                            <tr>
                                                <th>Student Name</th>
+                                               <th>Due Date</th>
                                                <th>Fee Status</th>
                                            </tr>
                                            </thead>
@@ -1112,6 +1113,7 @@
                                                {% for i in cl.total_unpaid %}
                                                <tr>
                                                    <td><a href="#">{{i}}</a></td>
+                                                   <td>{{i.due_date}}</td>
                                                    <td>Unpaid</td>
                                                </tr>
                                            {% endfor %}
