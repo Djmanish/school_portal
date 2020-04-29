@@ -283,40 +283,33 @@ def processing_fees(request):
     except:
         messages.info(request, "No student to process fees")
     
+    # starting checking if data already processed
+    if_already = Student_Tag_Processed_Record.objects.filter(institute = request.user.profile.institute, due_date = request.user.profile.institute.institute_schedule.due_date ).first()
+    if if_already:
+        return HttpResponse('fees already processed for this due date')
+    # ending checking if data already processed
+
+
     for st in school_students:          
         for tag in st.tags.all():
             if tag.active == "yes":
                 if str(tag.start_date)< str(st.student.institute.institute_schedule.due_date) < str(tag.end_date):
-                    try:
-                        existing_data =Student_Tag_Processed_Record.objects.get(institute= st.student.institute, 
-                        due_date = st.student.institute.institute_schedule.due_date,
-                        student= st.student,
-                        fees_code= tag.fees_code)
-                        return HttpResponse('fees already processed for this due date')
-                        if existing_data:
-                            
-                            institute_due_date = request.user.profile.institute
-                            Student_Tag_Processed_Record.objects.get(institute= st.student.institute, 
-                        due_date = st.student.institute.institute_schedule.due_date).delete()
-                    except:
-                        Student_Tag_Processed_Record.objects.create(institute= st.student.institute, 
-                        notification_date = st.student.institute.institute_schedule.notification_date, 
-                        process_date = st.student.institute.institute_schedule.processing_date,
-                        due_date = st.student.institute.institute_schedule.due_date,
-                        student= st.student,
-                        fees_code = tag.fees_code,
-                        description = tag.description,
-                        type = tag.type,
-                        active= tag.active,
-                        amount = tag.amount,
-                        tax_percentage = tag.tax_percentage,
-                        amount_including_tax = tag.amount_including_tax,
-                        start_date = tag.start_date,
-                        end_date = tag.end_date
+                    Student_Tag_Processed_Record.objects.create(institute= st.student.institute, 
+                    notification_date = st.student.institute.institute_schedule.notification_date, 
+                    process_date = st.student.institute.institute_schedule.processing_date,
+                    due_date = st.student.institute.institute_schedule.due_date,
+                    student= st.student,
+                    fees_code = tag.fees_code,
+                    description = tag.description,
+                    type = tag.type,
+                    active= tag.active,
+                    amount = tag.amount,
+                    tax_percentage = tag.tax_percentage,
+                    amount_including_tax = tag.amount_including_tax,
+                    start_date = tag.start_date,
+                    end_date = tag.end_date
                         )  
 
-                    
-                    
     # removing schedule, notification and due date of institute
     institute_dates = Fees_Schedule.objects.get(institute= request.user.profile.institute)
     institute_dates.delete()
