@@ -1021,83 +1021,81 @@
             
             <!-- info cards -->
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-                <div class="uk-width-medium-1-2">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <h3 class="heading_a uk-margin-bottom">Events & Calendar </h3>
-                            {% if user.profile.designation.level_name == "parent" %}
-                            {% if user.count > 1 %}
-                            <form  method="POST" action="#" class="form-inline" id="parent_calendar_form">
-                                {% csrf_token %}
-                                  <label style="margin: 4px;">Select Child:  </label>
-                                    <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
-                                    <option selected disabled value=""  >                  
-                                    {% if request.POST %}
-                                        {{user.post_child}}
-                                    {% else %}
-                                        {{user.first_child.child}}
-                                    {% endif %}
-                                    </option>
-                                    {% for child in user.child_par %}
-                                    <option value={{child.child.id}}>{{child.child}}</option>
-                                    {% endfor %}
-                             </select>
-                            <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary md-btn-mini ">
-                            </form>
-                            {% endif %}
-                            {% endif %}
-                            <div id="caleandar">
-                            </div>
-                            <script>
-                                var events = [ 
-                                            {% if user.profile.designation.level_name != "parent" %}
-                                            {% for h in holiday %}
-                                            {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}', 'Link': '#'},
-                                            {% endfor %}
-                                            {% endif %}
-                                            {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-                                            {% for i in exam_she %}
-                                            {'Date': new Date({{i.exam_date|date:"Y, n-1, j"}}), 'Title': '{{i.exam_type}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                            {% endfor %}  
-                                            {% endif %}   
-                                            {% if user.profile.designation.level_name == "teacher" %}
-                                            {% for j in user.exam_she_teacher %}
-                                            {'Date': new Date({{j.exam_date|date:"Y, n-1, j"}}), 'Title': '{{j.exam_type}}<br>{{j.exam_class}}-{{j.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                            {% endfor %}  
-                                            {% endif %} 
-                                            {% if user.profile.designation.level_name == "student" %}
-                                            {% for k in user.exam_she_student %}
-                                            {'Date': new Date({{k.exam_date|date:"Y, n-1, j"}}), 'Title': '{{k.exam_type}}<br>{{k.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                            {% endfor %}  
-                                            {% endif %} 
-                                            {% if user.profile.designation.level_name == "parent" %}
-                                            {% for h in user.holiday_child %}
-                                            {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}', 'Link': '#'},
-                                            {% endfor %}
-                                            {% for l in user.exam_she_child %}
-                                            {'Date': new Date({{l.exam_date|date:"Y, n-1, j"}}), 'Title': '{{l.institute}}<br>{{l.exam_type}}<br>{{l.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                            {% endfor %}  
-                                            {% endif %} 
-                                            
-                                            
-                                        ];
-
-    
-
-
-                                            var settings = {
-                                                
-                                            };
-                                            var element = document.getElementById('caleandar');
-                                            caleandar(element, events, settings);
-
-
-                            </script>                      
+               
+               {% if user.profile.designation %}
+               <div class="uk-width-medium-1-2">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <h3 class="heading_a uk-margin-bottom">Events & Calendar </h3>
+                        {% if user.profile.designation.level_name == "parent" %}
+                        {% if user.count > 1 %}
+                        <form  method="POST" action="#" class="form-inline" id="parent_calendar_form">
+                            {% csrf_token %}
+                              <label style="margin: 4px;">Select Child:  </label>
+                                <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
+                                <option selected disabled value=""  >                  
+                                {% if request.POST %}
+                                    {{user.post_child}}
+                                {% else %}
+                                    {{user.first_child.child}}
+                                {% endif %}
+                                </option>
+                                {% for child in user.child_par %}
+                                <option value={{child.child.id}}>{{child.child}}</option>
+                                {% endfor %}
+                         </select>
+                        <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary md-btn-mini ">
+                        </form>
+                        {% endif %}
+                        {% endif %}
+                        <div id="caleandar">
                         </div>
+                        <script>
+                            var events = [ 
+                                        {% if user.profile.designation.level_name != "parent" %}
+                                        {% for h in holiday %}
+                                        {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}', 'Link': '#'},
+                                        {% endfor %}
+                                        {% endif %}
+                                        {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+                                        {% for i in exam_she %}
+                                        {'Date': new Date({{i.exam_date|date:"Y, n-1, j"}}), 'Title': '{{i.exam_type}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
+                                        {% endfor %}  
+                                        {% endif %}   
+                                        {% if user.profile.designation.level_name == "teacher" %}
+                                        {% for j in user.exam_she_teacher %}
+                                        {'Date': new Date({{j.exam_date|date:"Y, n-1, j"}}), 'Title': '{{j.exam_type}}<br>{{j.exam_class}}-{{j.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
+                                        {% endfor %}  
+                                        {% endif %} 
+                                        {% if user.profile.designation.level_name == "student" %}
+                                        {% for k in user.exam_she_student %}
+                                        {'Date': new Date({{k.exam_date|date:"Y, n-1, j"}}), 'Title': '{{k.exam_type}}<br>{{k.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
+                                        {% endfor %}  
+                                        {% endif %} 
+                                        {% if user.profile.designation.level_name == "parent" %}
+                                        {% for h in user.holiday_child %}
+                                        {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}', 'Link': '#'},
+                                        {% endfor %}
+                                        {% for l in user.exam_she_child %}
+                                        {'Date': new Date({{l.exam_date|date:"Y, n-1, j"}}), 'Title': '{{l.institute}}<br>{{l.exam_type}}<br>{{l.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
+                                        {% endfor %}  
+                                        {% endif %}   
+                                    ];
+                                        var settings = {
+                                        };
+                                        var element = document.getElementById('caleandar');
+                                        caleandar(element, events, settings);
+                        </script>                      
                     </div>
+                </div>
+            </div> 
+               {% endif %}
+                   
+              
                 </div> 
-                
+               
                 {% if user.profile.designation.level_name == "principal" %}
+                {% if user.total_sum > 0 %}
                 <div class="uk-width-medium-1-2">
                     <div class="md-card">
                         <div class="md-card-content">
@@ -1131,6 +1129,8 @@
                     </div>
                 </div>
                 {% endif %}
+                {% endif %}
+
             </div>   
 
             
