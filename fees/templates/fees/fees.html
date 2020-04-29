@@ -549,6 +549,28 @@
       </div>
         </div>
         {% endif %}
+
+
+                
+
+<!-- The Modal -->
+  
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    Open modal
+  </button>
+  <div class="modal fade " id="myModal" style="margin-top: 10%;">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <!-- Modal body -->
+        <div class="modal-body">
+            <img src="{% static 'main_app/images/source.gif' %}">
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- ending pr  ocess fees git modal -->
+
+
                       </div>
 
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
@@ -823,17 +845,25 @@
 
                                           
                                         </div>
-         
+
+
+
+                                        <!-- starting procees fees gif model -->
+
+     
+
+
+
 <script>
 $('#fee_process_btn').click(function(){
   var entered_val = prompt("Enter 'yes' if you want to process the fees");
   if (entered_val == 'yes') {
+    $("#myModal").modal("show");
    $.ajax({
 type:"POST",
 url: "{% url 'processing_fees' %}",
 data:{csrfmiddlewaretoken:'{{csrf_token}}'},
 success: function(msg){
-    
     window.location.href = msg;
 }
    })
@@ -842,6 +872,9 @@ success: function(msg){
   }
 })
 </script>
+
+
+  
                                         <div class="uk-width-large-1-2" style="padding-right:40px;">
                                           
                                               <form method="POST" action="{% url 'fees_schedule' %}" >
@@ -1028,10 +1061,18 @@ $('#selected_tag_').change(function() {
 
                     </div>
                 </div>
-                
+        
+
             </div>
         </div>
     </div>
+
+
+
+
+
+
+
    
 <!-- script for tags mapped to a student -->
     <script>
@@ -1102,7 +1143,6 @@ $('#unselectAll').click(function() {
 });
     </script>
 
-
     <!-- common functions -->
     <script src="{% static 'main_app/js/common.min.js' %}"></script>
     <!-- uikit functions -->
@@ -1128,7 +1168,9 @@ $('#unselectAll').click(function() {
     <script src="{% static 'main_app/js/pages/forms_advanced.min.js' %}" ></script>
     
     <script src="{% static 'main_app/js/script.js' %}"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
     <!-- <script>
         $("input[type=date]").datepicker({
@@ -1177,7 +1219,7 @@ $('#unselectAll').click(function() {
 
 
     
-    
+  
 </body>
 
 </html>
