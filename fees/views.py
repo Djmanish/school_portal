@@ -104,7 +104,7 @@ def creating_tags(request):
         amount_with_tax = float(amount) + float(tax_value)
         
         try:
-            School_tags.objects.get(fees_code=fee_code)
+            School_tags.objects.get(institute =request.user.profile.institute, fees_code=fee_code)
             messages.error(request, "Tag with this fees code already exists !!!")
             return redirect('fees_home')
         except:
