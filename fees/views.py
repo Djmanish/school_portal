@@ -288,12 +288,16 @@ def processing_fees(request):
             if tag.active == "yes":
                 if str(tag.start_date)< str(st.student.institute.institute_schedule.due_date) < str(tag.end_date):
                     try:
-                        Student_Tag_Processed_Record.objects.get(institute= st.student.institute, 
-                        notification_date = st.student.institute.institute_schedule.notification_date, 
-                        process_date = st.student.institute.institute_schedule.processing_date,
+                        existing_data =Student_Tag_Processed_Record.objects.get(institute= st.student.institute, 
                         due_date = st.student.institute.institute_schedule.due_date,
                         student= st.student,
                         fees_code= tag.fees_code)
+                        return HttpResponse('fees already processed for this due date')
+                        if existing_data:
+                            
+                            institute_due_date = request.user.profile.institute
+                            Student_Tag_Processed_Record.objects.get(institute= st.student.institute, 
+                        due_date = st.student.institute.institute_schedule.due_date).delete()
                     except:
                         Student_Tag_Processed_Record.objects.create(institute= st.student.institute, 
                         notification_date = st.student.institute.institute_schedule.notification_date, 
@@ -309,7 +313,10 @@ def processing_fees(request):
                         amount_including_tax = tag.amount_including_tax,
                         start_date = tag.start_date,
                         end_date = tag.end_date
-                        )
+                        )  
+
+                    
+                    
     # removing schedule, notification and due date of institute
     institute_dates = Fees_Schedule.objects.get(institute= request.user.profile.institute)
     institute_dates.delete()
