@@ -9,6 +9,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no"/>
+    <style>
+        .on-the {
+            margin-left: 20px;
+        }
+         .on-the-fly {
+            margin-left: 300px;
+        }
+        @media screen and (max-width: 600px) {
+            .on-the-fly {
+               margin-left: 180px;
+            }
+        }
+        .on-the-fly-behavior {
+            margin-left: 300px;
+            color: red;
+        }
+        @media screen and (max-width: 600px) {
+            .on-the-fly-behavior {
+               margin-left: 180px;
+               color: red;
+            }
+        }
+    </style>
 
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
@@ -836,7 +859,59 @@
 
                 
             </div>
-            
+            <div class="uk-width-medium-1-2">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <div class="uk-overflow-container">
+                            <table class="uk-table uk-table-hover uk-table-condensed">
+                                <thead>
+                                       <div>
+                                         <h3 class="heading_a">{{user.teacher_class}} Fee Status</h3>
+                                        </div>
+                                        <tr>
+                                         <th class="uk-text-nowrap">Students</th>
+                                         <th class="uk-text-nowrap">Fees Status</th>
+                                        </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in user.users %}
+                                    <tr class="uk-table-middle">                                        
+                                        <td class="uk-width-3-10 uk-text-nowrap"><a href="#">{{i}}</a></td>
+                                        <td class="uk-width-3-10 uk-text-nowrap" style="color: red;">Unpaid</td>                                        
+                                    </tr>
+                                    {% endfor %}
+                                    
+                                    
+                                       
+                                </tbody>
+                            </table>
+                            {% if user.users.has_other_pages %}
+                                <ul class="pagination">
+                                    {% if user.users.has_previous %}
+                                    <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+                                    {% else %}
+                                    <li class="disabled"><span>&laquo;</span></li>
+                                    {% endif %}
+                                    {% for i in user.users.paginator.page_range %}
+                                    {% if user.users.number == i %}
+                                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                    {% else %}
+                                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% if user.users.has_next %}
+                                    <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+                                    {% else %}
+                                    <li class="disabled"><span>&raquo;</span></li>
+                                    {% endif %}
+                                </ul>
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
            
         </div>
             
@@ -1026,31 +1101,31 @@
                 <div class="uk-width-medium-1-2">
                     <div class="md-card">
                         <div class="md-card-content">
-                          
-                            <h3 class="heading_a uk-margin-bottom">Fess Status </h3>
-                            <div class="uk-overflow-container">
-                                <table class="uk-table uk-table-condensed uk-table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th >Class</th>
-                                            <th >Total Students</th>
-                                            <th >Fees Unpaid</th>                                        
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for cl in request.user.l_classes %}
-                                        <tr class="uk-table-middle">
-                                            <td ><a href="#">{{cl}}</a></td>
-                                            <td >{{cl.total_student_in_class}}</td>
-                                            <td >{{cl.total_unpaid_student}}</td>
-                                        </tr>
-                                      
-                                        {% endfor %}
-                                      
-                                 
-                                      
-                                    </tbody>
-                                </table>
+                            <h3 class="heading_a uk-margin-bottom">Fess Status</h3>
+                            <h6 lass="uk-accordion-title" class="on-the">Classes<span class="on-the-fly">Pending Fees</span></h6>
+                            <div class="uk-accordion" data-uk-accordion="{showfirst: false}">
+                                {% for cl in request.user.l_classes %}
+                                <h3 class="uk-accordion-title" style="color: #0080ff;">{{cl}}<span class="on-the-fly-behavior">{{cl.total_unpaid_student}} Student</span></h3>
+                                <div class="uk-accordion-content">
+                                    
+                                    <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>Student Name</th>
+                                                <th>Fee Status</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in cl.total_unpaid %}
+                                                <tr>
+                                                    <td><a href="#">{{i}}</a></td>
+                                                    <td>Unpaid</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% endfor %} 
                             </div>
                         </div>
                     </div>

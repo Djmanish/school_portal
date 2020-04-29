@@ -28,6 +28,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from main_app.serializers import UserProfileSerializer
 from fees.models import *
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
@@ -493,15 +494,28 @@ def dashboard(request):
                     request.user.users_notice.insert(0, notice)
         # ending user notice
 
-        # starting fees status for parent view
+        # starting fees status for principal view
         if request.user.profile.designation.level_name == "principal":
             request.user.l_classes = Classes.objects.filter(institute= request.user.profile.institute)
             for a in request.user.l_classes:
-                total_unpaid=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=a).count()
-                a.total_unpaid_student=total_unpaid
+                a.total_unpaid=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=a)
+                a.total_unpaid_student=a.total_unpaid.count()
                 total_student=UserProfile.objects.filter(institute = request.user.profile.institute,Class=a,designation__level_name="student").count()
                 a.total_student_in_class=total_student
-    
+                
+        # Starting fees status for teacher view
+        if request.user.profile.designation.level_name == "teacher":
+            request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
+            request.user.total_unpaid_student=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=request.user.teacher_class)
+            page = request.GET.get('page', 1)
+            paginator = Paginator(request.user.total_unpaid_student, 5)
+            try:
+                request.user.users = paginator.page(page)
+            except PageNotAnInteger:
+                request.user.users = paginator.page(1)
+            except EmptyPage:
+                request.user.users = paginator.page(paginator.num_pages)
+        # starting fees status for parent view
         if request.user.profile.designation.level_name == "parent":
             request.user.user_child_fee_status = []
             user_children= AddChild.objects.filter(institute= request.user.profile.institute, parent= request.user.profile)
