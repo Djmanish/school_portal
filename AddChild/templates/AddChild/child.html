@@ -557,7 +557,18 @@ aliceblue;
                     <input type="text" class="form-control" name='roll_number' placeholder="Enter a roll number" >  
                     <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">
                     </form>
-                    <div >
+                    {% if messages %}
+                        <div class="md-card md-card-primary">
+                            <div>
+                                <ul class="messages alert">
+                                    {% for message in messages %}
+                                    <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        {% endif %}
+                    <div >                        
                     <h3  {% if request.POST %}
                     style="margin-left: 20px; margin-top: 10px;margin-bottom:0px;"
                     {% else %}
@@ -567,17 +578,7 @@ aliceblue;
                     
                     </div>
             <div class="md-card uk-margin-medium-bottom">
-                {% if messages %}
-        <div class="md-card md-card-primary">
-      <div>
-          <ul class="messages alert">
-              {% for message in messages %}
-              <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-              {% endfor %}
-          </ul>
-      </div>
-        </div>
-        {% endif %}
+
                 <div class="md-card-content">
                     <div class="uk-overflow-container">
                         <table class="uk-table uk-table-hover" {% if request.POST %}
@@ -596,7 +597,11 @@ aliceblue;
                             </tr>
                             </thead>
                             <tbody>
+                            {% if request.POST and student == None %}
+                                <h4 style="color: red; margin-top: 10px;"> No Student Found </h4>
+                            {% endif %}    
                             {% if student.is_already_listed == True or student.is_already_listed == False %}
+                                
                             <tr>
                                 <td style="text-align:center; vertical-align: middle;">1</td>
                                 <td style="text-align:center;">
@@ -611,10 +616,8 @@ aliceblue;
                                     {% if student.is_already_listed == True %}
                                     
                                         <h4 style="color: red; margin-top: 10px;"> Already Selected </h4>
-                                    {% elif student.is_already_listed == None %}
-                                        <h5 style="color: red; margin-top: 10px;"> No Student Found </h3>
-                                   
-                                    {% else %} 
+                                                                      
+                                    {% elif child_search.parent == request.user.profile or child_search == None %}  
                                         <a href="{% url 'addchildtolist' student.pk %}" style=" margin-left:0%;vertical-align:middle; font-size: 16px; font-weight: bold;">Add Child</a>
                                     {% endif %}
                                 

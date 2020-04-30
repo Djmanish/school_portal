@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=>, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <style>
+      #body_t{
+          background: radial-gradient( white, white, lightblue);
+          height: 100vh;
+          box-sizing: border-box;
+      }
+      .main_div{
+          width: 80%;
+          margin: auto;
+          text-align: center;
+          box-shadow: 2px 2px 3px gray;
+          margin-top: 30px;
+          padding: 30px;
+      }
+      .spinner-border{
+        color: blue;
+          margin: auto;
+        line-height: 23px;
+      }
+  </style>
+</head>
+<body id="body_t">
+
+   
+    <div class="card light-card main_div">
+
+
+        <h3>Redirecting to the payment page...</h3>
+        <h6>Do not Refresh the page !</h6>
+        <div class="spinner-border " role="status" >
+            <span class="sr-only ">Loading...</span>
+          </div>
+        <form method="POST" action="https://securegw-stage.paytm.in/order/process" name="paytm">
+    
+    {% for key, value  in param_dict.items %}
+        <input type="hidden" name="{{key}}" value="{{value}}">
+    {% endfor %}
+        
+        </form>
+
+
+
+    </div>
+   
+    <script>
+        document.paytm.submit()
+    </script>
+
+
+
+</body>
+</html>

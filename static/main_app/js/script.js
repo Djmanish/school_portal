@@ -1,7 +1,6 @@
 
-
+ 
 $(document).ready(function(){
-  
     $('.n_i').keypress(function (e) {
         var regex = new RegExp("^[a-zA-Z ]+$");
         var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
@@ -21,6 +20,17 @@ $(document).ready(function(){
             return true;
         }
         alert('Only Digits are allowed !!!');
+        return false
+      });
+
+      $('.positive_number').keypress(function (e) {
+        var regex = new RegExp("^[0-9]+$");
+        var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(strigChar)) {
+            
+            return true;
+        }
+        alert('Only Positive Numbers !!!');
         return false
       });
 

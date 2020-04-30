@@ -20,6 +20,7 @@ from Attendance.models import *
 from AddChild.models import *
 from notices.models import *
 from holidaylist.models import *
+from exam_result.models import *
 from django.contrib.sessions.models import Session
 from examschedule.models import *
 from rest_framework.views import APIView
@@ -27,6 +28,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from main_app.serializers import UserProfileSerializer
 from fees.models import *
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
@@ -235,18 +237,70 @@ def index(request):
 
 @login_required
 def dashboard(request):
-    user_one = request.user
-     # starting assigned classes
-    user_institute_one= request.user.profile.institute
-    user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
-    
 
-    # starting assigned teachers
+    # random classmates for student
+    std_random=UserProfile.objects.filter(institute=request.user.profile.institute,Class=request.user.profile.Class,designation__level_name="student").exclude(user=request.user).order_by('?')[:5]
+    
+        
+
     # Events & Calendars
     holiday=HolidayList.objects.filter(institute=request.user.profile.institute,applicable="Yes")
     exam_she =ExamDetails.objects.filter(institute=request.user.profile.institute)
-    
-
+    if request.user.profile.designation:    
+        if request.user.profile.designation.level_name == "teacher":  
+            exam_she_teacher_class=Classes.objects.get(class_teacher= request.user)
+            request.user.exam_she_teacher=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_class=exam_she_teacher_class)
+    if request.user.profile.designation:    
+        if request.user.profile.designation.level_name == "student":
+            exam_she_student_class=UserProfile.objects.get(user=request.user)
+            request.user.exam_she_student=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_class=exam_she_student_class.Class)
+    if request.user.profile.designation:    
+        if request.user.profile.designation.level_name == "parent":
+            request.user.child_par=AddChild.objects.filter(parent=request.user.profile)
+            request.user.count=request.user.child_par.count()
+            
+            request.user.first_child=AddChild.objects.filter(parent=request.user.profile).first()
+            if request.user.first_child !=None:
+                request.user.holiday_child=HolidayList.objects.filter(institute=request.user.first_child.child.institute,applicable="Yes")
+                request.user.exam_she_child=ExamDetails.objects.filter(institute=request.user.first_child.child.institute,exam_class=request.user.first_child.child.Class)
+            
+            if request.method == "POST":
+                request.user.student=request.POST.get('selected_child')
+                std_child=UserProfile.objects.get(id=request.user.student)
+                request.user.post_child=std_child
+                request.user.holiday_child=HolidayList.objects.filter(institute=std_child.institute,applicable="Yes")
+                request.user.exam_she_child=ExamDetails.objects.filter(institute=std_child.institute,exam_class=std_child.Class)
+        
+    # for student latest exam
+    if request.user.profile.designation:    
+        if request.user.profile.designation.level_name == "student":
+            try:
+                request.user.exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
+                print(request.user.exam_type_child)
+                max_marks=request.user.exam_type_child.exam_max_marks
+                total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
+                request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
+                request.user.total_sum = 0
+                for i in request.user.child_result:
+                    i = i.result_score
+                    request.user.total_sum = request.user.total_sum + int(i)
+                request.user.m=int(total_marks)
+                try:
+                    request.user.avg=((request.user.total_sum/request.user.m)*100)
+                except ZeroDivisionError:
+                    request.user.avg=0
+                
+                if (request.user.avg<33):
+                    request.user.result="Fail"
+                else:
+                    request.user.result="Pass" 
+                    
+            except ExamType.DoesNotExist:
+                    pass
+            
+            
+                
+  
     # starting assigned teachers
    
     user_one = request.user
@@ -441,26 +495,43 @@ def dashboard(request):
                     request.user.users_notice.insert(0, notice)
         # ending user notice
 
+        # starting fees status for principal view
+        if request.user.profile.designation.level_name == "principal":
+            request.user.l_classes = Classes.objects.filter(institute= request.user.profile.institute)
+            for a in request.user.l_classes:
+                a.total_unpaid=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=a)
+                a.total_unpaid_student=a.total_unpaid.count()
+                total_student=UserProfile.objects.filter(institute = request.user.profile.institute,Class=a,designation__level_name="student").count()
+                a.total_student_in_class=total_student
+                
+        # Starting fees status for teacher view
+        if request.user.profile.designation.level_name == "teacher":
+            request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
+            request.user.total_unpaid_student=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=request.user.teacher_class)
+            page = request.GET.get('page', 1)
+            paginator = Paginator(request.user.total_unpaid_student, 5)
+            try:
+                request.user.users = paginator.page(page)
+            except PageNotAnInteger:
+                request.user.users = paginator.page(1)
+            except EmptyPage:
+                request.user.users = paginator.page(paginator.num_pages)
         # starting fees status for parent view
         if request.user.profile.designation.level_name == "parent":
             request.user.user_child_fee_status = []
-
-
             user_children= AddChild.objects.filter(institute= request.user.profile.institute, parent= request.user.profile)
             parent_student_list = []
             for st in user_children:
                 student= UserProfile.objects.get(pk=st.child.id)
                 parent_student_list.append(student)
-
+            
             
             if(len(user_children)>0):
-                student_fees = Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list )
+                student_fees = Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list, total_due_amount__gt=0  )
                 request.user.user_child_fee_status = student_fees
-                
-                          
             else:
-                print('user has no childer to show')
-            print(request.user.user_child_fee_status)
+                print('user has no childern to show')
+        
 
         # ending fees status for parent view
 
@@ -493,17 +564,19 @@ def dashboard(request):
         'pending5':pending5, 
         'active_sessions':active_sessions,  
         'len_online_user':len_online_user,  
-        'final_data': final_data,
         'holiday':holiday,
+        'final_data': final_data,
         'exam_she':exam_she,
+        'std_random':std_random,
         
-    }
+}
     return render(request, 'main_app/dashboard.html' , context)
 
 
 
 class RegistrationViewUniqueEmail(RegistrationView):
     form_class = RegistrationFormUniqueEmail
+    
 
 def login(request):
     if request.user.is_authenticated:
