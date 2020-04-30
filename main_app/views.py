@@ -569,12 +569,9 @@ def dashboard(request):
         'holiday':holiday,
         'final_data': final_data,
         'exam_she':exam_she,
-        'std_random':std_random,
-        
+        'std_random':std_random,        
 }
     return render(request, 'main_app/dashboard.html' , context)
-
-
 
 class RegistrationViewUniqueEmail(RegistrationView):
     form_class = RegistrationFormUniqueEmail

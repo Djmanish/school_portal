@@ -554,16 +554,18 @@
                 
 
 <!-- The Modal -->
-  
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-    Open modal
-  </button>
-  <div class="modal fade " id="myModal" style="margin-top: 10%;">
-    <div class="modal-dialog modal-sm">
+ 
+
+
+
+  <div class="modal fade " id="myModal" style="margin-top: 10px;">
+    <div class="modal-dialog modal-sm" style="background-color: lightblue;">
       <div class="modal-content">
-        <!-- Modal body -->
+      
         <div class="modal-body">
-            <img src="{% static 'main_app/images/source.gif' %}">
+           
+            <img class="img-fluid" src="{% static 'main_app/images/source.gif' %}" style="width: 30%; margin: auto;">
+            <h3 class="text-center">Processing, please wait....</h3>
         </div>
       </div>
     </div>
@@ -864,7 +866,14 @@ type:"POST",
 url: "{% url 'processing_fees' %}",
 data:{csrfmiddlewaretoken:'{{csrf_token}}'},
 success: function(msg){
-    window.location.href = msg;
+    $("#myModal").modal("hide");
+    if (msg == 'fees already processed for this due date'){
+        alert('Fees for this due date already processed');
+        location.reload();
+    }else{
+        window.location.href = msg;
+    }
+    
 }
    })
   } else {

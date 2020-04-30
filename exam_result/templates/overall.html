@@ -24,7 +24,13 @@
 
     <!-- flag icons -->
     <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
-
+    <style>
+        #2{
+    display: none !important;
+    background-color: #1976d2;
+}
+    
+    </style>
     
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
@@ -515,48 +521,42 @@
            
         
         <table
-        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair "
         id="ts_issues">
-        <tbody id="myresult">
-           
-           
-            {% if result_data %}
-            <tr >
-                <td><b>Subjects</b></td>
-                {% for e_type in exam_type_data %}
-                <td><b>
-                    {{e_type}} 
-                </b>   
-                </td>
-                {% endfor%}
+        <tbody >
+            {% for exam  in exam_type_list %}
+          <tr>
+            <td><b>
+                {{exam}}
+            
+            </b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            
+          </tr>
+            {% for data in e_data %}
+                    
+                    {% if exam in data.values %}
+            <tr>
+                {% for k,v in data.items %}
                 
-            </tr>
-            {% endif %}
+                <td class={{forloop.counter|slugify}}>
+                    {{v}}
+                </td>
+                <td>
+
+                </td>
            
-                      
-                               {% for data in result_data %}
-                               <tr>
-                                   
-                                   {% for k,v in data.items %}
-                                    
-                                   
-                                   {% if k == "subj" %}
-                                    <td>
-                                        {{v}}
-                                    </td>
-                                    {% endif %}
-                                    {% if  k == "avg" %}
-                                    <td>
-                                        {{v}}
-                                    </td>
-                                    {% endif %}
-                                    
-                                        
-                                       
-                                   {% endfor %}
-                                </tr>
-                    {% endfor %}
+                {% endfor %}
+                {% endif %}
+             </tr>
+ {% endfor %}
+ {% endfor %} 
         </tbody>
+        
                                                     </table>
                                                 </div>
                                             </div>
@@ -612,7 +612,13 @@
     </script>
 
 
+<script>
+    $(document).ready(function(){
+     
+        $(".2").css("display","none");
+      });
    
+    </script>
     
     </body>
 

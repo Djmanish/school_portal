@@ -81,7 +81,7 @@ class Student_Tag_Processed_Record(models.Model):
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
     class Meta:
-        unique_together = ('institute','process_date','student','fees_code')
+        unique_together = ('institute','due_date','student','fees_code')
     def __str__(self):
         return str(self.student.first_name) +" "+ str(self.student.last_name) 
 
@@ -96,6 +96,8 @@ class Students_fees_table(models.Model):
     total_due_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
     total_paid = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
     balance = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
+    class Meta:
+        unique_together = ('institute','due_date','student')
     
     def __str__(self):
         return str(self.student)

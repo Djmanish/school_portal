@@ -35,7 +35,18 @@ def exam_result(request,pk):
       #============================================================================================ 
         student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
         institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
-        
+        # score test
+        for student in institute_students:
+          try:
+            student_score=ExamResult.objects.get(institute= request.user.profile.institute,result_subject=selected_subject, exam_type=exam_type_id,
+             exam_sr_no=result_exam_type_sr_no, result_student_data=student.user)
+            student.existing_marks=student_score.result_score
+          except:
+            pass
+            
+             
+            
+            
         
 
         context={
@@ -71,8 +82,7 @@ def examresult(request,pk):
       institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
       if request.method=="POST":
           for sdata,score in zip(request.POST.getlist('student_first_name'),request.POST.getlist('student_marks')):
-            student_data = User.objects.get(pk=sdata)
-            
+            student_data = UserProfile.objects.get(pk=sdata)
             exam_subject=Subjects.objects.get(pk=request.POST.get('selected_subject'))
             examtype=ExamType.objects.get(pk=request.POST.get('exam_type_id'))
             examsrno=request.POST.get('result_exam_type_sr_no')
@@ -80,21 +90,22 @@ def examresult(request,pk):
             subject_teacher=User.objects.get(pk=request.POST.get('subject_teacher'))
             exam_max_marks=request.POST.get('exam_max_marks')
             exam_max_limit=request.POST.get('exam_max_limit')
-            
-
-            
-
-            marks_data=ExamResult()
-            marks_data.institute=request.user.profile.institute
-            marks_data.exam_sr_no= examsrno
-            marks_data.result_student_data=student_data
-            marks_data.exam_type= examtype
-            marks_data.result_subject=exam_subject
-            marks_data.result_class=subject_class
-            marks_data.result_subject_teacher=subject_teacher
-            marks_data.result_score=score
-            marks_data.result_max_marks=exam_max_marks
-            marks_data.save()
+            try:
+              st_data=ExamResult.objects.get(institute= request.user.profile.institute,result_subject=exam_subject, exam_type=examtype,
+             exam_sr_no=examsrno, result_student_data=student_data.user)
+              st_data.result_score=score
+            except:
+              marks_data=ExamResult()
+              marks_data.institute=request.user.profile.institute
+              marks_data.exam_sr_no= examsrno
+              marks_data.result_student_data=student_data
+              marks_data.exam_type= examtype
+              marks_data.result_subject=exam_subject
+              marks_data.result_class=subject_class
+              marks_data.result_subject_teacher=subject_teacher
+              marks_data.result_score=score
+              marks_data.result_max_marks=exam_max_marks
+              marks_data.save()
 
           marks_list=[]
           exam_result_data=ExamResult.objects.filter(institute=request.user.profile.institute,exam_type__exam_type=examtype,result_subject=exam_subject,exam_sr_no=examsrno)
@@ -107,6 +118,7 @@ def examresult(request,pk):
                 data_list=list( marks_list)
                 marks_list=list(map(int, data_list))
                 check_limit=int(exam_max_marks)
+         
           for score in marks_list:
                   
                   if score<check_limit or score==check_limit:
@@ -204,14 +216,17 @@ def chart_sr_no(request):
     
   return HttpResponse(chart_result_sr_no)
 
+
 def report_card(request,pk):
   exam_type_list =ExamType.objects.filter(institute=request.user.profile.institute)
   exam_id=request.user.profile.institute.id
 
   if request.method=="POST":
+      
       select_exam_type = request.POST.get('result_exam_type')
+      if select_exam_type=="Overall":
+        return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}')
       exam_type=ExamType.objects.get(pk=select_exam_type)
-  
       all_exam=ExamResult.objects.filter(exam_type=exam_type,result_student_data=request.user)
       exam_no=[]
       for data in all_exam:
@@ -225,17 +240,13 @@ def report_card(request,pk):
           pass
         else:
           resultsubject.append(sub.result_subject)
-      # print(resultsubject)
-
-          # print(data.exam_type, data.exam_sr_no, data.result_student_data, data.result_subject, data.result_score)
-      # print(exam_no)
       result_data=[]
       for sub_data in resultsubject:
         data_marks={}
+       
         data_marks['subj']=sub_data
         for e_no in exam_no:
             student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
-            
             data_marks[e_no]=student_data.result_score
         marks_data=[]
         for key,value in data_marks.items():
@@ -243,22 +254,18 @@ def report_card(request,pk):
               pass
             else:
               marks_data.append(value)
-        
+                
         avg=statistics.mean(marks_data)
         data_marks['avg']=avg
-
         result_data.append(data_marks)
-      
-      
-      context={
         
-       
+
+      context={
         'select_exam_type':exam_type,
         'all_exam':all_exam,
         'exam_no':exam_no,
         'resultsubject':resultsubject,
         'result_data':result_data,
-        # 'round_score':round_score,
               }
       return render(request, 'report_card.html', context)        
   context={
@@ -269,69 +276,70 @@ def report_card(request,pk):
   
  
 
+
  
   
     
 
 def overall_result(request,pk):
-  exam_type_data=[]
-  exam_type_list =ExamType.objects.filter(institute=request.user.profile.institute)
-  for exam_type in exam_type_list:
-          exam_type_data.append(exam_type.exam_type)
+    type_exam=[]
+    exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
+    for exam in exam_type_list:
+      type_exam.append(exam)
 
-  exam_id=request.user.profile.institute.id
-
-  for exam_type in exam_type_data:
-      all_exam=ExamResult.objects.filter(exam_type__exam_type=exam_type,result_student_data=request.user)
-     
+    for exam_type in exam_type_list:
+      exam_data= CalculateResult.objects.filter(calc_result_exam_type=exam_type,calc_result_student_data=request.user)
       exam_no=[]
-      for data in all_exam:
-        if data.exam_sr_no in exam_no:
+      for data in exam_data:
+        if data.calc_result_exam_sr_no in exam_no:
           pass
         else:
-          exam_no.append(data.exam_sr_no)
+          exam_no.append(data.calc_result_exam_sr_no)
       resultsubject=[]
-      for sub in all_exam:
-        if sub.result_subject in resultsubject:
+      for sub in exam_data:
+        if sub.calc_result_subject in resultsubject:
           pass
         else:
-          resultsubject.append(sub.result_subject)
-  
-      result_data=[]
-      for exam in exam_type_data:
-        for sub_data in resultsubject:
-          data_marks={}
-          data_marks['subj']=sub_data
-          marks_data=[]
-          for e_no in exam_no:
-                student_data=ExamResult.objects.get(exam_type__exam_type=exam,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
-                data_marks[e_no]=student_data.result_score
-                for key,value in data_marks.items():
-                    if key=="subj":
-                        pass
-                    else:
-                        marks_data.append(value)
-                avg=statistics.mean(marks_data)
-                data_marks['avg']=avg
-      result_data.append(data_marks)
+          resultsubject.append(sub.calc_result_subject)
+      
+      e_data=[]
+      for etype in type_exam:
+        
+        for sub in resultsubject:
+            
+            e_score=[]
+            dict1={}
+            dict1['sub']=sub
+            dict1['etype']=etype
+            for eno in exam_no:
+                examresult_data=CalculateResult.objects.filter(calc_result_exam_type=etype,calc_result_subject=sub,calc_result_exam_sr_no=eno,calc_result_student_data=request.user)
+                for exam_score in examresult_data:
+                    e_score.append(exam_score.calc_result_score)
+                    
+                marks_list=list(e_score)
+            marks=list(map(int, e_score))
+            perValue=sum(marks)/30
+            dict1['percent']=perValue
+            # print(dict1)
+            e_data.append(dict1)
+            print(e_data)
+      
       context={
-          'select_exam_type':exam_type,
-          'all_exam':all_exam,
-          'exam_no':exam_no,
-          'resultsubject':resultsubject,
-          'result_data':result_data,
-          'exam_type_data':exam_type_data,
-          # 'round_score':round_score,
-          'data_marks':data_marks,
-                }
-      return render(request, 'overall.html', context)        
-  context={
-        'exam_type_list':exam_type_list,
-      }
+      
+      'e_data':e_data,
+      'exam_type':exam_type,
+      'etype':etype,
+      'exam_type_list':exam_type_list,
 
-  return render(request, 'overall.html', context)
-  
- 
+      } 
+      return render(request, 'overall.html', context)
+
+         
+    context={
+      'exam_type_list':exam_type_list,
+     
+      } 
+    return render(request, 'overall.html', context)
 
  
 
