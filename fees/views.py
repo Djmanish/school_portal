@@ -8,6 +8,12 @@ from .forms import Fees_tag_update_form
 from django.utils import timezone
 from django.contrib.messages.views import SuccessMessageMixin
 import datetime
+from AddChild.models import *
+from fees.models import *
+from paytm import checksum
+from django.views.decorators.csrf import csrf_exempt
+from decimal import Decimal
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 # Create your views here.
 
 def fees_home(request):
@@ -31,7 +37,7 @@ def fees_home(request):
             messages.error(request, 'No student found in the selected class')
             return redirect('fees_home')
 
-        for student in all_students:
+        for student in all_students: #highlighting students that already mapped to this tag
             try:
                 student_all_tags = student.student_tags.tags.all()
                 if selected_tag in student_all_tags:
@@ -55,7 +61,33 @@ def fees_home(request):
 
 
 def parent_fees(request):
-    return render(request, 'fees/parent_fees.html')
+    if request.user.profile.designation.level_name == "parent":
+        #starting those data for pending fees            
+            user_children= AddChild.objects.filter(institute= request.user.profile.institute, parent= request.user.profile)
+            parent_student_list = []
+            for st in user_children: #select student form add child table
+                student= UserProfile.objects.get(pk=st.child.id)
+                parent_student_list.append(student)
+
+            if(len(user_children)>0):
+                student_fees = Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list, total_due_amount__gt=0 )
+                user_child_fee_status = student_fees             
+           
+        #Ending those data for pending fees
+        # starting those data for payment completed and invoice pdf 
+         
+            if(len(user_children)>0):
+                payment_record = list(reversed(Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list, total_due_amount=0)))
+                
+            paginator = Paginator(payment_record, 35)
+            page_number = request.GET.get('page')
+            payment_history = paginator.get_page(page_number)
+                    
+
+        # starting those data for payment completed and invoice pdf    
+            context = {'children_fee_status':user_child_fee_status,
+            'payment_history':payment_history}
+            return render(request, 'fees/parent_fees.html', context)
 
 
 def creating_tags(request):
@@ -72,7 +104,7 @@ def creating_tags(request):
         amount_with_tax = float(amount) + float(tax_value)
         
         try:
-            School_tags.objects.get(fees_code=fee_code)
+            School_tags.objects.get(institute =request.user.profile.institute, fees_code=fee_code)
             messages.error(request, "Tag with this fees code already exists !!!")
             return redirect('fees_home')
         except:
@@ -94,7 +126,7 @@ class Fees_tag_update_view(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "Fees Tag information updated successfully !!!"
     
     def form_valid(self, form):
-        print(self.get_object().amount_including_tax)
+        
         new_amount= form.instance.amount + ((form.instance.amount*form.instance.tax_percentage)/100) # updating amount with tax in case of tag update    
         form.instance.amount_including_tax = new_amount
 
@@ -122,6 +154,14 @@ class Fees_Tag_History_List(LoginRequiredMixin, ListView):
 
 def institute_fees_schedule(request):
     if request.method == "POST":
+
+        #starting checking if account details provided
+        try:
+            accnt_details = Account_details.objects.get(institute = request.user.profile.institute)
+        except:
+            messages.info(request,'please provide your paytm merchant ID and merchant KEY first in order to proceed further !!!')
+            return redirect('fees_home')
+        #ending checking if account details provided
         notification_date = request.POST.get('notification_date')
         due_date = request.POST.get('due_date')
         processing_date = request.POST.get('processing_date')
@@ -147,8 +187,11 @@ def institute_fees_schedule(request):
 
 def institute_account_details(request):
      if request.method == "POST":
-        merchant_id = request.POST.get('merchant_id')
-        merchant_key = request.POST.get('merchant_key')
+        merchant_id = request.POST.get('merchant_id').strip()
+        merchant_key = request.POST.get('merchant_key').strip()
+        if len(merchant_key)<16:
+            messages.info(request, 'please enter 16 character correct merchant key !!! ')
+            return redirect('fees_home')
         try:
             check_existence_ad = Account_details.objects.get(institute = request.user.profile.institute)
             
@@ -230,7 +273,7 @@ def students_mapped_to_a_tag(request):
     student_response = ""
     for student in all_students:
         student_response = student_response + f"<option>{student.student.first_name} {student.student.middle_name} {student.student.last_name} - {student.student.Class} </option>"   
-    print(all_students)
+    
     return HttpResponse(student_response)      
     
 
@@ -240,17 +283,17 @@ def processing_fees(request):
     except:
         messages.info(request, "No student to process fees")
     
-    for st in school_students:         
+    # starting checking if data already processed
+    if_already = Student_Tag_Processed_Record.objects.filter(institute = request.user.profile.institute, due_date = request.user.profile.institute.institute_schedule.due_date ).first()
+    if if_already:
+        return HttpResponse('fees already processed for this due date')
+    # ending checking if data already processed
+
+
+    for st in school_students:          
         for tag in st.tags.all():
             if tag.active == "yes":
-                try:
-                    Student_Tag_Processed_Record.objects.get(institute= st.student.institute, 
-                    notification_date = st.student.institute.institute_schedule.notification_date, 
-                    process_date = st.student.institute.institute_schedule.processing_date,
-                    due_date = st.student.institute.institute_schedule.due_date,
-                    student= st.student,
-                    fees_code= tag.fees_code)
-                except:
+                if str(tag.start_date)< str(st.student.institute.institute_schedule.due_date) < str(tag.end_date):
                     Student_Tag_Processed_Record.objects.create(institute= st.student.institute, 
                     notification_date = st.student.institute.institute_schedule.notification_date, 
                     process_date = st.student.institute.institute_schedule.processing_date,
@@ -265,11 +308,143 @@ def processing_fees(request):
                     amount_including_tax = tag.amount_including_tax,
                     start_date = tag.start_date,
                     end_date = tag.end_date
-                    )
+                        )  
+
     # removing schedule, notification and due date of institute
     institute_dates = Fees_Schedule.objects.get(institute= request.user.profile.institute)
     institute_dates.delete()
     return HttpResponse("")
 
-def Create_Fees_Summary(request):
-    pass
+
+
+def fees_pay_page(request):
+    if request.method == "POST":
+
+        # starting fetching account details
+        try:
+            accnt_details = Account_details.objects.get(institute = request.user.profile.institute)
+        except:
+            messages.info(request,'your Institute has not provided account details to complete this payment!!!   ')
+            return redirect('parent_fees')
+        merchant_id = accnt_details.merchant_id
+        MERCHANT_KEY = accnt_details.merchant_key
+        # ending fetching account details
+        
+        
+        student_id = request.POST.get('s_id')
+      
+        amount = request.POST.get('s_amount')
+        invoice_no = request.POST.get('s_inv')
+        param_dict = {
+        # Find your MID in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys
+        "MID" : merchant_id,
+
+        # Find your WEBSITE in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys
+        "WEBSITE" : "WEBSTAGING",
+
+        # Find your INDUSTRY_TYPE_ID in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys
+        "INDUSTRY_TYPE_ID" : "Retail",
+
+        # WEB for website and WAP for Mobile-websites or App
+        "CHANNEL_ID" : "WEB",
+
+        # Enter your unique order id
+        "ORDER_ID" : str(invoice_no),
+
+        # unique id that belongs to your customer
+        "CUST_ID" : str(student_id),
+
+        # customer's mobile number
+        "MOBILE_NO" : '8090831662',
+
+        # customer's email
+        "EMAIL" : 'writetodhananjay@gmail.com' ,
+
+        # Amount in INR that is payble by customer
+        # this should be numeric with optionally having two decimal points
+        "TXN_AMOUNT" : str(amount),
+
+        # on completion of transaction, we will send you the response on this URL
+        "CALLBACK_URL" : "http://trueblueappworks.com/fees/handle_requests/",
+    }
+
+        # MERCHANT_KEY = "#OqHWC23DZX1G2LN"
+        
+        param_dict['CHECKSUMHASH'] = checksum.generate_checksum(param_dict, MERCHANT_KEY)
+
+        return render(request, 'fees/payment_page.html', {'param_dict':param_dict})
+
+
+
+@csrf_exempt
+def handle_requests(request):
+    form = request.POST
+    response_dict = {}
+    for i in form.keys():
+        response_dict[i] = form[i]
+        if i == "CHECKSUMHASH":
+            Checksum = form[i]
+        
+     # starting fetching account details
+    institute_id_d = str(response_dict['ORDERID'])
+    new_d = institute_id_d.split('-')
+    school_id = new_d[0]
+    accnt_details = Account_details.objects.get(institute__id = school_id)
+    MERCHANT_KEY = accnt_details.merchant_key
+    # ending fetching account details
+        
+    MERCHANT_KEY = accnt_details.merchant_key
+    verify = checksum.verify_checksum(response_dict, MERCHANT_KEY, Checksum )
+    if verify:
+        if response_dict['RESPCODE'] == '01':
+            invoice__num = response_dict['ORDERID']
+            user = Students_fees_table.objects.get(invoice_number=invoice__num)
+            user.total_due_amount = float(user.total_due_amount) - float(response_dict['TXNAMOUNT'])
+            user.total_paid = response_dict['TXNAMOUNT']
+            user.payment_date = timezone.now()
+            user.balance = float(user.total_due_amount) - float(response_dict['TXNAMOUNT'])
+            user.save()
+        else:
+            print('order was not successfull because ' + response_dict['RESPMSG'])
+    
+    user_response_dict = {}
+    for k,v in response_dict.items():
+        if k=="MID":
+            pass
+        else:
+            user_response_dict[k]=v
+            
+    return render(request, 'fees/payment_status.html', {'response':user_response_dict, })
+        
+
+#function for payment details view link
+def view_invoice(request, pk):
+    fee_data = Students_fees_table.objects.get(pk=pk)
+    procees_table_data = Student_Tag_Processed_Record.objects.filter(institute= request.user.profile.institute, due_date = fee_data.due_date, student = fee_data.student)
+
+    total_sum_including_tax = 0
+    total_sum_amount = 0
+    for am in procees_table_data:
+        total_sum_including_tax = total_sum_including_tax + am.amount_including_tax
+        total_sum_amount = total_sum_amount + am.amount
+    
+    tax_amount = total_sum_including_tax - total_sum_amount
+    
+    if fee_data.total_due_amount == 0:
+        payment_status = True
+        payment_date = fee_data.payment_date
+    else:
+        payment_status = False
+        payment_date = None
+    
+
+
+    context = {
+        'fee_data':fee_data,
+        'fee_proce_data':procees_table_data,
+        'tax_amount':tax_amount,
+        'payment_status':payment_status,
+        'payment_date':payment_date
+
+    }
+    return render(request, 'fees/invoice.html', context)

@@ -124,11 +124,12 @@
       }
       .cld-number.eventday{
         font-weight: bold;
-        color: #0080FF;
+        background-color: #7cb342;
+        color: white;
       }
       .cld-number.eventday:hover{
         cursor: pointer;
-        background: #eee;
+        background: #87b457;
       }
       .today .cld-number.eventday:hover{
         background: #005EFF;

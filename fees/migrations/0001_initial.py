@@ -106,8 +106,50 @@ class Migration(migrations.Migration):
                 ('institute', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='main_app.Institute')),
                 ('student', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='main_app.UserProfile')),
             ],
-            options={
-                'unique_together': {('institute', 'process_date', 'student', 'fees_code')},
-            },
+        ),
+        migrations.CreateModel(
+            name='Student_Tags_Record',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('institute', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='main_app.Institute')),
+                ('student', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='student_tags', to='main_app.UserProfile')),
+                ('student_class', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='main_app.Classes')),
+                ('tags', models.ManyToManyField(related_name='tags_to_student', to='fees.School_tags')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Students_fees_table',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('due_date', models.DateField(null=True)),
+                ('invoice_number', models.CharField(max_length=20, null=True)),
+                ('total_due_amount', models.DecimalField(decimal_places=2, default=0, max_digits=10, null=True)),
+                ('total_paid', models.DecimalField(decimal_places=2, default=0, max_digits=10, null=True)),
+                ('balance', models.DecimalField(decimal_places=2, default=0, max_digits=10, null=True)),
+                ('institute', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='main_app.Institute')),
+                ('student', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='studnts_fees_info', to='main_app.UserProfile')),
+            ],
+        ),
+        migrations.AddField(
+            model_name='fees_tag_update_history',
+            name='fees_tag',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='tags_updates', to='fees.School_tags'),
+        ),
+        migrations.CreateModel(
+            name='Account_details',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('merchant_id', models.CharField(max_length=25)),
+                ('merchant_key', models.CharField(max_length=25)),
+                ('institute', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='institute_account_details', to='main_app.Institute')),
+            ],
+        ),
+        migrations.AlterUniqueTogether(
+            name='student_tag_processed_record',
+            unique_together={('institute', 'process_date', 'student', 'fees_code')},
+        ),
+        migrations.AlterUniqueTogether(
+            name='school_tags',
+            unique_together={('institute', 'fees_code')},
         ),
     ]
