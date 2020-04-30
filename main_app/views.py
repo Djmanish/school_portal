@@ -27,11 +27,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from main_app.serializers import UserProfileSerializer
-<<<<<<< HEAD
-=======
 from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
->>>>>>> 20ffc8585f090279cea9be531ee2426edbbb1998
 
 
 
@@ -567,21 +564,11 @@ def dashboard(request):
         'active_sessions':active_sessions,  
         'len_online_user':len_online_user,  
         'holiday':holiday,
-<<<<<<< HEAD
-        
-        'exam_she':exam_she,
-
-    }
-=======
         'final_data': final_data,
         'exam_she':exam_she,
-        'std_random':std_random,
-        
+        'std_random':std_random,        
 }
->>>>>>> 20ffc8585f090279cea9be531ee2426edbbb1998
     return render(request, 'main_app/dashboard.html' , context)
-
-
 
 class RegistrationViewUniqueEmail(RegistrationView):
     form_class = RegistrationFormUniqueEmail
