@@ -532,16 +532,39 @@
             <!-- statistics (small charts) -->
             {% if user.profile.designation %}
             <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
-                <div>
+                <div>{% if user.profile.designation.level_name == "student"%}
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">school</i></span></div>
+                            <span class="uk-text-muted uk-text-small">
+                                My Institute
+                            </span>
+                            <h4 class="uk-margin-remove">{{user.profile.institute}}</h4>
+                        </div>
+                    </div>
+                    {% else %}
                     <div class="md-card">
                         <div class="md-card-content">
                             <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">people</i></span></div>
-                            <span class="uk-text-muted uk-text-small">Total Students</span>
+                            <span class="uk-text-muted uk-text-small">
+                                Total Students
+                            </span>
                             <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_std}}</noscript></span></h2>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
-                <div>
+                <div>{% if user.profile.designation.level_name == "student"%}
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">person</i></span></div>
+                            <span class="uk-text-muted uk-text-small">
+                                Name
+                            </span>
+                            <h4 class="uk-margin-remove">{{user.profile.first_name}} {{user.profile.last_name}}</h4>
+                        </div>
+                    </div>
+                    {% else %}
                     <div class="md-card">
                         <div class="md-card-content">
                             <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">person</i></span></div>
@@ -549,8 +572,19 @@
                             <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_teacher}}</noscript></span></h2>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
-                <div>
+                <div>{% if user.profile.designation.level_name == "student"%}
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">class</i></span></div>
+                            <span class="uk-text-muted uk-text-small">
+                                Class
+                            </span>
+                            <h4 class="uk-margin-remove">{{user.profile.Class}}</h4>
+                        </div>
+                    </div>
+                    {% else %}
                     <div class="md-card">
                         <div class="md-card-content">
                             <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">school</i></span></div>
@@ -558,8 +592,27 @@
                             <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_class}}</noscript></span></h2>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
-                <div>
+                <div>{% if user.profile.designation.level_name == "student"%}
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">account_balance_wallet</i></span></div>
+                            <span class="uk-text-muted uk-text-small">
+                                Fees Status
+                            </span>
+                            {% if user.student_fee.total_due_amount > 0 %}
+                                <h4 class="uk-margin-remove" style="color: red;">                                
+                                Unpaid
+                                </h4>
+                            {% else %}
+                                <h4 class="uk-margin-remove" style="color:#7cb342;">                                
+                                Paid
+                                </h4>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% else %}
                     <div class="md-card">
                         <div class="md-card-content">
                             <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color:#7cb342;">person</i></span></div>
@@ -567,6 +620,7 @@
                             <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{len_online_user}}</noscript></span></h2>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 
             </div>
@@ -876,12 +930,12 @@
                                 <tbody>
                                     {% for i in user.users %}
                                     <tr class="uk-table-middle">                                        
-                                        <td class="uk-width-3-10 uk-text-nowrap"><a href="#">{{i}}</a></td>
+                                        <td class="uk-width-3-10 uk-text-nowrap"><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
                                         <td class="uk-width-3-10 uk-text-nowrap" style="color: red;">Unpaid</td>                                        
                                     </tr>
                                     {% endfor %}
                                     
-                                    
+                                     
                                        
                                 </tbody>
                             </table>
@@ -1112,7 +1166,7 @@
                                            <tbody>
                                                {% for i in cl.total_unpaid %}
                                                <tr>
-                                                   <td><a href="#">{{i}}</a></td>
+                                                   <td><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
                                                    <td>{{i.due_date}}</td>
                                                    <td>Unpaid</td>
                                                </tr>

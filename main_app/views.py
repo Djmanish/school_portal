@@ -515,6 +515,10 @@ def dashboard(request):
                 request.user.users = paginator.page(1)
             except EmptyPage:
                 request.user.users = paginator.page(paginator.num_pages)
+         # starting fees status for student view
+        if request.user.profile.designation.level_name == "student":
+            request.user.student_fee=Students_fees_table.objects.get(student=request.user.profile ,institute = request.user.profile.institute,student_class=request.user.profile.Class)
+
         # starting fees status for parent view
         if request.user.profile.designation.level_name == "parent":
             request.user.user_child_fee_status = []
