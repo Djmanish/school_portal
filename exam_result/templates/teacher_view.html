@@ -14,7 +14,8 @@
 
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
-
+    <script src="{% static 'main_app/js/jquery.js' %}"></script>
+    <script src="{% static 'main_app/js/script.js' %}"></script>
 
     <title>Examination</title>
 
@@ -40,7 +41,6 @@
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
  </head>
      <body
         class="disable_transitions sidebar_main_open sidebar_main_swipe">
@@ -628,7 +628,7 @@
                                                                         
                                                                         
                                                                        <td >
-                                                                           <input type="text" name="student_marks" min="0" max="999999" required></input>
+                                                                           <input type="text" name="student_marks" value="{{student.existing_marks}}"class="positive_number" required></input>
                                                                        </td>
                                                                     
                                                             </tr>
@@ -685,6 +685,8 @@
             s.parentNode.insertBefore(wf, s);
         })();
     </script>
+ 
+
 
     <!-- common functions -->
     <script src="{% static 'main_app/js/common.min.js' %}"></script>
@@ -692,6 +694,7 @@
     <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
     <!-- altair common functions/helpers -->
     <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
+
 
 
     <script>

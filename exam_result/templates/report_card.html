@@ -505,7 +505,7 @@
                                                     
                                                     <td> <select class="form-control" name="result_exam_type" style="padding: 2px;" required>
                                                             <option selected disabled value="">--Select Exam Type--</option>
-                                                            <option ><a href="{% url 'overall_result' request.user.profile.institute.id %}">Overall</a></option>
+                                                            <option>Overall</option>
 
                                                             {% for exam_type in exam_type_list %}
                                                             
@@ -514,18 +514,26 @@
                                                      </select>
                                                      
                                                     </td>
+                                                    <td></td>
                                             
                                                     <td>
                                                     <input type="submit" value="View" class="md-btn md-btn-primary">
                                                 </td>
-                                                   </tr>
-                                                </form>
-                                                  
+                                                <td>
+
+
+                                                </td>
+                                               
                                                    
-                                             
-                                            
-                                             
-                                                    
+                                                </form>
+                                                 
+                                                <!-- <form action="{% url 'overall_result' request.user.profile.institute.id %}" class="form-inline" id="attendance_form">
+                                                    <td>
+                                                        <input type="submit" value="Overall Result" class="md-btn md-btn-primary" style="margin-left:10px;">
+                                                    </td>
+                                                </form> -->
+                                            </tr>
+                                                  
                                                         <table
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues" >
