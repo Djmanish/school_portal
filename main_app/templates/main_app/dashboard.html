@@ -765,7 +765,7 @@
                                     
                                          {% for teachers in teacher_subject %}
                                         <tr class="uk-table-middle">
-                                        <td class="uk-width-3-10 uk-text-nowrap"><a href ="#">{{teachers.subject_teacher}}</a></td>
+                                        <td class="uk-width-3-10 uk-text-nowrap"><a href ="#">{{teachers.subject_teacher.profile.first_name}} {{teachers.subject_teacher.profile.last_name}}</a></td>
                                         <td class="uk-width-3-10 uk-text-nowrap">{{teachers.subject_name}}</td>
                                                                           
                                          </tr>
