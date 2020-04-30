@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block pageid %}index{% endblock pageid %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <br>
+            <br>
+            <br>
+            <br>
+            <h1 class="text-center">Manage Your Students in a Better Way</h1>
+            <p class="text-center">Register Your College, Coaching or institure and change the way you manage things. We made it much easier now.</p>
+            <div class="lgbtndiv" class="border border-success">
+                    <p >Login to Your Existing Account Now</p>
+                    <a class="btn btn-success btn-lg" href="{% url 'auth_login' %}">Login Now</a>
+            </div>
+            <br>
+            <br>
+            <div id="rgbtndiv"  class="border border-info rounded-2 " >
+                    <p>Not Registered ? Register Now by Clicking below button</p>
+                    <a class="btn btn-info btn-lg" href="{% url 'register' %}">Register Here</a>
+            </div>
+            
+        </div>
+        <div class="col-md-2"></div>
+
+    </div>
+</div>  
+
+{% endblock content %}
+    

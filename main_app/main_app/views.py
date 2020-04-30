@@ -502,10 +502,7 @@ def dashboard(request):
                 a.total_unpaid_student=a.total_unpaid.count()
                 total_student=UserProfile.objects.filter(institute = request.user.profile.institute,Class=a,designation__level_name="student").count()
                 a.total_student_in_class=total_student
-        # Starting fees status for teacher view
-        if request.user.profile.designation.level_name == "student":
-            request.user.student_fees_st=Students_fees_table.objects.get(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
-            print(request.user.student_fees_st.total_due_amount)      
+                
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "teacher":
             request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
