@@ -531,91 +531,45 @@
             
             <!-- statistics (small charts) -->
             {% if user.profile.designation %}
-            {% if user.profile.designation.level_name == "student" %}
-                <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
-                    <div>
-                        <div class="md-card">
-                            <div class="md-card-content">
-                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">school</i></span></div>
-                                <span class="uk-text-muted uk-text-small">My Institute</span>
-                                <h4 class="uk-margin-remove">{{user.profile.institute}}</h4>
-                            </div>
+            <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">people</i></span></div>
+                            <span class="uk-text-muted uk-text-small">Total Students</span>
+                            <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_std}}</noscript></span></h2>
                         </div>
                     </div>
-                    <div>
-                        <div class="md-card">
-                            <div class="md-card-content">
-                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">person</i></span></div>
-                                <span class="uk-text-muted uk-text-small">Name</span>
-                                <h4 class="uk-margin-remove">{{user.profile.first_name}} {{user.profile.last_name}}</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="md-card">
-                            <div class="md-card-content">
-                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">class</i></span></div>
-                                <span class="uk-text-muted uk-text-small">My Class</span>
-                                <h4 class="uk-margin-remove">{{user.profile.Class}}</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="md-card">
-                            <div class="md-card-content">
-                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color:#1976d2;">account_balance_wallet</i></span></div>
-                                <span class="uk-text-muted uk-text-small">Fee Status</span>
-                                {% if user.student_fees_st.total_due_amount > 0 %}
-                                    <h4 class="uk-margin-remove" style="color: red;">Unpaid</h4>
-                                {% else %}
-                                    <h4 class="uk-margin-remove">Paid</h4>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    
                 </div>
-            {% else %}
-                <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
-                    <div>
-                        <div class="md-card">
-                            <div class="md-card-content">
-                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">people</i></span></div>
-                                <span class="uk-text-muted uk-text-small">Total Students</span>
-                                <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_std}}</noscript></span></h2>
-                            </div>
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">person</i></span></div>
+                            <span class="uk-text-muted uk-text-small">Total Teachers</span>
+                            <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_teacher}}</noscript></span></h2>
                         </div>
                     </div>
-                    <div>
-                        <div class="md-card">
-                            <div class="md-card-content">
-                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">person</i></span></div>
-                                <span class="uk-text-muted uk-text-small">Total Teachers</span>
-                                <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_teacher}}</noscript></span></h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="md-card">
-                            <div class="md-card-content">
-                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">school</i></span></div>
-                                <span class="uk-text-muted uk-text-small">Total Classes</span>
-                                <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_class}}</noscript></span></h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="md-card">
-                            <div class="md-card-content">
-                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color:#7cb342;">person</i></span></div>
-                                <span class="uk-text-muted uk-text-small">Active Users</span>
-                                <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{len_online_user}}</noscript></span></h2>
-                            </div>
-                        </div>
-                    </div>
-                    
                 </div>
-            {% endif %}
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">school</i></span></div>
+                            <span class="uk-text-muted uk-text-small">Total Classes</span>
+                            <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{total_class}}</noscript></span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color:#7cb342;">person</i></span></div>
+                            <span class="uk-text-muted uk-text-small">Active Users</span>
+                            <h2 class="uk-margin-remove"><span class="countUpMe">0<noscript>{{len_online_user}}</noscript></span></h2>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
             {% endif %}
                 
 
@@ -922,7 +876,7 @@
                                 <tbody>
                                     {% for i in user.users %}
                                     <tr class="uk-table-middle">                                        
-                                        <td class="uk-width-3-10 uk-text-nowrap"><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
+                                        <td class="uk-width-3-10 uk-text-nowrap"><a href="#">{{i}}</a></td>
                                         <td class="uk-width-3-10 uk-text-nowrap" style="color: red;">Unpaid</td>                                        
                                     </tr>
                                     {% endfor %}
@@ -1072,7 +1026,7 @@
                <div class="uk-width-medium-1-2">
                 <div class="md-card">
                     <div class="md-card-content">
-                        <h4>Events & Calendar </h4>
+                        <h3 class="heading_a uk-margin-bottom">Events & Calendar </h3>
                         {% if user.profile.designation.level_name == "parent" %}
                         {% if user.count > 1 %}
                         <form  method="POST" action="#" class="form-inline" id="parent_calendar_form">
@@ -1140,7 +1094,7 @@
                <div class="uk-width-medium-1-2">
                    <div class="md-card">
                        <div class="md-card-content">
-                           <h4>Fess Status</h4>
+                           <h3 class="heading_a uk-margin-bottom">Fess Status</h3>
                            <h6 lass="uk-accordion-title" class="on-the">Classes<span class="on-the-fly">Pending Fees</span></h6>
                            <div class="uk-accordion" data-uk-accordion="{showfirst: false}">
                                {% for cl in request.user.l_classes %}
@@ -1158,7 +1112,7 @@
                                            <tbody>
                                                {% for i in cl.total_unpaid %}
                                                <tr>
-                                                   <td><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
+                                                   <td><a href="#">{{i}}</a></td>
                                                    <td>{{i.due_date}}</td>
                                                    <td>Unpaid</td>
                                                </tr>
