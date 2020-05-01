@@ -542,18 +542,21 @@
             <div class="uk-grid" data-uk-grid-margin="">
                 <div class="uk-width-small-3-5 uk-row-first">
                     <div class="uk-margin-bottom">
+                        To,
+                        <h6>{{fee_data.student.first_name|default:""}} {{fee_data.student.middle_name|default:""}} {{fee_data.student.last_name|default:""}}<br>
+                        Class: {{fee_data.student.Class|default:""}}
+                        </h6>
+                        
                         <span class="uk-text-muted uk-text-small uk-text-italic">Date:</span> {% now "F j, Y " %}
                         <br>
-                        <span class="uk-text-muted uk-text-small uk-text-italic">Due Date:</span> <span>{{fee_data.due_date}}</span>
-                        <h4><span class="uk-text-muted uk-text-small uk-text-italic">Invoice No.:</span> {{fee_data.invoice_number}}</h4>
+                        <span class="uk-text-muted uk-text-small uk-text-italic">Due Date:</span> <span>{{fee_data.due_date}}</span><br>
+                        <span class="uk-text-muted uk-text-small uk-text-italic">Invoice No.:</span> {{fee_data.invoice_number}} <br>
                         
                         {% if fee_data.payment_date %}
-                        <h5><span class="uk-text-muted uk-text-small uk-text-italic">Payment Date:</span>: {{fee_data.payment_date| default:""}}</h5>
+                        <span class="uk-text-muted uk-text-small uk-text-italic">Payment Date:</span>: {{fee_data.payment_date| default:""}}
                         {% endif %}
-                            
                         
                     </div>
-                   
                 </div>
                 
                 <div class="uk-width-small-2-5">

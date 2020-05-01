@@ -355,18 +355,20 @@ def fees_pay_page(request):
         "CUST_ID" : str(student_id),
 
         # customer's mobile number
-        "MOBILE_NO" : '8090831662',
+        "MOBILE_NO" : str(request.user.profile.mobile_number),
+        
 
         # customer's email
-        "EMAIL" : 'writetodhananjay@gmail.com' ,
+        "EMAIL" : str(request.user.email) ,
 
         # Amount in INR that is payble by customer
         # this should be numeric with optionally having two decimal points
         "TXN_AMOUNT" : str(amount),
 
         # on completion of transaction, we will send you the response on this URL
-        "CALLBACK_URL" : "http://trueblueappworks.com/fees/handle_requests/",
+        "CALLBACK_URL" : "http://localhost:8000/fees/handle_requests/",
     }
+        
 
         # MERCHANT_KEY = "#OqHWC23DZX1G2LN"
         
@@ -430,6 +432,7 @@ def view_invoice(request, pk):
     
     tax_amount = total_sum_including_tax - total_sum_amount
     
+    #logic for due or not due pic
     if fee_data.total_due_amount == 0:
         payment_status = True
         payment_date = fee_data.payment_date
