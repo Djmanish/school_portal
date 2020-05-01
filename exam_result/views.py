@@ -82,7 +82,7 @@ def examresult(request,pk):
       institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
       if request.method=="POST":
           for sdata,score in zip(request.POST.getlist('student_first_name'),request.POST.getlist('student_marks')):
-            student_data = UserProfile.objects.get(pk=sdata)
+            student_data = User.objects.get(pk=sdata)
             exam_subject=Subjects.objects.get(pk=request.POST.get('selected_subject'))
             examtype=ExamType.objects.get(pk=request.POST.get('exam_type_id'))
             examsrno=request.POST.get('result_exam_type_sr_no')
@@ -91,9 +91,11 @@ def examresult(request,pk):
             exam_max_marks=request.POST.get('exam_max_marks')
             exam_max_limit=request.POST.get('exam_max_limit')
             try:
+              
               st_data=ExamResult.objects.get(institute= request.user.profile.institute,result_subject=exam_subject, exam_type=examtype,
-             exam_sr_no=examsrno, result_student_data=student_data.user)
+              exam_sr_no=examsrno, result_student_data=student_data)
               st_data.result_score=score
+              st_data.save()
             except:
               marks_data=ExamResult()
               marks_data.institute=request.user.profile.institute
@@ -266,10 +268,13 @@ def report_card(request,pk):
         'exam_no':exam_no,
         'resultsubject':resultsubject,
         'result_data':result_data,
+        'exam_type_list':exam_type_list,
+
               }
       return render(request, 'report_card.html', context)        
   context={
         'exam_type_list':exam_type_list,
+        
       }
 
   return render(request, 'report_card.html', context)
@@ -304,9 +309,7 @@ def overall_result(request,pk):
       
       e_data=[]
       for etype in type_exam:
-        
         for sub in resultsubject:
-            
             e_score=[]
             dict1={}
             dict1['sub']=sub
@@ -322,7 +325,7 @@ def overall_result(request,pk):
             dict1['percent']=perValue
             # print(dict1)
             e_data.append(dict1)
-            print(e_data)
+            
       
       context={
       
