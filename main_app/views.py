@@ -42,10 +42,6 @@ class userList(APIView):
     def post(self):
         pass
 
-
-
-
-
 # Create your views here.
 
 def add_classes(request):
@@ -484,7 +480,7 @@ def dashboard(request):
         teacher_role_level = teacher_role_level.level_id
         user_role_level = request.user.profile.designation.level_id
         request.user.users_notice = []
-        all_notices = Notice.objects.all().order_by('id')
+        all_notices = Notice.objects.filter(publish_date__lte=timezone.now()).order_by('id')
         if user_role_level < teacher_role_level:
             request.user.users_notice = all_notices.exclude(category="absent").reverse()
         else:
@@ -492,6 +488,10 @@ def dashboard(request):
                 notice_recipients = notice.recipients_list.all()
                 if request.user.profile in notice_recipients:
                     request.user.users_notice.insert(0, notice)
+        # for n in request.user.users_notice:
+        #     if str(n.publish_date.date()) <= str(datetime.date.today()):
+        #         request.user.users_notice.append(n)
+
         # ending user notice
 
         # starting fees status for principal view
@@ -521,15 +521,18 @@ def dashboard(request):
         # starting fees status for parent view
         if request.user.profile.designation.level_name == "parent":
             request.user.user_child_fee_status = []
-            user_children= AddChild.objects.filter(institute= request.user.profile.institute, parent= request.user.profile)
+            user_children= AddChild.objects.filter( parent= request.user.profile)
+        
+            
             parent_student_list = []
             for st in user_children:
                 student= UserProfile.objects.get(pk=st.child.id)
                 parent_student_list.append(student)
+            print(parent_student_list)
             
             
             if(len(user_children)>0):
-                student_fees = Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list, total_due_amount__gt=0  )
+                student_fees = Students_fees_table.objects.filter(student__in= parent_student_list, total_due_amount__gt=0  )
                 request.user.user_child_fee_status = student_fees
             else:
                 print('user has no childern to show')

@@ -989,7 +989,7 @@
                                                 
                                                 {% for stfs in request.user.user_child_fee_status %}
                                                     <tr>
-                                                        <td><a href="{% url 'parent_fees' %}">{{stfs.student.first_name}}</a></td>
+                                                        <td><a href="{% url 'parent_fees' %}">{{stfs.student.first_name}} {{stfs.student.last_name|default:""}}</a></td>
                                                         <td>{{stfs.due_date}}</td>
                                                         <td>{{stfs.total_due_amount}}</td>
                                                     </tr>
