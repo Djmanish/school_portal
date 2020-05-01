@@ -17,7 +17,7 @@ def all_notices(request):
 
     user_role_level = request.user.profile.designation.level_id
 
-    all_notices = Notice.objects.all().order_by('id')
+    all_notices = Notice.objects.filter(publish_date__lte=timezone.now()).order_by('id')
     user_notices = []
     if user_role_level < teacher_role_level:
         user_notices = all_notices.exclude(category="absent").reverse()
@@ -36,8 +36,17 @@ def all_notices(request):
     except EmptyPage:
         user_notices = paginator.page(paginator.num_pages)
 
+# start hiding notices for future dates
+    # final_notices = []
+    # for notice in user_notices: 
+    #     if str(notice.publish_date.date()) <= str(datetime.date.today()):
+            
+    #         final_notices.append(notice)
+# ending hiding notices for future dates
+
     context ={
-        'all_notices': user_notices
+        'all_notices': user_notices,
+        
     }
 
     return render(request, 'notices/all_notices_list.html', context)

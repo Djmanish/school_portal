@@ -63,21 +63,21 @@ def fees_home(request):
 def parent_fees(request):
     if request.user.profile.designation.level_name == "parent":
         #starting those data for pending fees            
-            user_children= AddChild.objects.filter(institute= request.user.profile.institute, parent= request.user.profile)
+            user_children= AddChild.objects.filter( parent= request.user.profile)
             parent_student_list = []
             for st in user_children: #select student form add child table
                 student= UserProfile.objects.get(pk=st.child.id)
                 parent_student_list.append(student)
 
             if(len(user_children)>0):
-                student_fees = Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list, total_due_amount__gt=0 )
+                student_fees = Students_fees_table.objects.filter( student__in= parent_student_list, total_due_amount__gt=0 )
                 user_child_fee_status = student_fees             
            
         #Ending those data for pending fees
         # starting those data for payment completed and invoice pdf 
          
             if(len(user_children)>0):
-                payment_record = list(reversed(Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list, total_due_amount=0)))
+                payment_record = list(reversed(Students_fees_table.objects.filter( student__in= parent_student_list, total_due_amount=0)))
                 
             paginator = Paginator(payment_record, 35)
             page_number = request.GET.get('page')
@@ -319,10 +319,12 @@ def processing_fees(request):
 
 def fees_pay_page(request):
     if request.method == "POST":
+        student_id = request.POST.get('s_id')
+        student = UserProfile.objects.get(pk= student_id)
 
         # starting fetching account details
         try:
-            accnt_details = Account_details.objects.get(institute = request.user.profile.institute)
+            accnt_details = Account_details.objects.get(institute =student.institute)
         except:
             messages.info(request,'your Institute has not provided account details to complete this payment!!!   ')
             return redirect('parent_fees')
@@ -331,7 +333,7 @@ def fees_pay_page(request):
         # ending fetching account details
         
         
-        student_id = request.POST.get('s_id')
+        
       
         amount = request.POST.get('s_amount')
         invoice_no = request.POST.get('s_inv')
@@ -355,10 +357,11 @@ def fees_pay_page(request):
         "CUST_ID" : str(student_id),
 
         # customer's mobile number
-        "MOBILE_NO" : '8090831662',
+        "MOBILE_NO" : str(request.user.profile.mobile_number),
+        
 
         # customer's email
-        "EMAIL" : 'writetodhananjay@gmail.com' ,
+        "EMAIL" : str(request.user.email) ,
 
         # Amount in INR that is payble by customer
         # this should be numeric with optionally having two decimal points
@@ -367,6 +370,7 @@ def fees_pay_page(request):
         # on completion of transaction, we will send you the response on this URL
         "CALLBACK_URL" : "http://trueblueappworks.com/fees/handle_requests/",
     }
+        
 
         # MERCHANT_KEY = "#OqHWC23DZX1G2LN"
         
@@ -420,7 +424,7 @@ def handle_requests(request):
 #function for payment details view link
 def view_invoice(request, pk):
     fee_data = Students_fees_table.objects.get(pk=pk)
-    procees_table_data = Student_Tag_Processed_Record.objects.filter(institute= request.user.profile.institute, due_date = fee_data.due_date, student = fee_data.student)
+    procees_table_data = Student_Tag_Processed_Record.objects.filter( due_date = fee_data.due_date, student = fee_data.student)
 
     total_sum_including_tax = 0
     total_sum_amount = 0
@@ -430,6 +434,7 @@ def view_invoice(request, pk):
     
     tax_amount = total_sum_including_tax - total_sum_amount
     
+    #logic for due or not due pic
     if fee_data.total_due_amount == 0:
         payment_status = True
         payment_date = fee_data.payment_date
