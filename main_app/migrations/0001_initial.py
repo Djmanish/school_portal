@@ -160,7 +160,6 @@ class Migration(migrations.Migration):
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='profile', to=settings.AUTH_USER_MODEL)),
             ],
         ),
-<<<<<<< HEAD
         migrations.CreateModel(
             name='Tracking_permission_changes',
             fields=[
@@ -204,8 +203,6 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='disapproved_from', to='main_app.UserProfile')),
             ],
         ),
-=======
->>>>>>> aaa94bad019177fff72299844a3e8724b07f5e45
         migrations.AddField(
             model_name='institute_disapproved_user',
             name='applied_role',
