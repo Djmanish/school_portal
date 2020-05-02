@@ -504,8 +504,12 @@ def dashboard(request):
                 a.total_student_in_class=total_student
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "student":
-            request.user.student_fees_st=Students_fees_table.objects.get(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
-            print(request.user.student_fees_st.total_due_amount)      
+            request.user.student_fees_st=Students_fees_table.objects.filter(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
+            sum_in=0
+            for i in request.user.student_fees_st:
+                sum_in = sum_in+i.total_due_amount
+            request.user.sum_out=sum_in
+                      
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "teacher":
             request.user.teacher_class = Classes.objects.get(class_teacher= request.user)

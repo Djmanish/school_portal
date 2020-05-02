@@ -565,7 +565,7 @@
                             <div class="md-card-content">
                                 <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color:#1976d2;">account_balance_wallet</i></span></div>
                                 <span class="uk-text-muted uk-text-small">Fee Status</span>
-                                {% if user.student_fees_st.total_due_amount > 0 %}
+                                {% if user.sum_out > 0 %}
                                     <h4 class="uk-margin-remove" style="color: red;">Unpaid</h4>
                                 {% else %}
                                     <h4 class="uk-margin-remove">Paid</h4>
@@ -1170,9 +1170,36 @@
                            </div>
                        </div>
                    </div>
-               </div>
-               
-               {% endif %}     
+               </div>               
+               {% endif %}   
+               {% if user.profile.designation.level_name == "student" %}
+               <div class="uk-width-medium-1-2">
+                   <div class="md-card">
+                       <div class="md-card-content">
+                           <h4>My Dues</h4>
+                           <table class="uk-table uk-table-condensed uk-table-hover">
+                            <thead>
+                               <tr>
+                                <th class="uk-text-nowrap">Sr No.</th>
+                                <th class="uk-text-nowrap">Dues</th>
+                                <th class="uk-text-nowrap">Amount</th>
+                               </tr>
+                            </thead>
+                            <tbody>
+                                <br>
+                                {% for sn in user.student_fees_st %}
+                                <tr>
+                                    <td class="uk-width-3-10 uk-text-nowrap">{{forloop.counter}}</td>
+                                    <td class="uk-width-3-10 uk-text-nowrap">{{sn.due_date}}</td>
+                                    <td class="uk-width-3-10 uk-text-nowrap">{{sn.total_due_amount}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                       </div>
+                   </div>
+               </div>               
+               {% endif %}  
               
             </div> 
                
