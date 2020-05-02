@@ -1191,7 +1191,11 @@
                                 <tr>
                                     <td class="uk-width-3-10 uk-text-nowrap">{{forloop.counter}}</td>
                                     <td class="uk-width-3-10 uk-text-nowrap">{{sn.due_date}}</td>
-                                    <td class="uk-width-3-10 uk-text-nowrap">{{sn.total_due_amount}}</td>
+                                    {% if sn.total_due_amount == 0 %}
+                                        <td class="uk-width-3-10 uk-text-nowrap" style="color:#7cb342">Paid</td>
+                                    {% else %}
+                                        <td class="uk-width-3-10 uk-text-nowrap">{{sn.total_due_amount}}</td>
+                                    {% endif %}
                                 </tr>
                                 {% endfor %}
                             </tbody>
