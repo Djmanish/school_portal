@@ -858,6 +858,12 @@
 
 <script>
 $('#fee_process_btn').click(function(){
+
+    // confirm message before processing
+    if(!confirm('Before Processing make sure all tags mapped to students correctly for the given Due date. If you have any changes in students tags, click cancel and update first !!!')){
+        return false;
+    }
+
   var entered_val = prompt("Enter 'yes' if you want to process the fees");
   if (entered_val == 'yes') {
     $("#myModal").modal("show");
@@ -890,7 +896,7 @@ success: function(msg){
                                                   {% csrf_token %}
                                                   <div class="form-group">
                                                     <label>Proccessing Date</label>
-                                                    <input type="date" class="form-control" name="processing_date" {% if user.profile.institute.institute_schedule.processing_date %}
+ <input type="date" class="form-control" name="processing_date" {% if user.profile.institute.institute_schedule.processing_date %}
                                                     value="{{user.profile.institute.institute_schedule.processing_date|date:'Y-m-d'}}"
                                                 {% endif %} required>  
                                                  </div>
@@ -910,7 +916,7 @@ success: function(msg){
                                                  {% endif %}  required>
                                                    </div>
                                                   
-                                                    <input class="md-btn md-btn-primary"  type="submit"  > 
+                                                    <input class="md-btn md-btn-primary" id="dates_submit" type="submit"  > 
                                                 
                                             </form>
                                         </div>

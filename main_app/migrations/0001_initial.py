@@ -160,6 +160,49 @@ class Migration(migrations.Migration):
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='profile', to=settings.AUTH_USER_MODEL)),
             ],
         ),
+        migrations.CreateModel(
+            name='Tracking_permission_changes',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('update_time', models.DateTimeField()),
+                ('comment', models.TextField(blank=True, null=True)),
+                ('changes_made_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='user_made_changes_permission', to=settings.AUTH_USER_MODEL)),
+                ('institute', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='institute_role_permission_updated', to='main_app.Institute')),
+                ('old_permissions', models.ManyToManyField(blank=True, null=True, related_name='old_permissions', to='main_app.App_functions')),
+                ('role', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='role_permission_updated', to='main_app.Institute_levels')),
+                ('updated_permissions', models.ManyToManyField(blank=True, null=True, related_name='new_permissions', to='main_app.App_functions')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Subjects',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('subject_code', models.CharField(max_length=100)),
+                ('subject_name', models.CharField(max_length=100)),
+                ('institute', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='subject_institute', to='main_app.Institute')),
+                ('subject_class', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='class_subject', to='main_app.Classes')),
+                ('subject_teacher', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='subject_teacher', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Role_Description',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('institute', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='institute_role_desc', to='main_app.Institute')),
+                ('level', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='level_desc', to='main_app.Institute_levels')),
+                ('user', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='user_institute_role', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Institute_disapproved_user',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('date', models.DateField()),
+                ('applied_role', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='main_app.Institute_levels')),
+                ('institute', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='institute_disapproved_user', to='main_app.Institute')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='disapproved_from', to='main_app.UserProfile')),
+            ],
+        ),
         migrations.AddField(
             model_name='institute_disapproved_user',
             name='applied_role',
