@@ -37,6 +37,8 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
     <title>User Dashboard</title>
+     <!-- font awesome cdn -->
+     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
     <!-- clnde -->
     <link rel="stylesheet" href="{% static 'main_app/clndr/calendar.css' %}">
@@ -249,6 +251,7 @@
                                 </ul>
                             </div>
                         </li>
+                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
                     </ul>
                 </div>
             </nav>

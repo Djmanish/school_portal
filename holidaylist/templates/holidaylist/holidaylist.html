@@ -17,6 +17,8 @@
     <link rel="icon" type="image/png" href="{% static 'holidaylist/img/favicon-32x32.png' %}" sizes="32x32">
     <script src="{% static 'main_app/js/script.js' %}"></script>
     <title>HolidayList</title>
+     <!-- font awesome cdn -->
+     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     
     <!-- bootstrap -->
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
@@ -214,6 +216,8 @@
                                 </ul>
                             </div>
                         </li>
+                        
+ <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
                     </ul>
                 </div>
             </nav>

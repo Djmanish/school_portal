@@ -6,19 +6,12 @@
 <head>
     <style>
         #child_result_form {
-        
         border: 2px solid 
-        
         lightgray;
-        
         padding: 10px;
-        
         border-radius: 10px;
-        
         background-color:
-        
         aliceblue;
-        
         }
         </style>
     <meta charset="UTF-8">
@@ -31,6 +24,8 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
     <title>User Dashboard</title>
+     <!-- font awesome cdn -->
+     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
     <!-- additional styles for plugins -->
         <!-- weather icons -->
@@ -246,6 +241,7 @@
                                 </ul>
                             </div>
                         </li>
+                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
                     </ul>
                 </div>
             </nav>
