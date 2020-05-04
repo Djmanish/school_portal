@@ -362,14 +362,17 @@
 </li>
 <!-- ending notice menu -->
 
+
+{% if can_setup_fees_permission in user_permissions %}
 <li  title="Fees">
     <a href="{% url 'fees_home' %}">
         <span class="menu_icon"><i class="material-icons">date_range</i></span>
-        <span class="menu_title">Fees</span>
+        <span class="menu_title">Fees Setup</span>
     </a>
 </li>
-        
-
+           
+{% endif %}
+    
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
     <a href="{% url 'parent_fees' %}">
@@ -479,13 +482,7 @@
                             {% endif %}
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
-                            <!-- <li>
-                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
-                                    <span class="menu_title">View Exam Result</span>
-                                </a>
-    
-                            </li> -->
+                        
                             <li>
                                 <a href="{% url 'report_card' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">file_copy</i></span>
