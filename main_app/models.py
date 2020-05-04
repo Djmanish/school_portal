@@ -28,7 +28,7 @@ class Institute(models.Model):
     code = models.CharField(max_length=50, blank=True, null=True)
     name = models.CharField(max_length=150)
     establish_date=models.DateField(null=True, blank=True)
-    profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.jpg" )
+    profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.jpg", null=True )
     principal = models.CharField(max_length=50, null=True)
     session_start_date = models.DateField(null=True, blank=True)
     about = models.TextField(max_length=300, blank=True, default="This is about Institute" )

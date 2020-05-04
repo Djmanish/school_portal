@@ -856,7 +856,6 @@ def edit_institute(request, pk):
 
 class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     model = Institute
-    
     form_class = InstituteUpdateProfile
 
     template_name="main_app/edit_institute.html"
