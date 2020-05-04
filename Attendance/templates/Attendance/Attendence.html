@@ -15,10 +15,11 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
     <title>Attendance</title>
+    <!-- font awesome cdn -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
-    <!-- bootstrap css -->
-   
-<link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}"
+    <!-- bootstrap css --> 
+<link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
     <!-- additional styles for plugins -->
         <!-- weather icons -->
         <link rel="stylesheet" href="{% static 'main_app/bower_components/weather-icons/css/weather-icons.min.css' %}" media="all">
@@ -228,6 +229,7 @@
                                 </ul>
                             </div>
                         </li>
+                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
                     </ul>
                 </div>
             </nav>

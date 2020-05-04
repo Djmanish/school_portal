@@ -16,6 +16,8 @@
 
 
     <title>Update Profile</title>
+     <!-- font awesome cdn -->
+     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
 
     <link href="{% static 'main_app/bower_components/uikit/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
@@ -38,6 +40,7 @@
 <script src="{% static 'main_app/bower_components/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'main_app/bower_components/js/moment-master/min/moment.min.js' %}"></script>
 <script src="{% static 'main_app/bower_components/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'main_app/js/script.js' %}"></script>
 
    <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
@@ -219,6 +222,7 @@
                                 </ul>
                             </div>
                         </li>
+                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
                     </ul>
                 </div>
             </nav>
