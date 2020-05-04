@@ -920,7 +920,7 @@
                                         </tr>
                                 </thead>
                                 <tbody>
-                                    {% for i in user.users %}
+                                    {% for i in user.total_unpaid_student %}
                                     <tr class="uk-table-middle">                                        
                                         <td class="uk-width-3-10 uk-text-nowrap"><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
                                         <td class="uk-width-3-10 uk-text-nowrap" style="color: red;">Unpaid</td>                                        
