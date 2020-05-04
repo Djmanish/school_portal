@@ -301,9 +301,9 @@ def dashboard(request):
             except:            
                 teacher_class = None
                 teacher_subject = None    
-    else:
-        teacher_class = None
-        teacher_subject = None
+        else:
+            teacher_class = None
+            teacher_subject = None
        
     # starting assigned classes
     user_institute_one= request.user.profile.institute
