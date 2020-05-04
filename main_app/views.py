@@ -31,18 +31,14 @@ from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-
+# Create your views here.
 class userList(APIView):
-
     def get(self, request):
         user1= UserProfile.objects.all()
         serializer = UserProfileSerializer(user1, many=True)
         return Response(serializer.data)
-    
     def post(self):
         pass
-
-# Create your views here.
 
 def add_classes(request):
     user_permissions = request.user.user_institute_role.level.permissions.all()
@@ -67,13 +63,10 @@ def add_classes(request):
 
 
 class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-
     model = Classes
     form_class = ClassUpdateForm
     template_name="main_app/edit_class.html"
     success_message = "Details were updated successfully !!!"
-    
-
     def form_valid(self, form):
             form.instance.created_by = self.request.user
             return super().form_valid(form)
@@ -89,7 +82,6 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 # Add Subjects
-
 def add_subjects(request):
     user_permissions = request.user.user_institute_role.level.permissions.all()
     add_subject_permission = App_functions.objects.get(function_name='Can Add Subject')
@@ -233,12 +225,9 @@ def index(request):
 
 @login_required
 def dashboard(request):
-
     # random classmates for student
     std_random=UserProfile.objects.filter(institute=request.user.profile.institute,Class=request.user.profile.Class,designation__level_name="student").exclude(user=request.user).order_by('?')[:5]
     
-        
-
     # Events & Calendars
     holiday=HolidayList.objects.filter(institute=request.user.profile.institute,applicable="Yes")
     exam_she =ExamDetails.objects.filter(institute=request.user.profile.institute)
@@ -272,10 +261,13 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "student":
             try:
                 request.user.exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
+<<<<<<< HEAD
                 print(request.user.exam_type_child)
                 request.user.exam_date1=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).earliest('id')
                 request.user.exam_date2=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).latest('id')
                 
+=======
+>>>>>>> daba1993983323b6262151d5e0a17392b6cb1a94
                 max_marks=request.user.exam_type_child.exam_max_marks
                 total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
                 request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
@@ -292,39 +284,30 @@ def dashboard(request):
                 if (request.user.avg<33):
                     request.user.result="Fail"
                 else:
-                    request.user.result="Pass" 
-                    
+                    request.user.result="Pass"         
             except ExamType.DoesNotExist:
                     pass
             
-            
-                
-  
     # starting assigned teachers
     user_one = request.user
     if request.user.profile.designation == "teacher":
         teacher_class = Classes.objects.get(class_teacher= user_one)
     
     if request.user.profile.designation:
-
         if request.user.profile.designation.level_name == "teacher":  
-                        
             teacher_class = Classes.objects.get(class_teacher= user_one)
-            
             teacher_subject = Subjects.objects.filter(subject_class= teacher_class)
         else:
             
             teacher_class = None
             teacher_subject = None    
     else:
-
         teacher_class = None
         teacher_subject = None
        
     # starting assigned classes
     user_institute_one= request.user.profile.institute
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
-        
     # class attendance status 
     
     
@@ -335,9 +318,7 @@ def dashboard(request):
     ct_leave_status = []
     for i in range(0,6): # creating list of last six days
         last_six_days_list.append(datetime.date.today() - datetime.timedelta(i))
-
     teacher_class = Classes.objects.filter(class_teacher = request.user).first()
-
     for i in last_six_days_list:
         total_present_studentsc = Attendance.objects.filter(attendance_status="present" , student_class= teacher_class , date= i ).count()
         total_absent_studentsc = Attendance.objects.filter(attendance_status="absent" , student_class= teacher_class , date= i ).count()
@@ -355,12 +336,7 @@ def dashboard(request):
         one_list.append(l)
         final_data.append(one_list)
     
-
-
 # ending class teacher's  class status for last six days
-
-   
-
     # starting student,teacher & class count
     try:
         total_std=UserProfile.objects.filter(institute=request.user.profile.institute, designation__level_name="student", status="approve").count()
@@ -535,19 +511,19 @@ def dashboard(request):
             for st in user_children:
                 student= UserProfile.objects.get(pk=st.child.id)
                 parent_student_list.append(student)
-            print(parent_student_list)
-            
             
             if(len(user_children)>0):
                 student_fees = Students_fees_table.objects.filter(student__in= parent_student_list, total_due_amount__gt=0  )
                 request.user.user_child_fee_status = student_fees
-            else:
-                print('user has no childern to show')
+            
         
 
         # ending fees status for parent view
-
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
     context = {
+        'user_permissions':user_permissions,
+        'can_setup_fees_permission':can_setup_fees_permission,
         'all_classes': all_classes,
        'parent_children': parent_children,
        'teacher_subject': teacher_subject,

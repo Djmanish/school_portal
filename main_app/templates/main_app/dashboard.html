@@ -37,6 +37,8 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
     <title>User Dashboard</title>
+     <!-- font awesome cdn -->
+     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
     <!-- clnde -->
     <link rel="stylesheet" href="{% static 'main_app/clndr/calendar.css' %}">
@@ -249,6 +251,7 @@
                                 </ul>
                             </div>
                         </li>
+                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
                     </ul>
                 </div>
             </nav>
@@ -359,14 +362,17 @@
 </li>
 <!-- ending notice menu -->
 
+
+{% if can_setup_fees_permission in user_permissions %}
 <li  title="Fees">
     <a href="{% url 'fees_home' %}">
         <span class="menu_icon"><i class="material-icons">date_range</i></span>
-        <span class="menu_title">Fees</span>
+        <span class="menu_title">Fees Setup</span>
     </a>
 </li>
-        
-
+           
+{% endif %}
+    
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
     <a href="{% url 'parent_fees' %}">
@@ -476,13 +482,7 @@
                             {% endif %}
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
-                            <!-- <li>
-                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
-                                    <span class="menu_title">View Exam Result</span>
-                                </a>
-    
-                            </li> -->
+                        
                             <li>
                                 <a href="{% url 'report_card' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">file_copy</i></span>
