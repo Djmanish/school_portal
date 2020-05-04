@@ -996,7 +996,6 @@ def edit_role_permissions(request, pk):
     can_edit_role_permissions_permission = App_functions.objects.get(function_name='Can Edit Role Permissions')
 
     if can_edit_role_permissions_permission in user_permissions:
-
         if request.method == "POST":
             # creating object to to track changes in table
             tracking_permission_change = Tracking_permission_changes()

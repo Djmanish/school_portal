@@ -17,6 +17,10 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 # Create your views here.
 
 def fees_home(request):
+    # permission check 
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
+
     total_tags = School_tags.objects.filter(institute= request.user.profile.institute) # total tags of the school
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
 
@@ -46,6 +50,8 @@ def fees_home(request):
                 pass
 
         context= {'all_students':all_students,
+        'user_permissions':user_permissions,
+        'can_setup_fees_permission':can_setup_fees_permission,
         'all_tags': total_tags,
          'all_classes': all_classes,
          'showing_student_for_class':selected_class,
@@ -54,6 +60,8 @@ def fees_home(request):
         return render(request, 'fees/fees.html', context)
 
     context= {
+        'user_permissions':user_permissions,
+        'can_setup_fees_permission':can_setup_fees_permission,
         'all_classes': all_classes,
         'all_tags': total_tags
     }
