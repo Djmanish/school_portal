@@ -566,7 +566,7 @@
                                 <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color:#1976d2;">account_balance_wallet</i></span></div>
                                 <span class="uk-text-muted uk-text-small">Fee Status</span>
                                 {% if user.sum_out > 0 %}
-                                    <h4 class="uk-margin-remove" style="color: red;">Unpaid</h4>
+                                    <h4 class="uk-margin-remove" style="color: red;">Dues Pending</h4>
                                 {% else %}
                                     <h4 class="uk-margin-remove">Paid</h4>
                                 {% endif %}
@@ -1192,7 +1192,7 @@
                                     <td class="uk-width-3-10 uk-text-nowrap">{{forloop.counter}}</td>
                                     <td class="uk-width-3-10 uk-text-nowrap">{{sn.due_date}}</td>
                                     {% if sn.total_due_amount == 0 %}
-                                        <td class="uk-width-3-10 uk-text-nowrap" style="color:#7cb342">Paid</td>
+                                        <td class="uk-width-3-10 uk-text-nowrap" style="color:#7cb342"><b>Paid</b></td>
                                     {% else %}
                                         <td class="uk-width-3-10 uk-text-nowrap">{{sn.total_due_amount}}</td>
                                     {% endif %}
@@ -1207,9 +1207,64 @@
               
             </div> 
                
-                
+            {% if user.profile.designation %}
+            {% if  user.profile.designation.level_name == "student"  %}
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                <div class="uk-width-medium-1-2">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <h4>My Results</h4>
+                            <div class="uk-overflow-container">
+                                <table class="uk-table uk-table-condensed uk-table-hover">
+                                    <thead>
+                                       
+                                    </thead>
+                                    <tbody>
+                                        <br>
+                                        <tr>
+                                            <td>Exam Sr No.</td>
+                                             <td>{{user.exam_type_child.exam_type_sr_no}}</td>
+                                           </tr>
+                                            <tr>
+                                            <td>Exam</td>
+                                             <td>{{user.exam_type_child}}</td>
+                                           </tr>
+                                           {% if user.exam_date1.exam_date|date:"M" == user.exam_date2.exam_date|date:"M" %}
+                                           <tr>
+                                            <td>Exam Date</td>
+                                             <td>{{user.exam_date1.exam_date|date:"j"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
+                                           </tr>
+                                           {% else %}
+                                           <tr>
+                                            <td>Exam Date</td>
+                                             <td>{{user.exam_date1.exam_date|date:"j, M"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
+                                           </tr>
+                                           {% endif %}
+                                           <tr>
+                                            <td>Max Marks</td>
+                                             <td>{{user.exam_type_child.exam_max_marks}}</td>
+                                           </tr>
 
-            </div>   
+                                           <tr>
+                                            <td>Marks Obtained</td>
+                                             <td>{{user.total_sum}}</td>
+                                           </tr>
+
+                                           <tr>
+                                            <td>Result</td>
+                                             <td>{{user.result}}</td>
+                                           </tr>
+
+                                           
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+            </div>
+            {% endif %} {% endif %}  
 
             
     <!-- secondary sidebar -->
