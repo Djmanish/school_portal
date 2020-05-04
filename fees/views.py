@@ -17,6 +17,10 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 # Create your views here.
 
 def fees_home(request):
+    # permission check 
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
+
     total_tags = School_tags.objects.filter(institute= request.user.profile.institute) # total tags of the school
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
 
@@ -46,6 +50,8 @@ def fees_home(request):
                 pass
 
         context= {'all_students':all_students,
+        'user_permissions':user_permissions,
+        'can_setup_fees_permission':can_setup_fees_permission,
         'all_tags': total_tags,
          'all_classes': all_classes,
          'showing_student_for_class':selected_class,
@@ -54,6 +60,8 @@ def fees_home(request):
         return render(request, 'fees/fees.html', context)
 
     context= {
+        'user_permissions':user_permissions,
+        'can_setup_fees_permission':can_setup_fees_permission,
         'all_classes': all_classes,
         'all_tags': total_tags
     }
@@ -91,42 +99,46 @@ def parent_fees(request):
 
 
 def creating_tags(request):
-    if request.method == "POST":
-        fee_code = request.POST.get('fee_code').strip()
-        description = request.POST.get('tag_descripton').strip()
-        type = request.POST.get('tag_type').strip()
-        active_status = request.POST.get('active_status').strip()
-        amount = float( request.POST.get('amount').strip())
-        tax_percentage = request.POST.get('tax_per').strip()
-        start_date = request.POST.get('start_d').strip()
-        end_date = request.POST.get('end_d').strip()
-        tax_value = (float(amount)*float(tax_percentage))/100
-        amount_with_tax = float(amount) + float(tax_value)
-        
-        try:
-            School_tags.objects.get(institute =request.user.profile.institute, fees_code=fee_code)
-            messages.error(request, "Tag with this fees code already exists !!!")
-            return redirect('fees_home')
-        except:
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
+    if can_setup_fees_permission in user_permissions:
+        if request.method == "POST":
+            fee_code = request.POST.get('fee_code').strip()
+            description = request.POST.get('tag_descripton').strip()
+            type = request.POST.get('tag_type').strip()
+            active_status = request.POST.get('active_status').strip()
+            amount = float( request.POST.get('amount').strip())
+            tax_percentage = request.POST.get('tax_per').strip()
+            start_date = request.POST.get('start_d').strip()
+            end_date = request.POST.get('end_d').strip()
+            tax_value = (float(amount)*float(tax_percentage))/100
+            amount_with_tax = float(amount) + float(tax_value)
             try:
-                School_tags.objects.create(institute= request.user.profile.institute, fees_code= fee_code, description= description, type= type, active=active_status, amount= amount, tax_percentage= tax_percentage, amount_including_tax= amount_with_tax, start_date= start_date, end_date= end_date)
-                messages.success(request, 'Tag Created Successfully !!!')
+                School_tags.objects.get(institute =request.user.profile.institute, fees_code=fee_code)
+                messages.error(request, "Tag with this fees code already exists !!!")
                 return redirect('fees_home')
             except:
-                messages.error(request, 'Could not create this tag. please try again !!!')
-                return redirect('fees_home')
+                try:
+                    School_tags.objects.create(institute= request.user.profile.institute, fees_code= fee_code, description= description, type= type, active=active_status, amount= amount, tax_percentage= tax_percentage, amount_including_tax= amount_with_tax, start_date= start_date, end_date= end_date)
+                    messages.success(request, 'Tag Created Successfully !!!')
+                    return redirect('fees_home')
+                except:
+                    messages.error(request, 'Could not create this tag. please try again !!!')
+                    return redirect('fees_home')
+    else:
+        messages.info(request, "You do not have permission to access this page.")
+        return redirect('not_found')
 
 
-class Fees_tag_update_view(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class Fees_tag_update_view(LoginRequiredMixin,UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = School_tags
     # fields = ['fees_code','description','type','active','amount','tax_percentage','start_date','end_date']
     form_class = Fees_tag_update_form
     template_name = 'fees/edit_fees_tag.html'
     success_url = "/fees"
     success_message = "Fees Tag information updated successfully !!!"
-    
-    def form_valid(self, form):
-        
+
+    def form_valid(self, form):        
         new_amount= form.instance.amount + ((form.instance.amount*form.instance.tax_percentage)/100) # updating amount with tax in case of tag update    
         form.instance.amount_including_tax = new_amount
 
@@ -146,6 +158,14 @@ class Fees_tag_update_view(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         new_update_record.save()
         return super().form_valid(form)
     
+    def test_func(self):
+        user_permissions = self.request.user.user_institute_role.level.permissions.all()
+        can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
+        if can_setup_fees_permission in user_permissions:
+            return True
+        else:
+            return False
+    
 class Fees_Tag_History_List(LoginRequiredMixin, ListView):
     model = Fees_tag_update_history
     template_name = 'fees/fees_tag_update_history.html'
@@ -153,14 +173,16 @@ class Fees_Tag_History_List(LoginRequiredMixin, ListView):
     
 
 def institute_fees_schedule(request):
-    if request.method == "POST":
-
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
+    if can_setup_fees_permission in user_permissions:
+        if request.method == "POST":
         #starting checking if account details provided
-        try:
-            accnt_details = Account_details.objects.get(institute = request.user.profile.institute)
-        except:
-            messages.info(request,'please provide your paytm merchant ID and merchant KEY first in order to proceed further !!!')
-            return redirect('fees_home')
+            try:
+                accnt_details = Account_details.objects.get(institute = request.user.profile.institute)
+            except:
+                messages.info(request,'please provide your paytm merchant ID and merchant KEY first in order to proceed further !!!')
+                return redirect('fees_home')
         #ending checking if account details provided
         notification_date = request.POST.get('notification_date')
         due_date = request.POST.get('due_date')
@@ -169,8 +191,6 @@ def institute_fees_schedule(request):
         if notification_date< current_date or processing_date < current_date or due_date<current_date:
             messages.info(request, "Notification, Due or Process dates can not be past dates.")
             return redirect('fees_home')
-        
-
         try:
             check_existance = Fees_Schedule.objects.get(institute = request.user.profile.institute)
             check_existance.institute = request.user.profile.institute
@@ -184,56 +204,68 @@ def institute_fees_schedule(request):
             Fees_Schedule.objects.create(institute = request.user.profile.institute, notification_date= notification_date, due_date= due_date, processing_date= processing_date)
             messages.success(request, 'Schedule Information Updated !!!')
             return redirect('fees_home')
+    else:
+        messages.info(request, 'You do not have permission to visit this page.')
+        return redirect('not_found')
 
 def institute_account_details(request):
-     if request.method == "POST":
-        merchant_id = request.POST.get('merchant_id').strip()
-        merchant_key = request.POST.get('merchant_key').strip()
-        if len(merchant_key)<16:
-            messages.info(request, 'please enter 16 character correct merchant key !!! ')
-            return redirect('fees_home')
-        try:
-            check_existence_ad = Account_details.objects.get(institute = request.user.profile.institute)
-            
-            check_existence_ad.merchant_id = merchant_id
-            check_existence_ad.merchant_key = merchant_key
-            check_existence_ad.save()
-            messages.info(request, 'Account Details Updated Successfully !!!')
-            return redirect('fees_home')
-        except:
-            
-            Account_details.objects.create(institute = request.user.profile.institute, merchant_id = merchant_id, merchant_key = merchant_key)
-            messages.success(request, 'Account Details Updated Successfully !!!')
-            return redirect('fees_home')
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
+    if can_setup_fees_permission in user_permissions:
+
+        if request.method == "POST":
+            merchant_id = request.POST.get('merchant_id').strip()
+            merchant_key = request.POST.get('merchant_key').strip()
+            if len(merchant_key)<16:
+                messages.info(request, 'please enter 16 character correct merchant key !!! ')
+                return redirect('fees_home')
+            try:
+                check_existence_ad = Account_details.objects.get(institute = request.user.profile.institute)
+                
+                check_existence_ad.merchant_id = merchant_id
+                check_existence_ad.merchant_key = merchant_key
+                check_existence_ad.save()
+                messages.info(request, 'Account Details Updated Successfully !!!')
+                return redirect('fees_home')
+            except:
+                
+                Account_details.objects.create(institute = request.user.profile.institute, merchant_id = merchant_id, merchant_key = merchant_key)
+                messages.success(request, 'Account Details Updated Successfully !!!')
+                return redirect('fees_home')
+    else:
+        messages.info(request, 'You do not have permission to access this page')
+        return redirect('not_found')
 
 
 def Map_Tag_Students(request):
-    if request.method == "POST":
-        selected_tag = School_tags.objects.get(pk = request.POST.get('selected_taga'))
-        students_list = [] # list of all students selected
-        students_class = Classes.objects.get(pk= request.POST.get('students_class'))
-        
-        selected_students = request.POST.getlist('selected_students')
-        for student in selected_students:
-            get_student = UserProfile.objects.get(pk = student)
-            students_list.append(get_student)
-        
-        for student in students_list: #creating student record if not existing
-            try:
-                Student_Tags_Record.objects.get(student= student)
-            except:
-                Student_Tags_Record.objects.create(institute= request.user.profile.institute, student= student, student_class= student.Class)
+   
+        if request.method == "POST":
+            selected_tag = School_tags.objects.get(pk = request.POST.get('selected_taga'))
+            students_list = [] # list of all students selected
+            students_class = Classes.objects.get(pk= request.POST.get('students_class'))
+            
+            selected_students = request.POST.getlist('selected_students')
+            for student in selected_students:
+                get_student = UserProfile.objects.get(pk = student)
+                students_list.append(get_student)
+            
+            for student in students_list: #creating student record if not existing
+                try:
+                    Student_Tags_Record.objects.get(student= student)
+                except:
+                    Student_Tags_Record.objects.create(institute= request.user.profile.institute, student= student, student_class= student.Class)
 
-    #    removing this tag from all students in case of update
-        students_with_this_tag = Student_Tags_Record.objects.filter(student_class= students_class)
-        for student in students_with_this_tag:
-            student.tags.remove(selected_tag)
-        
-        
-        for student in students_list:
-            fetch_student = Student_Tags_Record.objects.get(student = student)
-            fetch_student.tags.add(selected_tag)
-        return redirect('fees_home')
+            #removing this tag from all students in case of update
+            students_with_this_tag = Student_Tags_Record.objects.filter(student_class= students_class)
+            for student in students_with_this_tag:
+                student.tags.remove(selected_tag)
+            
+            
+            for student in students_list:
+                fetch_student = Student_Tags_Record.objects.get(student = student)
+                fetch_student.tags.add(selected_tag)
+            return redirect('fees_home')
+   
 
 
 def Fetch_student_for_tags(request):
@@ -278,42 +310,47 @@ def students_mapped_to_a_tag(request):
     
 
 def processing_fees(request):
-    try:
-        school_students = Student_Tags_Record.objects.filter(institute= request.user.profile.institute)
-    except:
-        messages.info(request, "No student to process fees")
-    
-    # starting checking if data already processed
-    if_already = Student_Tag_Processed_Record.objects.filter(institute = request.user.profile.institute, due_date = request.user.profile.institute.institute_schedule.due_date ).first()
-    if if_already:
-        return HttpResponse('fees already processed for this due date')
-    # ending checking if data already processed
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
+    if can_setup_fees_permission in user_permissions:
+        try:
+            school_students = Student_Tags_Record.objects.filter(institute= request.user.profile.institute)
+        except:
+            messages.info(request, "No student to process fees")
+        # starting checking if data already processed
+        if_already = Student_Tag_Processed_Record.objects.filter(institute = request.user.profile.institute, due_date = request.user.profile.institute.institute_schedule.due_date ).first()
+        if if_already:
+            return HttpResponse('fees already processed for this due date')
+        # ending checking if data already processed
 
 
-    for st in school_students:          
-        for tag in st.tags.all():
-            if tag.active == "yes":
-                if str(tag.start_date)< str(st.student.institute.institute_schedule.due_date) < str(tag.end_date):
-                    Student_Tag_Processed_Record.objects.create(institute= st.student.institute, 
-                    notification_date = st.student.institute.institute_schedule.notification_date, 
-                    process_date = st.student.institute.institute_schedule.processing_date,
-                    due_date = st.student.institute.institute_schedule.due_date,
-                    student= st.student,
-                    fees_code = tag.fees_code,
-                    description = tag.description,
-                    type = tag.type,
-                    active= tag.active,
-                    amount = tag.amount,
-                    tax_percentage = tag.tax_percentage,
-                    amount_including_tax = tag.amount_including_tax,
-                    start_date = tag.start_date,
-                    end_date = tag.end_date
-                        )  
+        for st in school_students:          
+            for tag in st.tags.all():
+                if tag.active == "yes":
+                    if str(tag.start_date)< str(st.student.institute.institute_schedule.due_date) < str(tag.end_date):
+                        Student_Tag_Processed_Record.objects.create(institute= st.student.institute, 
+                        notification_date = st.student.institute.institute_schedule.notification_date, 
+                        process_date = st.student.institute.institute_schedule.processing_date,
+                        due_date = st.student.institute.institute_schedule.due_date,
+                        student= st.student,
+                        fees_code = tag.fees_code,
+                        description = tag.description,
+                        type = tag.type,
+                        active= tag.active,
+                        amount = tag.amount,
+                        tax_percentage = tag.tax_percentage,
+                        amount_including_tax = tag.amount_including_tax,
+                        start_date = tag.start_date,
+                        end_date = tag.end_date
+                            )  
 
-    # removing schedule, notification and due date of institute
-    institute_dates = Fees_Schedule.objects.get(institute= request.user.profile.institute)
-    institute_dates.delete()
-    return HttpResponse("")
+        # removing schedule, notification and due date of institute
+        institute_dates = Fees_Schedule.objects.get(institute= request.user.profile.institute)
+        institute_dates.delete()
+        return HttpResponse("")
+    else:
+        messages.info('You do not have permission to access this functionality.')
+        return redirect('not_found')
 
 
 
@@ -332,9 +369,6 @@ def fees_pay_page(request):
         MERCHANT_KEY = accnt_details.merchant_key
         # ending fetching account details
         
-        
-        
-      
         amount = request.POST.get('s_amount')
         invoice_no = request.POST.get('s_inv')
         param_dict = {

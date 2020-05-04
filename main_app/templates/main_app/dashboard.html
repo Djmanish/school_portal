@@ -1014,11 +1014,13 @@
    <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
     <div class="uk-width-medium-1-2">
         <div class="md-card">
+           
             <div class="md-card-content">
-              
                 <h3 class="heading_a uk-margin-bottom">Today's Class Status </h3>
-                <div class="uk-overflow-container">
+               
+                <div class="uk-overflow-container dbmh " >
                     <table class="uk-table uk-table-condensed uk-table-hover">
+                       
                         <thead>
                             <tr>
                                 <th >Class</th>
@@ -1026,10 +1028,9 @@
                                 <th >Present</th>
                                 <th >Absent</th>
                                 <th >Leave</th>
-                              
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="TCS">
                             {% for class in all_classes %}
                             <tr class="uk-table-middle">
                                 <td ><a href="{% url 'current_attendance_record' class.pk %}">{{class}}</a></td>
@@ -1038,11 +1039,7 @@
                                 <td >{{class.total_absent}}</td>
                                 <td >{{class.total_leave}}</td>
                             </tr>
-                          
                             {% endfor %}
-                          
-                     
-                          
                         </tbody>
                     </table>
                 </div>
@@ -1094,7 +1091,7 @@
                         </form>
                         {% endif %}
                         {% endif %}
-                        <div id="caleandar">
+                        <div id="caleandar" >
                         </div>
                         <script>
                             var events = [ 

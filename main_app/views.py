@@ -301,10 +301,13 @@ def dashboard(request):
             except:            
                 teacher_class = None
                 teacher_subject = None    
+        else:
+            teacher_class = None
+            teacher_subject = None
     else:
         teacher_class = None
         teacher_subject = None
-       
+        
     # starting assigned classes
     user_institute_one= request.user.profile.institute
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
@@ -430,7 +433,6 @@ def dashboard(request):
 
     # starting students attendance status
     if request.user.profile.designation:
-
         if request.user.profile.designation.level_name == "student":
             try:
                 total_days_open = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date ).count()
@@ -459,7 +461,7 @@ def dashboard(request):
         teacher_role_level = teacher_role_level.level_id
         user_role_level = request.user.profile.designation.level_id
         request.user.users_notice = []
-        all_notices = Notice.objects.filter(publish_date__lte=timezone.now()).order_by('id')
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
         if user_role_level < teacher_role_level:
             request.user.users_notice = all_notices.exclude(category="absent").reverse()
         else:
@@ -853,7 +855,6 @@ def edit_institute(request, pk):
 
 class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     model = Institute
-    
     form_class = InstituteUpdateProfile
 
     template_name="main_app/edit_institute.html"
@@ -1004,7 +1005,6 @@ def edit_role_permissions(request, pk):
     can_edit_role_permissions_permission = App_functions.objects.get(function_name='Can Edit Role Permissions')
 
     if can_edit_role_permissions_permission in user_permissions:
-
         if request.method == "POST":
             # creating object to to track changes in table
             tracking_permission_change = Tracking_permission_changes()

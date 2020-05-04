@@ -6,7 +6,6 @@ $(document).ready(function(){
         var regex = new RegExp("^[a-zA-Z ]+$");
         var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
         if (regex.test(strigChar)) {
-            
             return true;
         }
         alert('Only Characters Allowed');
@@ -17,7 +16,6 @@ $(document).ready(function(){
         var regex = new RegExp("^[0-9.]+$");
         var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
         if (regex.test(strigChar)) {
-            
             return true;
         }
         alert('Only Digits are allowed !!!');
@@ -27,8 +25,7 @@ $(document).ready(function(){
       $('.positive_number').keypress(function (e) {
         var regex = new RegExp("^[0-9]+$");
         var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-        if (regex.test(strigChar)) {
-            
+        if (regex.test(strigChar)) { 
             return true;
         }
         alert('Only Positive Numbers !!!');
