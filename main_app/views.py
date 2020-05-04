@@ -503,21 +503,21 @@ def dashboard(request):
                 total_student=UserProfile.objects.filter(institute = request.user.profile.institute,Class=a,designation__level_name="student").count()
                 a.total_student_in_class=total_student
         # Starting fees status for teacher view
-        if request.user.profile.designation.level_name == "student":
-            request.user.student_fees_st=Students_fees_table.objects.get(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
-            print(request.user.student_fees_st.total_due_amount)      
+        # if request.user.profile.designation.level_name == "student":
+        #     request.user.student_fees_st=Students_fees_table.objects.get(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
+        #     print(request.user.student_fees_st.total_due_amount)      
         # Starting fees status for teacher view
-        if request.user.profile.designation.level_name == "teacher":
-            request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
-            request.user.total_unpaid_student=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=request.user.teacher_class)
-            page = request.GET.get('page', 1)
-            paginator = Paginator(request.user.total_unpaid_student, 5)
-            try:
-                request.user.users = paginator.page(page)
-            except PageNotAnInteger:
-                request.user.users = paginator.page(1)
-            except EmptyPage:
-                request.user.users = paginator.page(paginator.num_pages)
+        # if request.user.profile.designation.level_name == "teacher":
+        #     request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
+        #     request.user.total_unpaid_student=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=request.user.teacher_class)
+        #     page = request.GET.get('page', 1)
+        #     paginator = Paginator(request.user.total_unpaid_student, 5)
+        #     try:
+        #         request.user.users = paginator.page(page)
+        #     except PageNotAnInteger:
+        #         request.user.users = paginator.page(1)
+        #     except EmptyPage:
+        #         request.user.users = paginator.page(paginator.num_pages)
         # starting fees status for parent view
         if request.user.profile.designation.level_name == "parent":
             request.user.user_child_fee_status = []

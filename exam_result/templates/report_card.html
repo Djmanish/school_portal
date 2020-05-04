@@ -514,6 +514,30 @@
                                                      </select>
                                                      
                                                     </td>
+                                                    <td>
+
+                                                    </td>
+                                                    
+                                                    {% if user.profile.designation.level_name == "parent" %}
+                                                        
+                                                    
+                                                        
+                                                                               
+                                                    <td>
+                                                      <select class="form-control" name="selected_student" style="padding: 2px;" required>
+                                                        <option selected disabled value="">--Select Student--</option>
+                                                        
+
+                                                        {% for student in parent_student_list %}
+                                                        
+                                                           <option value={{student.id}}>{{student}}</option>
+                                                        {% endfor %}
+                                                   
+                                                 </select>
+                                                
+                                                 
+                                                </td>
+                                                {% endif %}
                                                     <td></td>
                                             
                                                     <td>
@@ -527,11 +551,7 @@
                                                    
                                                 </form>
                                                  
-                                                <!-- <form action="{% url 'overall_result' request.user.profile.institute.id %}" class="form-inline" id="attendance_form">
-                                                    <td>
-                                                        <input type="submit" value="Overall Result" class="md-btn md-btn-primary" style="margin-left:10px;">
-                                                    </td>
-                                                </form> -->
+                                               
                                             </tr>
                                                   
                                                         <table
@@ -567,7 +587,7 @@
                                                             {% endfor%}
                                                             <td>
                                                                 <b>
-                                                                Average
+                                                                % of Final Score
                                                             </b>
                                                             </td>
                                                         </tr>

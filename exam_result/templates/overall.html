@@ -529,8 +529,12 @@
         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair "
         id="ts_issues">
         <tbody >
+            
+            
             {% for exam  in exam_type_list %}
+            
           <tr>
+            
             <td><b>
                 {{exam}}
             
@@ -542,10 +546,22 @@
             <td></td>
             
           </tr>
+          <tr>
+            <th >
+                Subjects
+            </th>
+            <th></th>
+            <th></th>
+            <th >
+              % of Final Score
+            </th>
+            
+          </tr>
             {% for data in e_data %}
                     
                     {% if exam in data.values %}
             <tr>
+               
                 {% for k,v in data.items %}
                 
                 <td class={{forloop.counter|slugify}}>
