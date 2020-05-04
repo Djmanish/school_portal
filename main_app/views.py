@@ -232,9 +232,12 @@ def dashboard(request):
     holiday=HolidayList.objects.filter(institute=request.user.profile.institute,applicable="Yes")
     exam_she =ExamDetails.objects.filter(institute=request.user.profile.institute)
     if request.user.profile.designation:    
-        if request.user.profile.designation.level_name == "teacher":  
-            exam_she_teacher_class=Classes.objects.get(class_teacher= request.user)
-            request.user.exam_she_teacher=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_class=exam_she_teacher_class)
+        if request.user.profile.designation.level_name == "teacher":
+            try:  
+                exam_she_teacher_class=Classes.objects.get(class_teacher= request.user)
+                request.user.exam_she_teacher=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_class=exam_she_teacher_class)
+            except:
+                pass
     if request.user.profile.designation:    
         if request.user.profile.designation.level_name == "student":
             exam_she_student_class=UserProfile.objects.get(user=request.user)
@@ -261,13 +264,10 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "student":
             try:
                 request.user.exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
-<<<<<<< HEAD
                 print(request.user.exam_type_child)
                 request.user.exam_date1=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).earliest('id')
                 request.user.exam_date2=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).latest('id')
                 
-=======
->>>>>>> daba1993983323b6262151d5e0a17392b6cb1a94
                 max_marks=request.user.exam_type_child.exam_max_marks
                 total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
                 request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
@@ -294,13 +294,13 @@ def dashboard(request):
         teacher_class = Classes.objects.get(class_teacher= user_one)
     
     if request.user.profile.designation:
-        if request.user.profile.designation.level_name == "teacher":  
-            teacher_class = Classes.objects.get(class_teacher= user_one)
-            teacher_subject = Subjects.objects.filter(subject_class= teacher_class)
-        else:
-            
-            teacher_class = None
-            teacher_subject = None    
+        if request.user.profile.designation.level_name == "teacher": 
+            try: 
+                teacher_class = Classes.objects.get(class_teacher= user_one)
+                teacher_subject = Subjects.objects.filter(subject_class= teacher_class)
+            except:            
+                teacher_class = None
+                teacher_subject = None    
     else:
         teacher_class = None
         teacher_subject = None
@@ -491,16 +491,14 @@ def dashboard(request):
                       
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "teacher":
-            request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
-            request.user.total_unpaid_student=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=request.user.teacher_class)
-            page = request.GET.get('page', 1)
-            paginator = Paginator(request.user.total_unpaid_student, 5)
             try:
-                request.user.users = paginator.page(page)
-            except PageNotAnInteger:
-                request.user.users = paginator.page(1)
-            except EmptyPage:
-                request.user.users = paginator.page(paginator.num_pages)
+                request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
+                request.user.total_unpaid_student=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=request.user.teacher_class)
+            except:
+                pass
+                request.user.teacher_class = None
+                request.user.total_unpaid_student= None
+            
         # starting fees status for parent view
         if request.user.profile.designation.level_name == "parent":
             request.user.user_child_fee_status = []
@@ -519,8 +517,12 @@ def dashboard(request):
         
 
         # ending fees status for parent view
-    user_permissions = request.user.user_institute_role.level.permissions.all()
-    can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
+    if request.user.profile.designation:
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
+    else:
+        user_permissions = None
+        can_setup_fees_permission =None
     context = {
         'user_permissions':user_permissions,
         'can_setup_fees_permission':can_setup_fees_permission,
