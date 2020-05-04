@@ -304,7 +304,10 @@ def dashboard(request):
         else:
             teacher_class = None
             teacher_subject = None
-       
+    else:
+        teacher_class = None
+        teacher_subject = None
+        
     # starting assigned classes
     user_institute_one= request.user.profile.institute
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
@@ -430,7 +433,6 @@ def dashboard(request):
 
     # starting students attendance status
     if request.user.profile.designation:
-
         if request.user.profile.designation.level_name == "student":
             try:
                 total_days_open = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date ).count()
