@@ -461,7 +461,7 @@ def dashboard(request):
         teacher_role_level = teacher_role_level.level_id
         user_role_level = request.user.profile.designation.level_id
         request.user.users_notice = []
-        all_notices = Notice.objects.filter(publish_date__lte=timezone.now()).order_by('id')
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
         if user_role_level < teacher_role_level:
             request.user.users_notice = all_notices.exclude(category="absent").reverse()
         else:

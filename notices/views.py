@@ -14,10 +14,9 @@ def all_notices(request):
     teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
     teacher_role_level = teacher_role_level.level_id
     
-
     user_role_level = request.user.profile.designation.level_id
 
-    all_notices = Notice.objects.filter(publish_date__lte=timezone.now()).order_by('id')
+    all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
     user_notices = []
     if user_role_level < teacher_role_level:
         user_notices = all_notices.exclude(category="absent").reverse()
@@ -36,14 +35,6 @@ def all_notices(request):
     except EmptyPage:
         user_notices = paginator.page(paginator.num_pages)
 
-# start hiding notices for future dates
-    # final_notices = []
-    # for notice in user_notices: 
-    #     if str(notice.publish_date.date()) <= str(datetime.date.today()):
-            
-    #         final_notices.append(notice)
-# ending hiding notices for future dates
-
     context ={
         'all_notices': user_notices,
         
@@ -58,7 +49,6 @@ def create_notice(request):
         messages.info(request, 'You might not have permission to create a notice !!!')
         return redirect('not_found')
     else:
-
         user_notices = Notice.objects.filter(author= request.user).order_by('-id')
         author_classes=[]
         if request.user.user_institute_role.level.level_name == 'teacher':
@@ -90,9 +80,6 @@ def create_notice(request):
                 return redirect('create_notice')
             except:
                 pass
-            
-
-            
             
             new_notice = Notice()
             new_notice.institute = request.user.profile.institute
