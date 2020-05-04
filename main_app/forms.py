@@ -24,7 +24,11 @@ class InstituteUpdateProfile(forms.ModelForm):
         widgets = {
             'establish_date': forms.DateInput(attrs={'type':'date'}),
             'session_start_date' : forms.DateInput(attrs={'type':'date','required':'required'}),
-            'profile_pic': forms.FileInput()
+            'profile_pic': forms.FileInput(),
+            'about':forms.Textarea(attrs={'rows':3}),
+            'contact_number1':forms.TextInput(attrs={'class':'positive_number'}),
+            'contact_number2':forms.TextInput(attrs={'class':'positive_number'}),
+            'contact_number3':forms.TextInput(attrs={'class':'positive_number'}),
 
         }
 
