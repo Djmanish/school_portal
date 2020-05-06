@@ -696,7 +696,17 @@ def edit_profile(request, pk):
     
     # Occurence of POST method
     if request.method == "POST":
-        
+        # starting code for checking profile pic extension
+        if 'profile_pic' in request.FILES:
+            Student_Photo= request.FILES.get('profile_pic')
+            fname = Student_Photo.name
+            if  fname.endswith('.jpeg') or fname.endswith('.jpg') or fname.endswith('.gif'):
+                pass
+            else:
+                messages.error(request, 'invalid photo format. upload a valid photo')
+                return redirect('user_profile')
+            #  ending code for checking profile pic extension
+            
         
         new_admin = 'admin_check'  in request.POST
         if new_admin: #if admin checkbox is checked
