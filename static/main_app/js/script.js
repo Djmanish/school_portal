@@ -1,11 +1,11 @@
 
  
 $(document).ready(function(){
+
     $('.n_i').keypress(function (e) {
         var regex = new RegExp("^[a-zA-Z ]+$");
         var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
         if (regex.test(strigChar)) {
-            
             return true;
         }
         alert('Only Characters Allowed');
@@ -16,7 +16,6 @@ $(document).ready(function(){
         var regex = new RegExp("^[0-9.]+$");
         var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
         if (regex.test(strigChar)) {
-            
             return true;
         }
         alert('Only Digits are allowed !!!');
@@ -26,8 +25,7 @@ $(document).ready(function(){
       $('.positive_number').keypress(function (e) {
         var regex = new RegExp("^[0-9]+$");
         var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-        if (regex.test(strigChar)) {
-            
+        if (regex.test(strigChar)) { 
             return true;
         }
         alert('Only Positive Numbers !!!');
@@ -53,12 +51,9 @@ $(document).ready(function () {
 
 //result print
   var testDivElement = document.getElementById('myresult');
-
   function savePDF() {
-    
       var imgData;
       html2canvas($("#myresult"), {
-          
           useCORS: true,
           onrendered: function (canvas) {
               imgData = canvas.toDataURL(
@@ -66,9 +61,21 @@ $(document).ready(function () {
               var doc = new jsPDF('l', 'in', [10, 12]);
               doc.addImage(imgData, 'PNG', 0,0);
               doc.save('sample-file.pdf');
-             
           }
       });
   }
 
   
+// starting script for processing , notification and due date
+$(document).ready(function(){
+  $('#dates_submit').click(function(){
+  var s_processing_date = $("input[name='processing_date']").val();
+  var s_notify_date = $('input[name="notification_date"]').val();
+  var s_due_date = $('input[name="due_date"]').val();
+  if (s_processing_date >= s_notify_date || s_processing_date>= s_due_date){
+    alert('Notification date or Due date can not be before processing date !');
+    return false;
+  }
+  });
+});
+// ending script for processing , notification and due date

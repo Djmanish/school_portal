@@ -18,6 +18,9 @@
 
 
     <title>Edit Notice</title>
+     <!-- font awesome cdn -->
+     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
@@ -220,6 +223,7 @@
                                 </ul>
                             </div>
                         </li>
+                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
                     </ul>
                 </div>
             </nav>
@@ -565,7 +569,7 @@
                                     <form method="POST" style="padding: 20px;">
                                       {% csrf_token %}
       {{form | crispy }}
-      <input type="submit" value="Update" class="md-btn md-btn-success">
+      <input type="submit" value="Update" class="md-btn md-btn-primary">
                                     </form>
                                   </div>
                                

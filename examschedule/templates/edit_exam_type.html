@@ -16,6 +16,9 @@
 
 
     <title>Examination</title>
+     <!-- font awesome cdn -->
+     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
 
    <!-- bootstrap -->
@@ -215,6 +218,7 @@
                                 </ul>
                             </div>
                         </li>
+                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
                     </ul>
                 </div>
             </nav>
@@ -262,12 +266,11 @@
         
         <div class="menu_section">
             <ul>
-                <li  title="Dashboard">
+                <li class="current_section" title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
-                    </a>
-                    
+                    </a> 
                 </li>
                 
                 <li title="User Profile">
@@ -320,18 +323,35 @@
             </a>
         </li> 
         {% endif %}
-            
-       
     </ul>
 </li>
 <!-- ending notice menu -->
-                
+
+
+{% if can_setup_fees_permission in user_permissions or user.profile.designation.level_name == "teacher" %}
+<li  title="Fees">
+    <a href="{% url 'fees_home' %}">
+        <span class="menu_icon"><i class="material-icons">date_range</i></span>
+        <span class="menu_title">Fees Setup</span>
+    </a>
+</li>
+           
+{% endif %}
+    
+{% if user.profile.designation.level_name == "parent" %}
+<li  title="Fees">
+    <a href="{% url 'parent_fees' %}">
+        <span class="menu_icon"><i class="material-icons">date_range</i></span>
+        <span class="menu_title">Fees Status</span>
+    </a>
+</li>
+{% endif %}
+    
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
-                    </a>
-                    
+                    </a>   
                 </li>
                 
                <li  title="Institute Schedule">
@@ -339,18 +359,15 @@
                     <span class="menu_icon"><i class="material-icons">schedule</i></span>
                     <span class="menu_title">Schedule</span>
                 </a>
-            </li>
-               
+            </li>               
             {% endif %}  
 
-            
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
                     <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                     <span class="menu_title">Admission Requests</span>
                 </a>
-                
             </li>
 
         {% endif %}
@@ -363,33 +380,25 @@
                             <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                             <span class="menu_title">Approvals</span>
                         </a>
-                        
                     </li>
                     
                     <li  title="Attendance">
-                    
                     <a href="{% url 'attendance' %}">
                             <span class="menu_icon"><i class="material-icons">done_all</i></span>
                             <span class="menu_title">Attendance</span>
                         </a>
-                        
                     </li> 
 
                     <li  title="Class Students">
-                    
                         <a href="{% url 'class_students_list' %}">
                                 <span class="menu_icon"><i class="material-icons">people</i></span>
                                 <span class="menu_title">Class Students</span>
                             </a>
-                            
                         </li> 
-
-                        
-
                     {% endif %}
                    
 
-                    <li class="current_section" title="Examination">
+                    <li  title="Examination">
 
                         <a href="">
                             <span class="menu_icon"><i class="material-icons">trending_up</i></span>
@@ -403,10 +412,8 @@
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam</span>
                                 </a>
-    
                             </li>
                             
-                  
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
@@ -420,7 +427,6 @@
                                     <span class="menu_icon"><i class="material-icons">visibility</i></span>
                                     <span class="menu_title">View Exam Schedule</span>
                                 </a>
-    
                             </li>
                            
                             {% if user.profile.designation.level_name == "teacher"%}
@@ -429,11 +435,10 @@
                                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                                     <span class="menu_title">Exam Result</span>
                                 </a>
-    
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion' request.user.profile.institute.id%}">
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -442,13 +447,7 @@
                             {% endif %}
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
-                            <!-- <li>
-                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
-                                    <span class="menu_title">View Exam Result</span>
-                                </a>
-    
-                            </li> -->
+                        
                             <li>
                                 <a href="{% url 'report_card' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">file_copy</i></span>
@@ -456,52 +455,21 @@
                                 </a>
     
                             </li>
-                            
-                            <!-- <li>
-                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                    <span class="menu_title">Marks Chart</span>
-                                </a>
-    
-                            </li> -->
-                          
                             {% endif %}
                         </ul>
-    
                     </li>
 
                     {% endif %} 
-                 
-            
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
                             <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
                             <span class="menu_title">Log Out</span>
                         </a>
                     </li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </ul>
         </div>
-
-
     </aside><!-- main sidebar end -->
-
-    <div id="page_content">
+        <div id="page_content">
         <div id="page_content_inner">
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
                 <div class="uk-width-large">

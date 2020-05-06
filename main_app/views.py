@@ -32,22 +32,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
 
 
-
+# Create your views here.
 class userList(APIView):
-
     def get(self, request):
         user1= UserProfile.objects.all()
         serializer = UserProfileSerializer(user1, many=True)
         return Response(serializer.data)
-    
     def post(self):
         pass
-
-
-
-
-
-# Create your views here.
 
 def add_classes(request):
     user_permissions = request.user.user_institute_role.level.permissions.all()
@@ -72,13 +64,10 @@ def add_classes(request):
 
 
 class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-
     model = Classes
     form_class = ClassUpdateForm
     template_name="main_app/edit_class.html"
     success_message = "Details were updated successfully !!!"
-    
-
     def form_valid(self, form):
             form.instance.created_by = self.request.user
             return super().form_valid(form)
@@ -94,7 +83,6 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 # Add Subjects
-
 def add_subjects(request):
     user_permissions = request.user.user_institute_role.level.permissions.all()
     add_subject_permission = App_functions.objects.get(function_name='Can Add Subject')
@@ -218,7 +206,8 @@ def approvals(request,pk):
     if request.user.profile.designation.level_name=='teacher' or request.user.profile.designation.level_name=='principal' or request.user.profile.designation.level_name=='admin':
 
         if request.user.profile.designation.level_name=='teacher':
-            pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval, designation=student_designation_id).reverse()
+            Class_teachers=Classes.objects.get(class_teacher=request.user)
+            pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval,Class=Class_teachers , designation=student_designation_id).reverse()
             parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute)
             parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute)
             active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id).reverse()
@@ -238,19 +227,19 @@ def index(request):
 
 @login_required
 def dashboard(request):
-
     # random classmates for student
     std_random=UserProfile.objects.filter(institute=request.user.profile.institute,Class=request.user.profile.Class,designation__level_name="student").exclude(user=request.user).order_by('?')[:5]
     
-        
-
     # Events & Calendars
     holiday=HolidayList.objects.filter(institute=request.user.profile.institute,applicable="Yes")
     exam_she =ExamDetails.objects.filter(institute=request.user.profile.institute)
     if request.user.profile.designation:    
-        if request.user.profile.designation.level_name == "teacher":  
-            exam_she_teacher_class=Classes.objects.get(class_teacher= request.user)
-            request.user.exam_she_teacher=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_class=exam_she_teacher_class)
+        if request.user.profile.designation.level_name == "teacher":
+            try:  
+                exam_she_teacher_class=Classes.objects.get(class_teacher= request.user)
+                request.user.exam_she_teacher=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_class=exam_she_teacher_class)
+            except:
+                pass
     if request.user.profile.designation:    
         if request.user.profile.designation.level_name == "student":
             exam_she_student_class=UserProfile.objects.get(user=request.user)
@@ -278,6 +267,9 @@ def dashboard(request):
             try:
                 request.user.exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
                 print(request.user.exam_type_child)
+                request.user.exam_date1=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).earliest('id')
+                request.user.exam_date2=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).latest('id')
+                
                 max_marks=request.user.exam_type_child.exam_max_marks
                 total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
                 request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
@@ -294,14 +286,10 @@ def dashboard(request):
                 if (request.user.avg<33):
                     request.user.result="Fail"
                 else:
-                    request.user.result="Pass" 
-                    
+                    request.user.result="Pass"         
             except ExamType.DoesNotExist:
                     pass
             
-            
-                
-  
     # starting assigned teachers
    
     user_one = request.user
@@ -309,25 +297,23 @@ def dashboard(request):
         teacher_class = Classes.objects.get(class_teacher= user_one)
     
     if request.user.profile.designation:
-
-        if request.user.profile.designation.level_name == "teacher":  
-                        
-            teacher_class = Classes.objects.get(class_teacher= user_one)
-            
-            teacher_subject = Subjects.objects.filter(subject_class= teacher_class)
+        if request.user.profile.designation.level_name == "teacher": 
+            try: 
+                teacher_class = Classes.objects.get(class_teacher= user_one)
+                teacher_subject = Subjects.objects.filter(subject_class= teacher_class)
+            except:            
+                teacher_class = None
+                teacher_subject = None    
         else:
-            
             teacher_class = None
-            teacher_subject = None    
+            teacher_subject = None
     else:
-
         teacher_class = None
         teacher_subject = None
-       
+        
     # starting assigned classes
     user_institute_one= request.user.profile.institute
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
-        
     # class attendance status 
     
     
@@ -338,9 +324,7 @@ def dashboard(request):
     ct_leave_status = []
     for i in range(0,6): # creating list of last six days
         last_six_days_list.append(datetime.date.today() - datetime.timedelta(i))
-
     teacher_class = Classes.objects.filter(class_teacher = request.user).first()
-
     for i in last_six_days_list:
         total_present_studentsc = Attendance.objects.filter(attendance_status="present" , student_class= teacher_class , date= i ).count()
         total_absent_studentsc = Attendance.objects.filter(attendance_status="absent" , student_class= teacher_class , date= i ).count()
@@ -358,12 +342,7 @@ def dashboard(request):
         one_list.append(l)
         final_data.append(one_list)
     
-
-
 # ending class teacher's  class status for last six days
-
-   
-
     # starting student,teacher & class count
     try:
         total_std=UserProfile.objects.filter(institute=request.user.profile.institute, designation__level_name="student", status="approve").count()
@@ -457,7 +436,6 @@ def dashboard(request):
 
     # starting students attendance status
     if request.user.profile.designation:
-
         if request.user.profile.designation.level_name == "student":
             try:
                 total_days_open = Attendance.objects.filter(student= request.user, institute= request.user.profile.institute, date__gte= request.user.profile.institute.session_start_date ).count()
@@ -486,7 +464,7 @@ def dashboard(request):
         teacher_role_level = teacher_role_level.level_id
         user_role_level = request.user.profile.designation.level_id
         request.user.users_notice = []
-        all_notices = Notice.objects.all().order_by('id')
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
         if user_role_level < teacher_role_level:
             request.user.users_notice = all_notices.exclude(category="absent").reverse()
         else:
@@ -494,6 +472,10 @@ def dashboard(request):
                 notice_recipients = notice.recipients_list.all()
                 if request.user.profile in notice_recipients:
                     request.user.users_notice.insert(0, notice)
+        # for n in request.user.users_notice:
+        #     if str(n.publish_date.date()) <= str(datetime.date.today()):
+        #         request.user.users_notice.append(n)
+
         # ending user notice
 
         # starting fees status for principal view
@@ -506,40 +488,48 @@ def dashboard(request):
                 a.total_student_in_class=total_student
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "student":
-            request.user.student_fees_st=Students_fees_table.objects.get(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
-            print(request.user.student_fees_st.total_due_amount)      
+            request.user.student_fees_st=Students_fees_table.objects.filter(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
+            sum_in=0
+            for i in request.user.student_fees_st:
+                sum_in = sum_in+i.total_due_amount
+            request.user.sum_out=sum_in
+                      
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "teacher":
-            request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
-            request.user.total_unpaid_student=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=request.user.teacher_class)
-            page = request.GET.get('page', 1)
-            paginator = Paginator(request.user.total_unpaid_student, 5)
             try:
-                request.user.users = paginator.page(page)
-            except PageNotAnInteger:
-                request.user.users = paginator.page(1)
-            except EmptyPage:
-                request.user.users = paginator.page(paginator.num_pages)
+                request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
+                request.user.total_unpaid_student=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=request.user.teacher_class)
+            except:
+                request.user.teacher_class = None
+                request.user.total_unpaid_student= None
+            
         # starting fees status for parent view
         if request.user.profile.designation.level_name == "parent":
             request.user.user_child_fee_status = []
-            user_children= AddChild.objects.filter(institute= request.user.profile.institute, parent= request.user.profile)
+            user_children= AddChild.objects.filter( parent= request.user.profile)
+        
+            
             parent_student_list = []
             for st in user_children:
                 student= UserProfile.objects.get(pk=st.child.id)
                 parent_student_list.append(student)
             
-            
             if(len(user_children)>0):
-                student_fees = Students_fees_table.objects.filter(institute = request.user.profile.institute, student__in= parent_student_list, total_due_amount__gt=0  )
+                student_fees = Students_fees_table.objects.filter(student__in= parent_student_list, total_due_amount__gt=0  )
                 request.user.user_child_fee_status = student_fees
-            else:
-                print('user has no childern to show')
+            
         
 
         # ending fees status for parent view
-
+    if request.user.profile.designation:
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
+    else:
+        user_permissions = None
+        can_setup_fees_permission =None
     context = {
+        'user_permissions':user_permissions,
+        'can_setup_fees_permission':can_setup_fees_permission,
         'all_classes': all_classes,
        'parent_children': parent_children,
        'teacher_subject': teacher_subject,
@@ -868,7 +858,6 @@ def edit_institute(request, pk):
 
 class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     model = Institute
-    
     form_class = InstituteUpdateProfile
 
     template_name="main_app/edit_institute.html"
@@ -1019,7 +1008,6 @@ def edit_role_permissions(request, pk):
     can_edit_role_permissions_permission = App_functions.objects.get(function_name='Can Edit Role Permissions')
 
     if can_edit_role_permissions_permission in user_permissions:
-
         if request.method == "POST":
             # creating object to to track changes in table
             tracking_permission_change = Tracking_permission_changes()

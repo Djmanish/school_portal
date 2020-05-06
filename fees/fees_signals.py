@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from .models import *
 from django.core.mail import send_mail
 import datetime
+from datetime import timedelta
+from notices.models import *
+from django.utils import timezone
 
 
 # signal for creating fees summary automatic
@@ -25,6 +28,20 @@ def create_summary(sender, instance, created, **kwargs):
             student.save()
         
             
-            
-            
+# starting signal for creating notification for fees due date
+@receiver(post_save, sender=Fees_Schedule)
+def due_date_notification(sender, instance, created, **kwargs):
+    if created:
+        due_notice = Notice.objects.create(institute = instance.institute, subject ="New Fees Due Date Updated", content=f"Institute has updated Due Date. Now fees for {instance.due_date} is available. You can pay now", publish_date= instance.notification_date )
+        
+        all_parents = UserProfile.objects.filter(institute= instance.institute, designation__level_name= 'parent' )
+        for p in all_parents:
+            due_notice.recipients_list.add(p)
+    else:
+        due_notice = Notice.objects.create(institute = instance.institute, subject ="New Fees Due Date Updated", content=f"Institute has updated Due Date. Now fees for {instance.due_date} is available. You can pay now", publish_date=instance.notification_date)
+        all_parents = UserProfile.objects.filter(institute= instance.institute, designation__level_name= 'parent' )
+        for p in all_parents:
+            due_notice.recipients_list.add(p)
 
+
+# ending signal for creating notification for fees due date

@@ -19,6 +19,9 @@
 
 
     <title>Create a Notice</title>
+     <!-- font awesome cdn -->
+     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
@@ -223,6 +226,7 @@
                                 </ul>
                             </div>
                         </li>
+                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
                     </ul>
                 </div>
             </nav>
@@ -640,31 +644,35 @@
 </script>
 
 
+
   <div class="form-group" id="select_individual" style="display: none;" >
-    <small style="color: #1976d2;"> press and hold control to select multiple </small>
+    <div class="input-group  input-group-sm">
+        <div class="input-group-prepend">
+          <span class="input-group-text search_icon"><i class="material-icons search_icon ">search</i></span>
+       </div>
+       <input type="text" class="form-control"  id="myInput" placeholder="Search a student name in list ...">
+     </div>
+  <small>press and hold ctrl to select multiple...</small>
     <select class="Individual_option form-control" id="select_individual" multiple="multiple"  class="selectpicker" data-live-search="true" name="selected_individual">
        <option selected disabled value=""> -- first select a class </option>
       </select>
   </div>
+  <br>
+  <br>
+
+
+
 
   <script>
     $(document).ready(function(){
-   
-       
         $("#to_select_class").change(function(){
-            
             $.ajax({
 type:'POST',
 url: "{% url 'fetch_notice_audience' %}" ,
 data:{class_id: $('#to_select_class').val(),
-   
-
 csrfmiddlewaretoken: '{{ csrf_token }}' },
-
 success: function(msg){
-   
     $('.Individual_option').html(msg);
-
 }
 })
     
@@ -672,8 +680,8 @@ success: function(msg){
     })
      
 </script>
-  <br>
-<div class="form-group">
+  
+<div class="form-group" >
     <label for="usr">Notice Refernce No. <small style="color: #1976d2;"> (Optional) </small> :</label><br>
     
     <input type="text" class="form-control" maxlength="15" name="notice_refrence_no"  >
@@ -925,6 +933,8 @@ alert('not deleted')
     <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
     <!-- altair common functions/helpers -->
     <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
 
     <script>
@@ -949,6 +959,18 @@ alert('not deleted')
 <script src="{% static 'main_app/bower_components/select2/dist/js/select2.min.js' %}" ></script>
 
     
+<!-- starting script for search in audience -->
+<script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#select_individual option").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    </script>
+<!-- ending script for search in audience -->
     
     </body>
 

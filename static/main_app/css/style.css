@@ -18,11 +18,6 @@ body{
     background-color: #1976d2;
 }
 
-  /* table#ts_issues td:nth-child(2) {
-    display: none !important;
-    visibility: hidden !important;
- } */
-  
   /* Style the buttons that are used to open the tab content */
   .tab button {
     background-color: inherit;
@@ -163,7 +158,7 @@ background-color: lightgray;
   text-align: center;
 }
 #select_individual{
-  height: 200px;
+  height: 150px;
 }
 img#slogo{
  height: 46px !important;
@@ -241,4 +236,9 @@ padding: 2px;
   padding: 4px;
   min-height: auto;
 }
-
+label{
+  margin-bottom: 0px !important;
+}
+.dbmh{
+  max-height: 290px;
+}
