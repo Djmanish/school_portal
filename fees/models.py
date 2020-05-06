@@ -96,6 +96,8 @@ class Students_fees_table(models.Model):
     total_due_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
     total_paid = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
     balance = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
+    class Meta:
+        unique_together = ('institute','due_date','student')
     
     def __str__(self):
         return str(self.student)

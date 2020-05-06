@@ -29,7 +29,6 @@ from rest_framework import status
 from main_app.serializers import UserProfileSerializer
 from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from main_app.models import *
 
 
 
@@ -303,7 +302,6 @@ def dashboard(request):
                 
   
     # starting assigned teachers
-   
     user_one = request.user
     if request.user.profile.designation == "teacher":
         teacher_class = Classes.objects.get(class_teacher= user_one)
@@ -504,10 +502,7 @@ def dashboard(request):
                 a.total_unpaid_student=a.total_unpaid.count()
                 total_student=UserProfile.objects.filter(institute = request.user.profile.institute,Class=a,designation__level_name="student").count()
                 a.total_student_in_class=total_student
-        # Starting fees status for teacher view
-        if request.user.profile.designation.level_name == "student":
-            request.user.student_fees_st=Students_fees_table.objects.get(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
-            print(request.user.student_fees_st.total_due_amount)      
+                
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "teacher":
             request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
@@ -571,9 +566,12 @@ def dashboard(request):
         'holiday':holiday,
         'final_data': final_data,
         'exam_she':exam_she,
-        'std_random':std_random,        
+        'std_random':std_random,
+        
 }
     return render(request, 'main_app/dashboard.html' , context)
+
+
 
 class RegistrationViewUniqueEmail(RegistrationView):
     form_class = RegistrationFormUniqueEmail
