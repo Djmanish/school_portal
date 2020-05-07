@@ -104,15 +104,16 @@ def exam_schedule(request,pk):
             selected_class = Classes.objects.get(pk=select_class_for_schedule)
             
             
-            
+            institute_pk = request.user.profile.institute.pk
         # fetching the value of exam from the given drop down
             
             exam_type_schedule= ExamType.objects.filter(institute=request.user.profile.institute)
             if exam_type_schedule:
                      pass
             else:
-                    messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can create Exam Cchedule')
-                    return redirect('not_found')
+                    messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can create Exam Schedule')
+                    
+                    return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
                     
             
             select_exam_for_schedule = request.GET.get('selected_exam_type')
@@ -193,13 +194,16 @@ def examschedule_view(request,pk):
             institute_exam_schedule = ExamDetails.objects.filter(institute=request.user.profile.institute)
             institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
             exam_class = Classes.objects.filter(institute=request.user.profile.institute)
+            institute_pk = request.user.profile.institute.pk
 
             if request.method=="POST":
                 select_exam_type = request.POST.get('selected_exam_type')
                 select_exam_type_no = request.POST.get('selected_exam_type_no')
                 if request.user.profile.designation.level_name=='student':
                         selected_class = request.user.profile.Class
+                        
                         exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
+                        
                         context = {
                         'exam_details': exam_details,
                         'institute_exam_schedule':institute_exam_schedule,
@@ -216,17 +220,20 @@ def examschedule_view(request,pk):
                                 select_class_for_schedule= first_class_id
                         selected_class = Classes.objects.get(pk=select_class_for_schedule)
                         exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
-                
-                
-                        context = {
-                        'exam_class':exam_class,
-                        'exam_details': exam_details,
-                        'institute_exam_schedule':institute_exam_schedule,
-                        'institute_exam_type':institute_exam_type,
-                        }
-                
-                        return render(request,'update_examschedule.html', context)
-            
+                        if exam_details:
+                        
+                                context = {
+                                'exam_class':exam_class,
+                                'exam_details': exam_details,
+                                'institute_exam_schedule':institute_exam_schedule,
+                                'institute_exam_type':institute_exam_type,
+                                }
+                        
+                                return render(request,'update_examschedule.html', context)
+                        else:
+                                messages.info(request, 'There is no Exam Data for this selection')
+                    
+                                return HttpResponseRedirect(f'/examschedule/examschedule/view/{institute_pk}')
             context={
               'exam_class':exam_class,
               'institute_exam_schedule':institute_exam_schedule,

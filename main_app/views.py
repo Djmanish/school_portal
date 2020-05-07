@@ -98,6 +98,7 @@ def add_subjects(request):
             subject_class=Classes.objects.get(id=new_class)
             # get data from User Table
             subject_teacher=User.objects.get(id=subject_teacher)
+            print(subject_teacher)
 
             subject_class = Subjects.objects.create(institute=request.user.profile.institute, subject_class=subject_class, subject_code= subject_code, subject_name= subject_name,subject_teacher=subject_teacher)
 
@@ -202,6 +203,7 @@ def delete_class(request, pk):
 def approvals(request,pk):
     institute_approval = Institute.objects.get(pk=pk)
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
+    
     if request.user.profile.designation.level_name=='teacher' or request.user.profile.designation.level_name=='principal' or request.user.profile.designation.level_name=='admin':
 
         if request.user.profile.designation.level_name=='teacher':

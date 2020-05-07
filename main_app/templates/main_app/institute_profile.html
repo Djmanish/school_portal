@@ -975,7 +975,7 @@
                                                                     Teacher--</option>
                                                               
                                                                     {% for teacher in institute_teachers %}
-                                                                    <option value='{{teacher.pk}}'>{{teacher}}</option>
+                                                                    <option value='{{teacher.pk}}'>{{teacher.first_name}} {{teacher.last_name}}</option>
                                                                    {% endfor %}
                                                                   
                                                     
