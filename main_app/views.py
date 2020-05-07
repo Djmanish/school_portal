@@ -29,6 +29,7 @@ from rest_framework import status
 from main_app.serializers import UserProfileSerializer
 from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from main_app.models import *
 
 
 # Create your views here.
@@ -207,7 +208,8 @@ def approvals(request,pk):
     if request.user.profile.designation.level_name=='teacher' or request.user.profile.designation.level_name=='principal' or request.user.profile.designation.level_name=='admin':
 
         if request.user.profile.designation.level_name=='teacher':
-            pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval, designation=student_designation_id).reverse()
+            Class_teachers=Classes.objects.get(class_teacher=request.user)
+            pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval,Class=Class_teachers , designation=student_designation_id).reverse()
             parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute)
             parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute)
             active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id).reverse()
@@ -291,6 +293,7 @@ def dashboard(request):
                     pass
             
     # starting assigned teachers
+   
     user_one = request.user
     if request.user.profile.designation == "teacher":
         teacher_class = Classes.objects.get(class_teacher= user_one)
@@ -698,7 +701,17 @@ def edit_profile(request, pk):
     
     # Occurence of POST method
     if request.method == "POST":
-        
+        # starting code for checking profile pic extension
+        if 'profile_pic' in request.FILES:
+            Student_Photo= request.FILES.get('profile_pic')
+            fname = Student_Photo.name
+            if  fname.endswith('.jpeg') or fname.endswith('.jpg') or fname.endswith('.gif'):
+                pass
+            else:
+                messages.error(request, 'invalid photo format. upload a valid photo')
+                return redirect('user_profile')
+            #  ending code for checking profile pic extension
+            
         
         new_admin = 'admin_check'  in request.POST
         if new_admin: #if admin checkbox is checked

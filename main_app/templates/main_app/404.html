@@ -29,10 +29,10 @@
 <br>
 {% if messages %}
 <div class="md-card md-card-primary">
-<div class=""md-card-content">
-  <ul class="messages alert">
+<div>
+  <ul class="messages alert"  >
       {% for message in messages %}
-      <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+      <p style="font-size: 20px;">{{ message }}</p>
       {% endfor %}
   </ul>
 </div>
