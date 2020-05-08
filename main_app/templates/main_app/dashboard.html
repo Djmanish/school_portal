@@ -412,7 +412,13 @@
                 {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
                     <li  title="Approvals">
                         <a href="{% url 'approvals' user.profile.institute.pk %}">
-                            <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
+                            <span class="menu_icon"><i class="material-icons">how_to_reg</i>
+                                {% if user.approval_request > 0 %}
+                                <span class="uk-badge" style="background-color: red;">                                
+                                {{user.approval_request}}                                     
+                                </span>
+                                {% endif %}
+                        </span>
                             <span class="menu_title">Approvals</span>
                         </a>
                     </li>
@@ -568,7 +574,7 @@
                                 {% if user.sum_out > 0 %}
                                     <h4 class="uk-margin-remove" style="color: red;">Dues Pending</h4>
                                 {% else %}
-                                    <h4 class="uk-margin-remove">Paid</h4>
+                                    <h4 class="uk-margin-remove">No Dues</h4>
                                 {% endif %}
                             </div>
                         </div>
@@ -741,27 +747,27 @@
                                       
                                         <tr>
                                             <td>Total Days Attendance Taken</td>
-                                             <td>{{user.student_total_days_school_open|default:"No Data"}}</td>
+                                             <td>{{user.student_total_days_school_open|default:0}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Total Days Present</td>
-                                             <td>{{user.student_total_days_present|default:"No Data"}}</td>
+                                             <td>{{user.student_total_days_present|default:0}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Total Days Absent</td>
-                                             <td>{{user.student_total_days_absent|default:"No Data"}}</td>
+                                             <td>{{user.student_total_days_absent|default:0}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Total Days leave Taken</td>
-                                             <td>{{user.student_total_days_leave|default:"No Data"}}</td>
+                                             <td>{{user.student_total_days_leave|default:0}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Attendance Percentage</td>
-                                             <td>{{user.student_attendance_percentage|default:"No Data"}}%</td>
+                                             <td>{{user.student_attendance_percentage|default:0}}%</td>
                                            </tr>
                                     </tbody>
                                 </table>
@@ -1139,7 +1145,7 @@
                        <div class="md-card-content">
                            <h4>Fess Status</h4>
                            <h6 lass="uk-accordion-title" class="on-the">Classes<span class="on-the-fly">Pending Fees</span></h6>
-                           <div class="uk-accordion" data-uk-accordion="{showfirst: false}">
+                           <div class="uk-accordion uk-overflow-container dbmh" data-uk-accordion="{showfirst: false}">
                                {% for cl in request.user.l_classes %}
                                <h3 class="uk-accordion-title" style="color: #0080ff;">{{cl}}<span class="on-the-fly-behavior">{{cl.total_unpaid_student}} Student</span></h3>
                                <div class="uk-accordion-content">

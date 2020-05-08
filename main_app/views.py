@@ -266,6 +266,7 @@ def dashboard(request):
             try:
                 request.user.exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
                 print(request.user.exam_type_child)
+                
                 request.user.exam_date1=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).earliest('id')
                 request.user.exam_date2=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).latest('id')
                 
@@ -484,14 +485,19 @@ def dashboard(request):
                 a.total_unpaid_student=a.total_unpaid.count()
                 total_student=UserProfile.objects.filter(institute = request.user.profile.institute,Class=a,designation__level_name="student").count()
                 a.total_student_in_class=total_student
-        # Starting fees status for teacher view
+        # Starting fees status for Student view
         if request.user.profile.designation.level_name == "student":
             request.user.student_fees_st=Students_fees_table.objects.filter(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
+            
             sum_in=0
             for i in request.user.student_fees_st:
                 sum_in = sum_in+i.total_due_amount
             request.user.sum_out=sum_in
-                      
+        # for approvals count
+        if request.user.profile.designation.level_name=='teacher':
+            Class_teachers=Classes.objects.get(class_teacher=request.user)
+            pending_users= UserProfile.objects.filter(status='pending', institute=request.user.profile.institute,Class=Class_teachers , designation__level_name="student").count()
+            request.user.approval_request = pending_users  
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "teacher":
             try:
