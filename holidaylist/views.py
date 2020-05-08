@@ -28,7 +28,7 @@ def holidaylist(request,pk):
     if request.method == "POST":
         if can_add_holiday_permission in user_permissions:
                 holiday_date= request.POST.get('holiday_date')
-                holiday_day= request.POST.get('holiday_day')
+                
                 holiday_name= request.POST.get('holiday_name')
 
                 holiday_applicable= request.POST.get('holiday_applicable')
@@ -38,7 +38,7 @@ def holidaylist(request,pk):
                 holiday_sms_send= request.POST.get('holiday_sms_send')
                 holiday_notification_send= request.POST.get('holiday_notification_send')
               
-                new_holiday = HolidayList.objects.create(institute=request.user.profile.institute, date=holiday_date, days= holiday_day, name= holiday_name, applicable=holiday_applicable,holiday_type=holiday_type, holiday_email=holiday_email_send, holiday_sms=holiday_sms_send, holiday_notification=holiday_notification_send )
+                new_holiday = HolidayList.objects.create(institute=request.user.profile.institute, date=holiday_date,  name= holiday_name, applicable=holiday_applicable,holiday_type=holiday_type, holiday_email=holiday_email_send, holiday_sms=holiday_sms_send, holiday_notification=holiday_notification_send )
         
                 messages.success(request, 'New Holiday Created successfully !!!')
                
@@ -72,7 +72,7 @@ def edit_holiday(request, pk):
 
 
             holiday_date=request.POST.get('holiday_date') 
-            holiday_day = request.POST.get('holiday_day')
+            
             holiday_name =  request.POST.get('holiday_name')
             holiday_applicable =  request.POST.get('holiday_applicable')
             holiday_type =  request.POST.get('holiday_type')
@@ -81,7 +81,7 @@ def edit_holiday(request, pk):
             holiday_notification =  request.POST.get('holiday_notification')
 
             edit_holiday.date=holiday_date
-            edit_holiday.days=holiday_day
+           
             edit_holiday.name=holiday_name
             edit_holiday.applicable=holiday_applicable
             edit_holiday.holiday_type=holiday_type
@@ -148,6 +148,8 @@ def holidayemail(request):
 
 def emailView(request,pk):
     institute_holiday = Institute.objects.get(pk=pk)
+    user_emails=User.objects.all()
+    print(user_emails)
 
     institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
     
