@@ -5,6 +5,7 @@ from main_app.models import *
 from .models import *
 from django.contrib import messages
 from django.views.generic import ListView, DetailView
+from PIL import Image
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
@@ -46,12 +47,24 @@ def admission_home(request):
         'states_list': states_list
     }
     if request.method == "POST":
+        # starting code for checking profile pic extension
+        Student_Photo= request.FILES['student_pic']
+        fname = Student_Photo.name
+        if  fname.endswith('.jpeg') or fname.endswith('.jpg') or fname.endswith('.gif'):
+            pass
+        else:
+            messages.error(request, 'invalid photo format. upload a valid photo')
+            return redirect('admission_home')
+        #  ending code for checking profile pic extension
+
+
+
         new_request = Admission_Query()
-        new_request.first_name= request.POST.get('first_name')
-        new_request.middle_name= request.POST.get('middle_name')
-        new_request.last_name = request.POST.get('last_name')
-        new_request.father_name = request.POST.get('father_name')
-        new_request.mother_name = request.POST.get('mother_name')
+        new_request.first_name= request.POST.get('first_name').strip()
+        new_request.middle_name= request.POST.get('middle_name').strip()
+        new_request.last_name = request.POST.get('last_name').strip()
+        new_request.father_name = request.POST.get('father_name').strip()
+        new_request.mother_name = request.POST.get('mother_name').strip()
         new_request.date_of_birth = request.POST.get('date_of_birth')
         new_request.gender = request.POST.get('gender')
         new_request.Category = request.POST.get('category')
@@ -60,8 +73,8 @@ def admission_home(request):
         new_request.mobile_Number = request.POST.get('mobile_number')
         new_request.Email_Id = request.POST.get('email')
         new_request.Nationality = request.POST.get('nationality')
-        new_request.Address= request.POST.get('address')
-        new_request.District = request.POST.get('district')
+        new_request.Address= request.POST.get('address').strip()
+        new_request.District = request.POST.get('district').strip()
         new_request.State = State.objects.get(pk=request.POST.get('state'))
         new_request.Pin_Code = request.POST.get('pin_code')
         new_request.Student_Photo= request.FILES['student_pic']

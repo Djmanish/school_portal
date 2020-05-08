@@ -10,9 +10,6 @@
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no"/>
 
-    <!-- font awesome cdn -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
@@ -199,7 +196,7 @@
                             </div>
                         </li>
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -208,7 +205,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
+                      
                     </ul>
                 </div>  
             </nav>
@@ -544,7 +541,7 @@
                                                             </div>
 
 
-                            <a title="Edit Profile" class="md-fab md-fab-small md-fab-accent hidden-print" href="{% url 'edit_profile' user.profile.pk %}">
+                            <a data-uk-tooltip title="Edit Profile" class="md-fab md-fab-small md-fab-accent hidden-print" href="{% url 'edit_profile' user.profile.pk %}">
                                 <i class="material-icons">&#xE150;</i>
                             </a>
                         </div>
@@ -590,7 +587,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Email</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{user.email}}</span>
+                                                        <span class="uk-text-small uk-text-muted"><a href="mailto:{{user.email}}">{{user.email}}</a></span>
                                                        
                                                     </div>
                                                 </li>
@@ -610,7 +607,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Facebook</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{user.profile.facebook_link}}</span>
+                                                        <span class="uk-text-small uk-text-muted"><a target="_blank" href="{{user.profile.facebook_link}}">{{user.profile.facebook_link}}</a></span>
                                                         
                                                     </div>
                                                 </li>

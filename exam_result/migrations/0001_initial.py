@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('main_app', '0001_initial'),
         ('examschedule', '0001_initial'),
+        ('main_app', '0001_initial'),
     ]
 
     operations = [

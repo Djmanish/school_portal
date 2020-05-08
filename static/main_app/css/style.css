@@ -242,3 +242,19 @@ label{
 .dbmh{
   max-height: 290px;
 }
+#md_user{
+  font-size: 16px;
+}
+
+#institute-options{
+  padding: 10px 25px;
+  background-color: #add8e62d;
+  border: 1px solid #0976a1c0;
+  
+  border-radius: 10px;
+  width: 95%;
+  margin: auto;
+  margin-top: 6px;
+  margin-bottom: 6px;
+ 
+}

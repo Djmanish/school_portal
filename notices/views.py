@@ -18,6 +18,7 @@ def all_notices(request):
 
     all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
     user_notices = []
+    #if admin and pricipal will see all notices so comparing leved id if less than tacher
     if user_role_level < teacher_role_level:
         user_notices = all_notices.exclude(category="absent").reverse()
     else:
@@ -36,10 +37,8 @@ def all_notices(request):
         user_notices = paginator.page(paginator.num_pages)
 
     context ={
-        'all_notices': user_notices,
-        
+        'all_notices': user_notices,        
     }
-
     return render(request, 'notices/all_notices_list.html', context)
 
 
@@ -98,18 +97,15 @@ def create_notice(request):
             recipients_valid_list = []
 
             if 'selected_individual' in request.POST:
-
                 selected_individuals = request.POST.getlist('selected_individual')
                 selected_individuals_list = []
                 for i in selected_individuals:
                     selected_individuals_list.append(UserProfile.objects.get(pk=i))
                 for i in selected_individuals_list:
                     new_notice.recipients_list.add(i)
-
             elif 'all_classes_check' in request.POST:
                 all_students = UserProfile.objects.filter(designation__level_name='student', institute= request.user.profile.institute)
                 all_parents = UserProfile.objects.filter(designation__level_name='parent', institute= request.user.profile.institute )
-
                 for st in all_students:
                     recipients_valid_list.append(st)
                 for pt in all_parents:

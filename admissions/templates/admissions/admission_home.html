@@ -15,9 +15,7 @@
 
 
     <title>Approvals</title>
- <!-- font awesome cdn -->
- <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
+ 
     <!-- bootstrap -->
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
     <!-- uikit -->
@@ -210,7 +208,7 @@
                       {% endif %}
                           
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -219,7 +217,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
+                      
                     </ul>
                 </div>
             </nav>
@@ -520,13 +518,13 @@
                                     {% csrf_token %}
                                     <tr class="aftr"><td class="admission_form_label" >First Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="first_name" required></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label n_i" >Middle Name:</td> <td><input type="text" class="form-control form-control-sm" name="middle_name"></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label " >Middle Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="middle_name"></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label n_i" >Last Name:</td> <td><input type="text" class="form-control form-control-sm" name="last_name"></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label " >Last Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="last_name"></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label n_i" >Father Name:</td> <td><input type="text" class="form-control form-control-sm" name="father_name" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label " >Father Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="father_name" required></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label n_i" >Mother Name:</td> <td><input type="text" class="form-control form-control-sm" name="mother_name" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label " >Mother Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="mother_name" required></td></tr>
 
                                     <tr class="aftr"><td class="admission_form_label" >Date-of-Birth:</td> <td><input type="date" class="form-control form-control-sm" name="date_of_birth" required></td></tr>
 
@@ -565,7 +563,7 @@
                                           </select>
                                     </td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label" >Mobile Number:</td> <td><input type="number" class="form-control form-control-sm" name="mobile_number" pattern="[1-9]{1}[0-9]{9}" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" >Mobile Number:</td> <td><input type="text"  maxlength="10" class="form-control form-control-sm positive_number" name="mobile_number" placeholder="10 digit mobile number" required></td></tr>
 
                                     <tr class="aftr"><td class="admission_form_label" >Email:</td> <td><input type="email" class="form-control form-control-sm" name="email"></td></tr>
 
@@ -598,7 +596,7 @@
                                     <tr class="aftr"><td class="admission_form_label" >Pin Code:</td> <td><input type="number" class="form-control form-control-sm" name="pin_code" required></td></tr>
 
 
-                                    <tr class="aftr"><td class="admission_form_label" >Student Photo:</td> <td><input type="file" class="form-control form-control-sm" name="student_pic" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" >Student Photo:</td> <td><input type="file" class="form-control form-control-sm" name="student_pic" accept="image/*" required></td></tr>
 
                                     <tr><td class="admission_form_label" ></td> <td><input type="submit" class="form-control admission_submit_button" value="Submit" 
                                     {% if disable_submit %}

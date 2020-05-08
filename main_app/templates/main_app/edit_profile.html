@@ -17,8 +17,7 @@
 
 
     <title>Update Profile</title>
-     <!-- font awesome cdn -->
-     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+ 
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
     <script src="{% static 'main_app/js/script.js' %}"></script>
 
@@ -45,7 +44,7 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
 
  
 </head>
@@ -210,7 +209,7 @@
                             </div>
                         </li>
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -219,7 +218,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
+                    
                     </ul>
                 </div>
             </nav>
@@ -711,16 +710,16 @@ $('#fdata').change(function(){
   <div id="institute-options" style="display: none;">
     <div class="form-group">
         <label >Institute Name:</label>
-        <input type="text" class="form-control" name='new_institute_name' placeholder="New institute name here" id="new_institute_id" >
+        <input type="text" class="form-control form-control-sm" name='new_institute_name' placeholder="New institute name here" id="new_institute_id" >
       </div>
       <div class="form-group">
         <label>Institute Phone:</label>
-        <input type="text" id="new_institute_phone_id" class="form-control" name="new_institute_phone" pattern="[1-9]{1}[0-9]{9}" placeholder="Enter 10 digit mobile number">
+        <input type="text" id="new_institute_phone_id" class="form-control form-control-sm" name="new_institute_phone" pattern="[1-9]{1}[0-9]{9}" placeholder="Enter 10 digit mobile number">
       </div>
 
       <div class="form-group">
         <label>Institute Address :</label>
-        <input type="text" class="form-control" name="new_institute_address" placeholder="Institute address here">
+        <input type="text" class="form-control form-control-sm" name="new_institute_address" placeholder="Institute address here">
       </div>
   </div>
 
@@ -790,12 +789,12 @@ $('#fdata').change(function(){
 
                               <div class="form-group">
                                 <label >Change Profile Picture:</label>
-                                <input type="file" class="form-control" name='profile_pic'>
+                                <input type="file" class="form-control" accept="image/*" name='profile_pic'>
                               </div>
 
                               <div class="form-group">
                                 <label >Mobile:</label>
-                                <input type="text" class="form-control" name='mobile_number' value="{{user_info.mobile_number}}" pattern="[1-9]{1}[0-9]{9}" required='required'>
+                                <input type="text" class="form-control" name='mobile_number' value="{{user_info.mobile_number|default:''}}" pattern="[1-9]{1}[0-9]{9}" required='required'>
                               </div>
                             
                               <div class="form-group">

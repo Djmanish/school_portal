@@ -29,6 +29,7 @@ from rest_framework import status
 from main_app.serializers import UserProfileSerializer
 from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from main_app.models import *
 
 
 # Create your views here.
@@ -98,6 +99,7 @@ def add_subjects(request):
             subject_class=Classes.objects.get(id=new_class)
             # get data from User Table
             subject_teacher=User.objects.get(id=subject_teacher)
+            print(subject_teacher)
 
             subject_class = Subjects.objects.create(institute=request.user.profile.institute, subject_class=subject_class, subject_code= subject_code, subject_name= subject_name,subject_teacher=subject_teacher)
 
@@ -202,6 +204,7 @@ def delete_class(request, pk):
 def approvals(request,pk):
     institute_approval = Institute.objects.get(pk=pk)
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
+    
     if request.user.profile.designation.level_name=='teacher' or request.user.profile.designation.level_name=='principal' or request.user.profile.designation.level_name=='admin':
 
         if request.user.profile.designation.level_name=='teacher':
@@ -291,6 +294,7 @@ def dashboard(request):
                     pass
             
     # starting assigned teachers
+   
     user_one = request.user
     if request.user.profile.designation == "teacher":
         teacher_class = Classes.objects.get(class_teacher= user_one)
@@ -703,7 +707,17 @@ def edit_profile(request, pk):
     
     # Occurence of POST method
     if request.method == "POST":
-        
+        # starting code for checking profile pic extension
+        if 'profile_pic' in request.FILES:
+            Student_Photo= request.FILES.get('profile_pic')
+            fname = Student_Photo.name
+            if  fname.endswith('.jpeg') or fname.endswith('.jpg') or fname.endswith('.gif'):
+                pass
+            else:
+                messages.error(request, 'invalid photo format. upload a valid photo')
+                return redirect('user_profile')
+            #  ending code for checking profile pic extension
+            
         
         new_admin = 'admin_check'  in request.POST
         if new_admin: #if admin checkbox is checked
@@ -792,8 +806,6 @@ def edit_profile(request, pk):
             
             return redirect('user_profile')
 
-        
-        
         return redirect('user_profile')
         
     return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,'all_institute_classes':all_institute_classes,})
