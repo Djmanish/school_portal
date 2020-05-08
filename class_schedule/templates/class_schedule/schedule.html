@@ -40,7 +40,8 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" </head> 
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" >
+</head> 
     <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
       <!-- main header -->
@@ -710,7 +711,7 @@
                                                             <td> </td>
                                                             <td colspan="2">
                                                             {% if monday_schedule.subject_teacher_lecture_one %}
-                                                            {{monday_schedule.subject_teacher_lecture_one}}
+                                                            {{monday_schedule.subject_teacher_lecture_one.profile.first_name}} {{monday_schedule.subject_teacher_lecture_one.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
@@ -718,49 +719,49 @@
                                                                 </td>                       
                                                             <td colspan="2">
                                                             {% if monday_schedule.subject_teacher_lecture_two %}
-                                                            {{monday_schedule.subject_teacher_lecture_two}}
+                                                            {{monday_schedule.subject_teacher_lecture_two.profile.first_name}} {{monday_schedule.subject_teacher_lecture_two.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>       
                                                             <td colspan="2">
                                                             {% if monday_schedule.subject_teacher_lecture_three %}
-                                                            {{monday_schedule.subject_teacher_lecture_three}} 
+                                                            {{monday_schedule.subject_teacher_lecture_three.profile.first_name}} {{monday_schedule.subject_teacher_lecture_three.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                </td>                                                            
                                                             <td colspan="2">
                                                             {% if monday_schedule.subject_teacher_lecture_four %}
-                                                            {{monday_schedule.subject_teacher_lecture_four}}
+                                                            {{monday_schedule.subject_teacher_lecture_four.profile.first_name}} {{monday_schedule.subject_teacher_lecture_four.profile.last_name}}
                                                             {% else %}
                                                             - 
                                                             {% endif %}
                                                                </td>                                                            
                                                             <td colspan="2">
                                                             {% if monday_schedule.subject_teacher_lecture_five %}
-                                                            {{monday_schedule.subject_teacher_lecture_five}}
+                                                            {{monday_schedule.subject_teacher_lecture_five.profile.first_name}} {{monday_schedule.subject_teacher_lecture_five.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td> 
                                                             <td colspan="2">
                                                             {% if monday_schedule.subject_teacher_lecture_six %}
-                                                            {{monday_schedule.subject_teacher_lecture_six}}
+                                                            {{monday_schedule.subject_teacher_lecture_six.profile.first_name}} {{monday_schedule.subject_teacher_lecture_six.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>             
                                                             <td colspan="2">
                                                             {% if monday_schedule.subject_teacher_lecture_seven %}
-                                                            {{monday_schedule.subject_teacher_lecture_seven}}
+                                                            {{monday_schedule.subject_teacher_lecture_seven.profile.first_name}} {{monday_schedule.subject_teacher_lecture_seven.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>           
                                                     <td colspan="2">
                                                     {% if monday_schedule.subject_teacher_lecture_eight %}
-                                                    {{monday_schedule.subject_teacher_lecture_eight}}
+                                                    {{monday_schedule.subject_teacher_lecture_eight.profile.first_name}} {{monday_schedule.subject_teacher_lecture_eight.profile.last_name}}
                                                     {% else %}
                                                     -
                                                     {% endif %}
@@ -846,7 +847,7 @@
                                                             <td> </td>
                                                             <td colspan="2">
                                                             {% if tuesday_schedule.subject_teacher_lecture_one %}
-                                                            {{tuesday_schedule.subject_teacher_lecture_one}}
+                                                            {{tuesday_schedule.subject_teacher_lecture_one.profile.first_name}} {{tuesday_schedule.subject_teacher_lecture_one.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
@@ -854,35 +855,35 @@
                                                           
                                                             <td colspan="2">
                                                             {% if tuesday_schedule.subject_teacher_lecture_two %}
-                                                            {{tuesday_schedule.subject_teacher_lecture_two}}
+                                                            {{tuesday_schedule.subject_teacher_lecture_two.profile.first_name}} {{tuesday_schedule.subject_teacher_lecture_two.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                                            
                                                             <td colspan="2">
                                                             {% if tuesday_schedule.subject_teacher_lecture_three %}
-                                                            {{tuesday_schedule.subject_teacher_lecture_three}}
+                                                            {{tuesday_schedule.subject_teacher_lecture_three.profile.first_name}} {{tuesday_schedule.subject_teacher_lecture_three.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                                            
                                                             <td colspan="2">
                                                             {% if tuesday_schedule.subject_teacher_lecture_four %}
-                                                            {{tuesday_schedule.subject_teacher_lecture_four}}
+                                                            {{tuesday_schedule.subject_teacher_lecture_four.profile.first_name}} {{tuesday_schedule.subject_teacher_lecture_four.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                                            
                                                             <td colspan="2">
                                                             {% if tuesday_schedule.subject_teacher_lecture_five %}
-                                                            {{tuesday_schedule.subject_teacher_lecture_five}}
+                                                            {{tuesday_schedule.subject_teacher_lecture_five.profile.first_name}} {{tuesday_schedule.subject_teacher_lecture_five.profile.last_name}}
                                                             {% else %}
                                                             - 
                                                             {% endif %}
                                                                </td> 
                                                             <td colspan="2">
                                                             {% if tuesday_schedule.subject_teacher_lecture_six %}
-                                                            {{tuesday_schedule.subject_teacher_lecture_six}}
+                                                            {{tuesday_schedule.subject_teacher_lecture_six.profile.first_name}} {{tuesday_schedule.subject_teacher_lecture_six.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
@@ -890,14 +891,14 @@
                                                          
                                                             <td colspan="2">
                                                             {% if tuesday_schedule.subject_teacher_lecture_seven %}
-                                                            {{tuesday_schedule.subject_teacher_lecture_seven}}
+                                                            {{tuesday_schedule.subject_teacher_lecture_seven.profile.first_name}} {{tuesday_schedule.subject_teacher_lecture_seven.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                             
                                                             <td colspan="2">
                                                             {% if tuesday_schedule.subject_teacher_lecture_eight %}
-                                                            {{tuesday_schedule.subject_teacher_lecture_eight}}
+                                                            {{tuesday_schedule.subject_teacher_lecture_eight.profile.first_name}} {{tuesday_schedule.subject_teacher_lecture_eight.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
@@ -988,14 +989,14 @@
                                                             <td> </td>
                                                             <td colspan="2">
                                                             {% if wednesday_schedule.subject_teacher_lecture_one %}
-                                                            {{wednesday_schedule.subject_teacher_lecture_one}}
+                                                            {{wednesday_schedule.subject_teacher_lecture_one.profile.first_name}} {{wednesday_schedule.subject_teacher_lecture_one.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                                  
                                                             <td colspan="2">
                                                             {% if wednesday_schedule.subject_teacher_lecture_two %}
-                                                            {{wednesday_schedule.subject_teacher_lecture_two}}
+                                                            {{wednesday_schedule.subject_teacher_lecture_two.profile.first_name}} {{wednesday_schedule.subject_teacher_lecture_two.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
@@ -1003,7 +1004,7 @@
                                                         
                                                             <td colspan="2">
                                                             {% if wednesday_schedule.subject_teacher_lecture_three %}
-                                                            {{wednesday_schedule.subject_teacher_lecture_three}}
+                                                            {{wednesday_schedule.subject_teacher_lecture_three.profile.first_name}} {{wednesday_schedule.subject_teacher_lecture_three.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
@@ -1011,21 +1012,21 @@
                                                            
                                                             <td colspan="2">
                                                             {% if wednesday_schedule.subject_teacher_lecture_four %}
-                                                            {{wednesday_schedule.subject_teacher_lecture_four}}
+                                                            {{wednesday_schedule.subject_teacher_lecture_four.profile.first_name}} {{wednesday_schedule.subject_teacher_lecture_four.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                                            
                                                             <td colspan="2">
                                                             {% if wednesday_schedule.subject_teacher_lecture_five %}
-                                                            {{wednesday_schedule.subject_teacher_lecture_five}}
+                                                            {{wednesday_schedule.subject_teacher_lecture_five.profile.first_name}} {{wednesday_schedule.subject_teacher_lecture_five.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td> 
                                                             <td colspan="2">
                                                             {% if wednesday_schedule.subject_teacher_lecture_six %}
-                                                            {{wednesday_schedule.subject_teacher_lecture_six}}
+                                                            {{wednesday_schedule.subject_teacher_lecture_six.profile.first_name}} {{wednesday_schedule.subject_teacher_lecture_six.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
@@ -1033,7 +1034,7 @@
                                                            
                                                             <td colspan="2">
                                                             {% if wednesday_schedule.subject_teacher_lecture_seven %}
-                                                            {{wednesday_schedule.subject_teacher_lecture_seven}}
+                                                            {{wednesday_schedule.subject_teacher_lecture_seven.profile.first_name}} {{wednesday_schedule.subject_teacher_lecture_seven.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
@@ -1041,7 +1042,7 @@
                                                           
                                                             <td colspan="2">
                                                             {% if wednesday_schedule.subject_teacher_lecture_eight %}
-                                                            {{wednesday_schedule.subject_teacher_lecture_eight}}
+                                                            {{wednesday_schedule.subject_teacher_lecture_eight.profile.first_name}} {{wednesday_schedule.subject_teacher_lecture_eight.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
@@ -1128,56 +1129,56 @@
                                                             <td> </td>
                                                             <td colspan="2">
                                                             {% if thursday_schedule.subject_teacher_lecture_one %}
-                                                            {{thursday_schedule.subject_teacher_lecture_one}}
+                                                            {{thursday_schedule.subject_teacher_lecture_one.profile.first_name}} {{thursday_schedule.subject_teacher_lecture_one.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                                  
                                                             <td colspan="2">
                                                             {% if thursday_schedule.subject_teacher_lecture_two %}
-                                                            {{thursday_schedule.subject_teacher_lecture_two}}
+                                                            {{thursday_schedule.subject_teacher_lecture_two.profile.first_name}} {{thursday_schedule.subject_teacher_lecture_two.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                                            
                                                             <td colspan="2">
                                                             {% if thursday_schedule.subject_teacher_lecture_three %}
-                                                            {{thursday_schedule.subject_teacher_lecture_three}}
+                                                            {{thursday_schedule.subject_teacher_lecture_three.profile.first_name}} {{thursday_schedule.subject_teacher_lecture_three.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td> 
                                                             <td colspan="2">
                                                             {% if thursday_schedule.subject_teacher_lecture_four %}
-                                                            {{thursday_schedule.subject_teacher_lecture_four}}
+                                                            {{thursday_schedule.subject_teacher_lecture_four.profile.first_name}} {{thursday_schedule.subject_teacher_lecture_four.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                                            
                                                             <td colspan="2">
                                                             {% if thursday_schedule.subject_teacher_lecture_five %}
-                                                            {{thursday_schedule.subject_teacher_lecture_five}}
+                                                            {{thursday_schedule.subject_teacher_lecture_five.profile.first_name}} {{thursday_schedule.subject_teacher_lecture_five.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td> 
                                                             <td colspan="2">
                                                             {% if thursday_schedule.subject_teacher_lecture_six %}
-                                                            {{thursday_schedule.subject_teacher_lecture_six}}
+                                                            {{thursday_schedule.subject_teacher_lecture_six.profile.first_name}} {{thursday_schedule.subject_teacher_lecture_six.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                            
                                                             <td colspan="2">
                                                             {% if thursday_schedule.subject_teacher_lecture_seven %}
-                                                            {{thursday_schedule.subject_teacher_lecture_seven}}
+                                                            {{thursday_schedule.subject_teacher_lecture_seven.profile.first_name}} {{thursday_schedule.subject_teacher_lecture_seven.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                           
                                                             <td colspan="2">
                                                             {% if thursday_schedule.subject_teacher_lecture_eight %}
-                                                            {{thursday_schedule.subject_teacher_lecture_eight}}
+                                                            {{thursday_schedule.subject_teacher_lecture_eight.profile.first_name}} {{thursday_schedule.subject_teacher_lecture_eight.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
@@ -1262,56 +1263,56 @@
                                                             <td> </td>
                                                             <td colspan="2">
                                                             {% if friday_schedule.subject_teacher_lecture_one %}
-                                                            {{friday_schedule.subject_teacher_lecture_one}}
+                                                            {{friday_schedule.subject_teacher_lecture_one.profile.first_name}} {{friday_schedule.subject_teacher_lecture_one.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                               
                                                             <td colspan="2">
                                                             {% if friday_schedule.subject_teacher_lecture_two %}
-                                                            {{friday_schedule.subject_teacher_lecture_two}}
+                                                            {{friday_schedule.subject_teacher_lecture_two.profile.first_name}} {{friday_schedule.subject_teacher_lecture_two.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                          
                                                             <td colspan="2">
                                                             {% if friday_schedule.subject_teacher_lecture_three %}
-                                                            {{friday_schedule.subject_teacher_lecture_three}}
+                                                            {{friday_schedule.subject_teacher_lecture_three.profile.first_name}} {{friday_schedule.subject_teacher_lecture_three.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                            
                                                             <td colspan="2">
                                                             {% if friday_schedule.subject_teacher_lecture_four %}
-                                                            {{friday_schedule.subject_teacher_lecture_four}}
+                                                            {{friday_schedule.subject_teacher_lecture_four.profile.first_name}} {{friday_schedule.subject_teacher_lecture_four.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                                            
                                                             <td colspan="2">
                                                             {% if friday_schedule.subject_teacher_lecture_five %}
-                                                            {{friday_schedule.subject_teacher_lecture_five}}
+                                                            {{friday_schedule.subject_teacher_lecture_five.profile.first_name}} {{friday_schedule.subject_teacher_lecture_five.profile.last_name}}
                                                             {% else %}
                                                             - 
                                                             {% endif %}
                                                                </td> 
                                                             <td colspan="2">
                                                             {% if friday_schedule.subject_teacher_lecture_six %}
-                                                            {{friday_schedule.subject_teacher_lecture_six}}
+                                                            {{friday_schedule.subject_teacher_lecture_six.profile.first_name}} {{friday_schedule.subject_teacher_lecture_six.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                              
                                                             <td colspan="2">
                                                             {% if friday_schedule.subject_teacher_lecture_seven %}
-                                                            {{friday_schedule.subject_teacher_lecture_seven}}
+                                                            {{friday_schedule.subject_teacher_lecture_seven.profile.first_name}} {{friday_schedule.subject_teacher_lecture_seven.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                            
                                                             <td colspan="2">
                                                             {% if friday_schedule.subject_teacher_lecture_eight %}
-                                                            {{friday_schedule.subject_teacher_lecture_eight}}
+                                                            {{friday_schedule.subject_teacher_lecture_eight.profile.first_name}} {{friday_schedule.subject_teacher_lecture_eight.profile.last_name}}
                                                             {% else %}
                                                             - 
                                                             {% endif %}
@@ -1396,42 +1397,42 @@
                                                             <td> </td>
                                                             <td colspan="2">
                                                             {% if saturday_schedule.subject_teacher_lecture_one %}
-                                                            {{saturday_schedule.subject_teacher_lecture_one}}
+                                                            {{saturday_schedule.subject_teacher_lecture_one.profile.first_name}} {{saturday_schedule.subject_teacher_lecture_one.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                            
                                                             <td colspan="2">
                                                             {% if saturday_schedule.subject_teacher_lecture_two %}
-                                                            {{saturday_schedule.subject_teacher_lecture_two}}
+                                                            {{saturday_schedule.subject_teacher_lecture_two.profile.first_name}} {{saturday_schedule.subject_teacher_lecture_two.profile.last_name}}
                                                             {% else %}
                                                             - 
                                                             {% endif %}
                                                                </td>                                               
                                                             <td colspan="2">
                                                             {% if saturday_schedule.subject_teacher_lecture_three %}
-                                                            {{saturday_schedule.subject_teacher_lecture_three}}
+                                                            {{saturday_schedule.subject_teacher_lecture_three.profile.first_name}} {{saturday_schedule.subject_teacher_lecture_three.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                            
                                                             <td colspan="2">
                                                             {% if saturday_schedule.subject_teacher_lecture_four %}
-                                                            {{saturday_schedule.subject_teacher_lecture_four}}
+                                                            {{saturday_schedule.subject_teacher_lecture_four.profile.first_name}} {{saturday_schedule.subject_teacher_lecture_four.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>                                                            
                                                             <td colspan="2">
                                                             {% if saturday_schedule.subject_teacher_lecture_five %}
-                                                            {{saturday_schedule.subject_teacher_lecture_five}}
+                                                            {{saturday_schedule.subject_teacher_lecture_five.profile.first_name}} {{saturday_schedule.subject_teacher_lecture_five.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td> 
                                                             <td colspan="2">
                                                             {% if saturday_schedule.subject_teacher_lecture_six %}
-                                                            {{saturday_schedule.subject_teacher_lecture_six}}
+                                                            {{saturday_schedule.subject_teacher_lecture_six.profile.first_name}} {{saturday_schedule.subject_teacher_lecture_six.profile.last_name}}
                                                             {% else %}
                                                             - 
                                                             {% endif %}
@@ -1439,14 +1440,14 @@
                                                             
                                                             <td colspan="2">
                                                             {% if saturday_schedule.subject_teacher_lecture_seven %}
-                                                            {{saturday_schedule.subject_teacher_lecture_seven}}
+                                                            {{saturday_schedule.subject_teacher_lecture_seven.profile.first_name}} {{saturday_schedule.subject_teacher_lecture_seven.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}
                                                                 </td>        
                                                             <td colspan="2">
                                                             {% if saturday_schedule.subject_teacher_lecture_eight %}
-                                                            {{saturday_schedule.subject_teacher_lecture_eight}}
+                                                            {{saturday_schedule.subject_teacher_lecture_eight.profile.first_name}} {{saturday_schedule.subject_teacher_lecture_eight.profile.last_name}}
                                                             {% else %}
                                                             -
                                                             {% endif %}

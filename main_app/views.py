@@ -798,8 +798,6 @@ def edit_profile(request, pk):
             
             return redirect('user_profile')
 
-        
-        
         return redirect('user_profile')
         
     return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,'all_institute_classes':all_institute_classes,})

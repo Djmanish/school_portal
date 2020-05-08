@@ -603,7 +603,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Email</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{institute_data.email}}</span>
+                                                        <span class="uk-text-small uk-text-muted"><a href="mailto:{{institute_data.email}}">{{institute_data.email}}</a></span>
                                                        
                                                     </div>
                                                 </li>
@@ -718,7 +718,7 @@
 
                                 <li>
                                     <div class="uk-width-large-1-2">
-                                        <h4 class="heading_c uk-margin-small-bottom">Personal Details</h4>
+                                       
                                         <ul class="md-list md-list-addon">
                                             <li>
                                                 <div class="md-list-content">
@@ -771,25 +771,13 @@
                                                         class="uk-text-small uk-text-muted">{{institute_data.contact_number1}}</span>
                                                 </div>
                                             </li>
-                                            <li>
-                                                <div class="md-list-content">
-                                                    <span class="md-list-heading"><a href="#">Email Id</a></span>
-                                                    <span
-                                                        class="uk-text-small uk-text-muted">{{institute_data.email}}</span>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="md-list-content">
-                                                    <span class="md-list-heading"><a href="#">Facebook</a></span>
-                                                    <span
-                                                        class="uk-text-small uk-text-muted">{{institute_data.facebook_link}}</span>
-                                                </div>
-                                            </li>
+                                   
+                                            
                                             <li>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Website</a></span>
                                                     <span
-                                                        class="uk-text-small uk-text-muted">{{institute_data.website_link}}</span>
+                                                        class="uk-text-small uk-text-muted"><a target="_blank" href="{{institute_data.website_link}}">{{institute_data.website_link}}</a></span>
                                                 </div>
                                             </li>
 
@@ -888,7 +876,7 @@
                                                                
                                                                 <td>
                                                                     {% if classes.class_teacher %}
-                                                                    {{classes.class_teacher}}
+                                                                    {{classes.class_teacher.profile.first_name}} {{classes.class_teacher.profile.last_name}}
                                                                     {% else %}
                                                                     Not assigned
                                                                     {% endif %}   
@@ -1029,7 +1017,7 @@
 
                                                                 <td> {{subjects.subject_code}} </td>
                                                                 <td> {{subjects.subject_name}} </td>
-                                                                <td> {{subjects.subject_teacher}} </td>
+                                                                <td> {{subjects.subject_teacher.profile.first_name}} {{subjects.subject_teacher.profile.last_name}} </td>
 
                                            
                                                                 {% if can_edit_subject_permission in user_permissions %}                    
