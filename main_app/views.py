@@ -78,6 +78,8 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return True
         else:
             return False
+
+
     def get_success_url(self, **kwargs):         
             return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
 
@@ -164,6 +166,23 @@ def edit_class(request, pk):
         institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
         # institute_classes = Classes.objects.filter(institute=request.user.profile.institute)
 
+        # starting user notice
+    if request.user.profile.designation:
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice
+
+
         if request.method == 'POST':            
                 new_class_teacher = User.objects.get(pk= request.POST.get('class_teacher'))
                 class_to_edit.class_teacher = new_class_teacher
@@ -202,6 +221,22 @@ def delete_class(request, pk):
 
 
 def approvals(request,pk):
+    
+        # starting user notice
+    if request.user.profile.designation:
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice
     institute_approval = Institute.objects.get(pk=pk)
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
     
@@ -474,10 +509,6 @@ def dashboard(request):
                 notice_recipients = notice.recipients_list.all()
                 if request.user.profile in notice_recipients:
                     request.user.users_notice.insert(0, notice)
-        # for n in request.user.users_notice:
-        #     if str(n.publish_date.date()) <= str(datetime.date.today()):
-        #         request.user.users_notice.append(n)
-
         # ending user notice
 
         # starting fees status for principal view
@@ -811,15 +842,27 @@ def edit_profile(request, pk):
 def institute_profile(request, pk):
 # starting assigning all functionalities to admin
     admin_pk = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='admin')
-    
     checking_for_admin = Role_Description.objects.filter(user=request.user, institute=request.user.profile.institute, level= admin_pk ).first()
-
-
     if checking_for_admin is not None:
         all_app_functions = App_functions.objects.all()
         for function in all_app_functions:
             request.user.user_institute_role.level.permissions.add(function)
 # ending assigning all functionalities to admin
+    # starting user notice
+    if request.user.profile.designation:
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice
 
 
     institute_data= Institute.objects.get(pk=pk)
@@ -882,6 +925,29 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
             return True
         else:
             return False
+    
+    def get_context_data(self, **kwargs):
+        # starting user notice
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= self.request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = self.request.user.profile.designation.level_id
+        self.request.user.users_notice = []
+        all_notices = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
+        if user_role_level < teacher_role_level:
+            self.request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if self.request.user.profile in notice_recipients:
+                    self.request.user.users_notice.insert(0, notice)
+        # ending user notice
+
+
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        # context['book_list'] = Book.objects.all()
+        return context
 
 
     def get_success_url(self, **kwargs):         

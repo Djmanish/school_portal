@@ -122,10 +122,12 @@
                         </div>
                     </div>
                  -->
-                <div class="uk-navbar-flip">
+                 <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav user_actions">
                         <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
-                       
+                        <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
+                        
+                        {% if user.profile.designation %}
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                             <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
                             <div class="uk-dropdown uk-dropdown-xlarge">
@@ -134,7 +136,7 @@
                                         <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
                                         <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
                                     </ul>
-                                    <ul id="header_alerts" class="uk-switcher uk-margin">
+                                    <ul id="header_alerts"  class="uk-switcher uk-margin">
                                         <li>
                                             <ul class="md-list md-list-addon alert_notice_list">
                                                 {% for notice in user.users_notice|slice:":5" %}
@@ -185,7 +187,7 @@
                                                         <i class="md-list-addon-icon material-icons uk-text-primary">&#xE8FD;</i>
                                                     </div>
                                                     <div class="md-list-content">
-                                                        <span class="md-list-heading">Quiet.</span>
+                                                        <span class="md-list-heading">Qui et.</span>
                                                         <span class="uk-text-small uk-text-muted uk-text-truncate">Quia pariatur id facere accusantium rerum illum.</span>
                                                     </div>
                                                 </li>
@@ -195,6 +197,8 @@
                                 </div>
                             </div>
                         </li>
+                        {% endif %}
+                            
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                             <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
@@ -207,7 +211,7 @@
                         </li>
                       
                     </ul>
-                </div>  
+                </div>
             </nav>
         </div>
         <div class="header_main_search_form">
