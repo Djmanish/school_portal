@@ -28,12 +28,11 @@ def all_notices(request):
         # ending user notice
     teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
     teacher_role_level = teacher_role_level.level_id
-    
     user_role_level = request.user.profile.designation.level_id
 
     all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
     user_notices = []
-    #if admin and pricipal will see all notices so comparing leved id if less than tacher
+    #if admin and pricipal will see all notices so comparing level id if less than tacher
     if user_role_level < teacher_role_level:
         user_notices = all_notices.exclude(category="absent").reverse()
     else:

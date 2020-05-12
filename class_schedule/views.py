@@ -10,6 +10,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from notices.models import Notice
 from django.utils import timezone
+from AddChild.models import *
 # Create your views here.
 
 @login_required
@@ -30,8 +31,21 @@ def schedule(request):
                     request.user.users_notice.insert(0, notice)
         # ending user notice    
     select_class_for_schedule = request.GET.get('selected_class') # class selected to view
+
+#     starting showing class based on user role
+    if request.user.profile.designation.level_name == "student":
+            all_class = list(Classes.objects.filter(institute=request.user.profile.institute, id= request.user.profile.Class.id ))
+    elif request.user.profile.designation.level_name == "parent":
+            classes = AddChild.objects.filter(parent = request.user.profile)  
+            all_class = []
+            for c in classes:
+                    all_class.append(c.Class)
+    else:
+             all_class = list(Classes.objects.filter(institute=request.user.profile.institute))
+#     ending showing class based on user role
+             
     if select_class_for_schedule == None:
-            first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
+            first_class = all_class[-1]
             if first_class:
                     pass
             else:
@@ -46,20 +60,20 @@ def schedule(request):
     time_table_for_class = selected_class.name
     selected_class_stage = selected_class.class_stage
     
-    all_class = Classes.objects.filter(institute=request.user.profile.institute)
+    
     all_lectures = Lecture.objects.filter(institute=request.user.profile.institute, class_stage= selected_class_stage)
     
 
-    monday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Monday"  )
-    tuesday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Tuesday" )
+    monday_schedule = Schedule.objects.get( Class= selected_class, day="Monday"  )
+    tuesday_schedule = Schedule.objects.get( Class= selected_class, day="Tuesday" )
 
-    wednesday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Wednesday" )
+    wednesday_schedule = Schedule.objects.get( Class= selected_class, day="Wednesday" )
 
-    thursday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Thursday" )
+    thursday_schedule = Schedule.objects.get( Class= selected_class, day="Thursday" )
 
-    friday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Friday" )
+    friday_schedule = Schedule.objects.get( Class= selected_class, day="Friday" )
 
-    saturday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Saturday" )
+    saturday_schedule = Schedule.objects.get( Class= selected_class, day="Saturday" )
 
     user_permissions = request.user.user_institute_role.level.permissions.all()
     schedule_update_permission = App_functions.objects.get(function_name='Can Update Schedule')

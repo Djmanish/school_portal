@@ -619,7 +619,9 @@ def login(request):
             try:
                 if g_user.is_active == False: # checking if user activated his account or not
                     error = 'User already registered, check your mail and follow the link to activate your account.'
-                    return render(request, 'registration/login.html', {'error':error})
+                    
+                    return redirect('registration_resend_activation')
+                    # return render(request, 'registration/login.html', {'error':error})
                 else:
                     username = g_user.username
                 user = auth.authenticate(username=username, password=password)

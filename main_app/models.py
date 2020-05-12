@@ -123,6 +123,10 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,null=True) # approval date
 
+    class Meta:
+        unique_together=['institute', 'Class','roll_number']
+    
+
     def approve(self):
         self.status= 'approve'
         self.save()
