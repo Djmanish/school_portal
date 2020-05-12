@@ -45,7 +45,14 @@ def schedule(request):
 #     ending showing class based on user role
              
     if select_class_for_schedule == None:
-            first_class = all_class[-1]
+            try:
+                    first_class = all_class[-1]
+            except:
+                     messages.info(request, 'you do not have children to show schedule')
+                     return redirect('user_dashboard')
+
+
+                
             if first_class:
                     pass
             else:
