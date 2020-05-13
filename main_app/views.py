@@ -403,7 +403,7 @@ def dashboard(request):
     # ending student,teacher & class count
     
     # Active Users Count
-    time= timezone.now()- datetime.timedelta(minutes=30)
+    time= timezone.now()- datetime.timedelta(minutes=3)
     time1= timezone.now()
     count=User.objects.filter(last_login__gte=time,last_login__lte=time1)
     
