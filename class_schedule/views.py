@@ -46,7 +46,7 @@ def schedule(request):
              
     if select_class_for_schedule == None:
             try:
-                    first_class = all_class[-1]
+                    first_class = all_class[0]
             except:
                      messages.info(request, 'you do not have children to show schedule')
                      return redirect('user_dashboard')
@@ -205,6 +205,7 @@ def schedule_update(request, pk):
                         
                         messages.success(request, "Class Schedule Updated Successfully !!!")
                         schedule_to_update.save()
+                        return redirect('class_schedule')
                 else:
                         messages.info(request, "You don't have permission to update class Schedule")
                         return redirect('not_found')

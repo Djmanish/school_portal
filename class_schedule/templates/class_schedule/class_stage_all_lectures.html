@@ -16,6 +16,7 @@
 
 
     <title>Update Profile</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
  
 
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
@@ -37,7 +38,7 @@
     <!-- bootstrap -->
   
     <script src="{% static 'js/jquery-3.1.1.js' %}"></script>
-<script src="{% static 'main_app/bower_components/js/bootstrap.min.js' %}"></script>
+
 <script src="{% static 'main_app/bower_components/js/moment-master/min/moment.min.js' %}"></script>
 <script src="{% static 'main_app/bower_components/js/bootstrap-datetimepicker.min.js' %}"></script>
 
@@ -496,7 +497,7 @@
         <div id="page_content_inner">
             {% if messages %}
             <div class="md-card md-card-primary">
-          <div >
+          <div class=>
               <ul class="messages alert">
                   {% for message in messages %}
                   <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
@@ -505,6 +506,7 @@
           </div>
             </div>
             {% endif %}
+            
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
                 <div class="uk-width-large">
                     <div class="md-card">
@@ -558,8 +560,8 @@
             {% for lecture in all_lectures %}
             <tr>
                 <td >{{lecture.lecture_name}}</td>
-                <td class="uk-text-center">{{lecture.start_time}}</td>
-                <td class="uk-text-center">{{lecture.end_time}}</td>
+                <td class="uk-text-center">{{lecture.start_time|time:"h:i a"}}</td>
+                <td class="uk-text-center">{{lecture.end_time|time:"h:i a"}}</td>
                 <td class="uk-text-center"><a href="{% url 'lecture_time' lecture.pk %}">Update Lecture Time</a></td>
             </tr>  
             {% endfor %}

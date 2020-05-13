@@ -210,13 +210,17 @@ def edit_class(request, pk):
         return redirect('not_found')
 
 def delete_class(request, pk):
+        institue_pk = request.user.profile.institute.pk
         class_to_delete = Classes.objects.get(pk=pk)
         class_to_delete.class_teacher = None
         class_to_delete.name = None
         class_to_delete.class_stage = None
-        class_to_delete.delete()
+        try:
+            class_to_delete.delete()
+        except:
+            messages.error(request, 'This class has students. Can not be deleted !')
+            return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
         messages.success(request, 'Class Deleted Successfully !!!')
-        institue_pk = request.user.profile.institute.pk
         return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
 
 
@@ -458,7 +462,7 @@ def dashboard(request):
     # starting attendace data for dashboard
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
     for c in all_classes:
-        total_student_class = UserProfile.objects.filter(institute= request.user.profile.institute, designation__level_name="student", Class= c).count()
+        total_student_class = UserProfile.objects.filter(institute= request.user.profile.institute, designation__level_name="student", Class= c , status="approve").count()
         c.total_student = total_student_class
 
         present_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="present" , student_class= c , date=  datetime.date.today() ).count()
@@ -1019,7 +1023,7 @@ def add_new_role(request, pk):
          return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
 def delete_user_role(request, pk):
-    
+    rr= request.user.profile.institute.id
     user_role =  Institute_levels.objects.get(pk=pk, institute= request.user.profile.institute)
     role_id= user_role.level_id
     if user_role.level_name == 'admin'  or user_role.level_name == 'parent' or user_role.level_name == 'student' or user_role.level_name == 'teacher' or user_role.level_name == 'principal' :
@@ -1031,9 +1035,13 @@ def delete_user_role(request, pk):
         for roles in roles_level_tod:
             roles.level_id -= 1
             roles.save()
-        user_role.delete()
+        try:
+            user_role.delete()
+        except:
+            messages.error(request, "There are users under this role. Can not be deleted")
+            return HttpResponseRedirect(f'/institute/profile/{rr}/')
         messages.success(request, 'User role deleted successfully !')
-        rr= request.user.profile.institute.id
+        
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
 

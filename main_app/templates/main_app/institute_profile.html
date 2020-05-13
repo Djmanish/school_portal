@@ -516,7 +516,7 @@
 
                             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
 
-                            <a class="md-fab md-fab-small md-fab-accent hidden-print"
+                            <a data-uk-tooltip title="Edit Institute Profile" class="md-fab md-fab-small md-fab-accent hidden-print"
                                 href="{% url 'edit_institute' user.profile.institute.pk %}">
                                 <i class="material-icons">&#xE150;</i>
                             </a>

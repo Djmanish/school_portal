@@ -568,13 +568,13 @@
                                      
                                         
                                         {% if schedule_info.subject_teacher_lecture_one  %}
-                                           <option selected value="{{schedule_info.subject_teacher_lecture_one.id}}">{{schedule_info.subject_teacher_lecture_one}}</option> 
+                                           <option selected value="{{schedule_info.subject_teacher_lecture_one.id}}">{{schedule_info.subject_teacher_lecture_one.profile.first_name}} {{schedule_info.subject_teacher_lecture_one.profile.last_name}}</option> 
                                         {% endif %}
                                             
                                         <option value="" >No Teacher</option>
                                         
                                         {% for teacher in institute_teachers %}
-                                            <option value="{{teacher.id}}">{{teacher}}</option></option>>
+                                            <option value="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option></option>>
                                         {% endfor %}
                                             
                                     </select>
@@ -602,12 +602,12 @@
                                     <select name="subject_teacher_lecture_two" class="md-input label-fixed" >
                               
                                         {% if schedule_info.subject_teacher_lecture_two  %}
-                                           <option selected value="{{schedule_info.subject_teacher_lecture_two.id}}">{{schedule_info.subject_teacher_lecture_two}}</option> 
+                                           <option selected value="{{schedule_info.subject_teacher_lecture_two.id}}">{{schedule_info.subject_teacher_lecture_two.profile.first_name}} {{schedule_info.subject_teacher_lecture_two.profile.last_name}}</option> 
                                         {% endif %}
                                       
                                         <option value="" >No Teacher</option>  
                                         {% for teacher in institute_teachers %}
-                                            <option value="{{teacher.id}}">{{teacher}}</option>
+                                            <option value="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option>
                                         {% endfor %}
                                             
                                     </select>
@@ -634,12 +634,12 @@
     <select name="subject_teacher_lecture_three" class="md-input label-fixed" >
 
         {% if schedule_info.subject_teacher_lecture_three  %}
-                                           <option selected value="{{schedule_info.subject_teacher_lecture_three.id}}">{{schedule_info.subject_teacher_lecture_three}}</option> 
+                                           <option selected value="{{schedule_info.subject_teacher_lecture_three.id}}">{{schedule_info.subject_teacher_lecture_three.profile.first_name}} {{schedule_info.subject_teacher_lecture_three.profile.last_name}}</option> 
                                         {% endif %}
       
                                         <option value="" >No Teacher</option>
         {% for teacher in institute_teachers %}
-            <option value="{{teacher.id}}">{{teacher}}</option>
+            <option value="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option>
         {% endfor %}
             
     </select>
@@ -666,11 +666,11 @@
     <label>Lecture 4 Subject Teacher Name: </label>
     <select name="subject_teacher_lecture_four" class="md-input label-fixed" >
         {% if schedule_info.subject_teacher_lecture_four  %}
-                                           <option selected value="{{schedule_info.subject_teacher_lecture_four.id}}">{{schedule_info.subject_teacher_lecture_four}}</option> 
+                                           <option selected value="{{schedule_info.subject_teacher_lecture_four.id}}">{{schedule_info.subject_teacher_lecture_four.profile.first_name}} {{schedule_info.subject_teacher_lecture_four.profile.last_name}}</option> 
                                         {% endif %}
                                         <option value="" >No Teacher</option> 
         {% for teacher in institute_teachers %}
-            <option value="{{teacher.id}}">{{teacher}}</option>
+            <option value="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option>
         {% endfor %}      
     </select>
 </div> 
@@ -697,11 +697,11 @@
     <select name="subject_teacher_lecture_five" class="md-input label-fixed" >
     
         {% if schedule_info.subject_teacher_lecture_five  %}
-                                           <option selected value="{{schedule_info.subject_teacher_lecture_five.id}}">{{schedule_info.subject_teacher_lecture_five}}</option> 
+                                           <option selected value="{{schedule_info.subject_teacher_lecture_five.id}}">{{schedule_info.subject_teacher_lecture_five.profile.first_name}} {{schedule_info.subject_teacher_lecture_five.profile.last_name}}</option> 
                                         {% endif %}
                                         <option value="" >No Teacher</option>
         {% for teacher in institute_teachers %}
-            <option value="{{teacher.id}}">{{teacher}}</option>
+            <option value="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option>
         {% endfor %}
             
     </select>
@@ -728,12 +728,12 @@
     <label>Lecture 6 Subject Teacher Name: </label>
     <select name="subject_teacher_lecture_six" class="md-input label-fixed" >
         {% if schedule_info.subject_teacher_lecture_six  %}
-        <option selected value="{{schedule_info.subject_teacher_lecture_six.id}}">{{schedule_info.subject_teacher_lecture_six}}</option> 
+        <option selected value="{{schedule_info.subject_teacher_lecture_six.id}}">{{schedule_info.subject_teacher_lecture_six.profile.first_name}} {{schedule_info.subject_teacher_lecture_six.profile.last_name}}</option> 
      {% endif %}
       
      <option value="" >No Teacher</option>
         {% for teacher in institute_teachers %}
-            <option value="{{teacher.id}}">{{teacher}}</option>
+            <option value="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option>
         {% endfor %}
             
     </select>
@@ -761,11 +761,11 @@
     <select name="subject_teacher_lecture_seven" class="md-input label-fixed" >
       
         {% if schedule_info.subject_teacher_lecture_seven  %}
-        <option selected value="{{schedule_info.subject_teacher_lecture_seven.id}}">{{schedule_info.subject_teacher_lecture_seven}}</option> 
+        <option selected value="{{schedule_info.subject_teacher_lecture_seven.id}}">{{schedule_info.subject_teacher_lecture_seven.profile.first_name}} {{schedule_info.subject_teacher_lecture_seven.profile.last_name}}</option> 
      {% endif %}
      <option value="" >No Teacher</option>
         {% for teacher in institute_teachers %}
-            <option value="{{teacher.id}}">{{teacher}}</option>
+            <option value="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option>
         {% endfor %}
             
     </select>
@@ -792,11 +792,11 @@
     <select name="subject_teacher_lecture_eight" class="md-input label-fixed" >
        
         {% if schedule_info.subject_teacher_lecture_eight  %}
-        <option selected value="{{schedule_info.subject_teacher_lecture_eight.id}}">{{schedule_info.subject_teacher_lecture_eight}}</option> 
+        <option selected value="{{schedule_info.subject_teacher_lecture_eight.id}}">{{schedule_info.subject_teacher_lecture_eight.profile.first_name}} {{schedule_info.subject_teacher_lecture_eight.profile.last_name}}</option> 
      {% endif %}
      <option value="" >No Teacher</option>
         {% for teacher in institute_teachers %}
-            <option value="{{teacher.id}}">{{teacher}}</option>
+            <option value="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option>
         {% endfor %}
             
     </select>

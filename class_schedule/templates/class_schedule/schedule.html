@@ -17,6 +17,7 @@
 
 
     <title>Institute Schedule</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
  
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
@@ -467,21 +468,6 @@
                         </a>
                     </li>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </ul>
         </div>
     </aside><!-- main sidebar end -->
@@ -490,6 +476,17 @@
     <div id="page_content">
 
         <div id="page_content_inner">
+            {% if messages %}
+            <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+            {% endif %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">      
                 
        
@@ -587,8 +584,8 @@
                                                             </th>
                                                              
                                                              {% for lecture in all_lectures %}
-                                                             <th colspan="2">{{lecture.start_time}} - 
-                                                        {{lecture.end_time}}</th>
+                                                             <th colspan="2">{{lecture.start_time|time:"h:i a"}} - 
+                                                        {{lecture.end_time|time:"h:i a"}}</th>
                                                              {% endfor %}
 
                                                            <th colspan="2"></th>
