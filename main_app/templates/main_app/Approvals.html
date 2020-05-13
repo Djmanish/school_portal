@@ -630,15 +630,16 @@
                                                      
                                                         <tbody>
                         
-                                                            {% for active in Active_user %}
+                                                            {% for active in Active_user|slice:"1:" %}
                                                             <tr>
+                                                                
                                                                 <th > {{ forloop.counter}} </th>
                                                                 <td> {{active.first_name }} {{active.last_name }}</td>
                                                                 <td> {{active.designation }} </td>
                                                                 <td> {{active.created_at}} </td>
                                                                 <td> {{active.updated_at}} </td>
                                                                 <td >  <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave disapprove_btn" href="{% url 'user_disapproval' active.pk %}">Disapprove</a>   </td>
-                        
+                                                                
                                                             </tr>
                                                             {% endfor %}
                         

@@ -37,6 +37,34 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
     <title>User Dashboard</title>
+    <!-- Fullcalendar -->
+    <link rel="stylesheet" href="{% static 'main_app/packages/core/main.css' %}" rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'main_app/packages/daygrid/main.css' %}" rel='stylesheet'>
+    <script src="{% static 'main_app/packages/core/main.js' %}"></script>
+    <script src="{% static 'main_app/packages/interaction/main.js' %}"></script>
+    <script src="{% static 'main_app/packages/daygrid/main.js' %}"></script>
+    <style>
+        .fc-unthemed .fc-prev-button::after{
+            visibility: hidden;            
+        }
+        .fc-unthemed .fc-next-button::after {
+            visibility: hidden;
+        }
+        
+        .fc-unthemed .fc-today-button::after {
+            visibility: hidden;
+        }
+        .fc-unthemed .fc-today-button{
+            background-color: #2c3e50;
+        }
+        #calendar {
+          width: auto;
+          margin: 0 auto;
+          height: auto;
+        }
+      
+    </style>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="{% static 'main_app/js/script.js' %}"></script>
 
@@ -809,8 +837,9 @@
                 {% endif %}
             </div>
            {% elif user.profile.designation.level_name == "teacher" %}      
-
+            
            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+            {% if user.user_subject_one_len > 0 %}
             <div class="uk-width-medium-1-2">
                 <div class="md-card">
                     <div class="md-card-content">
@@ -827,6 +856,12 @@
                                         </tr>
                                 </thead>
                                 <tbody>
+                                    {% for u in user.user_t1 %}
+                                    <tr class="uk-table-middle">
+                                        <td class="uk-width-3-10 uk-text-nowrap">{{u}}</td>
+                                        <td class="uk-width-3-10 uk-text-nowrap"></td>
+                                    </tr>
+                                    {% endfor %}
                                     {% for teacher1 in user_subject_one %}
                                     <tr class="uk-table-middle">
                                         <td class="uk-width-3-10 uk-text-nowrap">{{teacher1.subject_class}}</td>
@@ -842,7 +877,7 @@
                     </div>
                 </div>
             </div>
-            
+            {% endif %}
             <div class="uk-width-medium-1-2">
                 
                 <div class="md-card">
@@ -966,7 +1001,7 @@
                 
             </div>
            
-        </div>
+            </div>
             
             {% elif  user.profile.designation.level_name == "parent" %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
@@ -1139,6 +1174,7 @@
                     </div>
                 </div>
             </div> 
+            
                {% endif %}
                {% if user.profile.designation.level_name == "principal" %}
                <div class="uk-width-medium-1-2">
@@ -1208,7 +1244,14 @@
                    </div>
                </div>               
                {% endif %}  
-              
+               <div class="uk-width-medium-1-2">
+                <div class="md-card">
+                    <div class="md-card-content" style="height: auto;">
+                        
+                        <div id='calendar'></div>
+                    </div>
+                </div>
+            </div> 
             </div> 
                
             {% if user.profile.designation %}
@@ -1673,7 +1716,39 @@
                         };
 
     </script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+      
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'interaction', 'dayGrid' ],
+            
+            editable: true,
+            eventLimit: true, // allow "more" link when too many events
+            events: [
+              {
+                title: 'All Day Event',
+                start: '2020-02-01'
+              },
+              {% for h in holiday %}
+              {
+                title: '{{h.name}}',
+                start: "{{h.date|date:'Y-m-d'}}",
+                backgroundColor:'#AED6F1',                
+              },
+              {% endfor %}
+            ] 
+          });
+      
+          calendar.render();
+        });
+      
+      </script>
     
+                        
+    
+          
     
 </body>
 </html>

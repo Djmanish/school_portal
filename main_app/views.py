@@ -247,7 +247,10 @@ def approvals(request,pk):
     if request.user.profile.designation.level_name=='teacher' or request.user.profile.designation.level_name=='principal' or request.user.profile.designation.level_name=='admin':
 
         if request.user.profile.designation.level_name=='teacher':
-            Class_teachers=Classes.objects.get(class_teacher=request.user)
+            try:
+                Class_teachers=Classes.objects.get(class_teacher=request.user)
+            except Classes.DoesNotExist:
+                Class_teachers = 0
             pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval,Class=Class_teachers , designation=student_designation_id).reverse()
             parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute)
             parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute)
@@ -355,7 +358,10 @@ def dashboard(request):
         
     # starting assigned classes
     user_institute_one= request.user.profile.institute
+    request.user.user_t1=Classes.objects.filter(class_teacher=request.user,institute=user_institute_one)
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
+    request.user.user_subject_one_len = len(user_subject_one)
+    
     # class attendance status 
     
     
@@ -401,7 +407,7 @@ def dashboard(request):
     # ending student,teacher & class count
     
     # Active Users Count
-    time= timezone.now()- datetime.timedelta(minutes=30)
+    time= timezone.now()- datetime.timedelta(minutes=3)
     time1= timezone.now()
     count=User.objects.filter(last_login__gte=time,last_login__lte=time1)
     
@@ -534,9 +540,12 @@ def dashboard(request):
             request.user.sum_out=sum_in
         # for approvals count
         if request.user.profile.designation.level_name=='teacher':
-            Class_teachers=Classes.objects.get(class_teacher=request.user)
-            pending_users= UserProfile.objects.filter(status='pending', institute=request.user.profile.institute,Class=Class_teachers , designation__level_name="student").count()
-            request.user.approval_request = pending_users  
+            try:
+                Class_teachers=Classes.objects.get(class_teacher=request.user)
+                pending_users= UserProfile.objects.filter(status='pending', institute=request.user.profile.institute,Class=Class_teachers , designation__level_name="student").count()
+                request.user.approval_request = pending_users  
+            except:
+                pass
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "teacher":
             try:
