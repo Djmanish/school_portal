@@ -107,12 +107,12 @@ class UserProfile(models.Model):
     qualification = models.CharField(max_length=200, null=True, default='' )
     aadhar_card_number = models.CharField(max_length= 20, null=True, default='')
 
-    about = models.CharField(max_length=300, blank=True, null=True, default="write something about yourself ")
+    about = models.CharField(max_length=300, blank=True, null=True, )
     profile_pic = models.ImageField(default="default_profile_pic.jpg", upload_to='UserProfilePictures')
     mobile_number = models.PositiveIntegerField(null=True,)
     address_line_1 = models.CharField(max_length= 50 , null= True, default="Address line 1")
     address_line_2 = models.CharField(max_length=50, null = True, default="Address line 2")
-    city = models.CharField(max_length=50, null=True, default="City")
+    city = models.CharField(max_length=50, null=True, default="")
     state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True)
     pin_code = models.CharField(max_length=10, null=True, blank=True)
     facebook_link = models.URLField(null=True, blank=True, default="https://www.facebook.com/")
@@ -122,6 +122,10 @@ class UserProfile(models.Model):
     class_next_year=models.CharField(max_length=30,null=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,null=True) # approval date
+
+    class Meta:
+        unique_together=['institute', 'Class','roll_number']
+    
 
     def approve(self):
         self.status= 'approve'

@@ -65,6 +65,10 @@
       
     </style>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{% static 'main_app/js/script.js' %}"></script>
+
+   
     <!-- clnde -->
     <link rel="stylesheet" href="{% static 'main_app/clndr/calendar.css' %}">
     
@@ -350,15 +354,14 @@
                 {% endif %}
                     
 
-                {% if user.profile.institute %}
+                {% if user.profile.institute and user.profile.status == 'approve' %}
                 <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
-
-                
+      
 <!-- starting notice menu -->
 <li  title="Notices">
     <a href="">
@@ -395,7 +398,7 @@
         <span class="menu_title">Fees Setup</span>
     </a>
 </li>
-           
+
 {% endif %}
     
 {% if user.profile.designation.level_name == "parent" %}
@@ -420,7 +423,7 @@
                     <span class="menu_title">Schedule</span>
                 </a>
             </li>               
-            {% endif %}  
+           
 
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
@@ -525,6 +528,7 @@
                         </ul>
                     </li>
 
+                    {% endif %}  
                     {% endif %} 
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
@@ -1627,6 +1631,8 @@
 
         <!--  dashbord functions -->
         <script src="{% static 'main_app/js/pages/dashboard.min.js' %}"></script>
+
+     
 
        
     
