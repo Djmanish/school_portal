@@ -221,7 +221,7 @@ def delete_class(request, pk):
 
 
 def approvals(request,pk):
-    
+
         # starting user notice
     if request.user.profile.designation:
         teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
@@ -238,6 +238,8 @@ def approvals(request,pk):
                     request.user.users_notice.insert(0, notice)
         # ending user notice
     institute_approval = Institute.objects.get(pk=pk)
+    if request.user.profile.institute != institute_approval:
+        return HttpResponse("Forbidden")
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
     
     if request.user.profile.designation.level_name=='teacher' or request.user.profile.designation.level_name=='principal' or request.user.profile.designation.level_name=='admin':
@@ -307,10 +309,12 @@ def dashboard(request):
             try:
                 request.user.exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
                 print(request.user.exam_type_child)
-                
-                request.user.exam_date1=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).earliest('id')
-                request.user.exam_date2=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).latest('id')
-                
+                try:
+                    request.user.exam_date1=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).earliest('id')
+                    request.user.exam_date2=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).latest('id')
+                except ExamDetails.DoesNotExist:
+                    request.user.exam_date1 = None
+                    request.user.exam_date2 = None                  
                 max_marks=request.user.exam_type_child.exam_max_marks
                 total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
                 request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
@@ -529,6 +533,7 @@ def dashboard(request):
         # Starting fees status for Student view
         if request.user.profile.designation.level_name == "student":
             request.user.student_fees_st=Students_fees_table.objects.filter(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
+            request.user.student_fees_st_len = len(request.user.student_fees_st)
             
             sum_in=0
             for i in request.user.student_fees_st:

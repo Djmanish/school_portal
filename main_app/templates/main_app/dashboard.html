@@ -613,7 +613,7 @@
           </div>
             </div>
             {% endif %}
-            
+    {% if user.profile.status == "approve" %}
             <!-- statistics (small charts) -->
             {% if user.profile.designation %}
             {% if user.profile.designation.level_name == "student" %}
@@ -1228,6 +1228,7 @@
                </div>               
                {% endif %}   
                {% if user.profile.designation.level_name == "student" %}
+               {% if user.student_fees_st_len > 0 %}
                <div class="uk-width-medium-1-2">
                    <div class="md-card">
                        <div class="md-card-content">
@@ -1259,70 +1260,80 @@
                    </div>
                </div>               
                {% endif %}  
-              
+               
+               <div class="uk-width-medium-1-2">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <h4>My Results</h4>
+                        <div class="uk-overflow-container">
+                            <table class="uk-table uk-table-condensed uk-table-hover">
+                                <thead>
+                                   
+                                </thead>
+                                <tbody>
+                                    <br>
+                                    <tr>
+                                        <td>Exam Sr No.</td>
+                                         <td>{{user.exam_type_child.exam_type_sr_no}}</td>
+                                       </tr>
+                                        <tr>
+                                        <td>Exam</td>
+                                         <td>{{user.exam_type_child}}</td>
+                                       </tr>
+                                       {% if user.exam_date1 == None and user.exam_date2 == None%}
+                                       <tr>
+                                        <td>Exam Date</td>
+                                         <td>N/A</td>
+                                       </tr>
+                                       
+                                       {% elif user.exam_date1.exam_date|date:"M" == user.exam_date2.exam_date|date:"M" %}
+                                       <tr>
+                                        <td>Exam Date</td>
+                                         <td>{{user.exam_date1.exam_date|date:"j"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
+                                       </tr>
+                                       {% else %}
+                                       <tr>
+                                        <td>Exam Date</td>
+                                         <td>{{user.exam_date1.exam_date|date:"j, M"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
+                                       </tr>
+                                       {% endif %}
+                                       {% endif %}
+                                       <tr>
+                                        <td>Max Marks</td>
+                                         <td>{{user.exam_type_child.exam_max_marks}}</td>
+                                       </tr>
+
+                                       <tr>
+                                        <td>Marks Obtained</td>
+                                        {% if user.total_sum == 0 %}
+                                        <td>Marks Not Uploaded</td>
+                                        {% else %}
+                                        <td>{{user.total_sum}}</td>
+                                        {% endif %}
+                                       </tr>
+
+                                       <tr>
+                                        <td>Result</td>
+                                        {% if user.total_sum == 0 %}
+                                        <td>N/A</td>
+                                        {% else %}
+                                        <td>{{user.result}}</td>
+                                        {% endif %}
+                                       </tr>
+
+                                       
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
             </div> 
             
                
-            {% if user.profile.designation %}
-            {% if  user.profile.designation.level_name == "student"  %}
-            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-                <div class="uk-width-medium-1-2">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <h4>My Results</h4>
-                            <div class="uk-overflow-container">
-                                <table class="uk-table uk-table-condensed uk-table-hover">
-                                    <thead>
-                                       
-                                    </thead>
-                                    <tbody>
-                                        <br>
-                                        <tr>
-                                            <td>Exam Sr No.</td>
-                                             <td>{{user.exam_type_child.exam_type_sr_no}}</td>
-                                           </tr>
-                                            <tr>
-                                            <td>Exam</td>
-                                             <td>{{user.exam_type_child}}</td>
-                                           </tr>
-                                           {% if user.exam_date1.exam_date|date:"M" == user.exam_date2.exam_date|date:"M" %}
-                                           <tr>
-                                            <td>Exam Date</td>
-                                             <td>{{user.exam_date1.exam_date|date:"j"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
-                                           </tr>
-                                           {% else %}
-                                           <tr>
-                                            <td>Exam Date</td>
-                                             <td>{{user.exam_date1.exam_date|date:"j, M"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
-                                           </tr>
-                                           {% endif %}
-                                           <tr>
-                                            <td>Max Marks</td>
-                                             <td>{{user.exam_type_child.exam_max_marks}}</td>
-                                           </tr>
-
-                                           <tr>
-                                            <td>Marks Obtained</td>
-                                             <td>{{user.total_sum}}</td>
-                                           </tr>
-
-                                           <tr>
-                                            <td>Result</td>
-                                             <td>{{user.result}}</td>
-                                           </tr>
-
-                                           
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div> 
-
-            </div>
-            {% endif %} {% endif %}  
-
             
+           
     <!-- secondary sidebar -->
     <aside id="sidebar_secondary" class="tabbed_sidebar">
         <ul class="uk-tab uk-tab-icons uk-tab-grid" data-uk-tab="{connect:'#dashboard_sidebar_tabs', animation:'slide-horizontal'}">
