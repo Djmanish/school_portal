@@ -10,6 +10,40 @@
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no"/>
     <style>
+       
+        .fc-toolbar{
+            margin-left: auto !important;
+            margin-right: auto !important;
+            margin-bottom: auto !important;
+        }
+        .fc-day-grid-container{
+            margin: 10px !important;
+        }
+        .fc-button-primary:disabled{
+            background-color:#0080ff !important ;
+            border-color: #0080ff !important;
+            border-radius: 10% !important;
+        }
+        .fc-button-primary{
+            background-color:#0080ff !important ;
+            border-color: #0080ff !important;
+            border-radius: 10% !important;
+            margin-right: 5px !important;
+        }
+        .fc-toolbar h2{
+            color:#0080ff;
+            font-weight:500;
+        }
+        .fc-unthemed .fc-widget-header{
+            text-align: center !important;
+        }
+        .fc-sun{
+            color: red;
+        }
+        .fc-scroller{
+            height: auto !important;
+            margin-bottom: auto;
+        }
         .on-the {
             margin-left: 20px;
         }
@@ -54,7 +88,7 @@
         .fc-unthemed .fc-today-button::after {
             visibility: hidden;
         }
-        .fc-unthemed .fc-today-button{
+        .fc-unthemed .fc-today-button::after {
             background-color: #2c3e50;
         }
         #calendar {
@@ -62,7 +96,23 @@
           margin: 0 auto;
           height: auto;
         }
-      
+        .fc-toolbar .fc-button{
+            margin-top: auto !important;
+            opacity: 1;
+        }
+        .fc-unthemed .fc-today-button{
+            font-size: 12px !important;
+            font-weight: bolder;
+            border-radius: 10% !important;
+        }
+        .fc-today-button:hover{
+            
+            color: #212529;
+            font-weight: bold;
+        }
+        .fc-button:hover{
+            color: #212529;
+        }
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -1111,7 +1161,7 @@
                <div class="uk-width-medium-1-2">
                 <div class="md-card">
                     <div class="md-card-content">
-                        <h4>Events & Calendar </h4>
+                        
                         {% if user.profile.designation.level_name == "parent" %}
                         {% if user.count > 1 %}
                         <form  method="POST" action="#" class="form-inline" id="parent_calendar_form">
@@ -1133,47 +1183,12 @@
                         </form>
                         {% endif %}
                         {% endif %}
-                        <div id="caleandar" >
+                        <div id='calendar'></div>
                         </div>
-                        <script>
-                            var events = [ 
-                                        {% if user.profile.designation.level_name != "parent" %}
-                                        {% for h in holiday %}
-                                        {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}', 'Link': '#'},
-                                        {% endfor %}
-                                        {% endif %}
-                                        {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-                                        {% for i in exam_she %}
-                                        {'Date': new Date({{i.exam_date|date:"Y, n-1, j"}}), 'Title': '{{i.exam_type}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                        {% endfor %}  
-                                        {% endif %}   
-                                        {% if user.profile.designation.level_name == "teacher" %}
-                                        {% for j in user.exam_she_teacher %}
-                                        {'Date': new Date({{j.exam_date|date:"Y, n-1, j"}}), 'Title': '{{j.exam_type}}<br>{{j.exam_class}}-{{j.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                        {% endfor %}  
-                                        {% endif %} 
-                                        {% if user.profile.designation.level_name == "student" %}
-                                        {% for k in user.exam_she_student %}
-                                        {'Date': new Date({{k.exam_date|date:"Y, n-1, j"}}), 'Title': '{{k.exam_type}}<br>{{k.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                        {% endfor %}  
-                                        {% endif %} 
-                                        {% if user.profile.designation.level_name == "parent" %}
-                                        {% for h in user.holiday_child %}
-                                        {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}', 'Link': '#'},
-                                        {% endfor %}
-                                        {% for l in user.exam_she_child %}
-                                        {'Date': new Date({{l.exam_date|date:"Y, n-1, j"}}), 'Title': '{{l.institute}}<br>{{l.exam_type}}<br>{{l.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                        {% endfor %}  
-                                        {% endif %}   
-                                    ];
-                                        var settings = {
-                                        };
-                                        var element = document.getElementById('caleandar');
-                                        caleandar(element, events, settings);
-                        </script>                      
+                                             
                     </div>
                 </div>
-            </div> 
+                 
             
                {% endif %}
                {% if user.profile.designation.level_name == "principal" %}
@@ -1244,15 +1259,9 @@
                    </div>
                </div>               
                {% endif %}  
-               <div class="uk-width-medium-1-2">
-                <div class="md-card">
-                    <div class="md-card-content" style="height: auto;">
-                        
-                        <div id='calendar'></div>
-                    </div>
-                </div>
+              
             </div> 
-            </div> 
+            
                
             {% if user.profile.designation %}
             {% if  user.profile.designation.level_name == "student"  %}
