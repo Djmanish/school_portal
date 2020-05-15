@@ -30,6 +30,7 @@ from main_app.serializers import UserProfileSerializer
 from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
+from django.core.exceptions import PermissionDenied
 
 
 # Create your views here.
@@ -239,7 +240,7 @@ def approvals(request,pk):
         # ending user notice
     institute_approval = Institute.objects.get(pk=pk)
     if request.user.profile.institute != institute_approval:
-        return HttpResponse("Forbidden")
+        raise PermissionDenied
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
     
     if request.user.profile.designation.level_name=='teacher' or request.user.profile.designation.level_name=='principal' or request.user.profile.designation.level_name=='admin':
@@ -308,7 +309,8 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "student":
             try:
                 request.user.exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
-                print(request.user.exam_type_child)
+                
+               
                 try:
                     request.user.exam_date1=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).earliest('id')
                     request.user.exam_date2=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).latest('id')
@@ -333,7 +335,8 @@ def dashboard(request):
                 else:
                     request.user.result="Pass"         
             except ExamType.DoesNotExist:
-                    pass
+                request.user.exam_type_child= None
+                
             
     # starting assigned teachers
    
