@@ -11,14 +11,28 @@ from django.contrib import messages
 # Create your views here.
 
 def all_notices(request):
+        # starting user notice
+    if request.user.profile.designation:
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice
     teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
     teacher_role_level = teacher_role_level.level_id
-    
     user_role_level = request.user.profile.designation.level_id
 
     all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
     user_notices = []
-    #if admin and pricipal will see all notices so comparing leved id if less than tacher
+    #if admin and pricipal will see all notices so comparing level id if less than tacher
     if user_role_level < teacher_role_level:
         user_notices = all_notices.exclude(category="absent").reverse()
     else:
@@ -44,6 +58,21 @@ def all_notices(request):
 
 
 def create_notice(request):
+        # starting user notice
+    if request.user.profile.designation:
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice
     if request.user.user_institute_role.level.level_name == 'student' or request.user.user_institute_role.level.level_name == 'parent':
         messages.info(request, 'You might not have permission to create a notice !!!')
         return redirect('not_found')
@@ -73,13 +102,14 @@ def create_notice(request):
             selected_class = request.POST.get('notice_class')
             notice_refrence_no = request.POST.get('notice_refrence_no').strip()
 
-            try:
-                check_notice_no = Notice.objects.get(reference_no= notice_refrence_no)
-                messages.info(request, 'Notice with this reference no. already exists. ')
-                return redirect('create_notice')
-            except:
-                pass
-            
+            if not notice_refrence_no=="":
+                try:
+                    check_notice_no = Notice.objects.get(reference_no= notice_refrence_no)
+                    messages.info(request, 'Notice with this reference no. already exists. ')
+                    return redirect('create_notice')
+                except:
+                    pass
+                
             new_notice = Notice()
             new_notice.institute = request.user.profile.institute
             new_notice.subject = subject
@@ -201,7 +231,6 @@ def fetch_deleted_id(request,pk):
     return HttpResponse(notice_id)
 
 def delete_notice(request):
- 
     deleted_notice = Notice.objects.get(pk= request.POST.get('notice_id'))
     try:
         deleted_notice.delete()

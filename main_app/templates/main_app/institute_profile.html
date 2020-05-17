@@ -113,101 +113,83 @@
 
                 <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav user_actions">
-                        <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i
-                                    class="material-icons md-24 md-light">fullscreen</i></a></li>
-                        <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i
-                                    class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
-                                    <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                                        <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
-                                        <div class="uk-dropdown uk-dropdown-xlarge">
-                                            <div class="md-card-content">
-                                                <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
-                                                    <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
-                                                    <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
-                                                </ul>
-                                                <ul id="header_alerts" class="uk-switcher uk-margin">
-                                                    <li>
-                                                        <ul class="md-list md-list-addon">
-                                                            <li>
-                                                                <div class="md-list-addon-element">
-                                                                    <span class="md-user-letters md-bg-cyan">N</span>
-                                                                </div>
-                                                                <div class="md-list-content">
-                                                                    <span class="md-list-heading"><a href="{% url 'all_notice_list' %}"> All Notifiactions</a></span>
-                                                                    <span class="uk-text-small uk-text-muted">Click Here to see all your Notifications.</span>
-                                                                </div>
-                                                            </li>
-                                                            <!-- <li>
-                                                                <div class="md-list-addon-element">
-                                                                    <img class="md-user-image md-list-addon-avatar" src="{% static 'main_app/img/avatars/avatar_07_tn.png' %}" alt=""/>
-                                                                </div>
-                                                                <div class="md-list-content">
-                                                                    <span class="md-list-heading"><a href="page_mailbox.html">Esse similique et.</a></span>
-                                                                    <span class="uk-text-small uk-text-muted">Nam molestiae architecto maxime dicta qui esse consequatur dignissimos rem.</span>
-                                                                </div>
-                                                            </li> -->
-                                                            <!-- <li>
-                                                                <div class="md-list-addon-element">
-                                                                    <span class="md-user-letters md-bg-light-green">qm</span>
-                                                                </div>
-                                                                <div class="md-list-content">
-                                                                    <span class="md-list-heading"><a href="page_mailbox.html">Eaque autem.</a></span>
-                                                                    <span class="uk-text-small uk-text-muted">Aspernatur in quod distinctio est id provident nihil quam fugit inventore.</span>
-                                                                </div>
-                                                            </li> -->
-                                                         
-                                                        </ul>
-                                                        <!-- <div class="uk-text-center uk-margin-top uk-margin-small-bottom">
-                                                            <a href="page_mailbox.html" class="md-btn md-btn-flat md-btn-flat-primary js-uk-prevent">Show All</a>
-                                                        </div> -->
-                                                    </li>
-                                                    <li>
-                                                        <ul class="md-list md-list-addon">
-                                                            <li>
-                                                                <div class="md-list-addon-element">
-                                                                    <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
-                                                                </div>
-                                                                <div class="md-list-content">
-                                                                    <span class="md-list-heading">Voluptatem omnis.</span>
-                                                                    <span class="uk-text-small uk-text-muted uk-text-truncate">Consequatur eaque natus esse assumenda aut ab quidem.</span>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="md-list-addon-element">
-                                                                    <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
-                                                                </div>
-                                                                <div class="md-list-content">
-                                                                    <span class="md-list-heading">Itaque sit officiis.</span>
-                                                                    <span class="uk-text-small uk-text-muted uk-text-truncate">Ad velit quia possimus officia adipisci dicta enim.</span>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="md-list-addon-element">
-                                                                    <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
-                                                                </div>
-                                                                <div class="md-list-content">
-                                                                    <span class="md-list-heading">Modi odit impedit.</span>
-                                                                    <span class="uk-text-small uk-text-muted uk-text-truncate">Inventore unde praesentium numquam amet et sunt dolorum.</span>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="md-list-addon-element">
-                                                                    <i class="md-list-addon-icon material-icons uk-text-primary">&#xE8FD;</i>
-                                                                </div>
-                                                                <div class="md-list-content">
-                                                                    <span class="md-list-heading">Qui et.</span>
-                                                                    <span class="uk-text-small uk-text-muted uk-text-truncate">Quia pariatur id facere accusantium rerum illum.</span>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
+                        <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
+                        <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
+                        
+                        {% if user.profile.designation %}
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image"
-                                    src="{{user.profile.profile_pic.url}}" alt="" /> <span id="md_user">{{user.username}}</span></a>
+                            <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
+                            <div class="uk-dropdown uk-dropdown-xlarge">
+                                <div class="md-card-content">
+                                    <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
+                                        <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
+                                        <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
+                                    </ul>
+                                    <ul id="header_alerts"  class="uk-switcher uk-margin">
+                                        <li>
+                                            <ul class="md-list md-list-addon alert_notice_list">
+                                                {% for notice in user.users_notice|slice:":5" %}
+                                                <li>
+                                                    <a href="{% url 'all_notice_list' %}">
+                                                        <div class="md-list-addon-element">
+                                                            <span class="md-user-letters md-bg-cyan">N</span>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <ul class="md-list md-list-addon">
+                                                <li>
+                                                    <div class="md-list-addon-element">
+                                                        <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
+                                                    </div>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading">Voluptatem omnis.</span>
+                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Consequatur eaque natus esse assumenda aut ab quidem.</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-addon-element">
+                                                        <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
+                                                    </div>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading">Itaque sit officiis.</span>
+                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Ad velit quia possimus officia adipisci dicta enim.</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-addon-element">
+                                                        <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
+                                                    </div>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading">Modi odit impedit.</span>
+                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Inventore unde praesentium numquam amet et sunt dolorum.</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-addon-element">
+                                                        <i class="md-list-addon-icon material-icons uk-text-primary">&#xE8FD;</i>
+                                                    </div>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading">Qui et.</span>
+                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Quia pariatur id facere accusantium rerum illum.</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                            
+                        <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -216,7 +198,7 @@
                                 </ul>
                             </div>
                         </li>
-                
+                      
                     </ul>
                 </div>
             </nav>
@@ -603,7 +585,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Email</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{institute_data.email}}</span>
+                                                        <span class="uk-text-small uk-text-muted"><a href="mailto:{{institute_data.email}}">{{institute_data.email}}</a></span>
                                                        
                                                     </div>
                                                 </li>
@@ -719,8 +701,13 @@
                                 <li>
                                     <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                     <div class="uk-width-large-1-2">
+<<<<<<< HEAD
                                         <h4 class="heading_c uk-margin-small-bottom">Personal Details</h4>
                                         <ul class="md-list">
+=======
+                                       
+                                        <ul class="md-list md-list-addon">
+>>>>>>> a7df4db4cdad739e6b95cec645c79a1423517849
                                             <li>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Organization
@@ -774,6 +761,7 @@
                                                         class="uk-text-small uk-text-muted">{{institute_data.contact_number1}}</span>
                                                 </div>
                                             </li>
+<<<<<<< HEAD
                                         
 
                                         
@@ -791,11 +779,15 @@
                                                         class="uk-text-small uk-text-muted">{{institute_data.facebook_link}}</span>
                                                 </div>
                                             </li>
+=======
+                                   
+                                            
+>>>>>>> a7df4db4cdad739e6b95cec645c79a1423517849
                                             <li>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Website</a></span>
                                                     <span
-                                                        class="uk-text-small uk-text-muted">{{institute_data.website_link}}</span>
+                                                        class="uk-text-small uk-text-muted"><a target="_blank" href="{{institute_data.website_link}}">{{institute_data.website_link}}</a></span>
                                                 </div>
                                             </li>
 
@@ -899,7 +891,7 @@
                                                                
                                                                 <td>
                                                                     {% if classes.class_teacher %}
-                                                                    {{classes.class_teacher}}
+                                                                    {{classes.class_teacher.profile.first_name}} {{classes.class_teacher.profile.last_name}}
                                                                     {% else %}
                                                                     Not assigned
                                                                     {% endif %}   
@@ -1041,7 +1033,7 @@
 
                                                                 <td> {{subjects.subject_code}} </td>
                                                                 <td> {{subjects.subject_name}} </td>
-                                                                <td> {{subjects.subject_teacher}} </td>
+                                                                <td> {{subjects.subject_teacher.profile.first_name}} {{subjects.subject_teacher.profile.last_name}} </td>
 
                                            
                                                                 {% if can_edit_subject_permission in user_permissions %}                    

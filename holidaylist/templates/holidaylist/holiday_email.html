@@ -114,10 +114,12 @@
                         </div>
                     </div>
                  -->
-                <div class="uk-navbar-flip">
+                 <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav user_actions">
                         <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
                         <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
+                        
+                        {% if user.profile.designation %}
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                             <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
                             <div class="uk-dropdown uk-dropdown-xlarge">
@@ -126,41 +128,22 @@
                                         <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
                                         <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
                                     </ul>
-                                    <ul id="header_alerts" class="uk-switcher uk-margin">
+                                    <ul id="header_alerts"  class="uk-switcher uk-margin">
                                         <li>
-                                            <ul class="md-list md-list-addon">
+                                            <ul class="md-list md-list-addon alert_notice_list">
+                                                {% for notice in user.users_notice|slice:":5" %}
                                                 <li>
-                                                    <div class="md-list-addon-element">
-                                                        <span class="md-user-letters md-bg-cyan">N</span>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="{% url 'all_notice_list' %}"> All Notifiactions</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Click Here to see all your Notifications.</span>
-                                                    </div>
+                                                    <a href="{% url 'all_notice_list' %}">
+                                                        <div class="md-list-addon-element">
+                                                            <span class="md-user-letters md-bg-cyan">N</span>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
+                                                        </div>
+                                                    </a>
                                                 </li>
-                                                <!-- <li>
-                                                    <div class="md-list-addon-element">
-                                                        <img class="md-user-image md-list-addon-avatar" src="{% static 'main_app/img/avatars/avatar_07_tn.png' %}" alt=""/>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="page_mailbox.html">Esse similique et.</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Nam molestiae architecto maxime dicta qui esse consequatur dignissimos rem.</span>
-                                                    </div>
-                                                </li> -->
-                                                <!-- <li>
-                                                    <div class="md-list-addon-element">
-                                                        <span class="md-user-letters md-bg-light-green">qm</span>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading"><a href="page_mailbox.html">Eaque autem.</a></span>
-                                                        <span class="uk-text-small uk-text-muted">Aspernatur in quod distinctio est id provident nihil quam fugit inventore.</span>
-                                                    </div>
-                                                </li> -->
-                                             
+                                                {% endfor %}
                                             </ul>
-                                            <!-- <div class="uk-text-center uk-margin-top uk-margin-small-bottom">
-                                                <a href="page_mailbox.html" class="md-btn md-btn-flat md-btn-flat-primary js-uk-prevent">Show All</a>
-                                            </div> -->
                                         </li>
                                         <li>
                                             <ul class="md-list md-list-addon">
@@ -206,6 +189,8 @@
                                 </div>
                             </div>
                         </li>
+                        {% endif %}
+                            
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                             <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
@@ -216,7 +201,7 @@
                                 </ul>
                             </div>
                         </li>
-                        
+                      
                     </ul>
                 </div>
             </nav>

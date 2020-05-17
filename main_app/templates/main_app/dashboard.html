@@ -10,6 +10,40 @@
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no"/>
     <style>
+       
+        .fc-toolbar{
+            margin-left: auto !important;
+            margin-right: auto !important;
+            margin-bottom: auto !important;
+        }
+        .fc-day-grid-container{
+            margin: 10px !important;
+        }
+        .fc-button-primary:disabled{
+            background-color:#0080ff !important ;
+            border-color: #0080ff !important;
+            border-radius: 10% !important;
+        }
+        .fc-button-primary{
+            background-color:#0080ff !important ;
+            border-color: #0080ff !important;
+            border-radius: 10% !important;
+            margin-right: 5px !important;
+        }
+        .fc-toolbar h2{
+            color:#0080ff;
+            font-weight:500;
+        }
+        .fc-unthemed .fc-widget-header{
+            text-align: center !important;
+        }
+        .fc-sun{
+            color: red;
+        }
+        .fc-scroller{
+            height: auto !important;
+            margin-bottom: auto;
+        }
         .on-the {
             margin-left: 20px;
         }
@@ -37,6 +71,53 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
     <title>User Dashboard</title>
+    <!-- Fullcalendar -->
+    <link rel="stylesheet" href="{% static 'main_app/packages/core/main.css' %}" rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'main_app/packages/daygrid/main.css' %}" rel='stylesheet'>
+    <script src="{% static 'main_app/packages/core/main.js' %}"></script>
+    <script src="{% static 'main_app/packages/interaction/main.js' %}"></script>
+    <script src="{% static 'main_app/packages/daygrid/main.js' %}"></script>
+    <style>
+        .fc-unthemed .fc-prev-button::after{
+            visibility: hidden;            
+        }
+        .fc-unthemed .fc-next-button::after {
+            visibility: hidden;
+        }
+        
+        .fc-unthemed .fc-today-button::after {
+            visibility: hidden;
+        }
+        .fc-unthemed .fc-today-button::after {
+            background-color: #2c3e50;
+        }
+        #calendar {
+          width: auto;
+          margin: 0 auto;
+          height: auto;
+        }
+        .fc-toolbar .fc-button{
+            margin-top: auto !important;
+            opacity: 1;
+        }
+        .fc-unthemed .fc-today-button{
+            font-size: 12px !important;
+            font-weight: bolder;
+            border-radius: 10% !important;
+        }
+        .fc-today-button:hover{
+            
+            color: #212529;
+            font-weight: bold;
+        }
+        .fc-button:hover{
+            color: #212529;
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{% static 'main_app/js/script.js' %}"></script>
+
    
     <!-- clnde -->
     <link rel="stylesheet" href="{% static 'main_app/clndr/calendar.css' %}">
@@ -323,15 +404,14 @@
                 {% endif %}
                     
 
-                {% if user.profile.institute %}
+                {% if user.profile.institute and user.profile.status == 'approve' %}
                 <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
-
-                
+      
 <!-- starting notice menu -->
 <li  title="Notices">
     <a href="">
@@ -368,7 +448,7 @@
         <span class="menu_title">Fees Setup</span>
     </a>
 </li>
-           
+
 {% endif %}
     
 {% if user.profile.designation.level_name == "parent" %}
@@ -393,7 +473,7 @@
                     <span class="menu_title">Schedule</span>
                 </a>
             </li>               
-            {% endif %}  
+           
 
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
@@ -410,7 +490,13 @@
                 {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
                     <li  title="Approvals">
                         <a href="{% url 'approvals' user.profile.institute.pk %}">
-                            <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
+                            <span class="menu_icon"><i class="material-icons">how_to_reg</i>
+                                {% if user.approval_request > 0 %}
+                                <span class="uk-badge" style="background-color: red;">                                
+                                {{user.approval_request}}                                     
+                                </span>
+                                {% endif %}
+                        </span>
                             <span class="menu_title">Approvals</span>
                         </a>
                     </li>
@@ -492,6 +578,7 @@
                         </ul>
                     </li>
 
+                    {% endif %}  
                     {% endif %} 
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
@@ -526,7 +613,7 @@
           </div>
             </div>
             {% endif %}
-            
+{% if user.profile.status == "approve" %}
             <!-- statistics (small charts) -->
             {% if user.profile.designation %}
             {% if user.profile.designation.level_name == "student" %}
@@ -566,7 +653,7 @@
                                 {% if user.sum_out > 0 %}
                                     <h4 class="uk-margin-remove" style="color: red;">Dues Pending</h4>
                                 {% else %}
-                                    <h4 class="uk-margin-remove">Paid</h4>
+                                    <h4 class="uk-margin-remove">No Dues</h4>
                                 {% endif %}
                             </div>
                         </div>
@@ -739,27 +826,27 @@
                                       
                                         <tr>
                                             <td>Total Days Attendance Taken</td>
-                                             <td>{{user.student_total_days_school_open|default:"No Data"}}</td>
+                                             <td>{{user.student_total_days_school_open|default:0}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Total Days Present</td>
-                                             <td>{{user.student_total_days_present|default:"No Data"}}</td>
+                                             <td>{{user.student_total_days_present|default:0}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Total Days Absent</td>
-                                             <td>{{user.student_total_days_absent|default:"No Data"}}</td>
+                                             <td>{{user.student_total_days_absent|default:0}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Total Days leave Taken</td>
-                                             <td>{{user.student_total_days_leave|default:"No Data"}}</td>
+                                             <td>{{user.student_total_days_leave|default:0}}</td>
                                            </tr>
 
                                            <tr>
                                             <td>Attendance Percentage</td>
-                                             <td>{{user.student_attendance_percentage|default:"No Data"}}%</td>
+                                             <td>{{user.student_attendance_percentage|default:0}}%</td>
                                            </tr>
                                     </tbody>
                                 </table>
@@ -800,8 +887,9 @@
                 {% endif %}
             </div>
            {% elif user.profile.designation.level_name == "teacher" %}      
-
+            
            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+            {% if user.user_subject_one_len > 0 %}
             <div class="uk-width-medium-1-2">
                 <div class="md-card">
                     <div class="md-card-content">
@@ -818,6 +906,12 @@
                                         </tr>
                                 </thead>
                                 <tbody>
+                                    {% for u in user.user_t1 %}
+                                    <tr class="uk-table-middle">
+                                        <td class="uk-width-3-10 uk-text-nowrap">{{u}}</td>
+                                        <td class="uk-width-3-10 uk-text-nowrap"></td>
+                                    </tr>
+                                    {% endfor %}
                                     {% for teacher1 in user_subject_one %}
                                     <tr class="uk-table-middle">
                                         <td class="uk-width-3-10 uk-text-nowrap">{{teacher1.subject_class}}</td>
@@ -833,7 +927,7 @@
                     </div>
                 </div>
             </div>
-            
+            {% endif %}
             <div class="uk-width-medium-1-2">
                 
                 <div class="md-card">
@@ -957,7 +1051,7 @@
                 
             </div>
            
-        </div>
+            </div>
             
             {% elif  user.profile.designation.level_name == "parent" %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
@@ -1009,52 +1103,52 @@
 
             {% else %}
    <!-- tasks -->
-   <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-    <div class="uk-width-medium-1-2">
-        <div class="md-card">
-           
-            <div class="md-card-content">
-                <h3 class="heading_a uk-margin-bottom">Today's Class Status </h3>
-               
-                <div class="uk-overflow-container dbmh " >
-                    <table class="uk-table uk-table-condensed uk-table-hover">
-                       
-                        <thead>
-                            <tr>
-                                <th >Class</th>
-                                <th >Students</th>
-                                <th >Present</th>
-                                <th >Absent</th>
-                                <th >Leave</th>
-                            </tr>
-                        </thead>
-                        <tbody id="TCS">
-                            {% for class in all_classes %}
-                            <tr class="uk-table-middle">
-                                <td ><a href="{% url 'current_attendance_record' class.pk %}">{{class}}</a></td>
-                                <td >{{class.total_student}}</td>
-                                <td >{{class.total_present}}</td>
-                                <td >{{class.total_absent}}</td>
-                                <td >{{class.total_leave}}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                    <div class="uk-width-medium-1-2">
+                        <div class="md-card">
+                        
+                            <div class="md-card-content">
+                                <h3 class="heading_a uk-margin-bottom">Today's Class Status </h3>
+                            
+                                <div class="uk-overflow-container dbmh " >
+                                    <table class="uk-table uk-table-condensed uk-table-hover">
+                                    
+                                        <thead>
+                                            <tr>
+                                                <th >Class</th>
+                                                <th >Students</th>
+                                                <th >Present</th>
+                                                <th >Absent</th>
+                                                <th >Leave</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="TCS">
+                                            {% for class in all_classes %}
+                                            <tr class="uk-table-middle">
+                                                <td ><a href="{% url 'current_attendance_record' class.pk %}">{{class}}</a></td>
+                                                <td >{{class.total_student}}</td>
+                                                <td >{{class.total_present}}</td>
+                                                <td >{{class.total_absent}}</td>
+                                                <td >{{class.total_leave}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-width-medium-1-2">
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <h3 class="heading_a uk-margin-bottom">Approvals</h3>
+                                <div id="container" style="width: 100%;height: auto;">
+                                    <canvas id="canvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="uk-width-medium-1-2">
-        <div class="md-card">
-            <div class="md-card-content">
-                <h3 class="heading_a uk-margin-bottom">Approvals</h3>
-                <div id="container" style="width: 100%;height: auto;">
-                    <canvas id="canvas"></canvas>
-                  </div>
-            </div>
-        </div>
-    </div>
-</div>
             {% endif %}
  
             {% endif %}
@@ -1067,7 +1161,7 @@
                <div class="uk-width-medium-1-2">
                 <div class="md-card">
                     <div class="md-card-content">
-                        <h4>Events & Calendar </h4>
+                        
                         {% if user.profile.designation.level_name == "parent" %}
                         {% if user.count > 1 %}
                         <form  method="POST" action="#" class="form-inline" id="parent_calendar_form">
@@ -1089,47 +1183,13 @@
                         </form>
                         {% endif %}
                         {% endif %}
-                        <div id="caleandar" >
+                        <div id='calendar'></div>
                         </div>
-                        <script>
-                            var events = [ 
-                                        {% if user.profile.designation.level_name != "parent" %}
-                                        {% for h in holiday %}
-                                        {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}', 'Link': '#'},
-                                        {% endfor %}
-                                        {% endif %}
-                                        {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-                                        {% for i in exam_she %}
-                                        {'Date': new Date({{i.exam_date|date:"Y, n-1, j"}}), 'Title': '{{i.exam_type}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                        {% endfor %}  
-                                        {% endif %}   
-                                        {% if user.profile.designation.level_name == "teacher" %}
-                                        {% for j in user.exam_she_teacher %}
-                                        {'Date': new Date({{j.exam_date|date:"Y, n-1, j"}}), 'Title': '{{j.exam_type}}<br>{{j.exam_class}}-{{j.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                        {% endfor %}  
-                                        {% endif %} 
-                                        {% if user.profile.designation.level_name == "student" %}
-                                        {% for k in user.exam_she_student %}
-                                        {'Date': new Date({{k.exam_date|date:"Y, n-1, j"}}), 'Title': '{{k.exam_type}}<br>{{k.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                        {% endfor %}  
-                                        {% endif %} 
-                                        {% if user.profile.designation.level_name == "parent" %}
-                                        {% for h in user.holiday_child %}
-                                        {'Date': new Date({{h.date|date:"Y, n-1, j"}}), 'Title': '{{h.name}}', 'Link': '#'},
-                                        {% endfor %}
-                                        {% for l in user.exam_she_child %}
-                                        {'Date': new Date({{l.exam_date|date:"Y, n-1, j"}}), 'Title': '{{l.institute}}<br>{{l.exam_type}}<br>{{l.exam_subject}}', 'Link': "{% url 'examschedule_view' request.user.profile.institute.id %}"},
-                                        {% endfor %}  
-                                        {% endif %}   
-                                    ];
-                                        var settings = {
-                                        };
-                                        var element = document.getElementById('caleandar');
-                                        caleandar(element, events, settings);
-                        </script>                      
+                                             
                     </div>
                 </div>
-            </div> 
+                 
+            
                {% endif %}
                {% if user.profile.designation.level_name == "principal" %}
                <div class="uk-width-medium-1-2">
@@ -1137,7 +1197,7 @@
                        <div class="md-card-content">
                            <h4>Fess Status</h4>
                            <h6 lass="uk-accordion-title" class="on-the">Classes<span class="on-the-fly">Pending Fees</span></h6>
-                           <div class="uk-accordion" data-uk-accordion="{showfirst: false}">
+                           <div class="uk-accordion uk-overflow-container dbmh" data-uk-accordion="{showfirst: false}">
                                {% for cl in request.user.l_classes %}
                                <h3 class="uk-accordion-title" style="color: #0080ff;">{{cl}}<span class="on-the-fly-behavior">{{cl.total_unpaid_student}} Student</span></h3>
                                <div class="uk-accordion-content">
@@ -1167,101 +1227,118 @@
                    </div>
                </div>               
                {% endif %}   
+               {% if user.profile.designation %}
                {% if user.profile.designation.level_name == "student" %}
-               <div class="uk-width-medium-1-2">
-                   <div class="md-card">
-                       <div class="md-card-content">
-                           <h4>My Dues</h4>
-                           <table class="uk-table uk-table-condensed uk-table-hover">
-                            <thead>
-                               <tr>
-                                <th class="uk-text-nowrap">Sr No.</th>
-                                <th class="uk-text-nowrap">Dues</th>
-                                <th class="uk-text-nowrap">Amount</th>
-                               </tr>
-                            </thead>
-                            <tbody>
-                                <br>
-                                {% for sn in user.student_fees_st %}
-                                <tr>
-                                    <td class="uk-width-3-10 uk-text-nowrap">{{forloop.counter}}</td>
-                                    <td class="uk-width-3-10 uk-text-nowrap">{{sn.due_date}}</td>
-                                    {% if sn.total_due_amount == 0 %}
-                                        <td class="uk-width-3-10 uk-text-nowrap" style="color:#7cb342"><b>Paid</b></td>
-                                    {% else %}
-                                        <td class="uk-width-3-10 uk-text-nowrap">{{sn.total_due_amount}}</td>
-                                    {% endif %}
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                       </div>
-                   </div>
-               </div>               
-               {% endif %}  
-              
-            </div> 
-               
-            {% if user.profile.designation %}
-            {% if  user.profile.designation.level_name == "student"  %}
-            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-                <div class="uk-width-medium-1-2">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <h4>My Results</h4>
-                            <div class="uk-overflow-container">
+                    {% if user.student_fees_st_len > 0 %}
+                    <div class="uk-width-medium-1-2">
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <h4>My Dues</h4>
                                 <table class="uk-table uk-table-condensed uk-table-hover">
                                     <thead>
-                                       
+                                    <tr>
+                                        <th class="uk-text-nowrap">Sr No.</th>
+                                        <th class="uk-text-nowrap">Dues</th>
+                                        <th class="uk-text-nowrap">Amount</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
                                         <br>
+                                        {% for sn in user.student_fees_st %}
                                         <tr>
-                                            <td>Exam Sr No.</td>
-                                             <td>{{user.exam_type_child.exam_type_sr_no}}</td>
-                                           </tr>
-                                            <tr>
-                                            <td>Exam</td>
-                                             <td>{{user.exam_type_child}}</td>
-                                           </tr>
-                                           {% if user.exam_date1.exam_date|date:"M" == user.exam_date2.exam_date|date:"M" %}
-                                           <tr>
-                                            <td>Exam Date</td>
-                                             <td>{{user.exam_date1.exam_date|date:"j"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
-                                           </tr>
-                                           {% else %}
-                                           <tr>
-                                            <td>Exam Date</td>
-                                             <td>{{user.exam_date1.exam_date|date:"j, M"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
-                                           </tr>
-                                           {% endif %}
-                                           <tr>
-                                            <td>Max Marks</td>
-                                             <td>{{user.exam_type_child.exam_max_marks}}</td>
-                                           </tr>
-
-                                           <tr>
-                                            <td>Marks Obtained</td>
-                                             <td>{{user.total_sum}}</td>
-                                           </tr>
-
-                                           <tr>
-                                            <td>Result</td>
-                                             <td>{{user.result}}</td>
-                                           </tr>
-
-                                           
+                                            <td class="uk-width-3-10 uk-text-nowrap">{{forloop.counter}}</td>
+                                            <td class="uk-width-3-10 uk-text-nowrap">{{sn.due_date}}</td>
+                                            {% if sn.total_due_amount == 0 %}
+                                                <td class="uk-width-3-10 uk-text-nowrap" style="color:#7cb342"><b>Paid</b></td>
+                                            {% else %}
+                                                <td class="uk-width-3-10 uk-text-nowrap">{{sn.total_due_amount}}</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                    </div>               
+                    {% endif %} 
+                    
+                    
+                    {% endif %} {% endif %}  
+               {% if user.profile.designation.level_name == "student" %}
+               {% if user.exam_type_child != None %}
+                    <div class="uk-width-medium-1-2">
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <h4>My Results</h4>
+                                <div class="uk-overflow-container">
+                                    <table class="uk-table uk-table-condensed uk-table-hover">
+                                        <thead>
+                                        
+                                        </thead>
+                                        <tbody>
+                                            <br>
+                                            <tr>
+                                                <td>Exam Sr No.</td>
+                                                <td>{{user.exam_type_child.exam_type_sr_no}}</td>
+                                            </tr>
+                                                <tr>
+                                                <td>Exam</td>
+                                                <td>{{user.exam_type_child}}</td>
+                                            </tr>
+                                            {% if user.exam_date1 == None and user.exam_date2 == None%}
+                                            <tr>
+                                                <td>Exam Date</td>
+                                                <td>N/A</td>
+                                            </tr>
+                                            
+                                            {% elif user.exam_date1.exam_date|date:"M" == user.exam_date2.exam_date|date:"M" %}
+                                            <tr>
+                                                <td>Exam Date</td>
+                                                <td>{{user.exam_date1.exam_date|date:"j"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
+                                            </tr>
+                                            {% else %}
+                                            <tr>
+                                                <td>Exam Date</td>
+                                                <td>{{user.exam_date1.exam_date|date:"j, M"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endif %}
+                                            <tr>
+                                                <td>Max Marks</td>
+                                                <td>{{user.exam_type_child.exam_max_marks}}</td>
+                                            </tr>
+        
+                                            <tr>
+                                                <td>Marks Obtained</td>
+                                                {% if user.total_sum == 0 %}
+                                                <td>Marks Not Uploaded</td>
+                                                {% else %}
+                                                <td>{{user.total_sum}}</td>
+                                                {% endif %}
+                                            </tr>
+        
+                                            <tr>
+                                                <td>Result</td>
+                                                {% if user.total_sum == 0 %}
+                                                <td>N/A</td>
+                                                {% else %}
+                                                <td>{{user.result}}</td>
+                                                {% endif %}
+                                            </tr>
+        
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div> 
-
-            </div>
-            {% endif %} {% endif %}  
-
+                {% endif %}{% endif %}
+            </div> 
+          
+               
             
+           
     <!-- secondary sidebar -->
     <aside id="sidebar_secondary" class="tabbed_sidebar">
         <ul class="uk-tab uk-tab-icons uk-tab-grid" data-uk-tab="{connect:'#dashboard_sidebar_tabs', animation:'slide-horizontal'}">
@@ -1580,6 +1657,8 @@
         <!--  dashbord functions -->
         <script src="{% static 'main_app/js/pages/dashboard.min.js' %}"></script>
 
+     
+
        
     
     <script>
@@ -1662,7 +1741,39 @@
                         };
 
     </script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+      
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'interaction', 'dayGrid' ],
+            
+            editable: true,
+            eventLimit: true, // allow "more" link when too many events
+            events: [
+              {
+                title: 'All Day Event',
+                start: '2020-02-01'
+              },
+              {% for h in holiday %}
+              {
+                title: '{{h.name}}',
+                start: "{{h.date|date:'Y-m-d'}}",
+                backgroundColor:'#AED6F1',                
+              },
+              {% endfor %}
+            ] 
+          });
+      
+          calendar.render();
+        });
+      
+      </script>
     
+                        
+    
+          
     
 </body>
 </html>

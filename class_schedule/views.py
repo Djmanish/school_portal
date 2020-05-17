@@ -8,18 +8,56 @@ from django.views.generic import *
 from django.views.generic import ListView, UpdateView
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
+from notices.models import Notice
+from django.utils import timezone
+from AddChild.models import *
 # Create your views here.
 
 @login_required
 def schedule(request):
+    # starting user notice
+    if request.user.profile.designation:
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice    
     select_class_for_schedule = request.GET.get('selected_class') # class selected to view
+
+#     starting showing class based on user role
+    if request.user.profile.designation.level_name == "student":
+            all_class = list(Classes.objects.filter(institute=request.user.profile.institute, id= request.user.profile.Class.id ))
+    elif request.user.profile.designation.level_name == "parent":
+            classes = AddChild.objects.filter(parent = request.user.profile)  
+            all_class = []
+            for c in classes:
+                    all_class.append(c.Class)
+    else:
+             all_class = list(Classes.objects.filter(institute=request.user.profile.institute))
+#     ending showing class based on user role
+             
     if select_class_for_schedule == None:
-            first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
+            try:
+                    first_class = all_class[-1]
+            except:
+                     messages.info(request, 'you do not have children to show schedule')
+                     return redirect('user_dashboard')
+
+
+                
             if first_class:
                     pass
             else:
                     messages.info(request, 'It seems there are no classes in the institute. First create the classes then you can access schedule')
-                    return redirect('not_found')
+                    return redirect('user_dashboard')
             first_class_id = first_class.id
             select_class_for_schedule= first_class_id
             
@@ -29,29 +67,25 @@ def schedule(request):
     time_table_for_class = selected_class.name
     selected_class_stage = selected_class.class_stage
     
-    all_class = Classes.objects.filter(institute=request.user.profile.institute)
+    
     all_lectures = Lecture.objects.filter(institute=request.user.profile.institute, class_stage= selected_class_stage)
     
 
-    monday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Monday"  )
-    tuesday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Tuesday" )
+    monday_schedule = Schedule.objects.get( Class= selected_class, day="Monday"  )
+    tuesday_schedule = Schedule.objects.get( Class= selected_class, day="Tuesday" )
 
-    wednesday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Wednesday" )
+    wednesday_schedule = Schedule.objects.get( Class= selected_class, day="Wednesday" )
 
-    thursday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Thursday" )
+    thursday_schedule = Schedule.objects.get( Class= selected_class, day="Thursday" )
 
-    friday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Friday" )
+    friday_schedule = Schedule.objects.get( Class= selected_class, day="Friday" )
 
-    saturday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Saturday" )
+    saturday_schedule = Schedule.objects.get( Class= selected_class, day="Saturday" )
 
     user_permissions = request.user.user_institute_role.level.permissions.all()
     schedule_update_permission = App_functions.objects.get(function_name='Can Update Schedule')
     update_lecture_timing = App_functions.objects.get(function_name='Can Update Lecture Timing')
 
-
-
-
-   
     context = {'all_classes': all_class,
                 'all_lectures': all_lectures,
                 'monday_schedule':monday_schedule,

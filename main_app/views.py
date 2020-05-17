@@ -30,6 +30,7 @@ from main_app.serializers import UserProfileSerializer
 from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
+from django.core.exceptions import PermissionDenied
 
 
 # Create your views here.
@@ -78,6 +79,8 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return True
         else:
             return False
+
+
     def get_success_url(self, **kwargs):         
             return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
 
@@ -164,6 +167,23 @@ def edit_class(request, pk):
         institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
         # institute_classes = Classes.objects.filter(institute=request.user.profile.institute)
 
+        # starting user notice
+    if request.user.profile.designation:
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice
+
+
         if request.method == 'POST':            
                 new_class_teacher = User.objects.get(pk= request.POST.get('class_teacher'))
                 class_to_edit.class_teacher = new_class_teacher
@@ -202,13 +222,34 @@ def delete_class(request, pk):
 
 
 def approvals(request,pk):
+
+        # starting user notice
+    if request.user.profile.designation:
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice
     institute_approval = Institute.objects.get(pk=pk)
+    if request.user.profile.institute != institute_approval:
+        raise PermissionDenied
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
     
     if request.user.profile.designation.level_name=='teacher' or request.user.profile.designation.level_name=='principal' or request.user.profile.designation.level_name=='admin':
 
         if request.user.profile.designation.level_name=='teacher':
-            Class_teachers=Classes.objects.get(class_teacher=request.user)
+            try:
+                Class_teachers=Classes.objects.get(class_teacher=request.user)
+            except Classes.DoesNotExist:
+                Class_teachers = 0
             pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval,Class=Class_teachers , designation=student_designation_id).reverse()
             parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute)
             parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute)
@@ -268,10 +309,14 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "student":
             try:
                 request.user.exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
-                print(request.user.exam_type_child)
-                request.user.exam_date1=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).earliest('id')
-                request.user.exam_date2=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).latest('id')
                 
+               
+                try:
+                    request.user.exam_date1=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).earliest('id')
+                    request.user.exam_date2=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).latest('id')
+                except ExamDetails.DoesNotExist:
+                    request.user.exam_date1 = None
+                    request.user.exam_date2 = None                  
                 max_marks=request.user.exam_type_child.exam_max_marks
                 total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
                 request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
@@ -290,7 +335,8 @@ def dashboard(request):
                 else:
                     request.user.result="Pass"         
             except ExamType.DoesNotExist:
-                    pass
+                request.user.exam_type_child= None
+                
             
     # starting assigned teachers
    
@@ -315,7 +361,10 @@ def dashboard(request):
         
     # starting assigned classes
     user_institute_one= request.user.profile.institute
+    request.user.user_t1=Classes.objects.filter(class_teacher=request.user,institute=user_institute_one)
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
+    request.user.user_subject_one_len = len(user_subject_one)
+    
     # class attendance status 
     
     
@@ -361,7 +410,7 @@ def dashboard(request):
     # ending student,teacher & class count
     
     # Active Users Count
-    time= timezone.now()- datetime.timedelta(minutes=30)
+    time= timezone.now()- datetime.timedelta(minutes=3)
     time1= timezone.now()
     count=User.objects.filter(last_login__gte=time,last_login__lte=time1)
     
@@ -474,10 +523,6 @@ def dashboard(request):
                 notice_recipients = notice.recipients_list.all()
                 if request.user.profile in notice_recipients:
                     request.user.users_notice.insert(0, notice)
-        # for n in request.user.users_notice:
-        #     if str(n.publish_date.date()) <= str(datetime.date.today()):
-        #         request.user.users_notice.append(n)
-
         # ending user notice
 
         # starting fees status for principal view
@@ -488,14 +533,23 @@ def dashboard(request):
                 a.total_unpaid_student=a.total_unpaid.count()
                 total_student=UserProfile.objects.filter(institute = request.user.profile.institute,Class=a,designation__level_name="student").count()
                 a.total_student_in_class=total_student
-        # Starting fees status for teacher view
+        # Starting fees status for Student view
         if request.user.profile.designation.level_name == "student":
             request.user.student_fees_st=Students_fees_table.objects.filter(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
+            request.user.student_fees_st_len = len(request.user.student_fees_st)
+            
             sum_in=0
             for i in request.user.student_fees_st:
                 sum_in = sum_in+i.total_due_amount
             request.user.sum_out=sum_in
-                      
+        # for approvals count
+        if request.user.profile.designation.level_name=='teacher':
+            try:
+                Class_teachers=Classes.objects.get(class_teacher=request.user)
+                pending_users= UserProfile.objects.filter(status='pending', institute=request.user.profile.institute,Class=Class_teachers , designation__level_name="student").count()
+                request.user.approval_request = pending_users  
+            except:
+                pass
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "teacher":
             try:
@@ -582,7 +636,9 @@ def login(request):
             try:
                 if g_user.is_active == False: # checking if user activated his account or not
                     error = 'User already registered, check your mail and follow the link to activate your account.'
-                    return render(request, 'registration/login.html', {'error':error})
+                    
+                    return redirect('registration_resend_activation')
+                    # return render(request, 'registration/login.html', {'error':error})
                 else:
                     username = g_user.username
                 user = auth.authenticate(username=username, password=password)
@@ -800,8 +856,6 @@ def edit_profile(request, pk):
             
             return redirect('user_profile')
 
-        
-        
         return redirect('user_profile')
         
     return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,'all_institute_classes':all_institute_classes,})
@@ -813,15 +867,27 @@ def edit_profile(request, pk):
 def institute_profile(request, pk):
 # starting assigning all functionalities to admin
     admin_pk = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='admin')
-    
     checking_for_admin = Role_Description.objects.filter(user=request.user, institute=request.user.profile.institute, level= admin_pk ).first()
-
-
     if checking_for_admin is not None:
         all_app_functions = App_functions.objects.all()
         for function in all_app_functions:
             request.user.user_institute_role.level.permissions.add(function)
 # ending assigning all functionalities to admin
+    # starting user notice
+    if request.user.profile.designation:
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = request.user.profile.designation.level_id
+        request.user.users_notice = []
+        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
+        if user_role_level < teacher_role_level:
+            request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if request.user.profile in notice_recipients:
+                    request.user.users_notice.insert(0, notice)
+        # ending user notice
 
 
     institute_data= Institute.objects.get(pk=pk)
@@ -884,6 +950,29 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
             return True
         else:
             return False
+    
+    def get_context_data(self, **kwargs):
+        # starting user notice
+        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= self.request.user.profile.institute)
+        teacher_role_level = teacher_role_level.level_id
+        user_role_level = self.request.user.profile.designation.level_id
+        self.request.user.users_notice = []
+        all_notices = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
+        if user_role_level < teacher_role_level:
+            self.request.user.users_notice = all_notices.exclude(category="absent").reverse()
+        else:
+            for notice in all_notices:
+                notice_recipients = notice.recipients_list.all()
+                if self.request.user.profile in notice_recipients:
+                    self.request.user.users_notice.insert(0, notice)
+        # ending user notice
+
+
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        # context['book_list'] = Book.objects.all()
+        return context
 
 
     def get_success_url(self, **kwargs):         
