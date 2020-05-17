@@ -475,7 +475,7 @@
            
                                         <div class="md-card">
                                             <div class="md-card-content">
-                                                        
+                                                <h5>Exam Result</h5>
                                                         <form method="POST"  class="form-inline" id="attendance_form">
                                                             {% csrf_token %}
                                                             
@@ -568,8 +568,7 @@
                                                             </tr>
                                                             <tr>
                                                             <input type="hidden" value="{{selected_subject.id}}" name="selected_subject">
-
-                                                            <input type="hidden" value="{{exam_type_id.id}}" name="exam_type_id">
+                                                            <input type="type" value="{{exam_type_id.id}}" name="exam_type_id">
                                                             <input type="hidden" value="{{result_exam_type_sr_no}}" name="result_exam_type_sr_no">
                                                             <input type="hidden" value="{{selected_subject.subject_class.id}}" name="subject_class">
                                                             <input type="hidden" value="{{selected_subject.subject_teacher.id}}" name="subject_teacher">

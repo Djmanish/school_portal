@@ -18,10 +18,7 @@ def exam_result(request,pk):
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
       institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
-
-
     # -----------------------------------------------------------------------------------
-
       if request.method=="POST":
         selected_subject = Subjects.objects.get(pk=request.POST.get('result_selected_subject'))
         result_exam_type=request.POST.get('result_exam_type')
@@ -29,10 +26,9 @@ def exam_result(request,pk):
                     etype=ExamType.objects.get(institute= request.user.profile.institute, exam_type=result_exam_type)
                     exam_type=etype.id
                     result_exam_type=exam_type
-        exam_type_id=ExamType.objects.get(exam_type=result_exam_type)
+        exam_type_id=ExamType.objects.filter(pk=result_exam_type)
+        print(result_exam_type)
         result_exam_type_sr_no = request.POST.get('fetch_sr_no')
-        
-
       #============================================================================================ 
         student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
         institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
@@ -44,12 +40,6 @@ def exam_result(request,pk):
             student.existing_marks=student_score.result_score
           except:
             pass
-            
-             
-            
-            
-        
-
         context={
                   'subject_result':subject_result,
                   
@@ -159,7 +149,7 @@ def examresult(request,pk):
                         calculate_result.calc_result_total=sumValue
                         calculate_result.save()
           messages.success(request, 'Exam Result Stored successfully !!!')  
-          return redirect(f'/examresult/examresult/{inst_id}') 
+          return HttpResponseRedirect(f'/examresult/examresult/{inst_id}') 
 
       
 # Student View
@@ -178,10 +168,6 @@ def student_view(request,pk):
         for subjects in student_view:
           student_subject.append(subjects.result_subject)
         student_subject_data=list(student_subject)
-
-       
-
-
         context={
               'student_view':student_view,
               'student_marks':student_marks_data,
