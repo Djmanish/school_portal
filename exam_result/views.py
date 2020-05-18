@@ -18,17 +18,26 @@ def exam_result(request,pk):
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
       institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
+
+
     # -----------------------------------------------------------------------------------
+
       if request.method=="POST":
         selected_subject = Subjects.objects.get(pk=request.POST.get('result_selected_subject'))
         result_exam_type=request.POST.get('result_exam_type')
+        schedule_exam_type=ExamDetails.objects.filter(institute=request.user.profile.institute)
+        for exam_t in schedule_exam_type:
+          print(exam_t)
+       
         if result_exam_type==None:
                     etype=ExamType.objects.get(institute= request.user.profile.institute, exam_type=result_exam_type)
                     exam_type=etype.id
                     result_exam_type=exam_type
-        exam_type_id=ExamType.objects.filter(pk=result_exam_type)
         print(result_exam_type)
+        exam_type_id=ExamType.objects.get(exam_type=result_exam_type)
         result_exam_type_sr_no = request.POST.get('fetch_sr_no')
+        
+
       #============================================================================================ 
         student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
         institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
@@ -40,6 +49,12 @@ def exam_result(request,pk):
             student.existing_marks=student_score.result_score
           except:
             pass
+            
+             
+            
+            
+        
+
         context={
                   'subject_result':subject_result,
                   
@@ -119,8 +134,8 @@ def examresult(request,pk):
                               pass
                   
                   else:
-                              messages.info(request, 'Not Approriate Marks')
-                              return redirect('not_found')
+                              messages.info(request, 'Your Marks is greater than the Exam Type Maximum Marks')
+                              return redirect(f'/examresult/examresult/{inst_id}')
               
                 
           for subject in exam_result_data:
@@ -149,7 +164,7 @@ def examresult(request,pk):
                         calculate_result.calc_result_total=sumValue
                         calculate_result.save()
           messages.success(request, 'Exam Result Stored successfully !!!')  
-          return HttpResponseRedirect(f'/examresult/examresult/{inst_id}') 
+          return redirect(f'/examresult/examresult/{inst_id}') 
 
       
 # Student View
@@ -267,7 +282,7 @@ def report_card(request,pk):
             
             sumValue=sum(marks)
             sumValueper=sumValue/e
-            data_marks['avg']=sumValueper
+            data_marks['avg']=round(sumValueper,2)
             result_data.append(data_marks)
           context={
                 'select_exam_type':exam_type,
@@ -477,11 +492,18 @@ def overall_result(request,pk,student_pk):
 def class_promotion(request,pk):
     current_year=datetime.date.today().year
     next_year=datetime.date.today().year+1
+    
     # to get the list of all  classes                                        
-    all_classes = Classes.objects.filter(institute= request.user.profile.institute)
+    all_classes = Classes.objects.filter(institute= request.user.profile.institute,class_teacher=request.user)
+    promotes_class=Classes.objects.filter(institute= request.user.profile.institute)
     # to ge the data through POST method
     if request.method=="POST":
-        selected_class =Classes.objects.get(pk=request.POST.get('selected_class_promotion'))
+        selected_class_promotes =request.POST.get('selected_class_promotion')
+        if selected_class_promotes == None:
+                        first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
+                        first_class_id = first_class.id
+                        selected_class_promotes= first_class_id
+        selected_class = Classes.objects.get(pk=selected_class_promotes)
         #  to get the list of all students of selected class
         all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student', class_current_year=current_year)
         for student_class in all_students:
@@ -507,7 +529,10 @@ def class_promotion(request,pk):
                         student_data = User.objects.get(pk=sdata)
                         if student_data==user_da:
                               user_d.class_promotion_status=status
-                              user_d.Class=promoted_to_class
+                              if status=="Promoted":
+                                user_d.Class=promoted_to_class
+                              else:
+                                pass
                               user_d.class_current_year=current_year+1
                               user_d.class_next_year=next_year+1
                               user_d.save()
@@ -516,13 +541,16 @@ def class_promotion(request,pk):
             'all_classes': all_classes,
             'all_students':all_students,
             'list_promotion_choices':list_promotion_choices,
+            'promotes_class':promotes_class,
         }
+         
         return render(request, 'class_promotion.html', context)
     # Outer Context
     context= {
         'all_classes': all_classes,
         
     }
+    messages.success(request, 'Students Promoted successfully') 
     return render(request, 'class_promotion.html', context)
 
 

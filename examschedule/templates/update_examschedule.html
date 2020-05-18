@@ -406,7 +406,7 @@
     
                             </li>
                             {% endif %}
-                            <li>
+                            <li class="act_item" title="View Exam Schedule">
                                 <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">visibility</i></span>
                                     <span class="menu_title">View Exam Schedule</span>
@@ -543,6 +543,8 @@
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
                                                         <tbody>
+                                                                   
+                                                           
                                                                 <tr >
                                                                     
                                                                     <td colspan="3">
@@ -552,8 +554,7 @@
                                                                 
                                                                 {% if exam_details %}
                                                                     
-                                                               
-                                                                    
+                                                                 
                                                             
                                                             <tr  style="background-color: #1976d2; color:white; text-align:center; text-align:center;">
                                                                
