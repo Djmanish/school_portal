@@ -471,10 +471,11 @@
                                                 
                                                    
                                                   
-                                                       
+                                                       <h5> Create Exam Schedule</h5>
                                     
                                                         
-                                                        <form method="GET" class="form-inline" id="attendance_form">
+                                                        <form method="POST" class="form-inline" id="attendance_form">
+                                                            {% csrf_token %}
                                                            
                                                            
                                                             <label style="margin: 4px;">Select Class</label>
@@ -520,7 +521,7 @@
                                                         id="ts_issues">
 
                                                         <tbody>
-                                                            <form method="POST" action="">
+                                                            <form method="POST" action="{% url 'create_examschedule' request.user.profile.institute.id %}">
                                                                 {% csrf_token %}
                              
                                                               
@@ -531,7 +532,7 @@
                                                             <tr >
                                                                 <td ><label><b>Exam Code</b></label></td>
                                                                 <td colspan="6">
-                                                                    <input type="text" value={{institute_exam_schedule_data.code}}-{{selected_class.pk}}-{{exam_type_id.exam_type_sr_no}}-{{sr_no}} name="exam_institute_code"  style="text-align: center; font-weight: 500; border: 0ch;"/>
+                                                                    <input type="text" value={{institute_exam_schedule_data.code}}-{{selected_class.id}}-{{exam_type_id.exam_type_sr_no}}-{{sr_no}} name="exam_institute_code"  style="text-align: center; font-weight: 500; border: 0ch;"/>
                                                                 </td>
 
                                                             </tr>
@@ -546,7 +547,35 @@
                                                                 <td>End Time</td>
                                                                 <td>Assign Teacher</td>
                                                             </tr>
+
+                                                            {% else %}
+                                                            <div  style="padding:0px;" class="md-card-content">
+                                                            <div class="uk-overflow-container uk-margin-bottom">
+                                                            <div   class="md-card md-card-primary">
+                                                            <div>
+                                                                <ul class="messages alert">
+                                                                    
+                                                                    <li style="color: red;">No Subjects Found for Selected Class</li>
+                                                                    
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                        </div>
                                                             {% endif %}
+
+                                                           
+
+                                                            
+                                                            <tr>
+                                                                <input type="hidden" value="{{selected_class.id}}" name="selected_class_hidden">
+                                                                <input type="hidden" value="{{exam_type_id.id}}" name="exam_type_id_hidden">
+
+                                                                <input type="hidden" value="{{institute_exam_schedule_data.code.id}}" name="institute_exam_schedule_data_code">
+                                                                <input type="hidden" value="{{sr_no.id}}" name="sr_no">
+
+                                                            </tr>
+                                                          
                                                                     {% for exam_subject in exam_class_subject%}
                                                                     <tr style="text-align:center;"> 
                                                                         <td>
@@ -560,7 +589,7 @@
                                                                         <td>
                                                                             <div class="form-group">
                                                                                 <select id="hide"  style=" width:150px; background-color: white; -webkit-appearance:none; border:none;" class="form-control"  name="select_exam_subject_teacher">
-                                                                                  <option  value="{{exam_subject.subject_teacher.id}}">{{exam_subject.subject_teacher}}</option>
+                                                                                  <option  value="{{exam_subject.subject_teacher.id}}">{{exam_subject.subject_teacher.profile.first_name}} {{exam_subject.subject_teacher.profile.last_name}}</option>
                                                                                 </select>
                                                                               </div>
                                                                        
@@ -573,7 +602,7 @@
                                                                             <select class="form-control" name="assign_teacher" required>
                                                                                 <option selected disabled>--Assign Teacher--</option>
                                                                               {% for teacher in institute_teachers %}
-                                                                                  <option value='{{teacher.pk}}'>{{teacher}}</option>
+                                                                                  <option value='{{teacher.pk}}'>{{teacher.first_name}} {{teacher.last_name}}</option>
                                                                               {% endfor %}
                                                                                   
                                                                     

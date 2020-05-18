@@ -165,8 +165,11 @@ def holidayemail(request):
 
 def emailView(request,pk):
     institute_holiday = Institute.objects.get(pk=pk)
-    user_emails=User.objects.all()
-    print(user_emails)
+    user_emails=UserProfile.objects.filter(institute=request.user.profile.institute)
+    user_data_email=[]
+    for user_data in user_emails:
+        user_data_email.append(user_data.user.email)
+    
 
     institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
     
@@ -186,8 +189,12 @@ def emailView(request,pk):
             
             return render(request, 'holidaylist/holidaylist.html',{'institute_holiday_list':institute_holiday_list})
     
-            
-    return render(request, "holidaylist/holiday_email.html", {'form': form,'institute_holiday_list':institute_holiday_list})
+    context={
+        'user_data_email':user_data_email,
+        'form': form,
+        'institute_holiday_list':institute_holiday_list
+    }        
+    return render(request, "holidaylist/holiday_email.html", context)
 
 def successView(request):
     return HttpResponse('Success! Thank you for your message.')

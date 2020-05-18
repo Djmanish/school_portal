@@ -552,6 +552,7 @@
                                 data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">About</a></li>
                                 <li><a href="#">Details</a></li>
+                                {% if  user.user_institute_role.level.level_name == 'admin' or user.user_institute_role.level.level_name == 'principal'  %}
 
                                 <li><a href="#">Classes</a></li>
                                 <li><a href="#">Subjects</a></li>
@@ -561,7 +562,6 @@
                                 
 
 
-                                {% if  user.user_institute_role.level.level_name == 'admin' or user.user_institute_role.level.level_name == 'principal'  %}
                                 <li><a href="#">Roles</a></li>
                                 <li><a href="#">Role Permissions</a></li>
                                 {% endif %}
@@ -697,11 +697,17 @@
                                 </li>
                                 <!-- ending about tab content -->
                                 <!-- starting details tab content                                     -->
-
+                              
                                 <li>
+                                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                     <div class="uk-width-large-1-2">
+<<<<<<< HEAD
+                                        <h4 class="heading_c uk-margin-small-bottom">Personal Details</h4>
+                                        <ul class="md-list">
+=======
                                        
                                         <ul class="md-list md-list-addon">
+>>>>>>> a7df4db4cdad739e6b95cec645c79a1423517849
                                             <li>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Organization
@@ -745,7 +751,9 @@
         
         </span>
                                                 </div>
+                                            
                                             </li>
+                                        
                                             <li>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Contact</a></span>
@@ -753,8 +761,28 @@
                                                         class="uk-text-small uk-text-muted">{{institute_data.contact_number1}}</span>
                                                 </div>
                                             </li>
+<<<<<<< HEAD
+                                        
+
+                                        
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="md-list-heading"><a href="#">Email Id</a></span>
+                                                    <span
+                                                        class="uk-text-small uk-text-muted">{{institute_data.email}}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="md-list-heading"><a href="#">Facebook</a></span>
+                                                    <span
+                                                        class="uk-text-small uk-text-muted">{{institute_data.facebook_link}}</span>
+                                                </div>
+                                            </li>
+=======
                                    
                                             
+>>>>>>> a7df4db4cdad739e6b95cec645c79a1423517849
                                             <li>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Website</a></span>
@@ -766,7 +794,12 @@
                                         </ul>
 
                                     </div>
+                               
+                                </div>
+                           
                                 </li>
+       
+
                                 <!-- ending details tab content -->
                                 <!-- Starting Classes Tab Content -->
                                 <li>
@@ -892,6 +925,7 @@
                                 </li>
                                 <!-- End Classes Tab Content -->
                                 <!-- starting subjects tab content -->
+                                
                                 <li>
                                     <div id="">
                                         <h4 class="heading_c uk-margin-small-bottom">Currently Available Subjects</h4>
@@ -1022,7 +1056,7 @@
                                     </div>
                                 </li>
 
-
+                      
                                 <!-- ending subjects tab content -->
                                 <!-- starting roles tab content -->
 
