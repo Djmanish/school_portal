@@ -17,6 +17,8 @@ def create_summary(sender, instance, created, **kwargs):
             #creating a new student if does not exist
             new_student = Students_fees_table.objects.create(institute= instance.institute,student= instance.student, student_class = instance.student.Class , due_date= instance.due_date, )
             new_student.total_due_amount = new_student.total_due_amount + instance.amount_including_tax
+            new_student.balance = new_student.total_due_amount# can be deleted
+
             # invoice number syntax
             
             new_student.invoice_number = (str(instance.institute.id)+"-"+str(instance.student.id)+"-"+str(instance.due_date.strftime("%Y-%d-%m"))).strip() 
@@ -25,6 +27,7 @@ def create_summary(sender, instance, created, **kwargs):
             # if student already exist for this due date
             student = Students_fees_table.objects.get( institute= instance.institute, student= instance.student, due_date= instance.due_date)
             student.total_due_amount = student.total_due_amount + instance.amount_including_tax
+            student.balance = student.total_due_amount # can be deleted
             student.save()
         
             

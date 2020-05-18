@@ -28,7 +28,7 @@ def create_test_type(request,pk):
           examtype.exam_per_final_score=exam_per_final_score
           examtype.exam_type_sr_no=exam_sr_no
           examtype.save()
-          messages.success(request, 'New Exam Type Created successfully !!!')
+          messages.success(request, 'New exam type Created successfully !')
           institute_pk = request.user.profile.institute.pk
           return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
     
@@ -57,7 +57,7 @@ def edit_test_type(request, pk):
           test_type_info.exam_per_final_score=exam_per_final_score
           # examtype.exam_type_sr_no=exam_sr_no
           test_type_info.save()
-          messages.success(request, 'Exam Type Updated Successfully !!!')
+          messages.success(request, 'Exam type updated successfully !')
           institute_pk = request.user.profile.institute.pk
           return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
     
@@ -76,7 +76,7 @@ def delete_test_type(request, pk):
         test_type_info.exam_per_final_score="null"
         
         test_type_info.delete()
-        messages.success(request, 'Exam Type Deleted Successfully !!!')
+        messages.success(request, 'Exam type deleted successfully !')
         institute_pk = request.user.profile.institute.pk
         return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
 
@@ -111,7 +111,7 @@ def exam_schedule(request,pk):
             if exam_type_schedule:
                      pass
             else:
-                    messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can create Exam Schedule')
+                    messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can create exam schedule !')
                     
                     return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
                     
@@ -142,7 +142,7 @@ def exam_schedule(request,pk):
             if sr_no<=limit_exam:
                     pass
             else:
-                    messages.info(request, 'Exam Limit has exceeded')
+                    messages.info(request, 'Exam limit has exceeded !')
                     return redirect('not_found')
 
            
@@ -166,7 +166,7 @@ def exam_schedule(request,pk):
                   new_exam.exam_class=selected_class
                   new_exam.exam_type=exam_type_id
                   new_exam.save()
-              messages.success(request, 'New Exam Schedule Created successfully !!!')
+              messages.success(request, 'New exam schedule created successfully !')
 
           
                 
@@ -231,7 +231,7 @@ def examschedule_view(request,pk):
                         
                                 return render(request,'update_examschedule.html', context)
                         else:
-                                messages.info(request, 'There is no Exam Data for this selection')
+                                messages.info(request, 'There is no exam data for this selection !')
                     
                                 return HttpResponseRedirect(f'/examschedule/examschedule/view/{institute_pk}')
             context={
@@ -268,7 +268,7 @@ def edit_examschedule(request,pk):
 
          
           examdetails_info.save()
-          messages.success(request, 'Exam Schedule Updated Successfully !!!')
+          messages.success(request, 'Exam schedule updated successfully !')
           institute_pk = request.user.profile.institute.pk
           return HttpResponseRedirect(f'/examschedule/examschedule/view/{institute_pk}')
     
@@ -289,7 +289,7 @@ def delete_examschedule(request, pk):
         examdetails_info.exam_end_time="null"
         
         examdetails_info.delete()
-        messages.success(request, 'Exam Schedule Deleted Successfully !!!')
+        messages.success(request, 'Exam schedule deleted successfully !')
         institute_pk = request.user.profile.institute.pk
         return HttpResponseRedirect(f'/examschedule/examschedule/view/{institute_pk}')
 

@@ -48,7 +48,7 @@ def schedule(request):
             try:
                     first_class = all_class[0]
             except:
-                     messages.info(request, 'you do not have children to show schedule')
+                     messages.info(request, 'You do not have children to show schedule !')
                      return redirect('user_dashboard')
 
 
@@ -203,11 +203,11 @@ def schedule_update(request, pk):
                         except:
                                 schedule_to_update.subject_teacher_lecture_eight=None
                         
-                        messages.success(request, "Class Schedule Updated Successfully !!!")
+                        messages.success(request, "Class schedule updated successfully !")
                         schedule_to_update.save()
                         return redirect('class_schedule')
                 else:
-                        messages.info(request, "You don't have permission to update class Schedule")
+                        messages.info(request, "You don't have permission to update class Schedule !")
                         return redirect('not_found')
         return render(request, 'class_schedule/update_schedule.html', context_data )
 @login_required
@@ -222,7 +222,7 @@ class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
         # fields = ['start_time','end_time']
         form_class = Update_lecture_time_Form
         template_name= 'class_schedule/update_timing.html'
-        success_message = "Timing Updated Successfully !!!"
+        success_message = "Timing updated successfully !"
 
         def test_func(self):
                 user_permissions = self.request.user.user_institute_role.level.permissions.all()

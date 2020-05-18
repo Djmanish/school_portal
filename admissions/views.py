@@ -16,7 +16,7 @@ from django.utils import timezone
 def admission_home(request):
     try:
         if_already_user = Role_Description.objects.get(user=request.user)
-        messages.info(request, 'You are not allowed to visit this page')
+        messages.info(request, 'You are not allowed to visit this page !')
         return redirect('not_found')
     except:
         pass
@@ -24,7 +24,7 @@ def admission_home(request):
     try:
         if_already_requested = Admission_Query.objects.get(request_by= request.user)
         if if_already_requested:
-            messages.info(request, 'You have already requested. Please wait till any response from your school')
+            messages.info(request, 'You have already requested. Please wait till any response from your school !')
             school_list = Institute.objects.all()
             states_list = State.objects.all()
             context = {
@@ -49,7 +49,7 @@ def admission_home(request):
         if  fname.endswith('.jpeg') or fname.endswith('.jpg') or fname.endswith('.gif'):
             pass
         else:
-            messages.error(request, 'invalid photo format. upload a valid photo')
+            messages.error(request, 'invalid photo format. Only jpeg, jpg format are allowed !')
             return redirect('admission_home')
         #  ending code for checking profile pic extension
 
@@ -77,10 +77,10 @@ def admission_home(request):
         new_request.request_by = request.user
         try:
             new_request.save()
-            messages.success(request, 'We have received your data. We will get back to you soon.')
+            messages.success(request, 'We have received your data. We will get back to you soon !')
             return redirect('user_dashboard')
         except:
-            messages.error(request, 'failed to submit, Please fill all details carefully')
+            messages.error(request, 'Failed to submit, Please fill all details carefully !')
             return redirect('admission_home')
 
             
@@ -186,10 +186,10 @@ def approve_admission_request(request, pk):
     try:
         approved_user_profile.save()
         Admission_Query.objects.get(pk=pk).delete()
-        messages.success(request, 'Student Approved and Register Successfully')
+        messages.success(request, 'Student approved and registered successfully !')
         return redirect('admission_requests')
     except:
-        messages.error(request, "failed to register")
+        messages.error(request, "Failed to register !")
         return redirect('admission_requests')
 
 

@@ -129,7 +129,7 @@ def examresult(request,pk):
                               pass
                   
                   else:
-                              messages.info(request, 'Not Approriate Marks')
+                              messages.info(request, 'Not approriate marks !')
                               return redirect('not_found')
               
                 
@@ -158,7 +158,7 @@ def examresult(request,pk):
                         calculate_result.calc_result_avg=avgValue
                         calculate_result.calc_result_total=sumValue
                         calculate_result.save()
-          messages.success(request, 'Exam Result Stored successfully !!!')  
+          messages.success(request, 'Exam result stored successfully !')  
           return redirect(f'/examresult/examresult/{inst_id}') 
 
       

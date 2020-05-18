@@ -127,7 +127,7 @@
                         {% if user.profile.designation %}
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                             <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
-                            <div class="uk-dropdown uk-dropdown-xlarge">
+                            <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
                                 <div class="md-card-content">
                                     <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
                                         <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
@@ -136,7 +136,7 @@
                                     <ul id="header_alerts"  class="uk-switcher uk-margin">
                                         <li>
                                             <ul class="md-list md-list-addon alert_notice_list">
-                                                {% for notice in user.users_notice|slice:":5" %}
+                                                {% for notice in user.users_notice %}
                                                 <li>
                                                     <a href="{% url 'all_notice_list' %}">
                                                         <div class="md-list-addon-element">
@@ -498,10 +498,18 @@
     <div id="page_content">
 
         <div id="page_content_inner">
+            {% if messages %}
+            <div class="md-card md-card-primary">
+          <div >
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+            {% endif %}
 
-
-
-            
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">      
                 
        
@@ -537,17 +545,7 @@
                             </a> -->
                         </div>
                         <div class="user_content">
-                            {% if messages %}
-                            <div class="md-card md-card-primary">
-                          <div >
-                              <ul class="messages alert">
-                                  {% for message in messages %}
-                                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                  {% endfor %}
-                              </ul>
-                          </div>
-                            </div>
-                            {% endif %}
+                          
                             <div class="">
                                 <div class="md-card-content">
                                     <div class="">
@@ -565,8 +563,8 @@
                                                 <form id="notice_form" method="POST" action="{% url 'create_notice' %}" >
                                                     {% csrf_token %}
                                                     <div class="form-group">
-                                                        <label for="sel1">To:</label>
-  <select class="form-control" id="to_select_class" name="notice_class" required >
+                                                        <label for="sel1">To*</label>
+  <select class="form-control form-control-sm" id="to_select_class" name="notice_class" required >
       <option selected disabled value=""> -- Select a class -- </option>
       
       {% for class in author_classes %}
@@ -575,19 +573,26 @@
     
   </select>
 
-
-  <div class="form-check" style="margin: 2px;" >
+  <div class="row" style="padding: 0px 25px;">
+<div col-sm-6><div class="form-check" style="margin: 2px;" >
     <label class="form-check-label">
       <input type="checkbox" class="form-check-input" value="" name="all_classes_check">Select All Classes
     </label>
-  </div>
-
-
-  <div class="form-check" style="margin: 2px;" id="sel_al_c">
+  </div> </div>
+<div col-sm-6>
+    
+  <div class="form-check" style="margin: 2px;" id="sel_al_c" >
     <label class="form-check-label">
       <input type="checkbox" name="if_ind_s" class="form-check-input" value="">Select Individual
     </label>
   </div>
+</div>
+  </div>
+
+
+  
+
+
 
   <script>
     $(document).ready(function(){
@@ -640,9 +645,6 @@
   <br>
   <br>
 
-
-
-
   <script>
     $(document).ready(function(){
         $("#to_select_class").change(function(){
@@ -662,19 +664,26 @@ success: function(msg){
 </script>
   
 <div class="form-group" >
-    <label for="usr">Notice Refernce No. <small style="color: #1976d2;"> (Optional) </small> :</label><br>
+    <label for="usr">Notice Refernce No. <small style="color: #1976d2;"> (Optional) </small></label><br>
     
-    <input type="text" class="form-control" maxlength="15" name="notice_refrence_no"  >
+    <input type="text" class="form-control form-control-sm" maxlength="15" name="notice_refrence_no"  >
   </div>                
 
                              <div class="form-group">
-                          <label for="usr">Subject:</label>
-                       <input type="text" class="form-control" maxlength="150" name="notice_subject" id="notice_subject"  required>
+                          <label for="usr">Subject*</label>
+                       <input type="text" class="form-control form-control-sm" maxlength="150" name="notice_subject" id="notice_subject"  required>
                                                     </div>
                                                     <div class="form-group">
-                                                      <label for="pwd">Content:</label>
+                                                      <label for="pwd">Content*</label>
                                                      <textarea name="notice_body" id="notice_body" rows="4" class="form-control form-control-sm" required></textarea>
                                                     </div>
+                        <div class="form-group">
+                            <label for="usr">Publish Date & Time*</label>
+                            <input type="datetime-local" class="form-control form-control-sm" name="pubdatetime"  required>
+                        </div>
+
+
+
                                                     <button type="submit" class="md-btn md-btn-primary">Submit</button>
                                                   </form>
             
