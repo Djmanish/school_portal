@@ -117,7 +117,8 @@ def exam_schedule(request,pk):
         exam_type_schedule= ExamType.objects.filter(institute=request.user.profile.institute)
         if exam_type_schedule:
                      pass
-            else:
+        else:
+
                     messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can create exam schedule !')
                     
                     return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
