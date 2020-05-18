@@ -26,9 +26,9 @@ def addchild(request):
             try:
                 child_search = AddChild.objects.get(child=student)
                 if child_search.parent == request.user.profile:
-                    messages.success(request,'Already added in your list')
+                    messages.info(request,'Already added in your list !')
                 else:
-                    messages.success(request, 'Requested Child already associated with some other parent')
+                    messages.info(request, 'Requested Child already associated with some other parent !')
             except AddChild.DoesNotExist:
                 child_search=None
         
@@ -71,7 +71,7 @@ def addchildtolist(request,pk):
     student1= UserProfile.objects.get(id=pk)
     parent=request.user.profile
     add_child = AddChild.objects.create(parent=parent, child=student1, institute=student1.institute, Class=student1.Class)
-    messages.success(request, 'Request has been sent for the selected child')
+    messages.success(request, 'Request has been sent for the selected child !')
     return redirect('user_profile')
 
 def approve_child_request(request,pk):
@@ -202,7 +202,7 @@ def secondry_institute(request):
         selected_class = Classes.objects.get(pk=request.POST.get('selected_class'))
         roll_number=request.POST.get('roll_number')
         add_child = SecondryInstitute.objects.create(student_name=request.user.profile, student_institute=selected_institute, student_Class=selected_class,student_rollno=roll_number)
-        messages.success(request, 'Request has sent to add Institute.')
+        messages.success(request, 'Request has sent to add Institute !')
         return redirect('user_profile')
         # student = UserProfile.objects.get(institute=selected_institute,Class=selected_class,roll_number=roll_number)
         

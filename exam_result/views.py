@@ -163,7 +163,11 @@ def examresult(request,pk):
                         calculate_result.calc_result_avg=avgValue
                         calculate_result.calc_result_total=sumValue
                         calculate_result.save()
+<<<<<<< HEAD
           messages.success(request, 'Exam Result Stored successfully !!!')  
+=======
+          messages.success(request, 'Exam result stored successfully !')  
+>>>>>>> 566121e49cc98f2cc3deee6948ac78b4dcfef275
           return redirect(f'/examresult/examresult/{inst_id}') 
 
       

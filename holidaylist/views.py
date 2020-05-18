@@ -23,21 +23,7 @@ from django.utils import timezone
 
         # Create your views here.
 def holidaylist(request,pk):
-        # starting user notice
-    if request.user.profile.designation:
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = request.user.profile.designation.level_id
-        request.user.users_notice = []
-        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
-        if user_role_level < teacher_role_level:
-            request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if request.user.profile in notice_recipients:
-                    request.user.users_notice.insert(0, notice)
-        # ending user notice
+        
     institute_holiday = Institute.objects.get(pk=pk)
     institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
     user_permissions = request.user.user_institute_role.level.permissions.all()
@@ -58,7 +44,7 @@ def holidaylist(request,pk):
               
                 new_holiday = HolidayList.objects.create(institute=request.user.profile.institute, date=holiday_date,  name= holiday_name, applicable=holiday_applicable,holiday_type=holiday_type, holiday_email=holiday_email_send, holiday_sms=holiday_sms_send, holiday_notification=holiday_notification_send )
         
-                messages.success(request, 'New Holiday Created successfully !!!')
+                messages.success(request, 'New holiday created successfully !')
                
                 # institute_holidaylist = HolidayList.objects.filter(institute=institute_holiday).reverse()
     
@@ -108,11 +94,11 @@ def edit_holiday(request, pk):
             edit_holiday.holiday_notification=holiday_notification
 
             edit_holiday.save()
-            messages.success(request, 'Holiday Updated Successfully !!!')
+            messages.success(request, 'Holiday updated successfully !')
             rr=request.user.profile.institute.pk
             return HttpResponseRedirect(f'/holiday/holiday/{rr}')
         else:
-            messages.info(request, "you don't have permission to edit holiday info")
+            messages.info(request, "You don't have permission to edit holiday info !")
             return redirect('not_found')
 
     return render(request, 'holidaylist/edit_holiday.html', {'edit_holiday':edit_holiday})
@@ -131,7 +117,7 @@ def delete_holiday(request,pk):
          delete_holiday.holiday_sms="null"
          delete_holiday.holiday_notification="null"
          delete_holiday.delete()
-         messages.success(request, 'Holiday Deleted Successfully !!!')
+         messages.success(request, 'Holiday deleted successfully !')
          rr=request.user.profile.institute.pk
          return HttpResponseRedirect(f'/holiday/holiday/{rr}')
 
@@ -142,7 +128,7 @@ class HolidayUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
  model = HolidayList
  form_class = HolidayUpdateForm
  template_name="holidaylist/edit_holiday.html"
- success_message = "Details were updated successfully"
+ success_message = "Details were updated successfully !"
  success_url= "/holiday"
 
 def form_valid(self, form):

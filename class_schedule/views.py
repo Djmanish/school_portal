@@ -15,21 +15,7 @@ from AddChild.models import *
 
 @login_required
 def schedule(request):
-    # starting user notice
-    if request.user.profile.designation:
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = request.user.profile.designation.level_id
-        request.user.users_notice = []
-        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
-        if user_role_level < teacher_role_level:
-            request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if request.user.profile in notice_recipients:
-                    request.user.users_notice.insert(0, notice)
-        # ending user notice    
+        
     select_class_for_schedule = request.GET.get('selected_class') # class selected to view
 
 #     starting showing class based on user role
@@ -46,9 +32,9 @@ def schedule(request):
              
     if select_class_for_schedule == None:
             try:
-                    first_class = all_class[-1]
+                    first_class = all_class[0]
             except:
-                     messages.info(request, 'you do not have children to show schedule')
+                     messages.info(request, 'You do not have children to show schedule !')
                      return redirect('user_dashboard')
 
 
@@ -203,10 +189,11 @@ def schedule_update(request, pk):
                         except:
                                 schedule_to_update.subject_teacher_lecture_eight=None
                         
-                        messages.success(request, "Class Schedule Updated Successfully !!!")
+                        messages.success(request, "Class schedule updated successfully !")
                         schedule_to_update.save()
+                        return redirect('class_schedule')
                 else:
-                        messages.info(request, "You don't have permission to update class Schedule")
+                        messages.info(request, "You don't have permission to update class Schedule !")
                         return redirect('not_found')
         return render(request, 'class_schedule/update_schedule.html', context_data )
 @login_required
@@ -221,7 +208,7 @@ class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
         # fields = ['start_time','end_time']
         form_class = Update_lecture_time_Form
         template_name= 'class_schedule/update_timing.html'
-        success_message = "Timing Updated Successfully !!!"
+        success_message = "Timing updated successfully !"
 
         def test_func(self):
                 user_permissions = self.request.user.user_institute_role.level.permissions.all()

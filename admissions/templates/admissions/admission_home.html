@@ -40,7 +40,7 @@
 
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="{% static 'main_app/js/script.js' %}"></script>
+   
 
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
@@ -475,6 +475,17 @@
         <div id="page_content_inner">
 
             
+            {% if messages %}
+            <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+            {% endif %}
             <div class="md-card uk-margin-medium-bottom">
                 <div class="md-card-content">
                     <div class="uk-grid">
@@ -482,18 +493,7 @@
                             <h3 class="heading_b uk-margin-bottom text-center uk-text-primary">Fill Form to Initiate Admission Process</h3>
 <hr>
 
-                            {% if messages %}
-                            <div class="md-card md-card-primary">
-                          <div>
-                              <ul class="messages alert">
-                                  {% for message in messages %}
-                                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                  {% endfor %}
-                              </ul>
-                          </div>
-                            </div>
-                            {% endif %}
-                           
+                            
                             <table id="admission_form_table"  >
                                 <form method="POST" enctype="multipart/form-data" action="{% url 'admission_home' %}">
                                     {% csrf_token %}
@@ -577,7 +577,10 @@
                                     <tr class="aftr"><td class="admission_form_label" >Pin Code:</td> <td><input type="number" class="form-control form-control-sm" name="pin_code" required></td></tr>
 
 
-                                    <tr class="aftr"><td class="admission_form_label" >Student Photo:</td> <td><input type="file" class="form-control form-control-sm" name="student_pic" accept="image/*" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" >Student Photo:</td> <td> <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="student_pic" required>
+                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                      </div></td></tr>
 
                                     <tr><td class="admission_form_label" ></td> <td><input type="submit" class="form-control admission_submit_button" value="Submit" 
                                     {% if disable_submit %}
@@ -667,6 +670,6 @@
     </script>
 
 
-  
+<script src="{% static 'main_app/js/script.js' %}"></script>
 </body>
 </html>

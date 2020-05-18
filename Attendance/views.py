@@ -15,28 +15,13 @@ from django.utils import timezone
 # Create your views here.
 def attendance(request):
     
-        # starting user notice
-    if request.user.profile.designation:
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = request.user.profile.designation.level_id
-        request.user.users_notice = []
-        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
-        if user_role_level < teacher_role_level:
-            request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if request.user.profile in notice_recipients:
-                    request.user.users_notice.insert(0, notice)
-        # ending user notice
     if request.method == "POST":
         students_class = Classes.objects.get(pk=request.POST.get('selected_class_attendance'))
         attendance_date = request.POST.get('attendance_date')
         current_date = str(datetime.date.today())
 
         if attendance_date > current_date:
-            messages.error(request, "Attendance can't be taken for future dates")
+            messages.error(request, "Attendance can't be taken for future dates !")
             return redirect('attendance')
 
         elif attendance_date < current_date:  # fetching record if attendance already taken
@@ -100,7 +85,7 @@ def attendance(request):
         if students_class.class_teacher == request.user:
             return render(request, 'Attendance/Attendence.html', context)
         else:
-            messages.error(request, "Only Class Teacher can mark attendance")
+            messages.error(request, "Only Class Teacher can mark attendance !")
             context = {
                 'selected_class':all_class,
                  'selected_class_for_attendance':students_class,
@@ -178,7 +163,7 @@ def update_attendance_record(request, pk):
         all_students= UserProfile.objects.filter(institute=request.user.profile.institute,designation= designation_pk, Class=student_status.student_class)
         students_class = student_status.student_class
         attendance_date = current_date
-        messages.success(request, "Attendace status updated successfully")
+        messages.success(request, "Attendace status updated successfully !")
         
         return redirect(f'/attendance/update_attendance_record/{pk}/')
 
@@ -226,21 +211,6 @@ def current_date_attendance_record(request, pk):
         student.total_present_count = total_present
         student.total_absent_count = total_absent
         student.total_leave_count = total_leave
-       # starting user notice
-    if request.user.profile.designation:
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = request.user.profile.designation.level_id
-        request.user.users_notice = []
-        all_notices = Notice.objects.all().order_by('id')
-        if user_role_level < teacher_role_level:
-            request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if request.user.profile in notice_recipients:
-                    request.user.users_notice.insert(0, notice)
-        # ending user notice
 
 
   
@@ -254,28 +224,13 @@ def current_date_attendance_record(request, pk):
 
 def class_students_list(request):
     
-        # starting user notice
-    if request.user.profile.designation:
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = request.user.profile.designation.level_id
-        request.user.users_notice = []
-        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
-        if user_role_level < teacher_role_level:
-            request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if request.user.profile in notice_recipients:
-                    request.user.users_notice.insert(0, notice)
-        # ending user notice
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
     
     if request.method == "POST":
         selected_class = Classes.objects.get(pk = request.POST.get('selected_class_'))
         all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student', status="approve")
         if len(all_students)<1:
-            messages.error(request, 'No student found in the selected class')
+            messages.error(request, 'No student found in the selected class !')
             return redirect('class_students_list')
         
 
