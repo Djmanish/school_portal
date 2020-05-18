@@ -113,20 +113,6 @@ class Admission_Requests_View(LoginRequiredMixin, UserPassesTestMixin,  ListView
     
     
     def get_context_data(self, **kwargs):
-        # starting user notice
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= self.request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = self.request.user.profile.designation.level_id
-        self.request.user.users_notice = []
-        all_notices = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
-        if user_role_level < teacher_role_level:
-            self.request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if self.request.user.profile in notice_recipients:
-                    self.request.user.users_notice.insert(0, notice)
-        # ending user notice
 
 
         # Call the base implementation first to get a context
