@@ -24,16 +24,17 @@ def exam_result(request,pk):
 
       if request.method=="POST":
         selected_subject = Subjects.objects.get(pk=request.POST.get('result_selected_subject'))
+        
         result_exam_type=request.POST.get('result_exam_type')
         schedule_exam_type=ExamDetails.objects.filter(institute=request.user.profile.institute)
-        for exam_t in schedule_exam_type:
-          print(exam_t)
+        institute_pk = request.user.profile.institute.pk
+       
        
         if result_exam_type==None:
                     etype=ExamType.objects.get(institute= request.user.profile.institute, exam_type=result_exam_type)
                     exam_type=etype.id
                     result_exam_type=exam_type
-        print(result_exam_type)
+        
         exam_type_id=ExamType.objects.get(exam_type=result_exam_type)
         result_exam_type_sr_no = request.POST.get('fetch_sr_no')
         
@@ -41,6 +42,8 @@ def exam_result(request,pk):
       #============================================================================================ 
         student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
         institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
+        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,exam_class__name=selected_subject.subject_class )
+
         # score test
         for student in institute_students:
           try:
@@ -50,22 +53,30 @@ def exam_result(request,pk):
           except:
             pass
             
-             
+        if exam_details:
+
+
+
+       
+          context={
+                    'subject_result':subject_result,
+                    
+                    'selected_subject':selected_subject,
+                    'exam_type_id':exam_type_id,
+                    'result_exam_type_sr_no':result_exam_type_sr_no,
+                    'institute_exam_type':institute_exam_type,
+                    'institute_students':institute_students,
+                    
+                    }
+          return render(request, 'teacher_view.html', context) 
+        else:
+              messages.info(request, 'There is no schedule created for this selection!')
+                 
+              return HttpResponseRedirect(f'/examresult/examresult/{institute_pk}')    
             
             
         
 
-        context={
-                  'subject_result':subject_result,
-                  
-                  'selected_subject':selected_subject,
-                  'exam_type_id':exam_type_id,
-                  'result_exam_type_sr_no':result_exam_type_sr_no,
-                  'institute_exam_type':institute_exam_type,
-                  'institute_students':institute_students,
-                  
-                  }
-        return render(request, 'teacher_view.html', context) 
     # ----------------------------------------------------------------------------------------------
   
       context={

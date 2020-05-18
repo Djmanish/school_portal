@@ -521,18 +521,16 @@
                                                         id="ts_issues">
 
                                                         <tbody>
+                                                             
+                                                            {% if exam_class_subject %}
+
+                                                          
                                                             <form method="POST" action="{% url 'create_examschedule' request.user.profile.institute.id %}">
                                                                 {% csrf_token %}
                                                                 
                              
-                                                              
-                                                              {% if exam_class_subject %}
-                                                              <tr >
-                                                                    
-                                                                <th style="text-align: center; margin-bottom: 10px;" class="form-inline" id="attendance_form">Selected Class: {{select_class_for_schedule}}    &nbsp  &nbsp Selected Exam Type: {{select_exam_for_schedule}} &nbsp &nbsp Selected Exam Sr. No.: {{sr_no}}</th>
-                                                                <!-- <th style="text-align: center; margin-bottom: 10px;" class="form-inline" id="attendance_form">Selected Exam Type: {{select_exam_for_schedule}}</th> -->
-                                                               
-                                                            </tr>
+                                                             
+                                                          
                                                                   
                                                               
                                                                           

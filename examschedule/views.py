@@ -187,15 +187,16 @@ def create_exam_schedule(request, pk):
 
 
         if request.method == "POST":
+                          
+                selected_class=Classes.objects.get(pk=request.POST.get('selected_class_hidden'))
+                select_exam_type= ExamType.objects.get(pk=request.POST.get('exam_type_id_hidden'))
+                exam_code=request.POST.get('exam_institute_code')
+                exam_sr_no = request.POST.get('sr_no')
+                sr_no=ExamDetails.objects.filter(exam_type__exam_type=select_exam_type,exam_class=selected_class).values('exam_sr_no').distinct().count()+1
+                print(sr_no)
                 for subject,subject_teacher,date,start_time,end_time,assign_teacher in zip(request.POST.getlist('select_exam_subject'), request.POST.getlist('select_exam_subject_teacher'),request.POST.getlist('select_date'),request.POST.getlist('select_start_time'),request.POST.getlist('select_end_time'),request.POST.getlist('assign_teacher')):
                                 
-                                
-                        selected_class=Classes.objects.get(pk=request.POST.get('selected_class_hidden'))
-                        select_exam_type= ExamType.objects.get(pk=request.POST.get('exam_type_id_hidden'))
-                        exam_code=request.POST.get('exam_institute_code')
-                        exam_sr_no = request.POST.get('sr_no')
-                        sr_no=ExamDetails.objects.filter(exam_type__exam_type=select_exam_type,exam_class=selected_class).values('exam_sr_no').distinct().count()+1
-
+                      
                         new_exam = ExamDetails()
                         new_exam.institute=request.user.profile.institute 
                         new_exam.exam_subject = Subjects.objects.get(pk=subject)
@@ -209,7 +210,7 @@ def create_exam_schedule(request, pk):
                         new_exam.exam_class=selected_class
                         new_exam.exam_type=select_exam_type
                         new_exam.save()
-                messages.success(request, 'New Exam Schedule Created successfully !!!')
+        messages.success(request, 'New Exam Schedule Created successfully!')
                         
          
         return redirect(f'/examschedule/examschedule/{inst_id}') 
@@ -239,7 +240,9 @@ def examschedule_view(request,pk):
                         exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
                         
                         context = {
-                                'selected_class':selected_class,
+                        'selected_class':selected_class,
+                        'select_exam_type':select_exam_type,
+                        'select_exam_type_no':select_exam_type_no,
                         'exam_details': exam_details,
                         'institute_exam_schedule':institute_exam_schedule,
                         'institute_exam_type':institute_exam_type,
@@ -260,6 +263,9 @@ def examschedule_view(request,pk):
                                 context = {
                                 'select_class_for_schedule':select_class_for_schedule,
                                 'exam_class':exam_class,
+                                'selected_class':selected_class,
+                                'select_exam_type':select_exam_type,
+                                'select_exam_type_no':select_exam_type_no,      
                                 'exam_details': exam_details,
                                 'institute_exam_schedule':institute_exam_schedule,
                                 'institute_exam_type':institute_exam_type,
