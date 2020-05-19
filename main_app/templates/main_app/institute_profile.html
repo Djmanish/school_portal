@@ -665,7 +665,7 @@
                                                 {% endif %}
 
                                                 {% if institute_data.country %}
-                                                {{institute_data.country}},
+                                                {{institute_data.country}} -
                                                 {% endif %}
 
                                                 {% if institute_data.pin_code %}
@@ -729,7 +729,7 @@
                                                         {% endif %}
         
                                                         {% if institute_data.district %}
-                                                        {{institute_data.district}}
+                                                        {{institute_data.district}},
                                                         {% endif %}
         
                                                         {% if institute_data.state %}
@@ -737,7 +737,7 @@
                                                         {% endif %}
         
                                                         {% if institute_data.country %}
-                                                        {{institute_data.country}},
+                                                        {{institute_data.country}} -
                                                         {% endif %}
         
                                                         {% if institute_data.pin_code %}
@@ -808,20 +808,27 @@
                                             <!-- starting Classes modal themes -->
                                             <div class="uk-modal" id="modal_new_class">
                                                 <div class="uk-modal-dialog">
-                                                    <div class="uk-modal-header">
-                                                        <h3 class="uk-modal-title">Add New Class </h3>
-                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6" >
+                                                          <h3 class="uk-text-primary">Add New Class</h3>
+                                                        </div>
+                                                        <div class="col-sm-6 text-right">
+                                                            <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
+                                                         
+                                                        </div>
+                                                      </div>
+                                                    
                                                     <form  method="POST" action="{% url 'add_classes' %}">
                                                         {% csrf_token %}
                                                         <div class="form-group">
-                                                                <label >Class Name:</label>
+                                                                <label class= "required" >Class Name:</label>
                                                                 <input type="text" class="form-control" name="class_name" required>
                                                               </div>
                                                            
                                                               <div class="form-group">
-                                                                <label for="sel1">Select Class Stage:</label>
+                                                                <label class= "required" for="sel1">Select Class Stage:</label>
                                                                 <select class="form-control" name="class_stage" required>
-                                                                    <option selected disabled value="">--- select class stage ---</option>
+                                                                    <option selected disabled value="">--- Select Class Stage ---</option>
                                                                   <option>Primary</option>
                                                                   <option>Middle</option>
                                                                   <option>Highschool</option>
@@ -859,7 +866,7 @@
                                                                 <th style="text-align:center;">Class Teacher</th>
                                                               
                                                               {% if assign_class_teacher_permission in user_permissions %}
-                                                              <th style="text-align:center;">Assign class Teacher</th>
+                                                              <th style="text-align:center;">Assign Class Teacher</th>
                                                               {% endif %}
                                                               {% if can_edit_class_permission in user_permissions %}       
                                                                 <th style="text-align:center;">Edit Class</th>
@@ -933,14 +940,21 @@
                                             <!-- starting subject modal themes -->
                                             <div class="uk-modal" id="modal_new_subject">
                                                 <div class="uk-modal-dialog">
-                                                    <div class="uk-modal-header">
-                                                        <h3 class="uk-modal-title">Add New Subject </h3>
-                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6" >
+                                                          <h3 class="uk-text-primary">Add New Subject</h3>
+                                                        </div>
+                                                        <div class="col-sm-6 text-right">
+                                                            <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
+                                                         
+                                                        </div>
+                                                      </div>
+                                                                                                     
                                                     <form method="POST" action="{% url 'add_subjects' %}">
                                                         {% csrf_token %}
                                                         <div class="form-group">
-                                                            <label for="sel1">Select Class:</label>
-                                                            <select class="form-control" id="sel1" name="new_class">
+                                                            <label class="required" for="sel1">Select Class:</label>
+                                                            <select class="form-control" id="sel1" name="new_class" required>
 
                                                                 {% for class in institute_class %}
                                                                 <option value={{class.id}}>{{class}}</option>
@@ -952,17 +966,17 @@
 
                                                         </div>
                                                         <div class="form-group">
-                                                            <label>Subject Code:</label>
-                                                            <input type="text" class="form-control" name="subject_code">
+                                                            <label class="required">Subject Code:</label>
+                                                            <input type="text" class="form-control" name="subject_code" required>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label>Subject Name:</label>
-                                                            <input type="text" class="form-control" name="subject_name">
+                                                            <label class="required">Subject Name:</label>
+                                                            <input type="text" class="form-control" name="subject_name" required>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="sel1">Select Subject Teacher</label>
+                                                            <label class="required" for="sel1">Select Subject Teacher:</label>
                                                             <select class="form-control" name="subject_teacher" required>
-                                                                <option selected disabled value="">--select subject
+                                                                <option selected disabled value="">--Select Subject
                                                                     Teacher--</option>
                                                               
                                                                     {% for teacher in institute_teachers %}
@@ -1063,20 +1077,25 @@
                                                
                                                 <div class="uk-modal" id="add_new_role">
                                                     <div class="uk-modal-dialog">
-                                                        <div class="uk-modal-header">
-                                                            <h3 class="uk-modal-title">Add New Role to
-                                                                {{institute_data.name}}</h3>
-                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-6" >
+                                                              <h3 class="uk-text-primary">Add New Role to {{institute_data.name}}</h3>
+                                                            </div>
+                                                            <div class="col-sm-6 text-right">
+                                                                <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
+                                                             
+                                                            </div>
+                                                          </div>
                                                         <form method="POST"
                                                             action="/add/new_role/{{institute_data.id}}/">
                                                             {% csrf_token %}
                                                             <div class="uk-form-row">
-                                                                <label>Level Id</label>
+                                                                <label class=required>Level Id</label>
                                                                 <input type="number" class="md-input" name="level_id"
                                                                     min="3" maxlength="2"  required>
                                                             </div>
                                                             <div class="uk-form-row">
-                                                                <label>Role Name</label>
+                                                                <label class=required>Role Name</label>
                                                                 <input type="text" class="md-input" name="level_name"
                                                                     required />
                                                             </div>

@@ -5,23 +5,21 @@ from django.contrib import messages
 
 # Create your views here.
 def library(request):
-    institute_data=Institute.objects.get(name=request.user.profile.institute)
-    inst=request.user.profile.institute
-    categories= BookCategory.objects.filter(institute_category=inst)
+    institute_data=Institute.objects.get(pk = request.user.profile.institute.id)
+    categories= BookCategory.objects.filter(institute_category=request.user.profile.institute)#?
     context_data = {
       'institute_data':institute_data,
-       'categories':categories,
-    
+       'categories':categories,    
       }
     return render(request, 'library/library.html',context_data)
 
 def book(request):
-    institute_data=Institute.objects.get(name=request.user.profile.institute)
-    inst=request.user.profile.institute
-    categories= BookCategory.objects.filter(institute_category=inst)
-    sub_categories= BookSubCategory.objects.filter(institute_subcategory=inst)
-    books= Book.objects.filter(book_institute=inst)
+    institute_data=Institute.objects.get(pk=request.user.profile.institute.id)
+    categories= BookCategory.objects.filter(institute_category=request.user.profile.institute)
+    sub_categories= BookSubCategory.objects.filter(institute_subcategory=request.user.profile.institute)
+    books= Book.objects.filter(book_institute=request.user.profile.institute)
     len_books=len(books)
+    
     context_data = {
       'institute_data':institute_data,  
       'categories':categories,
@@ -33,8 +31,8 @@ def book(request):
 
 def add_book(request):
       if request.method == 'POST':
-            new_book_code= request.POST['book_code']
-            new_book_id= request.POST['book_id']
+            new_book_code= request.POST['book_code'].strip()
+            new_book_id= request.POST['book_id'].strip()
             new_book_name= request.POST['book_name']
             new_book_category= request.POST['book_category']
             new_book_subcategory= request.POST['book_sub_category']

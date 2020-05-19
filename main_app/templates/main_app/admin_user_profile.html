@@ -54,7 +54,7 @@
                                 
                 <!-- main sidebar switch -->
                 <a href="#" id="sidebar_main_toggle" class="sSwitch sSwitch_left">
-                    <span class="sSwitchIcon"></span>
+                    <span class="sSwitchIcon"></span> 
                 </a>
                 
                 <!-- secondary sidebar switch -->
@@ -651,10 +651,12 @@
                                                             {% endif %}
                                                             
                                                             {% if user.profile.institute.state %}
-                                                            {{user.profile.institute.state}}
+                                                            {{user.profile.institute.state}},
                                                             {% endif %}
                                                                 
-                                                            
+                                                            {% if user.profile.institute.country %}
+                                                            {{user.profile.institute.country}} -
+                                                            {% endif %}
                                                             
                                                             {% if user.profile.institute.pin_code %}
                                                             {{user.profile.institute.pin_code}}    
@@ -698,12 +700,16 @@
                                 {% if user.profile.address_line_2 %}{{user.profile.address_line_2}}{% endif %},
                                 
                                 {% if user.profile.city %}
-                                {{user.profile.city}}
-                                {% endif %},
+                                {{user.profile.city}},
+                                {% endif %}
                                  
                                 {% if user.profile.state %}
-                                {{user.profile.state}}
+                                {{user.profile.state}},
                                 {% endif %}
+
+                                {% if user.profile.country %}
+                                {{user.profile.country}} -
+                                {% endif %} 
                                 
                                 {% if user.profile.pin_code %}
                                 {{user.profile.pin_code}}

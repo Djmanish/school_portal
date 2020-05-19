@@ -522,19 +522,19 @@
                                                 {% csrf_token %}
                                                 <div class="form-group">
                                                         <label >Book code / ISBN No / Subject Code:</label>
-                                                        <input type="text" class="form-control" name="book_code" required>
+                              <input type="text" class="form-control form form-control-sm " name="book_code" required>
                                                     </div> 
                                                     <div class="form-group">                                                      
                                                         <label >Book ID:</label>
-                                                        <input type="text" class="form-control" name="book_id" required>
+                                                        <input type="text" class="form-control-sm form-control" name="book_id" required>
                                                       </div> 
                                                       <div class="form-group">
                                                         <label >Book Name:</label>
-                                                        <input type="text" class="form-control" name="book_name" required>
+                                                        <input type="text" class="form-control-sm form-control" name="book_name" required>
                                                       </div>
                                                       <div class="form-group">
                                                         <label for="sel1">Select Category:</label>
-                                                        <select class="form-control" name="book_category" required>
+                                                        <select class="form-control-sm form-control" name="book_category" required>
                                                             <option selected disabled value="">--- Select ---</option>
                                                             {% for i in categories %}
                                                             <option value={{i.id}}>{{i}}</option>
@@ -544,7 +544,7 @@
                                                       </div> 
                                                       <div class="form-group">
                                                         <label for="sel1">Select Sub Category:</label>
-                                                        <select class="form-control" name="book_sub_category" required>
+                                                        <select class="form-control-sm form-control" name="book_sub_category" required>
                                                             <option selected disabled value="">--- Select ---</option>
                                                             {% for j in sub_categories %}
                                                             <option value={{j.id}}>{{j}}</option>
@@ -554,15 +554,15 @@
                                                       </div> 
                                                       <div class="form-group">
                                                         <label >Author Name:</label>
-                                                        <input type="text" class="form-control" name="author_name" required>
+                                                        <input type="text" class="form-control-sm form-control" name="author_name" required>
                                                       </div>
                                                       <div class="form-group">
                                                         <label >Publications:</label>
-                                                        <input type="text" class="form-control" name="publications" required>
+                                                        <input type="text" class="form-control-sm form-control" name="publications" required>
                                                       </div>
                                                       <div class="form-group">
                                                         <label >Edition:</label>
-                                                        <input type="text" class="form-control" name="editions" required>
+                                                        <input type="text" class="form-control-sm form-control" name="editions" required>
                                                       </div>                                               
                                                       <table>
                                                         <tr>

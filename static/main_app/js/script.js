@@ -79,6 +79,12 @@ $(document).ready(function(){
 });
 // ending script for processing , notification and due date
 
+function validations(){
+  var value=document.getElementById("showdate").value;
+  if (new Date() < new Date(value)) {
+      alert("future date");
+  }
+}
 function formatAMPM(date) {
   var hours = date.getHours();
   var minutes = date.getMinutes();

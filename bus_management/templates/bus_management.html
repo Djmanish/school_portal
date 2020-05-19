@@ -1,5 +1,4 @@
 <!doctype html>
-<!-- comment test -->
 {% load static %}
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 9]><!-->
@@ -13,14 +12,12 @@
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no" />
 
-    <link rel="icon" type="image/png" href="{% static 'holidaylist/img/favicon-16x16.png' %}" sizes="16x16">
-    <link rel="icon" type="image/png" href="{% static 'holidaylist/img/favicon-32x32.png' %}" sizes="32x32">
-    <script src="{% static 'main_app/js/script.js' %}"></script>
-    <title>HolidayList</title>
-    
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
+
+    <title>Examination</title>
+ 
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
         media="all">
@@ -34,18 +31,18 @@
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
+    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
 
     <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
-        <script type="text/javascript" src="bower_components/matchMedia/matchMedia.js"></script>
-        <script type="text/javascript" src="bower_components/matchMedia/matchMedia.addListener.js"></script>
-        <link rel="stylesheet" href="assets/css/ie.css" media="all">
+        <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.js' %}"></script>
+        <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-
-</head>
-
-<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" </head>
+     <body
+        class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <!-- main header -->
     <!-- main header -->
     <header id="header_main">
         <div class="header_main_content">
@@ -91,6 +88,10 @@
                                         <a href="page_user_profile.html" class="uk-margin-top">
                                             <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
                                             <span class="uk-text-muted uk-display-block">User profile</span>
+                                        </a>
+                                        <a href="page_institute_profile.html" class="uk-margin-top">
+                                            <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                            <span class="uk-text-muted uk-display-block">Institute profile</span>
                                         </a>
                                     </div>
                                 </div>
@@ -201,8 +202,34 @@
                 </div>
             </nav>
         </div>
-
+        <div class="header_main_search_form">
+            <i class="md-icon header_main_search_close material-icons">&#xE5CD;</i>
+            <form class="uk-form uk-autocomplete" data-uk-autocomplete="{source:'data/search_data.json'}">
+                <input type="text" class="header_main_search_input" />
+                <button class="header_main_search_btn uk-button-link"><i
+                        class="md-icon material-icons">&#xE8B6;</i></button>
+                <script type="text/autocomplete">
+                    <ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">
+                        
+                        <li data-value="">
+                            <a href="" class="needsclick">
+                                <br>
+                                <span class="uk-text-muted uk-text-small"></span>
+                            </a>
+                        </li>
+                    
+                        <li data-value="autocomplete-value">
+                            <a class="needsclick">
+                                Autocomplete Text<br>
+                                <span class="uk-text-muted uk-text-small">Helper text</span>
+                            </a>
+                        </li>
+                    </ul>
+                </script>
+            </form>
+        </div>
     </header><!-- main header end -->
+    <!-- main sidebar -->
     <!-- main sidebar -->
     <aside id="sidebar_main">
         <div class="sidebar_main_header">
@@ -218,9 +245,10 @@
             </div>
             
         </div>
+
         <div class="menu_section">
             <ul>
-                <li  title="Dashboard">
+                <li title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -301,7 +329,7 @@
 </li>
 {% endif %}
     
-                <li class="current_section" title="Holiday List">
+                <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
@@ -352,16 +380,16 @@
                     {% endif %}
                    
 
-                    <li  title="Examination">
+                    <li   title="Examination">
 
                         <a href="">
                             <span class="menu_icon"><i class="material-icons">trending_up</i></span>
                             <span class="menu_title">Examination</span>
                         </a>
-                        <ul>
+                        <ul >
                             {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
 
-                            <li>
+                            <li class="act_item" title="Create Exam" >
                                 <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam</span>
@@ -425,308 +453,197 @@
     </aside><!-- main sidebar end -->
     <div id="page_content">
         <div id="page_content_inner">
-            
-                              <!-- success message -->
-                              {% if messages %}
-                              <div class="md-card md-card-primary">
-                            <div >
-                                <ul class="messages alert">
-                                    {% for message in messages %}
-                                    <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                              </div>
-                              {% endif %}
-
-            <div class="md-card">
-                <div class="md-card-content">
-                    <div class="uk-margin-bottom">
-                        <!-- <a href="#" class="md-btn uk-margin-right" id="printTable">Print Table</a> -->
-                        <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
-                            <!-- <button class="md-btn">Columns <i class="uk-icon-caret-down"></i></button> -->
-                            <!-- <div class="uk-dropdown">
-                                <ul class="uk-nav uk-nav-dropdown" id="columnSelector"></ul>
-
-
-                            </div> -->
-                        </div>
-                        <!-- <div class="md-card"> -->
-                            
-                            {% if can_add_holiday_permission in user_permissions %}
-                            <button type="button" class="md-btn md-btn-primary" style="background-color: #1976d2;" data-uk-modal="{target:'#modal_new_holiday'}">Add
-                                Holiday</button>
-                            {% endif %}
-
-                        <!-- starting Holiday modal themes -->
-                        <div class="uk-modal" id="modal_new_holiday">
-                            <div class="uk-modal-dialog">
-                                <div class="row">
-                                    <div class="col-sm-6" >
-                                      <h3 class="uk-text-primary">Add Holiday</h3>
-                                    </div>
-                                    <div class="col-sm-6 text-right">
-                                        <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
-                                    </div>
-                                  </div>
-                                
-                               <form method="POST" action="{% url 'holidaylist' user.profile.institute.pk %}">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                            <label class="required">Date</label>
-                                            <input type="date" class="form-control form-control-sm" name="holiday_date" required>
-                                        </div>
-                                        
-                                        
-                   
-
-                                    <div class="form-group">
-                                        <label class="required">Holiday Name:</label>
-                                        <input type="text" class="form-control n_i form-control-sm"  name='holiday_name' required="required">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sel1">Applicable:</label>
-                                        <select class="form-control form-control-sm" id="sel1" name="holiday_applicable">
-                                          <option value="Yes">Yes</option>
-                                          <option value="No">No</option>
-                                          
-                                        </select>
-                                      </div>
-                                    <div class="form-group">
-                                            <label>Holiday Type:</label>
-                                            <input type="text" class="form-control n_i form-control-sm" name='holiday_type' >
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="sel2">Email Send:</label>
-                                            <select class="form-control form-control-sm" id="sel2" name="holiday_email_send">
-                                                <option value="No">No</option>
-                                                <option value="Yes">Yes</option>
-                                               
-                                              
-                                            </select>
-                                          </div>
-                                          <div class="form-group">
-                                            <label for="sel3">SMS Send:</label>
-                                            <select class="form-control form-control-sm" id="sel3" name="holiday_sms_send">
-                                                <option value="No">No</option>
-                                                <option value="Yes">Yes</option>
-                                              
-                                              
-                                            </select>
-                                          </div>
-                                          <div class="form-group">
-                                            <label for="sel4">Notification Send:</label>
-                                            <select class="form-control form-control-sm" id="sel4" name="holiday_notification_send">
-                                                <option value="No">No</option>
-                                                <option value="Yes">Yes</option>
-                                              
-                                            </select>
-                                          </div>
-                                    <table>
-                                        <tr>
-                                            <td>
-                                    <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add
-                                        Holiday</button>
-                                    </td>
-                                    <td style="padding-left: 20px;">
-                                
-                                    <button  type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:#ff0000 ;width: 140px;">Cancel</button>
-                                </td>
-                                </tr>
-                                </table>
-
-                            </form>
-
-                            </div>
-                            <!-- </div> -->
-
-                        </div>
-
-                        <div class="uk-overflow-container uk-margin-bottom">
-                            <br>
-                            <table
-                                class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                                id="ts_pager_filter">
-                                <thead>
-                                    <tr >
-                                       
-
-                                        <th >Sr.No.</th>
-                                        <th >Date</th>
-                                        <th >Day</th>
-                                        <th >Name</th>
-                                        <th >Applicable</th>
-                                        <th >Type</th>
-                                        {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-
-                                        <th >Email</th>
-                                       <th  >Content</th> 
-                                        <!-- <th >SMS</th>
-                                        <th >Content</th> -->
-                                        <th >Notification</th>
-                                        <th >Content</th>
-
-                                        {% if can_edit_holiday_permission in user_permissions %}
-                                        <th >Edit</th>
-                                        <th >Delete</th>
-
-                                        {% endif %}
-                                        {% endif %}
-
-                                    </tr>
-                                </thead>
-                          
-                                <tbody>
-                                  {% for holiday in institute_holiday_list %}
-                                    
-                                    <tr>
-                                        <td >{{ forloop.counter}}</td>
-                                        <td  >
-                                            {{holiday.date}}
-
-                                        </td>
-                                        <td >{{holiday.date|date:"l" }}</td>
-                                        <td >{{holiday.name}}</td>
-                                        <td >{{holiday.applicable}}
-
-                                        
-                                        </td>
-                                        <td >{{holiday.holiday_type}}</td>
-                                        {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-
-                                        <td >
-                                            {{holiday.holiday_email}}
-                                            
-                                        </td>
-                                       
-                                        <td >
-                                            
-                                            {% if holiday.holiday_email == "Yes" %}
-                                            <a href="{% url 'emailView' user.profile.institute.id %}">Link</a>
-                                            
-                                            {% else %}
-                                            
-                                            Link
-                                            {% endif %}
-                                             </td>
-<!--                                         
-                                        <td >
-                                            
-                                            {{holiday.holiday_sms}}
-                                           
-                                        </td> -->
-                                        <!-- <td >
-                                            {% if holiday.holiday_sms == "Yes" %}
-                                            <a href="#">Link</a>
-                                            {% else %}
-                                           Link
-                                            {% endif %}
-                                        </td> -->
-                                        <td >
-                                            {{holiday.holiday_notification}}
-                   
-                                        </td>
-                                        <td >
-                                            {% if holiday.holiday_notification == "Yes" %}
-
-                                            <a href="#">Link</a>
-                                            {% else %}
-                                           Link
-                                            {% endif %}
-                                        </td>
-
-                                            {% if can_edit_holiday_permission in user_permissions %}
-                                            <td ><a  class="" href="{% url 'edit_holiday' holiday.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
-                                            </td>
-                                            {% endif %}
-
-                                            {% if can_delete_holiday_permission in user_permissions %}
-                                            <td ><a  class="" href="{% url 'delete_holiday' holiday.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
-                                            </td>
-                                            {% endif %}  
-                                        {% endif %}
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-
+            {% if messages %}
+            <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
             </div>
-        </div>
+            {% endif %}
+            
+                                        <div class="md-card">
+                                           
+                                      
+                                                <div id="attendance_form">
+                                                
+                                                    <div class="md-card-content">
+                                                
 
-        <!-- google web fonts -->
-        <script>
-            WebFontConfig = {
-                google: {
-                    families: [
-                        'Source+Code+Pro:400,700:latin',
-                        'Roboto:400,300,500,700,400italic:latin'
-                    ]
-                }
-            };
-            (function () {
-                var wf = document.createElement('script');
-                wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-                    '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-                wf.type = 'text/javascript';
-                wf.async = 'true';
-                var s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(wf, s);
-            })();
-        </script>
+                                                        
+                                                
+                                                
+                                               
+                                                    <button type="button"  class="md-btn md-btn-primary"
+                                                    data-uk-modal="{target:'#modal_new_test_type'}">Create Exam</button>
 
-        <!-- common functions -->
-        <script src="{% static 'main_app/js/common.min.js' %}"></script>
-        <!-- uikit functions -->
-        <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
-        <!-- altair common functions/helpers -->
-        <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
+                                                    <div class="uk-modal" id="modal_new_test_type">
+                                                        <div class="uk-modal-dialog">
+                                                            <div class="uk-modal-header">
+                                                                <h3 class="uk-modal-title">Create Exam </h3>
+                                                            </div>
+                                                        
+                                                            
+                                                            <form  method="POST"  action="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                                                {% csrf_token %}
+                                                                     <div class="form-group">
+                                                                        <label >Exam Type:</label>
+                                                                        <input type="text" class="form-control n_i" name="exam_type"  required>
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                        <label >Maximum Marks:</label>
+                                                                        <input type="number" class="form-control" name="exam_max_marks"  min="0" required>
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                        <label >Maximum Exam Limit:</label>
+                                                                        <input type="number" class="form-control" name="exam_max_limit" min="0" required>
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                        <label >% of Final Score:</label>
+                                                                        <input type="number" class="form-control" name="exam_per_final_score" min="0" required>
+                                                                      </div>
+                                                                      <table>
+                                                                        <tr>
+                                                                            <td >
+                                                                          <button type="submit"  class="md-btn md-btn-primary">Add Exam Type</button>
+                                                                        </td>
+                                                                        <td style="padding-left: 20px; ">
+                                                                <button type="button" class="md-btn md-btn-primary uk-modal-close">Cancel</button>
+                                                                        </td>
+                                                                    </tr>
+                                                        </table>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                        
+                                                        </div>
+                                                    </div>
+                                                    <div class="md-card-content">
+                                                
 
-        <!-- page specific plugins -->
-        <!-- tablesorter -->
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/jquery.tablesorter.min.js' %}"></script>
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/jquery.tablesorter.widgets.min.js' %}"></script>
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/widgets/widget-alignChar.min.js' %}"></script>
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/widgets/widget-columnSelector.min.js' %}"></script>
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/widgets/widget-print.min.js' %}"></script>
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js' %}"></script>
-        <!-- ionrangeslider -->
-        <script src="{% static 'main_app/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+                                                        <div class="uk-overflow-container uk-margin-bottom">
+                                                    <table
+                                                    class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                                    id="ts_issues">
+                                                   
+                                                
 
-        <!--  tablesorter functions -->
-        <script src="{% static 'main_app/assets/js/pages/plugins_tablesorter.min.js' %}"></script>
+                                                    <tbody>
+                                                       
+                                                       {% if institute_exam_type %}
+                                                           
+                                                            <tr style="background-color: #1976d2; color:white; text-align:center;">
+                                                                <td>Sr. No.</td>
+                                                                <td>Exam Type</td>
+                                                                <td>Maximum Marks</td>
+                                                                <td>Maximum Exam limit</td>
+                                                                <td>% of Final Score</td>
+                                                                <td>Edit</td>
+                                                                <td>Delete</td>
+                                                            </tr>
+                                                            {% endif %}
+                                                       
+                                                        
+                                                            {% for test_type in institute_exam_type %}
+                                                            <tr  style="text-align:center;">
+                                                                <td> {{ forloop.counter}}
+                                                                </td>
+                                                                <td>{{test_type.exam_type}}
+                                                                </td>
+                                                                <td>{{test_type.exam_max_marks}}</td>
 
-        <script>
-            $(function () {
-                if (isHighDensity()) {
-                    $.getScript("{ % static 'main_app/js/custom/dense.min.js' %}", function (data) {
-                        // enable hires images
-                        altair_helpers.retina_images();
-                    });
-                }
-                if (Modernizr.touch) {
-                    // fastClick (touch devices)
-                    FastClick.attach(document.body);
-                }
-            });
-            $window.load(function () {
-                // ie fixes
-                altair_helpers.ie_fix();
-            });
-        </script>
+                                                                <td>{{test_type.exam_max_limit}}</td>
+
+                                                                <td>{{test_type.exam_per_final_score}}</td>
+                                                                <td><a   href="{% url 'edit_test_type' test_type.pk%}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                                </td>
+                                                                <td><a  href="{% url 'delete_test_type' test_type.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                                </td>
+
+                                                            </tr>
+                                                            
+                                                             
+                                                             {% endfor %}
+                                                            
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                                </div>
+                     
+
+                                            
+                                            </div>
+                                        </div>
+                                            </div>
+                        
+
+                                        
 
 
-        
+
+                </div>
+            </div>
        
-</body>
+
+    <!-- google web fonts -->
+    <script>
+        WebFontConfig = {
+            google: {
+                families: [
+                    'Source+Code+Pro:400,700:latin',
+                    'Roboto:400,300,500,700,400italic:latin'
+                ]
+            }
+        };
+        (function () {
+            var wf = document.createElement('script');
+            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+                '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
+    </script>
+
+    <!-- common functions -->
+    <script src="{% static 'main_app/js/common.min.js' %}"></script>
+    <script src="{% static 'main_app/js/script.js' %}"></script>
+
+    <!-- uikit functions -->
+    <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
+    <!-- altair common functions/helpers -->
+    <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
+
+
+    <script>
+        $(function () {
+            if (isHighDensity()) {
+                $.getScript("assets/js/custom/dense.min.js", function (data) {
+                    // enable hires images
+                    altair_helpers.retina_images();
+                });
+            }
+            if (Modernizr.touch) {
+                // fastClick (touch devices)
+                FastClick.attach(document.body);
+            }
+        });
+        $window.load(function () {
+            // ie fixes
+            altair_helpers.ie_fix();
+        });
+    </script>
+
+
+    
+    
+    </body>
 
 </html>

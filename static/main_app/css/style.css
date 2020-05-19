@@ -242,6 +242,18 @@ label{
 .dbmh{
   max-height: 290px;
 }
+
+.ast{
+  color:red;
+  font-weight: bold;
+}
+label.required:before{
+  content: "*";
+  color: red;
+  font-weight: bold;
+}
+
+  
 #md_user{
   font-size: 16px;
 }
