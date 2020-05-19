@@ -833,53 +833,59 @@ def edit_profile(request, pk):
 
 @login_required
 def institute_profile(request, pk):
-# starting assigning all functionalities to admin
-    admin_pk = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='admin')
-    checking_for_admin = Role_Description.objects.filter(user=request.user, institute=request.user.profile.institute, level= admin_pk ).first()
-    if checking_for_admin is not None:
-        all_app_functions = App_functions.objects.all()
-        for function in all_app_functions:
-            request.user.user_institute_role.level.permissions.add(function)
-# ending assigning all functionalities to admin
-    
+    inst = request.user.profile.institute.id
+
+    if pk==inst:
+        # starting assigning all functionalities to admin
+        admin_pk = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='admin')
+        checking_for_admin = Role_Description.objects.filter(user=request.user, institute=request.user.profile.institute, level= admin_pk ).first()
+        if checking_for_admin is not None:
+            all_app_functions = App_functions.objects.all()
+            for function in all_app_functions:
+                request.user.user_institute_role.level.permissions.add(function)
+        # ending assigning all functionalities to admin
 
 
-    institute_data= Institute.objects.get(pk=pk)
-    institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
-    institute_class = Classes.objects.filter(institute=institute_data).reverse()
-    institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
-    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
-    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
-    # starting user permission code
-    user_permissions = request.user.user_institute_role.level.permissions.all()
-    add_class_permission = App_functions.objects.get(function_name='Can Add Class')
-    add_subject_permission = App_functions.objects.get(function_name='Can Add Subject')
-    assign_class_teacher_permission = App_functions.objects.get(function_name='Can Assign Class Teacher')
-    can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
-    can_delete_class_permission = App_functions.objects.get(function_name='Can Delete Class')
-    can_edit_subject_permission = App_functions.objects.get(function_name='Can Edit Subject')
-    can_delete_subject_permission = App_functions.objects.get(function_name='Can Delete Subject')
 
-    
-    # ending user permission code
-    context_data = {'institute_data':institute_data, 
-    'institute_roles':institute_roles,
-     'institute_class':institute_class,
-     'institute_subject':institute_subject,
-      'all_classes':institute_class,
-      'user_permissions': user_permissions,
-      'add_class_permission': add_class_permission,
-      'add_subject_permission':add_subject_permission,
-      'institute_teachers':institute_teachers,
-      'assign_class_teacher_permission':assign_class_teacher_permission,
-      'can_edit_class_permission':can_edit_class_permission,
-      'can_delete_class_permission':can_delete_class_permission,
-      'can_edit_subject_permission':can_edit_subject_permission,
-      'can_delete_subject_permission': can_delete_subject_permission
-      }
+        institute_data= Institute.objects.get(pk=pk)
+        institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
+        institute_class = Classes.objects.filter(institute=institute_data).reverse()
+        institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
+        designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+        institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+        # starting user permission code
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        add_class_permission = App_functions.objects.get(function_name='Can Add Class')
+        add_subject_permission = App_functions.objects.get(function_name='Can Add Subject')
+        assign_class_teacher_permission = App_functions.objects.get(function_name='Can Assign Class Teacher')
+        can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
+        can_delete_class_permission = App_functions.objects.get(function_name='Can Delete Class')
+        can_edit_subject_permission = App_functions.objects.get(function_name='Can Edit Subject')
+        can_delete_subject_permission = App_functions.objects.get(function_name='Can Delete Subject')
 
-    return render(request, 'main_app/institute_profile.html', context_data)
-    
+
+        # ending user permission code
+        context_data = {'institute_data':institute_data, 
+        'institute_roles':institute_roles,
+            'institute_class':institute_class,
+            'institute_subject':institute_subject,
+            'all_classes':institute_class,
+            'user_permissions': user_permissions,
+            'add_class_permission': add_class_permission,
+            'add_subject_permission':add_subject_permission,
+            'institute_teachers':institute_teachers,
+            'assign_class_teacher_permission':assign_class_teacher_permission,
+            'can_edit_class_permission':can_edit_class_permission,
+            'can_delete_class_permission':can_delete_class_permission,
+            'can_edit_subject_permission':can_edit_subject_permission,
+            'can_delete_subject_permission': can_delete_subject_permission
+            }
+
+        return render(request, 'main_app/institute_profile.html', context_data)
+
+    else:
+        raise PermissionDenied
+
 
    
 @login_required
@@ -889,6 +895,7 @@ def edit_institute(request, pk):
    
 
 class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView):
+
     model = Institute
     form_class = InstituteUpdateProfile
 
@@ -900,26 +907,16 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
         return super().form_valid(form)
     
     def test_func(self):
+        inst_id = self.get_object().id
+        if inst_id!=self.request.user.profile.institute.id:
+            raise PermissionDenied
         if self.request.user.profile.designation.level_name == "admin" or self.request.user.profile.designation.level_name == "principal":
             return True
         else:
             return False
     
     def get_context_data(self, **kwargs):
-        # starting user notice
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= self.request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = self.request.user.profile.designation.level_id
-        self.request.user.users_notice = []
-        all_notices = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
-        if user_role_level < teacher_role_level:
-            self.request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if self.request.user.profile in notice_recipients:
-                    self.request.user.users_notice.insert(0, notice)
-        # ending user notice
+      
 
 
         # Call the base implementation first to get a context

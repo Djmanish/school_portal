@@ -6,14 +6,16 @@ from .models import *
 from django.views.generic import *
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 
 
 # Create your views here.
 
 def create_test_type(request,pk):
-        user_permissions = request.user.user_institute_role.level.permissions.all()
-        add_exam_type_permission = App_functions.objects.get(function_name='Can Add Exam Type')
-        if add_exam_type_permission in user_permissions:
+        inst = request.user.profile.institute.id
+
+        if pk==inst:        
+       
                 institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
                 exam_sr_no=ExamType.objects.filter(institute=request.user.profile.institute).count()+1
                 
@@ -40,9 +42,7 @@ def create_test_type(request,pk):
                 }
                 return render(request, 'test_type_list.html', context)
         else:
-                messages.error(request,"Not Allow to access this page")
-                return redirect('not_found')
-                
+                        raise PermissionDenied
 
 
     
@@ -89,6 +89,9 @@ def delete_test_type(request, pk):
 
 
 def exam_schedule(request,pk):
+    inst = request.user.profile.institute.id
+
+    if pk==inst:
         institute_exam_schedule_data = Institute.objects.get(pk=pk)
         institute_exam_schedule = ExamDetails.objects.filter(institute=institute_exam_schedule_data)
 
@@ -172,7 +175,9 @@ def exam_schedule(request,pk):
                         }
         
         return render(request,'examschedule.html',context)
-        
+     
+    else:
+        raise PermissionDenied   
 
 def create_exam_schedule(request, pk):
         
@@ -226,6 +231,9 @@ def create_exam_schedule(request, pk):
  
 
 def examschedule_view(request,pk):
+        inst = request.user.profile.institute.id
+
+        if pk==inst:
             institute_exam_schedule = ExamDetails.objects.filter(institute=request.user.profile.institute)
             institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
             exam_class = Classes.objects.filter(institute=request.user.profile.institute)
@@ -283,6 +291,8 @@ def examschedule_view(request,pk):
              
                      }
             return render(request,'update_examschedule.html', context)
+        else:
+                raise PermissionDenied
 
 def edit_examschedule(request,pk):
     examdetails_info= ExamDetails.objects.get(pk=pk)
