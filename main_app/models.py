@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from datetime import date
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator,FileExtensionValidator
 import datetime
+from PIL import Image
 
 
 
@@ -20,7 +21,6 @@ class App_functions(models.Model):
 
 
 
-
 class Institute(models.Model):
     name = models.CharField(max_length=150, unique=True )
     profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.jpg" )
@@ -28,7 +28,7 @@ class Institute(models.Model):
     code = models.CharField(max_length=50, blank=True, null=True)
     name = models.CharField(max_length=150)
     establish_date=models.DateField(null=True, blank=True)
-    profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.jpg", null=True )
+    profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.png", null=True, blank=True, validators=[FileExtensionValidator(['jpeg','jpg','gif','png'])] )
     principal = models.CharField(max_length=50, null=True)
     session_start_date = models.DateField(null=True, blank=True)
     about = models.TextField(max_length=300, blank=True, default="This is about Institute" )
@@ -48,6 +48,9 @@ class Institute(models.Model):
     create_date=models.DateTimeField(auto_now_add=True,null=True, blank=True)
     updated_date=models.DateTimeField(auto_now=True,null=True, blank=True)
     created_by=models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='institute_profile', null=True)
+
+
+        
 
 
     def __str__(self):
@@ -103,12 +106,12 @@ class UserProfile(models.Model):
     qualification = models.CharField(max_length=200, null=True, default='' )
     aadhar_card_number = models.CharField(max_length= 20, null=True, default='')
 
-    about = models.CharField(max_length=300, blank=True, null=True, default="write something about yourself ")
+    about = models.CharField(max_length=300, blank=True, null=True, )
     profile_pic = models.ImageField(default="default_profile_pic.jpg", upload_to='UserProfilePictures')
     mobile_number = models.PositiveIntegerField(null=True,)
     address_line_1 = models.CharField(max_length= 50 , null= True, default="Address line 1")
     address_line_2 = models.CharField(max_length=50, null = True, default="Address line 2")
-    city = models.CharField(max_length=50, null=True, default="City")
+    city = models.CharField(max_length=50, null=True, default="")
     state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True)
     country= models.CharField(max_length=100, null=True, blank=True)
     facebook_link = models.URLField(null=True, blank=True, default="https://www.facebook.com/")
@@ -118,6 +121,10 @@ class UserProfile(models.Model):
     class_next_year=models.CharField(max_length=30,null=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,null=True) # approval date
+
+    class Meta:
+        unique_together=['institute', 'Class','roll_number']
+    
 
     def approve(self):
         self.status= 'approve'

@@ -8,18 +8,46 @@ from django.views.generic import *
 from django.views.generic import ListView, UpdateView
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
+from notices.models import Notice
+from django.utils import timezone
+from AddChild.models import *
 # Create your views here.
 
 @login_required
-def schedule(request):
+def schedule(request):   
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
+        
     select_class_for_schedule = request.GET.get('selected_class') # class selected to view
+
+#     starting showing class based on user role
+    if request.user.profile.designation.level_name == "student":
+            all_class = list(Classes.objects.filter(institute=request.user.profile.institute, id= request.user.profile.Class.id ))
+    elif request.user.profile.designation.level_name == "parent":
+            classes = AddChild.objects.filter(parent = request.user.profile)  
+            all_class = []
+            for c in classes:
+                    all_class.append(c.Class)
+    else:
+             all_class = list(Classes.objects.filter(institute=request.user.profile.institute))
+#     ending showing class based on user role
+             
     if select_class_for_schedule == None:
-            first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
+            try:
+                    first_class = all_class[0]
+            except:
+                     messages.info(request, 'You do not have children to show schedule !')
+                     return redirect('user_dashboard')
+
+
+                
             if first_class:
                     pass
             else:
                     messages.info(request, 'It seems there are no classes in the institute. First create the classes then you can access schedule')
-                    return redirect('not_found')
+                    return redirect('user_dashboard')
             first_class_id = first_class.id
             select_class_for_schedule= first_class_id
             
@@ -29,29 +57,25 @@ def schedule(request):
     time_table_for_class = selected_class.name
     selected_class_stage = selected_class.class_stage
     
-    all_class = Classes.objects.filter(institute=request.user.profile.institute)
+    
     all_lectures = Lecture.objects.filter(institute=request.user.profile.institute, class_stage= selected_class_stage)
     
 
-    monday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Monday"  )
-    tuesday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Tuesday" )
+    monday_schedule = Schedule.objects.get( Class= selected_class, day="Monday"  )
+    tuesday_schedule = Schedule.objects.get( Class= selected_class, day="Tuesday" )
 
-    wednesday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Wednesday" )
+    wednesday_schedule = Schedule.objects.get( Class= selected_class, day="Wednesday" )
 
-    thursday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Thursday" )
+    thursday_schedule = Schedule.objects.get( Class= selected_class, day="Thursday" )
 
-    friday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Friday" )
+    friday_schedule = Schedule.objects.get( Class= selected_class, day="Friday" )
 
-    saturday_schedule = Schedule.objects.get(institute=request.user.profile.institute, Class= selected_class, day="Saturday" )
+    saturday_schedule = Schedule.objects.get( Class= selected_class, day="Saturday" )
 
     user_permissions = request.user.user_institute_role.level.permissions.all()
     schedule_update_permission = App_functions.objects.get(function_name='Can Update Schedule')
     update_lecture_timing = App_functions.objects.get(function_name='Can Update Lecture Timing')
 
-
-
-
-   
     context = {'all_classes': all_class,
                 'all_lectures': all_lectures,
                 'monday_schedule':monday_schedule,
@@ -71,7 +95,11 @@ def schedule(request):
 
 @login_required
 def schedule_update(request, pk):
-
+                
+        # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
         schedule_to_update = Schedule.objects.get(pk=pk) # fetching schedule instance to update
         
         institute_subjects = Subjects.objects.filter(institute= request.user.profile.institute, subject_class= schedule_to_update.Class) # fetching available subjects in the institute
@@ -169,14 +197,20 @@ def schedule_update(request, pk):
                         except:
                                 schedule_to_update.subject_teacher_lecture_eight=None
                         
-                        messages.success(request, "Class Schedule Updated Successfully !!!")
+                        messages.success(request, "Class schedule updated successfully !")
                         schedule_to_update.save()
+                        return redirect('class_schedule')
                 else:
-                        messages.info(request, "You don't have permission to update class Schedule")
+                        messages.info(request, "You don't have permission to update class Schedule !")
                         return redirect('not_found')
         return render(request, 'class_schedule/update_schedule.html', context_data )
 @login_required
 def class_stage_lecture_time_update(request):
+                
+        # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
         return render(request, 'class_schedule/update_lecture_time.html')
 
 
@@ -187,7 +221,7 @@ class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
         # fields = ['start_time','end_time']
         form_class = Update_lecture_time_Form
         template_name= 'class_schedule/update_timing.html'
-        success_message = "Timing Updated Successfully !!!"
+        success_message = "Timing updated successfully !"
 
         def test_func(self):
                 user_permissions = self.request.user.user_institute_role.level.permissions.all()
@@ -196,7 +230,19 @@ class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
                         return True
                 else:
                         return False
+                        
                 
+        def get_context_data(self, **kwargs):
+        
+                # starting user notice
+                if self.request.user.profile.designation:
+                        self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
+                        # ending user notice
+
+
+                        # Call the base implementation first to get a context
+                        context = super().get_context_data(**kwargs)
+                        return context
 
         def get_success_url(self, **kwargs):
                 current_object = self.get_object()
@@ -212,6 +258,11 @@ class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
         
 
 def class_stage_all_lectures(request, id):
+                
+        # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
         if id == 1:
                 all_lectures = Lecture.objects.filter(institute=request.user.profile.institute, class_stage='Primary')
                 return render(request, 'class_schedule/class_stage_all_lectures.html',{'all_lectures':all_lectures, 'class_stage':'Primary'})

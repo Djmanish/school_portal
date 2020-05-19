@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect
 from main_app.models import Classes, UserProfile
 from django.contrib import messages
 from .models import School_tags, Fees_tag_update_history, Fees_Schedule, Account_details, Student_Tags_Record, Student_Tag_Processed_Record
@@ -31,14 +31,14 @@ def fees_home(request):
         selected_tag = School_tags.objects.get(pk=request.POST.get('selected_tag'))
         
         if selected_class.class_teacher != request.user:
-            messages.error(request, 'Only class teacher can map tags !!!')
+            messages.error(request, 'Only class teacher can map tags !')
             return redirect('fees_home')
         if len(total_tags_for_s)<= 0:
-             messages.error(request, 'No tags for this institute. First Create a tag.')
+             messages.error(request, 'No tags for this institute. First create a tag !')
              return redirect('fees_home')
         
         if len(all_students)<1:
-            messages.error(request, 'No student found in the selected class')
+            messages.error(request, 'No student found in the selected class !')
             return redirect('fees_home')
 
         for student in all_students: #highlighting students that already mapped to this tag
@@ -87,7 +87,7 @@ def parent_fees(request):
             if(len(user_children)>0):
                 payment_record = list(reversed(Students_fees_table.objects.filter( student__in= parent_student_list, total_due_amount=0)))
                 
-            paginator = Paginator(payment_record, 35)
+            paginator = Paginator(payment_record, 30)
             page_number = request.GET.get('page')
             payment_history = paginator.get_page(page_number)
                     
@@ -115,18 +115,18 @@ def creating_tags(request):
             amount_with_tax = float(amount) + float(tax_value)
             try:
                 School_tags.objects.get(institute =request.user.profile.institute, fees_code=fee_code)
-                messages.error(request, "Tag with this fees code already exists !!!")
+                messages.error(request, "Tag with this fees code already exists !")
                 return redirect('fees_home')
             except:
                 try:
                     School_tags.objects.create(institute= request.user.profile.institute, fees_code= fee_code, description= description, type= type, active=active_status, amount= amount, tax_percentage= tax_percentage, amount_including_tax= amount_with_tax, start_date= start_date, end_date= end_date)
-                    messages.success(request, 'Tag Created Successfully !!!')
+                    messages.success(request, 'Tag created successfully !')
                     return redirect('fees_home')
                 except:
-                    messages.error(request, 'Could not create this tag. please try again !!!')
+                    messages.error(request, 'Could not create this tag. Please try again !')
                     return redirect('fees_home')
     else:
-        messages.info(request, "You do not have permission to access this page.")
+        messages.info(request, "You do not have permission to access this page !")
         return redirect('not_found')
 
 
@@ -181,7 +181,7 @@ def institute_fees_schedule(request):
             try:
                 accnt_details = Account_details.objects.get(institute = request.user.profile.institute)
             except:
-                messages.info(request,'please provide your paytm merchant ID and merchant KEY first in order to proceed further !!!')
+                messages.info(request,'please provide your paytm merchant ID and merchant KEY first in order to proceed further !')
                 return redirect('fees_home')
         #ending checking if account details provided
         notification_date = request.POST.get('notification_date')
@@ -198,14 +198,14 @@ def institute_fees_schedule(request):
             check_existance.due_date= due_date
             check_existance.processing_date= processing_date
             check_existance.save()
-            messages.info(request, 'Fees Schedule updated !!!')
+            messages.info(request, 'Fees schedule updated !')
             return redirect('fees_home')
         except:
             Fees_Schedule.objects.create(institute = request.user.profile.institute, notification_date= notification_date, due_date= due_date, processing_date= processing_date)
-            messages.success(request, 'Schedule Information Updated !!!')
+            messages.success(request, 'Schedule information updated !')
             return redirect('fees_home')
     else:
-        messages.info(request, 'You do not have permission to visit this page.')
+        messages.info(request, 'You do not have permission to visit this page !')
         return redirect('not_found')
 
 def institute_account_details(request):
@@ -217,7 +217,7 @@ def institute_account_details(request):
             merchant_id = request.POST.get('merchant_id').strip()
             merchant_key = request.POST.get('merchant_key').strip()
             if len(merchant_key)<16:
-                messages.info(request, 'please enter 16 character correct merchant key !!! ')
+                messages.info(request, 'Please enter 16 character correct merchant key ! ')
                 return redirect('fees_home')
             try:
                 check_existence_ad = Account_details.objects.get(institute = request.user.profile.institute)
@@ -225,15 +225,15 @@ def institute_account_details(request):
                 check_existence_ad.merchant_id = merchant_id
                 check_existence_ad.merchant_key = merchant_key
                 check_existence_ad.save()
-                messages.info(request, 'Account Details Updated Successfully !!!')
+                messages.info(request, 'Account details updated successfully !')
                 return redirect('fees_home')
             except:
                 
                 Account_details.objects.create(institute = request.user.profile.institute, merchant_id = merchant_id, merchant_key = merchant_key)
-                messages.success(request, 'Account Details Updated Successfully !!!')
+                messages.success(request, 'Account details updated successfully !')
                 return redirect('fees_home')
     else:
-        messages.info(request, 'You do not have permission to access this page')
+        messages.info(request, 'You do not have permission to access this page !')
         return redirect('not_found')
 
 
@@ -264,6 +264,7 @@ def Map_Tag_Students(request):
             for student in students_list:
                 fetch_student = Student_Tags_Record.objects.get(student = student)
                 fetch_student.tags.add(selected_tag)
+            messages.success(request, 'Tag mapped to selected students successfully !')
             return redirect('fees_home')
    
 
@@ -316,7 +317,7 @@ def processing_fees(request):
         try:
             school_students = Student_Tags_Record.objects.filter(institute= request.user.profile.institute)
         except:
-            messages.info(request, "No student to process fees")
+            messages.info(request, "No student to process fees !")
         # starting checking if data already processed
         if_already = Student_Tag_Processed_Record.objects.filter(institute = request.user.profile.institute, due_date = request.user.profile.institute.institute_schedule.due_date ).first()
         if if_already:
@@ -349,7 +350,7 @@ def processing_fees(request):
         institute_dates.delete()
         return HttpResponse("")
     else:
-        messages.info('You do not have permission to access this functionality.')
+        messages.info('You do not have permission to access this functionality !')
         return redirect('not_found')
 
 
@@ -363,7 +364,7 @@ def fees_pay_page(request):
         try:
             accnt_details = Account_details.objects.get(institute =student.institute)
         except:
-            messages.info(request,'your Institute has not provided account details to complete this payment!!!   ')
+            messages.info(request,'Your institute has not provided account details to complete this payment !')
             return redirect('parent_fees')
         merchant_id = accnt_details.merchant_id
         MERCHANT_KEY = accnt_details.merchant_key
@@ -437,10 +438,12 @@ def handle_requests(request):
         if response_dict['RESPCODE'] == '01':
             invoice__num = response_dict['ORDERID']
             user = Students_fees_table.objects.get(invoice_number=invoice__num)
+            user.balance = float(user.total_due_amount) - float(response_dict['TXNAMOUNT'])
             user.total_due_amount = float(user.total_due_amount) - float(response_dict['TXNAMOUNT'])
             user.total_paid = response_dict['TXNAMOUNT']
             user.payment_date = timezone.now()
-            user.balance = float(user.total_due_amount) - float(response_dict['TXNAMOUNT'])
+            user.payment_method = "Online"
+            
             user.save()
         else:
             print('order was not successfull because ' + response_dict['RESPMSG'])
@@ -487,3 +490,66 @@ def view_invoice(request, pk):
 
     }
     return render(request, 'fees/invoice.html', context)
+
+def offline_fetch_student(request1):
+    selected_class = Classes.objects.get(pk=request1.POST.get('class_id'))
+    class_students = UserProfile.objects.filter(Class=selected_class, designation__level_name='student', status="approve")
+    students =""
+    for s in class_students:
+        students = students +f"<option value='{s.id}''>{s.first_name} {s.middle_name} {s.last_name}</option>"
+
+    return HttpResponse(students)   
+
+
+def fee_payment(request):
+    try:
+        student = UserProfile.objects.get(pk=request.POST.get('fees_pay_sid'))
+    except:
+        student = UserProfile.objects.get(pk=request.GET.get('student'))
+    # starting for due date whose fees is pending 
+    student_fees = Students_fees_table.objects.filter( student= student, total_due_amount__gt=0 )
+    #  ending for due date whose fees is pending 
+
+    # starting for those due dates whose fees is paid
+    payment_record = list(reversed(Students_fees_table.objects.filter( student= student, total_due_amount=0)))
+    # ending for those due dates whose fees is paid
+    paginator = Paginator(payment_record, 30)
+    page_number = request.GET.get('page')
+    payment_history = paginator.get_page(page_number)
+
+    context = {
+        'student':student,
+        'children_fee_status':student_fees,
+        'payment_history':payment_history
+
+    }
+    return render(request, 'fees/offline_student_fee_record.html', context )
+
+
+def fetch_collect_fee_record(request):
+    fee_record = Students_fees_table.objects.get(pk= request.POST.get('fee_rec_id'))
+    
+    student_info= '{"s_name":"%s","due_date":"%s","due_amount":"%s","fr_rc_id":"%s" }' %(fee_record.student.first_name,fee_record.due_date, fee_record.total_due_amount, fee_record.id)
+    return HttpResponse(student_info)
+
+def update_offline_fee(request):
+    fee_record_id = request.POST.get('sftrid')#id of row that is to be updated
+    paid_or_not = request.POST.get('paidornot')
+    if paid_or_not == 'yes':
+        fee_record = Students_fees_table.objects.get(pk=fee_record_id)
+        fee_record.payment_date = timezone.now()
+        fee_record.total_paid = fee_record.total_due_amount
+        fee_record.total_due_amount = 0
+        fee_record.balance = 0
+        fee_record.payment_method = 'Offline'
+        fee_record.save()
+        student_id = fee_record.student.id
+        return HttpResponseRedirect(f"/fees/fees/pay/?student={student_id}")
+
+    else:
+        fee_record = Students_fees_table.objects.get(pk=fee_record_id)
+        student_id = fee_record.student.id
+        return HttpResponseRedirect(f"/fees/fees/pay/?student={student_id}")
+
+def go_back(request):
+    print('this is go back')

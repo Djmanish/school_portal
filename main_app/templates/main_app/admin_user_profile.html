@@ -10,9 +10,6 @@
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no"/>
 
-    <!-- font awesome cdn -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
@@ -125,22 +122,24 @@
                         </div>
                     </div>
                  -->
-                <div class="uk-navbar-flip">
+                 <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav user_actions">
                         <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
-                       
+                        <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
+                        
+                        {% if user.profile.designation %}
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                             <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
-                            <div class="uk-dropdown uk-dropdown-xlarge">
+                            <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
                                 <div class="md-card-content">
                                     <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
                                         <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
                                         <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
                                     </ul>
-                                    <ul id="header_alerts" class="uk-switcher uk-margin">
+                                    <ul id="header_alerts"  class="uk-switcher uk-margin">
                                         <li>
                                             <ul class="md-list md-list-addon alert_notice_list">
-                                                {% for notice in user.users_notice|slice:":5" %}
+                                                {% for notice in user.users_notice %}
                                                 <li>
                                                     <a href="{% url 'all_notice_list' %}">
                                                         <div class="md-list-addon-element">
@@ -188,7 +187,7 @@
                                                         <i class="md-list-addon-icon material-icons uk-text-primary">&#xE8FD;</i>
                                                     </div>
                                                     <div class="md-list-content">
-                                                        <span class="md-list-heading">Quiet.</span>
+                                                        <span class="md-list-heading">Qui et.</span>
                                                         <span class="uk-text-small uk-text-muted uk-text-truncate">Quia pariatur id facere accusantium rerum illum.</span>
                                                     </div>
                                                 </li>
@@ -198,8 +197,10 @@
                                 </div>
                             </div>
                         </li>
+                        {% endif %}
+                            
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -208,9 +209,9 @@
                                 </ul>
                             </div>
                         </li>
-                        <li><a href="#"  class="user_action_icon">  <i class="fas fa-user-graduate" style="font-size: 22px;"></i> {{user.username}}    </a></li>
+                      
                     </ul>
-                </div>  
+                </div>
             </nav>
         </div>
         <div class="header_main_search_form">
@@ -498,7 +499,8 @@
 
     <div id="page_content">
         <div id="page_content_inner">
-            <!-- success message -->
+                          
+  <!-- success message -->
   {% if messages %}
   <div class="md-card md-card-primary">
 <div >
@@ -548,7 +550,7 @@
                                         
                                 </span><span class="sub-heading">
                                 {% if user.profile.designation %}
-                                {{user.profile.designation}}
+                                {{user.profile.designation|capfirst}}
                                 {% else %}
                                Click on edit button to find your institute and get started.
                                 {% endif %}
@@ -556,14 +558,13 @@
                                                             </div>
 
 
-                            <a title="Edit Profile" class="md-fab md-fab-small md-fab-accent hidden-print" href="{% url 'edit_profile' user.profile.pk %}">
+                            <a data-uk-tooltip title="Edit Profile" class="md-fab md-fab-small md-fab-accent hidden-print" href="{% url 'edit_profile' user.profile.pk %}">
                                 <i class="material-icons">&#xE150;</i>
                             </a>
                         </div>
 
                         <div class="user_content">
-                            <!-- success message -->
-  
+             
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">About</a></li>
                                  <li><a href="#">Details</a></li>
@@ -574,9 +575,7 @@
                                  {% if user.profile.designation.level_name == "parent" %}
                                  <li><a href="#">My Child</a></li>
                                  {% endif %}
-                                 {% if user.profile.designation.level_name == "student" %}
-                                 <li><a href="#">My Institutes</a></li>
-                                 {% endif %}
+                                
                                      
                                 
                                 <!-- <li><a href="#">Posts</a></li> -->
@@ -593,7 +592,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Email</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{user.email}}</span>
+                                                        <span class="uk-text-small uk-text-muted"><a href="mailto:{{user.email}}">{{user.email}}</a></span>
                                                        
                                                     </div>
                                                 </li>
@@ -613,7 +612,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Facebook</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{user.profile.facebook_link}}</span>
+                                                        <span class="uk-text-small uk-text-muted"><a target="_blank" href="{{user.profile.facebook_link}}">{{user.profile.facebook_link}}</a></span>
                                                         
                                                     </div>
                                                 </li>
@@ -686,7 +685,7 @@
                                         <li>
                                             <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                                 <div class="uk-width-large-1-2">
-                                                    <h4 class="heading_c uk-margin-small-bottom">Personal Details</h4>
+                                                    <h4 class="heading_c uk-margin-small-bottom">Details</h4>
                                                     <ul class="md-list">
                                                         <li>
                                                             <div class="md-list-content">
@@ -765,7 +764,8 @@
                                                 </div>
 
                                                 <div class="uk-width-large-1-2">
-                                                    <h4 class="heading_c uk-margin-small-bottom">Other Details</h4>
+                                                    
+                                                    <!-- <h4 class="heading_c uk-margin-small-bottom">Other Details</h4> -->
                                                     <ul class="md-list">
                                                         <li>
                                                             <div class="md-list-content">

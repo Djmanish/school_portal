@@ -30,6 +30,7 @@ from main_app.serializers import UserProfileSerializer
 from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
+from django.core.exceptions import PermissionDenied
 
 
 # Create your views here.
@@ -67,7 +68,7 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Classes
     form_class = ClassUpdateForm
     template_name="main_app/edit_class.html"
-    success_message = "Details updated successfully !"
+    success_message = "Details were updated successfully !"
     def form_valid(self, form):
             form.instance.created_by = self.request.user
             return super().form_valid(form)
@@ -78,6 +79,8 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return True
         else:
             return False
+
+
     def get_success_url(self, **kwargs):         
             return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
 
@@ -99,6 +102,7 @@ def add_subjects(request):
             subject_class=Classes.objects.get(id=new_class)
             # get data from User Table
             subject_teacher=User.objects.get(id=subject_teacher)
+            print(subject_teacher)
 
             subject_class = Subjects.objects.create(institute=request.user.profile.institute, subject_class=subject_class, subject_code= subject_code, subject_name= subject_name,subject_teacher=subject_teacher)
 
@@ -108,6 +112,11 @@ def add_subjects(request):
 
 
 def edit_subject(request, pk):
+    
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     subject_to_edit = Subjects.objects.get(pk=pk)
     institute_classes = Classes.objects.filter(institute=request.user.profile.institute )
     designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
@@ -154,6 +163,11 @@ def delete_subject(request, pk):
 
 
 def edit_class(request, pk):
+    
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     user_permissions = request.user.user_institute_role.level.permissions.all()
     can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
     if can_edit_class_permission in user_permissions:
@@ -162,6 +176,9 @@ def edit_class(request, pk):
         designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
         institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
         # institute_classes = Classes.objects.filter(institute=request.user.profile.institute)
+
+        
+
 
         if request.method == 'POST':            
                 new_class_teacher = User.objects.get(pk= request.POST.get('class_teacher'))
@@ -190,23 +207,34 @@ def edit_class(request, pk):
         return redirect('not_found')
 
 def delete_class(request, pk):
+        institue_pk = request.user.profile.institute.pk
         class_to_delete = Classes.objects.get(pk=pk)
         class_to_delete.class_teacher = None
         class_to_delete.name = None
         class_to_delete.class_stage = None
-        class_to_delete.delete()
+        try:
+            class_to_delete.delete()
+        except:
+            messages.error(request, 'This class has students. Can not be deleted !')
+            return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
         messages.success(request, 'Class deleted successfully !')
-        institue_pk = request.user.profile.institute.pk
         return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
 
 
 def approvals(request,pk):
+    
     institute_approval = Institute.objects.get(pk=pk)
+    if request.user.profile.institute != institute_approval:
+        raise PermissionDenied
     student_designation_id = Institute_levels.objects.get(institute= request.user.profile.institute,level_name='student'  )
+    
     if request.user.profile.designation.level_name=='teacher' or request.user.profile.designation.level_name=='principal' or request.user.profile.designation.level_name=='admin':
 
         if request.user.profile.designation.level_name=='teacher':
-            Class_teachers=Classes.objects.get(class_teacher=request.user)
+            try:
+                Class_teachers=Classes.objects.get(class_teacher=request.user)
+            except Classes.DoesNotExist:
+                Class_teachers = 0
             pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval,Class=Class_teachers , designation=student_designation_id).reverse()
             parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute)
             parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute)
@@ -219,7 +247,7 @@ def approvals(request,pk):
             inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval).order_by('id')
         return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
     else:
-        messages.info(request, "You don't have permission to approve/disapprove request !")
+        messages.info(request, "You don't have permission to approve/disapprove requests !")
         return redirect('not_found')
 
 def index(request):
@@ -266,10 +294,14 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "student":
             try:
                 request.user.exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
-                print(request.user.exam_type_child)
-                request.user.exam_date1=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).earliest('id')
-                request.user.exam_date2=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).latest('id')
                 
+               
+                try:
+                    request.user.exam_date1=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).earliest('id')
+                    request.user.exam_date2=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_type=request.user.exam_type_child).latest('id')
+                except ExamDetails.DoesNotExist:
+                    request.user.exam_date1 = None
+                    request.user.exam_date2 = None                  
                 max_marks=request.user.exam_type_child.exam_max_marks
                 total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
                 request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
@@ -288,7 +320,8 @@ def dashboard(request):
                 else:
                     request.user.result="Pass"         
             except ExamType.DoesNotExist:
-                    pass
+                request.user.exam_type_child= None
+                
             
     # starting assigned teachers
    
@@ -313,7 +346,10 @@ def dashboard(request):
         
     # starting assigned classes
     user_institute_one= request.user.profile.institute
+    request.user.user_t1=Classes.objects.filter(class_teacher=request.user,institute=user_institute_one)
     user_subject_one= Subjects.objects.filter(institute= user_institute_one, subject_teacher= user_one) 
+    request.user.user_subject_one_len = len(user_subject_one)
+    
     # class attendance status 
     
     
@@ -359,7 +395,7 @@ def dashboard(request):
     # ending student,teacher & class count
     
     # Active Users Count
-    time= timezone.now()- datetime.timedelta(minutes=30)
+    time= timezone.now()- datetime.timedelta(minutes=3)
     time1= timezone.now()
     count=User.objects.filter(last_login__gte=time,last_login__lte=time1)
     
@@ -420,7 +456,7 @@ def dashboard(request):
     # starting attendace data for dashboard
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
     for c in all_classes:
-        total_student_class = UserProfile.objects.filter(institute= request.user.profile.institute, designation__level_name="student", Class= c).count()
+        total_student_class = UserProfile.objects.filter(institute= request.user.profile.institute, designation__level_name="student", Class= c , status="approve").count()
         c.total_student = total_student_class
 
         present_student = Attendance.objects.filter(institute= request.user.profile.institute, attendance_status="present" , student_class= c , date=  datetime.date.today() ).count()
@@ -460,23 +496,8 @@ def dashboard(request):
 
     # starting user notice
     if request.user.profile.designation:
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = request.user.profile.designation.level_id
-        request.user.users_notice = []
-        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
-        if user_role_level < teacher_role_level:
-            request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if request.user.profile in notice_recipients:
-                    request.user.users_notice.insert(0, notice)
-        # for n in request.user.users_notice:
-        #     if str(n.publish_date.date()) <= str(datetime.date.today()):
-        #         request.user.users_notice.append(n)
-
-        # ending user notice
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
 
         # starting fees status for principal view
         if request.user.profile.designation.level_name == "principal":
@@ -486,14 +507,23 @@ def dashboard(request):
                 a.total_unpaid_student=a.total_unpaid.count()
                 total_student=UserProfile.objects.filter(institute = request.user.profile.institute,Class=a,designation__level_name="student").count()
                 a.total_student_in_class=total_student
-        # Starting fees status for teacher view
+        # Starting fees status for Student view
         if request.user.profile.designation.level_name == "student":
             request.user.student_fees_st=Students_fees_table.objects.filter(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
+            request.user.student_fees_st_len = len(request.user.student_fees_st)
+            
             sum_in=0
             for i in request.user.student_fees_st:
                 sum_in = sum_in+i.total_due_amount
             request.user.sum_out=sum_in
-                      
+        # for approvals count
+        if request.user.profile.designation.level_name=='teacher':
+            try:
+                Class_teachers=Classes.objects.get(class_teacher=request.user)
+                pending_users= UserProfile.objects.filter(status='pending', institute=request.user.profile.institute,Class=Class_teachers , designation__level_name="student").count()
+                request.user.approval_request = pending_users  
+            except:
+                pass
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "teacher":
             try:
@@ -580,7 +610,9 @@ def login(request):
             try:
                 if g_user.is_active == False: # checking if user activated his account or not
                     error = 'User already registered, check your mail and follow the link to activate your account.'
-                    return render(request, 'registration/login.html', {'error':error})
+                    
+                    return redirect('registration_resend_activation')
+                    # return render(request, 'registration/login.html', {'error':error})
                 else:
                     username = g_user.username
                 user = auth.authenticate(username=username, password=password)
@@ -601,21 +633,11 @@ def login(request):
 
 @login_required
 def user_profile(request):
-      # starting user notice
+    # starting user notice
     if request.user.profile.designation:
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = request.user.profile.designation.level_id
-        request.user.users_notice = []
-        all_notices = Notice.objects.all().order_by('id')
-        if user_role_level < teacher_role_level:
-            request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if request.user.profile in notice_recipients:
-                    request.user.users_notice.insert(0, notice)
-        # ending user notice
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
+
     user_permissions_changes = Tracking_permission_changes.objects.filter(institute= request.user.profile.institute, role = request.user.profile.designation).last()
     
     # Parent_childern Checkpoint Start
@@ -678,10 +700,18 @@ def fetch_levels(request):
 
 
     
-
+from django.core.exceptions import PermissionDenied
 @login_required
 def edit_profile(request, pk):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     user_info = UserProfile.objects.get(pk=pk)
+
+    if request.user.profile != user_info:
+        raise PermissionDenied
+
     all_institutes = Institute.objects.all()
     # to get all the states
     all_states = State.objects.all()
@@ -699,7 +729,17 @@ def edit_profile(request, pk):
     
     # Occurence of POST method
     if request.method == "POST":
-        
+        # starting code for checking profile pic extension
+        if 'profile_pic' in request.FILES:
+            Student_Photo= request.FILES.get('profile_pic')
+            fname = Student_Photo.name
+            if  fname.endswith('.jpeg') or fname.endswith('.jpg') or fname.endswith('.gif'):
+                pass
+            else:
+                messages.error(request, 'Invalid photo format. Only jpeg, jpg formats are accepted !')
+                return redirect('user_profile')
+            #  ending code for checking profile pic extension
+            
         
         new_admin = 'admin_check'  in request.POST
         if new_admin: #if admin checkbox is checked
@@ -790,8 +830,6 @@ def edit_profile(request, pk):
             
             return redirect('user_profile')
 
-        
-        
         return redirect('user_profile')
         
     return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,'all_institute_classes':all_institute_classes,})
@@ -801,55 +839,59 @@ def edit_profile(request, pk):
 
 @login_required
 def institute_profile(request, pk):
-# starting assigning all functionalities to admin
-    admin_pk = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='admin')
-    
-    checking_for_admin = Role_Description.objects.filter(user=request.user, institute=request.user.profile.institute, level= admin_pk ).first()
+    inst = request.user.profile.institute.id
+
+    if pk==inst:
+        # starting assigning all functionalities to admin
+        admin_pk = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='admin')
+        checking_for_admin = Role_Description.objects.filter(user=request.user, institute=request.user.profile.institute, level= admin_pk ).first()
+        if checking_for_admin is not None:
+            all_app_functions = App_functions.objects.all()
+            for function in all_app_functions:
+                request.user.user_institute_role.level.permissions.add(function)
+        # ending assigning all functionalities to admin
 
 
-    if checking_for_admin is not None:
-        all_app_functions = App_functions.objects.all()
-        for function in all_app_functions:
-            request.user.user_institute_role.level.permissions.add(function)
-# ending assigning all functionalities to admin
+
+        institute_data= Institute.objects.get(pk=pk)
+        institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
+        institute_class = Classes.objects.filter(institute=institute_data).reverse()
+        institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
+        designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
+        institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
+        # starting user permission code
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        add_class_permission = App_functions.objects.get(function_name='Can Add Class')
+        add_subject_permission = App_functions.objects.get(function_name='Can Add Subject')
+        assign_class_teacher_permission = App_functions.objects.get(function_name='Can Assign Class Teacher')
+        can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
+        can_delete_class_permission = App_functions.objects.get(function_name='Can Delete Class')
+        can_edit_subject_permission = App_functions.objects.get(function_name='Can Edit Subject')
+        can_delete_subject_permission = App_functions.objects.get(function_name='Can Delete Subject')
 
 
-    institute_data= Institute.objects.get(pk=pk)
-    institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
-    institute_class = Classes.objects.filter(institute=institute_data).reverse()
-    institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
-    designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
-    institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
-    # starting user permission code
-    user_permissions = request.user.user_institute_role.level.permissions.all()
-    add_class_permission = App_functions.objects.get(function_name='Can Add Class')
-    add_subject_permission = App_functions.objects.get(function_name='Can Add Subject')
-    assign_class_teacher_permission = App_functions.objects.get(function_name='Can Assign Class Teacher')
-    can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
-    can_delete_class_permission = App_functions.objects.get(function_name='Can Delete Class')
-    can_edit_subject_permission = App_functions.objects.get(function_name='Can Edit Subject')
-    can_delete_subject_permission = App_functions.objects.get(function_name='Can Delete Subject')
+        # ending user permission code
+        context_data = {'institute_data':institute_data, 
+        'institute_roles':institute_roles,
+            'institute_class':institute_class,
+            'institute_subject':institute_subject,
+            'all_classes':institute_class,
+            'user_permissions': user_permissions,
+            'add_class_permission': add_class_permission,
+            'add_subject_permission':add_subject_permission,
+            'institute_teachers':institute_teachers,
+            'assign_class_teacher_permission':assign_class_teacher_permission,
+            'can_edit_class_permission':can_edit_class_permission,
+            'can_delete_class_permission':can_delete_class_permission,
+            'can_edit_subject_permission':can_edit_subject_permission,
+            'can_delete_subject_permission': can_delete_subject_permission
+            }
 
-    
-    # ending user permission code
-    context_data = {'institute_data':institute_data, 
-    'institute_roles':institute_roles,
-     'institute_class':institute_class,
-     'institute_subject':institute_subject,
-      'all_classes':institute_class,
-      'user_permissions': user_permissions,
-      'add_class_permission': add_class_permission,
-      'add_subject_permission':add_subject_permission,
-      'institute_teachers':institute_teachers,
-      'assign_class_teacher_permission':assign_class_teacher_permission,
-      'can_edit_class_permission':can_edit_class_permission,
-      'can_delete_class_permission':can_delete_class_permission,
-      'can_edit_subject_permission':can_edit_subject_permission,
-      'can_delete_subject_permission': can_delete_subject_permission
-      }
+        return render(request, 'main_app/institute_profile.html', context_data)
 
-    return render(request, 'main_app/institute_profile.html', context_data)
-    
+    else:
+        raise PermissionDenied
+
 
    
 @login_required
@@ -859,6 +901,7 @@ def edit_institute(request, pk):
    
 
 class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView):
+
     model = Institute
     form_class = InstituteUpdateProfile
     
@@ -871,10 +914,25 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
         return super().form_valid(form)
     
     def test_func(self):
+        inst_id = self.get_object().id
+        if inst_id!=self.request.user.profile.institute.id:
+            raise PermissionDenied
         if self.request.user.profile.designation.level_name == "admin" or self.request.user.profile.designation.level_name == "principal":
             return True
         else:
             return False
+    
+    def get_context_data(self, **kwargs):
+       
+        # starting user notice
+        if self.request.user.profile.designation:
+            self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
+
+
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        return context
 
 
     def get_success_url(self, **kwargs):         
@@ -931,14 +989,14 @@ def add_new_role(request, pk):
             messages.success(request, "New role added successfully !")
             return HttpResponseRedirect(f'/institute/profile/{rr}/')  
         except:
-            messages.info(request, "Failed to add, check you fields !")
+            messages.error(request, "Failed to add, check you fields !")
             return HttpResponseRedirect(f'/institute/profile/{rr}/')
   
     else:
          return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
 def delete_user_role(request, pk):
-    
+    rr= request.user.profile.institute.id
     user_role =  Institute_levels.objects.get(pk=pk, institute= request.user.profile.institute)
     role_id= user_role.level_id
     if user_role.level_name == 'admin'  or user_role.level_name == 'parent' or user_role.level_name == 'student' or user_role.level_name == 'teacher' or user_role.level_name == 'principal' :
@@ -950,9 +1008,13 @@ def delete_user_role(request, pk):
         for roles in roles_level_tod:
             roles.level_id -= 1
             roles.save()
-        user_role.delete()
+        try:
+            user_role.delete()
+        except:
+            messages.error(request, "There are users under this role. Can not be deleted !")
+            return HttpResponseRedirect(f'/institute/profile/{rr}/')
         messages.success(request, 'User role deleted successfully !')
-        rr= request.user.profile.institute.id
+        
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
 
@@ -966,6 +1028,11 @@ def selecting_class(request):
     return redirect('user_profile')
 
 def assign_class_teacher(request, pk):
+    
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     user_permissions = request.user.user_institute_role.level.permissions.all()
     assign_class_teacher_permission = App_functions.objects.get(function_name='Can Assign Class Teacher')
 
@@ -980,7 +1047,7 @@ def assign_class_teacher(request, pk):
             selected_class.class_teacher = User.objects.get(pk= new_class_teacher)
             try:
                 selected_class.save()
-                messages.success(request, 'Class Teacher assigned successfully !')
+                messages.success(request, 'Class teacher assigned successfully !')
                 rr= request.user.profile.institute.id
                 return HttpResponseRedirect(f'/institute/profile/{rr}/')
             except:
@@ -988,7 +1055,7 @@ def assign_class_teacher(request, pk):
 
         return render(request, 'main_app/assign_class_teacher.html', context_data)
     else:
-        messages.info(request, "You don't have permission to assign Class Teacher !")
+        messages.info(request, "You don't have permission to assign class teacher !")
         return redirect('not_found')
 
 def not_found_page(request):
@@ -1006,6 +1073,11 @@ class Edit_Role_Permissions(LoginRequiredMixin, SuccessMessageMixin, UpdateView)
     
 
 def edit_role_permissions(request, pk):
+    
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     role_to_update_permissions = Institute_levels.objects.get(pk=pk)
     roles_to_update_all_permissions = role_to_update_permissions.permissions.all()
     all_app_functions = App_functions.objects.all()

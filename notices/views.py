@@ -10,24 +10,15 @@ from AddChild.models import *
 from django.contrib import messages
 # Create your views here.
 
-def all_notices(request):
-    teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
-    teacher_role_level = teacher_role_level.level_id
-    
-    user_role_level = request.user.profile.designation.level_id
-
-    all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
-    user_notices = []
-    if user_role_level < teacher_role_level:
-        user_notices = all_notices.exclude(category="absent").reverse()
-    else:
-        for notice in all_notices:
-            notice_recipients = notice.recipients_list.all()
-            if request.user.profile in notice_recipients:
-                user_notices.insert(0, notice)
+def all_notices(request):  
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
+    user_notices = Notice.objects.filter(institute=request.user.profile.institute, recipients_list = request.user.profile, publish_date__lte=timezone.now()).order_by('-id')
 
     page = request.GET.get('page', 1)
-    paginator = Paginator(user_notices, 25)
+    paginator = Paginator(user_notices, 30)
     try:
         user_notices = paginator.page(page)
     except PageNotAnInteger:
@@ -36,21 +27,23 @@ def all_notices(request):
         user_notices = paginator.page(paginator.num_pages)
 
     context ={
-        'all_notices': user_notices,
-        
+        'all_notices': user_notices,        
     }
-
     return render(request, 'notices/all_notices_list.html', context)
 
 
 
 def create_notice(request):
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     if request.user.user_institute_role.level.level_name == 'student' or request.user.user_institute_role.level.level_name == 'parent':
-        messages.info(request, 'You might not have permission to create a notice !!!')
+        messages.info(request, 'You may not have permission to create a notice !')
         return redirect('not_found')
     else:
         user_notices = Notice.objects.filter(author= request.user).order_by('-id')
-        author_classes=[]
+        author_classes= [] # showing classes according to user
         if request.user.user_institute_role.level.level_name == 'teacher':
             teacher_classes = Subjects.objects.filter(subject_teacher= request.user)
             for aclass in teacher_classes:
@@ -72,44 +65,46 @@ def create_notice(request):
             subject = request.POST.get('notice_subject')
             content = request.POST.get('notice_body')
             selected_class = request.POST.get('notice_class')
+            publish_datetime =datetime.datetime.strptime(request.POST.get('pubdatetime'), '%Y-%m-%dT%H:%M')
             notice_refrence_no = request.POST.get('notice_refrence_no').strip()
 
-            try:
-                check_notice_no = Notice.objects.get(reference_no= notice_refrence_no)
-                messages.info(request, 'Notice with this reference no. already exists. ')
-                return redirect('create_notice')
-            except:
-                pass
-            
+            if not notice_refrence_no=="":
+                try:
+                    check_notice_no = Notice.objects.get(reference_no= notice_refrence_no)
+                    messages.error(request, 'Notice with this reference no. already exists ! ')
+                    return redirect('create_notice')
+                except:
+                    pass
+                
             new_notice = Notice()
             new_notice.institute = request.user.profile.institute
             new_notice.subject = subject
             new_notice.content = content
-            new_notice.publish_date = timezone.now()
+            # new_notice.publish_date = timezone.now()
             new_notice.author = request.user
+            new_notice.created_at = timezone.now()
+            new_notice.publish_date = publish_datetime
             new_notice.reference_no= notice_refrence_no
             try:
                 new_notice.save()
-                messages.success(request, "Notice Created Successfully !!!")
+                messages.success(request, "Notice created successfully !")
             except:
-                messages.error(request, 'Could not Create Notice, Try again !!!')
+                messages.error(request, 'Could not Create notice, Try again !')
                 return redirect('create_notice')
 
             recipients_valid_list = []
 
             if 'selected_individual' in request.POST:
-
                 selected_individuals = request.POST.getlist('selected_individual')
                 selected_individuals_list = []
-                for i in selected_individuals:
+                for i in selected_individuals: #test this
                     selected_individuals_list.append(UserProfile.objects.get(pk=i))
                 for i in selected_individuals_list:
                     new_notice.recipients_list.add(i)
-
+                new_notice.recipients_list.add(request.user.profile)
             elif 'all_classes_check' in request.POST:
                 all_students = UserProfile.objects.filter(designation__level_name='student', institute= request.user.profile.institute)
                 all_parents = UserProfile.objects.filter(designation__level_name='parent', institute= request.user.profile.institute )
-
                 for st in all_students:
                     recipients_valid_list.append(st)
                 for pt in all_parents:
@@ -117,6 +112,7 @@ def create_notice(request):
                 
                 for i in recipients_valid_list:
                     new_notice.recipients_list.add(i)
+                new_notice.recipients_list.add(request.user.profile)
                 return redirect('create_notice')
 
             else:
@@ -130,6 +126,7 @@ def create_notice(request):
                 for u in recipients_valid_list:
                     user_name = u
                     new_notice.recipients_list.add(user_name)
+                new_notice.recipients_list.add(request.user.profile)
                 return redirect('create_notice')
         context = {
             'user_notices':user_notices,
@@ -205,7 +202,6 @@ def fetch_deleted_id(request,pk):
     return HttpResponse(notice_id)
 
 def delete_notice(request):
- 
     deleted_notice = Notice.objects.get(pk= request.POST.get('notice_id'))
     try:
         deleted_notice.delete()
@@ -220,16 +216,26 @@ def fetch_notice_audience(request):
     notice_audience=[]
     class_student = UserProfile.objects.filter(Class= selected_class, institute= request.user.profile.institute)
     class_parent = AddChild.objects.filter(Class= selected_class, institute= request.user.profile.institute, status='active')
+
+    class_assigned_teacher = Subjects.objects.filter(subject_class=selected_class )
     
 
     for st in class_student:
         notice_audience.append(st)
     for pt in class_parent:
-        notice_audience.append(pt.parent)
+        if pt.parent in notice_audience:
+            pass
+        else:
+            notice_audience.append(pt.parent)
+    for teacher in class_assigned_teacher:
+        if teacher.subject_teacher.profile in notice_audience:
+            pass
+        else:
+            notice_audience.append(teacher.subject_teacher.profile)
     
     individual_options = ''
     for individual in notice_audience:
-        individual_options = individual_options+f"<option value='{individual.id}'>{individual}  ({individual.designation})</option>"
+        individual_options = individual_options+f"<option value='{individual.id}'>{individual.first_name} {individual.last_name}  ({individual.designation})</option>"
     
     
     return HttpResponse(individual_options)

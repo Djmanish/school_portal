@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'admissions.apps.AdmissionsConfig',
     'notices.apps.NoticesConfig',
     'fees',
-    'rest_framework'
+    'rest_framework',
+    'library'
    
     
 ]

@@ -21,8 +21,8 @@ class user_approve_middleware:
                     pass
                 else:
                     if user_status== 'pending':
-                        messages.info(request, f'Hello! {request.user.username}, Your Institute has not approved your request yet. Once they approve it you will be able access it')
-                        return render(request, 'main_app/404.html')
+                        messages.info(request, f'Hello! {request.user.username}, Your Institute has not approved your request yet. Once they approve it you will be able to access your account.')
+                        return render(request, 'main_app/dashboard.html')
                     
                     
                 

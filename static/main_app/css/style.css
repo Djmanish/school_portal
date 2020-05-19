@@ -242,6 +242,11 @@ label{
 .dbmh{
   max-height: 290px;
 }
+
+.ast{
+  color:red;
+  font-weight: bold;
+}
 label.required:before{
   content: "*";
   color: red;
@@ -249,3 +254,52 @@ label.required:before{
 }
 
   
+#md_user{
+  font-size: 16px;
+}
+
+#institute-options{
+  padding: 10px 25px;
+  background-color: #add8e62d;
+  border: 1px solid #0976a1c0;
+  
+  border-radius: 10px;
+  width: 95%;
+  margin: auto;
+  margin-top: 6px;
+  margin-bottom: 6px;
+ 
+}
+
+/* starting scrollbar css */
+/* width */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 23px;
+  
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border: 1px solid darkgray;
+  box-shadow: inset 0 0 5px lightblue;
+  
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #7575757e;
+  border-radius: 20px;
+}
+/* ending scrollbar css */
+
+/* starting notification box modification */
+.notice_drop{
+  min-width: 470px;
+  min-height: 550px !important;
+}
+#header_alerts{
+  min-height: 450px;
+}
+/* ending notification box modification */

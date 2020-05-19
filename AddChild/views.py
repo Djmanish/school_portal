@@ -26,9 +26,9 @@ def addchild(request):
             try:
                 child_search = AddChild.objects.get(child=student)
                 if child_search.parent == request.user.profile:
-                    messages.success(request,'Already added in your list')
+                    messages.info(request,'Already added in your list !')
                 else:
-                    messages.success(request, 'Requested Child already associated with some other parent')
+                    messages.info(request, 'Requested Child already associated with some other parent !')
             except AddChild.DoesNotExist:
                 child_search=None
         
@@ -71,7 +71,7 @@ def addchildtolist(request,pk):
     student1= UserProfile.objects.get(id=pk)
     parent=request.user.profile
     add_child = AddChild.objects.create(parent=parent, child=student1, institute=student1.institute, Class=student1.Class)
-    messages.success(request, 'Request has been sent for the selected child')
+    messages.success(request, 'Request has been sent for the selected child !')
     return redirect('user_profile')
 
 def approve_child_request(request,pk):
@@ -108,28 +108,28 @@ def childview(request,pk):
     except ZeroDivisionError:
         present=0
         absent=0
-    exam_t=ExamType.objects.filter(institute=request.user.profile.institute)
-    try:
-        exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
-    except ExamType.DoesNotExist:
-        pass
-    max_marks=exam_type_child.exam_max_marks
-    total_marks=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class).count()*int(max_marks)
-    child_result=ExamResult.objects.filter(exam_type=exam_type_child,result_student_data=child_user)
-    total_sum = 0
-    for i in child_result:
-        i = i.result_score
-        total_sum = total_sum + int(i)
-    m=int(total_marks)
-    try:
-        avg=((total_sum/m)*100)
-    except ZeroDivisionError:
-        avg=0
+    # exam_t=ExamType.objects.filter(institute=request.user.profile.institute)
+    # try:
+    #     exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
+    # except ExamType.DoesNotExist:
+    #     pass
+    # max_marks=exam_type_child.exam_max_marks
+    # total_marks=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class).count()*int(max_marks)
+    # child_result=ExamResult.objects.filter(exam_type=exam_type_child,result_student_data=child_user)
+    # total_sum = 0
+    # for i in child_result:
+    #     i = i.result_score
+    #     total_sum = total_sum + int(i)
+    # m=int(total_marks)
+    # try:
+    #     avg=((total_sum/m)*100)
+    # except ZeroDivisionError:
+    #     avg=0
     
-    if (avg<33):
-        result="Fail"
-    else:
-        result="Pass"
+    # if (avg<33):
+    #     result="Fail"
+    # else:
+    #     result="Pass"
     # For events & Calendars
     child_she=ExamDetails.objects.filter(institute=child.child.institute,exam_class=child.child.Class)
     
@@ -170,25 +170,25 @@ def childview(request,pk):
         context={
             'ty':ty,
             'child_result_p':child_result_p,
-            'exam_t':exam_t,
-        'exam_type_child':exam_type_child,
+            # 'exam_t':exam_t,
+        # 'exam_type_child':exam_type_child,
         'present':present,
         'absent':absent,
         'child_subjects':child_subjects,
         'child':child,
-        'result':result,
+        # 'result':result,
         'child_she':child_she,
         }
         return render(request, 'AddChild/viewchild.html',context)
     context={
-        'exam_t':exam_t,
-        'exam_type_child':exam_type_child,
-        'child_result':child_result,
+        # 'exam_t':exam_t,
+        # 'exam_type_child':exam_type_child,
+        # 'child_result':child_result,
         'present':present,
         'absent':absent,
         'child_subjects':child_subjects,
         'child':child,
-        'result':result,
+        # 'result':result,
         'child_she':child_she
     }
     return render(request, 'AddChild/viewchild.html',context)
@@ -202,7 +202,7 @@ def secondry_institute(request):
         selected_class = Classes.objects.get(pk=request.POST.get('selected_class'))
         roll_number=request.POST.get('roll_number')
         add_child = SecondryInstitute.objects.create(student_name=request.user.profile, student_institute=selected_institute, student_Class=selected_class,student_rollno=roll_number)
-        messages.success(request, 'Request has sent to add Institute.')
+        messages.success(request, 'Request has sent to add Institute !')
         return redirect('user_profile')
         # student = UserProfile.objects.get(institute=selected_institute,Class=selected_class,roll_number=roll_number)
         

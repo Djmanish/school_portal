@@ -5,7 +5,10 @@ from main_app.models import *
 from .models import *
 from django.contrib import messages
 from django.views.generic import ListView, DetailView
+from PIL import Image
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from notices.models import *
+from django.utils import timezone
 
 # Create your views here.
 
@@ -13,7 +16,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 def admission_home(request):
     try:
         if_already_user = Role_Description.objects.get(user=request.user)
-        messages.info(request, 'You are not allowed to visit this page')
+        messages.info(request, 'You are not allowed to visit this page !')
         return redirect('not_found')
     except:
         pass
@@ -21,7 +24,7 @@ def admission_home(request):
     try:
         if_already_requested = Admission_Query.objects.get(request_by= request.user)
         if if_already_requested:
-            messages.info(request, 'You have already requested. Please wait till any response from your school')
+            messages.info(request, 'You have already requested. Please wait till any response from your school !')
             school_list = Institute.objects.all()
             states_list = State.objects.all()
             context = {
@@ -29,16 +32,10 @@ def admission_home(request):
                 'states_list': states_list,
                 'disable_submit':'disabled'
             }
-            return render( request , 'admissions/admission_home.html', context)
-
-            
+            return render( request , 'admissions/admission_home.html', context)        
     except:
         pass
     
-
-
-
-
     school_list = Institute.objects.all()
     states_list = State.objects.all()
     context = {
@@ -46,12 +43,24 @@ def admission_home(request):
         'states_list': states_list
     }
     if request.method == "POST":
+        # starting code for checking profile pic extension
+        Student_Photo= request.FILES['student_pic']
+        fname = Student_Photo.name
+        if  fname.endswith('.jpeg') or fname.endswith('.jpg') or fname.endswith('.gif'):
+            pass
+        else:
+            messages.error(request, 'invalid photo format. Only jpeg, jpg format are allowed !')
+            return redirect('admission_home')
+        #  ending code for checking profile pic extension
+
+
+
         new_request = Admission_Query()
-        new_request.first_name= request.POST.get('first_name')
-        new_request.middle_name= request.POST.get('middle_name')
-        new_request.last_name = request.POST.get('last_name')
-        new_request.father_name = request.POST.get('father_name')
-        new_request.mother_name = request.POST.get('mother_name')
+        new_request.first_name= request.POST.get('first_name').strip()
+        new_request.middle_name= request.POST.get('middle_name').strip()
+        new_request.last_name = request.POST.get('last_name').strip()
+        new_request.father_name = request.POST.get('father_name').strip()
+        new_request.mother_name = request.POST.get('mother_name').strip()
         new_request.date_of_birth = request.POST.get('date_of_birth')
         new_request.gender = request.POST.get('gender')
         new_request.Category = request.POST.get('category')
@@ -60,18 +69,18 @@ def admission_home(request):
         new_request.mobile_Number = request.POST.get('mobile_number')
         new_request.Email_Id = request.POST.get('email')
         new_request.Nationality = request.POST.get('nationality')
-        new_request.Address= request.POST.get('address')
-        new_request.District = request.POST.get('district')
+        new_request.Address= request.POST.get('address').strip()
+        new_request.District = request.POST.get('district').strip()
         new_request.State = State.objects.get(pk=request.POST.get('state'))
         new_request.Pin_Code = request.POST.get('pin_code')
         new_request.Student_Photo= request.FILES['student_pic']
         new_request.request_by = request.user
         try:
             new_request.save()
-            messages.success(request, 'We have received your data. We will get back to you soon.')
+            messages.success(request, 'We have received your data. We will get back to you soon !')
             return redirect('user_dashboard')
         except:
-            messages.error(request, 'failed to submit, Please fill all details carefully')
+            messages.error(request, 'Failed to submit, Please fill all details carefully !')
             return redirect('admission_home')
 
             
@@ -102,6 +111,18 @@ class Admission_Requests_View(LoginRequiredMixin, UserPassesTestMixin,  ListView
         else:
             return False
     
+    
+    def get_context_data(self, **kwargs):
+            
+    # starting user notice
+        if self.request.user.profile.designation:
+            self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        return context
+
+    
     def get_queryset(self):
         return Admission_Query.objects.filter(school_name= self.request.user.profile.institute)
 
@@ -113,6 +134,18 @@ class Admission_Request_Detail_View(LoginRequiredMixin, UserPassesTestMixin, Det
             return True
         else:
             return False
+
+    
+    def get_context_data(self, **kwargs):
+            
+    # starting user notice
+        if self.request.user.profile.designation:
+            self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        return context
+
 
 
 def fetching_disapproved_id(request, pk):
@@ -152,10 +185,10 @@ def approve_admission_request(request, pk):
     try:
         approved_user_profile.save()
         Admission_Query.objects.get(pk=pk).delete()
-        messages.success(request, 'Student Approved and Register Successfully')
+        messages.success(request, 'Student approved and registered successfully !')
         return redirect('admission_requests')
     except:
-        messages.error(request, "failed to register")
+        messages.error(request, "Failed to register !")
         return redirect('admission_requests')
 
 
