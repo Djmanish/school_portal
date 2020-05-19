@@ -89,3 +89,16 @@ $(document).ready(function(){
   var fileName = $(this).val().split("\\").pop();
   $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 });
+
+
+
+
+
+$('document').ready(function(){
+  
+  $('option').mousedown(function(e) {
+    e.preventDefault();
+    $(this).prop('selected', !$(this).prop('selected'));
+    return false;
+});
+})

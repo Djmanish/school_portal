@@ -10,7 +10,11 @@ from AddChild.models import *
 from django.contrib import messages
 # Create your views here.
 
-def all_notices(request):
+def all_notices(request):  
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     user_notices = Notice.objects.filter(institute=request.user.profile.institute, recipients_list = request.user.profile, publish_date__lte=timezone.now()).order_by('-id')
 
     page = request.GET.get('page', 1)
@@ -30,6 +34,10 @@ def all_notices(request):
 
 
 def create_notice(request):
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     if request.user.user_institute_role.level.level_name == 'student' or request.user.user_institute_role.level.level_name == 'parent':
         messages.info(request, 'You may not have permission to create a notice !')
         return redirect('not_found')

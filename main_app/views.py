@@ -112,6 +112,11 @@ def add_subjects(request):
 
 
 def edit_subject(request, pk):
+    
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     subject_to_edit = Subjects.objects.get(pk=pk)
     institute_classes = Classes.objects.filter(institute=request.user.profile.institute )
     designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
@@ -158,6 +163,11 @@ def delete_subject(request, pk):
 
 
 def edit_class(request, pk):
+    
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     user_permissions = request.user.user_institute_role.level.permissions.all()
     can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
     if can_edit_class_permission in user_permissions:
@@ -167,22 +177,7 @@ def edit_class(request, pk):
         institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
         # institute_classes = Classes.objects.filter(institute=request.user.profile.institute)
 
-        # starting user notice
-    if request.user.profile.designation:
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = request.user.profile.designation.level_id
-        request.user.users_notice = []
-        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id')[:10]
-        if user_role_level < teacher_role_level:
-            request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if request.user.profile in notice_recipients:
-                    request.user.users_notice.insert(0, notice)
-        request.user.users_notice = []
-        # ending user notice
+        
 
 
         if request.method == 'POST':            
@@ -638,6 +633,11 @@ def login(request):
 
 @login_required
 def user_profile(request):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
+
     user_permissions_changes = Tracking_permission_changes.objects.filter(institute= request.user.profile.institute, role = request.user.profile.designation).last()
     
     # Parent_childern Checkpoint Start
@@ -703,6 +703,10 @@ def fetch_levels(request):
 from django.core.exceptions import PermissionDenied
 @login_required
 def edit_profile(request, pk):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     user_info = UserProfile.objects.get(pk=pk)
 
     if request.user.profile != user_info:
@@ -832,7 +836,11 @@ def edit_profile(request, pk):
   
 
 @login_required
-def institute_profile(request, pk):
+def institute_profile(request, pk):  
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
 # starting assigning all functionalities to admin
     admin_pk = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='admin')
     checking_for_admin = Role_Description.objects.filter(user=request.user, institute=request.user.profile.institute, level= admin_pk ).first()
@@ -906,26 +914,15 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
             return False
     
     def get_context_data(self, **kwargs):
+       
         # starting user notice
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= self.request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = self.request.user.profile.designation.level_id
-        self.request.user.users_notice = []
-        all_notices = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
-        if user_role_level < teacher_role_level:
-            self.request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if self.request.user.profile in notice_recipients:
-                    self.request.user.users_notice.insert(0, notice)
+        if self.request.user.profile.designation:
+            self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
         # ending user notice
 
 
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        # context['book_list'] = Book.objects.all()
         return context
 
 
@@ -1022,6 +1019,11 @@ def selecting_class(request):
     return redirect('user_profile')
 
 def assign_class_teacher(request, pk):
+    
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     user_permissions = request.user.user_institute_role.level.permissions.all()
     assign_class_teacher_permission = App_functions.objects.get(function_name='Can Assign Class Teacher')
 
@@ -1059,6 +1061,11 @@ class Edit_Role_Permissions(LoginRequiredMixin, SuccessMessageMixin, UpdateView)
     
 
 def edit_role_permissions(request, pk):
+    
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     role_to_update_permissions = Institute_levels.objects.get(pk=pk)
     roles_to_update_all_permissions = role_to_update_permissions.permissions.all()
     all_app_functions = App_functions.objects.all()

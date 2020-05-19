@@ -14,6 +14,10 @@ from django.utils import timezone
 
 # Create your views here.
 def attendance(request):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     
     if request.method == "POST":
         students_class = Classes.objects.get(pk=request.POST.get('selected_class_attendance'))
@@ -150,6 +154,11 @@ def attendance_update(request, pk):
         # return redirect('attendance')
 
 def update_attendance_record(request, pk):
+    
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     student_to_update = User.objects.get(pk=pk)
     current_date = datetime.date.today()
     student_status = Attendance.objects.get(student = student_to_update, date = current_date)
@@ -175,6 +184,11 @@ def update_attendance_record(request, pk):
 
 
 def current_date_attendance_record(request, pk):
+    
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     students_class = Classes.objects.get(pk=pk)
     attendance_record = Attendance.objects.filter(institute= request.user.profile.institute, student_class= students_class, date= datetime.date.today()  )
     session_start_date = request.user.profile.institute.session_start_date
@@ -223,6 +237,11 @@ def current_date_attendance_record(request, pk):
 
 
 def class_students_list(request):
+    
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     
     all_classes = Classes.objects.filter(institute= request.user.profile.institute)
     

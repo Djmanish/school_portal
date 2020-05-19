@@ -825,7 +825,7 @@
                                                 <div class="input-group-prepend">
                                                   <span class="input-group-text search_icon"><i class="material-icons search_icon ">search</i></span>
                                                </div>
-                                               <input type="text" class="form-control"  id="#student_search_offline" placeholder="Search a student name in list ...">
+                                               <input type="text" class="form-control"  id="student_search_offline" placeholder="Search a student name in list ...">
                                              </div>
                                             <select id="class_students_offline" class=" form-control " size="7" name="fees_pay_sid" required >
                                             </select>
@@ -853,16 +853,7 @@
                                     });
                                 </script>
                                 <!-- ending fetching for student offline payment -->
-                                <script>
-                                    $(document).ready(function(){
-                                      $("#student_search_offline").on("keyup", function() {
-                                        var value = $(this).val().toLowerCase();
-                                        $("#class_students_list_t *").filter(function() {
-                                          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                                        });
-                                      });
-                                    });
-                                    </script>
+                                
                                 </li> 
                              
                                 <!-- ending offline payment tab -->
@@ -1253,6 +1244,16 @@ $('#unselectAll').click(function() {
           });
         });
         </script>
+        <script>
+            $(document).ready(function(){
+              $("#student_search_offline").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#class_students_offline *").filter(function() {
+                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+              });
+            });
+            </script>
 
     <script>
         $(function () {
