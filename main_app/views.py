@@ -836,25 +836,8 @@ def edit_profile(request, pk):
   
 
 @login_required
-<<<<<<< HEAD
 def institute_profile(request, pk):
     inst = request.user.profile.institute.id
-=======
-def institute_profile(request, pk):  
-# starting user notice
-    if request.user.profile.designation:
-        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
-    # ending user notice
-# starting assigning all functionalities to admin
-    admin_pk = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='admin')
-    checking_for_admin = Role_Description.objects.filter(user=request.user, institute=request.user.profile.institute, level= admin_pk ).first()
-    if checking_for_admin is not None:
-        all_app_functions = App_functions.objects.all()
-        for function in all_app_functions:
-            request.user.user_institute_role.level.permissions.add(function)
-# ending assigning all functionalities to admin
-    
->>>>>>> 341a6ce08dc1c63d80439f51ca83b68d93d17e12
 
     if pk==inst:
         # starting assigning all functionalities to admin
@@ -937,15 +920,11 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
             return False
     
     def get_context_data(self, **kwargs):
-<<<<<<< HEAD
-      
-=======
        
         # starting user notice
         if self.request.user.profile.designation:
             self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
         # ending user notice
->>>>>>> 341a6ce08dc1c63d80439f51ca83b68d93d17e12
 
 
         # Call the base implementation first to get a context
