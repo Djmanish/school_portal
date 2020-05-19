@@ -17,66 +17,61 @@ from holidaylist.forms import ContactForm
 from django.core.mail import send_mail, send_mass_mail, mail_admins, mail_managers
 from notices.models import *
 from django.utils import timezone
+from django.core.exceptions import PermissionDenied
+
 
 
 
         # Create your views here.
 def holidaylist(request,pk):
-        # starting user notice
-    if request.user.profile.designation:
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = request.user.profile.designation.level_id
-        request.user.users_notice = []
-        all_notices = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
-        if user_role_level < teacher_role_level:
-            request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if request.user.profile in notice_recipients:
-                    request.user.users_notice.insert(0, notice)
-        # ending user notice
-    institute_holiday = Institute.objects.get(pk=pk)
-    institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
-    user_permissions = request.user.user_institute_role.level.permissions.all()
-    can_add_holiday_permission = App_functions.objects.get(function_name='Can Add Holiday')
 
-    if request.method == "POST":
-        if can_add_holiday_permission in user_permissions:
-                holiday_date= request.POST.get('holiday_date')
-                
-                holiday_name= request.POST.get('holiday_name')
+    inst = request.user.profile.institute.id
 
-                holiday_applicable= request.POST.get('holiday_applicable')
-                holiday_type= request.POST.get('holiday_type')
-                holiday_email_send= request.POST.get('holiday_email_send')
-
-                holiday_sms_send= request.POST.get('holiday_sms_send')
-                holiday_notification_send= request.POST.get('holiday_notification_send')
-              
-                new_holiday = HolidayList.objects.create(institute=request.user.profile.institute, date=holiday_date,  name= holiday_name, applicable=holiday_applicable,holiday_type=holiday_type, holiday_email=holiday_email_send, holiday_sms=holiday_sms_send, holiday_notification=holiday_notification_send )
+    if pk==inst:
         
-                messages.success(request, 'New Holiday Created successfully !!!')
-               
-                # institute_holidaylist = HolidayList.objects.filter(institute=institute_holiday).reverse()
-    
-    user_permissions = request.user.user_institute_role.level.permissions.all()
-    can_add_holiday_permission = App_functions.objects.get(function_name='Can Add Holiday')
-    can_edit_holiday_permission = App_functions.objects.get(function_name='Can Edit Holiday')
-    can_delete_holiday_permission = App_functions.objects.get(function_name='Can Delete Holiday')
+            institute_holiday = Institute.objects.get(pk=pk)
+            institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
+            user_permissions = request.user.user_institute_role.level.permissions.all()
+            can_add_holiday_permission = App_functions.objects.get(function_name='Can Add Holiday')
 
-    context = {'institute_holiday_list':institute_holiday_list,
-    'user_permissions': user_permissions,
-    'can_add_holiday_permission':can_add_holiday_permission,
-    'can_edit_holiday_permission':can_edit_holiday_permission,
-    'can_delete_holiday_permission': can_delete_holiday_permission
+            if request.method == "POST":
+                if can_add_holiday_permission in user_permissions:
+                        holiday_date= request.POST.get('holiday_date')
+                        
+                        holiday_name= request.POST.get('holiday_name')
+
+                        holiday_applicable= request.POST.get('holiday_applicable')
+                        holiday_type= request.POST.get('holiday_type')
+                        holiday_email_send= request.POST.get('holiday_email_send')
+
+                        holiday_sms_send= request.POST.get('holiday_sms_send')
+                        holiday_notification_send= request.POST.get('holiday_notification_send')
+                    
+                        new_holiday = HolidayList.objects.create(institute=request.user.profile.institute, date=holiday_date,  name= holiday_name, applicable=holiday_applicable,holiday_type=holiday_type, holiday_email=holiday_email_send, holiday_sms=holiday_sms_send, holiday_notification=holiday_notification_send )
+                
+                        messages.success(request, 'New holiday created successfully !')
+                    
+                        # institute_holidaylist = HolidayList.objects.filter(institute=institute_holiday).reverse()
+            
+            user_permissions = request.user.user_institute_role.level.permissions.all()
+            can_add_holiday_permission = App_functions.objects.get(function_name='Can Add Holiday')
+            can_edit_holiday_permission = App_functions.objects.get(function_name='Can Edit Holiday')
+            can_delete_holiday_permission = App_functions.objects.get(function_name='Can Delete Holiday')
+
+            context = {'institute_holiday_list':institute_holiday_list,
+            'user_permissions': user_permissions,
+            'can_add_holiday_permission':can_add_holiday_permission,
+            'can_edit_holiday_permission':can_edit_holiday_permission,
+            'can_delete_holiday_permission': can_delete_holiday_permission
 
 
-    }
-    return render(request, 'holidaylist/holidaylist.html', context)
+            }
+            return render(request, 'holidaylist/holidaylist.html', context)
 
+            
 
+    else:
+        raise PermissionDenied
                 
 def edit_holiday(request, pk):
     edit_holiday= HolidayList.objects.get(pk=pk)
@@ -107,11 +102,11 @@ def edit_holiday(request, pk):
             edit_holiday.holiday_notification=holiday_notification
 
             edit_holiday.save()
-            messages.success(request, 'Holiday Updated Successfully !!!')
+            messages.success(request, 'Holiday updated successfully !')
             rr=request.user.profile.institute.pk
             return HttpResponseRedirect(f'/holiday/holiday/{rr}')
         else:
-            messages.info(request, "you don't have permission to edit holiday info")
+            messages.info(request, "You don't have permission to edit holiday info !")
             return redirect('not_found')
 
     return render(request, 'holidaylist/edit_holiday.html', {'edit_holiday':edit_holiday})
@@ -130,7 +125,7 @@ def delete_holiday(request,pk):
          delete_holiday.holiday_sms="null"
          delete_holiday.holiday_notification="null"
          delete_holiday.delete()
-         messages.success(request, 'Holiday Deleted Successfully !!!')
+         messages.success(request, 'Holiday deleted successfully !')
          rr=request.user.profile.institute.pk
          return HttpResponseRedirect(f'/holiday/holiday/{rr}')
 
@@ -141,7 +136,7 @@ class HolidayUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
  model = HolidayList
  form_class = HolidayUpdateForm
  template_name="holidaylist/edit_holiday.html"
- success_message = "Details were updated successfully"
+ success_message = "Details were updated successfully !"
  success_url= "/holiday"
 
 def form_valid(self, form):
@@ -165,8 +160,11 @@ def holidayemail(request):
 
 def emailView(request,pk):
     institute_holiday = Institute.objects.get(pk=pk)
-    user_emails=User.objects.all()
-    print(user_emails)
+    user_emails=UserProfile.objects.filter(institute=request.user.profile.institute)
+    user_data_email=[]
+    for user_data in user_emails:
+        user_data_email.append(user_data.user.email)
+    
 
     institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
     
@@ -186,8 +184,12 @@ def emailView(request,pk):
             
             return render(request, 'holidaylist/holidaylist.html',{'institute_holiday_list':institute_holiday_list})
     
-            
-    return render(request, "holidaylist/holiday_email.html", {'form': form,'institute_holiday_list':institute_holiday_list})
+    context={
+        'user_data_email':user_data_email,
+        'form': form,
+        'institute_holiday_list':institute_holiday_list
+    }        
+    return render(request, "holidaylist/holiday_email.html", context)
 
 def successView(request):
     return HttpResponse('Success! Thank you for your message.')

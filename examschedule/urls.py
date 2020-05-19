@@ -12,6 +12,7 @@ from .views import exam_schedule
 urlpatterns = [
   
   path('examschedule/<int:pk>', views.exam_schedule, name="examschedule"),
+  path('create_examschedule/<int:pk>', views.create_exam_schedule, name="create_examschedule"),
   # path('examtypelist/<int:pk>',views.exam_type, name="create_test_type"),
   path('examschedule/view/<int:pk>', views.examschedule_view, name='examschedule_view'),
   path('examtypelist/<int:pk>', views.create_test_type, name="create_test_type"),

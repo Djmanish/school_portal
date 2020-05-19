@@ -280,6 +280,14 @@ label{
   background: #7575757e;
   border-radius: 20px;
 }
-
-
 /* ending scrollbar css */
+
+/* starting notification box modification */
+.notice_drop{
+  min-width: 470px;
+  min-height: 550px !important;
+}
+#header_alerts{
+  min-height: 450px;
+}
+/* ending notification box modification */

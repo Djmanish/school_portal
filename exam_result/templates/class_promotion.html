@@ -136,7 +136,7 @@
                             {% if user.profile.designation %}
                             <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                                 <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
-                                <div class="uk-dropdown uk-dropdown-xlarge">
+                                <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
                                     <div class="md-card-content">
                                         <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
                                             <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
@@ -145,7 +145,7 @@
                                         <ul id="header_alerts"  class="uk-switcher uk-margin">
                                             <li>
                                                 <ul class="md-list md-list-addon alert_notice_list">
-                                                    {% for notice in user.users_notice|slice:":5" %}
+                                                    {% for notice in user.users_notice %}
                                                     <li>
                                                         <a href="{% url 'all_notice_list' %}">
                                                             <div class="md-list-addon-element">
@@ -264,7 +264,7 @@
         
         <div class="menu_section">
             <ul>
-                <li class="current_section" title="Dashboard">
+                <li title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -434,7 +434,7 @@
                                     <span class="menu_title">Exam Result</span>
                                 </a>
                             </li>
-                            <li  title="Class Students">
+                            <li class="act_item"  title="Class Students">
                     
                                 <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
@@ -487,7 +487,9 @@
                             {% endfor %}
                
                             </select>
-                
+                            &nbsp
+                            
+
                         <input type="submit" value="View" class="md-btn md-btn-primary ">          
                     </form>
                    
@@ -513,7 +515,7 @@
                                     <select name="promoted_to_class" class="form-control" >
                                        <option selected disabled value=""><b>Promote Class</b></option>
             
-                                            {% for class in all_classes %}
+                                            {% for class in promotes_class %}
                                             <option value="{{class.id}}">{{class}}</option>
                                             {% endfor %}
                                                         

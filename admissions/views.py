@@ -16,7 +16,7 @@ from django.utils import timezone
 def admission_home(request):
     try:
         if_already_user = Role_Description.objects.get(user=request.user)
-        messages.info(request, 'You are not allowed to visit this page')
+        messages.info(request, 'You are not allowed to visit this page !')
         return redirect('not_found')
     except:
         pass
@@ -24,7 +24,7 @@ def admission_home(request):
     try:
         if_already_requested = Admission_Query.objects.get(request_by= request.user)
         if if_already_requested:
-            messages.info(request, 'You have already requested. Please wait till any response from your school')
+            messages.info(request, 'You have already requested. Please wait till any response from your school !')
             school_list = Institute.objects.all()
             states_list = State.objects.all()
             context = {
@@ -49,7 +49,7 @@ def admission_home(request):
         if  fname.endswith('.jpeg') or fname.endswith('.jpg') or fname.endswith('.gif'):
             pass
         else:
-            messages.error(request, 'invalid photo format. upload a valid photo')
+            messages.error(request, 'invalid photo format. Only jpeg, jpg format are allowed !')
             return redirect('admission_home')
         #  ending code for checking profile pic extension
 
@@ -77,10 +77,10 @@ def admission_home(request):
         new_request.request_by = request.user
         try:
             new_request.save()
-            messages.success(request, 'We have received your data. We will get back to you soon.')
+            messages.success(request, 'We have received your data. We will get back to you soon !')
             return redirect('user_dashboard')
         except:
-            messages.error(request, 'failed to submit, Please fill all details carefully')
+            messages.error(request, 'Failed to submit, Please fill all details carefully !')
             return redirect('admission_home')
 
             
@@ -113,26 +113,13 @@ class Admission_Requests_View(LoginRequiredMixin, UserPassesTestMixin,  ListView
     
     
     def get_context_data(self, **kwargs):
-        # starting user notice
-        teacher_role_level = Institute_levels.objects.get(level_name='teacher', institute= self.request.user.profile.institute)
-        teacher_role_level = teacher_role_level.level_id
-        user_role_level = self.request.user.profile.designation.level_id
-        self.request.user.users_notice = []
-        all_notices = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now()).order_by('id')
-        if user_role_level < teacher_role_level:
-            self.request.user.users_notice = all_notices.exclude(category="absent").reverse()
-        else:
-            for notice in all_notices:
-                notice_recipients = notice.recipients_list.all()
-                if self.request.user.profile in notice_recipients:
-                    self.request.user.users_notice.insert(0, notice)
+            
+    # starting user notice
+        if self.request.user.profile.designation:
+            self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
         # ending user notice
-
-
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        # context['book_list'] = Book.objects.all()
         return context
 
     
@@ -147,6 +134,18 @@ class Admission_Request_Detail_View(LoginRequiredMixin, UserPassesTestMixin, Det
             return True
         else:
             return False
+
+    
+    def get_context_data(self, **kwargs):
+            
+    # starting user notice
+        if self.request.user.profile.designation:
+            self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        return context
+
 
 
 def fetching_disapproved_id(request, pk):
@@ -186,10 +185,10 @@ def approve_admission_request(request, pk):
     try:
         approved_user_profile.save()
         Admission_Query.objects.get(pk=pk).delete()
-        messages.success(request, 'Student Approved and Register Successfully')
+        messages.success(request, 'Student approved and registered successfully !')
         return redirect('admission_requests')
     except:
-        messages.error(request, "failed to register")
+        messages.error(request, "Failed to register !")
         return redirect('admission_requests')
 
 
