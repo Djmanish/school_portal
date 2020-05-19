@@ -258,7 +258,7 @@
 
         <div class="menu_section">
             <ul>
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -440,7 +440,7 @@
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
                         
-                            <li>
+                            <li  class="current_section" >
                                 <a href="{% url 'report_card' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">file_copy</i></span>
                                     <span class="menu_title">Report Card</span>

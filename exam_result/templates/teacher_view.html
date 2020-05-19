@@ -249,7 +249,7 @@
         </div>
         <div class="menu_section">
             <ul>
-                <li class="current_section" title="Dashboard">
+                <li title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -413,7 +413,7 @@
                             </li>
                            
                             {% if user.profile.designation.level_name == "teacher"%}
-                            <li>
+                            <li class="act_item" >
                                 <a href="{% url 'examresult' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                                     <span class="menu_title">Exam Result</span>
@@ -485,7 +485,7 @@
                                                              <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px; height:38px" required>
                                                                     <option selected disabled value="">--Exam Type--</option>
                                                                     {% for exam_type in institute_exam_type %}
-                                                                       <option value="{{exam_type}}" > {{exam_type}}</option>
+                                                                       <option value="{{exam_type}}"> {{exam_type}}</option>
                                                                     {% endfor %}
                                                              </select>
                                                            
@@ -549,15 +549,16 @@
                                              
                                                             </tr>
                                                             <tr>
-                                                            <input type="hidden" value="{{selected_subject.id}}" name="selected_subject">
-                                                            <input type="type" value="{{exam_type_id.id}}" name="exam_type_id">
-                                                            <input type="hidden" value="{{result_exam_type_sr_no}}" name="result_exam_type_sr_no">
-                                                            <input type="hidden" value="{{selected_subject.subject_class.id}}" name="subject_class">
-                                                            <input type="hidden" value="{{selected_subject.subject_teacher.id}}" name="subject_teacher">
-                                                            <input type="hidden" value="{{exam_type_id.exam_max_marks}}" name="exam_max_marks">
-                                                            <input type="hidden" value="{{exam_type_id.exam_max_limit}}" name="exam_max_limit">
-
-                                                        </tr>
+                                                                <input type="hidden" value="{{selected_subject.id}}" name="selected_subject">
+    
+                                                                <input type="hidden" value="{{exam_type_id.id}}" name="exam_type_id">
+                                                                <input type="hidden" value="{{result_exam_type_sr_no}}" name="result_exam_type_sr_no">
+                                                                <input type="hidden" value="{{selected_subject.subject_class.id}}" name="subject_class">
+                                                                <input type="hidden" value="{{selected_subject.subject_teacher.id}}" name="subject_teacher">
+                                                                <input type="hidden" value="{{exam_type_id.exam_max_marks}}" name="exam_max_marks">
+                                                                <input type="hidden" value="{{exam_type_id.exam_max_limit}}" name="exam_max_limit">
+    
+                                                            </tr>
                                                                      {% for student in institute_students %}
                                                                      
                                                                      
@@ -566,9 +567,9 @@
                                                                         {{ forloop.counter}}
                                                                      </td>
                                                                     
-                                                                        <td>
+                                                                        <td >
                                                                             <div class="form-group">
-                                                                                <select  id="text_center" style="overflow:hidden; text-align-last: center; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="student_first_name">
+                                                                                <select  id="text_center" style="overflow:hidden; text-align-last: center; -webkit-appearance: none; width:50px; background-color: white; border:none;" class="form-control"  name="student_first_name" >
                                                                                   <option id="text_center"  value="{{student.id}}">{{student.first_name}}</option>
                                                                                 </select>
                                                                               </div>

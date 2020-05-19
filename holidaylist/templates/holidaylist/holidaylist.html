@@ -220,7 +220,7 @@
         </div>
         <div class="menu_section">
             <ul>
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -301,7 +301,7 @@
 </li>
 {% endif %}
     
-                <li  title="Holiday List">
+                <li class="current_section" title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>

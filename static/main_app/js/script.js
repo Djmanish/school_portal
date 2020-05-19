@@ -1,10 +1,6 @@
 
  
 $(document).ready(function(){
-
-  
- 
-
     $('.n_i').keypress(function (e) {
         var regex = new RegExp("^[a-zA-Z ]+$");
         var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
@@ -83,12 +79,23 @@ $(document).ready(function(){
 });
 // ending script for processing , notification and due date
 
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
 
  // Add the following code if you want the name of the file appear on select
  $(".custom-file-input").on("change", function() {
   var fileName = $(this).val().split("\\").pop();
   $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 });
+
 
 
 
@@ -102,3 +109,4 @@ $('document').ready(function(){
     return false;
 });
 })
+

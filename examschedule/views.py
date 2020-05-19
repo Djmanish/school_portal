@@ -137,18 +137,10 @@ def exam_schedule(request,pk):
                 limit=exam_limit.exam_max_limit
                 limit_exam=int(limit)
 
-          #  to fetch the value of Subject and Subject Teacher
-        
-        
+        #  to fetch the value of Subject and Subject Teacher
         exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
-       
-                
-                
-                
-       
 
         # Count the number if type the exam type selected
-           
         sr_no=ExamDetails.objects.filter(exam_type__exam_type=exam_type_id,exam_class=selected_class).values('exam_sr_no').distinct().count()+1
             
         if sr_no<=limit_exam:
@@ -173,6 +165,8 @@ def exam_schedule(request,pk):
                         
                         'sr_no':sr_no,
                         'institute_exam_schedule':institute_exam_schedule,
+                        'select_class_for_schedule':selected_class,
+                        'select_exam_for_schedule':exam_type_id,
                         
 
                         }
@@ -245,6 +239,7 @@ def examschedule_view(request,pk):
                         exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
                         
                         context = {
+                                'selected_class':selected_class,
                         'exam_details': exam_details,
                         'institute_exam_schedule':institute_exam_schedule,
                         'institute_exam_type':institute_exam_type,
@@ -263,6 +258,7 @@ def examschedule_view(request,pk):
                         if exam_details:
                         
                                 context = {
+                                'select_class_for_schedule':select_class_for_schedule,
                                 'exam_class':exam_class,
                                 'exam_details': exam_details,
                                 'institute_exam_schedule':institute_exam_schedule,

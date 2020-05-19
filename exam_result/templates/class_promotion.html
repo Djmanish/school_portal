@@ -264,7 +264,7 @@
         
         <div class="menu_section">
             <ul>
-                <li class="current_section" title="Dashboard">
+                <li title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -434,7 +434,7 @@
                                     <span class="menu_title">Exam Result</span>
                                 </a>
                             </li>
-                            <li  title="Class Students">
+                            <li class="act_item"  title="Class Students">
                     
                                 <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
@@ -487,7 +487,9 @@
                             {% endfor %}
                
                             </select>
-                
+                            &nbsp
+                            
+
                         <input type="submit" value="View" class="md-btn md-btn-primary ">          
                     </form>
                    
@@ -513,7 +515,7 @@
                                     <select name="promoted_to_class" class="form-control" >
                                        <option selected disabled value=""><b>Promote Class</b></option>
             
-                                            {% for class in all_classes %}
+                                            {% for class in promotes_class %}
                                             <option value="{{class.id}}">{{class}}</option>
                                             {% endfor %}
                                                         

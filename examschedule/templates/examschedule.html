@@ -248,7 +248,7 @@
 
         <div class="menu_section">
             <ul>
-                <li class="current_section" title="Dashboard">
+                <li title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -396,7 +396,7 @@
                                 </a>
                             </li>
                             
-                            <li>
+                            <li class="act_item">
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam Schedule</span>
@@ -523,9 +523,16 @@
                                                         <tbody>
                                                             <form method="POST" action="{% url 'create_examschedule' request.user.profile.institute.id %}">
                                                                 {% csrf_token %}
+                                                                
                              
                                                               
                                                               {% if exam_class_subject %}
+                                                              <tr >
+                                                                    
+                                                                <th style="text-align: center; margin-bottom: 10px;" class="form-inline" id="attendance_form">Selected Class: {{select_class_for_schedule}}    &nbsp  &nbsp Selected Exam Type: {{select_exam_for_schedule}} &nbsp &nbsp Selected Exam Sr. No.: {{sr_no}}</th>
+                                                                <!-- <th style="text-align: center; margin-bottom: 10px;" class="form-inline" id="attendance_form">Selected Exam Type: {{select_exam_for_schedule}}</th> -->
+                                                               
+                                                            </tr>
                                                                   
                                                               
                                                                           
@@ -580,7 +587,7 @@
                                                                     <tr style="text-align:center;"> 
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <select  style="width:150px; background-color: white;-webkit-appearance:none; border:none;" class="form-control"  name="select_exam_subject">
+                                                                                <select  style="width:150px; background-color: white;-webkit-appearance:none; border:none;" class="form-control"  name="select_exam_subject" required>
                                                                                   <option  value="{{exam_subject.id}}">{{exam_subject}}</option>
                                                                                 </select>
                                                                               </div>
@@ -588,15 +595,15 @@
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <select id="hide"  style=" width:150px; background-color: white; -webkit-appearance:none; border:none;" class="form-control"  name="select_exam_subject_teacher">
+                                                                                <select id="hide"  style=" width:150px; background-color: white; -webkit-appearance:none; border:none;" class="form-control"  name="select_exam_subject_teacher" required>
                                                                                   <option  value="{{exam_subject.subject_teacher.id}}">{{exam_subject.subject_teacher.profile.first_name}} {{exam_subject.subject_teacher.profile.last_name}}</option>
                                                                                 </select>
                                                                               </div>
                                                                        
                                                                            </td>
-                                                                        <td><div class="form-group"><input type='date', class="form-control", value="", name="select_date"/></div></td>
-                                                                        <td><div class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value="", name="select_start_time"/></div></td>
-                                                                        <td><div class="form-group"><input type='time', onchange="onTimeChange()" ,  class="form-control", value="", name="select_end_time"/></div></td>
+                                                                        <td><div class="form-group"><input type='date', class="form-control", value="", name="select_date" required/></div></td>
+                                                                        <td><div class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value='', min = '00:01', max = '23:59:59', name="select_start_time" required/></div></td>
+                                                                        <td><div class="form-group"><input type='time', onchange="onTimeChange()" ,  class="form-control", value='',min = '00:01',max = '23:59:59', name="select_end_time" required/></div></td>
                                                                         <td>  <div class="form-group">
                                                                            
                                                                             <select class="form-control" name="assign_teacher" required>
