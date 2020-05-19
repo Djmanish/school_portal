@@ -17,8 +17,7 @@
 
 
     <title>Examination</title>
-
-
+ 
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
         media="all">
@@ -26,7 +25,7 @@
     <!-- flag icons -->
     <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
 
-    
+   
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
 
@@ -40,9 +39,7 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
- </head>
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" </head>
      <body
         class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -248,6 +245,7 @@
             </div>
             
         </div>
+
         <div class="menu_section">
             <ul>
                 <li title="Dashboard">
@@ -382,16 +380,16 @@
                     {% endif %}
                    
 
-                    <li  title="Examination">
+                    <li   title="Examination">
 
                         <a href="">
                             <span class="menu_icon"><i class="material-icons">trending_up</i></span>
                             <span class="menu_title">Examination</span>
                         </a>
-                        <ul>
+                        <ul >
                             {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
 
-                            <li>
+                            <li class="act_item" title="Create Exam" >
                                 <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam</span>
@@ -432,10 +430,10 @@
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
                         
-                            <li class="act_item" >
+                            <li>
                                 <a href="{% url 'report_card' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">file_copy</i></span>
-                                    <span class="menu_title" >Report Card</span>
+                                    <span class="menu_title">Report Card</span>
                                 </a>
     
                             </li>
@@ -453,142 +451,148 @@
             </ul>
         </div>
     </aside><!-- main sidebar end -->
-
     <div id="page_content">
         <div id="page_content_inner">
-                               <div class="md-card">
-                                            <div class="md-card-content">
+            {% if messages %}
+            <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+            {% endif %}
+            
+                                        <div class="md-card">
+                                           
+                                      
+                                                <div id="attendance_form">
                                                 
-                                                   
-                                                        
-                                                <form method="POST" class="form-inline" id="attendance_form" >
-                                                    {% csrf_token %}
-                                                <tr>
-                                                    
-                                                    <td> <select class="form-control" name="result_exam_type" style="padding: 2px;" required>
-                                                            <option selected disabled value="">--Select Exam Type--</option>
-                                                            <option>Overall</option>
+                                                    <div class="md-card-content">
+                                                
 
-                                                            {% for exam_type in exam_type_list %}
+                                                        
+                                                
+                                                
+                                               
+                                                    <button type="button"  class="md-btn md-btn-primary"
+                                                    data-uk-modal="{target:'#modal_new_test_type'}">Create Exam</button>
+
+                                                    <div class="uk-modal" id="modal_new_test_type">
+                                                        <div class="uk-modal-dialog">
+                                                            <div class="uk-modal-header">
+                                                                <h3 class="uk-modal-title">Create Exam </h3>
+                                                            </div>
+                                                        
                                                             
-                                                               <option value={{exam_type.id}}>{{exam_type}}</option>
-                                                            {% endfor %}
-                                                     </select>
-                                                     
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    
-                                                    {% if user.profile.designation.level_name == "parent" %}
-                                                        
-                                                    
-                                                        
-                                                                               
-                                                    <td>
-                                                      <select class="form-control" name="selected_student" style="padding: 2px;" required>
-                                                        <option selected disabled value="">--Select Student--</option>
-                                                        
-
-                                                        {% for student in parent_student_list %}
-                                                        
-                                                           <option value={{student.id}}>{{student}}</option>
-                                                        {% endfor %}
-                                                   
-                                                 </select>
+                                                            <form  method="POST"  action="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                                                {% csrf_token %}
+                                                                     <div class="form-group">
+                                                                        <label >Exam Type:</label>
+                                                                        <input type="text" class="form-control n_i" name="exam_type"  required>
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                        <label >Maximum Marks:</label>
+                                                                        <input type="number" class="form-control" name="exam_max_marks"  min="0" required>
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                        <label >Maximum Exam Limit:</label>
+                                                                        <input type="number" class="form-control" name="exam_max_limit" min="0" required>
+                                                                      </div>
+                                                                      <div class="form-group">
+                                                                        <label >% of Final Score:</label>
+                                                                        <input type="number" class="form-control" name="exam_per_final_score" min="0" required>
+                                                                      </div>
+                                                                      <table>
+                                                                        <tr>
+                                                                            <td >
+                                                                          <button type="submit"  class="md-btn md-btn-primary">Add Exam Type</button>
+                                                                        </td>
+                                                                        <td style="padding-left: 20px; ">
+                                                                <button type="button" class="md-btn md-btn-primary uk-modal-close">Cancel</button>
+                                                                        </td>
+                                                                    </tr>
+                                                        </table>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                        
+                                                        </div>
+                                                    </div>
+                                                    <div class="md-card-content">
                                                 
-                                                 
-                                                </td>
-                                                {% endif %}
-                                                    <td></td>
-                                            &nbsp
-                                            
-                                                    <td>
-                                                    <input type="submit" value="View" class="md-btn md-btn-primary">
-                                                </td>
-                                                <td>
 
-
-                                                </td>
-                                               
+                                                        <div class="uk-overflow-container uk-margin-bottom">
+                                                    <table
+                                                    class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                                    id="ts_issues">
                                                    
-                                                </form>
-                                                 
-                                               
-                                            </tr>
-                                                  
-                                                        <table
-                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                                                        id="ts_issues" >
-                                                       
-                                                          
-                                                {% if result_data %}
-                                                <tr>
-                                                    <td>
-                                                    <button id="savePDFbutton" class="md-btn md-btn-primary" onclick="savePDF()">
-                                                        <span class="menu_icon"><i class="material-icons" style="color: white ;">print</i></span>
-                                                        Save as PDF
-                                                    </button>
-                                                    </td>
-                                                </tr>
-                                                {% endif %}
-                                                        
-                                                    <tbody id="myresult">
-                                                        <tr colspan="10">
-                                                            <td style="color: #1976d2; "><b>{{select_exam_type}}</b></td>
+                                                
 
-                                                        </tr>
+                                                    <tbody>
                                                        
-                                                        {% if result_data %}
-                                                        <tr >
-                                                            <td><b>Subjects</b></td>
-                                                            {% for e_no in exam_no %}
-                                                            <td><b>
-                                                                {{e_no}} 
-                                                            </b>   
-                                                            </td>
-                                                            {% endfor%}
-                                                            <td>
-                                                                <b>
-                                                                % of Final Score
-                                                            </b>
-                                                            </td>
-                                                        </tr>
-                                                        {% endif %}
+                                                       {% if institute_exam_type %}
+                                                           
+                                                            <tr style="background-color: #1976d2; color:white; text-align:center;">
+                                                                <td>Sr. No.</td>
+                                                                <td>Exam Type</td>
+                                                                <td>Maximum Marks</td>
+                                                                <td>Maximum Exam limit</td>
+                                                                <td>% of Final Score</td>
+                                                                <td>Edit</td>
+                                                                <td>Delete</td>
+                                                            </tr>
+                                                            {% endif %}
                                                        
-                                                                  
-                                                                           {% for data in result_data %}
-                                                                           <tr>
-                                                                               
-                                                                               {% for k,v in data.items %}
-                                                                               <td>
-                                                                                   {{v}}
-                                                                               </td>
-                                                                                   
-                                                                               {% endfor %}
-                                                                                   
-                                                                          
-                                                                            </tr>
-                                                                {% endfor %}
-                                                               
+                                                        
+                                                            {% for test_type in institute_exam_type %}
+                                                            <tr  style="text-align:center;">
+                                                                <td> {{ forloop.counter}}
+                                                                </td>
+                                                                <td>{{test_type.exam_type}}
+                                                                </td>
+                                                                <td>{{test_type.exam_max_marks}}</td>
+
+                                                                <td>{{test_type.exam_max_limit}}</td>
+
+                                                                <td>{{test_type.exam_per_final_score}}</td>
+                                                                <td><a   href="{% url 'edit_test_type' test_type.pk%}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                                </td>
+                                                                <td><a  href="{% url 'delete_test_type' test_type.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                                </td>
+
+                                                            </tr>
+                                                            
+                                                             
+                                                             {% endfor %}
+                                                            
                                                     </tbody>
-                                                    
-                                                     
-                                                    </table>
+
+                                                </table>
+                                            </div>
+                                        </div>
 
                                                 </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                     
+
+                                            
+                                            </div>
+                                        </div>
+                                            </div>
+                        
+
+                                        
+
+
+
                 </div>
             </div>
-        </div>
-    </div>
+       
 
     <!-- google web fonts -->
     <script>
-        
         WebFontConfig = {
             google: {
                 families: [
@@ -610,15 +614,12 @@
 
     <!-- common functions -->
     <script src="{% static 'main_app/js/common.min.js' %}"></script>
+    <script src="{% static 'main_app/js/script.js' %}"></script>
+
     <!-- uikit functions -->
     <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
     <!-- altair common functions/helpers -->
     <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
-    <script src="{% static 'main_app/js/script.js' %}"></script>
-
 
 
     <script>
