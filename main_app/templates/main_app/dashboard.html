@@ -507,6 +507,12 @@
                             <span class="menu_title">Attendance</span>
                         </a>
                     </li> 
+                    <li  title="Library">
+                        <a href="{% url 'library' %}">
+                                <span class="menu_icon"><i class="material-icons">local_library</i></span>
+                                <span class="menu_title">Library</span>
+                            </a>
+                        </li> 
 
                     <li  title="Class Students">
                         <a href="{% url 'class_students_list' %}">
@@ -1013,9 +1019,11 @@
                                 </thead>
                                 <tbody>
                                     {% for i in user.total_unpaid_student %}
-                                    <tr class="uk-table-middle">                                        
+                                    <tr class="uk-table-middle">  
+                                        {% if i.status == 'active' %}                                      
                                         <td class="uk-width-3-10 uk-text-nowrap"><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
                                         <td class="uk-width-3-10 uk-text-nowrap" style="color: red;">Unpaid</td>                                        
+                                        {% endif %}
                                     </tr>
                                     {% endfor %}
                                     
@@ -1184,6 +1192,7 @@
                         {% endif %}
                         {% endif %}
                         <div id='calendar'></div>
+                        
                         </div>
                                              
                     </div>
@@ -1249,7 +1258,7 @@
                                             <td class="uk-width-3-10 uk-text-nowrap">{{forloop.counter}}</td>
                                             <td class="uk-width-3-10 uk-text-nowrap">{{sn.due_date}}</td>
                                             {% if sn.total_due_amount == 0 %}
-                                                <td class="uk-width-3-10 uk-text-nowrap" style="color:#7cb342"><b>Paid</b></td>
+                                                <!-- <td class="uk-width-3-10 uk-text-nowrap" style="color:#7cb342"><b>Paid</b></td> -->
                                             {% else %}
                                                 <td class="uk-width-3-10 uk-text-nowrap">{{sn.total_due_amount}}</td>
                                             {% endif %}
@@ -1749,13 +1758,10 @@
           var calendar = new FullCalendar.Calendar(calendarEl, {
             plugins: [ 'interaction', 'dayGrid' ],
             
-            editable: true,
+            editable: false,
             eventLimit: true, // allow "more" link when too many events
             events: [
-              {
-                title: 'All Day Event',
-                start: '2020-02-01'
-              },
+            {% if user.profile.designation.level_name != "parent" %}
               {% for h in holiday %}
               {
                 title: '{{h.name}}',
@@ -1763,6 +1769,74 @@
                 backgroundColor:'#AED6F1',                
               },
               {% endfor %}
+              {% endif %}
+              {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+              {% for ex in exam_she %}
+              {
+                title: '{{ex.exam_type}}',
+                start: "{{ex.exam_date|date:'Y-m-d'}}",
+                backgroundColor:'#AED6F1', 
+                url:'{% url 'examschedule_view' request.user.profile.institute.id %}',    
+              },
+              {% endfor %}
+              {% endif %}
+              {% if user.profile.designation.level_name == "teacher" %}
+              {% for ex in user.exam_she_teacher %}
+              {
+                title: '{{ex.exam_type}}',
+                start: "{{ex.exam_date|date:'Y-m-d'}}",
+                backgroundColor:'#AED6F1', 
+                url:'{% url 'examschedule_view' request.user.profile.institute.id %}',    
+              },
+              {% endfor %}
+              {% for ex in user.exam_she_teacher %}
+              {
+                title: '{{ex.exam_class}} - {{ex.exam_subject}}',
+                start: "{{ex.exam_date|date:'Y-m-d'}}",
+                backgroundColor:'#AED6F1', 
+                url:'#',    
+              },
+              {% endfor %}
+              {% endif %}
+              {% if user.profile.designation.level_name == "student" %}
+              {% for k in user.exam_she_student %}
+              {
+                title: '{{k.exam_type}}',
+                start: "{{k.exam_date|date:'Y-m-d'}}",
+                backgroundColor:'#AED6F1', 
+              },
+              {% endfor %}  
+              {% for ke in user.exam_she_student %}
+              {
+                title: '{{ke.exam_subject}}',
+                start: "{{ke.exam_date|date:'Y-m-d'}}",
+                backgroundColor:'#AED6F1', 
+              },
+              {% endfor %}
+              {% endif %}
+              {% if user.profile.designation.level_name == "parent" %}
+              {% for h in user.holiday_child %}
+              {
+                title: '{{h.name}}',
+                start: "{{h.date|date:'Y-m-d'}}",
+                backgroundColor:'#AED6F1',
+              },
+              {% endfor %} 
+              {% for l in user.exam_she_child %}
+              {
+                title: '{{l.exam_type}}',
+                start: "{{l.exam_date|date:'Y-m-d'}}",
+                backgroundColor:'#AED6F1',
+              },
+              {% endfor %} 
+              {% for li in user.exam_she_child %}
+              {
+                title: '{{li.institute}} - {{li.exam_subject}}',
+                start: "{{li.exam_date|date:'Y-m-d'}}",
+                backgroundColor:'#AED6F1',
+              },
+              {% endfor %}
+              {% endif %} 
             ] 
           });
       

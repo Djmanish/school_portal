@@ -11,7 +11,7 @@ from main_app.views import userList
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main_app.urls')),
-   
+    path('library/', include('library.urls')),
     path('addchild/', include('AddChild.urls')),
     path('attendance/', include('Attendance.urls')),
     path('accounts/', include('registration.backends.default.urls')),
