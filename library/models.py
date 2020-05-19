@@ -26,7 +26,7 @@ class Book(models.Model):
     author= models.CharField(max_length=50)
     publications= models.CharField(max_length=50)
     edition= models.CharField(max_length=50)
-    book_count= models.IntegerField()
+    book_count= models.IntegerField(null=True)
     def __str__(self):
        return self.book_name
 

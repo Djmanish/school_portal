@@ -465,42 +465,25 @@
 
     </aside><!-- main sidebar end -->
     <!-- Messages Section Begins -->
-    {% if messages %}
-    <div class="user_content">
-        <!-- success message -->
-        <div style="margin: 2px;">
-            <!-- success message -->
-            
-            <div class="md-card md-card-primary">
-            <div >
-            <ul class="messages alert">
-            {% for message in messages %}
-            <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-            </ul>
-            </div>
-            </div>
-            
-      </div>                     
-    </div>
-    {% endif %}
+    
     <div id="page_content">
         <div id="page_content_inner">
+            {% if messages %}
+            <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+            {% endif %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
                 <div class="uk-width-large">
                     <div class="md-card">
                         <div class="user_heading">
-                            <div class="user_heading_menu hidden-print">
-                                <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
-                                    <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
-                                     <div class="uk-dropdown uk-dropdown-small">
-                                        <ul class="uk-nav">
-                                            <li><a href="#">Settings</a></li>
-                                            <!-- <li><a href="#">Action 2</a></li> -->
-                                        </ul>
-                                    </div> 
-                                </div>
-                            </div>
+                            
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
                                     <img src="{{institute_data.profile_pic.url}}" alt="user avatar" />
@@ -535,54 +518,51 @@
                                             <div class="uk-modal-header">
                                                 <h3 class="uk-modal-title">Add Book</h3>
                                             </div>
-                                            <form  method="POST" action="{% url 'add_classes' %}">
+                                            <form  method="POST" action="{% url 'add_book' %}">
                                                 {% csrf_token %}
                                                 <div class="form-group">
+                                                        <label >Book code / ISBN No / Subject Code:</label>
+                                                        <input type="text" class="form-control" name="book_code" required>
+                                                    </div> 
+                                                    <div class="form-group">                                                      
                                                         <label >Book ID:</label>
-                                                        <input type="text" class="form-control" name="class_name" required>
-                                                      
-                                                        <label >Book Name:</label>
-                                                        <input type="text" class="form-control" name="class_name" required>
+                                                        <input type="text" class="form-control" name="book_id" required>
                                                       </div> 
                                                       <div class="form-group">
                                                         <label >Book Name:</label>
-                                                        <input type="text" class="form-control" name="class_name" required>
+                                                        <input type="text" class="form-control" name="book_name" required>
                                                       </div>
                                                       <div class="form-group">
                                                         <label for="sel1">Select Category:</label>
-                                                        <select class="form-control" name="class_stage" required>
-                                                            <option selected disabled value="">--- Select Category ---</option>
-                                                          <option>Category 1</option>
-                                                          <option>Category 2</option>
-                                                          <option>Category 3</option>
+                                                        <select class="form-control" name="book_category" required>
+                                                            <option selected disabled value="">--- Select ---</option>
+                                                            {% for i in categories %}
+                                                            <option value={{i.id}}>{{i}}</option>
+                                                            {% endfor %}
                                                          
                                                         </select>
                                                       </div> 
                                                       <div class="form-group">
                                                         <label for="sel1">Select Sub Category:</label>
-                                                        <select class="form-control" name="class_stage" required>
-                                                            <option selected disabled value="">--- Select Sub Category ---</option>
-                                                          <option>Sub Category 1</option>
-                                                          <option>Sub Category 2</option>
-                                                          <option>Sub Category 3</option>
+                                                        <select class="form-control" name="book_sub_category" required>
+                                                            <option selected disabled value="">--- Select ---</option>
+                                                            {% for j in sub_categories %}
+                                                            <option value={{j.id}}>{{j}}</option>
+                                                            {% endfor %}
                                                          
                                                         </select>
                                                       </div> 
                                                       <div class="form-group">
                                                         <label >Author Name:</label>
-                                                        <input type="text" class="form-control" name="class_name" required>
+                                                        <input type="text" class="form-control" name="author_name" required>
                                                       </div>
                                                       <div class="form-group">
                                                         <label >Publications:</label>
-                                                        <input type="text" class="form-control" name="class_name" required>
+                                                        <input type="text" class="form-control" name="publications" required>
                                                       </div>
                                                       <div class="form-group">
                                                         <label >Edition:</label>
-                                                        <input type="text" class="form-control" name="class_name" required>
-                                                      </div>
-                                                      <div class="form-group">
-                                                        <label >Book Count:</label>
-                                                        <input type="text" class="form-control" name="class_name" required>
+                                                        <input type="text" class="form-control" name="editions" required>
                                                       </div>                                               
                                                       <table>
                                                         <tr>
