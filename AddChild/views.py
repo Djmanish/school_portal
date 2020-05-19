@@ -108,28 +108,28 @@ def childview(request,pk):
     except ZeroDivisionError:
         present=0
         absent=0
-    exam_t=ExamType.objects.filter(institute=request.user.profile.institute)
-    try:
-        exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
-    except ExamType.DoesNotExist:
-        pass
-    max_marks=exam_type_child.exam_max_marks
-    total_marks=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class).count()*int(max_marks)
-    child_result=ExamResult.objects.filter(exam_type=exam_type_child,result_student_data=child_user)
-    total_sum = 0
-    for i in child_result:
-        i = i.result_score
-        total_sum = total_sum + int(i)
-    m=int(total_marks)
-    try:
-        avg=((total_sum/m)*100)
-    except ZeroDivisionError:
-        avg=0
+    # exam_t=ExamType.objects.filter(institute=request.user.profile.institute)
+    # try:
+    #     exam_type_child=ExamType.objects.filter(institute=request.user.profile.institute).latest('id')
+    # except ExamType.DoesNotExist:
+    #     pass
+    # max_marks=exam_type_child.exam_max_marks
+    # total_marks=Subjects.objects.filter(institute=child.child.institute,subject_class=child.child.Class).count()*int(max_marks)
+    # child_result=ExamResult.objects.filter(exam_type=exam_type_child,result_student_data=child_user)
+    # total_sum = 0
+    # for i in child_result:
+    #     i = i.result_score
+    #     total_sum = total_sum + int(i)
+    # m=int(total_marks)
+    # try:
+    #     avg=((total_sum/m)*100)
+    # except ZeroDivisionError:
+    #     avg=0
     
-    if (avg<33):
-        result="Fail"
-    else:
-        result="Pass"
+    # if (avg<33):
+    #     result="Fail"
+    # else:
+    #     result="Pass"
     # For events & Calendars
     child_she=ExamDetails.objects.filter(institute=child.child.institute,exam_class=child.child.Class)
     
@@ -170,25 +170,25 @@ def childview(request,pk):
         context={
             'ty':ty,
             'child_result_p':child_result_p,
-            'exam_t':exam_t,
-        'exam_type_child':exam_type_child,
+            # 'exam_t':exam_t,
+        # 'exam_type_child':exam_type_child,
         'present':present,
         'absent':absent,
         'child_subjects':child_subjects,
         'child':child,
-        'result':result,
+        # 'result':result,
         'child_she':child_she,
         }
         return render(request, 'AddChild/viewchild.html',context)
     context={
-        'exam_t':exam_t,
-        'exam_type_child':exam_type_child,
-        'child_result':child_result,
+        # 'exam_t':exam_t,
+        # 'exam_type_child':exam_type_child,
+        # 'child_result':child_result,
         'present':present,
         'absent':absent,
         'child_subjects':child_subjects,
         'child':child,
-        'result':result,
+        # 'result':result,
         'child_she':child_she
     }
     return render(request, 'AddChild/viewchild.html',context)
