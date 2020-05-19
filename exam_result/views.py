@@ -360,6 +360,9 @@ def report_card(request,pk):
                     else:
                       marks_data.append(value)
                 marks=list(map(int, marks_data))
+                exam_type=ExamType.objects.get(pk=select_exam_type)
+                exam_per_value=exam_type.exam_per_final_score
+                e=int(exam_per_value)
                 
                 sumValue=sum(marks)
                 sumValueper=sumValue/e
@@ -562,10 +565,11 @@ def class_promotion(request,pk):
                                   user_d.class_promotion_status=status
                                   if status=="Promoted":
                                     user_d.Class=promoted_to_class
+                                    user_d.class_current_year=current_year+1
+                                    user_d.class_next_year=next_year+1
                                   else:
                                     pass
-                                  user_d.class_current_year=current_year+1
-                                  user_d.class_next_year=next_year+1
+                                  
                                   user_d.save()
               # Inner Context
             context= {

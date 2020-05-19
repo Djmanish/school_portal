@@ -764,7 +764,7 @@ def edit_profile(request, pk):
             user_info.save()
 
             # sending mail to admin on registering
-            send_mail('Admin Request Confirmation ',f'Hello {request.user} , Thank you for using our application.  ', 'yourcollegeportal@gmail.com',[f'{request.user.email}'], html_message=f"<h4>Hello {request.user},</h4><p>Thank you for choosing our application.</p><p> You have requested to be an admin profile so you are able to create your own institution profile.once your request is approved you will received a confirmation email.</p>School Portal<br>school_portal@gmail.com<p></p>"
+            send_mail('Admin Request Confirmation ',f'Hello {request.user} , Thank you for using our application.  ', 'yourcollegeportal@gmail.com',[f'{request.user.email}'], html_message=f"<h4>Hello {request.user.first_name} {request.user.last_name},</h4><p>Thank you for choosing our application.</p><p> You have requested to be an admin profile so you are able to create your own institution profile.once your request is approved you will received a confirmation email.</p>School Portal<br>school_portal@gmail.com<p></p>"
             )
         
         
@@ -816,6 +816,8 @@ def edit_profile(request, pk):
             updated_state= State.objects.get(pk=request.POST['state'])
             user_info.state= updated_state 
         
+        user_info.country= request.POST['country']
+        user_info.pin_code= request.POST['pin_code']
         user_info.facebook_link= request.POST['facebook_link']
         user_info.class_current_year=current_year
         user_info.class_next_year=next_year
@@ -902,9 +904,10 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
 
     model = Institute
     form_class = InstituteUpdateProfile
+    
 
     template_name="main_app/edit_institute.html"
-    success_message = "Details were updated successfully !"
+    success_message = "Details updated successfully !"
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -942,7 +945,7 @@ def approve_request(request,pk):
 
     user = UserProfile.objects.get(pk=pk)
     user.approve()
-    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>Your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>school_portal@gmail.com<p></p>"
+    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>school_portal@gmail.com<p></p>"
             )
     rr= request.user.profile.institute.id
     return HttpResponseRedirect(f'/user/approvals/{rr}/')
@@ -997,7 +1000,7 @@ def delete_user_role(request, pk):
     user_role =  Institute_levels.objects.get(pk=pk, institute= request.user.profile.institute)
     role_id= user_role.level_id
     if user_role.level_name == 'admin'  or user_role.level_name == 'parent' or user_role.level_name == 'student' or user_role.level_name == 'teacher' or user_role.level_name == 'principal' :
-        messages.error(request, 'Admin, principal, teacher, parent or student roles can not be deleted !!!')
+        messages.error(request, 'Admin, principal,  teacher, Parent or student roles can not be deleted !')
         rr= request.user.profile.institute.id
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
     else:
@@ -1045,8 +1048,10 @@ def assign_class_teacher(request, pk):
             try:
                 selected_class.save()
                 messages.success(request, 'Class teacher assigned successfully !')
+                rr= request.user.profile.institute.id
+                return HttpResponseRedirect(f'/institute/profile/{rr}/')
             except:
-                messages.error(request,'Something went wrong !!!')
+                messages.error(request,'Something went wrong !')
 
         return render(request, 'main_app/assign_class_teacher.html', context_data)
     else:
@@ -1057,6 +1062,7 @@ def not_found_page(request):
     return render(request, 'main_app/404.html')
 
 class Edit_Role_Permissions(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    
     model = Institute_levels
     fields = ['permissions']
     template_name = "main_app/role_permissions_edit.html"
@@ -1101,7 +1107,7 @@ def edit_role_permissions(request, pk):
             for updated_permissions in updated_permissions:
 
                 tracking_permission_change.updated_permissions.add(updated_permissions)
-            messages.success(request, 'Role Permissions Updated !!!')    
+            messages.success(request, 'Role permissions updated !')    
             rr= request.user.profile.institute.id
             return HttpResponseRedirect(f'/institute/profile/{rr}/')
             
@@ -1135,3 +1141,4 @@ def fetch_classes(request):
     for c in institute_all_classes:
         all_classes= all_classes+ f"<option value='{c.id}' >"+str(c)+"</option>"
     return HttpResponse(all_classes)
+

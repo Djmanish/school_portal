@@ -1176,7 +1176,7 @@
                             {% csrf_token %}
                               <label style="margin: 4px;">Select Child:  </label>
                                 <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
-                                <option selected disabled value=""  >                  
+                                <option selected disabled value="">                  
                                 {% if request.POST %}
                                     {{user.post_child}}
                                 {% else %}

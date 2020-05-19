@@ -521,18 +521,17 @@
                         </div>
                         <div class="user_content">
 
-
 <form method="POST" action="{% url 'edit_class' class_info.pk %}">
 {% csrf_token %}
 <div>
 
 <div class="form-group">
-<label >Name:</label>
-<input type="text" class="form-control" name='class_name' value="{{class_info.name}}">
+<label class="required">Name:</label>
+<input type="text" class="form-control" name='class_name' value="{{class_info.name}}" required>
 </div>
 
 <div class="form-group">
-    <label for="sel1">Select Class Stage:</label>
+    <label class="required" for="sel1">Select Class Stage:</label>
     <select class="form-control" name="class_stage" required>
         
         {% if class_info.class_stage %}
@@ -546,16 +545,16 @@
     </select>
   </div>
 <div class="form-group" >
-    <label >Class Teacher:</label>
-    <select class="form-control" name="class_teacher" required/>
+    <label class="required">Class Teacher:</label>
+    <select class="form-control" name="class_teacher" required>
         
         {% if class_info.class_teacher %}
-        <option selected  value="{{class_info.class_teacher.id}}" >{{class_info.class_teacher}}</option>        
+        <option selected  value="{{class_info.class_teacher.id}}" >{{class_info.class_teacher.profile.first_name}} {{class_info.class_teacher.profile.last_name}}</option>        
         {% endif %}
             
       {% for teacher in institute_teachers %}
-    <option value="{{teacher.id}}">{{teacher}}</option>
-    {% endfor %}
+      <option value="{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</option>
+      {% endfor %}
     
     
     </select>

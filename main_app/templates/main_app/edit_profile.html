@@ -562,10 +562,12 @@
                         <!-- starting user form  -->
                         <form method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' user.profile.pk %}">
                             {% csrf_token %}
+                            
 
                             <div class="form-group">
-                                <label >First Name:</label>
-                                <input type="text" value="{{user_info.first_name}}" class="form-control n_i" name='first_name'   required>
+                                                                                            
+                                <label class="required">First Name</span>:</label>
+                                <input type="text" value="{{user_info.first_name}}" class="form-control n_i" name='first_name' required="required" >
                               </div>
 
                               <div class="form-group">
@@ -579,8 +581,8 @@
                               </div>
 
                               <div class="form-group">
-                                <label >Father's Name:</label>
-                                <input type="text" class="form-control n_i" name='father_name'  value="{{user_info.father_name}}">
+                                <label class="required">Father's Name:</label>
+                                <input type="text" class="form-control n_i" name='father_name'  value="{{user_info.father_name}}" required>
                               </div>
 
                               <div class="form-group">
@@ -589,8 +591,8 @@
                               </div>
     
                               <div class="form-group">
-                                <label for="gender">Gender:</label>
-                                <select class="form-control" id="gender" name="gender">
+                                <label class="required" for="gender">Gender:</label>
+                                <select class="form-control" id="gender" name="gender" required>
                                     
                                     {% if user_info.gender %}
                                         <option selected  >{{user_info.gender}}</option>
@@ -606,7 +608,7 @@
 {% if not user_info.designation  %}
 <div class="custom-control custom-checkbox">
     <input type="checkbox" class="custom-control-input" id="defaultUnchecked" name="admin_check">
-    <label class="custom-control-label" for="defaultUnchecked">Institute not Listed ? Create new Institute as Admin</label>
+    <label class="required" class="custom-control-label" for="defaultUnchecked">Institute not Listed ? Create new Institute as Admin</label>
 </div>
 
 <div id="institute_list">
@@ -624,7 +626,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Join as:</label>
+        <label class="required">Join as:</label>
         <select class="form-control" name="user_designation" id="fdata" required='required'>
     <option selected disabled value="">-- first select your school -- </option>
         </select>
@@ -697,10 +699,10 @@ $('#fdata').change(function(){
       </div>
   </div>
 
-                              <div class="form-group">
-                                <label >Date of Birth:</label>
+                              <div class="form-group" >
+                                <label class= "required">Date of Birth:</label>
                                 
-                                <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" >
+                                <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" required>
                               </div>
                               {% if user.user_institute_role.level.level_name != "student" %}
                               <div class="form-group">
@@ -711,8 +713,8 @@ $('#fdata').change(function(){
                                 
                                    
                                     {% endif %}
-                                  <option >Married</option>
-                                  <option >Unmarried</option >
+                                  <option >Unmarried</option>
+                                  <option >Married</option >
                                 </select>
                               </div>
                               {% endif %}
@@ -782,7 +784,7 @@ $('#fdata').change(function(){
                               </div>
 
                               <div class="form-group">
-                                <label >Address Line 1:</label>
+                                <label class="required">Address Line 1:</label>
                                 <input type="text" class="form-control" name='address_line_1' value="{{user_info.address_line_1}}">
                               </div>
 
@@ -812,9 +814,18 @@ $('#fdata').change(function(){
                                   
                                 </select>
                               </div>
+                              <div class="form-group">
+                                <label class="required">Country:</label>
+                                <input type="text" class="form-control n_i" name='country' value="{{user_info.country}}" required>
+                              </div>
 
                               <div class="form-group">
-                                <label >Facebook Profile link:</label>
+                                <label class="required">Pin Code:</label>
+                                <input type="text" class="form-control" name='pin_code' value="{{user_info.pin_code}}" required>
+                              </div>
+
+                              <div class="form-group"> 
+                                <label >Facebook Link:</label>
                                 <input type="url" class="form-control" name='facebook_link' value="{{user_info.facebook_link}}">
                               </div>
                               {% if user.profile.designation.level_name == "student"%}
@@ -984,10 +995,11 @@ $("input[type=date]").on('click', function() {
       })
     })
     </script>
+    
 
-<script>
-   
-    </script>
+<script src="{% static 'main_app/js/script.js' %}"></script>   
+
+
    
 </body>
 </html>
