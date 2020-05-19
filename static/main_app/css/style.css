@@ -242,3 +242,10 @@ label{
 .dbmh{
   max-height: 290px;
 }
+label.required:before{
+  content: "*";
+  color: red;
+  font-weight: bold;
+}
+
+  

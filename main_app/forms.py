@@ -9,6 +9,7 @@ from .models import *
 #         fields = ['subject_class','subject_code','subject_name']
 
 class ClassUpdateForm(forms.ModelForm):
+    
     class Meta:
         model = Classes
         fields = ['name','class_stage','class_teacher']
@@ -32,3 +33,5 @@ class InstituteUpdateProfile(forms.ModelForm):
 
         }
 
+
+    

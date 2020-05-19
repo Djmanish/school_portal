@@ -528,7 +528,7 @@
  <!-- messages -->
  {% if messages %}
  <div class="md-card md-card-primary">
-<div class=""md-card-content">
+<div class="md-card-content">
    <ul class="messages alert">
        {% for message in messages %}
        <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
@@ -558,21 +558,21 @@
         </div>
         
         <div class="form-group">
-        <label >Subject Code:</label>
+        <label class="required">Subject Code:</label>
         <input type="text" class="form-control" name='subject_code' value="{{subject_info.subject_code}}" required="required">
         </div>
         
         <div class="form-group">
-        <label >Subject Name:</label>
+        <label class="required">Subject Name:</label>
         <input type="text" class="form-control" name='subject_name' value="{{subject_info.subject_name}}" required="required">
         </div>
         <div class="form-group">
-            <label for="sel1">Select Subject Teacher</label>
+            <label for="sel1" class="required">Select Subject Teacher:</label>
             <select class="form-control" name="subject_teacher" required>
-                <option selected value="{{subject_info.subject_teacher.id}}">{{subject_info.subject_teacher}}</option>
+                <option selected value="{{subject_info.subject_teacher.id}}">{{subject_info.subject_teacher.profile.first_name}} {{subject_info.subject_teacher.profile.last_name}}</option>
               
               {% for teacher in institute_teachers %}
-                  <option value='{{teacher.pk}}'>{{teacher}}</option>
+                  <option value='{{teacher.pk}}'>{{teacher.first_name}} {{teacher.last_name}}</option>
               {% endfor %}
                   
     

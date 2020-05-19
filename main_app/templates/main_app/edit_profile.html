@@ -20,7 +20,7 @@
      <!-- font awesome cdn -->
      <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
-    <script src="{% static 'main_app/js/script.js' %}"></script>
+    
 
    <!-- bootstrap -->
    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
@@ -45,7 +45,7 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" > 
 
  
 </head>
@@ -572,15 +572,25 @@
       </div>
         </div>
         {% endif %}
-
-                            <h3 class="uk-text-primary">Update Your Information</h3>
+        <div class="row">
+            <div class="col-sm-6" >
+              <h3 class="uk-text-primary">Update Your Information</h3>
+            </div>
+            <div class="col-sm-6 text-right">
+                <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
+             
+            </div>
+          </div>
+                            
                         <!-- starting user form  -->
                         <form method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' user.profile.pk %}">
                             {% csrf_token %}
+                            
 
                             <div class="form-group">
-                                <label >First Name:</label>
-                                <input type="text" value="{{user_info.first_name}}" class="form-control n_i" name='first_name'   required>
+                                                                                            
+                                <label class="required">First Name</span>:</label>
+                                <input type="text" value="{{user_info.first_name}}" class="form-control n_i" name='first_name' required="required" >
                               </div>
 
                               <div class="form-group">
@@ -594,8 +604,8 @@
                               </div>
 
                               <div class="form-group">
-                                <label >Father's Name:</label>
-                                <input type="text" class="form-control n_i" name='father_name'  value="{{user_info.father_name}}">
+                                <label class="required">Father's Name:</label>
+                                <input type="text" class="form-control n_i" name='father_name'  value="{{user_info.father_name}}" required>
                               </div>
 
                               <div class="form-group">
@@ -604,8 +614,8 @@
                               </div>
     
                               <div class="form-group">
-                                <label for="gender">Gender:</label>
-                                <select class="form-control" id="gender" name="gender">
+                                <label class="required" for="gender">Gender:</label>
+                                <select class="form-control" id="gender" name="gender" required>
                                     
                                     {% if user_info.gender %}
                                         <option selected  >{{user_info.gender}}</option>
@@ -623,13 +633,13 @@
 {% if not user_info.designation  %}
 <div class="custom-control custom-checkbox">
     <input type="checkbox" class="custom-control-input" id="defaultUnchecked" name="admin_check">
-    <label class="custom-control-label" for="defaultUnchecked">Institute not Listed ? Create new Institute as Admin</label>
+    <label class="required" class="custom-control-label" for="defaultUnchecked">Institute not Listed ? Create new Institute as Admin</label>
 </div>
 
 
 <div id="institute_list">
     <div class="form-group" >
-        <label >Select Institute:</label>
+        <label class="required">Select Institute:</label>
         
         <select class="form-control" name="select_school" id="select_school">
             
@@ -644,7 +654,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Join as:</label>
+        <label class="required">Join as:</label>
         <select class="form-control" name="user_designation" id="fdata" required='required'>
     <option selected disabled value="">-- first select your school -- </option>
         </select>
@@ -710,11 +720,11 @@ $('#fdata').change(function(){
 
   <div id="institute-options" style="display: none;">
     <div class="form-group">
-        <label >Institute Name:</label>
+        <label class="required">Institute Name:</label>
         <input type="text" class="form-control" name='new_institute_name' placeholder="New institute name here" id="new_institute_id" >
       </div>
       <div class="form-group">
-        <label>Institute Phone:</label>
+        <label class="required">Institute Phone:</label>
         <input type="text" id="new_institute_phone_id" class="form-control" name="new_institute_phone" pattern="[1-9]{1}[0-9]{9}" placeholder="Enter 10 digit mobile number">
       </div>
 
@@ -724,10 +734,10 @@ $('#fdata').change(function(){
       </div>
   </div>
 
-                              <div class="form-group">
-                                <label >Date of Birth:</label>
+                              <div class="form-group" >
+                                <label class= "required">Date of Birth:</label>
                                 
-                                <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" >
+                                <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" required>
                               </div>
                               {% if user.user_institute_role.level.level_name != "student" %}
                               <div class="form-group">
@@ -738,8 +748,8 @@ $('#fdata').change(function(){
                                 
                                    
                                     {% endif %}
-                                  <option >Married</option>
-                                  <option >Unmarried</option >
+                                  <option >Unmarried</option>
+                                  <option >Married</option >
                                 </select>
                               </div>
                               {% endif %}
@@ -789,12 +799,12 @@ $('#fdata').change(function(){
                              
 
                               <div class="form-group">
-                                <label >Change Profile Picture:</label>
+                                <label class="required">Change Profile Picture:</label>
                                 <input type="file" class="form-control" name='profile_pic'>
                               </div>
 
                               <div class="form-group">
-                                <label >Mobile:</label>
+                                <label class="required">Mobile:</label>
                                 <input type="text" class="form-control" name='mobile_number' value="{{user_info.mobile_number}}" pattern="[1-9]{1}[0-9]{9}" required='required'>
                               </div>
                             
@@ -804,7 +814,7 @@ $('#fdata').change(function(){
                               </div>
 
                               <div class="form-group">
-                                <label >Address Line 1:</label>
+                                <label class="required">Address Line 1:</label>
                                 <input type="text" class="form-control" name='address_line_1' value="{{user_info.address_line_1}}">
                               </div>
 
@@ -814,12 +824,12 @@ $('#fdata').change(function(){
                               </div>
 
                               <div class="form-group">
-                                <label >City:</label>
+                                <label class="required">City:</label>
                                 <input type="text" class="form-control n_i" name='city' value="{{user_info.city}}">
                               </div>
 
                               <div class="form-group" >
-                                <label >State:</label>
+                                <label class="required">State:</label>
                                 <select class="form-control" name="state"  required>
                                   
                                   {% if user_info.state %}
@@ -834,9 +844,18 @@ $('#fdata').change(function(){
                                   
                                 </select>
                               </div>
+                              <div class="form-group">
+                                <label class="required">Country:</label>
+                                <input type="text" class="form-control n_i" name='country' value="{{user_info.country}}" required>
+                              </div>
 
                               <div class="form-group">
-                                <label >Facebook Profile link:</label>
+                                <label class="required">Pin Code:</label>
+                                <input type="text" class="form-control" name='pin_code' value="{{user_info.pin_code}}" required>
+                              </div>
+
+                              <div class="form-group"> 
+                                <label >Facebook Link:</label>
                                 <input type="url" class="form-control" name='facebook_link' value="{{user_info.facebook_link}}">
                               </div>
                               {% if user.profile.designation.level_name == "student"%}
@@ -1005,6 +1024,8 @@ $("input[type=date]").on('click', function() {
       })
     })
     </script>
-   
+    
+
+<script src="{% static 'main_app/js/script.js' %}"></script>   
 </body>
 </html>

@@ -55,11 +55,11 @@ def add_classes(request):
         days=['Monday','Tuesday', 'Wednesday', 'Thursday','Friday','Saturday']
         for day in days:
             create_schedule = Schedule.objects.create(institute=request.user.profile.institute, Class= new_class, day= day )
-        messages.success(request, 'Class Created successfully !!!')
+        messages.success(request, 'Class created successfully !')
         rr=request.user.profile.institute.id
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
     else:
-        messages.info(request, "you don't have permission to add class")
+        messages.info(request, "You don't have permission to add class !")
         return redirect('not_found')
 
 
@@ -67,7 +67,7 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Classes
     form_class = ClassUpdateForm
     template_name="main_app/edit_class.html"
-    success_message = "Details were updated successfully !!!"
+    success_message = "Details updated successfully !"
     def form_valid(self, form):
             form.instance.created_by = self.request.user
             return super().form_valid(form)
@@ -102,7 +102,7 @@ def add_subjects(request):
 
             subject_class = Subjects.objects.create(institute=request.user.profile.institute, subject_class=subject_class, subject_code= subject_code, subject_name= subject_name,subject_teacher=subject_teacher)
 
-            messages.success(request, 'Subject Created successfully !!!')
+            messages.success(request, 'Subject created successfully !')
             
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
 
@@ -129,11 +129,11 @@ def edit_subject(request, pk):
             subject_to_edit.subject_name = new_subject_name
             subject_to_edit.subject_teacher=new_subject_teacher
             subject_to_edit.save()
-            messages.success(request, 'Subject Updated Successfully !!!')
+            messages.success(request, 'Subject updated successfully !')
             institue_pk = request.user.profile.institute.pk
             return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
     else:
-        messages.info(request, "You Don't have permission to update subjects")
+        messages.info(request, "You don't have permission to update subjects !")
         return redirect('not_found')
     
     context = {
@@ -148,7 +148,7 @@ def delete_subject(request, pk):
         subject_to_delete.subject_code = "null"
         subject_to_delete.subject_name = "null"
         subject_to_delete.delete()
-        messages.success(request, 'Subject Deleted Successfully !!!')
+        messages.success(request, 'Subject deleted successfully !')
         institue_pk = request.user.profile.institute.pk
         return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
 
@@ -174,9 +174,9 @@ def edit_class(request, pk):
                 try:
                     class_to_edit.save()
                 except:
-                    messages.error(request, 'Teacher already assigned to a class !!!')
+                    messages.error(request, 'Teacher already assigned to a class !')
                     return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
-                messages.success(request, 'Class Updated Successfully !!!')
+                messages.success(request, 'Class updated successfully !')
                 
                 return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
     
@@ -186,7 +186,7 @@ def edit_class(request, pk):
         }
         return render(request, 'main_app/edit_class.html', context)
     else:
-        messages.info(request, 'May be you do not permission to edit classes')
+        messages.info(request, 'May be you do not permission to edit classes !')
         return redirect('not_found')
 
 def delete_class(request, pk):
@@ -195,7 +195,7 @@ def delete_class(request, pk):
         class_to_delete.name = None
         class_to_delete.class_stage = None
         class_to_delete.delete()
-        messages.success(request, 'Class Deleted Successfully !!!')
+        messages.success(request, 'Class deleted successfully !')
         institue_pk = request.user.profile.institute.pk
         return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
 
@@ -219,7 +219,7 @@ def approvals(request,pk):
             inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval).order_by('id')
         return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
     else:
-        messages.info(request, "You don't have permission to approve/disapprove requests.")
+        messages.info(request, "You don't have permission to approve/disapprove request !")
         return redirect('not_found')
 
 def index(request):
@@ -709,7 +709,7 @@ def edit_profile(request, pk):
             address1 = request.POST['new_institute_address'],
             created_by = request.user) # creating new institute
             except:
-                messages.info(request, 'Institute already exists !!!')
+                messages.info(request, 'Institute already exists !')
                 return render(request, 'main_app/edit_profile.html', {'user_info':user_info, 'all_institutes':all_institutes, 'all_states':all_states,})
             
             new_level_admin = Institute_levels.objects.create(institute=new_create_institute, level_id=1, level_name='admin')
@@ -724,7 +724,7 @@ def edit_profile(request, pk):
             user_info.save()
 
             # sending mail to admin on registering
-            send_mail('Admin Request Confirmation ',f'Hello {request.user} , Thank you for using our application.  ', 'yourcollegeportal@gmail.com',[f'{request.user.email}'], html_message=f"<h4>Hello {request.user},</h4><p>Thank you for choosing our application.</p><p> You have requested to be an admin profile so you are able to create your own institution profile.once your request is approved you will received a confirmation email.</p>School Portal<br>school_portal@gmail.com<p></p>"
+            send_mail('Admin Request Confirmation ',f'Hello {request.user} , Thank you for using our application.  ', 'yourcollegeportal@gmail.com',[f'{request.user.email}'], html_message=f"<h4>Hello {request.user.first_name} {request.user.last_name},</h4><p>Thank you for choosing our application.</p><p> You have requested to be an admin profile so you are able to create your own institution profile.once your request is approved you will received a confirmation email.</p>School Portal<br>school_portal@gmail.com<p></p>"
             )
         
         
@@ -776,15 +776,17 @@ def edit_profile(request, pk):
             updated_state= State.objects.get(pk=request.POST['state'])
             user_info.state= updated_state 
         
+        user_info.country= request.POST['country']
+        user_info.pin_code= request.POST['pin_code']
         user_info.facebook_link= request.POST['facebook_link']
         user_info.class_current_year=current_year
         user_info.class_next_year=next_year
    
         try:
             user_info.save()
-            messages.success(request, 'Profile details updated !!!')
+            messages.success(request, 'Profile details updated !')
         except:
-            messages.error(request, 'Failed to update, Please fill details correctly !!!')
+            messages.error(request, 'Failed to update, Please fill details correctly !')
             
             return redirect('user_profile')
 
@@ -859,9 +861,10 @@ def edit_institute(request, pk):
 class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     model = Institute
     form_class = InstituteUpdateProfile
+    
 
     template_name="main_app/edit_institute.html"
-    success_message = "Details were updated successfully"
+    success_message = "Details updated successfully !"
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -884,7 +887,7 @@ def approve_request(request,pk):
 
     user = UserProfile.objects.get(pk=pk)
     user.approve()
-    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>Your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>school_portal@gmail.com<p></p>"
+    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>school_portal@gmail.com<p></p>"
             )
     rr= request.user.profile.institute.id
     return HttpResponseRedirect(f'/user/approvals/{rr}/')
@@ -925,10 +928,10 @@ def add_new_role(request, pk):
                 role.level_id += 1
                 role.save()
             new_role.save()
-            messages.success(request, "New Role Added Successfully !")
+            messages.success(request, "New role added successfully !")
             return HttpResponseRedirect(f'/institute/profile/{rr}/')  
         except:
-            messages.info(request, "Failed to Add, check you fields!")
+            messages.info(request, "Failed to add, check you fields !")
             return HttpResponseRedirect(f'/institute/profile/{rr}/')
   
     else:
@@ -939,7 +942,7 @@ def delete_user_role(request, pk):
     user_role =  Institute_levels.objects.get(pk=pk, institute= request.user.profile.institute)
     role_id= user_role.level_id
     if user_role.level_name == 'admin'  or user_role.level_name == 'parent' or user_role.level_name == 'student' or user_role.level_name == 'teacher' or user_role.level_name == 'principal' :
-        messages.error(request, 'Admin, principal,  teacher, Parent or student roles can not be deleted !!!')
+        messages.error(request, 'Admin, principal,  teacher, Parent or student roles can not be deleted !')
         rr= request.user.profile.institute.id
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
     else:
@@ -977,23 +980,26 @@ def assign_class_teacher(request, pk):
             selected_class.class_teacher = User.objects.get(pk= new_class_teacher)
             try:
                 selected_class.save()
-                messages.success(request, 'Class Teacher assigned successfully!!!')
+                messages.success(request, 'Class Teacher assigned successfully !')
+                rr= request.user.profile.institute.id
+                return HttpResponseRedirect(f'/institute/profile/{rr}/')
             except:
-                messages.error(request,'Something went wrong !!!')
+                messages.error(request,'Something went wrong !')
 
         return render(request, 'main_app/assign_class_teacher.html', context_data)
     else:
-        messages.info(request, "You Don't have permission to assign Class Teacher")
+        messages.info(request, "You don't have permission to assign Class Teacher !")
         return redirect('not_found')
 
 def not_found_page(request):
     return render(request, 'main_app/404.html')
 
 class Edit_Role_Permissions(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    
     model = Institute_levels
     fields = ['permissions']
     template_name = "main_app/role_permissions_edit.html"
-    success_message = "Role Permissions Updated Successfully"
+    success_message = "Role permissions updated successfully !"
     def get_success_url(self, **kwargs):         
         return reverse_lazy("institute_detail", kwargs={'pk':self.request.user.profile.institute.id})
 
@@ -1029,7 +1035,7 @@ def edit_role_permissions(request, pk):
             for updated_permissions in updated_permissions:
 
                 tracking_permission_change.updated_permissions.add(updated_permissions)
-            messages.success(request, 'Role Permissions Updated !!!')    
+            messages.success(request, 'Role permissions updated !')    
             rr= request.user.profile.institute.id
             return HttpResponseRedirect(f'/institute/profile/{rr}/')
             
@@ -1040,7 +1046,7 @@ def edit_role_permissions(request, pk):
         }
         return render(request, 'main_app/role_permissions_edit.html', context)
     else:
-        messages.info(request, "You Don't have permission to edit permissions")
+        messages.info(request, "You don't have permission to edit permissions !")
         return redirect('not_found')
 
 
@@ -1063,3 +1069,4 @@ def fetch_classes(request):
     for c in institute_all_classes:
         all_classes= all_classes+ f"<option value='{c.id}' >"+str(c)+"</option>"
     return HttpResponse(all_classes)
+

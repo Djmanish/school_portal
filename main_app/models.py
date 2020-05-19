@@ -64,7 +64,7 @@ class Institute_levels(models.Model):
     created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
     start_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     end_date = models.DateField(null=True, blank= True)
-    class Meta:
+    class Meta: 
         # unique_together=['institute', 'level_id','level_name']
         ordering = ['-level_id']
     
@@ -72,8 +72,7 @@ class Institute_levels(models.Model):
         return self.level_name
 
 
-
-
+   
 
 class UserProfile(models.Model):
     Chi1 =[
@@ -111,7 +110,7 @@ class UserProfile(models.Model):
     address_line_2 = models.CharField(max_length=50, null = True, default="Address line 2")
     city = models.CharField(max_length=50, null=True, default="City")
     state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True)
-    pin_code = models.CharField(max_length=10, null=True, blank=True)
+    country= models.CharField(max_length=100, null=True, blank=True)
     facebook_link = models.URLField(null=True, blank=True, default="https://www.facebook.com/")
     status = models.CharField(max_length=25,choices=Chi1, null=True)
     class_promotion_status=models.CharField(max_length=30, choices=Promotion, null=True, default="Promoted")
