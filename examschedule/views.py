@@ -6,14 +6,16 @@ from .models import *
 from django.views.generic import *
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 
 
 # Create your views here.
 
 def create_test_type(request,pk):
-        user_permissions = request.user.user_institute_role.level.permissions.all()
-        add_exam_type_permission = App_functions.objects.get(function_name='Can Add Exam Type')
-        if add_exam_type_permission in user_permissions:
+        inst = request.user.profile.institute.id
+
+        if pk==inst:        
+       
                 institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
                 exam_sr_no=ExamType.objects.filter(institute=request.user.profile.institute).count()+1
                 
@@ -40,9 +42,7 @@ def create_test_type(request,pk):
                 }
                 return render(request, 'test_type_list.html', context)
         else:
-                messages.error(request,"Not Allow to access this page")
-                return redirect('not_found')
-                
+                        raise PermissionDenied
 
 
     
@@ -89,6 +89,9 @@ def delete_test_type(request, pk):
 
 
 def exam_schedule(request,pk):
+    inst = request.user.profile.institute.id
+
+    if pk==inst:
         institute_exam_schedule_data = Institute.objects.get(pk=pk)
         institute_exam_schedule = ExamDetails.objects.filter(institute=institute_exam_schedule_data)
 
@@ -172,7 +175,9 @@ def exam_schedule(request,pk):
                         }
         
         return render(request,'examschedule.html',context)
-        
+     
+    else:
+        raise PermissionDenied   
 
 def create_exam_schedule(request, pk):
         
@@ -187,15 +192,16 @@ def create_exam_schedule(request, pk):
 
 
         if request.method == "POST":
+                          
+                selected_class=Classes.objects.get(pk=request.POST.get('selected_class_hidden'))
+                select_exam_type= ExamType.objects.get(pk=request.POST.get('exam_type_id_hidden'))
+                exam_code=request.POST.get('exam_institute_code')
+                exam_sr_no = request.POST.get('sr_no')
+                sr_no=ExamDetails.objects.filter(exam_type__exam_type=select_exam_type,exam_class=selected_class).values('exam_sr_no').distinct().count()+1
+                print(sr_no)
                 for subject,subject_teacher,date,start_time,end_time,assign_teacher in zip(request.POST.getlist('select_exam_subject'), request.POST.getlist('select_exam_subject_teacher'),request.POST.getlist('select_date'),request.POST.getlist('select_start_time'),request.POST.getlist('select_end_time'),request.POST.getlist('assign_teacher')):
                                 
-                                
-                        selected_class=Classes.objects.get(pk=request.POST.get('selected_class_hidden'))
-                        select_exam_type= ExamType.objects.get(pk=request.POST.get('exam_type_id_hidden'))
-                        exam_code=request.POST.get('exam_institute_code')
-                        exam_sr_no = request.POST.get('sr_no')
-                        sr_no=ExamDetails.objects.filter(exam_type__exam_type=select_exam_type,exam_class=selected_class).values('exam_sr_no').distinct().count()+1
-
+                      
                         new_exam = ExamDetails()
                         new_exam.institute=request.user.profile.institute 
                         new_exam.exam_subject = Subjects.objects.get(pk=subject)
@@ -209,7 +215,7 @@ def create_exam_schedule(request, pk):
                         new_exam.exam_class=selected_class
                         new_exam.exam_type=select_exam_type
                         new_exam.save()
-                messages.success(request, 'New Exam Schedule Created successfully !!!')
+        messages.success(request, 'New Exam Schedule Created successfully!')
                         
          
         return redirect(f'/examschedule/examschedule/{inst_id}') 
@@ -225,6 +231,9 @@ def create_exam_schedule(request, pk):
  
 
 def examschedule_view(request,pk):
+        inst = request.user.profile.institute.id
+
+        if pk==inst:
             institute_exam_schedule = ExamDetails.objects.filter(institute=request.user.profile.institute)
             institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
             exam_class = Classes.objects.filter(institute=request.user.profile.institute)
@@ -239,7 +248,9 @@ def examschedule_view(request,pk):
                         exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
                         
                         context = {
-                                'selected_class':selected_class,
+                        'selected_class':selected_class,
+                        'select_exam_type':select_exam_type,
+                        'select_exam_type_no':select_exam_type_no,
                         'exam_details': exam_details,
                         'institute_exam_schedule':institute_exam_schedule,
                         'institute_exam_type':institute_exam_type,
@@ -260,6 +271,9 @@ def examschedule_view(request,pk):
                                 context = {
                                 'select_class_for_schedule':select_class_for_schedule,
                                 'exam_class':exam_class,
+                                'selected_class':selected_class,
+                                'select_exam_type':select_exam_type,
+                                'select_exam_type_no':select_exam_type_no,      
                                 'exam_details': exam_details,
                                 'institute_exam_schedule':institute_exam_schedule,
                                 'institute_exam_type':institute_exam_type,
@@ -277,6 +291,8 @@ def examschedule_view(request,pk):
              
                      }
             return render(request,'update_examschedule.html', context)
+        else:
+                raise PermissionDenied
 
 def edit_examschedule(request,pk):
     examdetails_info= ExamDetails.objects.get(pk=pk)
