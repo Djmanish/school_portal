@@ -14,7 +14,8 @@
 
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
-    <script src="{% static 'main_app/js/jquery.js' %}"></script>
+    <!-- <script src="{% static 'main_app/js/jquery.js' %}"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 
 
@@ -662,6 +663,8 @@ success: function(msg){
     })
      
 </script>
+
+
   
 <div class="form-group" >
     <label for="usr">Notice Refernce No. <small style="color: #1976d2;"> (Optional) </small></label><br>
@@ -960,7 +963,8 @@ alert('not deleted')
     });
     </script>
 <!-- ending script for search in audience -->
-    
+
+<script src="{% static 'main_app/js/script.js' %}"></script>
     </body>
 
 </html>

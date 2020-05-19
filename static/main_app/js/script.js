@@ -1,10 +1,6 @@
 
  
 $(document).ready(function(){
-
-  
- 
-
     $('.n_i').keypress(function (e) {
         var regex = new RegExp("^[a-zA-Z ]+$");
         var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
@@ -83,7 +79,6 @@ $(document).ready(function(){
 });
 // ending script for processing , notification and due date
 
-<<<<<<< HEAD
 function formatAMPM(date) {
   var hours = date.getHours();
   var minutes = date.getMinutes();
@@ -94,11 +89,24 @@ function formatAMPM(date) {
   var strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime;
 }
-=======
 
  // Add the following code if you want the name of the file appear on select
  $(".custom-file-input").on("change", function() {
   var fileName = $(this).val().split("\\").pop();
   $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 });
->>>>>>> 566121e49cc98f2cc3deee6948ac78b4dcfef275
+
+
+
+
+
+
+$('document').ready(function(){
+  
+  $('option').mousedown(function(e) {
+    e.preventDefault();
+    $(this).prop('selected', !$(this).prop('selected'));
+    return false;
+});
+})
+

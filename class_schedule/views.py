@@ -14,7 +14,11 @@ from AddChild.models import *
 # Create your views here.
 
 @login_required
-def schedule(request):
+def schedule(request):   
+# starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
         
     select_class_for_schedule = request.GET.get('selected_class') # class selected to view
 
@@ -91,7 +95,11 @@ def schedule(request):
 
 @login_required
 def schedule_update(request, pk):
-
+                
+        # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
         schedule_to_update = Schedule.objects.get(pk=pk) # fetching schedule instance to update
         
         institute_subjects = Subjects.objects.filter(institute= request.user.profile.institute, subject_class= schedule_to_update.Class) # fetching available subjects in the institute
@@ -198,6 +206,11 @@ def schedule_update(request, pk):
         return render(request, 'class_schedule/update_schedule.html', context_data )
 @login_required
 def class_stage_lecture_time_update(request):
+                
+        # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
         return render(request, 'class_schedule/update_lecture_time.html')
 
 
@@ -217,7 +230,19 @@ class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
                         return True
                 else:
                         return False
+                        
                 
+        def get_context_data(self, **kwargs):
+        
+                # starting user notice
+                if self.request.user.profile.designation:
+                        self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
+                        # ending user notice
+
+
+                        # Call the base implementation first to get a context
+                        context = super().get_context_data(**kwargs)
+                        return context
 
         def get_success_url(self, **kwargs):
                 current_object = self.get_object()
@@ -233,6 +258,11 @@ class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
         
 
 def class_stage_all_lectures(request, id):
+                
+        # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
         if id == 1:
                 all_lectures = Lecture.objects.filter(institute=request.user.profile.institute, class_stage='Primary')
                 return render(request, 'class_schedule/class_stage_all_lectures.html',{'all_lectures':all_lectures, 'class_stage':'Primary'})
