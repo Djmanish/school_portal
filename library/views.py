@@ -20,10 +20,14 @@ def book(request):
     inst=request.user.profile.institute
     categories= BookCategory.objects.filter(institute_category=inst)
     sub_categories= BookSubCategory.objects.filter(institute_subcategory=inst)
+    books= Book.objects.filter(book_institute=inst)
+    len_books=len(books)
     context_data = {
       'institute_data':institute_data,  
       'categories':categories,
       'sub_categories':sub_categories,
+      'books':books,
+      'len_books':len_books,
       }
     return render(request, 'library/add_book.html',context_data)
 

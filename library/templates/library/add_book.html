@@ -580,6 +580,41 @@
                                 </div>
                                 
                             </div>
+                            {% if len_books > 0 %}
+                            <div class="md-card uk-margin-medium-bottom">
+                                <div class="md-card-content">
+                                    <div class="uk-overflow-container">
+                                        <table class="uk-table uk-table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>Sr No.</th>
+                                                <th>Book Code</th>
+                                                <th>Book Name</th>
+                                                <th>Book Category</th>
+                                                <th>Book Sub Category</th>
+                                                <th>Author</th>
+                                                <th>Total Books</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for book in books %}
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>{{book.book_code}}</td>
+                                                <td>{{book}}</td>
+                                                <td>{{book.book_category}}</td>
+                                                <td>{{book.book_sub_category}}</td>
+                                                <td>{{book.author}}</td>
+                                                <td>{{10}}</td>
+
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
