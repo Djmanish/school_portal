@@ -522,38 +522,39 @@
                                                         id="ts_issues" >
                                                        
                                                           
-                                                {% if result_data %}
-                                                <tr>
-                                                    <td>
-                                                    <button id="savePDFbutton" class="md-btn md-btn-primary" onclick="savePDF()">
-                                                        <span class="menu_icon"><i class="material-icons" style="color: white ;">print</i></span>
-                                                        Save as PDF
-                                                    </button>
-                                                    </td>
-                                                </tr>
-                                                {% endif %}
-                                                        
-                                                    <tbody id="myresult">
-                                                        <tr colspan="10">
-                                                            <td style="color: #1976d2; "><b>{{select_exam_type}}</b></td>
-
-                                                        </tr>
-                                                       
                                                         {% if result_data %}
-                                                        <tr >
-                                                            <td><b>Subjects</b></td>
-                                                            {% for e_no in exam_no %}
-                                                            <td><b>
-                                                                {{e_no}} 
-                                                            </b>   
-                                                            </td>
-                                                            {% endfor%}
+                                                        <tr>
                                                             <td>
-                                                                <b>
-                                                                % of Final Score
-                                                            </b>
+                                                            <button id="savePDFbutton" class="md-btn md-btn-primary" onclick="savePDF()">
+                                                                <span class="menu_icon"><i class="material-icons" style="color: white ;">print</i></span>
+                                                                Save as PDF
+                                                            </button>
                                                             </td>
                                                         </tr>
+                                                        {% endif %}
+                                                                
+                                                            <tbody id="myresult">
+                                                                {% if result_data %}
+                                                                <tr colspan="10">
+                                                                    <td style="color: black; text-align: center; "><b>Institute Name: {{institute_student}}  &nbsp&nbsp&nbsp &nbsp&nbsp&nbspClass: {{student_class}} &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Exam:{{select_exam_type}}</b></td>
+        
+                                                                </tr>
+                                                                
+                        
+                                                               
+                                                               
+                                                                <tr >
+                                                                    <tr>&nbsp&nbsp
+                                                                        <td><b>Subjects</b></td>
+                                                                        <td>
+                                                                            
+                                                                        </td>
+                                                                       
+                                                                        <td>
+                                                                            <b>Marks</b>
+                                                                            
+                                                                        </td>
+                                                                    </tr>
                                                         {% endif %}
                                                        
                                                                   

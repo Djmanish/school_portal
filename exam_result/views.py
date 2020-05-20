@@ -239,6 +239,9 @@ def chart_sr_no(request):
 
 
 def report_card(request,pk):
+  institute_student=request.user.profile.institute
+  student_class=request.user.profile.Class
+  
   inst = request.user.profile.institute.id
 
   if pk==inst:
@@ -305,6 +308,8 @@ def report_card(request,pk):
                 data_marks['avg']=round(sumValueper,2)
                 result_data.append(data_marks)
               context={
+                'institute_student':institute_student,
+                'student_class':student_class,
                     'select_exam_type':exam_type,
                     'all_exam':all_exam,
                     'exam_no':exam_no,
@@ -392,6 +397,7 @@ def report_card(request,pk):
         
   else:
         raise PermissionDenied
+
 
 
 def overall_result(request,pk,student_pk):
