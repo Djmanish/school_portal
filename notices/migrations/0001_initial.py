@@ -41,4 +41,31 @@ class Migration(migrations.Migration):
                 'unique_together': {('reference_no', 'institute')},
             },
         ),
+        migrations.CreateModel(
+            name='Notification_Category',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=30, null=True)),
+                ('institute', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='inst_notice_category', to='main_app.Institute')),
+            ],
+        ),
+        migrations.AddField(
+            model_name='notice',
+            name='category',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='notice_category', to='notices.Notification_Category'),
+        ),
+        migrations.AddField(
+            model_name='notice',
+            name='institute',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='institute_notices', to='main_app.Institute'),
+        ),
+        migrations.AddField(
+            model_name='notice',
+            name='recipients_list',
+            field=models.ManyToManyField(related_name='users_notice', to='main_app.UserProfile'),
+        ),
+        migrations.AlterUniqueTogether(
+            name='notice',
+            unique_together={('reference_no', 'institute')},
+        ),
     ]

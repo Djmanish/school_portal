@@ -176,4 +176,8 @@ class Migration(migrations.Migration):
             name='institute',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='institute_classes', to='main_app.Institute'),
         ),
+        migrations.AlterUniqueTogether(
+            name='userprofile',
+            unique_together={('institute', 'Class', 'roll_number')},
+        ),
     ]

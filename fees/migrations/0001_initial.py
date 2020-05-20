@@ -115,5 +115,26 @@ class Migration(migrations.Migration):
             options={
                 'unique_together': {('institute', 'due_date', 'student', 'fees_code')},
             },
+        migrations.AddField(
+            model_name='fees_tag_update_history',
+            name='fees_tag',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='tags_updates', to='fees.School_tags'),
+        ),
+        migrations.AddField(
+            model_name='fees_tag_update_history',
+            name='update_by',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='fees_tag_updates', to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AlterUniqueTogether(
+            name='students_fees_table',
+            unique_together={('institute', 'due_date', 'student')},
+        ),
+        migrations.AlterUniqueTogether(
+            name='student_tag_processed_record',
+            unique_together={('institute', 'due_date', 'student', 'fees_code')},
+        ),
+        migrations.AlterUniqueTogether(
+            name='school_tags',
+            unique_together={('institute', 'fees_code')},
         ),
     ]
