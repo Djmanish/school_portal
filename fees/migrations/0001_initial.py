@@ -114,7 +114,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'unique_together': {('institute', 'due_date', 'student', 'fees_code')},
-            },
+            }),
         migrations.AddField(
             model_name='fees_tag_update_history',
             name='fees_tag',
