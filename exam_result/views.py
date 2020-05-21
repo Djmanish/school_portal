@@ -292,11 +292,13 @@ def report_card(request,pk):
               result_data=[]
               for sub_data in resultsubject:
                 data_marks={}
-              
                 data_marks['subj']=sub_data
                 for e_no in exam_no:
-                    student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
-                    data_marks[e_no]=student_data.result_score
+                  try:
+                        student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
+                        data_marks[e_no]=student_data.result_score
+                  except: 
+                      data_marks[e_no]=0
                 marks_data=[]
                 for key,value in data_marks.items():
                     if key=="subj":
@@ -362,10 +364,11 @@ def report_card(request,pk):
               
                 data_marks['subj']=sub_data
                 for e_no in exam_no:
-                    
+                  try:
                     student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=selected_student,result_subject=sub_data)
-                  
                     data_marks[e_no]=student_data.result_score
+                  except:
+                    data_marks[e_no]=0
                 marks_data=[]
                 for key,value in data_marks.items():
                     if key=="subj":

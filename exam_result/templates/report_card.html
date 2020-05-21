@@ -492,7 +492,7 @@
 
                                                         {% for student in parent_student_list %}
                                                         
-                                                           <option value={{student.id}}>{{student}}</option>
+                                                           <option value={{student.id}}>{{student.first_name}} {{student.last_name}}</option>
                                                         {% endfor %}
                                                    
                                                  </select>
@@ -520,8 +520,6 @@
                                                         <table
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues" >
-                                                       
-                                                          
                                                         {% if result_data %}
                                                         <tr>
                                                             <td>
@@ -535,7 +533,8 @@
                                                                 
                                                             <tbody id="myresult">
                                                                 {% if result_data %}
-                                                                <tr colspan="10">
+                                                                
+                                                                <tr >
                                                                     <td style="color: black; text-align: center; "><b>Institute Name: {{institute_student}}  &nbsp&nbsp&nbsp &nbsp&nbsp&nbspClass: {{student_class}} &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Exam:{{select_exam_type}}</b></td>
         
                                                                 </tr>
