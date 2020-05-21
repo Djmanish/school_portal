@@ -525,7 +525,7 @@
                                                                 
                                                             
                                                             <th ><b>Subject Class: {{selected_class}}</b></th>
-                                                            <th ><b>Exam Type: {{exam_type_id}}</b></th>
+                                                            <th ><b>Exam Type: {{selected_exam_type}}</b></th>
                                                             <th ><b>Exam Sr. No.: {{sr_no}}</b></th>
 
 
@@ -550,7 +550,7 @@
                                                             <tr >
                                                                 <td ><label><b>Exam Code</b></label></td>
                                                                 <td colspan="6">
-                                                                    <input type="text" value={{institute_exam_schedule_data.code}}-{{selected_class.id}}-{{exam_type_id.exam_type_sr_no}}-{{sr_no}} name="exam_institute_code"  style="text-align: center; font-weight: 500; border: 0ch;"/>
+                                                                    <input type="text" value={{institute_exam_schedule_data.code}}-{{selected_class.id}}-{{selected_exam_type.exam_type_sr_no}}-{{sr_no}} name="exam_institute_code"  style="text-align: center; font-weight: 500; border: 0ch;"/>
                                                                 </td>
 
                                                             </tr>
