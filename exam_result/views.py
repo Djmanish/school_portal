@@ -240,8 +240,7 @@ def chart_sr_no(request):
 
 
 def report_card(request,pk):
-  institute_student=request.user.profile.institute
-  student_class=request.user.profile.Class
+ 
   
   inst = request.user.profile.institute.id
 
@@ -265,6 +264,9 @@ def report_card(request,pk):
           # if select_exam_type=="Overall":
           #   return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}')
           if request.user.profile.designation.level_name=='student':
+
+              institute_student=request.user.profile.institute
+              student_class=request.user.profile.Class
               select_exam_type = request.POST.get('result_exam_type')
               
               if select_exam_type=="Overall":
@@ -326,6 +328,11 @@ def report_card(request,pk):
           if request.user.profile.designation.level_name=='parent':
               select_exam_type = request.POST.get('result_exam_type')
               selected_student=User.objects.get(pk=request.POST.get('selected_student'))
+              student_class= selected_student.profile.Class
+              institute_student=selected_student.profile.institute
+
+
+             
               if select_exam_type=="Overall":
                 select_exam_type = request.POST.get('result_exam_type')
                 selected_student=User.objects.get(pk=request.POST.get('selected_student'))
@@ -377,6 +384,8 @@ def report_card(request,pk):
                 
 
               context={
+                    'institute_student':institute_student,
+                    'student_class':student_class,
                     'select_exam_type':exam_type,
                     'all_exam':all_exam,
                     'exam_no':exam_no,
