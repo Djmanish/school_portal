@@ -143,6 +143,7 @@ def examresult(request,pk):
                 data_list=list( marks_list)
                 marks_list=list(map(int, data_list))
                 check_limit=int(exam_max_marks)
+          
          
           for score in marks_list:
                   
@@ -151,7 +152,7 @@ def examresult(request,pk):
                               pass
                   
                   else:
-                              messages.info(request, 'Your Marks is greater than the Exam Type Maximum Marks')
+                              messages.info(request, 'Entered Marks is greater than the Exam Type Maximum Marks')
                               return redirect(f'/examresult/examresult/{inst_id}')
               
                 

@@ -555,7 +555,20 @@
                                                                             
                                                                         </td>
                                                                     </tr>
-                                                        {% endif %}
+                                                                    <td></td>
+                                                                    {% for e_no in exam_no %}
+                                                                    <td><b>
+                                                                        {{e_no}} 
+                                                                    </b>   
+                                                                    </td>
+                                                                    {% endfor%}
+                                                                    <td>
+                                                                        <b>
+                                                                        % of Final Score
+                                                                    </b>
+                                                                    </td>
+                                                                </tr>
+                                                                {% endif %}
                                                        
                                                                   
                                                                            {% for data in result_data %}

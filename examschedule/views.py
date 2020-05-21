@@ -118,8 +118,8 @@ def exam_schedule(request,pk):
                 for exam_limit in exam_type_limit:
                         limit=exam_limit.exam_max_limit
                         limit_exam=int(limit)
-                print(limit_exam)
-                if sr_no<limit_exam:
+                
+                if sr_no<=limit_exam:
                     pass
                 else:
                     messages.error(request, 'Exam Limit has exceeded')
