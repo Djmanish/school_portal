@@ -219,7 +219,7 @@ def examschedule_view(request,pk):
                 if request.user.profile.designation.level_name=='student':
                         selected_class = request.user.profile.Class
                         
-                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
+                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class)
                         
                         context = {
                         'selected_class':selected_class,
@@ -322,8 +322,9 @@ def delete_examschedule(request, pk):
 
 def fetch_max_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
+  exam_type=ExamType.objects.get(pk=exam_type_id)
   
-  max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
+  max_exam_sr_no = ExamDetails.objects.filter(exam_type=exam_type_id).values('exam_sr_no').distinct()
  
   individual_sr_no = "<option>--Exam Type No.--</option>"
   for sr_no in max_exam_sr_no:
