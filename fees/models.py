@@ -102,3 +102,13 @@ class Students_fees_table(models.Model):
     
     def __str__(self):
         return str(self.student)
+
+class FeesResetHistory(models.Model):
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, null=True)
+    reset_done_by = models.ForeignKey(to=UserProfile, on_delete=models.SET_NULL, null=True, blank=True)
+    due_date = models.DateField(null=True)
+    reset_time = models.DateTimeField(blank=True, null=True)
+    comment = models.TextField(null=True)
+
+    def __str__(self):
+        return str(self.due_date)

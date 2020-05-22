@@ -5,7 +5,7 @@ from .models import *
 from main_app.models import UserProfile, Institute_levels
 
 
-@receiver(post_save, sender=Notice)
+@receiver(post_save, sender=Notice)# adding all authority above teacher to receipient list
 def save_profile(sender, instance, created, **kwargs):
     if created:
         teacher_level_id = Institute_levels.objects.get(institute= instance.institute ,level_name='teacher')

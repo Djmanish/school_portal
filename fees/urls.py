@@ -23,6 +23,7 @@ urlpatterns = [
     path('fees/pay/', views.fee_payment, name='fees_payment'),
     path('fee/collect/', views.fetch_collect_fee_record, name="fee_collect_record"),
     path('fee/offline/update/', views.update_offline_fee, name='update_offline_fee'),
-    path('invoice/go_back/', views.go_back, name="go_back")
+    
+    path('fees/reset/', views.ResetFees, name='reset_fees'),
 
 ]

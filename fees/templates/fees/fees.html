@@ -568,7 +568,14 @@
                                 {% if can_setup_fees_permission in user_permissions %}
                                 <li><a href="#">Fee Setup</a></li>
                                 <li ><a href="#">Schedule</a></li>
-                                <li ><a href="#">Offline Payment</a></li>
+                                <li ><a href="#">Pay Fees</a></li>  
+                                <!-- fees reset tab visible to principal only -->
+                                {% if  user.profile.designation.level_name == "principal" %}
+                                <li ><a href="#">Reset Fees</a></li> 
+                                {% endif %} 
+                                
+                                    
+                               
                                 {% endif %}
                                     
                                 
@@ -857,6 +864,69 @@
                                 </li> 
                              
                                 <!-- ending offline payment tab -->
+
+                                <!-- starting fees reset tab -->
+
+                                {% if  user.profile.designation.level_name == "principal" %}
+                                <li>
+                                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                        <div class="uk-width-large">
+                                            
+                                            <form  id="ddrfform" >
+{% csrf_token %}
+<div class="form-group">
+<label><i class="ast">*</i>Select Due Date:</label>
+<input type="date" name="ddtoreset" class="form-control" id="ddriv" required>
+</div>
+
+<div class="form-group">
+<label><i class="ast">*</i>Comment:</label>
+<textarea rows="2" required class="form-control" id="frscom" name="frcomn"></textarea>
+</div>
+
+<input type="submit" value="Reset" class="md-btn md-btn-primary" id="ddfesresetbtn" >
+                                            </form>
+
+                                            <script>
+   
+             $('document').ready(function(){
+
+                $('#ddrfform').submit(function(){  
+  var date = $('#ddriv').val()
+  if (date ===""){
+      alert('date is not selected');
+      return false;
+  }
+  var r = confirm("Are You Sure to Reset Fees Records for "+ date  +" ?");
+  if (r == true) {
+
+    $.ajax({
+        type:'POST',
+        url: "{% url 'reset_fees' %}",
+        data: {due_date:$('#ddriv').val(),
+        comment:$('#frscom').val(),
+    csrfmiddlewaretoken: "{{csrf_token}}"},
+    success:function(msg){
+        alert(msg);
+    }
+    })
+
+
+  } else {
+    return false
+  }
+});                
+             })
+                                            </script>
+                                         
+                                        </div>
+                                       </div>
+                
+                                </li> 
+                             
+                                {% endif %}                             
+                                <!-- ending fees reset tab -->
+                            
                                 {% endif %}
                                     
                                 
@@ -1215,6 +1285,7 @@ $('#unselectAll').click(function() {
     <script src="{% static 'main_app/js/pages/forms_advanced.min.js' %}" ></script>
     
     <script src="{% static 'main_app/js/script.js' %}"></script>
+
    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
@@ -1276,6 +1347,16 @@ $('#unselectAll').click(function() {
 
 
     
+<script>
+    
+$('document').ready(function(){ 
+  $('option').mousedown(function(e) {
+    e.preventDefault();
+    $(this).prop('selected', !$(this).prop('selected'));
+    return false;
+});
+})
+</script>
   
 </body>
 
