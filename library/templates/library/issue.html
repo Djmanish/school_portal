@@ -13,35 +13,58 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
-
-    <title>Admission Query </title>
- 
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+    <title>My Child</title>
+   
+    <!-- bootstrap css -->
+   
+<link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+    <!-- additional styles for plugins -->
+        <!-- weather icons -->
+        <link rel="stylesheet" href="{% static 'main_app/bower_components/weather-icons/css/weather-icons.min.css' %}" media="all">
+        <!-- metrics graphics (charts) -->
+        <link rel="stylesheet" href="{% static 'main_app/bower_components/metrics-graphics/dist/metricsgraphics.css' %}">
+        <!-- chartist -->
+        <link rel="stylesheet" href="{% static 'main_app/bower_components/chartist/dist/chartist.min.css' %}">
+    
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}" media="all">
 
     <!-- flag icons -->
     <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
 
-    
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
 
-   <!-- matchMedia polyfill for testing media queries in JS -->
+    <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.js' %}"></script>
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-   
+<style>
+#child_form {
 
+border: 2px solid 
+
+lightgray;
+
+padding: 10px;
+
+border-radius: 10px;
+
+background-color:
+
+aliceblue;
+
+
+
+}
+</style>
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -94,6 +117,14 @@
                                                 <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
                                                 <span class="uk-text-muted uk-display-block">Institute profile</span>
                                             </a>
+                                            <a href="page_institute_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">Admin profile</span>
+                                            </a>
+                                            <a href="page_institute_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">Teacher profile</span>
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="uk-width-1-3">
@@ -109,98 +140,98 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                 -->
-                 <div class="uk-navbar-flip">
-                    <ul class="uk-navbar-nav user_actions">
-                        <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
-                        <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
-                        
-                        {% if user.profile.designation %}
-                        <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
-                            <div class="uk-dropdown uk-dropdown-xlarge">
-                                <div class="md-card-content">
-                                    <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
-                                        <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
-                                        <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
-                                    </ul>
-                                    <ul id="header_alerts"  class="uk-switcher uk-margin">
-                                        <li>
-                                            <ul class="md-list md-list-addon alert_notice_list">
-                                                {% for notice in user.users_notice|slice:":5" %}
-                                                <li>
-                                                    <a href="{% url 'all_notice_list' %}">
+                    </div> -->
+                
+                    <div class="uk-navbar-flip">
+                        <ul class="uk-navbar-nav user_actions">
+                            <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
+                            <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
+                            
+                            {% if user.profile.designation %}
+                            <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                                <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
+                                <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
+                                    <div class="md-card-content">
+                                        <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
+                                            <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
+                                            <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
+                                        </ul>
+                                        <ul id="header_alerts"  class="uk-switcher uk-margin">
+                                            <li>
+                                                <ul class="md-list md-list-addon alert_notice_list">
+                                                    {% for notice in user.users_notice %}
+                                                    <li>
+                                                        <a href="{% url 'all_notice_list' %}">
+                                                            <div class="md-list-addon-element">
+                                                                <span class="md-user-letters md-bg-cyan">N</span>
+                                                            </div>
+                                                            <div class="md-list-content">
+                                                                <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <ul class="md-list md-list-addon">
+                                                    <li>
                                                         <div class="md-list-addon-element">
-                                                            <span class="md-user-letters md-bg-cyan">N</span>
+                                                            <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
                                                         </div>
                                                         <div class="md-list-content">
-                                                            <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
+                                                            <span class="md-list-heading">Voluptatem omnis.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Consequatur eaque natus esse assumenda aut ab quidem.</span>
                                                         </div>
-                                                    </a>
-                                                </li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <ul class="md-list md-list-addon">
-                                                <li>
-                                                    <div class="md-list-addon-element">
-                                                        <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading">Voluptatem omnis.</span>
-                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Consequatur eaque natus esse assumenda aut ab quidem.</span>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="md-list-addon-element">
-                                                        <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading">Itaque sit officiis.</span>
-                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Ad velit quia possimus officia adipisci dicta enim.</span>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="md-list-addon-element">
-                                                        <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading">Modi odit impedit.</span>
-                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Inventore unde praesentium numquam amet et sunt dolorum.</span>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="md-list-addon-element">
-                                                        <i class="md-list-addon-icon material-icons uk-text-primary">&#xE8FD;</i>
-                                                    </div>
-                                                    <div class="md-list-content">
-                                                        <span class="md-list-heading">Qui et.</span>
-                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Quia pariatur id facere accusantium rerum illum.</span>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>
+                                                    </li>
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">Itaque sit officiis.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Ad velit quia possimus officia adipisci dicta enim.</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">Modi odit impedit.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Inventore unde praesentium numquam amet et sunt dolorum.</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons uk-text-primary">&#xE8FD;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">Qui et.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Quia pariatur id facere accusantium rerum illum.</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endif %}
+                                
+                            <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                                <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
+                                <div class="uk-dropdown uk-dropdown-small">
+                                    <ul class="uk-nav js-uk-prevent">
+                                        <li><a href="{% url 'user_profile' %}">My profile</a></li>
+                                        <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                       
                                     </ul>
                                 </div>
-                            </div>
-                        </li>
-                        {% endif %}
-                            
-                        <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
-                            <div class="uk-dropdown uk-dropdown-small">
-                                <ul class="uk-nav js-uk-prevent">
-                                    <li><a href="{% url 'user_profile' %}">My profile</a></li>
-                                    <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
-                                   
-                                </ul>
-                            </div>
-                        </li>
-                      
-                    </ul>
-                </div>
+                            </li>
+                          
+                        </ul>
+                    </div>
             </nav>
         </div>
         <div class="header_main_search_form">
@@ -210,7 +241,8 @@
                 <button class="header_main_search_btn uk-button-link"><i class="md-icon material-icons">&#xE8B6;</i></button>
                 <script type="text/autocomplete">
                     <ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">
-                                                <li data-value="">
+                       
+                        <li data-value="">
                             <a href="" class="needsclick">
                                <br>
                                 <span class="uk-text-muted uk-text-small"></span>
@@ -230,6 +262,7 @@
     </header><!-- main header end -->
     <!-- main sidebar -->
     <aside id="sidebar_main">
+        
         <div class="sidebar_main_header">
             <div class="sidebar_logo">
                 <a href="{% url 'user_dashboard' %}" class="sSidebar_hide sidebar_logo_large">
@@ -254,7 +287,7 @@
                     
                 </li>
                 
-                <li title="User Profile">
+                <li class="current_section" title="User Profile">
                     <a href="{% url 'user_profile' %}">
                         <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">My Profile</span>
@@ -329,7 +362,7 @@
 
             
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-            <li class="current_section"  title="Admission Requests">
+            <li  title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
                     <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                     <span class="menu_title">Admission Requests</span>
@@ -417,7 +450,7 @@
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion'  request.user.profile.institute.id %}">
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id%}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -466,14 +499,27 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
             </ul>
         </div>
 
-
     </aside><!-- main sidebar end -->
-    <div id="page_content">
-        <div id="page_content_inner">
 
+    <div id="page_content">
+        
+        <div id="page_content_inner">
             
             {% if messages %}
             <div class="md-card md-card-primary">
@@ -486,135 +532,81 @@
           </div>
             </div>
             {% endif %}
-            <div class="md-card uk-margin-medium-bottom">
-                <div class="md-card-content">
-                    <div class="uk-grid">
-                        <div class="uk-width-1-1">
-                            <h3 class="heading_b uk-margin-bottom text-center uk-text-primary">Fill Form to Initiate Admission Process</h3>
-<hr>
+            
 
-                            
-                           
-                            <div class="row">
-                                <div class="col-sm-6" >
-                                  <h3 class="uk-text-primary"Fill Your Information Carefully</h3>
-                                </div>
-                                <div class="col-sm-6 text-right">
-                                    <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
-                                </div>
-                              </div>
-                            <table id="admission_form_table"  >
-                                
-                                <form method="POST" enctype="multipart/form-data" action="{% url 'admission_home' %}">
-                                    {% csrf_token %}
-                                    <tr class="aftr"><td class="admission_form_label required" >First Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="first_name" required></td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label " >Middle Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="middle_name"></td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label " >Last Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="last_name"></td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label n_i required" >Father Name:</td> <td><input type="text" class="form-control form-control-sm" name="father_name" required></td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label n_i required" >Mother Name:</td> <td><input type="text" class="form-control form-control-sm" name="mother_name" required></td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label required" >Date-of-Birth:</td> <td><input type="date" class="form-control form-control-sm" name="date_of_birth" required></td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label" >Gender:</td> <td>
-                                        <select class="form-control form-control-sm" name="gender" required>
-                                            <option value="Male" >Male</option>
-                                            <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
-                                          </select>
-                                    </td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label" >Category:</td> <td>
-                                        <select class="form-control form-control-sm" name="category" required>
-                                            <option value="General" >General</option>
-                                            <option value="sc/st">SC/ST</option>
-                                            <option value="OBC">OBC</option>
-                                          </select>
-                                    </td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label required" >Select School:</td> <td>
-                                        <select class="form-control form-control-sm" name="school" id="selected_institute" required>
-                                            <option selected disabled value="" > -- select school -- </option>
-
-                                            
-                                            {% for school in school_list %}
-                                            <option value="{{school.id}}"  >{{school}}</option>
-                                            {% endfor %}
-                                          </select>
-                                    </td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label required" >Select Class:</td> <td>
-                                        <select class="form-control form-control-sm" name="class" id="fetched_classes_admission" required >
-                                            <option selected disabled value="" > -- select school to choose class -- </option>
-                                           
-                                            
-                                          </select>
-                                    </td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label" >Mobile Number:</td> <td><input type="text"  maxlength="10" class="form-control form-control-sm positive_number" name="mobile_number" placeholder="10 digit mobile number" required></td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label required" >Email:</td> <td><input type="email" class="form-control form-control-sm" name="email"></td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label required" >Nationality:</td> 
-                                        <td>
-                                            <select class="form-control form-control-sm" name="nationality" required >
-                                                <option selected disabled value="" > -- select  -- </option>
-                                                <option value="Indian">Indian</option>
-                                                <option value="Other" >Other</option>
-                                                
-                                              </select>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="aftr"><td class="admission_form_label required" >Address:</td> <td><textarea name="address" class="form-control form-control-sm" rows="2" required></textarea></td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label required" >District:</td> <td><input type="text" class="form-control form-control-sm n_i" name="district" required></td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label required" >State:</td> <td>
-                                        <select class="form-control form-control-sm" name="state" required >
-                                            <option selected disabled value="" > -- select state  -- </option>
-                                            
-                                            {% for state in states_list %}
-                                            <option value="{{state.id}}" >{{state}}</option>
-                                            {% endfor %}
- 
-                                          </select>
-                                    </td></tr>
-
-                                    <tr class="aftr"><td class="admission_form_label required" >Pin Code:</td> <td><input type="number" class="form-control form-control-sm" name="pin_code" required></td></tr>
-
-
-                                    <tr class="aftr"><td class="admission_form_label" >Student Photo:</td> <td> <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="student_pic" required>
-                                        <label class="custom-file-label" for="customFile">Choose file</label>
-                                      </div></td></tr>
-
-                                    <tr><td class="admission_form_label" ></td> <td><input type="submit" class="form-control admission_submit_button" value="Submit" 
-                                    {% if disable_submit %}
-                                        disabled
+            <div class="md-card"> 
+                        <div class="md-card-content" >
+                            <h4 class="heading_a uk-margin-bottom">Search User</h4>
+                            <form  method="POST" action="#" class="form-inline attendance_form" id="child_form">
+                                {% csrf_token %}
+                                  <label style="margin: 4px;">Designation:  </label>
+                                <select id="selected_role" name="selected_role" style="width: 193px !important;margin-right: 20px !important;" class="form-control"  required>
+                                    {% for ds in designation %}
+                                    {% if ds.level_name == "parent" %}
+                                    {% else %}
+                                    <option value={{ds.id}}>{{ds.level_name}}</option>
                                     {% endif %}
-                                         ></td></tr>
-
-
-
-
-
-
-
-
-
-                                </form>
-                            </table>
-                          
+                                    {% endfor %}
+                             </select>
+                             
+                            <label style="margin: 4px;">Name:  </label> 
+                            <input type="text" id="full_name" class="form-control" name='full_name' placeholder="Enter Name" >  
+                            </form>
+                            <script>
+                                $(document).ready(function(){
+                                  $('#full_name').keyup(function(){
+                                      $.ajax({
+                                          type:'POST',
+                                          url:"{% url 'fetch_user_data' %}",
+                                          data:{selected_designation:$("#selected_role").val()
+                                           ,selected_name:$("#full_name").val()
+                                           ,csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                          
+                                          success: function(msg){
+                                              $('#ajax_search_data').html(msg);
+                                          }
+                                      })
+                                  })
+                                })
+                            </script>
+                            <div >                        
                             
-                        </div>
-                    </div>
-                </div>
+                            
+                            <div class="md-card uk-margin-medium-bottom">
+                                <div class="md-card-content">
+                                    <div class="uk-overflow-container" id="ajax_search_data">
+                                        
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            </div>   
+                                              
+                    
             </div>
+            
+            
 
+                    <script>
+                        $(document).ready(function(){
+                          $('#selected_institute').change(function(){
+                              $.ajax({
+                                  type:'POST',
+                                  url:'fetch_intitute_classes/',
+                                  data:{school_id:$("#selected_institute").val(), csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                  
+                                  success: function(msg){
+                                      $('#fetched_classes').html(msg);
+                                  }
+                              })
+                          })
+                        })
+                        </script>
+                    
+                    
+                    
+
+            
     <!-- google web fonts -->
     <script>
         WebFontConfig = {
@@ -625,10 +617,10 @@
                 ]
             }
         };
-        (function() {
+        (function () {
             var wf = document.createElement('script');
             wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+                '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
             wf.type = 'text/javascript';
             wf.async = 'true';
             var s = document.getElementsByTagName('script')[0];
@@ -636,50 +628,40 @@
         })();
     </script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- common functions -->
     <script src="{% static 'main_app/js/common.min.js' %}"></script>
     <!-- uikit functions -->
     <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
     <!-- altair common functions/helpers -->
     <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
-    <script>
-        $(document).ready(function(){
-          $('#selected_institute').change(function(){
-             
-              $.ajax({
-                  type:'POST',
-                  url:'fetch_intitute_classes_for_admission/',
-                  data:{school_id:$("#selected_institute").val(), csrfmiddlewaretoken: '{{ csrf_token }}' },
-                  
-                  success: function(msg){
-                      $('#fetched_classes_admission').html(msg);
-                  }
-              })
-          })
-        })
-        </script>
-    
+
 
     <script>
-        $(function() {
-            if(isHighDensity()) {
-                $.getScript( "static 'main_app/js/custom/dense.min.js'", function(data) {
+        $(function () {
+            if (isHighDensity()) {
+                $.getScript("assets/js/custom/dense.min.js", function (data) {
                     // enable hires images
                     altair_helpers.retina_images();
                 });
             }
-            if(Modernizr.touch) {
+            if (Modernizr.touch) {
                 // fastClick (touch devices)
                 FastClick.attach(document.body);
             }
         });
-        $window.load(function() {
+        $window.load(function () {
             // ie fixes
             altair_helpers.ie_fix();
         });
     </script>
+    
 
+    
 
-<script src="{% static 'main_app/js/script.js' %}"></script>
-</body>
+ 
+    
+    
+    </body>
+
 </html>
