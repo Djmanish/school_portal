@@ -485,7 +485,7 @@
                                                              <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px; height:38px" required>
                                                                     <option selected disabled value="">--Exam Type--</option>
                                                                     {% for exam_type in institute_exam_type %}
-                                                                       <option value="{{exam_type}}"> {{exam_type}}</option>
+                                                                       <option value="{{exam_type.id}}"> {{exam_type}}</option>
                                                                     {% endfor %}
                                                              </select>
                                                            
@@ -534,6 +534,10 @@
                                                                 
                                                             
                                                             <th ><b>Subject Class: {{selected_subject.subject_class}}</b></th>
+                                                            <th ><b>Exam Type: {{exam_type_id}}</b></th>
+                                                            <th ><b>Exam Sr. No.: {{result_exam_type_sr_no}}</b></th>
+
+
                                             
 
 

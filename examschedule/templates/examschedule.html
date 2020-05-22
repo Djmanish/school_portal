@@ -519,6 +519,19 @@
                                                         <table 
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
+                                                        {% if exam_class_subject %}
+                                                        <thead>
+                                                            <tr>
+                                                                
+                                                            
+                                                            <th ><b>Subject Class: {{selected_class}}</b></th>
+                                                            <th ><b>Exam Type: {{selected_exam_type}}</b></th>
+                                                            <th ><b>Exam Sr. No.: {{sr_no}}</b></th>
+
+
+                                                        </tr>
+                                                        </thead>
+                                                        {% endif %}
 
                                                         <tbody>
                                                              
@@ -537,7 +550,7 @@
                                                             <tr >
                                                                 <td ><label><b>Exam Code</b></label></td>
                                                                 <td colspan="6">
-                                                                    <input type="text" value={{institute_exam_schedule_data.code}}-{{selected_class.id}}-{{exam_type_id.exam_type_sr_no}}-{{sr_no}} name="exam_institute_code"  style="text-align: center; font-weight: 500; border: 0ch;"/>
+                                                                    <input type="text" value={{institute_exam_schedule_data.code}}-{{selected_class.id}}-{{selected_exam_type.exam_type_sr_no}}-{{sr_no}} name="exam_institute_code"  style="text-align: center; font-weight: 500; border: 0ch;"/>
                                                                 </td>
 
                                                             </tr>
@@ -554,6 +567,8 @@
                                                             </tr>
 
                                                             {% else %}
+                                                            {% if exam_details%}
+                                                            
                                                             <div  style="padding:0px;" class="md-card-content">
                                                             <div class="uk-overflow-container uk-margin-bottom">
                                                             <div   class="md-card md-card-primary">
@@ -567,6 +582,8 @@
                                                         </div>
                                                     </div>
                                                         </div>
+                                                        {% endif %}
+                                                        
                                                             {% endif %}
 
                                                            
@@ -574,7 +591,7 @@
                                                             
                                                             <tr>
                                                                 <input type="hidden" value="{{selected_class.id}}" name="selected_class_hidden">
-                                                                <input type="hidden" value="{{exam_type_id.id}}" name="exam_type_id_hidden">
+                                                                <input type="hidden" value="{{selected_exam_type.id}}" name="exam_type_id_hidden">
 
                                                                 <input type="hidden" value="{{institute_exam_schedule_data.code.id}}" name="institute_exam_schedule_data_code">
                                                                 <input type="hidden" value="{{sr_no.id}}" name="sr_no">
@@ -582,8 +599,8 @@
                                                             </tr>
                                                           
                                                                     {% for exam_subject in exam_class_subject%}
-                                                                    <tr style="text-align:center;"> 
-                                                                        <td>
+                                                                    <tr> 
+                                                                        <td  style="text-align:center; text-align-last: center;">
                                                                             <div class="form-group">
                                                                                 <select  style="width:150px; background-color: white;-webkit-appearance:none; border:none;" class="form-control"  name="select_exam_subject" required>
                                                                                   <option  value="{{exam_subject.id}}">{{exam_subject}}</option>
@@ -591,7 +608,7 @@
                                                                               </div>
                                                                             
                                                                         </td>
-                                                                        <td>
+                                                                        <td  style="text-align:center; text-align-last: center;">
                                                                             <div class="form-group">
                                                                                 <select id="hide"  style=" width:150px; background-color: white; -webkit-appearance:none; border:none;" class="form-control"  name="select_exam_subject_teacher" required>
                                                                                   <option  value="{{exam_subject.subject_teacher.id}}">{{exam_subject.subject_teacher.profile.first_name}} {{exam_subject.subject_teacher.profile.last_name}}</option>
@@ -599,10 +616,10 @@
                                                                               </div>
                                                                        
                                                                            </td>
-                                                                        <td><div class="form-group"><input type='date', class="form-control", value="", name="select_date" required/></div></td>
-                                                                        <td><div class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value='', min = '00:01', max = '23:59:59', name="select_start_time" required/></div></td>
-                                                                        <td><div class="form-group"><input type='time', onchange="onTimeChange()" ,  class="form-control", value='',min = '00:01',max = '23:59:59', name="select_end_time" required/></div></td>
-                                                                        <td>  <div class="form-group">
+                                                                        <td  style="text-align:center; text-align-last: center;"><div class="form-group"><input type='date', class="form-control", value="", name="select_date" required/></div></td>
+                                                                        <td  style="text-align:center; text-align-last: center;"><div class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value='', min = '00:01', max = '23:59:59', name="select_start_time" required/></div></td>
+                                                                        <td  style="text-align:center; text-align-last: center;"><div class="form-group"><input type='time', onchange="onTimeChange()" ,  class="form-control", value='',min = '00:01',max = '23:59:59', name="select_end_time" required/></div></td>
+                                                                        <td  style="text-align:center; text-align-last: center;">  <div class="form-group">
                                                                            
                                                                             <select class="form-control" name="assign_teacher" required>
                                                                                 <option value="" selected disabled>--Assign Teacher--</option>
