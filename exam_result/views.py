@@ -40,7 +40,7 @@ def exam_result(request,pk):
                     exam_type=etype.id
                     result_exam_type=exam_type
         
-        exam_type_id=ExamType.objects.get(exam_type=result_exam_type)
+        exam_type_id=ExamType.objects.get(pk=result_exam_type)
         result_exam_type_sr_no = request.POST.get('fetch_sr_no')
         
 
@@ -364,6 +364,7 @@ def report_card(request,pk):
               
                 data_marks['subj']=sub_data
                 for e_no in exam_no:
+                  
                   try:
                     student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=selected_student,result_subject=sub_data)
                     data_marks[e_no]=student_data.result_score
