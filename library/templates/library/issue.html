@@ -1,6 +1,5 @@
 <!doctype html>
 {% load static %}
-{% load custom_tags %}
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
 
@@ -14,14 +13,12 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
-    <title>Class Promotion</title>
-
+    <title>My Child</title>
    
-
     <!-- bootstrap css -->
    
 <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
-  <!-- additional styles for plugins --> 
+    <!-- additional styles for plugins -->
         <!-- weather icons -->
         <link rel="stylesheet" href="{% static 'main_app/bower_components/weather-icons/css/weather-icons.min.css' %}" media="all">
         <!-- metrics graphics (charts) -->
@@ -35,7 +32,6 @@
     <!-- flag icons -->
     <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
 
-    
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
 
@@ -50,7 +46,25 @@
     <![endif]-->
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<style>
+#child_form {
 
+border: 2px solid 
+
+lightgray;
+
+padding: 10px;
+
+border-radius: 10px;
+
+background-color:
+
+aliceblue;
+
+
+
+}
+</style>
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -248,6 +262,7 @@
     </header><!-- main header end -->
     <!-- main sidebar -->
     <aside id="sidebar_main">
+        
         <div class="sidebar_main_header">
             <div class="sidebar_logo">
                 <a href="{% url 'user_dashboard' %}" class="sSidebar_hide sidebar_logo_large">
@@ -264,14 +279,15 @@
         
         <div class="menu_section">
             <ul>
-                <li title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
-                    </a> 
+                    </a>
+                    
                 </li>
                 
-                <li title="User Profile">
+                <li class="current_section" title="User Profile">
                     <a href="{% url 'user_profile' %}">
                         <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">My Profile</span>
@@ -321,35 +337,18 @@
             </a>
         </li> 
         {% endif %}
+            
+       
     </ul>
 </li>
 <!-- ending notice menu -->
-
-
-{% if can_setup_fees_permission in user_permissions or user.profile.designation.level_name == "teacher" %}
-<li  title="Fees">
-    <a href="{% url 'fees_home' %}">
-        <span class="menu_icon"><i class="material-icons">date_range</i></span>
-        <span class="menu_title">Fees Setup</span>
-    </a>
-</li>
-           
-{% endif %}
-    
-{% if user.profile.designation.level_name == "parent" %}
-<li  title="Fees">
-    <a href="{% url 'parent_fees' %}">
-        <span class="menu_icon"><i class="material-icons">date_range</i></span>
-        <span class="menu_title">Fees Status</span>
-    </a>
-</li>
-{% endif %}
-    
+                
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
-                    </a>   
+                    </a>
+                    
                 </li>
                 
                <li  title="Institute Schedule">
@@ -357,15 +356,18 @@
                     <span class="menu_icon"><i class="material-icons">schedule</i></span>
                     <span class="menu_title">Schedule</span>
                 </a>
-            </li>               
+            </li>
+               
             {% endif %}  
 
+            
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
                     <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                     <span class="menu_title">Admission Requests</span>
                 </a>
+                
             </li>
 
         {% endif %}
@@ -378,21 +380,29 @@
                             <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                             <span class="menu_title">Approvals</span>
                         </a>
+                        
                     </li>
                     
                     <li  title="Attendance">
+                    
                     <a href="{% url 'attendance' %}">
                             <span class="menu_icon"><i class="material-icons">done_all</i></span>
                             <span class="menu_title">Attendance</span>
                         </a>
+                        
                     </li> 
 
                     <li  title="Class Students">
+                    
                         <a href="{% url 'class_students_list' %}">
                                 <span class="menu_icon"><i class="material-icons">people</i></span>
                                 <span class="menu_title">Class Students</span>
                             </a>
+                            
                         </li> 
+
+                        
+
                     {% endif %}
                    
 
@@ -410,8 +420,10 @@
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam</span>
                                 </a>
+    
                             </li>
                             
+                  
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
@@ -425,6 +437,7 @@
                                     <span class="menu_icon"><i class="material-icons">visibility</i></span>
                                     <span class="menu_title">View Exam Schedule</span>
                                 </a>
+    
                             </li>
                            
                             {% if user.profile.designation.level_name == "teacher"%}
@@ -433,10 +446,11 @@
                                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                                     <span class="menu_title">Exam Result</span>
                                 </a>
+    
                             </li>
-                            <li class="act_item"  title="Class Students">
+                            <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id%}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -445,7 +459,13 @@
                             {% endif %}
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
-                        
+                            <!-- <li>
+                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
+                                    <span class="menu_title">View Exam Result</span>
+                                </a>
+    
+                            </li> -->
                             <li>
                                 <a href="{% url 'report_card' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">file_copy</i></span>
@@ -453,22 +473,54 @@
                                 </a>
     
                             </li>
+                            
+                            <!-- <li>
+                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_title">Marks Chart</span>
+                                </a>
+    
+                            </li> -->
+                          
                             {% endif %}
                         </ul>
+    
                     </li>
 
                     {% endif %} 
+                 
+            
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
                             <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
                             <span class="menu_title">Log Out</span>
                         </a>
                     </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </ul>
         </div>
+
     </aside><!-- main sidebar end -->
+
     <div id="page_content">
+        
         <div id="page_content_inner">
+            
             {% if messages %}
             <div class="md-card md-card-primary">
           <div class=>
@@ -482,143 +534,77 @@
             {% endif %}
             
 
-            <div class="md-card">
-                
-                <div class="md-card-content" >
-                       
-                    <form  method="POST" action="{% url 'class_promotion' request.user.profile.institute.id %}" class="form-inline" id="attendance_form">
-                        {% csrf_token %}
-                    
-                          <label style="margin: 4px;">Select Class:  </label>
-                        <select name="selected_class_promotion" class="form-control"  required>
-                           <option selected disabled value=""> -- select a class -- </option>
-
-                            {% for class in all_classes %}
-                            <option value="{{class.id}}">{{class}}</option>
-                            {% endfor %}
-               
-                            </select>
-                            &nbsp
+            <div class="md-card"> 
+                        <div class="md-card-content" >
+                            <h4 class="heading_a uk-margin-bottom">Search User</h4>
+                            <form  method="POST" action="#" class="form-inline attendance_form" id="child_form">
+                                {% csrf_token %}
+                                  <label style="margin: 4px;">Designation:  </label>
+                                <select id="selected_role" name="selected_role" style="width: 193px !important;margin-right: 20px !important;" class="form-control"  required>
+                                    {% for ds in designation %}
+                                    {% if ds.level_name == "parent" %}
+                                    {% else %}
+                                    <option value={{ds.id}}>{{ds.level_name}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                             </select>
+                             
+                            <label style="margin: 4px;">Name:  </label> 
+                            <input type="text" id="full_name" class="form-control" name='full_name' placeholder="Enter Name" >  
+                            </form>
+                            <script>
+                                $(document).ready(function(){
+                                  $('#full_name').keyup(function(){
+                                      $.ajax({
+                                          type:'POST',
+                                          url:"{% url 'fetch_user_data' %}",
+                                          data:{selected_designation:$("#selected_role").val()
+                                           ,selected_name:$("#full_name").val()
+                                           ,csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                          
+                                          success: function(msg){
+                                              $('#ajax_search_data').html(msg);
+                                          }
+                                      })
+                                  })
+                                })
+                            </script>
+                            <div >                        
                             
-
-                        <input type="submit" value="View" class="md-btn md-btn-primary ">          
-                    </form>
-                   
+                            
+                            <div class="md-card uk-margin-medium-bottom">
+                                <div class="md-card-content">
+                                    <div class="uk-overflow-container" id="ajax_search_data">
+                                        
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            </div>   
+                                              
                     
-                    
-                    <div style="margin: 2px;">
-                          <!-- success message -->
-
-              
-                    </div>
-                   
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                    
-                        <table class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
-                            {% if all_students %}
-                                <tr> 
-                                    <td>
-                                    <h3>Promotes to {{showing_student_for_class}}</h3>
-                                    </td>
-                                    <td>
-                                    
-                                    <select name="promoted_to_class" class="form-control"  required>
-                                       <option selected disabled value=""><b>Promote Class</b></option>
-            
-                                            {% for class in promotes_class %}
-                                            <option value="{{class.id}}">{{class}}</option>
-                                            {% endfor %}
-                                                        
-                                    </select>
-                                    </td>
-                                </tr>
-                                {% endif %}
-                               
-
-                                    <div class="uk-overflow-container uk-margin-bottom">
-                              <tbody>
-                                  
-                                  {% if all_students %}
-                                      
-                                 
-                                      
-                                <tr>
-                                    <th style="text-align:center;" width="10%"><b>Sr. No.</b></th>
-                                    <th style="text-align:center; background-color: white;"><b>First Name</b></th>
-                                    <th style="text-align:center;"><b>Last Name</b></th>
-
-                                    <th style="text-align:center;"><b>Roll No.</b></th>
-                                    <th style="text-align:center;"><b>Status</b></th>
-
-                                </tr>
-                                {% endif %}
-                                
-                                  {% for student in all_students %}
-                                  <tr style="text-align-last: center;">
-                                      <td >{{forloop.counter}}</td>
-                                      <td >
-                                        <div   class="form-group">
-                                            <select style="overflow:hidden; -webkit-appearance: none; text-align: center;  background-color: white; border:none;" class="form-control"  name="student_first_name">
-                                              <option value="{{student.id}}">{{student.first_name}}</option>
-                                            </select>
-                                          </div>
-                                          
-                                    </td>
-                                    <td>
-                                        <div style="text-align: center;"  class="form-group">
-                                            <select style="overflow:hidden; -webkit-appearance: none;  text-align: center; background-color: white; border:none;" class="form-control"  name="student_last_name">
-                                              <option  value="{{student.id}}">{{student.last_name}}</option>
-                                            </select>
-                                          </div>
-                                    </td>
-                                    <td>
-                                        <div style="text-align: center;"  class="form-group">
-                                            <select style="overflow:hidden; -webkit-appearance: none; text-align: center; background-color: white; border:none;" class="form-control"  name="student_roll_no">
-                                              <option  value="{{student.id}}">{{student.roll_number}}</option>
-                                            </select>
-                                          </div>
-                                    </td>
-                                    <td>
-                                        <div  class="form-group">
-                                            <select style="width:100px;text-align: center;"  name="student_promotion_status">
-                                              {% for status in list_promotion_choices %}
-                                                 <option value='{{status}}'>{{status}}</option>
-                                              {% endfor %}
-                                            </select>
-                                          </div>
-                                          
-                                    </td>
-                                  </tr>
-                                 
-                                 
-                                  {% endfor %}
-                                  
-                                  {% if all_students %}
-                                      
-                                 
-                                      
-                                  <tr>
-                                    <td colspan="6">
-                                        <div style="text-align: center;"> 
-                                        <input type="submit" style="background-color: #1976d2;" class="btn btn-primary" value="Submit">
-                                        </div>
-
-                                    </td>
-                                </tr>
-                                {% endif %}
-                              </tbody>
-                           
-                        </div>
-                        </table>
-                   
-
-                    </form>
-               
-                    </div>
-              
-                </div>
             </div>
+            
+            
+
+                    <script>
+                        $(document).ready(function(){
+                          $('#selected_institute').change(function(){
+                              $.ajax({
+                                  type:'POST',
+                                  url:'fetch_intitute_classes/',
+                                  data:{school_id:$("#selected_institute").val(), csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                  
+                                  success: function(msg){
+                                      $('#fetched_classes').html(msg);
+                                  }
+                              })
+                          })
+                        })
+                        </script>
+                    
+                    
+                    
 
             
     <!-- google web fonts -->
@@ -669,25 +655,12 @@
             altair_helpers.ie_fix();
         });
     </script>
+    
 
+    
 
+ 
     
-    
-    <script>
-        document.getElementById('datePicker_attendance').valueAsDate = new Date();
-        $("input[type=date]").datepicker({
-      dateFormat: 'yy-mm-dd',
-      onSelect: function(dateText, inst) {
-        $(inst).val(dateText); // Write the value in the input
-      }
-    });
-    
-    // Code below to avoid the classic date-picker
-    $("input[type=date]").on('click', function() {
-      return false;
-    });
-    </script>
-    <script src=" {% static 'main_app/js/script' %}"></script>
     
     </body>
 

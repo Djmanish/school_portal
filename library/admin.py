@@ -5,3 +5,5 @@ admin.site.register(BookCategory)
 admin.site.register(BookSubCategory)
 admin.site.register(Book)
 admin.site.register(IssueBook)
+admin.site.register(BookCode)
+

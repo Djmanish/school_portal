@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'notices.apps.NoticesConfig',
     'fees',
     'rest_framework',
-    'library'
+    'library',
+    
    
     
 ]

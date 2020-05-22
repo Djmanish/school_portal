@@ -1,0 +1,84 @@
+
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                    <div class="uk-overflow-container">
+                        <table class="uk-table uk-table-hover">
+                            <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Designation</th>
+                                <th>Class</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in user_data %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{i.first_name}}</td>
+                                <td>
+                                    <img class="md-card-head-avatar" src="{{i.profile_pic.url}}" style="width: 40px; height: 40px; margin-top: 0%;" alt=""/>
+                                </td>
+                                <td>{{i.designation}}</td>
+                                <td>{{i.Class}}</td>
+                                <td>
+                                    <a id="{{i.id|slugify}}"  style=" margin-left:0%;vertical-align:middle; font-size: 16px; font-weight: bold;">Select</a>
+                                </td>
+                            </tr>
+                            <script>
+                                $(document).ready(function(){
+                                  $('#{{i.id|slugify}}').click(function(){
+                                      $('#issue_book_modal_btn').click();
+                                      $('#borrower_userid').val('{{i.id}}');
+                                      $('#borrower_name').val('{{i.first_name}} {{i.last_name}}');
+                                      
+                                  })
+                                })
+                            </script>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                    <a type="hidden" id="issue_book_modal_btn" data-uk-modal="{target:'#modal_book_issue'}">
+                    </a>
+                    <div class="uk-modal" id="modal_book_issue">
+                        <div class="uk-modal-dialog">
+                            <div class="uk-modal-header">
+                                <h3 class="uk-modal-title">Issue Book</h3>
+                            </div>
+                            <form  method="POST" action="{% url 'issue_book' %}">
+                                {% csrf_token %}
+                                <input type="hidden" id="borrower_userid" type="text" name="user_id">
+                                <div class="form-group">                                        
+                                        <label >User :</label>
+                                        <input id="borrower_name" type="text" class="form-control form form-control-sm "  required readonly>
+                                    </div>
+                                     
+                                    <div class="form-group">                                                      
+                                        <label >Enter Book Id:</label>
+                                        <input type="text" class="form-control-sm form-control" name="book_id" required>
+                                      </div> 
+                                      
+                                      <div class="form-group">
+                                        <label >Return Date:</label>
+                                        <input type="date" class="form-control-sm form-control" name="return_date" required>
+                                      </div>
+                                                                                     
+                                      <table>
+                                        <tr>
+                                            <td> 
+                                          <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Issue Book</button>
+                                        </td>
+                                        <td style="padding-left:20px;">
+                                <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: #1976d2;width: 140px;">Cancel</button>
+                            </td>
+                        </tr>
+                        </table>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>

@@ -41,6 +41,7 @@
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
@@ -507,16 +508,16 @@
                             
                         </div>
                         <div class="user_content">
-                            <div class="uk-grid" data-uk-grid-margin>
+                            <!-- <div class="uk-grid" data-uk-grid-margin>
                                 <div class="uk-width-medium-1-8" >
                                     <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"  data-uk-modal="{target:'#modal_new_book'}" >
                                         <i class="uk-icon-book"></i>
-                                        Add Book
+                                        Add Book Group
                                     </a>
-                                    <!-- <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"  href="{% url 'add_book' %}" >
+                                    <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"  href="{% url 'add_book' %}" >
                                         <i class="uk-icon-book"></i>
                                         Add Book
-                                    </a> -->
+                                    </a>
                                     <div class="uk-modal" id="modal_new_book">
                                         <div class="uk-modal-dialog">
                                             <div class="uk-modal-header">
@@ -526,11 +527,11 @@
                                                 {% csrf_token %}
                                                 <div class="form-group">
                                                         <label >Book code ( ISBN No / Subject Code ) :</label>
-                                                        <input type="text" class="form-control form form-control-sm " name="book_code" required>
+                              <input type="text" class="form-control form form-control-sm " name="book_code" required>
                                                     </div> 
                                                     <div class="form-group">                                                      
                                                         <label >Book Count:</label>
-                                                        <input type="number" class="form-control-sm form-control" name="book_count" required>
+                                                        <input type="text" class="form-control-sm form-control" name="book_count" required>
                                                       </div> 
                                                       <div class="form-group">
                                                         <label >Book Name:</label>
@@ -584,42 +585,105 @@
                                    
                                 </div>
                                 
-                            </div>
-                            {% if len_books > 0 %}
-                            <div class="md-card uk-margin-medium-bottom">
-                                <div class="md-card-content">
-                                    <div class="uk-overflow-container">
-                                        <table class="uk-table uk-table-hover">
-                                            <thead>
-                                            <tr>
-                                                <th>Sr No.</th>
-                                                <th>Book Code</th>
-                                                <th>Book Name</th>
-                                                <th>Book Category</th>
-                                                <th>Book Sub Category</th>
-                                                <th>Author</th>
-                                                <th>Total Books</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for book in books %}
-                                            <tr>
-                                                <td>{{forloop.counter}}</td>
-                                                <td>{{book.book_code}}</td>
-                                                <td>{{book}}</td>
-                                                <td>{{book.book_category}}</td>
-                                                <td>{{book.book_sub_category}}</td>
-                                                <td>{{book.author}}</td>
-                                                <td>{{10}}</td>
+                            </div> -->
+                            <!-- <div class="md-card-content" >
 
-                                            </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
+                       
+                                <form  method="POST" action="#" class="form-inline attendance_form" id="child_form">
+                                    {% csrf_token %}
+                                      <label style="margin: 4px;">Select Book Code:  </label>
+                                    <select id="book_code" name="book_code" class="form-control"  required>
+                                        <option selected disabled value=""  >                     
+                                        -- select book code --
+                                        </option>
+                                        {% for codes in book_codes %}
+                                        <option value={{codes.id}}>{{codes}}</option>
+                                        {% endfor %}
+                                 </select>
+                                <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">
+                                </form>
+                             
+                                
+                                
+                                </div> -->
+                                <h4 class="heading_a uk-margin-bottom">Book Details</h4>
+                                <!-- <div class="md-card uk-margin-medium-bottom">
+                                    <div class="md-card-content">
+                                        <div class="uk-overflow-container">
+                                            <table class="uk-table uk-table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th>Book Code</th>
+                                                    <th>Book Name</th>
+                                                    <th>Author</th>
+
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>{{book_code}}</td>
+                                                    <td>{{book_code.book_name}}</td>
+                                                    <td>{{book_code.author}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            {{book_count}}
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="uk-width-large-1-3 uk-width-medium-1-2">
+                                    <ul class="md-list md-list-addon">
+                                        <li>
+                                            <div class="md-list-addon-element">
+                                                <input type="checkbox" data-md-icheck checked />
+                                            </div>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">Book Code {{book_code}}</span>
+                                                <span class="uk-text-small uk-text-muted"><b>Name</b> -         {{book_code.book_name}}</span>
+                                                <span class="uk-text-small uk-text-muted"><b>Category</b> -     {{book_code.book_category}}</span>
+                                                <span class="uk-text-small uk-text-muted"><b>Sub Category</b> - {{book_code.book_sub_category}}</span>
+                                                <span class="uk-text-small uk-text-muted"><b>Author</b> -       {{book_code.author}}</span>
+                                                <span class="uk-text-small uk-text-muted"><b>Publication</b> -  {{book_code.publications}}</span>
+                                                <span class="uk-text-small uk-text-muted"><b>Edition</b> -      {{book_code.edition}}</span>
+                                                <span class="uk-text-small uk-text-muted"><b>Count</b> -        {{book_code.book_count}}</span>
+                                                <script type="text/javascript">
+                                                    $(document).ready(function() {
+                                                        $('input[type="checkbox"]').click(function(e) {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                        </li>
+                                        
+                                    </ul>
+                                </div>
+                                <h3 class="heading_a uk-margin-bottom">Enter Book IDs</h3>
+
+                                <div class="md-card">
+                                    <div class="md-card-content large-padding">
+                                        <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'add_new_book' %}">
+                                            {% csrf_token %}
+                                            <div class="uk-grid" data-uk-grid-margin>
+                                                {% for count in range %}
+                                                <div class="uk-width-medium-1-5">
+                                                    <div class="parsley-row">
+                                                        <label for="fullname">Enter Book ID {{forloop.counter}}<span class="req" style="color: red;">*</span></label>
+                                                        <input type="text" name="fullname" required class="form-control form-control-sm" />
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                           <input name="hide" type="hidden" value="{{book_code.id}}">
+                                            <div class="uk-grid" style="text-align: center;margin-top: 10px;">
+                                                <div class="uk-width-1-1">
+                                                    <button type="submit" class="md-btn md-btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                            </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -675,10 +739,7 @@
             altair_helpers.ie_fix();
         });
     </script>
-
-
-    
-    
+        
 </body>
 
 </html>
