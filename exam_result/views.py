@@ -308,19 +308,37 @@ def report_card(request,pk):
                         student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
                         data_marks[e_no]=student_data.result_score
                   except: 
-                      data_marks[e_no]=0
+                      data_marks[e_no]=None
+
                 marks_data=[]
                 for key,value in data_marks.items():
                     if key=="subj":
                       pass
                     else:
                       marks_data.append(value)
-                print(marks_data)
-                marks=list(map(int, marks_data))
+                      
+               
+                try:
+                  marks=list(map(int, marks_data))
+                  sumValue=sum(marks)
                 
-                sumValue=sum(marks)
-                sumValueper=sumValue/e
-                data_marks['avg']=round(sumValueper,2)
+                  sumValueper=sumValue/e
+                  data_marks['avg']=round(sumValueper,2)
+                  
+                except: 
+                  marks=marks_data
+                  sum=0
+                  for m in marks:
+                    try:
+                      sumValue= sum+m
+                      sum=sumValue/e
+                      print(sumValue)
+                      print(sum)
+                      data_marks['avg']=round(sum,2)
+                     
+                    except: 
+                      pass
+              
                 result_data.append(data_marks)
               context={
                 'institute_student':institute_student,
@@ -608,14 +626,14 @@ def class_promotion(request,pk):
                 'list_promotion_choices':list_promotion_choices,
                 'promotes_class':promotes_class,
             }
-            
+            messages.success(request, 'Students Promoted successfully')
             return render(request, 'class_promotion.html', context)
         # Outer Context
         context= {
             'all_classes': all_classes,
             
         }
-        messages.success(request, 'Students Promoted successfully') 
+         
         return render(request, 'class_promotion.html', context)
 
   else:
