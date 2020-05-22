@@ -215,11 +215,16 @@ def examschedule_view(request,pk):
 
             if request.method=="POST":
                 select_exam_type = request.POST.get('selected_exam_type')
+                if select_exam_type==None:
+                    etype=ExamType.objects.get(institute= request.user.profile.institute, exam_type=select_exam_type)
+                    exam_type=etype.id
+                    select_exam_type=exam_type
+                exam_type_data = ExamType.objects.get(pk=select_exam_type)
                 select_exam_type_no = request.POST.get('selected_exam_type_no')
                 if request.user.profile.designation.level_name=='student':
                         selected_class = request.user.profile.Class
                         
-                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class)
+                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=selected_class)
                         
                         context = {
                         'selected_class':selected_class,
@@ -239,7 +244,7 @@ def examschedule_view(request,pk):
                                 first_class_id = first_class.id
                                 select_class_for_schedule= first_class_id
                         selected_class = Classes.objects.get(pk=select_class_for_schedule)
-                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
+                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
                         if exam_details:
                         
                                 context = {
