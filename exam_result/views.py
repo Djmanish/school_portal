@@ -33,13 +33,10 @@ def exam_result(request,pk):
         result_exam_type=request.POST.get('result_exam_type')
         schedule_exam_type=ExamDetails.objects.filter(institute=request.user.profile.institute)
         institute_pk = request.user.profile.institute.pk
-       
-       
         if result_exam_type==None:
                     etype=ExamType.objects.get(institute= request.user.profile.institute, exam_type=result_exam_type)
                     exam_type=etype.id
                     result_exam_type=exam_type
-        
         exam_type_id=ExamType.objects.get(pk=result_exam_type)
         result_exam_type_sr_no = request.POST.get('fetch_sr_no')
         
@@ -217,15 +214,28 @@ def student_view(request,pk):
     return render(request, 'studentview.html' , context)
 
 
+
+
+
+
 def fetch_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
-  
-  max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
+  exam_type=ExamType.objects.get(pk=exam_type_id)
+  max_exam_sr_no = ExamDetails.objects.filter(exam_type=exam_type).values('exam_sr_no').distinct()
   individual_result_sr_no = "<option>--Exam Type No.--</option>"
   for result_sr_no in max_exam_sr_no:
     individual_result_sr_no = individual_result_sr_no + f"<option value='{result_sr_no['exam_sr_no']}'>"+result_sr_no['exam_sr_no']+"</option>" 
     
   return HttpResponse(individual_result_sr_no)
+
+
+
+
+
+
+
+
+
 
 
 def chart_sr_no(request):
