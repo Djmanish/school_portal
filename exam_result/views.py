@@ -316,29 +316,22 @@ def report_card(request,pk):
                       pass
                     else:
                       marks_data.append(value)
-                      
-               
-                try:
-                  marks=list(map(int, marks_data))
-                  sumValue=sum(marks)
-                
-                  sumValueper=sumValue/e
-                  data_marks['avg']=round(sumValueper,2)
-                  
-                except: 
-                  marks=marks_data
-                  sum=0
-                  for m in marks:
-                    try:
-                      sumValue= sum+m
-                      sum=sumValue/e
-                      print(sumValue)
-                      print(sum)
-                      data_marks['avg']=round(sum,2)
-                     
-                    except: 
+                print(marks_data)
+                sum=0
+                for m in marks_data:
+                    if m is None: 
                       pass
-              
+                    else:
+                      sum= sum+m
+
+                     
+                sumValue=sum
+                print(sumValue)
+                sumper=sumValue/e
+                print(sumper)
+                data_marks['avg']=round(sumper,2)
+                      # print(sum)
+                   
                 result_data.append(data_marks)
               context={
                 'institute_student':institute_student,
