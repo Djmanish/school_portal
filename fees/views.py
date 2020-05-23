@@ -551,5 +551,23 @@ def update_offline_fee(request):
         student_id = fee_record.student.id
         return HttpResponseRedirect(f"/fees/fees/pay/?student={student_id}")
 
-def go_back(request):
-    print('this is go back')
+
+
+
+
+# function for resetting due date fees record
+def ResetFees(request):
+    selected_due_date = request.POST.get('due_date')
+    records = Students_fees_table.objects.filter(due_date= selected_due_date, institute= request.user.profile.institute).delete()
+
+    proceesed_record = Student_Tag_Processed_Record.objects.filter(due_date=selected_due_date,  institute= request.user.profile.institute ).delete()
+    
+    if(records[0] > 0):
+        FeesResetHistory.objects.create(institute= request.user.profile.institute,
+        reset_done_by= request.user.profile,
+        due_date= selected_due_date,
+        reset_time= timezone.now(),
+        comment= request.POST.get('comment'))
+    
+    
+    return HttpResponse("Fees Reset Successfully !")
