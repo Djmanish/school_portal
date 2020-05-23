@@ -590,7 +590,7 @@
                                     </a>
                                 </div>
                                 <div class="uk-width-medium-1-5">
-                                    <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="javascript:void(0)">
+                                    <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;" data-uk-modal="{target:'#return_book'}">
                                         <i class="uk-icon-level-down"></i>
                                         Return Book
                                     </a>
@@ -607,6 +607,36 @@
                                         Fine
                                     </a>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="uk-modal" id="return_book">
+                            <div class="uk-modal-dialog">
+                                <div class="uk-modal-header">
+                                    <h3 class="uk-modal-title">Book Return</h3>
+                                </div>
+                                <form  method="POST" action="{% url 'return_book' %}">
+                                    {% csrf_token %}
+                                    
+                                        
+                                            <div class="uk-input-group">
+                                                <label style="margin-bottom: 5px;"><span class="ast"> * </span> Enter Book Id</label>
+                                                <input type="text" class="form-control form form-control-sm" required />
+                                                <span class="uk-input-group-addon">
+                                                    <a href="#"><i class="material-icons" style="margin-top: 20px !important;color: #1976d2; font-size: x-large;">search</i></a>
+                                                </span>
+                                            </div>
+                                                                                      
+                                          <!-- <table>
+                                            <tr>
+                                                <td> 
+                                              <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
+                                            </td>
+                                            <td style="padding-left:20px;">
+                                    <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white; color:black;width: 140px;">Cancel</button>
+                                </td>
+                            </tr>
+                            </table> -->
+                            </form>
                             </div>
                         </div>
                     </div>

@@ -21,6 +21,7 @@ from AddChild.models import *
 from notices.models import *
 from holidaylist.models import *
 from exam_result.models import *
+from library.models import *
 from django.contrib.sessions.models import Session
 from examschedule.models import *
 from rest_framework.views import APIView
@@ -31,6 +32,7 @@ from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
 from django.core.exceptions import PermissionDenied
+
 
 
 # Create your views here.
@@ -352,7 +354,13 @@ def dashboard(request):
     
     # class attendance status 
     
-    
+    # Library Book Status
+    if request.user.profile.designation != "parent":
+            request.user.student_books=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
+            print(request.user.student_books)
+            request.user.student_books_len = len(request.user.student_books)
+
+
 # starting class teacher's  class status for last six days
     last_six_days_list = []
     ct_present_status = []
@@ -507,6 +515,7 @@ def dashboard(request):
                 a.total_unpaid_student=a.total_unpaid.count()
                 total_student=UserProfile.objects.filter(institute = request.user.profile.institute,Class=a,designation__level_name="student").count()
                 a.total_student_in_class=total_student
+                
         # Starting fees status for Student view
         if request.user.profile.designation.level_name == "student":
             request.user.student_fees_st=Students_fees_table.objects.filter(student=request.user.profile,institute = request.user.profile.institute,student_class=request.user.profile.Class) 
@@ -591,7 +600,8 @@ def dashboard(request):
         'holiday':holiday,
         'final_data': final_data,
         'exam_she':exam_she,
-        'std_random':std_random,        
+        'std_random':std_random,  
+          
 }
     return render(request, 'main_app/dashboard.html' , context)
 

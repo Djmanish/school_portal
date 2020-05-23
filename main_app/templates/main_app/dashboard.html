@@ -1028,7 +1028,7 @@
                                     {% endfor %}
                                     
                                     
-                                       
+                                        
                                 </tbody>
                             </table>
                             {% if user.users.has_other_pages %}
@@ -1236,43 +1236,42 @@
                    </div>
                </div>               
                {% endif %}   
-               {% if user.profile.designation %}
-               {% if user.profile.designation.level_name == "student" %}
-                    {% if user.student_fees_st_len > 0 %}
-                    <div class="uk-width-medium-1-2">
-                        <div class="md-card">
-                            <div class="md-card-content">
-                                <h4>My Dues</h4>
+               
+<!-- student library book status -->
+{% if request.user.profile.designation.level_name != "parent" %}
+                <div class="uk-width-medium-1-2">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <h4>Library Books Issue</h4>
+                            <div class="uk-overflow-container">
                                 <table class="uk-table uk-table-condensed uk-table-hover">
                                     <thead>
-                                    <tr>
-                                        <th class="uk-text-nowrap">Sr No.</th>
-                                        <th class="uk-text-nowrap">Dues</th>
-                                        <th class="uk-text-nowrap">Amount</th>
-                                    </tr>
+                                        <tr>
+                                            <th class="uk-text-nowrap" style="text-align: center;">Book Name</th>
+                                            <th class="uk-text-nowrap" style="text-align: center;">Due Date</th>
+                                                                                                                  
+                                        </tr>                                       
                                     </thead>
                                     <tbody>
-                                        <br>
-                                        {% for sn in user.student_fees_st %}
+                                        {% for stdr in user.student_books %}
                                         <tr>
-                                            <td class="uk-width-3-10 uk-text-nowrap">{{forloop.counter}}</td>
-                                            <td class="uk-width-3-10 uk-text-nowrap">{{sn.due_date}}</td>
-                                            {% if sn.total_due_amount == 0 %}
-                                                <!-- <td class="uk-width-3-10 uk-text-nowrap" style="color:#7cb342"><b>Paid</b></td> -->
-                                            {% else %}
-                                                <td class="uk-width-3-10 uk-text-nowrap">{{sn.total_due_amount}}</td>
-                                            {% endif %}
-                                        </tr>
-                                        {% endfor %}
+                                        <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;">{{stdr.book_name}}</td>
+                                        <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;">{{stdr.expiry_date}}</td>
+                                        </tr>  
+                                      
+                                        {% endfor %}                                    
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    </div>               
-                    {% endif %} 
+                    </div>
+                </div>
+    {% endif %}
+
                     
-                    
-                    {% endif %} {% endif %}  
+                     
+
+
                {% if user.profile.designation.level_name == "student" %}
                {% if user.exam_type_child != None %}
                     <div class="uk-width-medium-1-2">

@@ -497,7 +497,7 @@
                            
                             <div class="row">
                                 <div class="col-sm-6" >
-                                  <h3 class="uk-text-primary"Fill Your Information Carefully</h3>
+                                  <h3 class="uk-text-primary">Fill Your Information Carefully</h3>
                                 </div>
                                 <div class="col-sm-6 text-right">
                                     <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
@@ -507,19 +507,19 @@
                                 
                                 <form method="POST" enctype="multipart/form-data" action="{% url 'admission_home' %}">
                                     {% csrf_token %}
-                                    <tr class="aftr"><td class="admission_form_label required" >First Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="first_name" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>First Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="first_name" required></td></tr>
 
                                     <tr class="aftr"><td class="admission_form_label " >Middle Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="middle_name"></td></tr>
 
                                     <tr class="aftr"><td class="admission_form_label " >Last Name:</td> <td><input type="text" class="form-control form-control-sm n_i" name="last_name"></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label n_i required" >Father Name:</td> <td><input type="text" class="form-control form-control-sm" name="father_name" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label n_i" ><span class="ast">*</span>Father Name:</td> <td><input type="text" class="form-control form-control-sm" name="father_name" required></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label n_i required" >Mother Name:</td> <td><input type="text" class="form-control form-control-sm" name="mother_name" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label n_i" ><span class="ast">*</span>Mother Name:</td> <td><input type="text" class="form-control form-control-sm" name="mother_name" required></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label required" >Date-of-Birth:</td> <td><input type="date" class="form-control form-control-sm" name="date_of_birth" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>Date-of-Birth:</td> <td><input type="date" class="form-control form-control-sm" name="date_of_birth" required></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label" >Gender:</td> <td>
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>Gender:</td> <td>
                                         <select class="form-control form-control-sm" name="gender" required>
                                             <option value="Male" >Male</option>
                                             <option value="Female">Female</option>
@@ -527,7 +527,7 @@
                                           </select>
                                     </td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label" >Category:</td> <td>
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>Category:</td> <td>
                                         <select class="form-control form-control-sm" name="category" required>
                                             <option value="General" >General</option>
                                             <option value="sc/st">SC/ST</option>
@@ -535,7 +535,7 @@
                                           </select>
                                     </td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label required" >Select School:</td> <td>
+                                    <tr class="aftr"><td class="admission_form_label required" ><span class="ast">*</span>Select School:</td> <td>
                                         <select class="form-control form-control-sm" name="school" id="selected_institute" required>
                                             <option selected disabled value="" > -- select school -- </option>
 
@@ -546,7 +546,7 @@
                                           </select>
                                     </td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label required" >Select Class:</td> <td>
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>Select Class:</td> <td>
                                         <select class="form-control form-control-sm" name="class" id="fetched_classes_admission" required >
                                             <option selected disabled value="" > -- select school to choose class -- </option>
                                            
@@ -554,11 +554,11 @@
                                           </select>
                                     </td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label" >Mobile Number:</td> <td><input type="text"  maxlength="10" class="form-control form-control-sm positive_number" name="mobile_number" placeholder="10 digit mobile number" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>Mobile Number:</td> <td><input type="text"  maxlength="10" class="form-control form-control-sm positive_number" name="mobile_number" placeholder="10 digit mobile number" required></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label required" >Email:</td> <td><input type="email" class="form-control form-control-sm" name="email"></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>Email:</td> <td><input type="email" class="form-control form-control-sm" name="email"></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label required" >Nationality:</td> 
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>Nationality:</td> 
                                         <td>
                                             <select class="form-control form-control-sm" name="nationality" required >
                                                 <option selected disabled value="" > -- select  -- </option>
@@ -569,11 +569,11 @@
                                         </td>
                                     </tr>
 
-                                    <tr class="aftr"><td class="admission_form_label required" >Address:</td> <td><textarea name="address" class="form-control form-control-sm" rows="2" required></textarea></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>Address:</td> <td><textarea name="address" class="form-control form-control-sm" rows="2" required></textarea></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label required" >District:</td> <td><input type="text" class="form-control form-control-sm n_i" name="district" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>District:</td> <td><input type="text" class="form-control form-control-sm n_i" name="district" required></td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label required" >State:</td> <td>
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>State:</td> <td>
                                         <select class="form-control form-control-sm" name="state" required >
                                             <option selected disabled value="" > -- select state  -- </option>
                                             
@@ -584,10 +584,10 @@
                                           </select>
                                     </td></tr>
 
-                                    <tr class="aftr"><td class="admission_form_label required" >Pin Code:</td> <td><input type="number" class="form-control form-control-sm" name="pin_code" required></td></tr>
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>Pin Code:</td> <td><input type="number" class="form-control form-control-sm" name="pin_code" required></td></tr>
 
 
-                                    <tr class="aftr"><td class="admission_form_label" >Student Photo:</td> <td> <div class="custom-file">
+                                    <tr class="aftr"><td class="admission_form_label" ><span class="ast">*</span>Student Photo:</td> <td> <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="student_pic" required>
                                         <label class="custom-file-label" for="customFile">Choose file</label>
                                       </div></td></tr>

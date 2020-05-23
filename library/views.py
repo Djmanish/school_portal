@@ -18,7 +18,7 @@ def book(request):
     institute_data=Institute.objects.get(pk=request.user.profile.institute.id)
     categories= BookCategory.objects.filter(institute_category=request.user.profile.institute)
     sub_categories= BookSubCategory.objects.filter(institute_subcategory=request.user.profile.institute)
-    books= Book.objects.filter(book_institute=request.user.profile.institute)
+    books= BookCode.objects.filter(book_institute=request.user.profile.institute)
     len_books=len(books)
     context_data = {
       'institute_data':institute_data,  
@@ -159,13 +159,19 @@ def issue_book(request):
 def user_id_data(request):
       print("Hello World")
       if request.method == 'POST':
-            user_d= request.POST['user_id'] 
-            user_pro= UserProfile.objects.get(pk=user_d)
-            print(user_pro)
+            issue_book_id= request.POST['book_id']
+            issuebookf= IssueBook.objects.get(book_id=issue_book_id, return_date__isnull=True)
             context_data = {
-              'user_pro':user_pro,
+              'issuebookf':issuebookf,
             }
             return render(request, 'library/user_id_data.html', context_data)
       
+def return_book(request):
+      if request.method == 'POST':
+            bookid= request.POST.get('book_id')
+            search_book_rt= Book.objects.get(book_id=bookid)
+            issue_book_search= IssueBook.objects.filter(book_name=search_book_rt,  return_date__isnull=True)
+            print(issue_book_search)
+      return HttpResponse('Hello World')
       
 

@@ -498,7 +498,7 @@
                                 <div>
                                     <div class="form-group">
                                     
-                                            <label for="uk_dp_1">Date</label>
+                                            <label for="uk_dp_1">Date:</label>
                                             <input type="date" class="form-control" name='holiday_date' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{edit_holiday.date|date:'Y-m-d'}}" required >
 
                                         
@@ -516,7 +516,7 @@
                                             value="{{edit_holiday.name}}" required="required">
                                     </div>
                                     <div class="form-group">
-                                        <label for="sel1">Applicable</label>
+                                        <label for="sel1">Applicable:</label>
                                         <select class="form-control" name="holiday_applicable" required>
                                             {% if edit_holiday.applicable %}
                                             <option selected>{{edit_holiday.applicable}}</option>
@@ -528,12 +528,12 @@
                                    
 
                                     <div class="form-group">
-                                        <label>Holiday Type</label>
+                                        <label>Holiday Type:</label>
                                         <input type="text" class="form-control n_i" name='holiday_type'
                                             value="{{edit_holiday.holiday_type}}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="sel1">Holiday Email</label>
+                                        <label for="sel1">Holiday Email:</label>
                                         <select class="form-control" name="holiday_email" required>
                                             {% if edit_holiday.holiday_email %}
                                             <option selected>{{edit_holiday.holiday_email}}</option>
@@ -553,7 +553,7 @@
                                      </select>
                                       </div> -->
                                       <div class="form-group">
-                                        <label for="sel1">Holiday Notification</label>
+                                        <label for="sel1">Holiday Notification:</label>
                                         <select class="form-control" name="holiday_notification" required>
                                             {% if edit_holiday.holiday_notification %}
                                             <option selected>{{edit_holiday.holiday_notification}}</option>
