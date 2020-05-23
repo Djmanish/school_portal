@@ -37,10 +37,10 @@ class IssueBook(models.Model):
     issued_by= models.CharField(max_length=50)
     issued_date= models.DateTimeField(null=True)
     expiry_date= models.DateTimeField(null=True)
-    return_date= models.DateTimeField(null=True)
+    return_date= models.DateTimeField(null=True, blank=True)
     description= models.TextField(max_length=100, blank=True)
-    delay_counter= models.IntegerField(null=True)
+    delay_counter= models.IntegerField(null=True, blank= True)
 
     def __str__(self):
-       return self.user_name
+       return str(self.user_name)
 
