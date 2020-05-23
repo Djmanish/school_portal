@@ -89,95 +89,69 @@ def delete_test_type(request, pk):
 
 
 def exam_schedule(request,pk):
-    inst = request.user.profile.institute.id
+        inst = request.user.profile.institute.id
 
-    if pk==inst:
+        if pk!=inst:
+                raise PermissionDenied 
         institute_exam_schedule_data = Institute.objects.get(pk=pk)
         institute_exam_schedule = ExamDetails.objects.filter(institute=institute_exam_schedule_data)
 
         # fetch the teachers of current institute
         designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
         institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk)
-       
-
 
         #  fetch the value of selected class from the dropdown menu
         exam_class = Classes.objects.filter(institute=request.user.profile.institute)
-        #     select_class_for_schedule = request.POST.get('selected_class')
-        #     selected_class = Classes.objects.get(pk=select_class_for_schedule)
-            
-        select_class_for_schedule = request.POST.get('selected_class')
-        if select_class_for_schedule == None:
-                    first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
-                    first_class_id = first_class.id
-                    select_class_for_schedule= first_class_id
-        selected_class = Classes.objects.get(pk=select_class_for_schedule)
-        
+        exam_type_schedule= ExamType.objects.filter(institute=request.user.profile.institute)
         institute_pk = request.user.profile.institute.pk
 
-        # fetching the value of exam from the given drop down
-            
-        exam_type_schedule= ExamType.objects.filter(institute=request.user.profile.institute)
-        if exam_type_schedule:
-                     pass
-        else:
-
-                    messages.info(request, 'It seems there are no exam types in the institute. First create the exam type then you can create exam schedule !')
-                    
-                    return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
-        
-        select_exam_for_schedule = request.POST.get('selected_exam_type')
-         
-        if select_exam_for_schedule==None:
-                   etype=ExamType.objects.filter(institute= request.user.profile.institute).first()
-                   exam_type=etype.id
-                   select_exam_for_schedule=exam_type
-        exam_type_id=ExamType.objects.get(pk=select_exam_for_schedule)
-            
-              #  to fetch the length of exam limit from exam type
-        exam_type_limit=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=exam_type_id)
-        for exam_limit in exam_type_limit:
-                limit=exam_limit.exam_max_limit
-                limit_exam=int(limit)
-
-        #  to fetch the value of Subject and Subject Teacher
-        exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
-
-        # Count the number if type the exam type selected
-        sr_no=ExamDetails.objects.filter(exam_type__exam_type=exam_type_id,exam_class=selected_class).values('exam_sr_no').distinct().count()+1
-            
-        if sr_no<=limit_exam:
+        if request.method=="POST":
+                select_class_for_schedule = request.POST.get('selected_class')
+                selected_class = Classes.objects.get(pk=select_class_for_schedule)
+                select_exam_for_schedule = request.POST.get('selected_exam_type')
+                selected_exam_type = ExamType.objects.get(pk=select_exam_for_schedule)
+                
+                
+                exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
+                sr_no=ExamDetails.objects.filter(exam_type__exam_type=selected_exam_type,exam_class=selected_class).values('exam_sr_no').distinct().count()+1
+                exam_type_limit=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=selected_exam_type)
+                for exam_limit in exam_type_limit:
+                        limit=exam_limit.exam_max_limit
+                        limit_exam=int(limit)
+                
+                if sr_no<=limit_exam:
                     pass
-        else:
+                else:
                     messages.error(request, 'Exam Limit has exceeded')
                     return HttpResponseRedirect(f'/examschedule/examschedule/{institute_pk}')
-        
-        
-        # if len(exam_class_subject)==0:
-        #         messages.error(request, 'No subjects Found for Selected Class')
-        #         return redirect('examschedule')    
-        
-        context={
-                        'institute_exam_schedule_data':institute_exam_schedule_data,  
+
+                if exam_class_subject:
+
+                        context={
                         'exam_class':exam_class,
-                        'exam_class_subject':exam_class_subject,
                         'institute_teachers':institute_teachers,
                         'exam_type_schedule':exam_type_schedule,
+                        'exam_class_subject':exam_class_subject,
                         'selected_class':selected_class,
-                        'exam_type_id':exam_type_id,
-                        
+                        'selected_exam_type':selected_exam_type,
                         'sr_no':sr_no,
-                        'institute_exam_schedule':institute_exam_schedule,
-                        'select_class_for_schedule':selected_class,
-                        'select_exam_for_schedule':exam_type_id,
-                        
+                        'institute_exam_schedule_data':institute_exam_schedule_data,
 
+                        
                         }
-        
+                        return render(request,'examschedule.html',context)
+                else:
+                        messages.error(request, 'No subjects Found for Selected Class')
+                        return HttpResponseRedirect(f'/examschedule/examschedule/{institute_pk}')
+
+        context={
+                'exam_class':exam_class,
+                'institute_teachers':institute_teachers,
+                'exam_type_schedule':exam_type_schedule,
+                
+                
+                }
         return render(request,'examschedule.html',context)
-     
-    else:
-        raise PermissionDenied   
 
 def create_exam_schedule(request, pk):
         
@@ -198,7 +172,7 @@ def create_exam_schedule(request, pk):
                 exam_code=request.POST.get('exam_institute_code')
                 exam_sr_no = request.POST.get('sr_no')
                 sr_no=ExamDetails.objects.filter(exam_type__exam_type=select_exam_type,exam_class=selected_class).values('exam_sr_no').distinct().count()+1
-                print(sr_no)
+               
                 for subject,subject_teacher,date,start_time,end_time,assign_teacher in zip(request.POST.getlist('select_exam_subject'), request.POST.getlist('select_exam_subject_teacher'),request.POST.getlist('select_date'),request.POST.getlist('select_start_time'),request.POST.getlist('select_end_time'),request.POST.getlist('assign_teacher')):
                                 
                       
@@ -241,11 +215,16 @@ def examschedule_view(request,pk):
 
             if request.method=="POST":
                 select_exam_type = request.POST.get('selected_exam_type')
+                if select_exam_type==None:
+                    etype=ExamType.objects.get(institute= request.user.profile.institute, exam_type=select_exam_type)
+                    exam_type=etype.id
+                    select_exam_type=exam_type
+                exam_type_data = ExamType.objects.get(pk=select_exam_type)
                 select_exam_type_no = request.POST.get('selected_exam_type_no')
                 if request.user.profile.designation.level_name=='student':
                         selected_class = request.user.profile.Class
                         
-                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
+                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=selected_class)
                         
                         context = {
                         'selected_class':selected_class,
@@ -265,7 +244,7 @@ def examschedule_view(request,pk):
                                 first_class_id = first_class.id
                                 select_class_for_schedule= first_class_id
                         selected_class = Classes.objects.get(pk=select_class_for_schedule)
-                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= select_exam_type,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
+                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
                         if exam_details:
                         
                                 context = {
@@ -348,8 +327,9 @@ def delete_examschedule(request, pk):
 
 def fetch_max_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
+  exam_type=ExamType.objects.get(pk=exam_type_id)
   
-  max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
+  max_exam_sr_no = ExamDetails.objects.filter(exam_type=exam_type_id).values('exam_sr_no').distinct()
  
   individual_sr_no = "<option>--Exam Type No.--</option>"
   for sr_no in max_exam_sr_no:

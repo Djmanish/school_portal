@@ -1,6 +1,7 @@
 
  
 $(document).ready(function(){
+  
     $('.n_i').keypress(function (e) {
         var regex = new RegExp("^[a-zA-Z ]+$");
         var strigChar = String.fromCharCode(!e.charCode ? e.which : e.charCode);
@@ -31,8 +32,13 @@ $(document).ready(function(){
         return false
       });
 
+      
+// starting script for due date fees alert
 
-  
+
+
+// starting script for due date fees alert
+
   });
 
 $(document).ready(function () {
@@ -107,8 +113,7 @@ function formatAMPM(date) {
 
 
 
-$('document').ready(function(){
-  
+$('document').ready(function(){ 
   $('option').mousedown(function(e) {
     e.preventDefault();
     $(this).prop('selected', !$(this).prop('selected'));

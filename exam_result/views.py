@@ -33,14 +33,11 @@ def exam_result(request,pk):
         result_exam_type=request.POST.get('result_exam_type')
         schedule_exam_type=ExamDetails.objects.filter(institute=request.user.profile.institute)
         institute_pk = request.user.profile.institute.pk
-       
-       
         if result_exam_type==None:
                     etype=ExamType.objects.get(institute= request.user.profile.institute, exam_type=result_exam_type)
                     exam_type=etype.id
                     result_exam_type=exam_type
-        
-        exam_type_id=ExamType.objects.get(exam_type=result_exam_type)
+        exam_type_id=ExamType.objects.get(pk=result_exam_type)
         result_exam_type_sr_no = request.POST.get('fetch_sr_no')
         
 
@@ -143,6 +140,7 @@ def examresult(request,pk):
                 data_list=list( marks_list)
                 marks_list=list(map(int, data_list))
                 check_limit=int(exam_max_marks)
+          
          
           for score in marks_list:
                   
@@ -151,7 +149,7 @@ def examresult(request,pk):
                               pass
                   
                   else:
-                              messages.info(request, 'Your Marks is greater than the Exam Type Maximum Marks')
+                              messages.info(request, 'Entered Marks is greater than the Exam Type Maximum Marks')
                               return redirect(f'/examresult/examresult/{inst_id}')
               
                 
@@ -216,15 +214,28 @@ def student_view(request,pk):
     return render(request, 'studentview.html' , context)
 
 
+
+
+
+
 def fetch_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
-  
-  max_exam_sr_no = ExamDetails.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
+  exam_type=ExamType.objects.get(pk=exam_type_id)
+  max_exam_sr_no = ExamDetails.objects.filter(exam_type=exam_type).values('exam_sr_no').distinct()
   individual_result_sr_no = "<option>--Exam Type No.--</option>"
   for result_sr_no in max_exam_sr_no:
     individual_result_sr_no = individual_result_sr_no + f"<option value='{result_sr_no['exam_sr_no']}'>"+result_sr_no['exam_sr_no']+"</option>" 
     
   return HttpResponse(individual_result_sr_no)
+
+
+
+
+
+
+
+
+
 
 
 def chart_sr_no(request):
@@ -239,6 +250,8 @@ def chart_sr_no(request):
 
 
 def report_card(request,pk):
+ 
+  
   inst = request.user.profile.institute.id
 
   if pk==inst:
@@ -261,6 +274,9 @@ def report_card(request,pk):
           # if select_exam_type=="Overall":
           #   return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}')
           if request.user.profile.designation.level_name=='student':
+
+              institute_student=request.user.profile.institute
+              student_class=request.user.profile.Class
               select_exam_type = request.POST.get('result_exam_type')
               
               if select_exam_type=="Overall":
@@ -286,11 +302,14 @@ def report_card(request,pk):
               result_data=[]
               for sub_data in resultsubject:
                 data_marks={}
-              
                 data_marks['subj']=sub_data
                 for e_no in exam_no:
-                    student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
-                    data_marks[e_no]=student_data.result_score
+                  try:
+                        student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
+                        data_marks[e_no]=student_data.result_score
+                  except: 
+                      data_marks[e_no]=None
+
                 marks_data=[]
                 for key,value in data_marks.items():
                     if key=="subj":
@@ -298,13 +317,25 @@ def report_card(request,pk):
                     else:
                       marks_data.append(value)
                 print(marks_data)
-                marks=list(map(int, marks_data))
-                
-                sumValue=sum(marks)
-                sumValueper=sumValue/e
-                data_marks['avg']=round(sumValueper,2)
+                sum=0
+                for m in marks_data:
+                    if m is None: 
+                      pass
+                    else:
+                      sum= sum+m
+
+                     
+                sumValue=sum
+                print(sumValue)
+                sumper=sumValue/e
+                print(sumper)
+                data_marks['avg']=round(sumper,2)
+                      # print(sum)
+                   
                 result_data.append(data_marks)
               context={
+                'institute_student':institute_student,
+                'student_class':student_class,
                     'select_exam_type':exam_type,
                     'all_exam':all_exam,
                     'exam_no':exam_no,
@@ -320,6 +351,11 @@ def report_card(request,pk):
           if request.user.profile.designation.level_name=='parent':
               select_exam_type = request.POST.get('result_exam_type')
               selected_student=User.objects.get(pk=request.POST.get('selected_student'))
+              student_class= selected_student.profile.Class
+              institute_student=selected_student.profile.institute
+
+
+             
               if select_exam_type=="Overall":
                 select_exam_type = request.POST.get('result_exam_type')
                 selected_student=User.objects.get(pk=request.POST.get('selected_student'))
@@ -349,10 +385,12 @@ def report_card(request,pk):
               
                 data_marks['subj']=sub_data
                 for e_no in exam_no:
-                    
-                    student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=selected_student,result_subject=sub_data)
                   
+                  try:
+                    student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=selected_student,result_subject=sub_data)
                     data_marks[e_no]=student_data.result_score
+                  except:
+                    data_marks[e_no]=0
                 marks_data=[]
                 for key,value in data_marks.items():
                     if key=="subj":
@@ -371,6 +409,8 @@ def report_card(request,pk):
                 
 
               context={
+                    'institute_student':institute_student,
+                    'student_class':student_class,
                     'select_exam_type':exam_type,
                     'all_exam':all_exam,
                     'exam_no':exam_no,
@@ -392,6 +432,7 @@ def report_card(request,pk):
         
   else:
         raise PermissionDenied
+
 
 
 def overall_result(request,pk,student_pk):
@@ -578,14 +619,14 @@ def class_promotion(request,pk):
                 'list_promotion_choices':list_promotion_choices,
                 'promotes_class':promotes_class,
             }
-            
+            messages.success(request, 'Students Promoted successfully')
             return render(request, 'class_promotion.html', context)
         # Outer Context
         context= {
             'all_classes': all_classes,
             
         }
-        messages.success(request, 'Students Promoted successfully') 
+         
         return render(request, 'class_promotion.html', context)
 
   else:

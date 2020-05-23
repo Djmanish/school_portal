@@ -16,6 +16,21 @@ class BookSubCategory(models.Model):
     def __str__(self):
        return self.book_sub_category_name
 
+class BookCode(models.Model):
+    code=models.CharField(max_length=20, null=True, unique=True)
+    book_count= models.IntegerField(null=True)
+    book_institute = models.ForeignKey(to=Institute, related_name="bookcode_institute", on_delete=models.PROTECT, null=True, blank=True)
+    book_name= models.CharField(max_length=50)
+    book_category= models.ForeignKey(to=BookCategory,on_delete=models.CASCADE, related_name='bookcode_category')
+    book_sub_category= models.ForeignKey(to=BookSubCategory,on_delete=models.CASCADE, related_name='bookcode_sub_category')
+    author= models.CharField(max_length=50)
+    publications= models.CharField(max_length=50)
+    edition= models.CharField(max_length=50)
+    class Meta:
+        unique_together = ('code', 'book_institute',)
+    def __str__(self):
+        return self.code
+
 class Book(models.Model):
     book_code=models.CharField(max_length=20, null=True)
     book_id= models.CharField(max_length=20, null=True)
@@ -27,19 +42,26 @@ class Book(models.Model):
     publications= models.CharField(max_length=50)
     edition= models.CharField(max_length=50)
     book_count= models.IntegerField(null=True)
+    class Meta:
+        unique_together = ('book_code', 'book_id', 'book_institute' )
     def __str__(self):
        return self.book_name
 
 class IssueBook(models.Model):
-    user_name= models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='user_name', null=False, blank=False)
-    book_name= models.ForeignKey(to=Book, on_delete=models.CASCADE, related_name='issued_book_name', null=False, blank=False)
+    user_name= models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='user_name', null=True, blank=False)
+    book_name= models.ForeignKey(to=Book, on_delete=models.CASCADE, related_name='issued_book_name', null=True, blank=False)
     issue_book_institute = models.ForeignKey(to=Institute, related_name="issue_book_institute", on_delete=models.CASCADE, null=True, blank=True)
-    issued_by= models.CharField(max_length=50)
-    issued_date= models.DateTimeField(null=True)
+    issued_by= models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='issued_by', null=True, blank=False)
+    issued_date= models.DateTimeField(null=True,)
     expiry_date= models.DateTimeField(null=True)
     return_date= models.DateTimeField(null=True, blank=True)
+<<<<<<< HEAD
     description= models.TextField(max_length=100, blank=True)
     delay_counter= models.IntegerField(null=True, blank= True)
+=======
+    description= models.TextField(blank=True)
+    delay_counter= models.IntegerField(null=True, blank=True)
+>>>>>>> 07bc06270f2e8e9712810a6257a3d7661f2007a5
 
     def __str__(self):
        return str(self.user_name)

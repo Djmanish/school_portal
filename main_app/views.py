@@ -826,7 +826,7 @@ def edit_profile(request, pk):
             updated_state= State.objects.get(pk=request.POST['state'])
             user_info.state= updated_state 
         
-        user_info.country= request.POST['country']
+        # user_info.country= request.POST['country']
         user_info.pin_code= request.POST['pin_code']
         user_info.facebook_link= request.POST['facebook_link']
         user_info.class_current_year=current_year
