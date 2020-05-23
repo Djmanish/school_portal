@@ -308,7 +308,8 @@ def report_card(request,pk):
                         student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
                         data_marks[e_no]=student_data.result_score
                   except: 
-                      data_marks[e_no]=0
+                      data_marks[e_no]=None
+
                 marks_data=[]
                 for key,value in data_marks.items():
                     if key=="subj":
@@ -316,11 +317,21 @@ def report_card(request,pk):
                     else:
                       marks_data.append(value)
                 print(marks_data)
-                marks=list(map(int, marks_data))
-                
-                sumValue=sum(marks)
-                sumValueper=sumValue/e
-                data_marks['avg']=round(sumValueper,2)
+                sum=0
+                for m in marks_data:
+                    if m is None: 
+                      pass
+                    else:
+                      sum= sum+m
+
+                     
+                sumValue=sum
+                print(sumValue)
+                sumper=sumValue/e
+                print(sumper)
+                data_marks['avg']=round(sumper,2)
+                      # print(sum)
+                   
                 result_data.append(data_marks)
               context={
                 'institute_student':institute_student,
@@ -608,14 +619,14 @@ def class_promotion(request,pk):
                 'list_promotion_choices':list_promotion_choices,
                 'promotes_class':promotes_class,
             }
-            
+            messages.success(request, 'Students Promoted successfully')
             return render(request, 'class_promotion.html', context)
         # Outer Context
         context= {
             'all_classes': all_classes,
             
         }
-        messages.success(request, 'Students Promoted successfully') 
+         
         return render(request, 'class_promotion.html', context)
 
   else:
