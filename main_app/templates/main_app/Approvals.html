@@ -484,6 +484,18 @@
     </aside><!-- main sidebar end -->
     <div id="page_content">
         <div id="page_content_inner">
+            
+            {% if messages %}
+            <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+            {% endif %}
 
             <h3 class="heading_b uk-margin-bottom">My Approvals</h3>
             <div class="md-card uk-margin-medium-bottom">

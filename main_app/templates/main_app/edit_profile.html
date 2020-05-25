@@ -774,7 +774,7 @@ $('#fdata').change(function(){
 
 
                               <div class="form-group">
-                                <label >Mobile:</label>
+                                <label class="required" >Mobile:</label>
                                 <input type="text" class="form-control" name='mobile_number' value="{{user_info.mobile_number|default:''}}" pattern="[1-9]{1}[0-9]{9}" required='required'>
                               </div>
                             
@@ -814,14 +814,14 @@ $('#fdata').change(function(){
                                   
                                 </select>
                               </div>
-                              <div class="form-group">
+                              <!-- <div class="form-group">
                                 <label class="required">Country:</label>
                                 <input type="text" class="form-control n_i" name='country' value="{{user_info.country}}" required>
-                              </div>
+                              </div> -->
 
                               <div class="form-group">
                                 <label class="required">Pin Code:</label>
-                                <input type="text" class="form-control" name='pin_code' value="{{user_info.pin_code}}" required>
+                                <input type="text" class="form-control" name='u_pin_code' value="{{user_info.pin_code|default:''}}" required>
                               </div>
 
                               <div class="form-group"> 
