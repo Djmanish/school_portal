@@ -33,6 +33,7 @@
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
@@ -575,7 +576,158 @@
                             
                         </div>
                         <div class="user_content">
-                            <div class="uk-grid" data-uk-grid-margin style="margin-left: 30px;">
+                            <div class="user_content">
+             
+                                <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
+                                    <li class="uk-active"><a href="#">Issue Book</a></li>
+                                     <li><a href="#">Return Books</a></li>                                     
+                                     <li><a href="#">Books</a></li>
+                                     
+                                    
+                                         
+                                    
+                                    <!-- <li><a href="#">Posts</a></li> -->
+                                </ul>
+                                <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
+                                    <!-- Start Issue Book Tab -->
+                                    <li>
+                                    <div class="uk-width-medium-1-5">
+                                        <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'issuebook' %}">
+                                            <i class="uk-icon-level-up"></i>
+                                            Issue Book
+                                        </a>
+                                    </div>
+                                    </li>
+                                    <!-- End Issue Book Tab -->
+                                    <!-- Start Return Book Tab -->
+                                    <li>
+                                    <div class="uk-width-medium-1-5">
+                                        <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;" data-uk-modal="{target:'#return_book'}">
+                                            <i class="uk-icon-level-down"></i>
+                                            Return Book
+                                        </a>
+                                    </div>
+                                    </li> 
+                                    <!-- End Return Book Tab -->
+                                    <!-- Start Book Tab -->
+                                    <li>
+                                        <div class="uk-grid" data-uk-grid-margin>
+                                            <div class="uk-width-medium-1-8" >
+                                                <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"  data-uk-modal="{target:'#modal_new_book'}" >
+                                                    <i class="uk-icon-book"></i>
+                                                    Add Book
+                                                </a>
+                                                <!-- <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"  href="{% url 'add_book' %}" >
+                                                    <i class="uk-icon-book"></i>
+                                                    Add Book
+                                                </a> -->
+                                                <div class="uk-modal" id="modal_new_book">
+                                                    <div class="uk-modal-dialog">
+                                                        <div class="uk-modal-header">
+                                                            <h3 class="uk-modal-title">Add Book Group</h3>
+                                                        </div>
+                                                        <form  method="POST" action="{% url 'add_book_group' %}">
+                                                            {% csrf_token %}
+                                                            <div class="form-group">
+                                                                    <label >Book code ( ISBN No / Subject Code ) :</label>
+                                                                    <input type="text" class="form-control form form-control-sm " name="book_code" required>
+                                                                </div> 
+                                                                <div class="form-group">                                                      
+                                                                    <label >Book Count:</label>
+                                                                    <input type="number" class="form-control-sm form-control" name="book_count" required>
+                                                                  </div> 
+                                                                  <div class="form-group">
+                                                                    <label >Book Name:</label>
+                                                                    <input type="text" class="form-control-sm form-control" name="book_name" required>
+                                                                  </div>
+                                                                  <div class="form-group">
+                                                                    <label for="sel1">Select Category:</label>
+                                                                    <select class="form-control-sm form-control" name="book_category" required>
+                                                                        <option selected disabled value="">--- Select ---</option>
+                                                                        {% for i in categories %}
+                                                                        <option value={{i.id}}>{{i}}</option>
+                                                                        {% endfor %}
+                                                                     
+                                                                    </select>
+                                                                  </div> 
+                                                                  <div class="form-group">
+                                                                    <label for="sel1">Select Sub Category:</label>
+                                                                    <select class="form-control-sm form-control" name="book_sub_category" required>
+                                                                        <option selected disabled value="">--- Select ---</option>
+                                                                        {% for j in sub_categories %}
+                                                                        <option value={{j.id}}>{{j}}</option>
+                                                                        {% endfor %}
+                                                                     
+                                                                    </select>
+                                                                  </div> 
+                                                                  <div class="form-group">
+                                                                    <label >Author Name:</label>
+                                                                    <input type="text" class="form-control-sm form-control" name="author_name" required>
+                                                                  </div>
+                                                                  <div class="form-group">
+                                                                    <label >Publications:</label>
+                                                                    <input type="text" class="form-control-sm form-control" name="publications" required>
+                                                                  </div>
+                                                                  <div class="form-group">
+                                                                    <label >Edition:</label>
+                                                                    <input type="text" class="form-control-sm form-control" name="editions" required>
+                                                                  </div>                                               
+                                                                  <table>
+                                                                    <tr>
+                                                                        <td> 
+                                                                      <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add Book</button>
+                                                                    </td>
+                                                                    <td style="padding-left:20px;">
+                                                            <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:white; color: black ;width: 140px;">Cancel</button>
+                                                        </td>
+                                                    </tr>
+                                                    </table>
+                                                    </form>
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
+                                            
+                                        </div>
+                                        
+                                        <div class="md-card uk-margin-medium-bottom">
+                                            <div class="md-card-content">
+                                                <div class="uk-overflow-container">
+                                                    <table class="uk-table uk-table-hover">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Sr No.</th>
+                                                            <th>Book Code</th>
+                                                            <th>Book Name</th>
+                                                            <th>Book Category</th>
+                                                            <th>Book Sub Category</th>
+                                                            <th>Author</th>
+                                                            <th>Total Books</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for book in books %}
+                                                        <tr>
+                                                            <td>{{forloop.counter}}</td>
+                                                            <td>{{book.code}}</td>
+                                                            <td>{{book.book_name}}</td>
+                                                            <td>{{book.book_category}}</td>
+                                                            <td>{{book.book_sub_category}}</td>
+                                                            <td>{{book.author}}</td>
+                                                            <td>{{book.book_count}}</td>
+            
+                                                        </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </li>                                             
+                                <!-- Add Book Tab End -->
+                                        </div>
+                            <!-- <div class="uk-grid" data-uk-grid-margin style="margin-left: 30px;">
                                 <div class="uk-width-medium-1-5" >
                                     <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'book' %}" >
                                         <i class="uk-icon-book"></i>
@@ -607,24 +759,45 @@
                                         Fine
                                     </a>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="uk-modal" id="return_book">
                             <div class="uk-modal-dialog">
                                 <div class="uk-modal-header">
                                     <h3 class="uk-modal-title">Book Return</h3>
                                 </div>
-                                <form  method="POST" action="{% url 'return_book' %}">
-                                    {% csrf_token %}
-                                    
-                                        
-                                            <div class="uk-input-group">
-                                                <label style="margin-bottom: 5px;"><span class="ast"> * </span> Enter Book Id</label>
-                                                <input type="text" class="form-control form form-control-sm" required />
-                                                <span class="uk-input-group-addon">
-                                                    <a href="#"><i class="material-icons" style="margin-top: 20px !important;color: #1976d2; font-size: x-large;">search</i></a>
-                                                </span>
+                                    <script>
+                                        $(document).ready(function(){
+                                          $("#issue_data").keyup(function(){
+                                            $.ajax({
+                                                type:'POST',
+                                                url:"{% url 'return_book' %}",
+                                                data:{issue_dt:$("#issue_data").val()
+                                                ,csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                
+                                                success: function(msg){
+                                                    $('#ajax_issue_data').html(msg);
+                                                }
+                                            })
+                                          });
+                                        });
+                                        </script>
+                                            <div class="form-group">
+                                                <label><span class="ast"> * </span>Book Id :</label>
+                                                <input id="issue_data" type="text" class="form-control form form-control-sm " name="book_code" required>
                                             </div>
+                                            <!-- <div class="uk-input-group">
+                                                <label style="margin-bottom: 5px;"><span class="ast"> * </span> Enter Book Id</label>
+                                                <input id="issue_data" type="text" class="form-control form form-control-sm" required />
+                                                <span class="uk-input-group-addon">
+                                                    <a id="myfunction"><i class="material-icons" style="margin-top: 20px !important;color: #1976d2; font-size: x-large;">search</i></a>
+                                                    
+                                                </span>
+                                            </div> -->
+                                            <form method="POST" id="ajax_issue_data" action="{% url 'book_return' %}">
+
+                                            </form>
+                                            
                                                                                       
                                           <!-- <table>
                                             <tr>
@@ -636,7 +809,9 @@
                                 </td>
                             </tr>
                             </table> -->
-                            </form>
+                           
+                           
+                            
                             </div>
                         </div>
                     </div>
