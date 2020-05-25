@@ -228,7 +228,7 @@ def examschedule_view(request,pk):
                         
                         context = {
                         'selected_class':selected_class,
-                        'select_exam_type':select_exam_type,
+                        'exam_type_data':exam_type_data,
                         'select_exam_type_no':select_exam_type_no,
                         'exam_details': exam_details,
                         'institute_exam_schedule':institute_exam_schedule,
@@ -251,7 +251,7 @@ def examschedule_view(request,pk):
                                 'select_class_for_schedule':select_class_for_schedule,
                                 'exam_class':exam_class,
                                 'selected_class':selected_class,
-                                'select_exam_type':select_exam_type,
+                                'exam_type_data':exam_type_data,
                                 'select_exam_type_no':select_exam_type_no,      
                                 'exam_details': exam_details,
                                 'institute_exam_schedule':institute_exam_schedule,
@@ -267,6 +267,7 @@ def examschedule_view(request,pk):
               'exam_class':exam_class,
               'institute_exam_schedule':institute_exam_schedule,
               'institute_exam_type':institute_exam_type,
+              
              
                      }
             return render(request,'update_examschedule.html', context)
