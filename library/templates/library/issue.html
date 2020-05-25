@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
-    <title>My Child</title>
+    <title>Issue Book</title>
    
     <!-- bootstrap css -->
    
@@ -262,7 +262,7 @@ aliceblue;
     </header><!-- main header end -->
     <!-- main sidebar -->
     <aside id="sidebar_main">
-        
+
         <div class="sidebar_main_header">
             <div class="sidebar_logo">
                 <a href="{% url 'user_dashboard' %}" class="sSidebar_hide sidebar_logo_large">
@@ -276,18 +276,17 @@ aliceblue;
             </div>
             
         </div>
-        
+
         <div class="menu_section">
             <ul>
-                <li  title="Dashboard">
+                <li title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
-                    </a>
-                    
+                    </a> 
                 </li>
                 
-                <li class="current_section" title="User Profile">
+                <li title="User Profile">
                     <a href="{% url 'user_profile' %}">
                         <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">My Profile</span>
@@ -304,15 +303,14 @@ aliceblue;
                 {% endif %}
                     
 
-                {% if user.profile.institute %}
+                {% if user.profile.institute and user.profile.status == 'approve' %}
                 <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
-
-                
+      
 <!-- starting notice menu -->
 <li  title="Notices">
     <a href="">
@@ -337,18 +335,35 @@ aliceblue;
             </a>
         </li> 
         {% endif %}
-            
-       
     </ul>
 </li>
 <!-- ending notice menu -->
-                
+
+
+{% if can_setup_fees_permission in user_permissions or user.profile.designation.level_name == "teacher" %}
+<li  title="Fees">
+    <a href="{% url 'fees_home' %}">
+        <span class="menu_icon"><i class="material-icons">date_range</i></span>
+        <span class="menu_title">Fees Setup</span>
+    </a>
+</li>
+
+{% endif %}
+    
+{% if user.profile.designation.level_name == "parent" %}
+<li  title="Fees">
+    <a href="{% url 'parent_fees' %}">
+        <span class="menu_icon"><i class="material-icons">date_range</i></span>
+        <span class="menu_title">Fees Status</span>
+    </a>
+</li>
+{% endif %}
+    
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
-                    </a>
-                    
+                    </a>   
                 </li>
                 
                <li  title="Institute Schedule">
@@ -356,18 +371,15 @@ aliceblue;
                     <span class="menu_icon"><i class="material-icons">schedule</i></span>
                     <span class="menu_title">Schedule</span>
                 </a>
-            </li>
-               
-            {% endif %}  
+            </li>               
+           
 
-            
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
                     <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                     <span class="menu_title">Admission Requests</span>
                 </a>
-                
             </li>
 
         {% endif %}
@@ -377,32 +389,36 @@ aliceblue;
                 {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
                     <li  title="Approvals">
                         <a href="{% url 'approvals' user.profile.institute.pk %}">
-                            <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
+                            <span class="menu_icon"><i class="material-icons">how_to_reg</i>
+                                {% if user.approval_request > 0 %}
+                                <span class="uk-badge" style="background-color: red;">                                
+                                {{user.approval_request}}                                     
+                                </span>
+                                {% endif %}
+                        </span>
                             <span class="menu_title">Approvals</span>
                         </a>
-                        
                     </li>
                     
                     <li  title="Attendance">
-                    
                     <a href="{% url 'attendance' %}">
                             <span class="menu_icon"><i class="material-icons">done_all</i></span>
                             <span class="menu_title">Attendance</span>
                         </a>
-                        
                     </li> 
+                    <li class="current_section" title="Library">
+                        <a href="{% url 'library' %}">
+                                <span class="menu_icon"><i class="material-icons">local_library</i></span>
+                                <span class="menu_title">Library</span>
+                            </a>
+                        </li> 
 
                     <li  title="Class Students">
-                    
                         <a href="{% url 'class_students_list' %}">
                                 <span class="menu_icon"><i class="material-icons">people</i></span>
                                 <span class="menu_title">Class Students</span>
                             </a>
-                            
                         </li> 
-
-                        
-
                     {% endif %}
                    
 
@@ -420,10 +436,8 @@ aliceblue;
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam</span>
                                 </a>
-    
                             </li>
                             
-                  
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
@@ -437,7 +451,6 @@ aliceblue;
                                     <span class="menu_icon"><i class="material-icons">visibility</i></span>
                                     <span class="menu_title">View Exam Schedule</span>
                                 </a>
-    
                             </li>
                            
                             {% if user.profile.designation.level_name == "teacher"%}
@@ -446,11 +459,10 @@ aliceblue;
                                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                                     <span class="menu_title">Exam Result</span>
                                 </a>
-    
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion' request.user.profile.institute.id%}">
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -459,13 +471,7 @@ aliceblue;
                             {% endif %}
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
-                            <!-- <li>
-                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
-                                    <span class="menu_title">View Exam Result</span>
-                                </a>
-    
-                            </li> -->
+                        
                             <li>
                                 <a href="{% url 'report_card' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">file_copy</i></span>
@@ -473,45 +479,18 @@ aliceblue;
                                 </a>
     
                             </li>
-                            
-                            <!-- <li>
-                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
-                                    <span class="menu_title">Marks Chart</span>
-                                </a>
-    
-                            </li> -->
-                          
                             {% endif %}
                         </ul>
-    
                     </li>
 
+                    {% endif %}  
                     {% endif %} 
-                 
-            
                 <li title="Log Out">
                         <a href="{% url 'auth_logout' %}">
                             <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
                             <span class="menu_title">Log Out</span>
                         </a>
                     </li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </ul>
         </div>
 
@@ -536,21 +515,23 @@ aliceblue;
 
             <div class="md-card"> 
                         <div class="md-card-content" >
-                            <h4 class="heading_a uk-margin-bottom">Search User</h4>
+                            <h4 class="heading_a uk-margin-bottom">Select User For Book Issue</h4>
                             <form  method="POST" action="#" class="form-inline attendance_form" id="child_form">
                                 {% csrf_token %}
                                   <label style="margin: 4px;">Designation:  </label>
                                 <select id="selected_role" name="selected_role" style="width: 193px !important;margin-right: 20px !important;" class="form-control"  required>
                                     {% for ds in designation %}
                                     {% if ds.level_name == "parent" %}
-                                    {% else %}
-                                    <option value={{ds.id}}>{{ds.level_name}}</option>
+                                    {% elif ds.level_name == "student" %}
+                                    <option value={{ds.id}}>Student</option>                                    
                                     {% endif %}
                                     {% endfor %}
+                                    
+                                    <option value="100">Staff</option>
                              </select>
                              
                             <label style="margin: 4px;">Name:  </label> 
-                            <input type="text" id="full_name" class="form-control" name='full_name' placeholder="Enter Name" >  
+                            <input type="text" id="full_name" class="form-control" name='full_name' placeholder="Search User" >  
                             </form>
                             <script>
                                 $(document).ready(function(){
@@ -572,14 +553,12 @@ aliceblue;
                             <div >                        
                             
                             
-                            <div class="md-card uk-margin-medium-bottom">
-                                <div class="md-card-content">
+                            
+                                
                                     <div class="uk-overflow-container" id="ajax_search_data">
                                         
                                     </div>
-                                </div>
-                            
-                            </div>
+                               
                             </div>   
                                               
                     

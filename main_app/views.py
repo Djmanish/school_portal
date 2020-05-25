@@ -357,8 +357,32 @@ def dashboard(request):
     # Library Book Status
     if request.user.profile.designation != "parent":
             request.user.student_books=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
-            print(request.user.student_books)
-            request.user.student_books_len = len(request.user.student_books)
+            # request.user.student_books_len = len(request.user.student_books)
+            request.user.booksdue=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
+            print(request.user.booksdue)
+            count_delay=timezone.now()
+            for i in request.user.student_books:
+                # ed = i.expiry_date
+                if count_delay > i.expiry_date:
+                    i.delay = count_delay - i.expiry_date
+                else:
+                    i.delay = 0    
+
+            # ex_date = request.user.student_books.expiry_date
+            # print(ex_date)
+
+            
+            # if count_delay > ex_date:
+            #     a= count_delay - ex_date
+            #     print(a)
+            # else:
+            #     print("not hell")
+            
+            # sum_in=0
+            # for i in a:
+            #     sum_in = sum_in+i.total_due_amount
+            # request.user.sum_out=sum_in           
+         
 
 
 # starting class teacher's  class status for last six days
@@ -826,8 +850,8 @@ def edit_profile(request, pk):
             updated_state= State.objects.get(pk=request.POST['state'])
             user_info.state= updated_state 
         
-        # user_info.country= request.POST['country']
-        user_info.pin_code= request.POST['pin_code']
+        # user_info.pin_code= request.POST.get['u_pin_code']
+        user_info.pin_code= request.POST['u_pin_code']
         user_info.facebook_link= request.POST['facebook_link']
         user_info.class_current_year=current_year
         user_info.class_next_year=next_year

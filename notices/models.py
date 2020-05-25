@@ -8,7 +8,7 @@ class Notification_Category(models.Model):
     name = models.CharField(max_length=30, null=True)
 
     def __str__(self):
-        return str(self.institute+" "+self.name)
+        return str(self.institute)+" "+str(self.name)
 
 
 
