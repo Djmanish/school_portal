@@ -1,4 +1,6 @@
+
 <!doctype html>
+
 {% load static %}
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 9]><!-->
@@ -31,6 +33,7 @@
     display: none !important;
     background-color: #1976d2;
 }
+
     
     </style>
     
@@ -483,40 +486,35 @@
         <tbody >
             
             
-            {% for exam  in exam_type_list %}
+            
             
           <tr>
-            
+              <td><b>Subjects</b>
+                  </td>
+            {% for exam  in type_exam %}
+            <td></td>
             <td><b>
                 {{exam}}
             
             </b></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            
+           
+            {% endfor %}
+        <td></td>
+
+
+            <td><b>Final Score</b></td>
           </tr>
-          <tr>
-            <th >
-                Subjects
-            </th>
-            <th></th>
-            <th></th>
-            <th >
-              % of Final Score
-            </th>
-            
-          </tr>
-            {% for data in e_data %}
+          
+         
+            {% for data in sub_percent_list %}
                     
-                    {% if exam in data.values %}
+                 
+                    
             <tr>
                
                 {% for k,v in data.items %}
                 
-                <td class={{forloop.counter|slugify}}>
+                <td>
                     {{v}}
                 </td>
                 <td>
@@ -524,10 +522,10 @@
                 </td>
            
                 {% endfor %}
-                {% endif %}
+              
              </tr>
  {% endfor %}
- {% endfor %} 
+  
         </tbody>
         
                                                     </table>

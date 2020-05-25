@@ -16,6 +16,6 @@ urlpatterns = [
     path('issuebook/',views.issuebook,name='issuebook'),
     path('fetch_user_data/',views.fetch_user_data,name='fetch_user_data'),
     path('issue_book/',views.issue_book,name='issue_book'),
-    path('user_id_data/',views.user_id_data,name='user_id_data'),
+    path('book_return/',views.book_return,name='book_return'),
     path('return_book/',views.return_book,name='return_book'),
 ]
