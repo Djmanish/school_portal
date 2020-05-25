@@ -482,7 +482,7 @@
                                                     
                                                     {% if user.profile.designation.level_name == "parent" %}
                                                         
-                                                    &nbsp
+                                                    
                                                         
                                                                                
                                                     <td>
@@ -492,7 +492,7 @@
 
                                                         {% for student in parent_student_list %}
                                                         
-                                                           <option value={{student.id}}>{{student.first_name}} {{student.last_name}}</option>
+                                                           <option value={{student.id}}>{{student}}</option>
                                                         {% endfor %}
                                                    
                                                  </select>
@@ -520,54 +520,64 @@
                                                         <table
                                                         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues" >
+                                                       
+                                                          
+                                                {% if result_data %}
+                                                <tr>
+                                                    <td>
+                                                    <button id="savePDFbutton" class="md-btn md-btn-primary" onclick="savePDF()">
+                                                        <span class="menu_icon"><i class="material-icons" style="color: white ;">print</i></span>
+                                                        Save as PDF
+                                                    </button>
+                                                    </td>
+                                                </tr>
+                                                {% endif %}
+                                                        
+                                                    <tbody id="myresult">
                                                         {% if result_data %}
+                                                        <tr  >
+                                                            <th colspan="1", style="color: black; ">Institute Name: {{institute_student}}</th>
+                                                       <th style="color: black;">
+                                                        Exam:{{select_exam_type}}
+                                                       </th>
+                                                        </tr>
                                                         <tr>
+                                                            <th colspan="1", style="color: black;">Class: {{student_class}}</th>
+                                                        <th></th>
+                                                        </tr>
+                                                       
+                                                       
+                                                        <tr >
+                                                            <tr>&nbsp&nbsp
+                                                                <th><b>Subjects</b></th>
+                                                                <td>
+                                                                    
+                                                                </td>
+                                                               
+                                                                <th>
+                                                                    Marks
+                                                                    
+                                                                </th>
+                                                            </tr>
+                                                            <td></td>
+                                                            {% for e_no in exam_no %}
+                                                            <td><b>
+                                                                {{e_no}} 
+                                                            </b>   
+                                                            </td>
+                                                            {% endfor%}
                                                             <td>
-                                                            <button id="savePDFbutton" class="md-btn md-btn-primary" onclick="savePDF()">
-                                                                <span class="menu_icon"><i class="material-icons" style="color: white ;">print</i></span>
-                                                                Save as PDF
-                                                            </button>
+                                                                <b>
+                                                               Total Marks
+                                                            </b>
+                                                            </td>
+                                                            <td>
+                                                                <b>
+                                                                % of Final Score
+                                                            </b>
                                                             </td>
                                                         </tr>
                                                         {% endif %}
-                                                                
-                                                            <tbody id="myresult">
-                                                                {% if result_data %}
-                                                                
-                                                                <tr >
-                                                                    <td style="color: black; text-align: center; "><b>Institute Name: {{institute_student}}  &nbsp&nbsp&nbsp &nbsp&nbsp&nbspClass: {{student_class}} &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Exam:{{select_exam_type}}</b></td>
-        
-                                                                </tr>
-                                                                
-                        
-                                                               
-                                                               
-                                                                <tr >
-                                                                    <tr>&nbsp&nbsp
-                                                                        <td><b>Subjects</b></td>
-                                                                        <td>
-                                                                            
-                                                                        </td>
-                                                                       
-                                                                        <td>
-                                                                            <b>Marks</b>
-                                                                            
-                                                                        </td>
-                                                                    </tr>
-                                                                    <td></td>
-                                                                    {% for e_no in exam_no %}
-                                                                    <td><b>
-                                                                        {{e_no}} 
-                                                                    </b>   
-                                                                    </td>
-                                                                    {% endfor%}
-                                                                    <td>
-                                                                        <b>
-                                                                        % of Final Score
-                                                                    </b>
-                                                                    </td>
-                                                                </tr>
-                                                                {% endif %}
                                                        
                                                                   
                                                                            {% for data in result_data %}

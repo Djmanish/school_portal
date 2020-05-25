@@ -982,6 +982,7 @@ def approve_request(request,pk):
     send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>school_portal@gmail.com<p></p>"
             )
     rr= request.user.profile.institute.id
+    messages.success(request, f"Request of {user.first_name} approved successfully !")
     return HttpResponseRedirect(f'/user/approvals/{rr}/')
     
 
