@@ -468,6 +468,47 @@
 
     <div id="page_content">
         <div id="page_content_inner">
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+                <div class="uk-width-large">
+                    <div class="md-card">
+                        <div class="user_heading">
+                            <div class="user_heading_menu hidden-print">
+                                <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
+                                    <!-- <i class="md-icon material-icons md-icon-light">&#xE5D4;</i> -->
+                                    <!-- <div class="uk-dropdown uk-dropdown-small">
+                                        <ul class="uk-nav">
+                                            <li><a href="#">Action 1</a></li>
+                                            <li><a href="#">Action 2</a></li>
+                                        </ul>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="user_heading_avatar">
+                                <div class="thumbnail">
+                                    <img src="{{user_institute_name.profile_pic.url}}" alt="user avatar" />
+                                </div>
+                            </div>
+                            <div class="user_heading_content">
+                                <h2 class="heading_b uk-margin-bottom"><span
+                                        class="uk-text-truncate">{{user_institute_name.name}}</span></h2>
+                            </div>
+
+
+                            {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+
+                            <a data-uk-tooltip title="Edit Institute Profile" class="md-fab md-fab-small md-fab-accent hidden-print"
+                                href="{% url 'edit_institute' user.profile.institute.pk %}">
+                                <i class="material-icons">&#xE150;</i>
+                            </a>
+                            {% endif %}
+
+
+
+
+
+
+                        </div>
+
                 
             <div class="md-card">
                 <div class="md-card-content">
@@ -478,39 +519,54 @@
                             
                         <input type="submit" value="Go Back" style="border: none;" class="md-btn-primary">
                         </div>
+
                     </form>
         
         <table
         class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair "
         id="ts_issues">
         <tbody >
-            
-            
-            
-            
-          <tr>
-              <td><b>Subjects</b>
-                  </td>
-            {% for exam  in type_exam %}
-            <td></td>
-            <td><b>
-                {{exam}}
-            
-            </b></td>
-           
-            {% endfor %}
-        <td></td>
+            <tr>
+                <table class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                
+                id="ts_issues">
+               
+                <tr>
+                    <td  style="width:10%; text-align: left;"><b>Institute Name:&nbsp&nbsp&nbsp {{institute_student}}</b></td>
+                    <td style="width: 10%; text-align:left;"><b>Class:&nbsp&nbsp&nbsp{{student_class}}</b></td>
 
+            </table>
+        </tr>
+        <table class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair "
+        id="ts_issues">
 
-            <td><b>Final Score</b></td>
-          </tr>
+       
+            
+            
+            
+            <tr style="text-align: center;background-color: #007bff; color:white">
+                <td ><b>Subjects</b>
+                    </td >
+              {% for exam  in type_exam %}
+              <td></td>
+              <td><b>
+                  {{exam}}
+              
+              </b></td>
+             
+              {% endfor %}
+          <td></td>
+  
+  
+              <td><b>Final Score</b></td>
+            </tr>
           
          
             {% for data in sub_percent_list %}
                     
                  
                     
-            <tr>
+            <tr style="text-align: center;">
                
                 {% for k,v in data.items %}
                 
@@ -525,13 +581,31 @@
               
              </tr>
  {% endfor %}
-  
+ <tr>
+     <table>
+         <tr >
+        <td style="text-align: center; padding-left: 50px;"><b>
+            Final Percentage: &nbsp &nbsp &nbsp &nbsp  
+        </b></td>
+        <td></td>
+
+        <td></td>
+        <td></td>
+
+        <td  style="text-align: center; padding-left: 25px;"><b>{{grand_result}}</b></td>
+    </tr>
+     </table>
+     
+ </tr>
+</table>
         </tbody>
         
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
 
                
     <!-- google web fonts -->
