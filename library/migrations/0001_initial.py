@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('main_app', '0001_initial'),
+        ('main_app', '0003_auto_20200525_1651'),
     ]
 
     operations = [
@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='IssueBook',
+            name='BookCode',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('issued_date', models.DateTimeField(null=True)),
@@ -57,6 +57,26 @@ class Migration(migrations.Migration):
                 ('institute_subcategory', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='institute_subcategory', to='main_app.Institute')),
                 ('parent_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='book_sub_category', to='library.BookCategory')),
             ],
+        ),
+        migrations.CreateModel(
+            name='IssueBook',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('issued_date', models.DateTimeField(null=True)),
+                ('expiry_date', models.DateTimeField(null=True)),
+                ('return_date', models.DateTimeField(blank=True, null=True)),
+                ('description', models.TextField(blank=True)),
+                ('delay_counter', models.IntegerField(blank=True, null=True)),
+                ('book_name', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='issued_book_name', to='library.Book')),
+                ('issue_book_institute', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='issue_book_institute', to='main_app.Institute')),
+                ('issued_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='issued_by', to='main_app.UserProfile')),
+                ('user_name', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='user_name', to='main_app.UserProfile')),
+            ],
+        ),
+        migrations.AddField(
+            model_name='bookcode',
+            name='book_sub_category',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bookcode_sub_category', to='library.BookSubCategory'),
         ),
         migrations.AddField(
             model_name='book',
