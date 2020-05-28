@@ -129,11 +129,13 @@ def attendance_update(request, pk):
                     # starting student absent notice
                     absent_notice = Notice()
                     absent_notice.institute = request.user.profile.institute
+                    absent_notice.category='Attendance'
                     absent_notice.subject = f"{student} Marked absent on {attendance_date}"
                     absent_notice.content = f"{student} Marked absent on {attendance_date}"
-                    absent_notice.publish_date = attendance_date
+                    absent_notice.created_at = timezone.now()
+                    absent_notice.publish_date = timezone.now()
                     # absent_notice.author = request.user
-                    absent_notice.category="absent"
+                
                     absent_notice.save()
                     absent_student = UserProfile.objects.get(user= student)
                     student_parent = AddChild.objects.get(child= absent_student )
