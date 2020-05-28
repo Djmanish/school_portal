@@ -8,13 +8,13 @@ from django.contrib.auth.signals import user_logged_in
 
 
 # starting signal for creating library notification category when institute is created
-@receiver(post_save, sender=Institute)
-def LibraryNoticeCategory(sender, instance, created, **kwargs):
-    if created:
-        try:
-            Notification_Category.objects.get(name="Library", institute= instance)
-        except:
-            Notification_Category.objects.create(name="Library", institute= instance)
+# @receiver(post_save, sender=Institute)
+# def LibraryNoticeCategory(sender, instance, created, **kwargs):
+#     if created:
+#         try:
+#             Notification_Category.objects.get(name="Library", institute= instance)
+#         except:
+#             Notification_Category.objects.create(name="Library", institute= instance)
 # ending signal for creating library notification category when institute is created
 
 # starting sending notification when Book Issued

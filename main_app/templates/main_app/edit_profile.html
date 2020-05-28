@@ -566,32 +566,32 @@
 
                             <div class="form-group">
                                                                                             
-                                <label class="required">First Name</span>:</label>
+                                <label class="required">First Name</label>
                                 <input type="text" value="{{user_info.first_name}}" class="form-control n_i" name='first_name' required="required" >
                               </div>
 
                               <div class="form-group">
-                                <label >Middle Name:</label>
+                                <label >Middle Name</label>
                                 <input type="text" class="form-control n_i" name='middle_name'  value="{{user_info.middle_name}}">
                               </div>
 
                               <div class="form-group">
-                                <label >Last Name:</label>
+                                <label >Last Name</label>
                                 <input type="text" class="form-control n_i" name='last_name'  value="{{user_info.last_name}}">
                               </div>
 
                               <div class="form-group">
-                                <label class="required">Father's Name:</label>
+                                <label class="required">Father's Name</label>
                                 <input type="text" class="form-control n_i" name='father_name'  value="{{user_info.father_name}}" required>
                               </div>
 
                               <div class="form-group">
-                                <label >Mother's Name:</label>
+                                <label >Mother's Name</label>
                                 <input type="text" class="form-control n_i" name='mother_name'  value="{{user_info.mother_name}}">
                               </div>
     
                               <div class="form-group">
-                                <label class="required" for="gender">Gender:</label>
+                                <label class="required" for="gender">Gender</label>
                                 <select class="form-control" id="gender" name="gender" required>
                                     
                                     {% if user_info.gender %}
@@ -613,7 +613,7 @@
 
 <div id="institute_list">
     <div class="form-group" >
-        <label >Select Institute:</label>
+        <label >Select Institute</label>
         <select class="form-control" name="select_school" id="select_school">
             
             {% if not user_info.institute %}
@@ -626,14 +626,14 @@
         </select>
       </div>
       <div class="form-group">
-        <label class="required">Join as:</label>
+        <label class="required">Join as</label>
         <select class="form-control" name="user_designation" id="fdata" required='required'>
     <option selected disabled value="">-- first select your school -- </option>
         </select>
     </div>
 
     <div class="form-group" id="user_class"  style="display: none;">
-<label>Select Your Class:</label>
+<label>Select Your Class</label>
 <select id="selected_designaion_clas" name="student_class" class="form-control">
 </select>
     </div>    
@@ -685,28 +685,28 @@ $('#fdata').change(function(){
 
   <div id="institute-options" style="display: none;">
     <div class="form-group">
-        <label >Institute Name:</label>
+        <label >Institute Name</label>
         <input type="text" class="form-control form-control-sm" name='new_institute_name' placeholder="New institute name here" id="new_institute_id" >
       </div>
       <div class="form-group">
-        <label>Institute Phone:</label>
+        <label>Institute Phone</label>
         <input type="text" id="new_institute_phone_id" class="form-control form-control-sm" name="new_institute_phone" pattern="[1-9]{1}[0-9]{9}" placeholder="Enter 10 digit mobile number">
       </div>
 
       <div class="form-group">
-        <label>Institute Address :</label>
+        <label>Institute Address</label>
         <input type="text" class="form-control form-control-sm" name="new_institute_address" placeholder="Institute address here">
       </div>
   </div>
 
                               <div class="form-group" >
-                                <label class= "required">Date of Birth:</label>
+                                <label class= "required">Date of Birth</label>
                                 
                                 <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" required>
                               </div>
                               {% if user.user_institute_role.level.level_name != "student" %}
                               <div class="form-group">
-                                <label >Marital Status:</label>
+                                <label >Marital Status</label>
                                 <select class="form-control" name="marital_status">     
                                     {% if user_info.marital_status %}
                                         <option selected  >{{user_info.marital_status}}</option>
@@ -720,7 +720,7 @@ $('#fdata').change(function(){
                               {% endif %}
 
                               <div class="form-group">
-                                <label >Category:</label>
+                                <label >Category</label>
                                 <select class="form-control" name="category_">     
                                     {% if user_info.category %}
                                         <option selected  >{{user_info.category}}</option>
@@ -741,7 +741,7 @@ $('#fdata').change(function(){
 
 
   <div class="form-group">
-    <label for="">My Roll No.:</label>
+    <label for="">My Roll No.</label>
     <input type="text" class="form-control" value="{{user_info.roll_number|default:''}}" name="st_roll_number">
   </div>
 
@@ -750,21 +750,21 @@ $('#fdata').change(function(){
 {% endif %}
 
                               <div class="form-group">
-                                <label >About Yourself:</label>
+                                <label >About Yourself</label>
                                
                                 <textarea class="form-control"  name='about' >{{user_info.about|default:''}}</textarea>
                               </div>
 
                               {% if user.user_institute_role.level.level_name != "student" %}
                               <div class="form-group">
-                                <label >Qualification:</label>
+                                <label >Qualification</label>
                                 <input type="text" class="form-control" name='user_qualification' value="{{user_info.qualification}}" >
                               </div>
                               {% endif %}
                              
                              
                               <div class="form-group">
-                                <label >Change Profile Picture:</label>
+                                <label >Change Profile Picture</label>
                                 <div class="custom-file">
                                   <input type="file" class="custom-file-input" id="customFile" accept="image/*" name='profile_pic'>
                                   <label class="custom-file-label" for="customFile">Choose file</label>
@@ -774,33 +774,34 @@ $('#fdata').change(function(){
 
 
                               <div class="form-group">
-                                <label class="required">Mobile:</label>
+                                <label class="required">Contact No.</label>
                                 <input type="text" class="form-control" name='mobile_number' value="{{user_info.mobile_number|default:''}}" pattern="[1-9]{1}[0-9]{9}" required='required'>
                               </div>
                             
                               <div class="form-group">
-                                <label >Aadhaar Card Number:</label>
+                                <label >Aadhaar Card Number</label>
                                 <input type="text" class="form-control n_a positive_number" maxlength="12" name='adhar_number' value="{{user_info.aadhar_card_number}}" placeholder="12 digit aadhar card number">
                               </div>
 
                               <div class="form-group">
-                                <label class="required">Address Line 1:</label>
+                                <label class="required">Address Line 1</label>
                                 <input type="text" class="form-control" name='address_line_1' value="{{user_info.address_line_1}}">
                               </div>
 
                               <div class="form-group">
-                                <label >Address Line 2:</label>
+                                <label >Address Line 2</label>
                                 <input type="text" class="form-control" name='address_line_2' value="{{user_info.address_line_2}}">
                               </div>
 
                               <div class="form-group">
-                                <label >City:</label>
-                                <input type="text" class="form-control n_i" name='city' value="{{user_info.city|default:''}}">
+                                <label class="required" >City</label>
+                                <input type="text" class="form-control n_i" name='city' value="{{user_info.city|default:''}}" required>
                               </div>
 
                               <div class="form-group" > 
-                                <label class="required">State:</label>
+                                <label class="required">State</label>
                                 <select class="form-control" name="state"  required>
+                                    <option selected disabled value=""> --- select state --- </option>
                                   
                                   {% if user_info.state %}
                                       <option selected disabled>{{user_info.state}}</option>
@@ -820,12 +821,12 @@ $('#fdata').change(function(){
                               </div> -->
 
                               <div class="form-group">
-                                <label class="required">Pin Code:</label>
+                                <label class="required">Pin Code</label>
                                 <input type="text" class="form-control" name='u_pin_code' value="{{user_info.pin_code|default:''}}" required>
                               </div>
 
                               <div class="form-group"> 
-                                <label >Facebook Link:</label>
+                                <label >Facebook Link</label>
                                 <input type="url" class="form-control" name='facebook_link' value="{{user_info.facebook_link}}">
                               </div>
                               {% if user.profile.designation.level_name == "student"%}

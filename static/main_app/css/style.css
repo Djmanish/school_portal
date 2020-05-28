@@ -247,12 +247,11 @@ label{
 
 .ast{
   color:red;
-  font-weight: bold;
+  
 }
 label.required::after{
   content: "*";
   color: red;
-  font-weight: bold;
 }
 
   
