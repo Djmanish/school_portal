@@ -564,7 +564,7 @@
                                                 <form id="notice_form" method="POST" action="{% url 'create_notice' %}" >
                                                     {% csrf_token %}
                                                     <div class="form-group">
-                                                        <label for="sel1">To*</label>
+                                                        <label for="sel1" class="required">To</label>
   <select class="form-control form-control-sm" id="to_select_class" name="notice_class" required >
       <option selected disabled value=""> -- Select a class -- </option>
       
@@ -673,15 +673,15 @@ success: function(msg){
   </div>                
 
                              <div class="form-group">
-                          <label for="usr">Subject*</label>
+                          <label for="usr" class="required">Subject</label>
                        <input type="text" class="form-control form-control-sm" maxlength="150" name="notice_subject" id="notice_subject"  required>
                                                     </div>
                                                     <div class="form-group">
-                                                      <label for="pwd">Content*</label>
+                                                      <label for="pwd" class="required">Content</label>
                                                      <textarea name="notice_body" id="notice_body" rows="4" class="form-control form-control-sm" required></textarea>
                                                     </div>
                         <div class="form-group">
-                            <label for="usr">Publish Date & Time*</label>
+                            <label for="usr" class="required">Publish Date & Time</label>
                             <input type="datetime-local" class="form-control form-control-sm" name="pubdatetime"  required>
                         </div>
 
