@@ -563,13 +563,13 @@
                                         class="uk-text-truncate">{{institute_data.name}}</span></h2>
                                         <ul class="user_stats">
                                             <li>
-                                                <h4 class="heading_a">0 <span class="sub-heading">Books</span></h4>
+                                                <h4 class="heading_a">{{total_books}} <span class="sub-heading">Books</span></h4>
                                             </li>
                                             <li>
-                                                <h4 class="heading_a">0 <span class="sub-heading">Issued</span></h4>
+                                                <h4 class="heading_a">{{total_issue_books}} <span class="sub-heading">Issued</span></h4>
                                             </li>
                                             <li>
-                                                <h4 class="heading_a">0 <span class="sub-heading">Left</span></h4>
+                                                <h4 class="heading_a">{{left}} <span class="sub-heading">Left</span></h4>
                                             </li>
                                         </ul>
                             </div>
@@ -596,6 +596,38 @@
                                             <i class="uk-icon-level-up"></i>
                                             Issue Book
                                         </a>
+                                    </div>
+                                    <div class="md-card uk-margin-medium-bottom">
+                                        <div class="md-card-content">
+                                            <div class="uk-overflow-container">
+                                                <table class="uk-table uk-table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Sr No.</th>
+                                                        <th>Book Code</th>
+                                                        <th>Book ID</th>
+                                                        <th>Book Name</th>
+                                                        <th>Issued To</th>
+                                                        <th>Designation</th>
+                                                        <th>Issue Date</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for issues in total_issue %}
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td>{{issues.book_name.book_code}}</td>
+                                                        <td>{{issues.book_name.book_id}}</td>                                                        
+                                                        <td>{{issues.book_name}}</td>
+                                                        <td>{{issues.user_name.first_name}} {{issues.user_name.last_name}}</td>
+                                                        <td>{{issues.user_name.designation}}</td>
+                                                        <td>{{issues.issued_date|date:"M d, Y"}}</td>        
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                     </li>
                                     <!-- End Issue Book Tab -->
@@ -642,7 +674,7 @@
                                                                   </div>
                                                                   <div class="form-group">
                                                                     <label for="sel1"><span class="ast"> * </span>Select Category:</label>
-                                                                    <select class="form-control-sm form-control" name="book_category" required>
+                                                                    <select id="book_category" class="form-control-sm form-control" name="book_category" required>
                                                                         <option selected disabled value="">--- Select ---</option>
                                                                         {% for i in categories %}
                                                                         <option value={{i.id}}>{{i}}</option>
@@ -652,11 +684,11 @@
                                                                   </div> 
                                                                   <div class="form-group">
                                                                     <label for="sel1"><span class="ast"> * </span>Select Sub Category:</label>
-                                                                    <select class="form-control-sm form-control" name="book_sub_category" required>
-                                                                        <option selected disabled value="">--- Select ---</option>
-                                                                        {% for j in sub_categories %}
+                                                                    <select id="book_sub_category" class="form-control-sm form-control" name="book_sub_category" required>
+                                                                        <!-- <option selected disabled value="">--- Select ---</option> -->
+                                                                        <!-- {% for j in sub_categories %}
                                                                         <option value={{j.id}}>{{j}}</option>
-                                                                        {% endfor %}
+                                                                        {% endfor %} -->
                                                                      
                                                                     </select>
                                                                   </div> 
@@ -682,6 +714,22 @@
                                                         </td>
                                                     </tr>
                                                     </table>
+                                                    <script>
+                                                        $(document).ready(function(){
+                                                          $('#book_category').change(function(){
+                                                              $.ajax({
+                                                                  type:'POST',
+                                                                  url:'fetch_sub_category/',
+                                                                  data:{category:$("#book_category").val(), 
+                                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                  
+                                                                  success: function(msg){
+                                                                      $('#book_sub_category').html(msg);
+                                                                  }
+                                                              })
+                                                          })
+                                                        })
+                                                        </script>
                                                     </form>
                                                     </div>
                                                 </div>

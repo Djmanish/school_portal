@@ -11,12 +11,20 @@ def library(request):
     categories= BookCategory.objects.filter(institute_category=request.user.profile.institute)
     sub_categories= BookSubCategory.objects.filter(institute_subcategory=request.user.profile.institute)
     #?
+    total_books = Book.objects.filter(book_institute=request.user.profile.institute).count()
+    total_issue = IssueBook.objects.filter(issue_book_institute=request.user.profile.institute,return_date__isnull=True)
+    total_issue_books = total_issue.count()
+    left = total_books - total_issue_books
     books= BookCode.objects.filter(book_institute=request.user.profile.institute)
     context_data = {
       'institute_data':institute_data,
       'categories':categories, 
       'books':books,   
       'sub_categories':sub_categories,
+      'total_books':total_books,
+      'total_issue_books':total_issue_books,
+      'left':left,
+      'total_issue':total_issue,
     }
     return render(request, 'library/library.html',context_data)
 
@@ -139,14 +147,14 @@ def fetch_user_data(request):
             role= request.POST['selected_designation']
             name= request.POST['selected_name']
             if role == "100":
-                  q1= UserProfile.objects.filter(first_name__icontains=name)
+                  q1= UserProfile.objects.filter(institute=request.user.profile.institute,first_name__icontains=name)
                   q2= q1.exclude(designation__level_name="student")
-                  user_data= q2.exclude(designation__level_name="parent")
+                  user_data = q2.exclude(designation__level_name="parent")
                   des=1
                   
             else:                  
                 designation=Institute_levels.objects.get(pk=role, institute=request.user.profile.institute)
-                user_data= UserProfile.objects.filter(designation=designation, first_name__icontains=name)
+                user_data= UserProfile.objects.filter(designation=designation, institute=request.user.profile.institute ,  first_name__icontains=name)
                 des=0
             context_data = {
               'user_data':user_data,
@@ -160,12 +168,21 @@ def issue_book(request):
           bookid= request.POST['book_id']
           expirydate= request.POST['return_date']
           borrower= UserProfile.objects.get(pk=userid)
-          borrower_book= Book.objects.get(book_id=bookid)
-          today= datetime.datetime.today()
-          today_time= datetime.datetime.now().strftime('%H:%M:%S')
-          new_issue_book=IssueBook.objects.create(user_name=borrower, book_name=borrower_book, issue_book_institute=borrower.institute, issued_by=request.user.profile, issued_date=today, expiry_date=expirydate)
-          messages.success(request, 'Book Issued Successfully !')
-          return HttpResponseRedirect(f'/library/issuebook/')
+          try:
+            borrower_book= Book.objects.get(book_id=bookid)
+          except Book.DoesNotExist:
+            messages.error(request, 'Incorrect Book ID')
+            return HttpResponseRedirect(f'/library/issuebook/')
+          try:
+            chk= IssueBook.objects.get(book_name__book_id=bookid, return_date__isnull=True)
+            messages.error(request, 'Book Is Already Issued')
+            return HttpResponseRedirect(f'/library/issuebook/')
+          except:
+            today= datetime.datetime.today()
+            today_time= datetime.datetime.now().strftime('%H:%M:%S')
+            new_issue_book=IssueBook.objects.create(user_name=borrower, book_name=borrower_book, issue_book_institute=borrower.institute, issued_by=request.user.profile, issued_date=today, expiry_date=expirydate)
+            messages.success(request, 'Book Issued Successfully !')
+            return HttpResponseRedirect(f'/library/issuebook/')
           
       # return HttpResponse('Hello World Issue Book')      
 
@@ -176,7 +193,7 @@ def book_return(request):
             book_i= request.POST.get('borrow_id') 
             cat= request.POST.get('book_category')  
             if cat == "0":  
-              messages.success(request, 'Book Not Returned, Please Try Again !')
+              messages.error(request, 'Book Not Returned, Please Try Again !')
             else:      
               t = IssueBook.objects.get(id=book_i)
               cd = t.expiry_date           
@@ -206,6 +223,15 @@ def return_book(request):
               'issue_book_search':issue_book_search,
             }
             return render(request, 'library/book_return.html', context_data)
+
+def fetch_sub_category(request):
+    selected_category  = BookCategory.objects.get(pk=request.POST.get('category'))
+    
+    category_search = BookSubCategory.objects.filter(parent_category__pk=selected_category.id)
+    subs = ""
+    for sub in category_search:
+        subs= subs+ f"<option value='{sub.id}' >"+str(sub)+"</option>"
+    return HttpResponse(subs)
       
       
 

@@ -30,6 +30,7 @@
   
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
@@ -538,7 +539,7 @@
                                                       </div>
                                                       <div class="form-group">
                                                         <label for="sel1">Select Category:</label>
-                                                        <select class="form-control-sm form-control" name="book_category" required>
+                                                        <select id="book_category" class="form-control-sm form-control" name="book_category" required>
                                                             <option selected disabled value="">--- Select ---</option>
                                                             {% for i in categories %}
                                                             <option value={{i.id}}>{{i}}</option>
@@ -548,11 +549,9 @@
                                                       </div> 
                                                       <div class="form-group">
                                                         <label for="sel1">Select Sub Category:</label>
-                                                        <select class="form-control-sm form-control" name="book_sub_category" required>
+                                                        <select id="book_sub_category" class="form-control-sm form-control" name="book_sub_category" required>
                                                             <option selected disabled value="">--- Select ---</option>
-                                                            {% for j in sub_categories %}
-                                                            <option value={{j.id}}>{{j}}</option>
-                                                            {% endfor %}
+                                                            
                                                          
                                                         </select>
                                                       </div> 
@@ -578,6 +577,22 @@
                                             </td>
                                         </tr>
                                         </table>
+                                        <script>
+                                            $(document).ready(function(){
+                                              $('#book_category').change(function(){
+                                                  $.ajax({
+                                                      type:'POST',
+                                                      url:'fetch_sub_category/',
+                                                      data:{category:$("#book_category").val(), 
+                                                      csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                      
+                                                      success: function(msg){
+                                                          $('#book_sub_category').html(msg);
+                                                      }
+                                                  })
+                                              })
+                                            })
+                                            </script>
                                         </form>
                                         </div>
                                     </div>

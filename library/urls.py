@@ -18,4 +18,6 @@ urlpatterns = [
     path('issue_book/',views.issue_book,name='issue_book'),
     path('book_return/',views.book_return,name='book_return'),
     path('return_book/',views.return_book,name='return_book'),
+    path('fetch_sub_category/', views.fetch_sub_category, name="fetch_sub_category"),
+
 ]
