@@ -571,3 +571,8 @@ def ResetFees(request):
     
     
     return HttpResponse("Fees Reset Successfully !")
+
+class FeesResetHistoryListView(LoginRequiredMixin, ListView):
+    model = FeesResetHistory
+    template_name = "fees/fees_reset_history.html"
+    paginate_by = 20

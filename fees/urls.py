@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from .views import *
+from .views import FeesResetHistoryListView
 
 urlpatterns = [
     path('', views.fees_home, name="fees_home" ),
@@ -23,7 +24,7 @@ urlpatterns = [
     path('fees/pay/', views.fee_payment, name='fees_payment'),
     path('fee/collect/', views.fetch_collect_fee_record, name="fee_collect_record"),
     path('fee/offline/update/', views.update_offline_fee, name='update_offline_fee'),
-    
     path('fees/reset/', views.ResetFees, name='reset_fees'),
+    path('reset/history/', FeesResetHistoryListView.as_view(), name="fees_reset_history")
 
 ]

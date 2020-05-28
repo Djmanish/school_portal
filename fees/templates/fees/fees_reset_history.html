@@ -16,21 +16,10 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
 
-    <title>Institute Profile</title>
+    <title>Fees Reset History</title>
 
-     <!-- font awesome cdn -->
-     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
-    
-    <link rel="stylesheet" href="{% static 'main_app/bower_components/codemirror/lib/codemirror.css' %}">
-    <!-- select2 -->
-    <link rel="stylesheet" href="{% static 'main_app/bower_components/select2/dist/css/select2.min.css' %}">
-    
-
-
-
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
         media="all">
@@ -38,7 +27,7 @@
     <!-- flag icons -->
     <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
 
-  
+   
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
 
@@ -51,13 +40,11 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-</head>
-
-<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" </head> 
+    <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
-    <header id="header_main">
+      <!-- main header -->
+      <header id="header_main">
         <div class="header_main_content">
             <nav class="uk-navbar">
 
@@ -223,13 +210,14 @@
                         class="md-icon material-icons">&#xE8B6;</i></button>
                 <script type="text/autocomplete">
                     <ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">
-                                                <li data-value="">
+                        
+                        <li data-value="">
                             <a href="" class="needsclick">
-                               <br>
+                                <br>
                                 <span class="uk-text-muted uk-text-small"></span>
                             </a>
                         </li>
-                       
+                    
                         <li data-value="autocomplete-value">
                             <a class="needsclick">
                                 Autocomplete Text<br>
@@ -242,7 +230,8 @@
         </div>
     </header><!-- main header end -->
     <!-- main sidebar -->
-    <aside id="sidebar_main">
+      <!-- main sidebar -->
+      <aside id="sidebar_main">
 
         <div class="sidebar_main_header">
             <div class="sidebar_logo">
@@ -431,7 +420,7 @@
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
+                                <a href="{% url 'class_promotion'  request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -495,26 +484,22 @@
 
             </ul>
         </div>
-
     </aside><!-- main sidebar end -->
 
+   
     <div id="page_content">
+
         <div id="page_content_inner">
-  <!-- success message -->
-  {% if messages %}
-  <div class="md-card md-card-primary">
-  <div >
-  <ul class="messages alert">
-  {% for message in messages %}
-  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-  {% endfor %}
-  </ul>
-  </div>
-  </div>
-  {% endif %}
-          
-            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">      
+                
+       
+      
+                    
+
+
+
                 <div class="uk-width-large">
+
                     <div class="md-card">
                         <div class="user_heading">
                             <div class="user_heading_menu hidden-print">
@@ -522,8 +507,8 @@
                                     <!-- <i class="md-icon material-icons md-icon-light">&#xE5D4;</i> -->
                                     <!-- <div class="uk-dropdown uk-dropdown-small">
                                         <ul class="uk-nav">
-                                            <li><a href="#">Action 1</a></li>
-                                            <li><a href="#">Action 2</a></li>
+                                            <li><a href="#"></a></li>
+                                  
                                         </ul>
                                     </div> -->
                                 </div>
@@ -534,224 +519,130 @@
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span
-                                        class="uk-text-truncate">{{user.profile.institute.name}}</span></h2>
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading">Fees Reset History List</span></h2>
+
                             </div>
-
-
-                            {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-
-                            <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print"
-                                href="{% url 'edit_institute' user.profile.institute.pk %}">
+                            <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
                                 <i class="material-icons">&#xE150;</i>
                             </a> -->
-                            {% endif %}
-
-
-
-
-
-
                         </div>
                         <div class="user_content">
-                         
-                              
+                            <ul id="user_profile_tabs" class="uk-tab"
+                                data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}"
+                                data-uk-sticky="{ top: 48, media: 960 }">
                       
-                            <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
-                                <li class="uk-active"><a href="#">Payment Detail</a></li>
+                          
                                
-                                <li><a href="#">Payment History</a></li>
                             </ul>
                             <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
-                                <li>
-                                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
-                                        <div class="uk-width-large">
+                           
+
+                               
+                        
+                            <li>
+                                <table class="uk-table uk-table-hover uk-table-condensed">
+                                    <thead>
+                                      <tr>
+                                        <th>Due Date</th>
+                                        <th>Reset Time</th>
+                                        <th>Comment</th>
+                                        <th>Reset Done By</th>
+                                       
+                                       
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        {% for object in object_list %}
+                                        <tr>
+                                            <td>{{object.due_date}}</td>
+                                            <td>{{object.reset_time}}</td>
+                                            <td>{{object.comment}}</td>
+                                          
+                                            <td>{{object.reset_done_by.first_name}} {{object.reset_done_by.last_name}}</td>
+                                          </tr>
+                                        {% endfor %}
                                             
+                                     
+                                    
+                                     
+                                    </tbody>
+                                  </table>
+                               
+                                      
+                                <!-- starting pagination -->
+<div class="container text-center mb-3">
+    {% if is_paginated %}
+    
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="md-btn md-btn-primary md-btn-mini">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}"  class="md-btn md-btn-primary md-btn-mini">previous</a>
+            {% endif %}
+    
+            <span class="current" style="font-weight: bolder;">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}"  class="md-btn md-btn-primary md-btn-mini">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}"  class="md-btn md-btn-primary md-btn-mini">last &raquo;</a>
+            {% endif %}
+       
+  {% endif %}
+  </div>
+<!-- ending pagination -->
                                            
-                                            <!-- <form>
-                                                <div class="row">
-                                                <div class="col">
-                                                <label for="uk_dp_1">Student</label>
-                                                                     
-                                                 <select name="selected_class_attendance" class="form-control"  required>
-                                                    
-                                                  
-                                                     <option selected  value="{{selected_class_for_attendance.id}}" ></option>
-                                                     
-                                                     <option selected  value="">-- select Student --</option>
-                                                                                 
-                                                     <option>Raresh Singh</option>
-                                                     <option value={{class.id}}>Neha Singh</option>
-                                                     <option value={{class.id}}>Karan Singh</option>
-                                                     </select>
-                                                      </div>               
-                                                                   
-                                                 <div class="col">
-                                                   <label for="uk_dp_1">School/Institute</label>
-                                                                     
-                                                   <select name="selected_class_attendance" class="form-control"  required>
-                                                                                                    
-                                                       <option selected  value="{{selected_class_for_attendance.id}}" ></option>
-                                                     
-                                                       <option selected  value="">-- select School/Institute --</option>
-                                                                                 
-                                                       <option value={{class.id}}>K V NO 1</option>
-                                                       <option value={{class.id}}>School2</option>
-                                                       <option value={{class.id}}>AAdarsh Intitute</option>
-                                                    </select>
-                                                     </div>
-                                                      </div>             
-                                                     
-                                                     </form>                -->
-                                                            
-                                            <br>
-                                            <div class="uk-overflow-container">
-                                                <table class="uk-table uk-table-nowrap table_check">
-                                                    <thead>
-                                                    <tr>
-<!--                                                       
-                                                        <th class="uk-width-1-10">View</th> -->
-                                                       
-                                                        <th class="">Student</th>
-                                                        <th class="">School Name</th>
-                                                        <th class="">Due Date</th>
-                                                        <th class="">Amount Due</th>
-                                                        <th class="">Details</th>
-                                                     
-
-                                                        <th></th>
-                                                      
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {% for child in children_fee_status %}
-                                                        <tr>
-                                                       
-                                                            <td class="">{{child.student.first_name}}</td>
-                                                            <td class="">{{child.institute}}</td>
-                                                            <td class="">{{child.due_date}}</td>
-                                                            <td class="">{{child.total_due_amount}}</td>
-                                                            <td class=""><a href="{% url 'view_invoice' child.pk %}">View Details</a></td>
-                                                         
-
-
-                                                            <!-- pay btn form -->
-                                                            <td class="">
-                                                             
-                                                                <a href="#" >
-<form method="POST" action="{% url 'pay_fees_page' %}">
-    {% csrf_token %}
-    <input type="hidden" name="s_id" value="{{child.student.pk}}">
-    <input type="hidden" name="s_amount" value="{{child.total_due_amount}}">
-    <input type="hidden" name="s_inv" value="{{child.invoice_number}}">
-
-
-    <input type="submit" value="Pay Now" class="md-btn md-btn-primary md-btn-mini">
-</form>
-
-
-
-                                                            </a></td>
-                                                       
-                                                        </tr>  
-                                                        {% endfor %}
-                                                            
-                                                    </tbody>
-                                                    </div>
-                                                </table>
-                                                <!-- <div class="uk-width-medium-1-6">
-                                                    <a class="md-btn md-btn-primary md-btn-wave-light" href="fees_payment.html">Pay Fees</a>
-                                                </div> -->
-                                            </div>
-
-                                        
-                                             
-                            
-                                        <li>
-                                            <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
-                                                <div class="uk-width-large">
-                                            <h4 class="heading_a uk-margin-bottom">Payment History </h4>
-                                            <div class="uk-overflow-container">
-                                                <table class="uk-table uk-table-nowrap table_check">
-                                                    <thead>
-                                                    <tr>
-                                                        <th class="uk-text-center">Student</th>
-                                                        <th class=" uk-text-center">School</th>
-                                                        <th class=" uk-text-center">Due Date</th>
-                                                        <th class=" uk-text-center">Payment Date</th>
-                                                        <th class=" uk-text-center">Payment Method</th>
-                                                        <th class=" uk-text-center">Invoice N.</th>
-                                                       
-                                                        <th class="uk-text-center">Invoice</th>
-
-                                                       
-                                                        
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    
-                                                            
-                                                            {% for d in payment_history %}
-                                                            <tr>
-                                                            <td class="uk-text-center">{{d.student}}</td> 
-                                                            <td class="uk-text-center">{{d.student.institute}}</td>
-                                                            <td class="uk-text-center">{{d.due_date}}</td>
-                                                            <td class="uk-text-center">{{d.payment_date}}</td>
-                                                            <td class="uk-text-center">{{d.payment_method}}</td>
-                                                            <td class="uk-text-center">{{d.invoice_number}}</td>
-                                                            <td class="uk-text-center uk-btn uk-btn-primary">
-                                                                <a href="{% url 'view_invoice' d.pk %}">view invoice <i style="color: red;" class="far fa-file-pdf"></i></a>
-                                                                </td>
-                                                        </tr>  
-                                                            {% endfor %}
-                                                           
-                                                        
-                                                    
-                                                        
-                                                    </tbody>
-                                                    </div>
-                                                </table>
-                                                
-
-                                                
-
-                        <!-- starting pagination -->
-
-                        <div class="pagination" style="margin-top: 10px;">
-                            <span class="step-links">
-                                {% if payment_history.has_previous %}
-                                    <a href="?page=1" class="md-btn md-btn-primary md-btn-mini">&laquo; first</a>
-                                    <a href="?page={{ payment_history.previous_page_number }}" class="md-btn md-btn-primary md-btn-mini">previous</a>
-                                {% endif %}
+                            </li>
                         
-                                <span class="current">
-                                    Page {{ payment_history.number }} of {{ payment_history.paginator.num_pages }}.
-                                </span>
-                        
-                                {% if payment_history.has_next %}
-                                    <a href="?page={{ payment_history.next_page_number }}" class="md-btn md-btn-primary md-btn-mini">next</a>
-                                    <a href="?page={{ payment_history.paginator.num_pages }}" class="md-btn md-btn-primary md-btn-mini">last &raquo;</a>
-                                {% endif %}
-                            </span>
-                        </div>
 
-                        <!-- ending pagination -->
-
-
-
-
-                                            </div> 
-                                            
-                                        </li>
-                                        
-                                    </ul>
-                                </li>
                             </ul>
+
                         </div>
 
                     </div>
+
+
+                    <!-- <div class="uk-width-large-3-10 hidden-print">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="uk-margin-medium-bottom">
+                                <h3 class="heading_c uk-margin-bottom">Alerts</h3>
+                                <ul class="md-list md-list-addon">
+                                    <li>
+                                        <div class="md-list-addon-element">
+                                            <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
+                                        </div>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">Ullam dolor praesentium.</span>
+                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Et voluptatum cumque excepturi dolores.</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-addon-element">
+                                            <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
+                                        </div>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">Veniam fuga sed.</span>
+                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Quia similique autem aut eaque qui.</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-addon-element">
+                                            <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
+                                        </div>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">Voluptatem voluptatem veritatis.</span>
+                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Iure autem asperiores numquam rerum ut sunt.</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div> -->
+
+                    <!-- <a class="md-btn md-btn-flat md-btn-flat-primary" href="#">Show all</a>
+                        </div> -->
+                    <!-- </div> -->
+
                 </div>
-                
             </div>
         </div>
     </div>
@@ -776,32 +667,13 @@
             s.parentNode.insertBefore(wf, s);
         })();
     </script>
-    
 
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <!-- common functions -->
     <script src="{% static 'main_app/js/common.min.js' %}"></script>
     <!-- uikit functions -->
     <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
     <!-- altair common functions/helpers -->
     <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
-
-    <!-- page specific plugins -->
-    <!-- jquery ui -->
-    <script src="{% static 'main_app/bower_components/jquery-ui/jquery-ui.min.js' %}" ></script>
-    <!-- ionrangeslider -->
-    <script src="{% static 'main_app/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js' %}" ></script>
-    <!-- htmleditor (codeMirror) -->
-    <script src="{% static 'main_app/js/uikit_htmleditor_custom.min.js' %}" ></script>
-    <!-- inputmask -->
-    <script src="{% static 'main_app/bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js' %}"></script>
-    <!-- select2 -->
-    <script src="{% static 'main_app/bower_components/select2/dist/js/select2.min.js' %}" ></script>
-	<!-- clear button -->
-	<script src="{% static 'main_app/bower_components/Add-Clear/addclear.min.js' %}" ></script>
-
-    <!--  forms advanced functions -->
-    <script src="{% static 'main_app/js/pages/forms_advanced.min.js' %}" ></script>
 
 
     <script>
@@ -826,6 +698,6 @@
 
     
     
-</body>
+    </body>
 
 </html>

@@ -249,7 +249,7 @@ label{
   color:red;
   font-weight: bold;
 }
-label.required:before{
+label.required::after{
   content: "*";
   color: red;
   font-weight: bold;
@@ -305,3 +305,11 @@ label.required:before{
   min-height: 450px;
 }
 /* ending notification box modification */
+
+.asteriskField{
+  color: red !important;
+}
+
+.tdcs{
+  max-height: 300px;
+}

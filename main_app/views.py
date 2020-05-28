@@ -115,7 +115,7 @@ def add_subjects(request):
 
 def edit_subject(request, pk):
     
-# starting user notice
+    # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
@@ -1161,7 +1161,7 @@ class Permission_Updates_History_list_View(LoginRequiredMixin, ListView):
     
     
     template_name = 'main_app/permissions_update_history.html'
-    paginate_by = 15
+    paginate_by = 20
 
     def get_queryset(self):
         admin_role = Institute_levels.objects.get(institute=self.request.user.profile.institute, level_name="admin") ##skipping admin role changes
