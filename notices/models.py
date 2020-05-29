@@ -3,19 +3,19 @@ from main_app.models import *
 from django.contrib.auth.models import User
 # Create your models here.
 
-class Notification_Category(models.Model):
-    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='inst_notice_category', null=True)
-    name = models.CharField(max_length=30, null=True)
+# class Notification_Category(models.Model):
+#     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='inst_notice_category', null=True)
+#     name = models.CharField(max_length=30, null=True)
 
-    def __str__(self):
-        return str(self.institute+" "+self.name)
+#     def __str__(self):
+#         return str(self.institute)+" "+str(self.name)
 
 
 
 class Notice(models.Model):
     reference_no = models.CharField(max_length=15, null=True, blank=True)
     institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE, related_name='institute_notices', null=True)
-    category = models.ForeignKey(to=Notification_Category, on_delete=models.PROTECT, related_name='notice_category', null=True, blank=True)
+    category = models.CharField(max_length=30, null=True, blank=True)
     subject = models.CharField(max_length=150, null=True, blank=True)
     content = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(null=True, blank=True)

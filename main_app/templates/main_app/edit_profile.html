@@ -746,7 +746,7 @@ $('#fdata').change(function(){
 
 
   <div class="form-group">
-    <label for="">My Roll No</label>
+    <label for="">My Roll No.</label>
     <input type="text" class="form-control" value="{{user_info.roll_number|default:''}}" name="st_roll_number">
   </div>
 
@@ -779,7 +779,7 @@ $('#fdata').change(function(){
 
 
                               <div class="form-group">
-                                <label class="required">Mobile</label>
+                                <label class="required">Contact No.</label>
                                 <input type="text" class="form-control" name='mobile_number' value="{{user_info.mobile_number|default:''}}" pattern="[1-9]{1}[0-9]{9}" required='required'>
                               </div>
                             
@@ -799,13 +799,14 @@ $('#fdata').change(function(){
                               </div>
 
                               <div class="form-group">
-                                <label >City</label>
-                                <input type="text" class="form-control n_i" name='city' value="{{user_info.city|default:''}}">
+                                <label class="required" >City</label>
+                                <input type="text" class="form-control n_i" name='city' value="{{user_info.city|default:''}}" required>
                               </div>
 
                               <div class="form-group" > 
                                 <label class="required">State</label>
                                 <select class="form-control" name="state"  required>
+                                    <option selected disabled value=""> --- select state --- </option>
                                   
                                   {% if user_info.state %}
                                       <option selected disabled>{{user_info.state}}</option>
@@ -819,14 +820,14 @@ $('#fdata').change(function(){
                                   
                                 </select>
                               </div>
-                              <div class="form-group">
-                                <label class="required">Country</label>
+                              <!-- <div class="form-group">
+                                <label class="required">Country:</label>
                                 <input type="text" class="form-control n_i" name='country' value="{{user_info.country}}" required>
-                              </div>
+                              </div> -->
 
                               <div class="form-group">
                                 <label class="required">Pin Code</label>
-                                <input type="text" class="form-control" name='pin_code' value="{{user_info.pin_code}}" required>
+                                <input type="text" class="form-control" name='u_pin_code' value="{{user_info.pin_code|default:''}}" required>
                               </div>
 
                               <div class="form-group"> 

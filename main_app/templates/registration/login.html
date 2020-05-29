@@ -15,6 +15,7 @@
     <title>Login Page</title>
 
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %} "/>
@@ -40,13 +41,13 @@
                   {% endif %}
                     
                   {% csrf_token %}
-                    <div class="uk-form-row">
+                    <div class="form-group">
                         <label for="login_username">Email:</label>
-                        <input class="md-input" type="email" id="login_username" name="username" required />
+                        <input class="form-control" type="email" id="login_username" name="username" required />
                     </div>
-                    <div class="uk-form-row">
+                    <div class="form-group">
                         <label for="login_password">Password:</label>
-                        <input class="md-input" type="password" id="login_password" name="password" required />
+                        <input class="form-control" type="password" id="login_password" name="password" required />
                     </div>
                     <div class="uk-margin-medium-top">
                       <input type="submit" class="md-btn md-btn-primary md-btn-block md-btn-large" value="Sign In">

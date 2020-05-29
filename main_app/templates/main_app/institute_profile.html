@@ -808,25 +808,23 @@
                                             <!-- starting Classes modal themes -->
                                             <div class="uk-modal" id="modal_new_class">
                                                 <div class="uk-modal-dialog">
+                                                    <button type="button" class="uk-modal-close uk-close"></button>
                                                     <div class="row">
                                                         <div class="col-sm-6" >
                                                           <h3 class="uk-text-primary">Add New Class</h3>
                                                         </div>
-                                                        <div class="col-sm-6 text-right">
-                                                            <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
-                                                         
-                                                        </div>
+                                                      
                                                       </div>
                                                     
                                                     <form  method="POST" action="{% url 'add_classes' %}">
                                                         {% csrf_token %}
                                                         <div class="form-group">
-                                                                <label class= "required" >Class Name:</label>
+                                                                <label class= "required" >Class Name</label>
                                                                 <input type="text" class="form-control" name="class_name" required>
                                                               </div>
                                                            
                                                               <div class="form-group">
-                                                                <label class= "required" for="sel1">Select Class Stage:</label>
+                                                                <label class= "required" for="sel1">Select Class Stage</label>
                                                                 <select class="form-control" name="class_stage" required>
                                                                     <option selected disabled value="">--- Select Class Stage ---</option>
                                                                   <option>Primary</option>
@@ -841,9 +839,7 @@
                                                                     <td> 
                                                                   <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add Class</button>
                                                                 </td>
-                                                                <td style="padding-left:20px;">
-                                                        <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: #1976d2;width: 140px;">Cancel</button>
-                                                    </td>
+                                                              
                                                 </tr>
                                                 </table>
                                                 </form>
@@ -860,25 +856,25 @@
                                                         id="ts_issues">
                                                         <thead >
                                                             <tr>
-                                                                <th style="text-align:center;">Sr. No.</th>
-                                                                <th style="text-align:center;">Class Name</th>
+                                                                <th >SI No</th>
+                                                                <th >Class Name</th>
                                                                 <!-- <th><b>Class Teacher</b></th> -->
-                                                                <th style="text-align:center;">Class Teacher</th>
+                                                                <th >Class Teacher</th>
                                                               
                                                               {% if assign_class_teacher_permission in user_permissions %}
-                                                              <th style="text-align:center;">Assign Class Teacher</th>
+                                                              <th >Assign Class Teacher</th>
                                                               {% endif %}
                                                               {% if can_edit_class_permission in user_permissions %}       
-                                                                <th style="text-align:center;">Edit Class</th>
+                                                                <th >Edit Class</th>
                                                                 {% endif %}
 
                                                                 {% if can_delete_class_permission in user_permissions %} 
-                                                                <th style="text-align:center;">Delete Class</th>
+                                                                <th >Delete Class</th>
                                                                 {% endif %}
 
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="text_center">
+                                                        <tbody >
                                                             {% for classes in institute_class %}
                                                             <tr>
                                                                 <td > {{ forloop.counter}}
@@ -940,41 +936,35 @@
                                             <!-- starting subject modal themes -->
                                             <div class="uk-modal" id="modal_new_subject">
                                                 <div class="uk-modal-dialog">
+                                                    <button type="button" class="uk-modal-close uk-close"></button>
                                                     <div class="row">
                                                         <div class="col-sm-6" >
                                                           <h3 class="uk-text-primary">Add New Subject</h3>
                                                         </div>
-                                                        <div class="col-sm-6 text-right">
-                                                            <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
-                                                         
-                                                        </div>
+                                                      
                                                       </div>
                                                                                                      
                                                     <form method="POST" action="{% url 'add_subjects' %}">
                                                         {% csrf_token %}
                                                         <div class="form-group">
-                                                            <label class="required" for="sel1">Select Class:</label>
+                                                            <label class="required" for="sel1">Select Class</label>
                                                             <select class="form-control" id="sel1" name="new_class" required>
-
                                                                 {% for class in institute_class %}
                                                                 <option value={{class.id}}>{{class}}</option>
                                                                 {% endfor %}
-
-
-
                                                             </select>
 
                                                         </div>
                                                         <div class="form-group">
-                                                            <label class="required">Subject Code:</label>
+                                                            <label class="required">Subject Code</label>
                                                             <input type="text" class="form-control" name="subject_code" required>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label class="required">Subject Name:</label>
+                                                            <label class="required">Subject Name</label>
                                                             <input type="text" class="form-control" name="subject_name" required>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label class="required" for="sel1">Select Subject Teacher:</label>
+                                                            <label class="required" for="sel1">Select Subject Teacher</label>
                                                             <select class="form-control" name="subject_teacher" required>
                                                                 <option selected disabled value="">--Select Subject
                                                                     Teacher--</option>
@@ -992,10 +982,7 @@
                                                         <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add
                                                             Subject</button>
                                                         </td>
-                                                        <td style="padding-left: 20px;">
-                                                        <button type="button"
-                                                            class="md-btn md-btn-primary uk-modal-close" style="background-color: #1976d2;width: 140px;">Cancel</button>
-                                                        </td>
+                                                     
                                                     </tr>
                                                     </table>
                                                 </form>
@@ -1012,17 +999,17 @@
                                                         id="ts_issues">
                                                         <thead >
                                                             
-                                                                <th style="text-align:center;">Sr. No.</th>
-                                                                <th style="text-align:center;">Class</th>
-                                                                <th style="text-align:center;">Subject Code</th>
-                                                                <th style="text-align:center;">Subject Name</th>
-                                                                <th style="text-align:center;">Subject Teacher</th>
+                                                                <th >SI No</th>
+                                                                <th >Class</th>
+                                                                <th >Subject Code</th>
+                                                                <th >Subject Name</th>
+                                                                <th >Subject Teacher</th>
                                                                 {% if can_edit_subject_permission in user_permissions %}                    
-                                                                <th style="text-align:center;">Edit</th>
+                                                                <th >Edit</th>
                                                                 {% endif %}
 
                                                                 {% if can_delete_subject_permission in user_permissions %} 
-                                                                <th style="text-align:center;">Delete</th>
+                                                                <th >Delete</th>
                                                                 {% endif %}
                                                                 
 
@@ -1030,7 +1017,7 @@
                                                         </thead>
                                                         <tbody>
                                                             {% for subjects in institute_subject %}
-                                                            <tr style="text-align:center;">
+                                                            <tr >
                                                                 <td > {{ forloop.counter}}
                                                                 </td>
                                                                 <td> {{subjects.subject_class}} </td>
@@ -1077,26 +1064,24 @@
                                                
                                                 <div class="uk-modal" id="add_new_role">
                                                     <div class="uk-modal-dialog">
+                                                        <button type="button" class="uk-modal-close uk-close"></button>
                                                         <div class="row">
                                                             <div class="col-sm-6" >
                                                               <h3 class="uk-text-primary">Add New Role to {{institute_data.name}}</h3>
                                                             </div>
-                                                            <div class="col-sm-6 text-right">
-                                                                <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
-                                                             
-                                                            </div>
+                                                            
                                                           </div>
                                                         <form method="POST"
                                                             action="/add/new_role/{{institute_data.id}}/">
                                                             {% csrf_token %}
                                                             <div class="uk-form-row">
                                                                 <label class=required>Level Id</label>
-                                                                <input type="number" class="md-input" name="level_id"
+                                                                <input type="number" class="form-control" name="level_id"
                                                                     min="3" maxlength="2"  required>
                                                             </div>
                                                             <div class="uk-form-row">
                                                                 <label class=required>Role Name</label>
-                                                                <input type="text" class="md-input" name="level_name"
+                                                                <input type="text" class="form-control" name="level_name"
                                                                     required />
                                                             </div>
                                                             <br>
@@ -1107,10 +1092,7 @@
                                                                 type="submit" style="background-color: #1976d2;width: 140px;">Add Role</button>
                                                       
                                                             </td>
-                                                            <td style="padding-left: 20px;">
-                                                            <button type="button"
-                                                                class="md-btn md-btn-primary uk-modal-close" style="background-color: #1976d2;width: 140px;">Close</button>
-                                                            </td>
+                                                        
                                                         </tr>
                                                         </table>
                                                       
@@ -1125,17 +1107,17 @@
                                                         id="ts_issues">
                                                         <thead>
                                                             <tr>
-                                                                <th style="text-align:center;">Level</th>
-                                                                <th style="text-align:center;">Role</th>
-                                                                <th style="text-align:center;">Start Date</th>
-                                                                <th style="text-align:center;">Action</th>
+                                                                <th >Level</th>
+                                                                <th >Role</th>
+                                                                <th >Start Date</th>
+                                                                <th >Action</th>
                                                             </tr>
                                                         </thead>
 
                                                         <tbody>
 
                                                             {% for role in institute_roles %}
-                                                            <tr style="text-align:center;">
+                                                            <tr >
                                                                 <td ><span
                                                                         class="uk-text-small uk-text-muted uk-text-nowrap">{{role.level_id}}</span>
                                                                 </td>
@@ -1179,16 +1161,16 @@
                             <thead>
                                 <tr>
                                   
-                                    <th style="text-align:center;">Role</th>
+                                    <th >Role</th>
                                  
-                                    <th style="text-align:center;">Edit Role Permissions</th>
+                                    <th >Edit Role Permissions</th>
                                 </tr>
                             </thead>
 
                             <tbody>
 
                                 {% for role in institute_roles %}
-                                <tr style="text-align:center;">
+                                <tr >
                                   
                                     <td >
                                  
