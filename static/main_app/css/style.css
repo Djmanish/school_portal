@@ -249,7 +249,7 @@ label{
   color:red;
   font-weight: bold;
 }
-label.required:before{
+label.required:after{
   content: "*";
   color: red;
   font-weight: bold;

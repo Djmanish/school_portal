@@ -104,7 +104,7 @@ def add_subjects(request):
             subject_class=Classes.objects.get(id=new_class)
             # get data from User Table
             subject_teacher=User.objects.get(id=subject_teacher)
-            print(subject_teacher)
+            
 
             subject_class = Subjects.objects.create(institute=request.user.profile.institute, subject_class=subject_class, subject_code= subject_code, subject_name= subject_name,subject_teacher=subject_teacher)
 
@@ -359,7 +359,7 @@ def dashboard(request):
             request.user.student_books=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
             # request.user.student_books_len = len(request.user.student_books)
             request.user.booksdue=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
-            print(request.user.booksdue)
+          
             count_delay=timezone.now()
             for i in request.user.student_books:
                 # ed = i.expiry_date
@@ -368,22 +368,36 @@ def dashboard(request):
                 else:
                     i.delay = 0    
 
-            # ex_date = request.user.student_books.expiry_date
-            # print(ex_date)
+           
 
+# starting library status for parent view
+    if request.user.profile.designation.level_name == "parent":
+              
+        request.user.user_child_books_status = []
+        user_children= AddChild.objects.filter( parent= request.user.profile)
+        print(user_children)
+        parent_student_list = []
+        for books in user_children:
+            student= UserProfile.objects.get(pk=books.child.id)
+            parent_student_list.append(student)
             
-            # if count_delay > ex_date:
-            #     a= count_delay - ex_date
-            #     print(a)
-            # else:
-            #     print("not hell")
-            
-            # sum_in=0
-            # for i in a:
-            #     sum_in = sum_in+i.total_due_amount
-            # request.user.sum_out=sum_in           
-         
+        # if(len(user_children)>0):
+        #     student_lib = Students_fees_table.objects.filter(student__in= parent_student_list )
+        #     request.user.user_child_books_status = student_lib
+ 
 
+        request.user.student_books=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
+          
+        request.user.booksdue=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
+        
+        count_delay=timezone.now()
+        for i in request.user.student_books:
+               
+            if count_delay > i.expiry_date:
+                i.delay = count_delay - i.expiry_date
+            else:
+                i.delay = 0 
+    
 
 # starting class teacher's  class status for last six days
     last_six_days_list = []

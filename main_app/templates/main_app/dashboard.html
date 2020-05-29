@@ -1197,8 +1197,7 @@
                                              
                     </div>
                 </div>
-                 
-            
+                             
                {% endif %}
                {% if user.profile.designation.level_name == "principal" %}
                <div class="uk-width-medium-1-2">
@@ -1277,11 +1276,61 @@
                 
                 </table>
             </div>
-        </div>{% endif %}
-    </div>{% endif %}
+        </div>
+    </div>
 </div>
                   
-                     
+ <!-- parent library book status -->
+ 
+ {% elif request.user.profile.designation.level_name == "parent" %}
+     
+ <div class="uk-width-medium-1-2">
+         
+    <div class="md-card">
+        <div class="md-card-content">
+            <div >
+               <table class="uk-table uk-table-condensed uk-table-hover">
+                    <thead>
+                        <div class="row">
+                            <div class="col-sm-6" >
+                              <h3 class="heading_a ">Book Issue By Student(s)</h3>
+                            </div>
+                            
+                            <div class="col-sm-6 text-center">
+                                {% if user.booksdue > 0 %}
+                                <h3 class="heading_a uk-margin-bottom">Book(s) Delayed:<span style="color: red; font-weight:bold;">{{user.booksdue}}</span></h3>
+                                {%endif%}
+                            </div>
+                          </div>
+                           
+                            <tr>
+                             <th class="uk-text-nowrap">Book Name</th>
+                             <th class="uk-text-nowrap">Due Date</th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                       
+                        {% for stdr in user.student_books %}
+                            <tr class="uk-table-middle">
+                            <td class="uk-width-3-10 uk-text-nowrap">{{stdr.book_name}}</td>
+                            <td class="uk-width-3-10 uk-text-nowrap" >{{stdr.expiry_date.date}}</td>
+                            </tr>
+                      
+                        {% endfor %}
+                    </tbody>
+                
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+         </div>{% endif %}
+     </div>{% endif %}
+ </div> 
+         
+
+
+
 
 
                {% if user.profile.designation.level_name == "student" %}
