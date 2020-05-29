@@ -6,4 +6,6 @@ admin.site.register(BookSubCategory)
 admin.site.register(Book)
 admin.site.register(IssueBook)
 admin.site.register(BookCode)
+admin.site.register(LibrarySettings)
+# admin.site.register(IssueDays)
 

@@ -3,6 +3,8 @@ from main_app.models import*
 from .models import *
 from django.contrib import messages
 from django.utils import timezone
+from notices.models import *
+
 
 
 # Create your views here.
@@ -16,6 +18,12 @@ def library(request):
     total_issue_books = total_issue.count()
     left = total_books - total_issue_books
     books= BookCode.objects.filter(book_institute=request.user.profile.institute)
+    lib_set= LibrarySettings.objects.get(institute=request.user.profile.institute)
+    
+     # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     context_data = {
       'institute_data':institute_data,
       'categories':categories, 
@@ -25,6 +33,7 @@ def library(request):
       'total_issue_books':total_issue_books,
       'left':left,
       'total_issue':total_issue,
+      'lib_set':lib_set,
     }
     return render(request, 'library/library.html',context_data)
 
@@ -34,6 +43,10 @@ def book(request):
     sub_categories= BookSubCategory.objects.filter(institute_subcategory=request.user.profile.institute)
     books= BookCode.objects.filter(book_institute=request.user.profile.institute)
     len_books=len(books)
+     # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     context_data = {
       'institute_data':institute_data,  
       'categories':categories,
@@ -78,6 +91,10 @@ def add_book(request):
       institute_data=Institute.objects.get(pk=request.user.profile.institute.id)
       book_code= BookCode.objects.get(pk=request.GET.get('book_group'))  
       book_count = int(book_code.book_count)
+       # starting user notice
+      if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+      # ending user notice
       context_data = {
       'institute_data':institute_data,  
       'book_code':book_code,
@@ -136,7 +153,10 @@ def issuebook(request):
             role= request.POST['selected_role']
             name= request.POST['full_name']
             print(role)
-     
+      # starting user notice
+      if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+      # ending user notice
       context_data = {
         'designation':designation,      
       }
@@ -233,5 +253,15 @@ def fetch_sub_category(request):
         subs= subs+ f"<option value='{sub.id}' >"+str(sub)+"</option>"
     return HttpResponse(subs)
       
-      
+def lib_settings(request):
+      if request.method == 'POST':
+            max_b= request.POST['max_books']
+            days_b= request.POST['days_books']
+            reminder_d= request.POST['reminder_days']            
+            t= LibrarySettings.objects.get(institute__id=request.user.profile.institute.id)
+            t.max_Book_Allows= max_b
+            t.day_Span= days_b
+            t.send_Reminder_Before= reminder_d
+            t.save()              
+            return HttpResponseRedirect(f'/library/')        
 
