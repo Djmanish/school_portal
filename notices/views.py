@@ -8,10 +8,11 @@ from django.views.generic import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from AddChild.models import *
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 # Create your views here.
 
 def all_notices(request):  
-# starting user notice
+    # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
@@ -34,7 +35,7 @@ def all_notices(request):
 
 
 def create_notice(request):
-# starting user notice
+    # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
@@ -182,13 +183,21 @@ def creating_new_notice(request):
         
 
         
+from .forms import NoticeUpdateForm
 
-
-class Edit_Notice_view(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class Edit_Notice_view(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model= Notice
-    fields = ['subject','content']
+    # fields = ['subject','content']
     template_name = 'notices/update_notice.html'
     success_url ="/notice/create/"
+    form_class = NoticeUpdateForm
+    success_message = "Notice updated successfully !"
+
+    def form_valid(self, form):
+        print()
+        
+        form.instance.publish_date = datetime.datetime.strptime(self.request.POST['pubdatetime'], '%Y-%m-%dT%H:%M') 
+        return super().form_valid(form)
 
     def test_func(self):
         notice = self.get_object()

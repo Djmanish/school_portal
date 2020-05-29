@@ -549,9 +549,22 @@
                                     <form method="POST" style="padding: 20px;">
                                       {% csrf_token %}
       {{form | crispy }}
+
+      <div class="form-group">
+        <label for="usr" class="required">Publish Date & Time</label>
+        <input type="datetime-local" class="form-control form-control-sm" name="pubdatetime" value="{{object.publish_date|date:'DATETIME_FORMAT'}}"  required>
+    </div>
       <input type="submit" value="Update" class="md-btn md-btn-primary">
                                     </form>
                                   </div>
+
+                                  <!-- <script>
+    $(function () {
+        $('.datetime-input').datetimepicker({
+            format:'YYYY-MM-DD HH:mm:ss'
+        });
+    });
+</script> -->
                                
                         
                             <li>

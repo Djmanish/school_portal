@@ -247,12 +247,11 @@ label{
 
 .ast{
   color:red;
-  font-weight: bold;
+  
 }
 label.required::after{
   content: "*";
   color: red;
-  font-weight: bold;
 }
 
   
@@ -313,3 +312,16 @@ label.required::after{
 .tdcs{
   max-height: 300px;
 }
+
+/* starting form control modifications */
+
+.form-control{
+  border:1px solid #1976d249 !important;
+}
+.form-control:focus {
+  background-color:#1976d211 !important;
+  border: 1px solid  #1976d2 !important ;
+  box-shadow: none !important;  
+}
+
+/* ending form control modifications */
