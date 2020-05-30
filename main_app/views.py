@@ -355,7 +355,8 @@ def dashboard(request):
     # class attendance status 
     
     # Library Book Status
-    if request.user.profile.designation != "parent":
+    if request.user.profile.designation:
+        if request.user.profile.designation != "parent":
             request.user.student_books=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
             # request.user.student_books_len = len(request.user.student_books)
             request.user.booksdue=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
@@ -371,32 +372,32 @@ def dashboard(request):
            
 
 # starting library status for parent view
-    if request.user.profile.designation.level_name == "parent":
-              
-        request.user.user_child_books_status = []
-        user_children= AddChild.objects.filter( parent= request.user.profile)
-        print(user_children)
-        parent_student_list = []
-        for books in user_children:
-            student= UserProfile.objects.get(pk=books.child.id)
-            parent_student_list.append(student)
-            
-        # if(len(user_children)>0):
-        #     student_lib = Students_fees_table.objects.filter(student__in= parent_student_list )
-        #     request.user.user_child_books_status = student_lib
- 
+        if request.user.profile.designation.level_name == "parent":
+                
+            request.user.user_child_books_status = []
+            user_children= AddChild.objects.filter( parent= request.user.profile)
+            print(user_children)
+            parent_student_list = []
+            for books in user_children:
+                student= UserProfile.objects.get(pk=books.child.id)
+                parent_student_list.append(student)
+                
+            # if(len(user_children)>0):
+            #     student_lib = Students_fees_table.objects.filter(student__in= parent_student_list )
+            #     request.user.user_child_books_status = student_lib
+    
 
-        request.user.student_books=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
-          
-        request.user.booksdue=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
-        
-        count_delay=timezone.now()
-        for i in request.user.student_books:
-               
-            if count_delay > i.expiry_date:
-                i.delay = count_delay - i.expiry_date
-            else:
-                i.delay = 0 
+            request.user.student_books=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
+            
+            request.user.booksdue=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
+            
+            count_delay=timezone.now()
+            for i in request.user.student_books:
+                
+                if count_delay > i.expiry_date:
+                    i.delay = count_delay - i.expiry_date
+                else:
+                    i.delay = 0 
     
 
 # starting class teacher's  class status for last six days

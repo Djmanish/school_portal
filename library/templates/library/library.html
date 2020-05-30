@@ -513,13 +513,14 @@
                             </div>
                             <div class="uk-modal" id="modal_new_category">
                                 <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
                                     <div class="uk-modal-header">
-                                        <h3 class="uk-modal-title">Add Book Category</h3>
+                                        <h3 class="uk-text-primary">Add Book Category</h3>
                                     </div>
                                     <form  method="POST" action="{% url 'add_category' %}">
                                         {% csrf_token %}
                                         <div class="form-group">
-                                            <label style="color: black;"> <span class="ast"> * </span>Category Name:</label>
+                                            <label class="required" style="color: black;">Category Name</label>
                                             <input type="text" class="form-control" name="book_category_name" required>
                                           </div>                                                                                                         
                                               <table>
@@ -528,7 +529,7 @@
                                                   <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add Category</button>
                                                 </td>
                                                 <td style="padding-left:20px;">
-                                        <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button>
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
                                     </td>
                                 </tr>
                                 </table>
@@ -537,31 +538,33 @@
                             </div>
                             <div class="uk-modal" id="modal_new_sub_category">
                                 <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
                                     <div class="uk-modal-header">
-                                        <h3 class="uk-modal-title">Add Book Sub Category</h3>
+                                        <h3 class="uk-text-primary">Add Book Sub Category</h3>
                                     </div>
                                     <form  method="POST" action="{% url 'add_sub_category' %}">
                                         {% csrf_token %}
                                         <div class="form-group">
-                                            <label style="color: black;"><span class="ast"> * </span>Sub Category Name:</label>
-                                            <input type="text" class="form-control" name="sub_category_name" required>
-                                          </div>   
-                                          <div class="form-group">
-                                            <label style="color: black;"><span class="ast"> * </span>Select Category:</label>
+                                            <label class="required" style="color: black;">Select Category</label>
                                             <select class="form-control" name="sub_category_parent" required>
                                                 <option selected disabled value="">--- Select ---</option>
                                                 {% for i in categories %}
                                               <option value={{i.id}}>{{i}}</option>
                                               {% endfor %}
                                             </select>
-                                          </div>                                                                                                     
+                                          </div>  
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Sub Category Name</label>
+                                            <input type="text" class="form-control" name="sub_category_name" required>
+                                          </div>   
+                                                                                                                                             
                                               <table>
                                                 <tr>
                                                     <td> 
                                                   <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;">Add Sub Category</button>
                                                 </td>
                                                 <td style="padding-left:20px;">
-                                        <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:white;width: 140px;color: black;">Cancel</button>
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:white;width: 140px;color: black;">Cancel</button> -->
                                     </td>
                                 </tr>
                                 </table>
@@ -570,21 +573,22 @@
                             </div>
                             <div class="uk-modal" id="modal_library_settings">
                                 <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
                                     <div class="uk-modal-header">
-                                        <h3 class="uk-modal-title">Library Settings</h3>
+                                        <h3 class="uk-text-primary">Library Settings</h3>
                                     </div>
                                     <form  method="POST" action="{% url 'lib_settings' %}">
                                         {% csrf_token %}
                                         <div class="form-group">
-                                            <label class="required" style="color: black;">Max Books Per User:</label>
+                                            <label class="required" style="color: black;">Max Books Per User</label>
                                             <input type="number" class="form-control" value="{{lib_set.max_Book_Allows}}" name="max_books" required >
                                           </div>   
                                           <div class="form-group">
-                                            <label class="required" style="color: black;">Set Days For Book Allotement:</label>
+                                            <label class="required" style="color: black;">Set Days For Book Allotement</label>
                                             <input type="number" class="form-control" value="{{lib_set.day_Span}}" name="days_books" required>
                                           </div> 
                                           <div class="form-group">
-                                            <label class="required" style="color: black;">Reminder Start Before (Days):</label>
+                                            <label class="required" style="color: black;">Reminder Start Before (Days)</label>
                                             <input type="number" class="form-control" value="{{lib_set.send_Reminder_Before}}" name="reminder_days" required>
                                           </div>
                                                                                                                                                 
@@ -698,25 +702,26 @@
                                                 </a> -->
                                                 <div class="uk-modal" id="modal_new_book">
                                                     <div class="uk-modal-dialog">
+                                                        <button type="button" class="uk-modal-close uk-close"></button>
                                                         <div class="uk-modal-header">
-                                                            <h3 class="uk-modal-title">Add Book Group</h3>
+                                                            <h3 class="uk-text-primary">Add Book</h3>
                                                         </div>
                                                         <form  method="POST" action="{% url 'add_book_group' %}">
                                                             {% csrf_token %}
                                                             <div class="form-group">
-                                                                    <label ><span class="ast"> * </span>Book code ( ISBN No / Subject Code ) :</label>
+                                                                    <label class="required">Book Code ( ISBN No / Subject Code )</label>
                                                                     <input type="text" class="form-control form form-control-sm " name="book_code" required>
                                                                 </div> 
                                                                 <div class="form-group">                                                      
-                                                                    <label ><span class="ast"> * </span>Book Count:</label>
+                                                                    <label class="required">Book Count</label>
                                                                     <input type="number" class="form-control-sm form-control" name="book_count" required>
                                                                   </div> 
                                                                   <div class="form-group">
-                                                                    <label ><span class="ast"> * </span>Book Name:</label>
+                                                                    <label class="required">Book Name</label>
                                                                     <input type="text" class="form-control-sm form-control" name="book_name" required>
                                                                   </div>
                                                                   <div class="form-group">
-                                                                    <label for="sel1"><span class="ast"> * </span>Select Category:</label>
+                                                                    <label class="required" for="sel 1">Select Category</label>
                                                                     <select id="book_category" class="form-control-sm form-control" name="book_category" required>
                                                                         <option selected disabled value="">--- Select ---</option>
                                                                         {% for i in categories %}
@@ -726,7 +731,7 @@
                                                                     </select>
                                                                   </div> 
                                                                   <div class="form-group">
-                                                                    <label for="sel1"><span class="ast"> * </span>Select Sub Category:</label>
+                                                                    <label class="required" for="sel1">Select Sub Category</label>
                                                                     <select id="book_sub_category" class="form-control-sm form-control" name="book_sub_category" required>
                                                                         <!-- <option selected disabled value="">--- Select ---</option> -->
                                                                         <!-- {% for j in sub_categories %}
@@ -736,15 +741,15 @@
                                                                     </select>
                                                                   </div> 
                                                                   <div class="form-group">
-                                                                    <label ><span class="ast"> * </span>Author Name:</label>
+                                                                    <label class="required">Author Name</label>
                                                                     <input type="text" class="form-control-sm form-control" name="author_name" required>
                                                                   </div>
                                                                   <div class="form-group">
-                                                                    <label ><span class="ast"> * </span>Publications:</label>
+                                                                    <label class="required">Publication</label>
                                                                     <input type="text" class="form-control-sm form-control" name="publications" required>
                                                                   </div>
                                                                   <div class="form-group">
-                                                                    <label ><span class="ast"> * </span>Edition:</label>
+                                                                    <label class="required">Edition</label>
                                                                     <input type="text" class="form-control-sm form-control" name="editions" required>
                                                                   </div>                                               
                                                                   <table>
@@ -753,7 +758,7 @@
                                                                       <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add Book</button>
                                                                     </td>
                                                                     <td style="padding-left:20px;">
-                                                            <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:white; color: black ;width: 140px;">Cancel</button>
+                                                            <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:white; color: black ;width: 140px;">Cancel</button> -->
                                                         </td>
                                                     </tr>
                                                     </table>
@@ -854,8 +859,9 @@
                         </div>
                         <div class="uk-modal" id="return_book">
                             <div class="uk-modal-dialog">
+                                <button type="button" class="uk-modal-close uk-close"></button>
                                 <div class="uk-modal-header">
-                                    <h3 class="uk-modal-title">Book Return</h3>
+                                    <h3 class="uk-text-primary">Book Return</h3>
                                 </div>
                                     <script>
                                         $(document).ready(function(){
@@ -874,7 +880,7 @@
                                         });
                                         </script>
                                             <div class="form-group">
-                                                <label><span class="ast"> * </span>Book Id :</label>
+                                                <label class="required">Book Id :</label>
                                                 <input id="issue_data" type="text" class="form-control form form-control-sm " name="book_code" required>
                                             </div>
                                             <!-- <div class="uk-input-group">

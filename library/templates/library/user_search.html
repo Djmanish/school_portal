@@ -50,26 +50,24 @@
                     </a>
                     <div class="uk-modal" id="modal_book_issue">
                         <div class="uk-modal-dialog">
+                            <button type="button" class="uk-modal-close uk-close"></button>
                             <div class="uk-modal-header">
-                                <h3 class="uk-modal-title">Issue Book</h3>
+                                <h3 class="uk-text-primary">Issue Book</h3>
                             </div>
                             <form  method="POST" action="{% url 'issue_book' %}">
                                 {% csrf_token %}
                                 <input type="hidden" id="borrower_userid" type="text" name="user_id">
                                 <div class="form-group">                                        
-                                        <label >User :</label>
+                                        <label > Selected User</label>
                                         <input id="borrower_name" type="text" class="form-control form form-control-sm "  required readonly>
                                     </div>
                                      
                                     <div class="form-group">                                                      
-                                        <label ><span class="ast"> * </span>Enter Book Id:</label>
+                                        <label class="required" >Enter Book Id</label>
                                         <input type="text" class="form-control-sm form-control" name="book_id" required>
                                       </div> 
                                       
-                                      <div class="form-group">
-                                        <label ><span class="ast"> * </span>Return Date:</label>
-                                        <input type="date" class="form-control-sm form-control" name="return_date" required>
-                                      </div>
+                                      
                                                                                      
                                       <table>
                                         <tr>
@@ -77,7 +75,7 @@
                                           <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Issue Book</button>
                                         </td>
                                         <td style="padding-left:20px;">
-                                <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:white;color: black ;width: 140px;">Cancel</button>
+                                
                             </td>
                         </tr>
                         </table>
