@@ -647,10 +647,13 @@ def dashboard(request):
 class RegistrationViewUniqueEmail(RegistrationView):
     form_class = RegistrationFormUniqueEmail
     
-
+from django.contrib.auth import logout
 def login(request):
-    if request.user.is_authenticated:
-        return redirect('user_dashboard')
+    try:
+        if request.user.is_authenticated:
+            return redirect('user_dashboard')
+    except:
+        logout(request)
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
