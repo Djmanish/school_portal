@@ -1,22 +1,22 @@
 <form  method="POST" action="{% url 'book_return' %}">
     {% csrf_token %}
     <div class="form-group">
-        <label >Name :</label>
+        <label >Name</label>
         <input id="borrow_name" value="{{issue_book_search.user_name.first_name}} {{issue_book_search.user_name.last_name}}" type="text" class="form-control form form-control-sm " name="book_code" required readonly/>
     </div>
     <div class="form-group">
-        <label >Book Name :</label>
+        <label >Book Name</label>
         <input id="borrow_name" value="{{issue_book_search.book_name}}" type="text" class="form-control form form-control-sm " name="book_code" required readonly/>
     </div> 
     <div class="form-group">
-        <label >Issue Date :</label>
+        <label >Issue Date</label>
         <input id="borrow_name" value='{{issue_book_search.issued_date|date:"M d,Y"}}' type="text" class="form-control form form-control-sm " name="book_code" required readonly/>
     </div> 
     
         <input id="borrow_id" value="{{issue_book_search.id}}" type="hidden" class="form-control form form-control-sm " name="borrow_id" required readonly/>
     
     <div class="form-group">
-        <label for="sel1"><span class="ast"> * </span>Return Book:</label>
+        <label class="required" for="sel1">Return Book:</label>
         <select class="form-control-sm form-control" name="book_category" required>
             <option value="0">No</option>       
             <option value="1">Yes</option>                 
@@ -28,7 +28,7 @@
         <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
         </td>
         <td style="padding-left:20px;">
-    <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white; color:black;width: 140px;">Cancel</button>
+    <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white; color:black;width: 140px;">Cancel</button> -->
     </td>
     </tr>
     </table>

@@ -736,7 +736,7 @@
    success: function(msg){
        $("#myModal").modal("hide");
        if (msg == 'fees already processed for this due date'){
-           alert('Fees for this due date already processed');
+           alert('Fees for this due date already processed !');
            location.reload();
        }else{
            window.location.href = msg;

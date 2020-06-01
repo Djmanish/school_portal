@@ -4,6 +4,7 @@ from .models import *
 from django.contrib import messages
 from django.utils import timezone
 from notices.models import *
+from datetime import datetime, timedelta
 
 
 
@@ -186,7 +187,11 @@ def issue_book(request):
       if request.method == 'POST':
           userid= request.POST['user_id']
           bookid= request.POST['book_id']
-          expirydate= request.POST['return_date']
+          sh_for_days = LibrarySettings.objects.get(institute__id=request.user.profile.institute.id)
+          today= timezone.now()
+          expirydate= today+timedelta(days= sh_for_days.day_Span)
+          ex_d =expirydate.date()
+          # expirydate= request.POST['return_date']
           borrower= UserProfile.objects.get(pk=userid)
           try:
             borrower_book= Book.objects.get(book_id=bookid)
@@ -198,10 +203,11 @@ def issue_book(request):
             messages.error(request, 'Book Is Already Issued')
             return HttpResponseRedirect(f'/library/issuebook/')
           except:
-            today= datetime.datetime.today()
-            today_time= datetime.datetime.now().strftime('%H:%M:%S')
+            
+            # today_time= datetime.datetime.now().strftime('%H:%M:%S')
             new_issue_book=IssueBook.objects.create(user_name=borrower, book_name=borrower_book, issue_book_institute=borrower.institute, issued_by=request.user.profile, issued_date=today, expiry_date=expirydate)
-            messages.success(request, 'Book Issued Successfully !')
+            messages.success(request, 'Book issued successfully !')
+            messages.info(request,f' Return date is {ex_d} !')
             return HttpResponseRedirect(f'/library/issuebook/')
           
       # return HttpResponse('Hello World Issue Book')      
