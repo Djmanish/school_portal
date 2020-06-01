@@ -315,10 +315,10 @@ label.required::after{
 
 /* starting form control modifications */
 
-.form-control{
+.form-control, .custom-file-label , .custom-select{
   border:1px solid #1976d249 !important;
 }
-.form-control:focus {
+.form-control:focus, .custom-select {
   background-color:#1976d211 !important;
   border: 1px solid  #1976d2 !important ;
   box-shadow: none !important;  
