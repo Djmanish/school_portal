@@ -515,7 +515,7 @@
                             </div>
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{institute_data.profile_pic.url}}" alt="user avatar" />
+                                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
                                 </div>
                             </div>
                             <div class="user_heading_content">
@@ -596,8 +596,9 @@
                                            <a href="{% url 'fees_tag_history' %}"> <b><i class="material-icons uk-text-primary">history</i> Tag Updates Full History</b></a>
                                            <div class="uk-modal" id="modal_new_tag">
                                                <div class="uk-modal-dialog">
+                                                <button type="button" class="uk-modal-close uk-close"></button>
                                                    <div class="uk-modal-header">
-                                                       <h3 class="uk-modal-title">Add New Tag </h3>
+                                                    <h3 class="uk-text-primary">Add New Tag</h3>
                                                    </div>
                                                    <form method="POST" action="{% url 'create_fee_tag' %}">
                                                        {% csrf_token %}
@@ -735,7 +736,7 @@
    success: function(msg){
        $("#myModal").modal("hide");
        if (msg == 'fees already processed for this due date'){
-           alert('Fees for this due date already processed');
+           alert('Fees for this due date already processed !');
            location.reload();
        }else{
            window.location.href = msg;
@@ -870,8 +871,14 @@
                                 {% if  user.profile.designation.level_name == "principal" %}
                                 <li>
                                     <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+
+                                        
+                                        <a href="{% url 'fees_reset_history' %}" style="color: #1976d2; float: right;" ><strong> <i class="material-icons uk-text-success">history</i> Fees Reset(Full History)</strong></a>
                                         <div class="uk-width-large">
                                             
+                
+
+
                                             <form  id="ddrfform" >
 {% csrf_token %}
 <div class="form-group">

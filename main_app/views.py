@@ -104,7 +104,7 @@ def add_subjects(request):
             subject_class=Classes.objects.get(id=new_class)
             # get data from User Table
             subject_teacher=User.objects.get(id=subject_teacher)
-            print(subject_teacher)
+            
 
             subject_class = Subjects.objects.create(institute=request.user.profile.institute, subject_class=subject_class, subject_code= subject_code, subject_name= subject_name,subject_teacher=subject_teacher)
 
@@ -115,7 +115,7 @@ def add_subjects(request):
 
 def edit_subject(request, pk):
     
-# starting user notice
+    # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
@@ -355,11 +355,12 @@ def dashboard(request):
     # class attendance status 
     
     # Library Book Status
-    if request.user.profile.designation != "parent":
+    if request.user.profile.designation:
+        if request.user.profile.designation != "parent":
             request.user.student_books=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
             # request.user.student_books_len = len(request.user.student_books)
             request.user.booksdue=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
-            print(request.user.booksdue)
+          
             count_delay=timezone.now()
             for i in request.user.student_books:
                 # ed = i.expiry_date
@@ -368,22 +369,36 @@ def dashboard(request):
                 else:
                     i.delay = 0    
 
-            # ex_date = request.user.student_books.expiry_date
-            # print(ex_date)
+           
 
-            
-            # if count_delay > ex_date:
-            #     a= count_delay - ex_date
-            #     print(a)
-            # else:
-            #     print("not hell")
-            
-            # sum_in=0
-            # for i in a:
-            #     sum_in = sum_in+i.total_due_amount
-            # request.user.sum_out=sum_in           
-         
+# starting library status for parent view
+        if request.user.profile.designation.level_name == "parent":
+                
+            request.user.user_child_books_status = []
+            user_children= AddChild.objects.filter( parent= request.user.profile)
+            print(user_children)
+            parent_student_list = []
+            for books in user_children:
+                student= UserProfile.objects.get(pk=books.child.id)
+                parent_student_list.append(student)
+                
+            # if(len(user_children)>0):
+            #     student_lib = Students_fees_table.objects.filter(student__in= parent_student_list )
+            #     request.user.user_child_books_status = student_lib
+    
 
+            request.user.student_books=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
+            
+            request.user.booksdue=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
+            
+            count_delay=timezone.now()
+            for i in request.user.student_books:
+                
+                if count_delay > i.expiry_date:
+                    i.delay = count_delay - i.expiry_date
+                else:
+                    i.delay = 0 
+    
 
 # starting class teacher's  class status for last six days
     last_six_days_list = []
@@ -429,11 +444,11 @@ def dashboard(request):
     # Active Users Count
     time= timezone.now()- datetime.timedelta(minutes=3)
     time1= timezone.now()
-    count=User.objects.filter(last_login__gte=time,last_login__lte=time1)
+    count=UserProfile.objects.filter(user__last_login__gte=time,user__last_login__lte=time1)
     
     online_user=[]
     for i_user in count:
-        if i_user.profile.institute==request.user.profile.institute:
+        if i_user.institute==request.user.profile.institute:
             online_user.append(i_user)
 
     len_online_user=len(online_user)
@@ -632,10 +647,13 @@ def dashboard(request):
 class RegistrationViewUniqueEmail(RegistrationView):
     form_class = RegistrationFormUniqueEmail
     
-
+from django.contrib.auth import logout
 def login(request):
-    if request.user.is_authenticated:
-        return redirect('user_dashboard')
+    try:
+        if request.user.is_authenticated:
+            return redirect('user_dashboard')
+    except:
+        logout(request)
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -1161,7 +1179,7 @@ class Permission_Updates_History_list_View(LoginRequiredMixin, ListView):
     
     
     template_name = 'main_app/permissions_update_history.html'
-    paginate_by = 15
+    paginate_by = 20
 
     def get_queryset(self):
         admin_role = Institute_levels.objects.get(institute=self.request.user.profile.institute, level_name="admin") ##skipping admin role changes

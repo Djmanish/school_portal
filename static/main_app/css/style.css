@@ -133,7 +133,7 @@ body{
   margin: auto;
 }
 .admission_form_label{
-  text-align: center;
+  text-align: left;
   font-weight: 400;
   
 }
@@ -247,12 +247,11 @@ label{
 
 .ast{
   color:red;
-  font-weight: bold;
+  
 }
-label.required:before{
+label.required::after{
   content: "*";
   color: red;
-  font-weight: bold;
 }
 
   
@@ -305,3 +304,24 @@ label.required:before{
   min-height: 450px;
 }
 /* ending notification box modification */
+
+.asteriskField{
+  color: red !important;
+}
+
+.tdcs{
+  max-height: 300px;
+}
+
+/* starting form control modifications */
+
+.form-control, .custom-file-label , .custom-select{
+  border:1px solid #1976d249 !important;
+}
+.form-control:focus, .custom-select {
+  background-color:#1976d211 !important;
+  border: 1px solid  #1976d2 !important ;
+  box-shadow: none !important;  
+}
+
+/* ending form control modifications */

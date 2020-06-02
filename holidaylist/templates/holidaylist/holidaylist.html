@@ -461,13 +461,12 @@
                         <!-- starting Holiday modal themes -->
                         <div class="uk-modal" id="modal_new_holiday">
                             <div class="uk-modal-dialog">
+                                <button type="button" class="uk-modal-close uk-close"></button>
                                 <div class="row">
                                     <div class="col-sm-6" >
                                       <h3 class="uk-text-primary">Add Holiday</h3>
                                     </div>
-                                    <div class="col-sm-6 text-right">
-                                        <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
-                                    </div>
+                               
                                   </div>
                                 
                                <form method="POST" action="{% url 'holidaylist' user.profile.institute.pk %}">
@@ -481,11 +480,11 @@
                    
 
                                     <div class="form-group">
-                                        <label class="required">Holiday Name:</label>
+                                        <label class="required">Holiday Name</label>
                                         <input type="text" class="form-control n_i form-control-sm"  name='holiday_name' required="required">
                                     </div>
                                     <div class="form-group">
-                                        <label for="sel1">Applicable:</label>
+                                        <label for="sel1">Applicable</label>
                                         <select class="form-control form-control-sm" id="sel1" name="holiday_applicable">
                                           <option value="Yes">Yes</option>
                                           <option value="No">No</option>
@@ -493,11 +492,11 @@
                                         </select>
                                       </div>
                                     <div class="form-group">
-                                            <label>Holiday Type:</label>
+                                            <label>Holiday Type</label>
                                             <input type="text" class="form-control n_i form-control-sm" name='holiday_type' >
                                         </div>
                                         <div class="form-group">
-                                            <label for="sel2">Email Send:</label>
+                                            <label for="sel2">Email Send</label>
                                             <select class="form-control form-control-sm" id="sel2" name="holiday_email_send">
                                                 <option value="No">No</option>
                                                 <option value="Yes">Yes</option>
@@ -506,7 +505,7 @@
                                             </select>
                                           </div>
                                           <div class="form-group">
-                                            <label for="sel3">SMS Send:</label>
+                                            <label for="sel3">SMS Send</label>
                                             <select class="form-control form-control-sm" id="sel3" name="holiday_sms_send">
                                                 <option value="No">No</option>
                                                 <option value="Yes">Yes</option>
@@ -515,7 +514,7 @@
                                             </select>
                                           </div>
                                           <div class="form-group">
-                                            <label for="sel4">Notification Send:</label>
+                                            <label for="sel4">Notification Send</label>
                                             <select class="form-control form-control-sm" id="sel4" name="holiday_notification_send">
                                                 <option value="No">No</option>
                                                 <option value="Yes">Yes</option>
@@ -528,10 +527,7 @@
                                     <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add
                                         Holiday</button>
                                     </td>
-                                    <td style="padding-left: 20px;">
-                                
-                                    <button  type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:#ff0000 ;width: 140px;">Cancel</button>
-                                </td>
+                                 
                                 </tr>
                                 </table>
 

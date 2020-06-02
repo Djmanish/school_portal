@@ -19,6 +19,13 @@ class ClassUpdateForm(forms.ModelForm):
 
 
 class InstituteUpdateProfile(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(InstituteUpdateProfile, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['code'].required = True
+        self.fields['establish_date'].required = True
+        self.fields['session_start_date'].required = True
     class Meta:
         model = Institute
         fields = ['code','name','establish_date', 'session_start_date', 'profile_pic','principal','about','contact_number1','contact_number2','contact_number3','address1','address2','district','state','country','pin_code','email','facebook_link','website_link']
@@ -31,9 +38,24 @@ class InstituteUpdateProfile(forms.ModelForm):
             'contact_number1':forms.TextInput(attrs={'class':'positive_number'}),
             'contact_number2':forms.TextInput(attrs={'class':'positive_number'}),
             'contact_number3':forms.TextInput(attrs={'class':'positive_number'}),
-           
-
         }
+
+        labels = {
+        "profile_pic": "Profile Picture",
+        'code':"School Code",
+        'name':"School Name",
+        'establish_date':'Establish Date',
+        'session_start_date':'Session Start Date',
+        'contact_number1':'Contact No. 1',
+        'contact_number2':'Contact No. 2',
+        'contact_number3':'Contact No. 3',
+        'address1':'Address Line 1',
+        'address2':'Address Line 2',
+        'pin_code':'Pin Code',
+        'facebook_link':'Facebook Link',
+        'website_link':'School Website Link'
+
+    }
 
             
             

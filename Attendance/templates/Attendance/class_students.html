@@ -522,9 +522,9 @@
                     <form  method="POST" action="{% url 'class_students_list' %}" class="form-inline" id="attendance_form">
                         {% csrf_token %}
                     
-                          <label style="margin: 4px;">Select Class:  </label>
+                          <label style="margin: 4px;"><span class ="ast">*</span>Select Class:  </label>
                         <select name="selected_class_" class="form-control"  required>
-                           <option selected disabled value=""> -- select a class -- </option>
+                           <option selected disabled value=""> -- Select Class -- </option>
 
 {% for class in all_classes %}
 <option value="{{class.id}}">{{class}}</option>
