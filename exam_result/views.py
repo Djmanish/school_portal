@@ -11,11 +11,26 @@ from django.core.cache import cache
 import random   
 from AddChild.models import * 
 from django.core.exceptions import PermissionDenied
-
+from io import BytesIO
+from django.template.loader import get_template
+from django.views import View
+from xhtml2pdf import pisa
+from django.contrib.sessions.models import Session
+from django.utils import timezone
+from notices.models import Notice, Notification_Category
+from django.http import JsonResponse
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models.fields.files import ImageFieldFile
 # Create your views here.
 def exam_result(request,pk):
   inst = request.user.profile.institute.id
   if pk==inst:
+        # starting user notice
+      if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
+    
       result_institute=Institute.objects.get(pk=pk)
       exam_result_institute=ExamResult.objects.filter(institute=result_institute)
       #  to fetch the logged in  subject teacher
@@ -72,6 +87,10 @@ def exam_result(request,pk):
         raise PermissionDenied
     
 def examresult(request,pk):
+    # starting user notice
+      if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
       result_institute=Institute.objects.get(pk=pk)
       exam_result_institute=ExamResult.objects.filter(institute=result_institute)
       inst_id=request.user.profile.institute.id
@@ -184,12 +203,12 @@ def chart_sr_no(request):
     chart_result_sr_no = chart_result_sr_no + f"<option>"+result_sr_no['exam_sr_no']+"</option>" 
   return HttpResponse(chart_result_sr_no)
 
-
 def report_card(request,pk):
-
-  inst = request.user.profile.institute.id
-  if pk==inst:
       user_institute_name=Institute.objects.get(pk=pk)
+        # starting user notice
+      if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
 
       request.user.user_child_fee_status = []
       user_children= AddChild.objects.filter(parent= request.user.profile)
@@ -204,9 +223,36 @@ def report_card(request,pk):
           if request.user.profile.designation.level_name=='student':
               institute_student=request.user.profile.institute
               student_class=request.user.profile.Class
+              student_session_start=request.user.profile.class_current_year
+              student_session_end=request.user.profile.class_next_year
+              student_profile_pic=request.user.profile.profile_pic
+              student_roll_no=request.user.profile.roll_number
+              student_first_name=request.user.profile.first_name
+              student_last_name=request.user.profile.last_name
+              student_mother_name=request.user.profile.mother_name
+              student_father_name=request.user.profile.father_name
+              student_dob=request.user.profile.date_of_birth
+              student_contact_no=request.user.profile.mobile_number
+              student_address1=request.user.profile.address_line_1
+              student_address2=request.user.profile.address_line_2
+              # student_session=UserProfile.objects.get(pk=request.user)
               select_exam_type = request.POST.get('result_exam_type')
-              if select_exam_type=="Overall":
-                return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{request.user.id}')
+              if select_exam_type=="overall":
+                if request.POST.get("report_cart_button"):
+                  return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{request.user.id}')
+
+                elif request.POST.get("view_button"):
+                  return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{request.user.id}')
+              else :
+                if select_exam_type!="overall":
+                  
+                    if request.POST.get("report_cart_button"):
+                      return reports_card(request,exam_id)
+                      # return HttpResponseRedirect(f'/examresult/reports_card/{exam_id}')
+
+                    elif request.POST.get("view_button"):
+                      pass
+                
               exam_type=ExamType.objects.get(pk=select_exam_type)
               exam_per_value=exam_type.exam_per_final_score
               e=int(exam_per_value)
@@ -232,13 +278,159 @@ def report_card(request,pk):
               for sub_data in resultsubject:
                 data_marks={}
                 data_marks['subj']=sub_data
+                
+                s=sub_data
                 for e_no in exam_no:
                   try:
                         student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
                         data_marks[e_no]=student_data.result_score
+                        
                   except: 
                       data_marks[e_no]=None
+                my_session_context={}
+                for key,value in data_marks.items():
+                  print(value)
 
+                marks_data=[]
+                for key,value in data_marks.items():
+                    if key=="subj":
+                      pass
+                    else:
+                      marks_data.append(value)
+                sum=0
+                for m in marks_data:
+                    if m is None: 
+                      pass
+                    else:
+                      sum= sum+m
+                max_exam_limit=exam_no[-1]  
+                max_limit=int(max_exam_limit)  
+                sumValue=sum
+                data_marks['sum']=sumValue
+                sumper=((sumValue/max_limit)/examtype_maxmarks)*e
+                data_marks['avg']=round(sumper,2)
+                result_data.append(data_marks)
+                percentage_sum=[]
+                for k,v in data_marks.items():
+                    if k=='avg':
+                      percentage_sum.append(v)
+                sum=0
+                for per_sum in percentage_sum:
+                    sum=sum+per_sum
+                
+              my_session_context['sum']=sum
+              my_session_context['user_institute_name']=user_institute_name.name
+              my_session_context['user_institute_address1']=user_institute_name.address1
+              my_session_context['user_institute_address2']=user_institute_name.address2
+              my_session_context['selected_exam_type']=exam_type.exam_type
+              my_session_context['student_session_start']=student_session_start
+              my_session_context['student_session_end']=student_session_end
+              my_session_context['student_roll_no']=student_roll_no
+              my_session_context['student_class']=json.dumps(str(student_class))
+
+              my_session_context['student_first_name']=student_first_name
+              my_session_context['student_last_name']=student_last_name
+              my_session_context['student_mother_name']=student_mother_name
+              my_session_context['student_father_name']=student_father_name
+              my_session_context['student_dob']=json.dumps(str(student_dob))
+              my_session_context['student_contact_no']=student_contact_no
+              my_session_context['student_address1']=student_address1
+              my_session_context['student_address2']=student_address2
+              my_session_context['user_institute_pic']=json.dumps(str(user_institute_name.profile_pic))
+              my_session_context['Subjects']=json.dumps(str(resultsubject))
+              my_session_context['exam_no']=json.dumps(str(exam_no))
+              my_session_context['result_data']=json.dumps(str(result_data))
+              
+              
+
+
+              context={
+                'user_institute_name':user_institute_name,
+                'institute_student':institute_student,
+                'student_class':student_class,
+                    'select_exam_type':exam_type,
+                    'all_exam':all_exam,
+                    'exam_no':exam_no,
+                    'resultsubject':resultsubject,
+                    'result_data':result_data,
+                    'exam_type_list':exam_type_list,
+                    'parent_student_list':parent_student_list,
+                    'e_maxmarks':e_maxmarks,
+                          }
+              request.session['result_session_data'] =my_session_context
+
+              # result_data = request.session['result_data'] 
+              
+              return render(request, 'report_card.html', context)
+
+            
+          if request.user.profile.designation.level_name=='parent':
+              user_institute_name=Institute.objects.get(pk=pk)
+              select_exam_type = request.POST.get('result_exam_type')
+              selected_student=User.objects.get(pk=request.POST.get('selected_student'))
+              student_class= selected_student.profile.Class
+              institute_student=selected_student.profile.institute
+
+              exam_id=request.user.profile.institute.id
+
+
+             
+              # if select_exam_type=="Overall":
+               
+              #   # return render(request, 'overall.html', context)
+
+              #   return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{selected_student.id}')
+              
+              if select_exam_type=="overall":
+                select_exam_type = request.POST.get('result_exam_type')
+                select_st=request.POST.get('selected_student')
+                selected_student=User.objects.get(pk=select_st)
+                if request.POST.get("report_cart_button"):
+                  return overall_report_card(request,exam_id,select_st)
+
+                elif request.POST.get("view_button"):
+                  return overall_result(request,exam_id,select_st)
+              else :
+                if select_exam_type!="overall":
+                  
+                    if request.POST.get("report_cart_button"):
+                      return reports_card(request,exam_id)
+                      # return HttpResponseRedirect(f'/examresult/reports_card/{exam_id}')
+
+                    elif request.POST.get("view_button"):
+                      pass 
+              exam_type=ExamType.objects.get(pk=select_exam_type)
+              exam_per_value=exam_type.exam_per_final_score
+              e=int(exam_per_value)
+              e_maxmarks=exam_type.exam_max_marks
+              examtype_maxmarks=int(e_maxmarks)
+              e_total_limit=exam_type.exam_max_limit
+              examtype_total_limit=int(e_total_limit)
+              
+              all_exam=ExamResult.objects.filter(exam_type=exam_type,result_student_data=selected_student)
+              exam_no=[]
+              for data in all_exam:
+                if data.exam_sr_no in exam_no:
+                  pass
+                else:
+                  exam_no.append(data.exam_sr_no)
+              resultsubject=[]
+              for sub in all_exam:
+                if sub.result_subject in resultsubject:
+                  pass
+                else:
+                  resultsubject.append(sub.result_subject)
+              result_data=[]
+              for sub_data in resultsubject:
+                data_marks={}
+              
+                data_marks['subj']=sub_data
+                for e_no in exam_no:
+                  try:
+                    student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=selected_student,result_subject=sub_data)
+                    data_marks[e_no]=student_data.result_score
+                  except:
+                    data_marks[e_no]=None
                 marks_data=[]
                 for key,value in data_marks.items():
                     if key=="subj":
@@ -267,9 +459,585 @@ def report_card(request,pk):
                 for per_sum in percentage_sum:
                     sum=sum+per_sum
 
+                
+
+              context={
+                'user_institute_name':user_institute_name,
+                'e_maxmarks':e_maxmarks,
+                    'institute_student':institute_student,
+                    'student_class':student_class,
+                    'select_exam_type':exam_type,
+                    'all_exam':all_exam,
+                    'exam_no':exam_no,
+                    'resultsubject':resultsubject,
+                    'result_data':result_data,
+                    'exam_type_list':exam_type_list,
+                    'parent_student_list':parent_student_list,
+                          }
+          return render(request, 'report_card.html', context)        
+      context={
+        'user_institute_name':user_institute_name,
+            'exam_type_list':exam_type_list,
+            'parent_student_list':parent_student_list,
+            
+          }
+
+      return render(request, 'report_card.html', context)
+        
+
+
+
+
+def overall_result(request,pk,student_pk):
+  inst = request.user.profile.institute.id
+  user_children= AddChild.objects.filter(parent= request.user.profile)
+  parent_student_list = []
+  for st in user_children:
+            student= UserProfile.objects.get(pk=st.child.id)
+            parent_student_list.append(student)
+  user_institute_name=Institute.objects.get(pk=pk)
+  selected_student_data=UserProfile.objects.get(pk=student_pk)
+  institute_student=selected_student_data.institute
+  student_class=selected_student_data.Class
+
+  if pk==inst:
+    if request.user.profile.designation.level_name=='parent':
+      if request.method=="POST":
+              user_institute_name=Institute.objects.get(pk=pk)
+              select_exam_type = request.POST.get('result_exam_type')
+              select_st=request.POST.get('selected_student')
+              selected_student=User.objects.get(pk=select_st)
+              student_class= selected_student.profile.Class
+              institute_student=selected_student.profile.institute
+
+              exam_id=request.user.profile.institute.id
+
+
+             
+              # if select_exam_type=="Overall":
+               
+              #   # return render(request, 'overall.html', context)
+
+              #   return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{selected_student.id}')
+              
+              if select_exam_type=="overall":
+                select_exam_type = request.POST.get('result_exam_type')
+                select_st=request.POST.get('selected_student')
+                selected_student=UserProfile.objects.get(pk=select_st)
+                if request.POST.get("report_cart_button"):
+                  return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
+
+                elif request.POST.get("view_button"):
+                  return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{selected_student.id}')
+              else :
+                if select_exam_type!="overall":
+                  
+                    if request.POST.get("report_cart_button"):
+                      return reports_card(request,exam_id)
+                      # return HttpResponseRedirect(f'/examresult/reports_card/{exam_id}')
+
+                    elif request.POST.get("view_button"):
+                      pass 
+              exam_type=ExamType.objects.get(pk=select_exam_type)
+              exam_per_value=exam_type.exam_per_final_score
+              e=int(exam_per_value)
+              e_maxmarks=exam_type.exam_max_marks
+              examtype_maxmarks=int(e_maxmarks)
+              e_total_limit=exam_type.exam_max_limit
+              examtype_total_limit=int(e_total_limit)
+              
+              all_exam=ExamResult.objects.filter(exam_type=exam_type,result_student_data=selected_student)
+              exam_no=[]
+              for data in all_exam:
+                if data.exam_sr_no in exam_no:
+                  pass
+                else:
+                  exam_no.append(data.exam_sr_no)
+              resultsubject=[]
+              for sub in all_exam:
+                if sub.result_subject in resultsubject:
+                  pass
+                else:
+                  resultsubject.append(sub.result_subject)
+              result_data=[]
+              for sub_data in resultsubject:
+                data_marks={}
+              
+                data_marks['subj']=sub_data
+                for e_no in exam_no:
+                  try:
+                    student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=selected_student,result_subject=sub_data)
+                    data_marks[e_no]=student_data.result_score
+                  except:
+                    data_marks[e_no]=None
+                marks_data=[]
+                for key,value in data_marks.items():
+                    if key=="subj":
+                      pass
+                    else:
+                      marks_data.append(value)
+                sum=0
+                for m in marks_data:
+                    if m is None: 
+                      pass
+                    else:
+                      sum= sum+m
+
+                max_exam_limit=exam_no[-1]  
+                max_limit=int(max_exam_limit)  
+                sumValue=sum
+                data_marks['sum']=sumValue
+                sumper=((sumValue/max_limit)/examtype_maxmarks)*e
+                data_marks['avg']=round(sumper,2)
+                result_data.append(data_marks)
+                percentage_sum=[]
+                for k,v in data_marks.items():
+                    if k=='avg':
+                      percentage_sum.append(v)
+                sum=0
+                for per_sum in percentage_sum:
+                    sum=sum+per_sum
+
+                
+
+              context={
+                'user_institute_name':user_institute_name,
+                'e_maxmarks':e_maxmarks,
+                    'institute_student':institute_student,
+                    'student_class':student_class,
+                    'select_exam_type':exam_type,
+                    'all_exam':all_exam,
+                    'exam_no':exam_no,
+                    'resultsubject':resultsubject,
+                    'result_data':result_data,
+                    'exam_type_list':exam_type_list,
+                    'parent_student_list':parent_student_list,
+                          }
+              return render(request, 'report_card.html', context)        
+      context={
+          'user_institute_name':user_institute_name,
+              
+              'parent_student_list':parent_student_list,
+              
+            }
+
+      return render(request, 'report_card.html', context)
+                 
+
+
+    if request.user.profile.designation.level_name=='student':
+      user_institute_name=Institute.objects.get(pk=pk)
+      institute_student=request.user.profile.institute
+      student_class=request.user.profile.Class
+      # Create the list of all exam type present in the institute
+      type_exam=[]
+      exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
+      for exam in exam_type_list:
+        type_exam.append(exam)
+      count_value=0
+      for exam_count in type_exam:
+        count_value=count_value+1
+
+
+      for exam_type in exam_type_list:
+        exam_data= ExamResult.objects.filter(exam_type=exam_type,result_student_data=request.user)
+
+        # list of all sr no
+        exam_no=[]
+        for data in exam_data:
+          if data.exam_sr_no in exam_no:
+            pass
+          else:
+            exam_no.append(data.exam_sr_no)
+        # print(exam_no)
+
+        #  list of all subjects  
+        resultsubject=[]
+        for sub in exam_data:
+          if sub.result_subject in resultsubject:
+            pass
+          else:
+            resultsubject.append(sub.result_subject)
+        
+       
+
+        
+        e_data=[]
+        for etype in type_exam:
+          etype_limit=etype.exam_max_limit
+          exam_type_limit=int(etype_limit)
+          etype_marks=etype.exam_max_marks
+          exam_type_marks=int(etype_marks)
+          # final score based on exam type
+          e_type_perValue=etype.exam_per_final_score
+          e_type_per=int(e_type_perValue)
+      
+          for sub in resultsubject:
+            # create list to store exam result
+              e_score=[]
+            # dictionary to store all data set
+              dict1={}
+              # store subjects in dictionary
+              dict1['sub']=sub
+              # store data type in dictionary
+              dict1['etype']=etype
+              # fetch the value of exam score
+              for eno in exam_no:
+                  examresult_data=ExamResult.objects.filter(exam_type=etype,result_subject=sub,exam_sr_no=eno,result_student_data=request.user)
+                  for exam_score in examresult_data:
+                      e_score.append(exam_score.result_score)
+                  marks_list=list(e_score)
+                        
+               
+              # print(max_limit)
+              max_sr_value=[]
+           
+              max_exam_sr_no = ExamDetails.objects.filter(exam_type=etype).values('exam_sr_no').distinct()
+              for max_value in max_exam_sr_no:
+                  for k,v in max_value.items():
+                        max_sr_value.append(v)
+           
+             
+                    # print(v)
+              try:
+                  max_exam_limit=max_sr_value[-1]  
+                  max_limit=int(max_exam_limit)
+              except:
+                max_exam_limit=None
+                max_limit=1
+              
+              # for loop in exam score list
+              sum=0
+              for score in e_score:  
+                  sum=sum+score
+              sumValue=sum
+               
+              perValue=(sumValue/max_limit/exam_type_marks)*e_type_per
+              # store percent in dictionary
+              dict1['percent']=round(perValue,2)
+              e_data.append(dict1)
+        
+        
+        # retrieve list of all subjects from dictionary
+        sub_value=[]
+        for eytpe in e_data:
+          for sub in e_data:
+              for k,v in sub.items():
+                  if k=='sub':
+                    if v in sub_value:
+                      pass
+                    else:
+                      sub_value.append(v)
+        
+       # retrieve list of all percentage from dictionary
+        sub_percent_list=[]
+        for subject in sub_value:
+          sub_percent={}
+          all_percent_list=[]
+          per={}
+          for sub in e_data:
+            sub_percent['sub']=subject
+            for k,v in sub.items():
+              if k=='sub' and v==subject:
+                 
+                 for k,v in sub.items():
+                   if k=='percent':
+                     all_percent_list.append(v)
+          # print(all_percent_list)
+          for percent_marks in all_percent_list:
+            sub_percent[percent_marks]=percent_marks 
+          
+          sum=0
+          for percent in all_percent_list:
+            sum=sum+percent
+          sub_percent['percent_sum']=round(sum,2)
+          sub_percent_list.append(sub_percent)
+        final_percentage=[]
+        for final_percent_sum in sub_percent_list:
+            for k,v in final_percent_sum.items():
+              if k=='percent_sum':
+                final_percentage.append(v)
+        sum=0
+        for final_sum in final_percentage:
+          sum=sum+final_sum
+        # count the number of subjects
+        count=0
+        for i in resultsubject:
+            count=count+1
+        total_marks_count=count*100
+
+        final_percent_result=(sum/total_marks_count)*100
+        grand_result=round(final_percent_result,2)
+        range_value=range(0, count_value)
+
+        context={
+          'institute_student':institute_student,
+          'student_class':student_class,
+        'user_institute_name':user_institute_name,
+        'e_data':e_data,
+        'type_exam':type_exam,
+        'exam_type':exam_type,
+        'etype':etype,
+        'all_percent_list':all_percent_list,
+        'exam_type_list':exam_type_list,
+        'sub_percent_list':sub_percent_list,
+        'grand_result':grand_result,
+        'count_value':count_value,
+        'range_value':range_value,
+        
+
+        } 
+        return render(request, 'overall.html', context)
+
+            
+    context={
+        'exam_type_list':exam_type_list,
+        
+        } 
+    return render(request, 'overall.html', context)
+  else:
+        raise PermissionDenied
+
+  
+
+
+  
+  
+def class_promotion(request,pk):
+  inst = request.user.profile.institute.id
+
+  if pk==inst:
+        current_year=datetime.date.today().year
+        next_year=datetime.date.today().year+1
+        
+        # to get the list of all  classes                                        
+        all_classes = Classes.objects.filter(institute= request.user.profile.institute,class_teacher=request.user)
+        promotes_class=Classes.objects.filter(institute= request.user.profile.institute)
+        # to ge the data through POST method
+        if request.method=="POST":
+            selected_class_promotes =request.POST.get('selected_class_promotion')
+            if selected_class_promotes == None:
+                            first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
+                            first_class_id = first_class.id
+                            selected_class_promotes= first_class_id
+            selected_class = Classes.objects.get(pk=selected_class_promotes)
+            #  to get the list of all students of selected class
+            all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student', class_current_year=current_year)
+            for student_class in all_students:
+                  stu_class=student_class.Class
+            promotion_status = UserProfile._meta.get_field('class_promotion_status').choices
+            promotion_choices=dict(promotion_status)
+            list_promotion_choices=list(promotion_choices)
+            institute=request.user.profile.institute
+            if request.method=="POST":
+                      promoted_to_class=request.POST.get('promoted_to_class')
+                      if promoted_to_class == None:
+                            first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
+                            first_class_id = first_class.id
+                            promoted_to_class= first_class_id
+                      promoted_to_class = Classes.objects.get(pk=promoted_to_class)
+                  #  to get the students data from the UserProfile
+                      user_data=UserProfile.objects.filter(institute=institute, Class=selected_class)
+                      #   get the list of users from the UserProfile
+                      for user_d in user_data:
+                          user_da=user_d.user
+                      #  fetch the data from the front end
+                          for sdata,status in zip(request.POST.getlist('student_roll_no'),request.POST.getlist('student_promotion_status')):
+                            student_data = User.objects.get(pk=sdata)
+                            if student_data==user_da:
+                                  user_d.class_promotion_status=status
+                                  if status=="Promoted":
+                                    user_d.Class=promoted_to_class
+                                    user_d.class_current_year=current_year+1
+                                    user_d.class_next_year=next_year+1
+                                  else:
+                                    pass
+                                  
+                                  user_d.save()
+              # Inner Context
+            context= {
+                'all_classes': all_classes,
+                'all_students':all_students,
+                'list_promotion_choices':list_promotion_choices,
+                'promotes_class':promotes_class,
+            }
+            messages.success(request, 'Students Promoted successfully')
+            return render(request, 'class_promotion.html', context)
+        # Outer Context
+        context= {
+            'all_classes': all_classes,
+            
+        }
+         
+        return render(request, 'class_promotion.html', context)
+
+  else:
+        raise PermissionDenied
+
+def st_result(request):
+  
+  pass
+ 
+
+
+def render_to_pdf(template_src, context_dict={}):
+      for i in context_dict.items():
+        print(type(i))
+      
+      template=get_template(template_src)
+      html = template.render(context_dict)
+      result=BytesIO()
+      pdf=pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")),result)
+
+      if not pdf.err:
+          return HttpResponse(result.getvalue(),content_type='application/pdf')
+      return None
+
+
+
+
+class ViewPDF(View):
+ def get(self, request, *args,**kwargs):
+      result_session_data = request.session['result_session_data'] 
+      my_dict={}
+      my_dict['values']=result_session_data
+      print(type(my_dict))
+      pdf =  render_to_pdf('ReportCard.html',my_dict)
+      return HttpResponse(pdf, content_type='application/pdf')
+
+from django import template
+register=template.Library()
+
+@register.filter
+def get_fields(obj):
+  return my_dict._meta.get_fields
+
+
+def reports_card(request,pk):
+      user_institute_name=Institute.objects.get(pk=pk)
+        # starting user notice
+      if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
+
+      request.user.user_child_fee_status = []
+      user_children= AddChild.objects.filter(parent= request.user.profile)
+      parent_student_list = []
+      for st in user_children:
+            student= UserProfile.objects.get(pk=st.child.id)
+            parent_student_list.append(student)
+      exam_type_list =ExamType.objects.filter(institute=request.user.profile.institute)
+      exam_id=request.user.profile.institute.id
+
+      if request.method=="POST":
+          if request.user.profile.designation.level_name=='student':
+              institute_student=request.user.profile.institute
+              student_class=request.user.profile.Class
+              student_session_start=request.user.profile.class_current_year
+              student_session_end=request.user.profile.class_next_year
+              student_profile_pic=request.user.profile.profile_pic
+              student_roll_no=request.user.profile.roll_number
+              student_first_name=request.user.profile.first_name
+              student_last_name=request.user.profile.last_name
+              student_mother_name=request.user.profile.mother_name
+              student_father_name=request.user.profile.father_name
+              student_dob=request.user.profile.date_of_birth
+              student_contact_no=request.user.profile.mobile_number
+              student_address1=request.user.profile.address_line_1
+              student_address2=request.user.profile.address_line_2
+              student_profile_pic =request.user.profile.profile_pic
+              # student_session=UserProfile.objects.get(pk=request.user)
+              select_exam_type = request.POST.get('result_exam_type')
+              if select_exam_type=="Overall":
+                if request.POST.get("report_cart_button"):
+                  return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{request.user.id}')
+
+                elif request.POST.get("view_button"):
+                  return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{request.user.id}')
+
+              exam_type=ExamType.objects.get(pk=select_exam_type)
+              exam_per_value=exam_type.exam_per_final_score
+              e=int(exam_per_value)
+              e_maxmarks=exam_type.exam_max_marks
+              examtype_maxmarks=int(e_maxmarks)
+              e_total_limit=exam_type.exam_max_limit
+              examtype_total_limit=int(e_total_limit)
+
+              all_exam=ExamResult.objects.filter(exam_type=exam_type,result_student_data=request.user)
+              exam_no=[]
+              for data in all_exam:
+                if data.exam_sr_no in exam_no:
+                  pass
+                else:
+                  exam_no.append(data.exam_sr_no)
+              resultsubject=[]
+              for sub in all_exam:
+                if sub.result_subject in resultsubject:
+                  pass
+                else:
+                  resultsubject.append(sub.result_subject)
+              result_data=[]
+              for sub_data in resultsubject:
+                data_marks={}
+                data_marks['subj']=sub_data
+                
+                s=sub_data
+                for e_no in exam_no:
+                  try:
+                        student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
+                        data_marks[e_no]=student_data.result_score
+                        
+                  except: 
+                      data_marks[e_no]=None
+                my_session_context={}
+               
+
+                marks_data=[]
+                for key,value in data_marks.items():
+                    if key=="subj":
+                      pass
+                    else:
+                      marks_data.append(value)
+                sum=0
+                for m in marks_data:
+                    if m is None: 
+                      pass
+                    else:
+                      sum= sum+m
+                
+           
+
+                max_exam_limit=exam_no[-1]  
+                max_limit=int(max_exam_limit)  
+                sumValue=sum
+                data_marks['sum']=sumValue
+                sumper=((sumValue/max_limit)/examtype_maxmarks)*e
+                data_marks['avg']=round(sumper,2)
+                result_data.append(data_marks)
+                percentage_sum=[]
+                for k,v in data_marks.items():
+                    if k=='avg':
+                      percentage_sum.append(v)
+                sum=0
+                for per_sum in percentage_sum:
+                    sum=sum+per_sum
+              
+              
+
+
               context={
                 'user_institute_name':user_institute_name,
                 'institute_student':institute_student,
+                'student_roll_no':student_roll_no,
+                'student_first_name':student_first_name,
+                'student_last_name':student_last_name,
+                'student_father_name':student_father_name,
+                'student_mother_name':student_mother_name,
+                'student_dob':student_dob,
+                'student_contact_no':student_contact_no,
+                'student_address1':student_address1,
+                'student_address2':student_address2,
+                'student_profile_pic':student_profile_pic,
                 'student_class':student_class,
                     'select_exam_type':exam_type,
                     'all_exam':all_exam,
@@ -279,8 +1047,10 @@ def report_card(request,pk):
                     'exam_type_list':exam_type_list,
                     'parent_student_list':parent_student_list,
                     'e_maxmarks':e_maxmarks,
+                    'sum':sum,
                           }
-              return render(request, 'report_card.html', context)
+              return render(request, 'ReportCard.html', context)
+
             
           if request.user.profile.designation.level_name=='parent':
               user_institute_name=Institute.objects.get(pk=pk)
@@ -373,7 +1143,7 @@ def report_card(request,pk):
                     'exam_type_list':exam_type_list,
                     'parent_student_list':parent_student_list,
                           }
-          return render(request, 'report_card.html', context)        
+          return render(request, 'ReportCard.html', context)        
       context={
         'user_institute_name':user_institute_name,
             'exam_type_list':exam_type_list,
@@ -381,14 +1151,10 @@ def report_card(request,pk):
             
           }
 
-      return render(request, 'report_card.html', context)
+      return render(request, 'ReportCard.html', context)
         
-  else:
-        raise PermissionDenied
 
-
-
-def overall_result(request,pk,student_pk):
+def overall_report_card(request,pk,student_pk):
   inst = request.user.profile.institute.id
   user_institute_name=Institute.objects.get(pk=pk)
   selected_student_data=UserProfile.objects.get(pk=student_pk)
@@ -559,6 +1325,19 @@ def overall_result(request,pk,student_pk):
       user_institute_name=Institute.objects.get(pk=pk)
       institute_student=request.user.profile.institute
       student_class=request.user.profile.Class
+      student_session_start=request.user.profile.class_current_year
+      student_session_end=request.user.profile.class_next_year
+      student_profile_pic=request.user.profile.profile_pic
+      student_roll_no=request.user.profile.roll_number
+      student_first_name=request.user.profile.first_name
+      student_last_name=request.user.profile.last_name
+      student_mother_name=request.user.profile.mother_name
+      student_father_name=request.user.profile.father_name
+      student_dob=request.user.profile.date_of_birth
+      student_contact_no=request.user.profile.mobile_number
+      student_address1=request.user.profile.address_line_1
+      student_address2=request.user.profile.address_line_2
+      student_profile_pic =request.user.profile.profile_pic
       # Create the list of all exam type present in the institute
       type_exam=[]
       exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
@@ -621,14 +1400,20 @@ def overall_result(request,pk,student_pk):
                
               # print(max_limit)
               max_sr_value=[]
+           
               max_exam_sr_no = ExamDetails.objects.filter(exam_type=etype).values('exam_sr_no').distinct()
               for max_value in max_exam_sr_no:
                   for k,v in max_value.items():
-                    max_sr_value.append(v)
+                        max_sr_value.append(v)
+           
+             
                     # print(v)
-              
-              max_exam_limit=max_sr_value[-1]  
-              max_limit=int(max_exam_limit)
+              try:
+                  max_exam_limit=max_sr_value[-1]  
+                  max_limit=int(max_exam_limit)
+              except:
+                max_exam_limit=None
+                max_limit=1
               
               # for loop in exam score list
               sum=0
@@ -696,6 +1481,17 @@ def overall_result(request,pk,student_pk):
 
         context={
           'institute_student':institute_student,
+            'student_roll_no':student_roll_no,
+                'student_first_name':student_first_name,
+                'student_last_name':student_last_name,
+                'student_father_name':student_father_name,
+                'student_mother_name':student_mother_name,
+                'student_dob':student_dob,
+                'student_contact_no':student_contact_no,
+                'student_address1':student_address1,
+                'student_address2':student_address2,
+                'student_profile_pic':student_profile_pic,
+                'student_class':student_class,
           'student_class':student_class,
         'user_institute_name':user_institute_name,
         'e_data':e_data,
@@ -711,92 +1507,16 @@ def overall_result(request,pk,student_pk):
         
 
         } 
-        return render(request, 'overall.html', context)
+        return render(request, 'Overall_Report_Card.html', context)
 
             
     context={
         'exam_type_list':exam_type_list,
         
         } 
-    return render(request, 'overall.html', context)
+    return render(request, 'Overall_Report_Card.html', context)
   else:
         raise PermissionDenied
 
   
 
-
-  
-  
-def class_promotion(request,pk):
-  inst = request.user.profile.institute.id
-
-  if pk==inst:
-        current_year=datetime.date.today().year
-        next_year=datetime.date.today().year+1
-        
-        # to get the list of all  classes                                        
-        all_classes = Classes.objects.filter(institute= request.user.profile.institute,class_teacher=request.user)
-        promotes_class=Classes.objects.filter(institute= request.user.profile.institute)
-        # to ge the data through POST method
-        if request.method=="POST":
-            selected_class_promotes =request.POST.get('selected_class_promotion')
-            if selected_class_promotes == None:
-                            first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
-                            first_class_id = first_class.id
-                            selected_class_promotes= first_class_id
-            selected_class = Classes.objects.get(pk=selected_class_promotes)
-            #  to get the list of all students of selected class
-            all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student', class_current_year=current_year)
-            for student_class in all_students:
-                  stu_class=student_class.Class
-            promotion_status = UserProfile._meta.get_field('class_promotion_status').choices
-            promotion_choices=dict(promotion_status)
-            list_promotion_choices=list(promotion_choices)
-            institute=request.user.profile.institute
-            if request.method=="POST":
-                      promoted_to_class=request.POST.get('promoted_to_class')
-                      if promoted_to_class == None:
-                            first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
-                            first_class_id = first_class.id
-                            promoted_to_class= first_class_id
-                      promoted_to_class = Classes.objects.get(pk=promoted_to_class)
-                  #  to get the students data from the UserProfile
-                      user_data=UserProfile.objects.filter(institute=institute, Class=selected_class)
-                      #   get the list of users from the UserProfile
-                      for user_d in user_data:
-                          user_da=user_d.user
-                      #  fetch the data from the front end
-                          for sdata,status in zip(request.POST.getlist('student_roll_no'),request.POST.getlist('student_promotion_status')):
-                            student_data = User.objects.get(pk=sdata)
-                            if student_data==user_da:
-                                  user_d.class_promotion_status=status
-                                  if status=="Promoted":
-                                    user_d.Class=promoted_to_class
-                                    user_d.class_current_year=current_year+1
-                                    user_d.class_next_year=next_year+1
-                                  else:
-                                    pass
-                                  
-                                  user_d.save()
-              # Inner Context
-            context= {
-                'all_classes': all_classes,
-                'all_students':all_students,
-                'list_promotion_choices':list_promotion_choices,
-                'promotes_class':promotes_class,
-            }
-            messages.success(request, 'Students Promoted successfully')
-            return render(request, 'class_promotion.html', context)
-        # Outer Context
-        context= {
-            'all_classes': all_classes,
-            
-        }
-         
-        return render(request, 'class_promotion.html', context)
-
-  else:
-        raise PermissionDenied
-
-def st_result(request):
-  pass
