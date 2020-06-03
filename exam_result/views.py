@@ -243,6 +243,8 @@ def report_card(request,pk):
                   # return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{request.user.id}')
 
                 elif request.POST.get("view_button"):
+                  # return overall_result(request,exam_id,request.user.id)
+
                   return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{request.user.id}')
               else :
                 if select_exam_type!="overall":
@@ -481,26 +483,24 @@ def overall_result(request,pk,student_pk):
             student= UserProfile.objects.get(pk=st.child.id)
             parent_student_list.append(student)
   user_institute_name=Institute.objects.get(pk=pk)
-  selected_student_data=UserProfile.objects.get(pk=student_pk)
-  institute_student=selected_student_data.institute
-  student_class=selected_student_data.Class
-
-
+  selected_student_data=User.objects.get(pk=student_pk)
+  institute_student=selected_student_data.profile.institute
+  student_class=selected_student_data.profile.Class
   if pk==inst:
     if request.user.profile.designation.level_name=='parent':
         
-              student_session_start=selected_student_data.class_current_year
-              student_session_end=selected_student_data.class_next_year
-              student_profile_pic=selected_student_data.profile_pic
-              student_roll_no=selected_student_data.roll_number
-              student_first_name=selected_student_data.first_name
-              student_last_name=selected_student_data.last_name
-              student_mother_name=selected_student_data.mother_name
-              student_father_name=selected_student_data.father_name
-              student_dob=selected_student_data.date_of_birth
-              student_contact_no=selected_student_data.mobile_number
-              student_address1=selected_student_data.address_line_1
-              student_address2=selected_student_data.address_line_2
+              student_session_start=selected_student_data.profile.class_current_year
+              student_session_end=selected_student_data.profile.class_next_year
+              student_profile_pic=selected_student_data.profile.profile_pic
+              student_roll_no=selected_student_data.profile.roll_number
+              student_first_name=selected_student_data.profile.first_name
+              student_last_name=selected_student_data.profile.last_name
+              student_mother_name=selected_student_data.profile.mother_name
+              student_father_name=selected_student_data.profile.father_name
+              student_dob=selected_student_data.profile.date_of_birth
+              student_contact_no=selected_student_data.profile.mobile_number
+              student_address1=selected_student_data.profile.address_line_1
+              student_address2=selected_student_data.profile.address_line_2
               user_institute_name=Institute.objects.get(pk=pk)
               select_exam_type = request.POST.get('result_exam_type')
               # select_st=request.POST.get('selected_student')
@@ -710,7 +710,7 @@ def overall_result(request,pk,student_pk):
 
                     
     context={
-                'exam_type_list':exam_type_list,
+                
                 'parent_student_list':parent_student_list,
                 
                 } 
@@ -725,10 +725,12 @@ def overall_result(request,pk,student_pk):
 
       if select_exam_type=="overall":
           if request.POST.get("report_cart_button"):
-              return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{request.user.id}')
+              return overall_report_card(request,exam_id,request.user.id)
+              # return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{request.user.id}')
 
           elif request.POST.get("view_button"):
-              return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{request.user.id}')
+              return overall_result(request,exam_id,request.user.id)
+              # return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{request.user.id}')
       else :
           if select_exam_type!="overall":
                   
@@ -749,7 +751,7 @@ def overall_result(request,pk,student_pk):
 
 
       for exam_type in exam_type_list:
-        exam_data= ExamResult.objects.filter(exam_type=exam_type,result_student_data=request.user)
+        exam_data= ExamResult.objects.filter(exam_type=exam_type,result_student_data=request.user.id)
 
         # list of all sr no
         exam_no=[]
@@ -758,8 +760,6 @@ def overall_result(request,pk,student_pk):
             pass
           else:
             exam_no.append(data.exam_sr_no)
-        # print(exam_no)
-
         #  list of all subjects  
         resultsubject=[]
         for sub in exam_data:
@@ -767,10 +767,6 @@ def overall_result(request,pk,student_pk):
             pass
           else:
             resultsubject.append(sub.result_subject)
-        
-       
-
-        
         e_data=[]
         for etype in type_exam:
           etype_limit=etype.exam_max_limit
@@ -893,6 +889,7 @@ def overall_result(request,pk,student_pk):
         'grand_result':grand_result,
         'count_value':count_value,
         'range_value':range_value,
+        'exam_type_list':exam_type_list,
         
 
         } 
@@ -1281,20 +1278,20 @@ def overall_report_card(request,pk,student_pk):
 
   if pk==inst:
     if request.user.profile.designation.level_name=='parent':
-      student_class= selected_student.Class
-      institute_student=selected_student.institute
-      student_session_start=selected_student.class_current_year
-      student_session_end=selected_student.class_next_year
-      student_profile_pic=selected_student.profile_pic
-      student_roll_no=selected_student.roll_number
-      student_first_name=selected_student.first_name
-      student_last_name=selected_student.last_name
-      student_mother_name=selected_student.mother_name
-      student_father_name=selected_student.father_name
-      student_dob=selected_student.date_of_birth
-      student_contact_no=selected_student.mobile_number
-      student_address1=selected_student.address_line_1
-      student_address2=selected_student.address_line_2
+      student_class= selected_student_data.Class
+      institute_student=selected_student_data.institute
+      student_session_start=selected_student_data.class_current_year
+      student_session_end=selected_student_data.class_next_year
+      student_profile_pic=selected_student_data.profile_pic
+      student_roll_no=selected_student_data.roll_number
+      student_first_name=selected_student_data.first_name
+      student_last_name=selected_student_data.last_name
+      student_mother_name=selected_student_data.mother_name
+      student_father_name=selected_student_data.father_name
+      student_dob=selected_student_data.date_of_birth
+      student_contact_no=selected_student_data.mobile_number
+      student_address1=selected_student_data.address_line_1
+      student_address2=selected_student_data.address_line_2
       
       type_exam=[]
       exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
@@ -1652,6 +1649,7 @@ def overall_report_card(request,pk,student_pk):
         'grand_result':grand_result,
         'count_value':count_value,
         'range_value':range_value,
+        'exam_type_list':exam_type_list,
         
 
         } 
