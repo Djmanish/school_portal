@@ -17,7 +17,7 @@ from django.views import View
 from xhtml2pdf import pisa
 from django.contrib.sessions.models import Session
 from django.utils import timezone
-from notices.models import Notice, Notification_Category
+from notices.models import *
 from django.http import JsonResponse
 import json
 from django.core.serializers.json import DjangoJSONEncoder
@@ -239,7 +239,8 @@ def report_card(request,pk):
               select_exam_type = request.POST.get('result_exam_type')
               if select_exam_type=="overall":
                 if request.POST.get("report_cart_button"):
-                  return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{request.user.id}')
+                  return overall_report_card(request,exam_id,request.user.id)
+                  # return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{request.user.id}')
 
                 elif request.POST.get("view_button"):
                   return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{request.user.id}')
@@ -629,6 +630,24 @@ def overall_result(request,pk,student_pk):
       user_institute_name=Institute.objects.get(pk=pk)
       institute_student=request.user.profile.institute
       student_class=request.user.profile.Class
+      select_exam_type = request.POST.get('result_exam_type')
+      exam_id=request.user.profile.institute.id
+
+      if select_exam_type=="overall":
+          if request.POST.get("report_cart_button"):
+              return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{request.user.id}')
+
+          elif request.POST.get("view_button"):
+              return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{request.user.id}')
+      else :
+          if select_exam_type!="overall":
+                  
+              if request.POST.get("report_cart_button"):
+                  return reports_card(request,exam_id)
+                      # return HttpResponseRedirect(f'/examresult/reports_card/{exam_id}')
+
+              elif request.POST.get("view_button"):
+                  pass 
       # Create the list of all exam type present in the institute
       type_exam=[]
       exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
