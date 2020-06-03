@@ -915,21 +915,7 @@ def render_to_pdf(template_src, context_dict={}):
 
 
 
-class ViewPDF(View):
- def get(self, request, *args,**kwargs):
-      result_session_data = request.session['result_session_data'] 
-      my_dict={}
-      my_dict['values']=result_session_data
-      print(type(my_dict))
-      pdf =  render_to_pdf('ReportCard.html',my_dict)
-      return HttpResponse(pdf, content_type='application/pdf')
 
-from django import template
-register=template.Library()
-
-@register.filter
-def get_fields(obj):
-  return my_dict._meta.get_fields
 
 
 def reports_card(request,pk):
