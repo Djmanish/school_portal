@@ -512,13 +512,74 @@
                 
             <div class="md-card">
                 <div class="md-card-content">
-                    <form action="{% url 'report_card' request.user.profile.institute.id %}" class="form-inline" id="attendance_form" >
+                    <!-- <form action="{% url 'report_card' request.user.profile.institute.id %}" class="form-inline" id="attendance_form" >
                         {% csrf_token %}
                         <div class="md-btn md-btn-primary">
                             <i class="material-icons">arrow_back</i>
                             
                         <input type="submit" value="Go Back" style="border: none;" class="md-btn-primary">
                         </div>
+
+                    </form> -->
+                    <form method="POST" class="form-inline" id="attendance_form">
+                        {% csrf_token %}
+                        <tr>
+
+                            <td> <select class="form-control" name="result_exam_type" style="padding: 2px;"
+                                    required>
+                                    <option selected disabled value="">--Select Exam Type--</option>
+                                    <option value="overall">Overall</option>
+
+                                    {% for exam_type in exam_type_list %}
+
+                                    <option value={{exam_type.id}}>{{exam_type}}</option>
+                                    {% endfor %}
+                                </select>
+
+                            </td>
+                            <td>
+
+                            </td>
+
+                            {% if user.profile.designation.level_name == "parent" %}
+                            <td>
+                                <select class="form-control" name="selected_student" style="padding: 2px;"
+                                    required>
+                                    <option selected disabled value="">--Select Student--</option>
+
+
+                                    {% for student in parent_student_list %}
+
+                                    <option value={{student.id}}>{{student}}</option>
+                                    {% endfor %}
+
+                                </select>
+
+
+                            </td>
+                            {% endif %}
+                            <td></td>
+                            &nbsp
+                            <td>
+                                <input type="submit" name="view_button"
+                                    formaction="{% url 'report_card' request.user.profile.institute.id %}"
+                                    value="View" class="md-btn md-btn-primary">
+                            </td>
+                            &nbsp
+                            &nbsp
+
+                            <td>
+
+                                <input type="submit" name="report_cart_button"
+                                 
+                                    value="Print" class="md-btn md-btn-primary">
+                    </form>
+                    </td>
+                    <td>
+
+
+                    </td>
+
 
                     </form>
         
@@ -544,7 +605,7 @@
             
             
             
-            <tr style="text-align: center;background-color: #007bff; color:white">
+            <tr style="text-align: center;background-color: #1976d2; color:white">
                 <td ><b>Subjects</b>
                     </td >
               {% for exam  in type_exam %}
@@ -566,7 +627,7 @@
                     
                  
                     
-            <tr style="text-align: center;">
+            <tr style="text-align: right;">
                
                 {% for k,v in data.items %}
                 

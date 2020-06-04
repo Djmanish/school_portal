@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import resolve
-
+from django.contrib.auth import logout
 class user_approve_middleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -12,6 +12,11 @@ class user_approve_middleware:
 
     def __call__(self, request):
         current_url_name = resolve(request.path_info).url_name
+
+        if current_url_name == 'auth_logout': # if url is logout then exempted
+            logout(request)
+            return redirect('login_user')
+            
         if request.user.is_authenticated:
             user_status = request.user.profile.status
             if request.user.is_staff: #checking if user has staff status

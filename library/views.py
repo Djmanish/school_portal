@@ -79,13 +79,13 @@ def add_book_group(request):
               search_code=0
             if search_code == 0:
                   new_book= BookCode.objects.create(code=new_book_code, book_count=new_book_count, book_institute=ins, book_name=new_book_name, book_category=get_category, book_sub_category=get_subcategory, author=new_book_author, publications=new_book_publication, edition=new_book_edition)
-                  messages.success(request, 'Book Group Added successfully !')
-                  messages.info(request, "Please Enter Book ID's !")
+                  messages.success(request, 'Book group added successfully !')
+                  messages.info(request, "Please enter book ids !")
                   return HttpResponseRedirect(f'/library/add_book/?book_group={new_book.id}')
             else:                  
-                  messages.error(request, 'Book Code Already Added !')
-                  messages.info(request, "Please Try Another Book Code !")
-                  return HttpResponseRedirect(f'/library/')
+                  messages.error(request, 'Book code already added !')
+                  messages.info(request, "Please try another book code !")
+                  return HttpResponseRedirect(f'/library/book/')
             
               
             
@@ -139,7 +139,8 @@ def add_new_book(request):
                       except:
                         pass
                 
-                for id in book_ids:                        
+                for id in book_ids:
+                      id = id.strip()                        
                       Book.objects.create(book_id=id, book_code=book_code.code, book_institute=book_code.book_institute, book_name=book_code.book_name, book_category=book_code.book_category, book_sub_category=book_code.book_sub_category, author=book_code.author, publications=book_code.publications, edition=book_code.edition, book_count=book_count_len )
                 messages.success(request, 'Books Added successfully !')
                 return HttpResponseRedirect(f'/library/')
@@ -164,7 +165,7 @@ def add_sub_category(request):
     get_parent= BookCategory.objects.get(id=parent_categorys)
     print(get_parent)
     new_sub_category= BookSubCategory.objects.create(book_sub_category_name=sub_category, parent_category=get_parent, institute_subcategory=request.user.profile.institute)
-    messages.success(request, 'Sub Category Created successfully !')
+    messages.success(request, 'Sub category created successfully !')
     return HttpResponseRedirect(f'/library/')
 
 def issuebook(request):
@@ -215,11 +216,11 @@ def issue_book(request):
           try:
             borrower_book= Book.objects.get(book_id=bookid, book_institute=request.user.profile.institute)
           except Book.DoesNotExist:
-            messages.error(request, 'Incorrect Book ID')
+            messages.error(request, 'Incorrect book id')
             return HttpResponseRedirect(f'/library/issuebook/')
           try:
             chk= IssueBook.objects.get(book_name__book_id=bookid, return_date__isnull=True)
-            messages.error(request, 'Book Is Already Issued')
+            messages.error(request, 'Book is already issued')
             return HttpResponseRedirect(f'/library/issuebook/')
           except:
             chk_active_issue= sh_for_days.max_Book_Allows
@@ -259,7 +260,7 @@ def book_return(request):
               t.return_date = timezone.now()            
               t.delay_counter=cc
               t.save()
-              messages.success(request, 'Book Returned Successfully !')
+              messages.success(request, 'Book returned successfully !')
             return HttpResponseRedirect(f'/library/')
             
 

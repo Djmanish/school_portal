@@ -54,21 +54,58 @@ $(document).ready(function () {
   });
 
 
+  var specialElementHandlers = {
+    "#editor":function(element, renderer){
+      return true;
+    }
+  };
+
+  $("#cmd").click(function(){
+
+    var doc = new jsPDF();
+
+    doc.fromHTML($("#target").html(),15,15,{
+      "width":170,
+      "elementHandlers":specialElementHandlers
+    });
+    doc.save("test.pdf")
+  })
 //result print
-  var testDivElement = document.getElementById('myresult');
+  var testDivElement = document.document.getElementById('result');
   function savePDF() {
-      var imgData;
-      html2canvas($("#myresult"), {
-          useCORS: true,
-          onrendered: function (canvas) {
-              imgData = canvas.toDataURL(
-                 'image/png');
-              var doc = new jsPDF('l', 'in', [10, 12]);
-              doc.addImage(imgData, 'PNG', 0,0);
-              doc.save('sample-file.pdf');
-          }
-      });
-  }
+    var imgData;
+    html2canvas($("#myresult"), {
+    useCORS: true,
+    onrendered: function (canvas) {
+    imgData = canvas.toDataURL(
+    'image/png');
+    var doc = new jsPDF("a4"); // var doc = new jsPDF('l', 'in', [10, 12]); change page size
+    doc.addImage(imgData, 'PNG', 10, 10);
+    doc.save('ReportCard.pdf');
+    
+    }
+    });
+    }
+
+// Report_Card Print
+// var doc = new jsPDF();          
+// var elementHandler = {
+//   '#myresult': function (element, renderer) {
+//     return true;
+//   }
+// };
+// var source = window.document.getElementsByTagName("body")[0];
+// doc.fromHTML(
+//     source,
+//     15,
+//     15,
+//     {
+//       'width': 180,'elementHandlers': elementHandler
+//     });
+
+// doc.output("dataurlnewwindow");
+
+
 
   
 // starting script for processing , notification and due date

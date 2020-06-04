@@ -444,11 +444,11 @@ def dashboard(request):
     # Active Users Count
     time= timezone.now()- datetime.timedelta(minutes=3)
     time1= timezone.now()
-    count=User.objects.filter(last_login__gte=time,last_login__lte=time1)
+    count=UserProfile.objects.filter(user__last_login__gte=time,user__last_login__lte=time1)
     
     online_user=[]
     for i_user in count:
-        if i_user.profile.institute==request.user.profile.institute:
+        if i_user.institute==request.user.profile.institute:
             online_user.append(i_user)
 
     len_online_user=len(online_user)
@@ -647,10 +647,13 @@ def dashboard(request):
 class RegistrationViewUniqueEmail(RegistrationView):
     form_class = RegistrationFormUniqueEmail
     
-
+from django.contrib.auth import logout
 def login(request):
-    if request.user.is_authenticated:
-        return redirect('user_dashboard')
+    try:
+        if request.user.is_authenticated:
+            return redirect('user_dashboard')
+    except:
+        logout(request)
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']

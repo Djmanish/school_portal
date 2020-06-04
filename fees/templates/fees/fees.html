@@ -596,8 +596,9 @@
                                            <a href="{% url 'fees_tag_history' %}"> <b><i class="material-icons uk-text-primary">history</i> Tag Updates Full History</b></a>
                                            <div class="uk-modal" id="modal_new_tag">
                                                <div class="uk-modal-dialog">
+                                                <button type="button" class="uk-modal-close uk-close"></button>
                                                    <div class="uk-modal-header">
-                                                       <h3 class="uk-modal-title">Add New Tag </h3>
+                                                    <h3 class="uk-text-primary">Add New Tag</h3>
                                                    </div>
                                                    <form method="POST" action="{% url 'create_fee_tag' %}">
                                                        {% csrf_token %}
