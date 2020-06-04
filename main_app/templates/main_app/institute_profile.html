@@ -574,7 +574,7 @@
                             <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
                                 <!-- starting about tab content -->
                                 <li>
-                                    {{institute_data.about}} <div
+                                    {{institute_data.about|default:''}} <div
                                         class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                         <div class="uk-width-large-1-2">
                                             <h4 class="heading_c uk-margin-small-bottom">Contact Info</h4>
@@ -585,7 +585,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Email</a></span>
-                                                        <span class="uk-text-small uk-text-muted"><a href="mailto:{{institute_data.email}}">{{institute_data.email}}</a></span>
+                                                        <span class="uk-text-small uk-text-muted"><a href="mailto:{{institute_data.email}}">{{institute_data.email|default:''}}</a></span>
                                                        
                                                     </div>
                                                 </li>
@@ -599,7 +599,7 @@
                                                             class="uk-text-small uk-text-muted">
                                                         
                                                         {% if institute_data.contact_number1 %}
-                                                        {{institute_data.contact_number1}},
+                                                        {{institute_data.contact_number1|default:''}},
                                                         {% endif %}
                                                             
                                                         
@@ -622,7 +622,7 @@
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Facebook</a></span>
                                                         <span
-                                                            class="uk-text-small uk-text-muted"><a href="{{institute_data.facebook_link}}" target="_blank">{{institute_data.facebook_link}}</a></span>
+                                                            class="uk-text-small uk-text-muted"><a href="{{institute_data.facebook_link}}" target="_blank">{{institute_data.facebook_link|default:''}}</a></span>
                                                         
                                                     </div>
                                                 </li>
@@ -687,7 +687,7 @@
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Code</a></span>
                                                         <span
-                                                            class="uk-text-small uk-text-muted">{{institute_data.code}}</span>
+                                                            class="uk-text-small uk-text-muted">{{institute_data.code|default:''}}</span>
                                                     </div>
                                                 </li>
 
@@ -701,7 +701,7 @@
                                 <li>
                                     <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                     <div class="uk-width-large-1-2">
-                                        <h4 class="heading_c uk-margin-small-bottom">Organization Details</h4>
+                                        <!-- <h4 class="heading_c uk-margin-small-bottom">Organization Details</h4> -->
                                         <ul class="md-list">
                                             <li>
                                                 <div class="md-list-content">
@@ -713,9 +713,9 @@
                                             </li>
                                             <li>
                                                 <div class="md-list-content">
-                                                    <span class="md-list-heading"><a href="#">Establish Year</a></span>
+                                                    <span class="md-list-heading"><a href="#">Establish Date</a></span>
                                                     <span
-                                                        class="uk-text-small uk-text-muted">{{institute_data.establish_date}}</span>
+                                                        class="uk-text-small uk-text-muted">{{institute_data.establish_date|default:''}}</span>
                                                 </div>
                                             </li>
                                             <li>
@@ -759,27 +759,39 @@
                                         
 
                                         
-                                            <li>
-                                                <div class="md-list-content">
-                                                    <span class="md-list-heading"><a href="#">Email Id</a></span>
-                                                    <span
-                                                        class="uk-text-small uk-text-muted">{{institute_data.email}}</span>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="md-list-content">
-                                                    <span class="md-list-heading"><a href="#">Facebook</a></span>
-                                                    <span
-                                                        class="uk-text-small uk-text-muted">{{institute_data.facebook_link}}</span>
-                                                </div>
-                                            </li>
+                                           
                                             <li>
                                                 <div class="md-list-content">
                                                     <span class="md-list-heading"><a href="#">Website</a></span>
                                                     <span
-                                                        class="uk-text-small uk-text-muted"><a target="_blank" href="{{institute_data.website_link}}">{{institute_data.website_link}}</a></span>
+                                                        class="uk-text-small uk-text-muted"><a target="_blank" href="{{institute_data.website_link}}">{{institute_data.website_link|default:''}}</a></span>
                                                 </div>
                                             </li>
+
+                                        </ul>
+
+                                    </div>
+
+                                    <div class="uk-width-large-1-2">
+                                        <!-- <h4 class="heading_c uk-margin-small-bottom">Organization Details</h4> -->
+                                        <ul class="md-list">
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="md-list-heading"><a href="#">Session Start Date</a></span>
+                                                    <span
+                                                        class="uk-text-small uk-text-muted">{{institute_data.session_start_date|default:""}}</span>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="md-list-content">
+                                                    <span class="md-list-heading"><a href="#">Principal</a></span>
+                                                    <span
+                                                        class="uk-text-small uk-text-muted">{{institute_data.principal|default:""}}</span>
+                                                </div>
+                                            </li>
+                                        
+                                         
 
                                         </ul>
 
@@ -886,7 +898,7 @@
                                                                     {% if classes.class_teacher %}
                                                                     {{classes.class_teacher.profile.first_name}} {{classes.class_teacher.profile.last_name}}
                                                                     {% else %}
-                                                                    Not assigned
+                                                                    Not Assigned
                                                                     {% endif %}   
                                                                     </td>
                                             {% if assign_class_teacher_permission in user_permissions %}

@@ -548,7 +548,7 @@
                             <form method="POST" >
                                 {% csrf_token %}
                                <div class="form-group">
-                                   <label>Select Multiple Permissions:</label><br>
+                                   <label>Select Multiple Permissions</label><br>
                                    <small class="text-info">press and hold control to select multiple permissions</small>
                                 <select multiple class="form-control" name="new_permissions" style="min-height: 300px;">
                                     
@@ -566,7 +566,7 @@
                                   </select>
                                </div>
                                <div class="form-group">
-                                <label>Comment:</label>
+                                <label class="required">Comment</label>
                                 
                                 <textarea class="form-control" rows="3" name="pc_comment" required></textarea>
     
