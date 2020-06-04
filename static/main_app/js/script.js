@@ -71,7 +71,7 @@ $(document).ready(function () {
     doc.save("test.pdf")
   })
 //result print
-  var testDivElement = document.getElementById('result');
+  var testDivElement = document.querySelector('#result');
   function savePDF() {
       var imgData;
       html2canvas($("#myresult"), {

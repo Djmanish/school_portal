@@ -18,11 +18,13 @@
 
         .button_print {
             display: flex;
-            height: 30px;
-            width: 80px;
-            background-color: blue;
+            height: 35px;
+            width: 90px;
+            background-color: #1976d2;
             color: white;
             float: right;
+            padding: 10px;
+            margin-left: 5px;
         }
 
         .html2canvas-container {
@@ -37,6 +39,7 @@
 
 <table>
     <tr>
+        <td></td>
         <td>
             <button class="button_print" id="result" onclick="savePDF()">
                 Download
@@ -132,28 +135,28 @@
             
             <table class="table_border">
                 <tr>
-                    <td colspan="7" style="text-align: center; font-size: 20px; ">ACADEMIC PERFORMANCE: SCHOOLASTIC
+                    <td colspan="7" style="text-align: center; font-size: 20px; background-color: red;">ACADEMIC PERFORMANCE: SCHOOLASTIC
                         AREAS</td>
                 </tr>
                 &nbsp
                 &nbsp
 
 
-                <tr style="text-align: center;background-color: #1976d2; color:white">
-                    <td ><b>Subjects</b>
-                        </td >
+                <tr style="text-align: center;">
+                    <th >Subjects
+                        </th >
                   {% for exam  in type_exam %}
-                  <td></td>
-                  <td><b>
+                  <th></th>
+                  <th>
                       {{exam}}
                   
-                  </b></td>
+                  </th>
                  
                   {% endfor %}
-              <td></td>
+              <th></th>
       
       
-                  <td><b>Final Score</b></td>
+                  <th>Final Score</th>
                 </tr>
 
 
