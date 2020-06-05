@@ -19,6 +19,9 @@ def library(request):
     total_issue_books = total_issue.count()
     left = total_books - total_issue_books
     books= BookCode.objects.filter(book_institute=request.user.profile.institute)
+    for b in books:
+          sh_books= Book.objects.filter(book_code=b.code, book_institute=b.book_institute).count()
+          b.count=sh_books
     lib_set= LibrarySettings.objects.get(institute=request.user.profile.institute)
     
      # starting user notice
@@ -104,28 +107,43 @@ def add_book(request):
 
 
       return render(request, 'library/add_book_copies.html', context_data)
+
+def checkIfDuplicates_1(listOfElems):
+    # ''' Check if given list contains any duplicates '''
+    if len(listOfElems) == len(set(listOfElems)):
+      return False
+    else:
+      return True
+
       
 def add_new_book(request):
       if request.method == 'POST':
                 book_ids= request.POST.getlist('fullname')
                 book_count_len=len(book_ids)
                 book_code= BookCode.objects.get(pk=request.POST.get('hide'))
-                try:
-                  for i in book_ids:
-                        i = i.strip()
-                        search_book= Book.objects.get(book_id=i)
-                        
-                  messages.error(request, "Book ids must be unique !")                        
-                  return HttpResponseRedirect(f'/library/')
-                        
-                except:
-
-
-                  for id in book_ids:   
-                        id = id.strip()                     
-                        Book.objects.create(book_id=id, book_code=book_code.code, book_institute=book_code.book_institute, book_name=book_code.book_name, book_category=book_code.book_category, book_sub_category=book_code.book_sub_category, author=book_code.author, publications=book_code.publications, edition=book_code.edition, book_count=book_count_len )
-                  messages.success(request, 'Books added successfully !')
-                  return HttpResponseRedirect(f'/library/')
+                result= checkIfDuplicates_1(book_ids)
+                if result:
+                      messages.error(request, "You Are Entering Same Book ID's !")  
+                      instance = BookCode.objects.get(id=book_code.id, book_institute=request.user.profile.institute)
+                      instance.delete()
+                      return HttpResponseRedirect(f'/library/') 
+                else:
+                      print ("non Duplicates")
+                for book in book_ids:
+                      try:
+                        search_books= Book.objects.get(book_id=book, book_institute=request.user.profile.institute)
+                        messages.error(request, "Books Id's Must Be Unique !") 
+                        instance = BookCode.objects.get(id=book_code.id, book_institute=request.user.profile.institute)
+                        instance.delete() 
+                        return HttpResponseRedirect(f'/library/') 
+                      except:
+                        pass
+                
+                for id in book_ids:
+                      id = id.strip()                        
+                      Book.objects.create(book_id=id, book_code=book_code.code, book_institute=book_code.book_institute, book_name=book_code.book_name, book_category=book_code.book_category, book_sub_category=book_code.book_sub_category, author=book_code.author, publications=book_code.publications, edition=book_code.edition, book_count=book_count_len )
+                messages.success(request, 'Books Added successfully !')
+                return HttpResponseRedirect(f'/library/')
 
             
 
@@ -196,7 +214,7 @@ def issue_book(request):
           # expirydate= request.POST['return_date']
           borrower= UserProfile.objects.get(pk=userid)
           try:
-            borrower_book= Book.objects.get(book_id=bookid)
+            borrower_book= Book.objects.get(book_id=bookid, book_institute=request.user.profile.institute)
           except Book.DoesNotExist:
             messages.error(request, 'Incorrect book id')
             return HttpResponseRedirect(f'/library/issuebook/')
@@ -205,12 +223,19 @@ def issue_book(request):
             messages.error(request, 'Book is already issued')
             return HttpResponseRedirect(f'/library/issuebook/')
           except:
-            
+            chk_active_issue= sh_for_days.max_Book_Allows
+            sch_user= IssueBook.objects.filter(user_name=borrower,issue_book_institute=borrower.institute,return_date__isnull=True).count()
+            print(sch_user)
+            print(chk_active_issue)
             # today_time= datetime.datetime.now().strftime('%H:%M:%S')
-            new_issue_book=IssueBook.objects.create(user_name=borrower, book_name=borrower_book, issue_book_institute=borrower.institute, issued_by=request.user.profile, issued_date=today, expiry_date=expirydate)
-            messages.success(request, 'Book issued successfully !')
-            messages.info(request,f' Return date is {ex_d} !')
-            return HttpResponseRedirect(f'/library/issuebook/')
+            if sch_user < chk_active_issue:
+              new_issue_book=IssueBook.objects.create(user_name=borrower, book_name=borrower_book, issue_book_institute=borrower.institute, issued_by=request.user.profile, issued_date=today, expiry_date=expirydate)
+              messages.success(request, 'Book issued successfully !')
+              messages.info(request,f' Return date is {ex_d} ')
+              return HttpResponseRedirect(f'/library/issuebook/')
+            else:                  
+                  messages.error(request, 'Requested User Active Issued Book Limit Is Exceeded !')  
+                  return HttpResponseRedirect(f'/library/issuebook/')
           
       # return HttpResponse('Hello World Issue Book')      
 
@@ -245,7 +270,7 @@ def return_book(request):
       if request.method == 'POST':
             bookid= request.POST.get('issue_dt')
             # search_book_rt= Book.objects.get(book_id=bookid)
-            issue_book_search= IssueBook.objects.get(book_name__book_id=bookid,  return_date__isnull=True)
+            issue_book_search= IssueBook.objects.get(book_name__book_id=bookid,issue_book_institute=request.user.profile.institute,  return_date__isnull=True)
             # print(issue_book_search)
             context_data = {
               'issue_book_search':issue_book_search,
@@ -273,3 +298,7 @@ def lib_settings(request):
             t.save()              
             return HttpResponseRedirect(f'/library/')        
 
+def edit_book(request,pk):
+      book = BookCode.objects.get(pk=pk)
+      print(book)
+      return HttpResponse('Hello')

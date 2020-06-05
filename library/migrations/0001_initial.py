@@ -34,26 +34,13 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='BookCode',
+            name='LibrarySettings',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('code', models.CharField(max_length=20, null=True)),
-                ('book_count', models.IntegerField(null=True)),
-                ('book_name', models.CharField(max_length=50)),
-                ('author', models.CharField(max_length=50)),
-                ('publications', models.CharField(max_length=50)),
-                ('edition', models.CharField(max_length=50)),
-                ('book_category', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='bookcode_category', to='library.BookCategory')),
-                ('book_institute', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='bookcode_institute', to='main_app.Institute')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='BookSubCategory',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('book_sub_category_name', models.CharField(max_length=50)),
-                ('institute_subcategory', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='institute_subcategory', to='main_app.Institute')),
-                ('parent_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='book_sub_category', to='library.BookCategory')),
+                ('max_Book_Allows', models.IntegerField(blank=True, null=True)),
+                ('day_Span', models.IntegerField(blank=True, null=True)),
+                ('send_Reminder_Before', models.IntegerField(blank=True, null=True)),
+                ('institute', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='library_settings', to='main_app.Institute')),
             ],
         ),
         migrations.CreateModel(
@@ -71,10 +58,14 @@ class Migration(migrations.Migration):
                 ('user_name', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='user_name', to='main_app.UserProfile')),
             ],
         ),
-        migrations.AddField(
-            model_name='bookcode',
-            name='book_sub_category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='bookcode_sub_category', to='library.BookSubCategory'),
+        migrations.CreateModel(
+            name='BookSubCategory',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('book_sub_category_name', models.CharField(max_length=50)),
+                ('institute_subcategory', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='institute_subcategory', to='main_app.Institute')),
+                ('parent_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='book_sub_category', to='library.BookCategory')),
+            ],
         ),
         migrations.AddField(
             model_name='book',
@@ -91,9 +82,23 @@ class Migration(migrations.Migration):
             name='book_sub_category',
             field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='book_sub_category', to='library.BookSubCategory'),
         ),
-        migrations.AlterUniqueTogether(
-            name='bookcode',
-            unique_together={('code', 'book_institute')},
+        migrations.CreateModel(
+            name='BookCode',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('code', models.CharField(max_length=20, null=True)),
+                ('book_count', models.IntegerField(null=True)),
+                ('book_name', models.CharField(max_length=50)),
+                ('author', models.CharField(max_length=50)),
+                ('publications', models.CharField(max_length=50)),
+                ('edition', models.CharField(max_length=50)),
+                ('book_category', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='bookcode_category', to='library.BookCategory')),
+                ('book_institute', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='bookcode_institute', to='main_app.Institute')),
+                ('book_sub_category', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='bookcode_sub_category', to='library.BookSubCategory')),
+            ],
+            options={
+                'unique_together': {('code', 'book_institute')},
+            },
         ),
         migrations.AlterUniqueTogether(
             name='book',

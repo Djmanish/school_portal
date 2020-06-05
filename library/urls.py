@@ -20,5 +20,5 @@ urlpatterns = [
     path('return_book/',views.return_book,name='return_book'),
     path('fetch_sub_category/', views.fetch_sub_category, name="fetch_sub_category"),
     path('lib_settings/',views.lib_settings,name='lib_settings'),
-
+    path('edit_book/<int:pk>/',views.edit_book,name='edit_book'),
 ]
