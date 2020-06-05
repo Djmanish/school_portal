@@ -5,6 +5,7 @@ from django.contrib import messages
 from Attendance.models import *
 from exam_result.models import *
 from examschedule.models import *
+from main_app.views import *
 # Create your views here.
 def addchild(request):
     institutes=Institute.objects.all()
@@ -92,7 +93,7 @@ def delete_child_request(request,pk):
     user = AddChild.objects.get(pk=pk)
     user.delete()
     rr= request.user.profile.institute.id
-    return render(request, 'main_app/dashboard.html')
+    return HttpResponseRedirect('/user/dashboard/')
 
 def childview(request,pk):
     

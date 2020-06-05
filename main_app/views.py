@@ -577,6 +577,7 @@ def dashboard(request):
             try:
                 request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
                 request.user.total_unpaid_student=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=request.user.teacher_class)
+                
             except:
                 request.user.teacher_class = None
                 request.user.total_unpaid_student= None
