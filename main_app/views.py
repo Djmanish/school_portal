@@ -358,12 +358,11 @@ def dashboard(request):
     if request.user.profile.designation:
         if request.user.profile.designation != "parent":
             request.user.student_books=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
-            # request.user.student_books_len = len(request.user.student_books)
             request.user.booksdue=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
           
             count_delay=timezone.now()
             for i in request.user.student_books:
-                # ed = i.expiry_date
+               
                 if count_delay > i.expiry_date:
                     i.delay = count_delay - i.expiry_date
                 else:

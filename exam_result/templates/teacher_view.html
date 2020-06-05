@@ -473,7 +473,7 @@
                                                             {% csrf_token %}
                                                             
                                                             
-                                                            <label style="margin: 4px;">Select Subject</label>
+                                                            <label class = "required" style="margin: 4px;">Select Subject</label>
                                                                 <select class="form-control" name="result_selected_subject" style="padding: 2px;  height:38px">
                                                                     <option selected disabled value="">--Subject--</option>
                                                                     {% for subject in subject_result %}
@@ -481,7 +481,7 @@
                                                                     {% endfor %}
                                                                  </select>
                                                                  
-                                                            <label style="margin: 4px;">Select Exam Type</label>
+                                                            <label class = "required" style="margin: 4px;">Select Exam Type</label>
                                                              <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px; height:38px" required>
                                                                     <option selected disabled value="">--Exam Type--</option>
                                                                     {% for exam_type in institute_exam_type %}
@@ -489,7 +489,7 @@
                                                                     {% endfor %}
                                                              </select>
                                                            
-                                                            <label style="margin: 4px;">Select Exam Type No.</label>
+                                                            <label class = "required" style="margin: 4px;">Select Exam Type No.</label>
                                                                 <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px; height:38px">
                                                                     <option selected disabled value=''>--Exam Type No.--</option>
                                         
