@@ -544,10 +544,10 @@
                                 class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                 id="ts_pager_filter">
                                 <thead>
+                                    
+                                    {% if institute_holiday_list %}     
                                     <tr >
-                                       
-
-                                        <th >Sr.No.</th>
+                                        <th >SI No</th>
                                         <th >Date</th>
                                         <th >Day</th>
                                         <th >Name</th>
@@ -565,11 +565,12 @@
                                         {% if can_edit_holiday_permission in user_permissions %}
                                         <th >Edit</th>
                                         <th >Delete</th>
-
                                         {% endif %}
                                         {% endif %}
 
                                     </tr>
+                                    {% endif %}
+                                        
                                 </thead>
                           
                                 <tbody>

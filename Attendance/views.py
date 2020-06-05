@@ -130,8 +130,8 @@ def attendance_update(request, pk):
                     absent_notice = Notice()
                     absent_notice.institute = request.user.profile.institute
                     absent_notice.category='Attendance'
-                    absent_notice.subject = f"{student} Marked absent on {attendance_date}"
-                    absent_notice.content = f"{student} Marked absent on {attendance_date}"
+                    absent_notice.subject = f"{student.profile.first_name} {student.profile.last_name} Marked absent on {attendance_date}"
+                    absent_notice.content = f"{student.profile.first_name} {student.profile.last_name} Marked absent on {attendance_date}"
                     absent_notice.created_at = timezone.now()
                     absent_notice.publish_date = timezone.now()
                     # absent_notice.author = request.user

@@ -26,6 +26,11 @@ class InstituteUpdateProfile(forms.ModelForm):
         self.fields['code'].required = True
         self.fields['establish_date'].required = True
         self.fields['session_start_date'].required = True
+        self.fields['address2'].required = False
+        self.fields['state'].required = True
+        self.fields['country'].required = True
+        self.fields['pin_code'].required = True
+
     class Meta:
         model = Institute
         fields = ['code','name','establish_date', 'session_start_date', 'profile_pic','principal','about','contact_number1','contact_number2','contact_number3','address1','address2','district','state','country','pin_code','email','facebook_link','website_link']
@@ -53,7 +58,8 @@ class InstituteUpdateProfile(forms.ModelForm):
         'address2':'Address Line 2',
         'pin_code':'Pin Code',
         'facebook_link':'Facebook Link',
-        'website_link':'School Website Link'
+        'website_link':'School Website Link',
+        'district':'City',
 
     }
 
