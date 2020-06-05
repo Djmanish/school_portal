@@ -27,7 +27,7 @@ class BookCode(models.Model):
     publications= models.CharField(max_length=50)
     edition= models.CharField(max_length=50)
     class Meta:
-        unique_together = ('code', 'book_institute',)
+        unique_together = ['code', 'book_institute']
     def __str__(self):
         return self.code
 
@@ -43,7 +43,7 @@ class Book(models.Model):
     edition= models.CharField(max_length=50)
     book_count= models.IntegerField(null=True)
     class Meta:
-        unique_together = ('book_code', 'book_id', 'book_institute' )
+        unique_together = ['book_code', 'book_id', 'book_institute']
     def __str__(self):
        return self.book_name
 

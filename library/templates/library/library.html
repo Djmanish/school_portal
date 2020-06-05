@@ -629,7 +629,7 @@
                                     <li class="uk-active"><a href="#">Issue Book</a></li>
                                      <li><a href="#">Return Books</a></li>                                     
                                      <li><a href="#">Books</a></li>
-                                     
+                                     <li><a href="#">Fine</a></li>                   
                                     
                                          
                                     
@@ -785,7 +785,72 @@
                                             </div>
                                             
                                         </div>
-                                        
+                                        <a type="hidden" id="modal_edit_book_btn" data-uk-modal="{target:'#modal_edit_book'}"></a>
+                                        <div class="uk-modal" id="modal_edit_book">
+                                                    <div class="uk-modal-dialog">
+                                                        <button type="button" class="uk-modal-close uk-close"></button>
+                                                        <div class="uk-modal-header">
+                                                            <h3 class="uk-text-primary">Edit Book</h3>
+                                                        </div>
+                                                        <form  method="POST" action="#">
+                                                            {% csrf_token %}
+                                                            <div class="form-group">
+                                                                    <label class="required">Book Code ( ISBN No / Subject Code )</label>
+                                                                    <input id="book_code" type="text" class="form-control form form-control-sm " name="book_code" required>
+                                                                </div> 
+                                                                <div class="form-group">                                                      
+                                                                    <label class="required">Book Count</label>
+                                                                    <input id="book_count" type="number" class="form-control-sm form-control" name="book_count" required>
+                                                                  </div> 
+                                                                  <div class="form-group">
+                                                                    <label  class="required">Book Name</label>
+                                                                    <input id="book_name" type="text" class="form-control-sm form-control" name="book_name" required>
+                                                                  </div>
+                                                                  <div class="form-group">
+                                                                    <label class="required" for="sel 1">Select Category</label>
+                                                                    <select id="book_category" class="form-control-sm form-control" name="book_category" required>
+                                                                        
+                                                                        {% for i in categories %}
+                                                                        <option value={{i.id}}>{{i}}</option>
+                                                                        {% endfor %}
+                                                                     
+                                                                    </select>
+                                                                  </div> 
+                                                                  <div class="form-group">
+                                                                    <label class="required" for="sel1">Select Sub Category</label>
+                                                                    <select id="book_sub_category" class="form-control-sm form-control" name="book_sub_category" required>
+                                                                        <!-- <option selected disabled value="">--- Select ---</option> -->
+                                                                        {% for j in sub_categories %}
+                                                                        <option value={{j.id}}>{{j}}</option>
+                                                                        {% endfor %}
+                                                                     
+                                                                    </select>
+                                                                  </div> 
+                                                                  <div class="form-group">
+                                                                    <label class="required">Author Name</label>
+                                                                    <input id="book_author" type="text" class="form-control-sm form-control" name="author_name" required>
+                                                                  </div>
+                                                                  <div class="form-group">
+                                                                    <label class="required">Publication</label>
+                                                                    <input id="book_publication" type="text" class="form-control-sm form-control" name="publications" required>
+                                                                  </div>
+                                                                  <div class="form-group">
+                                                                    <label class="required">Edition</label>
+                                                                    <input id="book_edition" type="text" class="form-control-sm form-control" name="editions" required>
+                                                                  </div>                                               
+                                                                  <table>
+                                                                    <tr>
+                                                                        <td> 
+                                                                      <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add Book</button>
+                                                                    </td>
+                                                                    <td style="padding-left:20px;">
+                                                            <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:white; color: black ;width: 140px;">Cancel</button> -->
+                                                        </td>
+                                                    </tr>
+                                                    </table>
+                                                    </form>
+                                                    </div>
+                                                </div>
                                         <div class="md-card uk-margin-medium-bottom">
                                             <div class="md-card-content">
                                                 <div class="uk-overflow-container">
@@ -799,6 +864,7 @@
                                                             <th>Book Sub Category</th>
                                                             <th>Author</th>
                                                             <th>Total Books</th>
+                                                            
                                                         </tr>
                                                         </thead>
                                                         <tbody>
@@ -810,9 +876,25 @@
                                                             <td>{{book.book_category}}</td>
                                                             <td>{{book.book_sub_category}}</td>
                                                             <td>{{book.author}}</td>
-                                                            <td>{{book.book_count}}</td>
-            
+                                                            <td>{{book.count}}</td>
+                                                            
                                                         </tr>
+                                                        <script>
+                                                            $(document).ready(function(){
+                                                            $('#{{book.id|slugify}}').click(function(){
+                                                                $('#modal_edit_book_btn').click();
+                                                                $('#book_code').val('{{book.code}}');
+                                                                $('#book_count').val('{{book.book_count}}');
+                                                                $('#book_name').val('{{book.book_name}}');
+                                                                $('#book_category').val('{{book.book_category}}');
+                                                                $('#book_sub_category').val('{{book.book_sub_category}}');
+                                                                $('#book_author').val('{{book.author}}');
+                                                                $('#book_publication').val('{{book.publications}}');
+                                                                $('#book_edition').val('{{book.edition}}');
+                                                                
+                                                            })
+                                                            })
+                                                        </script>
                                                         {% endfor %}
                                                         </tbody>
                                                     </table>
@@ -822,6 +904,11 @@
                                         
                                     </li>                                             
                                 <!-- Add Book Tab End -->
+                                <!--Start Fine Tab-->
+                                <li>
+                                    Hello World
+                                </li>
+                                <!--End Fine Tab-->
                                         </div>
                             <!-- <div class="uk-grid" data-uk-grid-margin style="margin-left: 30px;">
                                 <div class="uk-width-medium-1-5" >
