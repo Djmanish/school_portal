@@ -134,8 +134,11 @@ def fees_paid_notification(sender, instance, created, **kwargs):
             student = UserProfile.objects.get(pk=instance.student.id)
             fees_paid_notice.recipients_list.add(student)
 
-            student_parent= AddChild.objects.filter(child= instance.student).first()
-            fees_paid_notice.recipients_list.add(student_parent.parent)
-                
+            try:
+                student_parent= AddChild.objects.filter(child= instance.student).first()
+                fees_paid_notice.recipients_list.add(student_parent.parent)
+            except:
+                pass
+                    
 
 # ending sending notification when fees paid
