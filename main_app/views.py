@@ -585,7 +585,7 @@ def dashboard(request):
         # starting fees status for parent view
         if request.user.profile.designation.level_name == "parent":
             request.user.user_child_fee_status = []
-            user_children= AddChild.objects.filter( parent= request.user.profile)
+            user_children= AddChild.objects.filter( parent= request.user.profile, status='active')
         
             
             parent_student_list = []
