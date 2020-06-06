@@ -325,3 +325,8 @@ label.required::after{
 }
 
 /* ending form control modifications */
+
+#forget_password_link{
+ text-align: center; 
+
+}

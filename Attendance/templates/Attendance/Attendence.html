@@ -513,6 +513,10 @@
             </div>
             {% endif %}
 
+
+
+            
+
             <div class="md-card">
                 
                 <div class="md-card-content" >
@@ -520,7 +524,7 @@
                     <form  method="POST" action="#" class="form-inline" id="attendance_form">
                         {% csrf_token %}
                     
-                          <label class ="required" style="margin: 4px;">Select Class </label>
+                          <label class ="required" style="margin: 4px;">Select Class</label>
                         <select name="selected_class_attendance" class="form-control"  required>
                            
                             {% if selected_class_for_attendance %}

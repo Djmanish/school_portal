@@ -237,10 +237,11 @@ def approvals(request,pk):
                 Class_teachers=Classes.objects.get(class_teacher=request.user)
             except Classes.DoesNotExist:
                 Class_teachers = 0
+            
             pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval,Class=Class_teachers , designation=student_designation_id).reverse()
-            parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute)
-            parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute)
-            active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, designation=student_designation_id).reverse()
+            parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute, Class=Class_teachers)
+            parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute, Class=Class_teachers)
+            active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, Class=Class_teachers, designation=student_designation_id).reverse()
             inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval, designation=student_designation_id).reverse()
             return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'parent_request_active':parent_request_active,'parent_request_inactive':parent_request_inactive,'Active_user':active_users,'Inactive_user':inactive_users})
         else:
@@ -358,12 +359,11 @@ def dashboard(request):
     if request.user.profile.designation:
         if request.user.profile.designation != "parent":
             request.user.student_books=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
-            # request.user.student_books_len = len(request.user.student_books)
             request.user.booksdue=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
           
             count_delay=timezone.now()
             for i in request.user.student_books:
-                # ed = i.expiry_date
+               
                 if count_delay > i.expiry_date:
                     i.delay = count_delay - i.expiry_date
                 else:
@@ -577,6 +577,7 @@ def dashboard(request):
             try:
                 request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
                 request.user.total_unpaid_student=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=request.user.teacher_class)
+                
             except:
                 request.user.teacher_class = None
                 request.user.total_unpaid_student= None
@@ -584,7 +585,7 @@ def dashboard(request):
         # starting fees status for parent view
         if request.user.profile.designation.level_name == "parent":
             request.user.user_child_fee_status = []
-            user_children= AddChild.objects.filter( parent= request.user.profile)
+            user_children= AddChild.objects.filter( parent= request.user.profile, status='active')
         
             
             parent_student_list = []

@@ -489,9 +489,9 @@
                     <form  method="POST" action="{% url 'class_promotion' request.user.profile.institute.id %}" class="form-inline" id="attendance_form">
                         {% csrf_token %}
                     
-                          <label style="margin: 4px;">Select Class:  </label>
+                          <label class = "required" style="margin: 4px;">Select Class</label>
                         <select name="selected_class_promotion" class="form-control"  required>
-                           <option selected disabled value=""> -- select a class -- </option>
+                           <option selected disabled value="">--Select Class--</option>
 
                             {% for class in all_classes %}
                             <option value="{{class.id}}">{{class}}</option>

@@ -76,8 +76,8 @@ class Student_Tag_Processed_Record(models.Model):
     type= models.CharField(max_length=7, null=True)
     active = models.CharField(max_length=5, null=True)
     amount = models.DecimalField(decimal_places=2, max_digits=20, null=True)
-    tax_percentage = models.DecimalField(decimal_places=2, max_digits=5, null=True)
-    amount_including_tax = models.DecimalField(decimal_places=2, max_digits=5, null=True)
+    tax_percentage = models.DecimalField(decimal_places=2, max_digits=20, null=True)
+    amount_including_tax = models.DecimalField(decimal_places=2, max_digits=20, null=True)
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
     class Meta:
