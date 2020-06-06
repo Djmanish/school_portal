@@ -373,8 +373,8 @@ def report_card(request,pk):
                 if request.POST.get("report_cart_button"):
                   return overall_report_card(request,exam_id,selected_student.id)
                 elif request.POST.get('view_button'):
-                    # return overall_result(request,exam_id,selected_student.id)
-                    return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{selected_student.id}')
+                    return overall_result(request,exam_id,selected_student.id)
+                    # return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{selected_student.id}')
               else :
                 if select_exam_type!="overall":
                   
@@ -485,7 +485,7 @@ def report_card(request,pk):
 
 
 def overall_result(request,pk,student_pk):
-  print(student_pk)
+  
   inst = request.user.profile.institute.id
   user_children= AddChild.objects.filter(parent= request.user.profile)
   parent_student_list = []
@@ -506,204 +506,193 @@ def overall_result(request,pk,student_pk):
               selected_student=User.objects.get(pk=select_st)
               student_class= selected_student.profile.Class
               institute_student=selected_student.profile.institute
-
               exam_id=request.user.profile.institute.id
-
-
-
-             
               # if select_exam_type=="Overall":
                
               #   # return render(request, 'overall.html', context)
 
               #   return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{selected_student.id}')
-              
-              if select_exam_type=="overall":
-                
-                if request.POST.get("report_cart_button"):
-                  return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
-
-                elif request.POST.get("view_button"):
-                  return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{selected_student.id}')
-
-              else :
-                if select_exam_type!="overall":
+              if select_exam_type:
+                  if select_exam_type=="overall":
                     
-                  
-                    if request.POST['submit']=='report_card_button':
-                      return reports_card(request,exam_id)
-                      # return HttpResponseRedirect(f'/examresult/reports_card/{exam_id}')
+                    if request.POST.get("report_cart_button"):
+                      return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
 
-                    elif request.POST['submit']=='view_button':
-                       return report_card(request,exam_id)
-                      
-              type_exam=[]
-              exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
-              for exam in exam_type_list:
-                type_exam.append(exam)
-              count_value=0
-              for exam_count in type_exam:
-                count_value=count_value+1
+                    elif request.POST.get("view_button"):
+                          type_exam=[]
+                          exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
+                          for exam in exam_type_list:
+                            type_exam.append(exam)
+                          count_value=0
+                          for exam_count in type_exam:
+                            count_value=count_value+1
 
-              print(type_exam)
-              for exam_type in exam_type_list:
-                exam_data= ExamResult.objects.filter(exam_type=exam_type,result_student_data=request.user)
+                          print(type_exam)
+                          for exam_type in exam_type_list:
+                            exam_data= ExamResult.objects.filter(exam_type=exam_type,result_student_data=selected_student)
 
-                # list of all sr no
-                exam_no=[]
-                for data in exam_data:
-                  if data.exam_sr_no in exam_no:
-                    pass
-                  else:
-                    exam_no.append(data.exam_sr_no)
-                # print(exam_no)
+                            # list of all sr no
+                            exam_no=[]
+                            for data in exam_data:
+                              if data.exam_sr_no in exam_no:
+                                pass
+                              else:
+                                exam_no.append(data.exam_sr_no)
+                            # print(exam_no)
 
-                #  list of all subjects  
-                resultsubject=[]
-                for sub in exam_data:
-                  if sub.result_subject in resultsubject:
-                    pass
-                  else:
-                    resultsubject.append(sub.result_subject)
-                
-              
-
-                
-                e_data=[]
-                for etype in type_exam:
-                  etype_limit=etype.exam_max_limit
-                  exam_type_limit=int(etype_limit)
-                  etype_marks=etype.exam_max_marks
-                  exam_type_marks=int(etype_marks)
-                  # final score based on exam type
-                  e_type_perValue=etype.exam_per_final_score
-                  e_type_per=int(e_type_perValue)
-              
-                  for sub in resultsubject:
-                    # create list to store exam result
-                      e_score=[]
-                    # dictionary to store all data set
-                      dict1={}
-                      # store subjects in dictionary
-                      dict1['sub']=sub
-                      # store data type in dictionary
-                      dict1['etype']=etype
-                      # fetch the value of exam score
-                      for eno in exam_no:
-                          examresult_data=ExamResult.objects.filter(exam_type=etype,result_subject=sub,exam_sr_no=eno,result_student_data=request.user)
-                          for exam_score in examresult_data:
-                              e_score.append(exam_score.result_score)
-                          marks_list=list(e_score)
+                            #  list of all subjects  
+                            resultsubject=[]
+                            for sub in exam_data:
+                              if sub.result_subject in resultsubject:
+                                pass
+                              else:
+                                resultsubject.append(sub.result_subject)
+                            e_data=[]
+                            for etype in type_exam:
+                              etype_limit=etype.exam_max_limit
+                              exam_type_limit=int(etype_limit)
+                              etype_marks=etype.exam_max_marks
+                              exam_type_marks=int(etype_marks)
+                              # final score based on exam type
+                              e_type_perValue=etype.exam_per_final_score
+                              e_type_per=int(e_type_perValue)
+                          
+                              for sub in resultsubject:
+                                # create list to store exam result
+                                  e_score=[]
+                                # dictionary to store all data set
+                                  dict1={}
+                                  # store subjects in dictionary
+                                  dict1['sub']=sub
+                                  # store data type in dictionary
+                                  dict1['etype']=etype
+                                  # fetch the value of exam score
+                                  for eno in exam_no:
+                                      examresult_data=ExamResult.objects.filter(exam_type=etype,result_subject=sub,exam_sr_no=eno,result_student_data=selected_student)
+                                      for exam_score in examresult_data:
+                                          e_score.append(exam_score.result_score)
+                                      marks_list=list(e_score)
+                                            
+                                  
+                                  # print(max_limit)
+                                  max_sr_value=[]
+                              
+                                  max_exam_sr_no = ExamDetails.objects.filter(exam_type=etype).values('exam_sr_no').distinct()
+                                  for max_value in max_exam_sr_no:
+                                      for k,v in max_value.items():
+                                            max_sr_value.append(v)
+                              
                                 
-                      
-                      # print(max_limit)
-                      max_sr_value=[]
-                  
-                      max_exam_sr_no = ExamDetails.objects.filter(exam_type=etype).values('exam_sr_no').distinct()
-                      for max_value in max_exam_sr_no:
-                          for k,v in max_value.items():
-                                max_sr_value.append(v)
-                  
-                    
-                            # print(v)
-                      try:
-                          max_exam_limit=max_sr_value[-1]  
-                          max_limit=int(max_exam_limit)
-                      except:
-                        max_exam_limit=None
-                        max_limit=1
-                      
-                      # for loop in exam score list
-                      sum=0
-                      for score in e_score:  
-                          sum=sum+score
-                      sumValue=sum
-                      
-                      perValue=(sumValue/max_limit/exam_type_marks)*e_type_per
-                      # store percent in dictionary
-                      dict1['percent']=round(perValue,2)
-                      e_data.append(dict1)
-                
-                
-                # retrieve list of all subjects from dictionary
-                sub_value=[]
-                for eytpe in e_data:
-                  for sub in e_data:
-                      for k,v in sub.items():
-                          if k=='sub':
-                            if v in sub_value:
-                              pass
-                            else:
-                              sub_value.append(v)
-                
-              # retrieve list of all percentage from dictionary
-                sub_percent_list=[]
-                for subject in sub_value:
-                  sub_percent={}
-                  all_percent_list=[]
-                  per={}
-                  for sub in e_data:
-                    sub_percent['sub']=subject
-                    for k,v in sub.items():
-                      if k=='sub' and v==subject:
+                                        # print(v)
+                                  try:
+                                      max_exam_limit=max_sr_value[-1]  
+                                      max_limit=int(max_exam_limit)
+                                  except:
+                                    max_exam_limit=None
+                                    max_limit=1
+                                  
+                                  # for loop in exam score list
+                                  sum=0
+                                  for score in e_score:  
+                                      sum=sum+score
+                                  sumValue=sum
+                                  
+                                  perValue=(sumValue/max_limit/exam_type_marks)*e_type_per
+                                  # store percent in dictionary
+                                  dict1['percent']=round(perValue,2)
+                                  e_data.append(dict1)
+                            
+                            
+                            # retrieve list of all subjects from dictionary
+                            sub_value=[]
+                            for eytpe in e_data:
+                              for sub in e_data:
+                                  for k,v in sub.items():
+                                      if k=='sub':
+                                        if v in sub_value:
+                                          pass
+                                        else:
+                                          sub_value.append(v)
+                            
+                          # retrieve list of all percentage from dictionary
+                            sub_percent_list=[]
+                            for subject in sub_value:
+                              sub_percent={}
+                              all_percent_list=[]
+                              per={}
+                              for sub in e_data:
+                                sub_percent['sub']=subject
+                                for k,v in sub.items():
+                                  if k=='sub' and v==subject:
+                                    
+                                    for k,v in sub.items():
+                                      if k=='percent':
+                                        all_percent_list.append(v)
+                              # print(all_percent_list)
+                              for percent_marks in all_percent_list:
+                                sub_percent[percent_marks]=percent_marks 
+                              
+                              sum=0
+                              for percent in all_percent_list:
+                                sum=sum+percent
+                              sub_percent['percent_sum']=round(sum,2)
+                              sub_percent_list.append(sub_percent)
+                            final_percentage=[]
+                            for final_percent_sum in sub_percent_list:
+                                for k,v in final_percent_sum.items():
+                                  if k=='percent_sum':
+                                    final_percentage.append(v)
+                            sum=0
+                            for final_sum in final_percentage:
+                              sum=sum+final_sum
+                            # count the number of subjects
+                            count=0
+                            for i in resultsubject:
+                                count=count+1
+                            total_marks_count=count*100
+
+                            final_percent_result=(sum/total_marks_count)*100
+                            grand_result=round(final_percent_result,2)
+                            range_value=range(0, count_value)
+
+                            context={
+                              'institute_student':institute_student,
+                              'student_class':student_class,
+                            'user_institute_name':user_institute_name,
+                            'e_data':e_data,
+                            'type_exam':type_exam,
+                            'exam_type':exam_type,
+                            'etype':etype,
+                            'all_percent_list':all_percent_list,
+                            'exam_type_list':exam_type_list,
+                            'sub_percent_list':sub_percent_list,
+                            'grand_result':grand_result,
+                            'count_value':count_value,
+                            'range_value':range_value,
+                            'student_pk':request.user.id,
+                            'parent_student_list':parent_student_list,
+                            
+
+                            } 
+                            return render(request, 'overall.html', context)
+
+                                
+                  context={
+                              'exam_type_list':exam_type_list,
+                              'parent_student_list':parent_student_list,
+                              
+                              } 
+                  return render(request, 'overall.html', context)
+              else :
+                    if select_exam_type!="overall":
                         
-                        for k,v in sub.items():
-                          if k=='percent':
-                            all_percent_list.append(v)
-                  # print(all_percent_list)
-                  for percent_marks in all_percent_list:
-                    sub_percent[percent_marks]=percent_marks 
-                  
-                  sum=0
-                  for percent in all_percent_list:
-                    sum=sum+percent
-                  sub_percent['percent_sum']=round(sum,2)
-                  sub_percent_list.append(sub_percent)
-                final_percentage=[]
-                for final_percent_sum in sub_percent_list:
-                    for k,v in final_percent_sum.items():
-                      if k=='percent_sum':
-                        final_percentage.append(v)
-                sum=0
-                for final_sum in final_percentage:
-                  sum=sum+final_sum
-                # count the number of subjects
-                count=0
-                for i in resultsubject:
-                    count=count+1
-                total_marks_count=count*100
+                      
+                        if request.POST['submit']=='report_card_button':
+                          return reports_card(request,exam_id)
+                          # return HttpResponseRedirect(f'/examresult/reports_card/{exam_id}')
 
-                final_percent_result=(sum/total_marks_count)*100
-                grand_result=round(final_percent_result,2)
-                range_value=range(0, count_value)
-
-                context={
-                  'institute_student':institute_student,
-                  'student_class':student_class,
-                'user_institute_name':user_institute_name,
-                'e_data':e_data,
-                'type_exam':type_exam,
-                'exam_type':exam_type,
-                'etype':etype,
-                'all_percent_list':all_percent_list,
-                'exam_type_list':exam_type_list,
-                'sub_percent_list':sub_percent_list,
-                'grand_result':grand_result,
-                'count_value':count_value,
-                'range_value':range_value,
-                'student_pk':request.user.id
-                
-
-                } 
-                return render(request, 'overall.html', context)
-
-                    
-      context={
-                'exam_type_list':exam_type_list,
-                'parent_student_list':parent_student_list,
-                
-                } 
-      return render(request, 'overall.html', context)
+                        elif request.POST['submit']=='view_button':
+                          return report_card(request,exam_id)
 
 
       if request.user.profile.designation.level_name=='student':
