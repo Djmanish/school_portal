@@ -474,7 +474,7 @@
                                                             
                                                             
                                                             <label class = "required" style="margin: 4px;">Select Subject</label>
-                                                                <select class="form-control" name="result_selected_subject" style="padding: 2px;  height:38px">
+                                                                <select class="form-control" name="result_selected_subject" style="padding: 2px;  height:38px" required>
                                                                     <option selected disabled value="">--Subject--</option>
                                                                     {% for subject in subject_result %}
                                                                     <option value="{{subject.id}}">{{subject}}</option>
@@ -490,7 +490,7 @@
                                                              </select>
                                                            
                                                             <label class = "required" style="margin: 4px;">Select Exam Type No.</label>
-                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px; height:38px">
+                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px; height:38px" required>
                                                                     <option selected disabled value=''>--Exam Type No.--</option>
                                         
                                                              </select>
