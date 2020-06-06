@@ -822,9 +822,6 @@
 
                                         <li>
                                             {% if added_permissions or removed_permissions  %}
-                                            
-                                           
-
                                             <div class="row">
                                                 <div class="col ">
                                                   <div class="card" >
@@ -837,8 +834,8 @@
                                                   </div>
                                                 </div>
                                               </div>
-
-                                            
+                                              {% else %}
+                                            <h3>No Changes to Show !</h3>
                                               
                                             {% endif %}
                                             <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
