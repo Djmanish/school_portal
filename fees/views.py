@@ -420,12 +420,39 @@ def fees_pay_page(request):
 
 @csrf_exempt
 def handle_requests(request):
+    
     form = request.POST
     response_dict = {}
     for i in form.keys():
         response_dict[i] = form[i]
         if i == "CHECKSUMHASH":
             Checksum = form[i]
+
+    # Starting creating transactions history 
+    try:
+        invoice__num = response_dict['ORDERID']
+        user = Students_fees_table.objects.get(invoice_number=invoice__num)
+        Transactions_history.objects.create(
+                student = user.student,
+                school = user.student.institute,
+                invoice_number = response_dict['ORDERID'],
+                currency = response_dict['CURRENCY'],
+                gateway_name = response_dict['GATEWAYNAME'],
+                txnid = response_dict['TXNID'],
+                BANKTXNID = response_dict['BANKTXNID'],
+                TXNAMOUNT = response_dict['TXNAMOUNT'],
+                STATUS = response_dict['STATUS'],
+                RESPCODE = response_dict['RESPCODE'],
+                RESPMSG = response_dict['RESPMSG'],
+                TXNDATE= timezone.now(),
+                BANKNAME = response_dict['BANKNAME'],
+                PAYMENTMODE = response_dict['PAYMENTMODE'],
+            )
+    except:
+        pass
+                
+    # ending creating transactions history 
+
         
      # starting fetching account details
     institute_id_d = str(response_dict['ORDERID'])
@@ -453,30 +480,7 @@ def handle_requests(request):
         except:
             pass
             
-        # Starting creating transactions history 
-        try:
-            invoice__num = response_dict['ORDERID']
-            user = Students_fees_table.objects.get(invoice_number=invoice__num)
-            Transactions_history.objects.create(
-                student = user.student,
-                school = user.student.institute,
-                invoice_number = response_dict['ORDERID'],
-                currency = response_dict['CURRENCY'],
-                gateway_name = response_dict['GATEWAYNAME'],
-                txnid = response_dict['TXNID'],
-                BANKTXNID = response_dict['BANKTXNID'],
-                TXNAMOUNT = response_dict['TXNAMOUNT'],
-                STATUS = response_dict['STATUS'],
-                RESPCODE = response_dict['RESPCODE'],
-                RESPMSG = response_dict['RESPMSG'],
-                TXNDATE= timezone.now(),
-                BANKNAME = response_dict['BANKNAME'],
-                PAYMENTMODE = response_dict['PAYMENTMODE'],
-            )
-        except:
-            pass
-        # ending creating transactions history 
-
+        
     
     user_response_dict = {}
     for k,v in response_dict.items():
