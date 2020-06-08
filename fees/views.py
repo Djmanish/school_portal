@@ -449,7 +449,23 @@ def handle_requests(request):
                 PAYMENTMODE = response_dict['PAYMENTMODE'],
             )
     except:
-        pass
+        try:  #incase of failure transactions just to keep records
+            invoice__num = response_dict['ORDERID']
+            user = Students_fees_table.objects.get(invoice_number=invoice__num)
+            Transactions_history.objects.create(
+                student = user.student,
+                school = user.student.institute,
+                invoice_number = response_dict['ORDERID'],
+                currency = response_dict['CURRENCY'],
+                TXNAMOUNT = response_dict['TXNAMOUNT'],
+                STATUS = response_dict['STATUS'],
+                RESPCODE = response_dict['RESPCODE'],
+                RESPMSG = response_dict['RESPMSG'],
+                TXNDATE= timezone.now(),
+            )
+        except:
+            pass
+        
                 
     # ending creating transactions history 
 

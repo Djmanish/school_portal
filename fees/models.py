@@ -130,6 +130,9 @@ class Transactions_history(models.Model):
     BANKNAME = models.TextField(null=True)
     PAYMENTMODE = models.CharField(max_length=20, null=True)
 
+    def __str__(self):
+        return str(self.student) 
+
 
 
 
