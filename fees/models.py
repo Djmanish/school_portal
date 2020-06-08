@@ -112,3 +112,24 @@ class FeesResetHistory(models.Model):
 
     def __str__(self):
         return str(self.due_date)
+
+
+class Transactions_history(models.Model):
+    student = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='students_all_transactions', null=True)
+    school = models.ForeignKey(to=Institute, on_delete=models.CASCADE, null=True)
+    invoice_number = invoice_number = models.CharField(max_length=20, null=True,) #order id
+    currency = models.CharField(max_length=10, null=True)
+    gateway_name = models.CharField(max_length=20, null=True)
+    txnid = models.CharField(max_length=90, null=True)
+    BANKTXNID = models.CharField(max_length=90, null=True)
+    TXNAMOUNT = models.CharField(max_length=12, null=True)
+    STATUS = models.CharField(max_length = 25, null=True)
+    RESPCODE = models.CharField(max_length=15, null=True)
+    RESPMSG = models.TextField(null=True)
+    TXNDATE = models.DateTimeField(null=True)
+    BANKNAME = models.TextField(null=True)
+    PAYMENTMODE = models.CharField(max_length=20, null=True)
+
+
+
+

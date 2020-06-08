@@ -72,7 +72,7 @@ def fees_home(request):
 def parent_fees(request):
     if request.user.profile.designation.level_name == "parent":
         #starting those data for pending fees            
-            user_children= AddChild.objects.filter( parent= request.user.profile)
+            user_children= AddChild.objects.filter( parent= request.user.profile, status='active')
             parent_student_list = []
             for st in user_children: #select student form add child table
                 student= UserProfile.objects.get(pk=st.child.id)
@@ -350,6 +350,7 @@ def processing_fees(request):
         # removing schedule, notification and due date of institute
         institute_dates = Fees_Schedule.objects.get(institute= request.user.profile.institute)
         institute_dates.delete()
+        messages.success(request, 'Fees for the given due date processed successfully !')
         return HttpResponse("")
     else:
         messages.info('You do not have permission to access this functionality !')
@@ -405,7 +406,7 @@ def fees_pay_page(request):
         "TXN_AMOUNT" : str(amount),
 
         # on completion of transaction, we will send you the response on this URL
-        "CALLBACK_URL" : "http://trueblueappworks.com/fees/handle_requests/",
+        "CALLBACK_URL" : "http://localhost:8000/fees/handle_requests/",
     }
         
 
@@ -437,18 +438,45 @@ def handle_requests(request):
     MERCHANT_KEY = accnt_details.merchant_key
     verify = checksum.verify_checksum(response_dict, MERCHANT_KEY, Checksum )
     if verify:
-        if response_dict['RESPCODE'] == '01':
+        try:
+            if response_dict['RESPCODE'] == '01':
+                invoice__num = response_dict['ORDERID']
+                user = Students_fees_table.objects.get(invoice_number=invoice__num)
+                user.balance = float(user.total_due_amount) - float(response_dict['TXNAMOUNT'])
+                user.total_due_amount = float(user.total_due_amount) - float(response_dict['TXNAMOUNT'])
+                user.total_paid = response_dict['TXNAMOUNT']
+                user.payment_date = timezone.now()
+                user.payment_method = "Online"
+                user.save()
+            else:
+                print('order was not successfull because ' + response_dict['RESPMSG'])
+        except:
+            pass
+            
+        # Starting creating transactions history 
+        try:
             invoice__num = response_dict['ORDERID']
             user = Students_fees_table.objects.get(invoice_number=invoice__num)
-            user.balance = float(user.total_due_amount) - float(response_dict['TXNAMOUNT'])
-            user.total_due_amount = float(user.total_due_amount) - float(response_dict['TXNAMOUNT'])
-            user.total_paid = response_dict['TXNAMOUNT']
-            user.payment_date = timezone.now()
-            user.payment_method = "Online"
-            
-            user.save()
-        else:
-            print('order was not successfull because ' + response_dict['RESPMSG'])
+            Transactions_history.objects.create(
+                student = user.student,
+                school = user.student.institute,
+                invoice_number = response_dict['ORDERID'],
+                currency = response_dict['CURRENCY'],
+                gateway_name = response_dict['GATEWAYNAME'],
+                txnid = response_dict['TXNID'],
+                BANKTXNID = response_dict['BANKTXNID'],
+                TXNAMOUNT = response_dict['TXNAMOUNT'],
+                STATUS = response_dict['STATUS'],
+                RESPCODE = response_dict['RESPCODE'],
+                RESPMSG = response_dict['RESPMSG'],
+                TXNDATE= timezone.now(),
+                BANKNAME = response_dict['BANKNAME'],
+                PAYMENTMODE = response_dict['PAYMENTMODE'],
+            )
+        except:
+            pass
+        # ending creating transactions history 
+
     
     user_response_dict = {}
     for k,v in response_dict.items():
