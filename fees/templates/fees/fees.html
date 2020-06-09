@@ -578,8 +578,11 @@
                                
                                 {% endif %}
                                     
-                                
+                                {% if  user.profile.designation.level_name == "teacher" %}
                                 <li class="uk-active"><a href="#">Map a Tag</a></li>
+                                {% endif %}
+                                
+                               
                                 <li ><a href="#">Student's Tags</a></li>
                            
                             </ul>
@@ -936,8 +939,7 @@
                             
                                 {% endif %}
                                     
-                                
-                              
+                                {% if  user.profile.designation.level_name == "teacher" %}
                                 <li>
                                     <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                    
@@ -1056,6 +1058,10 @@
                                 
                                     
                                 </li>
+                                {% endif %}
+                                
+                              
+                                
                                 <li>
                                     <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" >
                                        

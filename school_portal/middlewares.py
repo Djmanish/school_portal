@@ -14,8 +14,7 @@ class user_approve_middleware:
         current_url_name = resolve(request.path_info).url_name
 
         if current_url_name == 'auth_logout': # if url is logout then exempted
-            logout(request)
-            return redirect('login_user')
+            redirect('auth_logout')
             
         if request.user.is_authenticated:
             user_status = request.user.profile.status
