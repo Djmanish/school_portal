@@ -1058,7 +1058,7 @@ def delete_user_role(request, pk):
         rr= request.user.profile.institute.id
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
     else:
-        roles_level_tod = Institute_levels.objects.filter(Q(institute = user_role.institute) & Q(level_id__gte =  user_role.level_id )  )
+        roles_level_tod = Institute_levels.objects.filter(Q(institute = user_role.institute) & Q(level_id__gt =  user_role.level_id )  )
         for roles in roles_level_tod:
             roles.level_id -= 1
             roles.save()

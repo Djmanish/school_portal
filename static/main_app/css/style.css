@@ -330,3 +330,15 @@ label.required::after{
  text-align: center; 
 
 }
+
+.btn-goback{
+color: blue;
+border-radius: 2px;
+}
+.btn-goback:hover{
+  color: blue;
+  
+}
+.btn-goback i{
+  color: blue;
+}
