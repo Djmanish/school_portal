@@ -452,24 +452,44 @@
         </div>
     </aside><!-- main sidebar end -->
 
-    <div id="page_content">
-        <div id="page_content_inner">
-            {% if messages %}
-            <div class="md-card md-card-primary">
-          <div class=>
-              <ul class="messages alert">
-                  {% for message in messages %}
-                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                  {% endfor %}
-              </ul>
-          </div>
-            </div>
-            {% endif %}
-                                        <div class="md-card">
-
-                                            <div class="md-card-content">
-                                                
-                                                   
+    
+            <div id="page_content">
+                <div id="page_content_inner">
+                    {% if messages %}
+                    <div class="md-card md-card-primary">
+                  <div class=>
+                      <ul class="messages alert">
+                          {% for message in messages %}
+                          <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                          {% endfor %}
+                      </ul>
+                  </div>
+                    </div>
+                    {% endif %}
+                    <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">      
+                        <div class="uk-width-large">
+        
+                            <div class="md-card">
+                                <div class="user_heading">
+                    <div class="user_heading_avatar">
+                        <div class="thumbnail">
+                            <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
+                        </div>
+                    </div>
+                    <div class="user_heading_content">
+                        <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading"></span></h2>
+        
+                    </div>
+                    <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
+                        <i class="material-icons">&#xE150;</i>
+                    </a> -->
+                </div>
+        
+                    
+                                                            <div class="md-card">
+                                                        
+                                                            <div class="md-card-content">
+                                          
                                                   
                                                        <h5> Create Exam Schedule</h5>
                                     
@@ -668,6 +688,9 @@
                      
                                             </div>
                                         </div>
+
+                        </div>
+                        </div>
 
     <!-- google web fonts -->
     <script>
