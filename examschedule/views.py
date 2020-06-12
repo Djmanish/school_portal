@@ -6,6 +6,7 @@ from .models import *
 from django.views.generic import *
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
+from AddChild.models import *
 from django.core.exceptions import PermissionDenied
 
 
@@ -212,6 +213,11 @@ def examschedule_view(request,pk):
             institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
             exam_class = Classes.objects.filter(institute=request.user.profile.institute)
             institute_pk = request.user.profile.institute.pk
+            user_children= AddChild.objects.filter(parent= request.user.profile)
+            parent_student_list = []
+            for st in user_children:
+                        student= UserProfile.objects.get(pk=st.child.id)
+                        parent_student_list.append(student)
 
             if request.method=="POST":
                 select_exam_type = request.POST.get('selected_exam_type')
@@ -236,37 +242,70 @@ def examschedule_view(request,pk):
                         }
                 
                         return render(request,'update_examschedule.html', context)
+                
                         
                 else:
-                        select_class_for_schedule = request.POST.get('selected_class')
-                        if select_class_for_schedule == None:
-                                first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
-                                first_class_id = first_class.id
-                                select_class_for_schedule= first_class_id
-                        selected_class = Classes.objects.get(pk=select_class_for_schedule)
-                        exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
-                        if exam_details:
+                        if request.user.profile.designation.level_name=='parent':
+                                select_st=request.POST.get('selected_student')
+                                selected_student=User.objects.get(pk=select_st)
+                                student_class= selected_student.profile.Class
+                                
+                                # select_class_for_schedule =student_class
+                                # if select_class_for_schedule == None:
+                                #         first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
+                                #         first_class_id = first_class.id
+                                #         select_class_for_schedule= first_class_id
+                                # selected_class = Classes.objects.get(pk=select_class_for_schedule)
+                                exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=student_class)
+                                try:
+                                
+                                        context = {
+                                        'select_class_for_schedule':select_class_for_schedule,
+                                        'exam_class':exam_class,
+                                        'selected_class':selected_class,
+                                        'exam_type_data':exam_type_data,
+                                        'select_exam_type_no':select_exam_type_no,      
+                                        'exam_details': exam_details,
+                                        'institute_exam_schedule':institute_exam_schedule,
+                                        'institute_exam_type':institute_exam_type,
+                                        }
+                                
+                                        return render(request,'update_examschedule.html', context)
+                                except:
+                                        messages.info(request, 'There is no exam data for this selection !')
                         
-                                context = {
-                                'select_class_for_schedule':select_class_for_schedule,
-                                'exam_class':exam_class,
-                                'selected_class':selected_class,
-                                'exam_type_data':exam_type_data,
-                                'select_exam_type_no':select_exam_type_no,      
-                                'exam_details': exam_details,
-                                'institute_exam_schedule':institute_exam_schedule,
-                                'institute_exam_type':institute_exam_type,
-                                }
-                        
-                                return render(request,'update_examschedule.html', context)
+                                        return HttpResponseRedirect(f'/examschedule/examschedule/view/{institute_pk}')
                         else:
-                                messages.info(request, 'There is no exam data for this selection !')
-                    
-                                return HttpResponseRedirect(f'/examschedule/examschedule/view/{institute_pk}')
+                                select_class_for_schedule = request.POST.get('selected_class')
+                                if select_class_for_schedule == None:
+                                        first_class = Classes.objects.filter(institute= request.user.profile.institute).last()
+                                        first_class_id = first_class.id
+                                        select_class_for_schedule= first_class_id
+                                selected_class = Classes.objects.get(pk=select_class_for_schedule)
+                                exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=selected_class )
+                                if exam_details:
+                                
+                                        context = {
+                                        'select_class_for_schedule':select_class_for_schedule,
+                                        'exam_class':exam_class,
+                                        'selected_class':selected_class,
+                                        'exam_type_data':exam_type_data,
+                                        'select_exam_type_no':select_exam_type_no,      
+                                        'exam_details': exam_details,
+                                        'institute_exam_schedule':institute_exam_schedule,
+                                        'institute_exam_type':institute_exam_type,
+                                        }
+                                
+                                        return render(request,'update_examschedule.html', context)
+                                else:
+                                        messages.info(request, 'There is no exam data for this selection !')
+                        
+                                        return HttpResponseRedirect(f'/examschedule/examschedule/view/{institute_pk}')
             context={
               'exam_class':exam_class,
               'institute_exam_schedule':institute_exam_schedule,
               'institute_exam_type':institute_exam_type,
+              'parent_student_list':parent_student_list,
               
              
                      }

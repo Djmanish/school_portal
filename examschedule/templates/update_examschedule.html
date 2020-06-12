@@ -492,8 +492,21 @@
                                               
                                                             <form method="POST" class="form-inline" id="attendance_form">
                                                                 {% csrf_token %}
+
+                                                                {% if user.profile.designation.level_name == "parent" %}
+                                                                <td>
+                                                                    <label class ="required" style="margin: 4px;">Select Student</label>
+                                                                    <select class="form-control" name="selected_student" style="padding: 2px;"
+                                                                        required>
+                                                                        <option selected disabled value="">--Select Student--</option>
+                                                                        {% for student in parent_student_list %}
+                                                                        <option value={{student.id}}>{{student}}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </td>
+                                                                {% endif %}
                                                            
-                                                                {% if user.profile.designation.level_name != "student"%}
+                                                                {% if user.profile.designation.level_name != "student" and  user.profile.designation.level_name != "parent"%}
                                   
                                                                 <label class ="required" style="margin: 4px;">Select Class</label>
                                                                     <select class="form-control" name="selected_class"  required>
