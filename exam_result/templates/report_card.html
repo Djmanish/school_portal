@@ -503,7 +503,9 @@
                                 <form method="POST" class="form-inline" id="attendance_form">
                                     {% csrf_token %}
                                     <tr>
-                                        <td> <select class="form-control" name="result_exam_type" style="padding: 2px;"
+                                        <td> 
+                                            <label class ="required" style="margin: 4px;">Select Exam Type</label>
+                                            <select class="form-control" name="result_exam_type" style="padding: 2px;"
                                                 required>
                                                 <option selected disabled value="">--Select Exam Type--</option>
                                                 <option value="overall">Overall</option>
@@ -614,7 +616,7 @@
                                                 <tr>
 
                                                     {% for k,v in data.items %}
-                                                    <td style="text-align: right;">
+                                                    <td style="text-align: left;">
                                                         {{v}}
                                                     </td>
 

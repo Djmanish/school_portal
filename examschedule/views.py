@@ -32,7 +32,7 @@ def create_test_type(request,pk):
                         examtype.exam_per_final_score=exam_per_final_score
                         examtype.exam_type_sr_no=exam_sr_no
                         examtype.save()
-                        messages.success(request, 'New Exam Type Created successfully !!!')
+                        messages.success(request, 'New Exam Type Created successfully !')
                         institute_pk = request.user.profile.institute.pk
                         return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
                 
@@ -141,7 +141,7 @@ def exam_schedule(request,pk):
                         }
                         return render(request,'examschedule.html',context)
                 else:
-                        messages.error(request, 'No subjects Found for Selected Class')
+                        messages.error(request, 'No subjects Found for Selected Class!')
                         return HttpResponseRedirect(f'/examschedule/examschedule/{institute_pk}')
 
         context={
