@@ -27,7 +27,7 @@ from examschedule.models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from main_app.serializers import UserProfileSerializer
+from main_app.serializers import UserProfileSerializer, UserSerializer
 from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
@@ -43,7 +43,15 @@ class userList(APIView):
         return Response(serializer.data)
     def post(self):
         pass
+class userLoginData(APIView):
+    def get(self, request):
+        user1= User.objects.all()
+        serializer = UserSerializer(user1, many=True)
+        return Response(serializer.data)
+    def post(self):
+        pass
 
+    
 def add_classes(request):
     user_permissions = request.user.user_institute_role.level.permissions.all()
     add_class_permission = App_functions.objects.get(function_name='Can Add Class')
