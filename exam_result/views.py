@@ -51,6 +51,12 @@ def exam_result(request,pk):
       #============================================================================================ 
         student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
         institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
+        if institute_students==None:
+            messages.info(request, 'No Students Found')
+            return redirect(f'/examresult/examresult/{inst_id}')
+        else:
+          pass
+
         exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,exam_class__name=selected_subject.subject_class )
         # score test
         for student in institute_students:
@@ -107,6 +113,13 @@ def examresult(request,pk):
             subject_teacher=User.objects.get(pk=request.POST.get('subject_teacher'))
             exam_max_marks=request.POST.get('exam_max_marks')
             exam_max_limit=request.POST.get('exam_max_limit')
+            check_limit=int(exam_max_marks)  
+            if int(score)<check_limit or int(score)==check_limit:
+                              pass
+            else:
+                              messages.info(request, 'Entered Marks is greater than the Exam Type Maximum Marks')
+                              return redirect(f'/examresult/examresult/{inst_id}')
+             
             try:
               
               st_data=ExamResult.objects.get(institute= request.user.profile.institute,result_subject=exam_subject, exam_type=examtype,
@@ -136,14 +149,8 @@ def examresult(request,pk):
           
                 data_list=list( marks_list)
                 marks_list=list(map(int, data_list))
-                check_limit=int(exam_max_marks)
-          for score in marks_list:
-                  if score<check_limit or score==check_limit:
-                              pass
-                  else:
-                              messages.info(request, 'Entered Marks is greater than the Exam Type Maximum Marks')
-                              return redirect(f'/examresult/examresult/{inst_id}')
-              
+                
+       
           messages.success(request, 'Exam Result Stored successfully !!!')  
           return redirect(f'/examresult/examresult/{inst_id}') 
 
