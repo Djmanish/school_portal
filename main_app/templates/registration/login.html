@@ -37,7 +37,7 @@
                 <form method="POST" action="{% url 'login_user' %}">
                   
                   {% if error %}
-                  <p style="color: red;">{{error}}</p>
+                  <p style="color:red;">{{error}}</p>
                   {% endif %}
                     
                   {% csrf_token %}

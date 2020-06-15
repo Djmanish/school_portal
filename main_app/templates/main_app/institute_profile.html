@@ -194,6 +194,7 @@
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                     <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                    <li><a href="{% url 'auth_password_change' %}">Log Out</a></li>
                                    
                                 </ul>
                             </div>
@@ -231,22 +232,14 @@
     </header><!-- main header end -->
     <!-- main sidebar -->
     <aside id="sidebar_main">
-
-        <div class="sidebar_main_header">
-            <div class="sidebar_logo">
-                <a href="{% url 'user_dashboard' %}" class="sSidebar_hide sidebar_logo_large">
-                    <img class="logo_regular img-fluid " id="slogo" src="{% static 'main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
-                    <img class="logo_light img-fluid " id="slogo" src="{% static 'main_app/img/main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
-                </a>
-                <a href="{% url 'user_dashboard' %}" class="sSidebar_show sidebar_logo_small">
-                    <img class="logo_regular" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
-                    <img class="logo_light" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
-                </a>
+        <div class="sidebar_main_header" style="position: fixed; top: -9px; z-index: 1;">
+            <div>
+                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt=""/> </a>
             </div>
-            
         </div>
 
-        <div class="menu_section">
+        <div>
+           <div class="menu_section" style="position: relative; top: 91px;">
             <ul>
                 <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
@@ -483,6 +476,10 @@
 
             </ul>
         </div>
+        
+            
+            
+        </div>  
 
     </aside><!-- main sidebar end -->
 
@@ -1221,6 +1218,11 @@
             </div>
         </div>
     </div>
+    <footer id="footer" class =" md-bg-blue-700 text-white" style = "text-align: center;">
+    
+        A product of  <a href="#" style = "color: white;">Trueblue AppWerks</a>
+        
+    </footer>
 
     <!-- google web fonts -->
     <script>

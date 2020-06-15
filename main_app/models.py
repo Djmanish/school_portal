@@ -29,6 +29,7 @@ class Institute(models.Model):
     name = models.CharField(max_length=150)
     establish_date=models.DateField(null=True, blank=True)
     profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.png", null=True, blank=True, validators=[FileExtensionValidator(['jpeg','jpg','gif','png'])] )
+    institute_logo = models.ImageField(upload_to="Institute logo",default="default_school_pic.png", null=True, blank=True, validators=[FileExtensionValidator(['jpeg','jpg','gif','png'])] )
     principal = models.CharField(max_length=50, null=True)
     session_start_date = models.DateField(null=True, blank=True)
     about = models.TextField(max_length=300, blank=True, default="This is about Institute" )

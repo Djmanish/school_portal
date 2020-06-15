@@ -163,7 +163,7 @@ background-color: lightgray;
   height: 150px;
 }
 img#slogo{
- height: 46px !important;
+ height: 50px !important;
 }
 #sidebar_main .sidebar_main_header{
   padding: 12px !important;
@@ -325,3 +325,32 @@ label.required::after{
 }
 
 /* ending form control modifications */
+
+#body-font{
+  font-family: Roboto,sans-serif;
+  font-size: 14px/1.42857143;
+  font-weight: 400;
+  padding-top: 48px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.img-logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+  height: auto;
+  top: 0px;
+}
+.bottom_logo{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+  height: auto;
+  bottom: 0px;
+}
+.sidebar_main_header {
+  max-height: 100px !important; 
+ }

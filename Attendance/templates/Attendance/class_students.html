@@ -549,6 +549,8 @@
                                     <th >Full Name</th>
                                   
                                     <th >Roll No.</th>
+                                    <th>Father's Name</th>
+                                    <th>Mother's Name</th>
                                 </tr>
                                 
                                 {% endif %}
@@ -577,7 +579,10 @@
                                             
                                     </td>
                                   
-                                    <td  >{{student.roll_number}}</td>
+                                    <td> {{student.roll_number}}</td>
+                                    <td> {{student.father_name}}</td>
+                                    <td> {{student.mother_name}}</td>
+
                                   </tr>
                                  
                                   {% endfor %}

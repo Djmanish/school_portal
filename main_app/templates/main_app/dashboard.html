@@ -329,6 +329,12 @@
                                     <ul class="uk-nav js-uk-prevent">
                                         <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                         <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                        <li title="Log Out">
+                                            <a href="{% url 'auth_logout' %}">
+                                                
+                                                <span class="menu_title">Log Out</span>
+                                            </a>
+                                        </li>
                                        
                                     </ul>
                                 </div>
@@ -365,24 +371,16 @@
         </div>
     </header><!-- main header end -->
     <!-- main sidebar -->
-    <aside id="sidebar_main">
+    <aside id="sidebar_main" >
         
-        <div class="sidebar_main_header">
-            <div class="sidebar_logo">
-                <a href="{% url 'user_dashboard' %}" class="sSidebar_hide sidebar_logo_large">
-                    <img class="logo_regular img-fluid " id="slogo" src="{% static 'main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
-                    <img class="logo_light img-fluid " id="slogo" src="{% static 'main_app/img/main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
-                </a>
-                <a href="{% url 'user_dashboard' %}" class="sSidebar_show sidebar_logo_small">
-                    <img class="logo_regular" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
-                    <img class="logo_light" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
-                </a>
+        <div class="sidebar_main_header" style="position: fixed; top: -7px; z-index: 1;">
+            <div>
+                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="" style="height: 48px;" /> </a>
             </div>
-            
         </div>
         
-        <div class="menu_section">
-            <ul>
+        <div class="menu_section" style="position: relative;top: 91px; bottom: 60px; ">
+            <ul style="margin-bottom: 100px;">
                 <li class="current_section" title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
@@ -589,14 +587,15 @@
 
                     {% endif %}  
                     {% endif %} 
-                <li title="Log Out">
-                        <a href="{% url 'auth_logout' %}">
-                            <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
-                            <span class="menu_title">Log Out</span>
-                        </a>
-                    </li>
+                
             </ul>
         </div>
+        <div class="sidebar_main_header" style="position: fixed;bottom: -35px; z-index: 1;">
+            <div>
+            
+                <a href="#" ><img id="slogo" class="img.bottom_logo" style="width:60%;" src="{% static 'main_app/images/blogo1.png' %}" alt=""/> </a>
+            </div>
+        </div></div>
     </aside><!-- main sidebar end -->
 
     <div id="page_content">
@@ -921,7 +920,7 @@
                                     {% for u in user.user_t1 %}
                                     <tr class="uk-table-middle">
                                         <td class="uk-width-3-10 uk-text-nowrap">{{u}}</td>
-                                        <td class="uk-width-3-10 uk-text-nowrap"></td>
+                                        <td class="uk-width-3-10 uk-text-nowrap"><b>Class Teacher</b></td>
                                     </tr>
                                     {% endfor %}
                                     {% for teacher1 in user_subject_one %}
@@ -1030,8 +1029,9 @@
                                 </thead>
                                 <tbody>
                                     {% for i in user.total_unpaid_student %}
-                                    <tr class="uk-table-middle">  
-                                        {% if i.student.status == 'active' %}                                      
+                                    
+                                    <tr>  
+                                        {% if i.student.status == 'approve' %}                                      
                                         <td class="uk-width-3-10 uk-text-nowrap"><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
                                         <td class="uk-width-3-10 uk-text-nowrap" style="color: red;">Unpaid</td>                                        
                                         {% endif %}
@@ -1074,7 +1074,7 @@
             
             {% elif  user.profile.designation.level_name == "parent" %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-                {% if user.user_child_fee_status %}
+                {% if user.user_child_fee_status.status == "active" %}
                 <div class="uk-width-medium-1-2">
                     <div class="">
                         <div class="md-card-content">
@@ -1100,11 +1100,13 @@
                                             
                                                 
                                                 {% for stfs in request.user.user_child_fee_status %}
+                                                {% if stfs.status == "active" %}
                                                     <tr>
                                                         <td><a href="{% url 'parent_fees' %}">{{stfs.student.first_name}} {{stfs.student.last_name|default:""}}</a></td>
                                                         <td>{{stfs.due_date}}</td>
                                                         <td>{{stfs.total_due_amount}}</td>
                                                     </tr>
+                                                {% endif %}
                                                 {% endfor %}
                                                     
                                                 
@@ -1175,20 +1177,17 @@
                 
             
             <!-- info cards -->
-            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+<div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
                
                {% if user.profile.designation %}
                <div class="uk-width-medium-1-2">
                 <div class="md-card">
-                    <div class="md-card-content">
-                        
-                        {% if user.profile.designation.level_name == "parent" %}
+                    {% if user.profile.designation.level_name == "parent" %}
                         {% if user.count > 1 %}
                         <form  method="POST" action="#" class="form-inline" id="parent_calendar_form">
                             {% csrf_token %}
                               <label style="margin: 4px;">Select Child:  </label>
                                 <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
-                                <option selected disabled value="">                  
                                 {% if request.POST %}
                                     {{user.post_child}}
                                 {% else %}
@@ -1196,13 +1195,18 @@
                                 {% endif %}
                                 </option>
                                 {% for child in user.child_par %}
+                                {% if child.status == "active" %}
                                 <option value={{child.child.id}}>{{child.child}}</option>
+                                {% endif %}
                                 {% endfor %}
                          </select>
                         <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary md-btn-mini ">
                         </form>
                         {% endif %}
                         {% endif %}
+                    <div class="md-card-content">
+                        
+                        
                         <div id='calendar'></div>
                         
                         </div>
@@ -1248,96 +1252,96 @@
                </div>               
                {% endif %}   
                
-<!-- student library book status -->
+                <!-- student library book status -->
 
-{% if user.student_books %}
-{% if request.user.profile.designation.level_name != "parent" %} 
-<div class="uk-width-medium-1-2">         
-    <div class="md-card">
-        <div class="md-card-content">
-            <div >
-               <table class="uk-table uk-table-condensed uk-table-hover">
-                    <thead>
-                        <div class="row">
-                            <div class="col-sm-6" >
-                              <h3 class="heading_a ">Library Book Issue</h3>
+                {% if user.student_books %}
+                {% if request.user.profile.designation.level_name != "parent" %} 
+                <div class="uk-width-medium-1-2">         
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div >
+                            <table class="uk-table uk-table-condensed uk-table-hover">
+                                    <thead>
+                                        <div class="row">
+                                            <div class="col-sm-6" >
+                                            <h3 class="heading_a ">Library Book Issue</h3>
+                                            </div>
+                                            <div class="col-sm-6 text-center">
+                                                {% if user.booksdue > 0 %}
+                                                <h3 class="heading_a uk-margin-bottom">Book(s) Delayed:<span style="color: red; font-weight:bold;">{{user.booksdue}}</span></h3>
+                                                {%endif%}
+                                            </div>
+                                        </div>
+                                        
+                                            <tr>
+                                            <th class="uk-text-nowrap">Book Name</th>
+                                            <th class="uk-text-nowrap">Due Date</th>
+                                            </tr>
+                                    </thead>
+                                    <tbody>
+                                    
+                                        {% for stdr in user.student_books %}
+                                            <tr class="uk-table-middle">
+                                            <td class="uk-width-3-10 uk-text-nowrap">{{stdr.book_name}}</td>
+                                            <td class="uk-width-3-10 uk-text-nowrap" >{{stdr.expiry_date.date}}</td>
+                                            </tr>
+                                    
+                                        {% endfor %}
+                                    </tbody>
+                                
+                                </table>
                             </div>
-                            <div class="col-sm-6 text-center">
-                                {% if user.booksdue > 0 %}
-                                <h3 class="heading_a uk-margin-bottom">Book(s) Delayed:<span style="color: red; font-weight:bold;">{{user.booksdue}}</span></h3>
-                                {%endif%}
-                            </div>
-                          </div>
-                           
-                            <tr>
-                             <th class="uk-text-nowrap">Book Name</th>
-                             <th class="uk-text-nowrap">Due Date</th>
-                            </tr>
-                    </thead>
-                    <tbody>
-                       
-                        {% for stdr in user.student_books %}
-                            <tr class="uk-table-middle">
-                            <td class="uk-width-3-10 uk-text-nowrap">{{stdr.book_name}}</td>
-                            <td class="uk-width-3-10 uk-text-nowrap" >{{stdr.expiry_date.date}}</td>
-                            </tr>
-                      
-                        {% endfor %}
-                    </tbody>
-                
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-                  
- <!-- parent library book status -->
-{% endif %}
+                        </div>
+                    </div>
+                </div>
+                                
+                <!-- parent library book status -->
+                {% endif %}
  
- {% if request.user.profile.designation.level_name == "parent" %}
-     
- <div class="uk-width-medium-1-2">
-         
-    <div class="md-card">
-        <div class="md-card-content">
-            <div >
-               <table class="uk-table uk-table-condensed uk-table-hover">
-                    <thead>
-                        <div class="row">
-                            <div class="col-sm-6" >
-                              <h3 class="heading_a ">Book Issue By Student(s)</h3>
+                {% if request.user.profile.designation.level_name == "parent" %}
+                    
+                <div class="uk-width-medium-1-2">
+                        
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div >
+                            <table class="uk-table uk-table-condensed uk-table-hover">
+                                    <thead>
+                                        <div class="row">
+                                            <div class="col-sm-6" >
+                                            <h3 class="heading_a ">Book Issue By Student(s)</h3>
+                                            </div>
+                                            
+                                            <div class="col-sm-6 text-center">
+                                                {% if user.booksdue > 0 %}
+                                                <h3 class="heading_a uk-margin-bottom">Book(s) Delayed:<span style="color: red; font-weight:bold;">{{user.booksdue}}</span></h3>
+                                                {%endif%}
+                                            </div>
+                                        </div>
+                                        
+                                            <tr>
+                                            <th class="uk-text-nowrap">Book Name</th>
+                                            <th class="uk-text-nowrap">Due Date</th>
+                                            </tr>
+                                    </thead>
+                                    <tbody>
+                                    
+                                        {% for stdr in user.student_books %}
+                                            <tr class="uk-table-middle">
+                                            <td class="uk-width-3-10 uk-text-nowrap">{{stdr.book_name}}</td>
+                                            <td class="uk-width-3-10 uk-text-nowrap" >{{stdr.expiry_date.date}}</td>
+                                            </tr>
+                                    
+                                        {% endfor %}
+                                    </tbody>
+                                
+                                </table>
                             </div>
-                            
-                            <div class="col-sm-6 text-center">
-                                {% if user.booksdue > 0 %}
-                                <h3 class="heading_a uk-margin-bottom">Book(s) Delayed:<span style="color: red; font-weight:bold;">{{user.booksdue}}</span></h3>
-                                {%endif%}
-                            </div>
-                          </div>
-                           
-                            <tr>
-                             <th class="uk-text-nowrap">Book Name</th>
-                             <th class="uk-text-nowrap">Due Date</th>
-                            </tr>
-                    </thead>
-                    <tbody>
-                       
-                        {% for stdr in user.student_books %}
-                            <tr class="uk-table-middle">
-                            <td class="uk-width-3-10 uk-text-nowrap">{{stdr.book_name}}</td>
-                            <td class="uk-width-3-10 uk-text-nowrap" >{{stdr.expiry_date.date}}</td>
-                            </tr>
-                      
-                        {% endfor %}
-                    </tbody>
-                
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-{% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
  
          
 
@@ -1678,7 +1682,11 @@
         </div>
 
     </aside>
-
+    <footer id="footer" class =" md-bg-blue-700 text-white" style ="text-align: right; z-index:1">
+    
+        &copy; A product of <a href="#" style ="color:white;" >Trueblue AppWerks</a>
+        
+    </footer>
 
 
     
@@ -1837,7 +1845,8 @@
               {
                 title: '{{h.name}}',
                 start: "{{h.date|date:'Y-m-d'}}",
-                backgroundColor:'#AED6F1',                
+                backgroundColor:'#F08080',  
+                url:'{% url 'holidaylist' user.profile.institute.pk %}',                
               },
               {% endfor %}
               {% endif %}
@@ -1846,7 +1855,7 @@
               {
                 title: '{{ex.exam_type}}',
                 start: "{{ex.exam_date|date:'Y-m-d'}}",
-                backgroundColor:'#AED6F1', 
+                backgroundColor:'#6495ED', 
                 url:'{% url 'examschedule_view' request.user.profile.institute.id %}',    
               },
               {% endfor %}
@@ -1856,7 +1865,7 @@
               {
                 title: '{{ex.exam_type}}',
                 start: "{{ex.exam_date|date:'Y-m-d'}}",
-                backgroundColor:'#AED6F1', 
+                backgroundColor:'#6495ED', 
                 url:'{% url 'examschedule_view' request.user.profile.institute.id %}',    
               },
               {% endfor %}
@@ -1864,7 +1873,7 @@
               {
                 title: '{{ex.exam_class}} - {{ex.exam_subject}}',
                 start: "{{ex.exam_date|date:'Y-m-d'}}",
-                backgroundColor:'#AED6F1', 
+                backgroundColor:'#6495ED', 
                 url:'#',    
               },
               {% endfor %}
@@ -1874,14 +1883,14 @@
               {
                 title: '{{k.exam_type}}',
                 start: "{{k.exam_date|date:'Y-m-d'}}",
-                backgroundColor:'#AED6F1', 
+                backgroundColor:'#6495ED', 
               },
               {% endfor %}  
               {% for ke in user.exam_she_student %}
               {
                 title: '{{ke.exam_subject}}',
                 start: "{{ke.exam_date|date:'Y-m-d'}}",
-                backgroundColor:'#AED6F1', 
+                backgroundColor:'#6495ED', 
               },
               {% endfor %}
               {% endif %}
@@ -1890,21 +1899,22 @@
               {
                 title: '{{h.name}}',
                 start: "{{h.date|date:'Y-m-d'}}",
-                backgroundColor:'#AED6F1',
+                backgroundColor:'#F08080',
+                url:'{% url 'holidaylist' user.profile.institute.pk %}'
               },
               {% endfor %} 
               {% for l in user.exam_she_child %}
               {
                 title: '{{l.exam_type}}',
                 start: "{{l.exam_date|date:'Y-m-d'}}",
-                backgroundColor:'#AED6F1',
+                backgroundColor:'#6495ED',
               },
               {% endfor %} 
               {% for li in user.exam_she_child %}
               {
                 title: '{{li.institute}} - {{li.exam_subject}}',
                 start: "{{li.exam_date|date:'Y-m-d'}}",
-                backgroundColor:'#AED6F1',
+                backgroundColor:'#6495ED',
               },
               {% endfor %}
               {% endif %} 
