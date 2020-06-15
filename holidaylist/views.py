@@ -160,10 +160,10 @@ def holidayemail(request):
 
 def emailView(request,pk):
     institute_holiday = Institute.objects.get(pk=pk)
-    user_emails=UserProfile.objects.filter(institute=request.user.profile.institute)
-    user_data_email=[]
-    for user_data in user_emails:
-        user_data_email.append(user_data.user.email)
+    # user_emails=UserProfile.objects.filter(institute=request.user.profile.institute)
+    # user_data_email=[]
+    # for user_data in user_emails:
+    #     user_data_email.append(user_data.user.email)
     
 
     institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
@@ -177,6 +177,7 @@ def emailView(request,pk):
             subject = form.cleaned_data['subject']
             from_email = form.cleaned_data['from_email']
             message = form.cleaned_data['message']
+            print("yes")
             try:
                 send_mail(subject, message,from_email,[to_email],fail_silently=False)
             except BadHeaderError:
@@ -185,7 +186,7 @@ def emailView(request,pk):
             return render(request, 'holidaylist/holidaylist.html',{'institute_holiday_list':institute_holiday_list})
     
     context={
-        'user_data_email':user_data_email,
+        # 'user_data_email':user_data_email,
         'form': form,
         'institute_holiday_list':institute_holiday_list
     }        

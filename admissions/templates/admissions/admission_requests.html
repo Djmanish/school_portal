@@ -12,14 +12,14 @@
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no" />
 
-    <link rel="icon" type="image/png" href="{% static 'holidaylist/img/favicon-16x16.png' %}" sizes="16x16">
-    <link rel="icon" type="image/png" href="{% static 'holidaylist/img/favicon-32x32.png' %}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
-    <title>Admission Requests</title>
+
+    <title>Institute Profile</title>
 
     <!-- bootstrap -->
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
-
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
         media="all">
@@ -27,21 +27,20 @@
     <!-- flag icons -->
     <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
 
-    
+  
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
 
     <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
-        <script type="text/javascript" src="bower_components/matchMedia/matchMedia.js"></script>
-        <script type="text/javascript" src="bower_components/matchMedia/matchMedia.addListener.js"></script>
-        <link rel="stylesheet" href="assets/css/ie.css" media="all">
+        <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.js' %}"></script>
+        <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
 </head>
 
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
@@ -90,6 +89,10 @@
                                         <a href="page_user_profile.html" class="uk-margin-top">
                                             <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
                                             <span class="uk-text-muted uk-display-block">User profile</span>
+                                        </a>
+                                        <a href="page_institute_profile.html" class="uk-margin-top">
+                                            <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                            <span class="uk-text-muted uk-display-block">Institute profile</span>
                                         </a>
                                     </div>
                                 </div>
@@ -200,7 +203,31 @@
                 </div>
             </nav>
         </div>
-
+        <div class="header_main_search_form">
+            <i class="md-icon header_main_search_close material-icons">&#xE5CD;</i>
+            <form class="uk-form uk-autocomplete" data-uk-autocomplete="{source:'data/search_data.json'}">
+                <input type="text" class="header_main_search_input" />
+                <button class="header_main_search_btn uk-button-link"><i
+                        class="md-icon material-icons">&#xE8B6;</i></button>
+                <script type="text/autocomplete">
+                    <ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">
+                                                <li data-value="">
+                            <a href="" class="needsclick">
+                               <br>
+                                <span class="uk-text-muted uk-text-small"></span>
+                            </a>
+                        </li>
+                       
+                        <li data-value="autocomplete-value">
+                            <a class="needsclick">
+                                Autocomplete Text<br>
+                                <span class="uk-text-muted uk-text-small">Helper text</span>
+                            </a>
+                        </li>
+                    </ul>
+                </script>
+            </form>
+        </div>
     </header><!-- main header end -->
     <!-- main sidebar -->
     <aside id="sidebar_main">
@@ -218,6 +245,7 @@
             </div>
             
         </div>
+
         <div class="menu_section">
             <ul>
                 <li  title="Dashboard">
@@ -246,7 +274,7 @@
                     
 
                 {% if user.profile.institute %}
-                <li  title="Institute Profile">
+                <li class="current_section" title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>
@@ -303,7 +331,7 @@
 
             
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-            <li class="current_section" title="Admission Requests">
+            <li  title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
                     <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                     <span class="menu_title">Admission Requests</span>
@@ -391,7 +419,7 @@
                             </li>
                             <li  title="Class Students">
                     
-                                <a href="{% url 'class_promotion'  request.user.profile.institute.id %}">
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
                                         <span class="menu_title">Class Promotion</span>
                                     </a>
@@ -454,102 +482,122 @@
 
 
             </ul>
-        </div> 
-       
+        </div>
+
     </aside><!-- main sidebar end -->
 
     <div id="page_content">
         <div id="page_content_inner">
             
-            {% if messages %}
-            <div class="md-card md-card-primary">
-          <div class=>
-              <ul class="messages alert">
-                  {% for message in messages %}
-                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                  {% endfor %}
-              </ul>
-          </div>
-            </div>
-            {% endif %}
-
-            <div class="md-card">
-                <div class="md-card-content">
-                    <div class="uk-margin-bottom">
-                        <!-- <a href="#" class="md-btn uk-margin-right" id="printTable">Print Table</a> -->
-                        <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
-                            <!-- <button class="md-btn">Columns <i class="uk-icon-caret-down"></i></button> -->
-                            <!-- <div class="uk-dropdown">
-                                <ul class="uk-nav uk-nav-dropdown" id="columnSelector"></ul>
-
-
-                            </div> -->
-                        </div>
-                        <!-- <div class="md-card"> -->
-                            
-                        <!-- starting Holiday modal themes -->
-                      
-
-                        <div class="uk-overflow-container uk-margin-bottom">
-                            <table
-                                class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                                id="ts_pager_filter">
-                                <thead>
-                                 <h3>Admission Requests</h3>  
-                                 
-                                 {% if object_list %}
-                                 <tr>
-                                    <th>Full Name</th>
-                                    <th>Class</th>
-                                    <th>DOB</th>
-                                    <th>Gender</th>
-                                    <th>Category</th>
-                                
-
-                                </tr>
-                                {% else %}
-                                <h6>No Requests found.</h6>
-                                 {% endif %}
-                                     
-                                
-                                </thead>
-                          
-                                <tbody>
-                                    
-                                    {% for objects in object_list %}
-                                    <tr>
-  <td><a href="{% url 'admission_request' objects.id %}">{{objects.first_name}} 
-    {% if objects.middle_name %}
-    {{objects.middle_name}}
-    {% endif %}
-    {% if objects.last_name %}
-    {{objects.last_name}}
-    {% endif %}</a>
-      </td>
-      <td>
-        {{objects.class_name}}
-      </td>
-      <td>
-        {{objects.date_of_birth}}
-      </td>
-      <td>
-        {{objects.gender}}
-      </td>
-      <td>
-        {{objects.Category}}
-      </td>
-                                    </tr>
-                                    {% endfor %}
-                                        
-                                 
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-
+                                <!-- success message -->
+        {% if messages %}
+        <div class="md-card md-card-primary">
+      <div >
+          <ul class="messages alert">
+              {% for message in messages %}
+              <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+              {% endfor %}
+          </ul>
+      </div>
+        </div>
+        {% endif %}
                     
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+                <div class="uk-width-large">
+                    <div class="md-card">
+                        <div class="user_heading">
+                            <div class="user_heading_menu hidden-print">
+                                <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
+                                    <!-- <i class="md-icon material-icons md-icon-light">&#xE5D4;</i> -->
+                                    <!-- <div class="uk-dropdown uk-dropdown-small">
+                                        <ul class="uk-nav">
+                                            <li><a href="#">Action 1</a></li>
+                                            <li><a href="#">Action 2</a></li>
+                                        </ul>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="user_heading_avatar">
+                                <div class="thumbnail">
+                                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
+                                </div>
+                            </div>
+                            <div class="user_heading_content">
+                                <h2 class="heading_b uk-margin-bottom"><span
+                                        class="uk-text-truncate">{{user.profile.institute.name}}</span>
+                                        <span class="sub-heading">Admission Requests</span>
+                                    </h2>
+                                       
+                            </div>
+
+
+
+
+
+
+
+                        </div>
+
+                        <div class="user_content">
+                      
+                            <div class="uk-overflow-container uk-margin-bottom">
+                                <table
+                                    class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
+                                    id="ts_pager_filter">
+                                    <thead>
+                                  
+                                     
+                                     {% if object_list %}
+                                     <tr>
+                                        <th>Full Name</th>
+                                        <th>Class</th>
+                                        <th>DOB</th>
+                                        <th>Gender</th>
+                                        <th>Category</th>
+                                    
+    
+                                    </tr>
+                                    {% else %}
+                                    <h6>No Requests found.</h6>
+                                     {% endif %}
+                                         
+                                    
+                                    </thead>
+                              
+                                    <tbody>
+                                        
+                                        {% for objects in object_list %}
+                                        <tr>
+      <td><a href="{% url 'admission_request' objects.id %}">{{objects.first_name}} 
+        {% if objects.middle_name %}
+        {{objects.middle_name}}
+        {% endif %}
+        {% if objects.last_name %}
+        {{objects.last_name}}
+        {% endif %}</a>
+          </td>
+          <td>
+            {{objects.class_name}}
+          </td>
+          <td>
+            {{objects.date_of_birth}}
+          </td>
+          <td>
+            {{objects.gender}}
+          </td>
+          <td>
+            {{objects.Category}}
+          </td>
+                                        </tr>
+                                        {% endfor %}
+                                            
+                                     
+    
+                                    </tbody>
+                                </table>
+                            </div>
+
+                                                
 <!-- starting pagination -->
 <div class="container text-center mb-3">
     {% if is_paginated %}
@@ -571,81 +619,68 @@
   {% endif %}
   </div>
 <!-- ending pagination -->
-                </div>
 
+
+                        </div>
+
+                    </div>
+                </div>
+                
             </div>
         </div>
+    </div>
 
-        <!-- google web fonts -->
-        <script>
-            WebFontConfig = {
-                google: {
-                    families: [
-                        'Source+Code+Pro:400,700:latin',
-                        'Roboto:400,300,500,700,400italic:latin'
-                    ]
-                }
-            };
-            (function () {
-                var wf = document.createElement('script');
-                wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-                    '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-                wf.type = 'text/javascript';
-                wf.async = 'true';
-                var s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(wf, s);
-            })();
-        </script>
+    <!-- google web fonts -->
+    <script>
+        WebFontConfig = {
+            google: {
+                families: [
+                    'Source+Code+Pro:400,700:latin',
+                    'Roboto:400,300,500,700,400italic:latin'
+                ]
+            }
+        };
+        (function () {
+            var wf = document.createElement('script');
+            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+                '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
+    </script>
 
-        <!-- common functions -->
-        <script src="{% static 'main_app/js/common.min.js' %}"></script>
-        <!-- uikit functions -->
-        <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
-        <!-- altair common functions/helpers -->
-        <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
-
-        <!-- page specific plugins -->
-        <!-- tablesorter -->
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/jquery.tablesorter.min.js' %}"></script>
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/jquery.tablesorter.widgets.min.js' %}"></script>
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/widgets/widget-alignChar.min.js' %}"></script>
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/widgets/widget-columnSelector.min.js' %}"></script>
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/widgets/widget-print.min.js' %}"></script>
-        <script
-            src="{% static 'main_app/bower_components/tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js' %}"></script>
-        <!-- ionrangeslider -->
-        <script src="{% static 'main_app/bower_components/ion.rangeslider/js/ion.rangeSlider.min.js' %}"></script>
-
-        <!--  tablesorter functions -->
-        <script src="{% static 'main_app/assets/js/pages/plugins_tablesorter.min.js' %}"></script>
-
-        <script>
-            $(function () {
-                if (isHighDensity()) {
-                    $.getScript("{ % static 'main_app/js/custom/dense.min.js' %}", function (data) {
-                        // enable hires images
-                        altair_helpers.retina_images();
-                    });
-                }
-                if (Modernizr.touch) {
-                    // fastClick (touch devices)
-                    FastClick.attach(document.body);
-                }
-            });
-            $window.load(function () {
-                // ie fixes
-                altair_helpers.ie_fix();
-            });
-        </script>
+    <!-- common functions -->
+    <script src="{% static 'main_app/js/common.min.js' %}"></script>
+    <!-- uikit functions -->
+    <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
+    <!-- altair common functions/helpers -->
+    <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
 
 
-        
-        
+    <script>
+        $(function () {
+            if (isHighDensity()) {
+                $.getScript("assets/js/custom/dense.min.js", function (data) {
+                    // enable hires images
+                    altair_helpers.retina_images();
+                });
+            }
+            if (Modernizr.touch) {
+                // fastClick (touch devices)
+                FastClick.attach(document.body);
+            }
+        });
+        $window.load(function () {
+            // ie fixes
+            altair_helpers.ie_fix();
+        });
+    </script>
+
+
+    
+    
 </body>
 
 </html>

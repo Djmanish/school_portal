@@ -39,7 +39,11 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" </head>
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</head>
+
      <body
         class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -464,11 +468,32 @@
           </div>
             </div>
             {% endif %}
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">      
+                <div class="uk-width-large">
+
+                    <div class="md-card">
+                        <div class="user_heading">
+            <div class="user_heading_avatar">
+                <div class="thumbnail">
+                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
+                </div>
+            </div>
+            <div class="user_heading_content">
+                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading"></span></h2>
+
+            </div>
+            <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
+                <i class="material-icons">&#xE150;</i>
+            </a> -->
+        </div>
+
             
-                                        <div class="md-card">
+                        <div class="md-card">
+                            <div class="md-card-content">
                                            
                                       
                                                 <div id="attendance_form">
+                                                    <div class="md-card">
                                                 
                                                     <div class="md-card-content">
                                                 
@@ -482,6 +507,7 @@
 
                                                     <div class="uk-modal" id="modal_new_test_type">
                                                         <div class="uk-modal-dialog">
+                                                            <button type="button" class="uk-modal-close uk-close"></button>
                                                             <div class="uk-modal-header">
                                                                 <h3 class="uk-modal-title">Create Exam </h3>
                                                             </div>
@@ -510,9 +536,7 @@
                                                                             <td >
                                                                           <button type="submit"  class="md-btn md-btn-primary">Add Exam Type</button>
                                                                         </td>
-                                                                        <td style="padding-left: 20px; ">
-                                                                <button type="button" class="md-btn md-btn-primary uk-modal-close">Cancel</button>
-                                                                        </td>
+                                                                    
                                                                     </tr>
                                                         </table>
                                                         </form>
@@ -584,7 +608,8 @@
                         
 
                                         
-
+</div>
+</div>
 
 
                 </div>

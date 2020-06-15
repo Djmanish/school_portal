@@ -296,10 +296,13 @@ label.required::after{
 /* ending scrollbar css */
 
 /* starting notification box modification */
-.notice_drop{
-  min-width: 470px;
-  min-height: 550px !important;
+@media only screen and (min-width: 500px) {
+  .notice_drop{
+    min-width: 470px;
+    min-height: 550px !important;
+  }
 }
+
 #header_alerts{
   min-height: 450px;
 }
@@ -354,3 +357,23 @@ label.required::after{
 .sidebar_main_header {
   max-height: 100px !important; 
  }
+#forget_password_link{
+ text-align: center; 
+
+}
+
+.btn-goback{
+color: blue;
+border-radius: 2px;
+}
+.btn-goback:hover{
+  color: blue;
+  
+}
+.btn-goback i{
+  color: blue;
+}
+#augbb{
+  background-color: white;
+  color: blue;
+}
