@@ -1018,6 +1018,7 @@
                 <div class="md-card">
                     <div class="md-card-content">
                         <div class="uk-overflow-container">
+                            {% if user.teacher_class != None %}
                             <table class="uk-table uk-table-hover uk-table-condensed">
                                 <thead>
                                        <div>
@@ -1043,6 +1044,7 @@
                                         
                                 </tbody>
                             </table>
+                            {% endif %}
                             {% if user.users.has_other_pages %}
                                 <ul class="pagination">
                                     {% if user.users.has_previous %}
@@ -1192,12 +1194,12 @@
                                 {% if request.POST %}
                                     {{user.post_child}}
                                 {% else %}
-                                    {{user.first_child.child}}
+                                    {{user.first_child.child.first_name}}
                                 {% endif %}
                                 </option>
                                 {% for child in user.child_par %}
                                 {% if child.status == "active" %}
-                                <option value={{child.child.id}}>{{child.child}}</option>
+                                <option value={{child.child.id}}>{{child.child.first_name}}</option>
                                 {% endif %}
                                 {% endfor %}
                          </select>
@@ -1220,7 +1222,8 @@
                <div class="uk-width-medium-1-2">
                    <div class="md-card">
                        <div class="md-card-content">
-                           <h4>Fess Status</h4>
+                        <h3 class="heading_a uk-margin-bottom">Fess Status</h3>
+                           <!-- <h4>Fess Status</h4> -->
                            <h6 lass="uk-accordion-title" class="on-the">Classes<span class="on-the-fly">Pending Fees</span></h6>
                            <div class="uk-accordion uk-overflow-container dbmh" data-uk-accordion="{showfirst: false}">
                                {% for cl in request.user.l_classes %}
@@ -1833,7 +1836,10 @@
       
           var calendar = new FullCalendar.Calendar(calendarEl, {
             plugins: [ 'interaction', 'dayGrid' ],
-            
+            header: {
+                left: 'title',
+                right: 'today,dayGridMonth,dayGridWeek,prev,next,'
+            },            
             editable: false,
             eventLimit: true, // allow "more" link when too many events
             events: [
