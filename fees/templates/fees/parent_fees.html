@@ -627,7 +627,7 @@
                                                         {% for child in children_fee_status %}
                                                         <tr>
                                                        
-                                                            <td class="">{{child.student.first_name}}</td>
+                                                            <td class="">{{child.student.first_name}} {{child.student.last_name}}</td>
                                                             <td class="">{{child.institute}}</td>
                                                             <td class="">{{child.due_date}}</td>
                                                             <td class="">{{child.total_due_amount}}</td>
@@ -693,7 +693,7 @@
                                                             
                                                             {% for d in payment_history %}
                                                             <tr>
-                                                            <td class="uk-text-center">{{d.student}}</td> 
+                                                            <td class="uk-text-center">{{d.student.first_name}} {{d.student.last_name}}</td> 
                                                             <td class="uk-text-center">{{d.student.institute}}</td>
                                                             <td class="uk-text-center">{{d.due_date}}</td>
                                                             <td class="uk-text-center">{{d.payment_date}}</td>

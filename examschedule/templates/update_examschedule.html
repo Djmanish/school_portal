@@ -453,7 +453,6 @@
             </ul>
         </div>
     </aside><!-- main sidebar end -->
-
     <div id="page_content">
         <div id="page_content_inner">
             {% if messages %}
@@ -467,6 +466,24 @@
           </div>
             </div>
             {% endif %}
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">      
+                <div class="uk-width-large">
+
+                    <div class="md-card">
+                        <div class="user_heading">
+            <div class="user_heading_avatar">
+                <div class="thumbnail">
+                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
+                </div>
+            </div>
+            <div class="user_heading_content">
+                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading"></span></h2>
+
+            </div>
+            <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
+                <i class="material-icons">&#xE150;</i>
+            </a> -->
+        </div>
             <div class="md-card">
 
                 <div class="md-card-content">
@@ -475,10 +492,23 @@
                                               
                                                             <form method="POST" class="form-inline" id="attendance_form">
                                                                 {% csrf_token %}
+
+                                                                {% if user.profile.designation.level_name == "parent" %}
+                                                                <td>
+                                                                    <label class ="required" style="margin: 4px;">Select Student</label>
+                                                                    <select class="form-control" name="selected_student" style="padding: 2px;"
+                                                                        required>
+                                                                        <option selected disabled value="">--Select Student--</option>
+                                                                        {% for student in parent_student_list %}
+                                                                        <option value={{student.id}}>{{student}}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </td>
+                                                                {% endif %}
                                                            
-                                                                {% if user.profile.designation.level_name != "student"%}
+                                                                {% if user.profile.designation.level_name != "student" and  user.profile.designation.level_name != "parent"%}
                                   
-                                                                <label style="margin: 4px;">Select Class</label>
+                                                                <label class ="required" style="margin: 4px;">Select Class</label>
                                                                     <select class="form-control" name="selected_class"  required>
                                                                         <option selected disabled value="">--Class--</option>
                                                                         
@@ -488,7 +518,7 @@
                                                                     </select>
 
                                                                 {% endif %}
-                                                                <label style="margin: 4px;">Select Exam Type</label>
+                                                                <label class ="required" style="margin: 4px;">Select Exam Type</label>
                                                                     <select class="form-control" id="selected_exam_type" name="selected_exam_type"  required>
                                                     
                                                                         <option selected disabled value="">--Exam Type--</option>
@@ -498,7 +528,7 @@
                                                                         {% endfor %}
                                                                     </select>
                                                                  
-                                                                    <label style="margin: 4px;">Select Exam Type No.</label>
+                                                                    <label class ="required" style="margin: 4px;">Select Exam Type No.</label>
                                                                 
                                                                     <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no"  required>
                                                                         <option selected disabled value=''>--Exam Type No.--</option>
@@ -586,11 +616,11 @@
                                                                         {% for institute_exam_schedule in exam_details %}
                                                                         <tr style="text-align:center;">
                                                                             <td> {{ institute_exam_schedule.exam_subject}}</td>
-                                                                            <td>{{institute_exam_schedule.exam_subject_teacher}}</td>
+                                                                            <td>{{institute_exam_schedule.exam_subject_teacher.profile.first_name}}</td>
                                                                             <td>{{institute_exam_schedule.exam_date}}</td>
                                                                             <td>{{institute_exam_schedule.exam_start_time}}</td>
                                                                             <td>{{institute_exam_schedule.exam_end_time}}</td>
-                                                                            <td>{{institute_exam_schedule.exam_assign_teacher}}</td>
+                                                                            <td>{{institute_exam_schedule.exam_assign_teacher.profile.first_name}} {{institute_exam_schedule.exam_assign_teacher.profile.last_name}}</td>
                                                                             
 
                                                                             

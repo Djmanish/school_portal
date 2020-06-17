@@ -27,7 +27,7 @@ from examschedule.models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from main_app.serializers import UserProfileSerializer
+from main_app.serializers import UserProfileSerializer, UserSerializer
 from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
@@ -43,7 +43,15 @@ class userList(APIView):
         return Response(serializer.data)
     def post(self):
         pass
+class userLoginData(APIView):
+    def get(self, request):
+        user1= User.objects.all()
+        serializer = UserSerializer(user1, many=True)
+        return Response(serializer.data)
+    def post(self):
+        pass
 
+    
 def add_classes(request):
     user_permissions = request.user.user_institute_role.level.permissions.all()
     add_class_permission = App_functions.objects.get(function_name='Can Add Class')
@@ -1059,7 +1067,7 @@ def delete_user_role(request, pk):
         rr= request.user.profile.institute.id
         return HttpResponseRedirect(f'/institute/profile/{rr}/')
     else:
-        roles_level_tod = Institute_levels.objects.filter(Q(institute = user_role.institute) & Q(level_id__gte =  user_role.level_id )  )
+        roles_level_tod = Institute_levels.objects.filter(Q(institute = user_role.institute) & Q(level_id__gt =  user_role.level_id )  )
         for roles in roles_level_tod:
             roles.level_id -= 1
             roles.save()

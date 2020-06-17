@@ -103,7 +103,7 @@ def fetch_institute_class_admission(request):
 class Admission_Requests_View(LoginRequiredMixin, UserPassesTestMixin,  ListView ):
     model = Admission_Query
     template_name = "admissions/admission_requests.html"
-    paginate_by = 20
+    paginate_by = 25
 
     def test_func(self):
         if self.request.user.profile.designation.level_name == "admin" or self.request.user.profile.designation.level_name == "principal":
