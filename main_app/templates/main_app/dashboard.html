@@ -464,6 +464,8 @@
               {% endif %}
             {% endfor %}
 
+
+           
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
@@ -521,12 +523,7 @@
                             <span class="menu_title">Attendance</span>
                         </a>
                     </li> 
-                    <li  title="Library">
-                        <a href="{% url 'library' %}">
-                                <span class="menu_icon"><i class="material-icons">local_library</i></span>
-                                <span class="menu_title">Library</span>
-                            </a>
-                        </li> 
+               
 
                     <li  title="Class Students">
                         <a href="{% url 'class_students_list' %}">
@@ -535,6 +532,17 @@
                             </a>
                         </li> 
                     {% endif %}
+
+                    {% for i in user.user_institute_role.level.permissions.all %}    
+                    {% if i.function_name == "Can Manage Library" %}
+                    <li  title="Library">
+                      <a href="{% url 'library' %}">
+                          <span class="menu_icon"><i class="material-icons">local_library</i></span>
+                          <span class="menu_title">Library</span>
+                      </a>
+                  </li>      
+                    {% endif %}
+                  {% endfor %}
                    
 
                     <li  title="Examination">
