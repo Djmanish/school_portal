@@ -94,6 +94,10 @@ class IssueBook(models.Model):
     return_date= models.DateTimeField(null=True, blank=True)
     description= models.TextField(blank=True)
     delay_counter= models.IntegerField(null=True, blank=True)
+    late_fine = models.IntegerField(null=True, blank=True)
+    damage_fine= models.IntegerField(default=0)
+    updated_by= models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='updated_by', null=True, blank=True)
+    date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
        return str(self.user_name)
@@ -103,6 +107,7 @@ class LibrarySettings(models.Model):
     max_Book_Allows= models.IntegerField(null=True, blank=True)
     day_Span= models.IntegerField(null=True, blank=True)
     send_Reminder_Before= models.IntegerField(null=True, blank=True)
+    late_fine_per_day = models.IntegerField(null=True, blank=True)
     
     def __str__(self):
         return str(self.institute)

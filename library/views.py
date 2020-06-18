@@ -242,23 +242,32 @@ def issue_book(request):
 
 def book_return(request):
       if request.method == 'POST':
-            print("Book Return method")
+            lib = LibrarySettings.objects.get(institute__id=request.user.profile.institute.id)
             book_i= request.POST.get('borrow_id') 
-            cat= request.POST.get('book_category')  
+            cat= request.POST.get('book_category') 
+            fine= request.POST.get('book_fine') 
+            desc= request.POST.get('book_desc')
             if cat == "0":  
               messages.error(request, 'Book Not Returned, Please Try Again !')
             else:      
               t = IssueBook.objects.get(id=book_i)
               cd = t.expiry_date           
               td = timezone.now()
+
               if td > cd :
                     cc= (td - cd).days
+                    lt_fine = int(cc*lib.late_fine_per_day)
               else:
                     cc = 0
-              print(cc) 
-              print(t)
+                    lt_fine = 0
+              
               t.return_date = timezone.now()            
               t.delay_counter=cc
+              t.late_fine = lt_fine
+              t.fine = fine
+              t.description= desc
+              t.updated_by= request.user.profile
+              t.date= td
               t.save()
               messages.success(request, 'Book returned successfully !')
             return HttpResponseRedirect(f'/library/')

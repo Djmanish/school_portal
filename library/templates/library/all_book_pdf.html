@@ -59,9 +59,9 @@
                             {% for j in mylist %}
                             <tr>
                                 {% for i in j %}
-                                <td><b>{{i.book_code}}</b>
+                                <td><b>Book Name: {{i.book_name}}</b>
                                     <img src="http://127.0.0.1:8000{{i.qr_codes.url}}" style="width: 100px;height: auto;object-fit:fill;vertical-align: middle;">
-                                    <b>{{i.book_id}}</b>
+                                    <b>Book ID: {{i.book_id}}</b>
                                 </td>
                                 {% endfor %}
                             </tr>
