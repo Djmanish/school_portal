@@ -61,7 +61,7 @@ class Book(models.Model):
         unique_together = ['book_code', 'book_id', 'book_institute']
     def __str__(self):
        return self.book_name
-
+    # qr code auto generate
     def save(self, *args, **kwargs):
         qr = qrcode.QRCode(
             version=1,
