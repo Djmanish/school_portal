@@ -434,6 +434,7 @@ def dashboard(request):
         final_data.append(one_list)
     
 # ending class teacher's  class status for last six days
+
     # starting student,teacher & class count
     try:
         total_std=UserProfile.objects.filter(institute=request.user.profile.institute, designation__level_name="student", status="approve").count()
