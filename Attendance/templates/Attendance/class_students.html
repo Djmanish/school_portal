@@ -576,8 +576,8 @@
                                 <h3>All Students of {{showing_student_for_class}}</h3>
                                 <tr>
                                     <th >Sr. No.</th>
-                                    <th >Full Name</th>
-                                  
+                                    <th >Student's Name</th>
+                                    <th >Image</th> 
                                     <th >Roll No.</th>
                                     <th>Father's Name</th>
                                     <th>Mother's Name</th>
@@ -597,7 +597,7 @@
                                   {% for student in all_students %}
                                   <tr>
                                       <td >{{forloop.counter}}</td>
-                                    <td  >{{student.first_name}}
+                                    <td><a href="{% url 'student_detail' student.pk %}"> {{student.first_name}}
                                         
                                         {% if student.middle_name %}
                                         {{student.middle_name}}
@@ -606,9 +606,13 @@
                                         {% if student.last_name %}
                                         {{student.last_name}}
                                         {% endif %}
-                                            
+                                        </a>   
                                     </td>
-                                  
+                                    <div>
+                                    <td class="zoom">
+                                        <img class="md-card-head-avatar" src="{{student.profile_pic.url}}" style="width: 40px; height: 40px; margin-top: 0%;" alt=""/>
+                                    </td></div>
+                                       
                                     <td> {{student.roll_number}}</td>
                                     <td> {{student.father_name}}</td>
                                     <td> {{student.mother_name}}</td>

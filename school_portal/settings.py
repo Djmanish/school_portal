@@ -52,7 +52,9 @@ INSTALLED_APPS = [
     'fees',
     'rest_framework',
     'library',
-    
+    'rest_framework.authtoken',
+
+    'AuthTokens',
     
     
    
@@ -167,4 +169,11 @@ LOGIN_REDIRECT_URL = 'user_dashboard'
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
+}
+
+REST_FRAMEWORK = {
+  'DEFAULT_AUTHENTICATION_CLASSES': (
+      'rest_framework.authentication.TokenAuthentication',
+      
+    )
 }

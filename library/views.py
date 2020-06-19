@@ -7,6 +7,12 @@ from notices.models import *
 from datetime import datetime, timedelta
 from library.utils import render_to_pdf
 from django.core.paginator import Paginator
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from library.serializers import UserSerializer
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 
 
@@ -341,12 +347,20 @@ def edit_book(request):
 
 def delete_book(request,pk):
       search_edit_book= BookCode.objects.get(pk=pk)
-      search_edit_book.status = "inactive"
-      search_edit_book.save()
+      
       search_books= Book.objects.filter(book_code=search_edit_book.code)
+      for i in search_books:
+            try:
+                  ser_bk = IssueBook.objects.get(book_name__id= i.id, return_date__isnull=True)
+                  messages.error(request,f'Unable to delete, Book ID: {i.book_id} is issued')
+                  return HttpResponseRedirect(f'/library/')
+            except IssueBook.DoesNotExist:
+                  pass
       for i in search_books:
             i.status = "inactive"
             i.save()
+      search_edit_book.status = "inactive"
+      search_edit_book.save()
       messages.error(request,f'Book Code:- {search_edit_book}, Deleted successfully')
       return HttpResponseRedirect(f'/library/')
 
@@ -403,12 +417,26 @@ def show_qr(request):
             selected_individuals_list = []
             for i in selected_books: #test this
                   selected_individuals_list.append(Book.objects.get(pk=i,status="active"))
-            print(selected_individuals_list)
+            length = len(selected_individuals_list)
+            if length  == 5:
+                  rows = 1
+            else:
+                  rows = int((length/5)+1)
+            print(rows)
+            q = []
+            col = 5
+            intial = 0
+            for i in range(rows):
+                  q.append((selected_individuals_list)[intial:col])
+                  intial = col
+                  col = col+5
+            for i in q:
+                  print(i)                  
             return render_to_pdf(
-                  'library/book_pdf.html',
+                  'library/all_book_pdf.html',
                   {
                         'pagesize':'A4',
-                        'mylist': selected_individuals_list,
+                        'wishlist': q,
                         'institute_data':institute_data,
                     }
                   )
@@ -475,12 +503,18 @@ def view_book(request, pk):
 
 def delete_view_book(request, pk):
       delete_bk= Book.objects.get(pk=pk)
-      delete_bk.status="inactive"
-      delete_bk.save()
       book_cd = BookCode.objects.get(code=delete_bk.book_code, book_institute=request.user.profile.institute)
       idd = book_cd.pk
-      messages.error(request,f'Book Deleted Successfully')
-      return HttpResponseRedirect(f'/library/view_book/{idd}')
+      try:
+            search_book = IssueBook.objects.get(book_name__id=delete_bk.id, return_date__isnull=True)
+            messages.error(request,f'Unable to delete, Book ID: {delete_bk.book_id} is issued')
+            return HttpResponseRedirect(f'/library/view_book/{idd}')
+      except IssueBook.DoesNotExist:
+            print("hello")
+            delete_bk.status="inactive"
+            delete_bk.save()      
+            messages.error(request,f'Book Deleted Successfully')
+            return HttpResponseRedirect(f'/library/view_book/{idd}')
 
 def fetch_book_ids(request):
       selected_book_code = BookCode.objects.get(pk=request.POST.get('class_id') )
@@ -490,3 +524,20 @@ def fetch_book_ids(request):
             individual_options = individual_options+f"<option value='{individual.id}'>{individual.book_id} - {individual.book_name}</option>"
      
       return HttpResponse(individual_options)
+
+class UserCreate(APIView):
+    """ 
+    Creates the user. 
+    """
+
+    def post(self, request, format='json'):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            if user:
+                token = Token.objects.create(user=user)
+                json = serializer.data
+                json['token'] = token.key
+                return Response(json, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

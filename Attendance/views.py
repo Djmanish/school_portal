@@ -12,6 +12,13 @@ from AddChild.models import *
 from django.utils import timezone
 # import requests
 
+
+#student detail
+def student_detail(request,pk):
+    student=UserProfile.objects.get(pk=pk)
+    context = {'student':student}
+    return render (request, 'Attendance/student_detail.html', context)
+    
 # Create your views here.
 def attendance(request):
     # starting user notice
