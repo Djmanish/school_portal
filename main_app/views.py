@@ -675,7 +675,7 @@ def login(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
-        password =make_password(password)
+        # password =make_password(password)
         
         try:
             g_user = User.objects.get(email= username) # checkng whether user registered or not ?
@@ -695,7 +695,7 @@ def login(request):
                     error = 'Email or password incorrect'
                     return render(request, 'registration/login.html', {'error':error})
             except:
-                error = 'Email or password incorrect !'
+                error = 'Email or password incorrect'
                 return render(request, 'registration/login.html', {'error':error})               
         except:
             error = 'No user registered with this email !'
