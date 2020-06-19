@@ -52,7 +52,10 @@ INSTALLED_APPS = [
     'fees',
     'rest_framework',
     'library',
-    'rest_framework.authtoken',    
+    'rest_framework.authtoken',
+
+    'AuthTokens',
+    
     
    
     
