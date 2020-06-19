@@ -34,7 +34,7 @@
                 text-align:center; 
                 border:1px solid black; 
                 padding:5px 
-              
+        
             } 
             .geeks { 
                 border-right:hidden; 
@@ -52,7 +52,7 @@
         <h2 style="text-align: center;font-size: 30px;">{{institute_data}}</h2>
         <div style="text-align: center;font-size: 20px;">Library Books QR</div>
 
-       
+                        {% if mylist %}
                         <table>
                             
                             <tbody style="margin-bottom: 0px;">
@@ -60,7 +60,7 @@
                             <tr>
                                 {% for i in j %}
                                 <td><b>Book Name: {{i.book_name}}</b>
-                                    <img src="http://127.0.0.1:8000{{i.qr_codes.url}}" style="width: 100px;height: auto;object-fit:fill;vertical-align: middle;">
+                                    <img src="http://trueblueappworks.com{{i.qr_codes.url}}" >
                                     <b>Book ID: {{i.book_id}}</b>
                                 </td>
                                 {% endfor %}
@@ -68,6 +68,25 @@
                             {% endfor %}
                             </tbody>
                         </table>
+                        {% endif %}
+                        
+                        {% if wishlist %}
+                        <table>
+                            
+                            <tbody style="margin-bottom: 0px;">
+                            {% for j in wishlist %}
+                            <tr>
+                                {% for i in j %}
+                                <td><b>Book Name: {{i.book_name}}</b>
+                                    <img src="http://trueblueappworks.com{{i.qr_codes.url}}" >
+                                    <b>Book ID: {{i.book_id}}</b>
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %} 
                        
                     
     </body>

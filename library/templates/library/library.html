@@ -728,7 +728,7 @@
                                                     <i class="uk-icon-book"></i>
                                                     Add Book
                                                 </a>
-                                                <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"  data-uk-modal="{target:'#modal_print_qr'}" >
+                                                <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"   data-uk-modal="{target:'#modal_print_qr'}" >
                                                     <i class="uk-icon-qrcode"></i>
                                                     Print QR
                                                 </a>
@@ -808,7 +808,7 @@
                                                         <div class="uk-modal-header">
                                                             <h3 class="uk-text-primary">Print QR</h3>
                                                         </div>
-                                                        <form  method="POST" action="{% url 'show_qr' %}">
+                                                        <form  method="POST" action="{% url 'show_qr' %}" target="_blank">
                                                             {% csrf_token %}
                                                                   <div class="form-group">
                                                                     <label class="required" for="sel 1">Select Book Code</label>
@@ -1023,10 +1023,18 @@
                                                             </td>
                                                             <td><a class="{{book.id|slugify}}" ><i class="material-icons" style="color: #7cb342;font-weight: bold;">add</i></a>
                                                             </td>
-                                                            <td><a  href="{% url 'delete_book' book.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                            <td><a class="confirm-delete" href="{% url 'delete_book' book.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                             </td>
                                                             
                                                         </tr>
+                                                        
+                                                        <script>
+                                                            $(document).ready(function(){
+                                                            $(document).on('click', '.confirm-delete', function(){
+                                                                return confirm('Are you sure you want to delete this?');
+                                                                });
+                                                            });
+                                                        </script>
                                                         <script>
                                                             $(document).ready(function(){
                                                             $('.{{book.id|slugify}}').click(function(){
@@ -1267,6 +1275,7 @@
       });
     });
     </script>  
+    
     
 </body>
 

@@ -675,10 +675,18 @@
                                                         <img id="{{i.id|slugify}}" src="{{i.qr_codes.url}}" style="width: 40px;height: auto;object-fit:fill;vertical-align: middle;cursor: pointer;transition: 0.3s;">
                                                     </td>
                                                     </td>
-                                                    <td><a  href="{% url 'delete_view_book' i.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                    <td><a class="confirm-delete"  href="{% url 'delete_view_book' i.pk %}" onclick="myFunction()"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                     </td>
                                                     
                                                 </tr>
+                                                <script>
+                                                    $(document).ready(function(){
+                                                    $(document).on('click', '.confirm-delete', function(){
+                                                        return confirm('Are you sure you want to delete this?');
+                                                        });
+                                                    });
+                                                </script>
+                                                    
                                                 <script>
                                                     $(document).ready(function(){
                                                     $('#{{i.id|slugify}}').click(function(){
