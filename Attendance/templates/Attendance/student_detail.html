@@ -13,11 +13,9 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
-    <title>My Child</title>
-    
-    <!-- bootstrap css -->
-   
-<link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}"
+    <title>My Profile   </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
     <!-- additional styles for plugins -->
         <!-- weather icons -->
         <link rel="stylesheet" href="{% static 'main_app/bower_components/weather-icons/css/weather-icons.min.css' %}" media="all">
@@ -32,11 +30,15 @@
     <!-- flag icons -->
     <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
 
+   
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
+
+   
 
     <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
@@ -44,8 +46,6 @@
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
@@ -56,7 +56,7 @@
                                 
                 <!-- main sidebar switch -->
                 <a href="#" id="sidebar_main_toggle" class="sSwitch sSwitch_left">
-                    <span class="sSwitchIcon"></span>
+                    <span class="sSwitchIcon"></span> 
                 </a>
                 
                 <!-- secondary sidebar switch -->
@@ -127,21 +127,11 @@
                  <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav user_actions">
                         <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
-                    
+                        <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
+                        
                         {% if user.profile.designation %}
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                          
-                            {% if user.profile.status == 'approve' %}
-                            <a href="#" id="user_action_iconb" atval="{{user.pk}}" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i>
-                                {% for notice in user.users_notice %}
-                                {% if notice.publish_date >= user.user_last_notice_view.last_seen %}
-                                <span class="uk-badge nbadge" >  <i class="large material-icons" id="nbadge" style="font-size: 15px;">lens</i>
-                                </span>
-                                {% endif %}
-                            {% endfor %}
-                        </a> 
-                               
-                            {% endif %}
+                            <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
                             <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
                                 <div class="md-card-content">
                                     <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
@@ -217,13 +207,6 @@
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                     <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
-                                    <li title="Log Out">
-                                        <a href="{% url 'auth_logout' %}">
-                                            
-                                            <span class="menu_title">Log Out</span>
-                                        </a>
-                                    </li>
-                                   
                                 </ul>
                             </div>
                         </li>
@@ -258,22 +241,23 @@
             </form>
         </div>
     </header><!-- main header end -->
+   
     <!-- main sidebar -->
-    <aside id="sidebar_main" >
-        
-        <div class="institute_logo_top" >
+    <aside id="sidebar_main">
+        <div class="sidebar_main_header" style="position: fixed; top: -9px; z-index: 1;">
             <div>
-                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="institute_logo style="height: 48px;" /> </a>
+                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt=""/> </a>
             </div>
         </div>
         
-        <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
-            <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+        <div class="menu_section" style="position: relative;top: 91px;">
+            <ul>
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
-                    </a> 
+                    </a>
+                    
                 </li>
                 
                 <li title="User Profile">
@@ -293,14 +277,15 @@
                 {% endif %}
                     
 
-                {% if user.profile.institute and user.profile.status == 'approve' %}
+                {% if user.profile.institute %}
                 <li  title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>
                     </a>    
                 </li>
-      
+
+                
 <!-- starting notice menu -->
 <li  title="Notices">
     <a href="">
@@ -325,38 +310,18 @@
             </a>
         </li> 
         {% endif %}
+            
+       
     </ul>
 </li>
 <!-- ending notice menu -->
-
-{% for i in user.user_institute_role.level.permissions.all %}    
-              {% if i.function_name == "Can Update Lecture Timing" %}
-              <li  title="Fees">
-                <a href="{% url 'fees_home' %}">
-                    <span class="menu_icon"><i class="material-icons">receipt</i></span>
-                    <span class="menu_title">Fees Setup</span>
-                </a>
-            </li>      
-              {% endif %}
-            {% endfor %}
-
-
-           
-    
-{% if user.profile.designation.level_name == "parent" %}
-<li  title="Fees">
-    <a href="{% url 'parent_fees' %}">
-        <span class="menu_icon"><i class="material-icons">receipt</i></span>
-        <span class="menu_title">Fees Status</span>
-    </a>
-</li>
-{% endif %}
-    
+                
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
-                    </a>   
+                    </a>
+                    
                 </li>
                 
                <li  title="Institute Schedule">
@@ -364,15 +329,18 @@
                     <span class="menu_icon"><i class="material-icons">schedule</i></span>
                     <span class="menu_title">Schedule</span>
                 </a>
-            </li>               
-           
+            </li>
+               
+            {% endif %}  
 
+            
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
-                    <span class="menu_icon"><i class="material-icons">group_add</i></span>
+                    <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                     <span class="menu_title">Admission Requests</span>
                 </a>
+                
             </li>
 
         {% endif %}
@@ -382,43 +350,34 @@
                 {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
                     <li  title="Approvals">
                         <a href="{% url 'approvals' user.profile.institute.pk %}">
-                            <span class="menu_icon"><i class="material-icons">how_to_reg</i>
-                                {% if user.approval_request > 0 %}
-                                <span class="uk-badge" style="background-color: red;">                                
-                                {{user.approval_request}}                                     
-                                </span>
-                                {% endif %}
-                        </span>
+                            <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
                             <span class="menu_title">Approvals</span>
                         </a>
+                        
                     </li>
                     
                     <li  title="Attendance">
+                    
                     <a href="{% url 'attendance' %}">
                             <span class="menu_icon"><i class="material-icons">done_all</i></span>
                             <span class="menu_title">Attendance</span>
                         </a>
+                        
                     </li> 
-               
+                    
 
                     <li  title="Class Students">
+                    
                         <a href="{% url 'class_students_list' %}">
                                 <span class="menu_icon"><i class="material-icons">people</i></span>
                                 <span class="menu_title">Class Students</span>
                             </a>
+                            
                         </li> 
-                    {% endif %}
 
-                    {% for i in user.user_institute_role.level.permissions.all %}    
-                    {% if i.function_name == "Can Manage Library" %}
-                    <li  title="Library">
-                      <a href="{% url 'library' %}">
-                          <span class="menu_icon"><i class="material-icons">local_library</i></span>
-                          <span class="menu_title">Library</span>
-                      </a>
-                  </li>      
+                        
+
                     {% endif %}
-                  {% endfor %}
                    
 
                     <li  title="Examination">
@@ -435,8 +394,10 @@
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam</span>
                                 </a>
+    
                             </li>
                             
+                  
                             <li>
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
@@ -450,6 +411,7 @@
                                     <span class="menu_icon"><i class="material-icons">visibility</i></span>
                                     <span class="menu_title">View Exam Schedule</span>
                                 </a>
+    
                             </li>
                            
                             {% if user.profile.designation.level_name == "teacher"%}
@@ -458,6 +420,7 @@
                                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                                     <span class="menu_title">Exam Result</span>
                                 </a>
+    
                             </li>
                             <li  title="Class Students">
                     
@@ -470,7 +433,13 @@
                             {% endif %}
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
-                        
+                            <!-- <li>
+                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
+                                    <span class="menu_title">View Exam Result</span>
+                                </a>
+    
+                            </li> -->
                             <li>
                                 <a href="{% url 'report_card' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">file_copy</i></span>
@@ -478,91 +447,301 @@
                                 </a>
     
                             </li>
+                            
+                            <!-- <li>
+                                <a href="{% url 'studentview' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">poll</i></span>
+                                    <span class="menu_title">Marks Chart</span>
+                                </a>
+    
+                            </li> -->
+                          
                             {% endif %}
                         </ul>
+    
                     </li>
 
-                    {% endif %}  
                     {% endif %} 
-                
-            </ul>
-        </div>
-        <div class="global_logo">
+                 
             
-                <a target="_blank" href="http://globalcredence.com/" ><img  style="max-height: 32px;" src="{% static 'main_app/images/blogo1.png' %}" alt=""/> </a>
-         
+                <li title="Log Out">
+                        <a href="{% url 'auth_logout' %}">
+                            <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
+                            <span class="menu_title">Log Out</span>
+                        </a>
+                    </li>
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </ul>
+            
+            
+        
+            
+            
+        </div>
+
+        
+        
+       
+            <div class="menu_section sidebar_main_header" style="position: relative; bottom: -91px; z-index: 0;">
+            <div>
+                <a href="#" class="user_action_image"><img id="slogo" class="img.bottom_logo" style= "width: 100%; " src="{% static 'main_app/images/blogo.png' %}" alt=""/> </a>
+            </div>
         </div>
     </aside><!-- main sidebar end -->
 
-
     <div id="page_content">
         <div id="page_content_inner">
-            
-            {% if messages %}
-            <div class="md-card md-card-primary">
-          <div class=>
-              <ul class="messages alert">
-                  {% for message in messages %}
-                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                  {% endfor %}
-              </ul>
-          </div>
-            </div>
-            {% endif %}
+                          
+  <!-- success message -->
+  {% if messages %}
+  <div class="md-card md-card-primary">
+<div >
+    <ul class="messages alert">
+        {% for message in messages %}
+        <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+  </div>
+  {% endif %}
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+                <div class="uk-width-large">
+                    <div class="md-card">
+                        <div class="user_heading">
+                            <div class="user_heading_menu hidden-print">
+                               
+                                <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
+                                    <!-- <i class="md-icon material-icons md-icon-light">&#xE5D4;</i> -->
+                                    <!-- <div class="uk-dropdown uk-dropdown-small">
+                                        
+                                        <ul class="uk-nav">
+                                        
+                                             <li><a href="#">Action 1</a></li>
+                                            <li><a href="#">Action 2</a></li>
+                                        </ul>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="user_heading_avatar">
+                                <div class="thumbnail">
+                                    <img src="{{student.profile_pic.url}}" alt="user avatar"/>
+                                </div>
+                            </div>
+                            <div class="user_heading_content">
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{student.first_name}}
+                                    
+                                    {% if student.middle_name %}
+                                       {{student.middle_name}} 
+                                    {% endif %}
 
-            <div class="md-card">
+                                    
+                                    {% if student.last_name %}
+                                        {{student.last_name}}
+                                    {% endif %}
+                                
+                                </span><span class="sub-heading">
+                                    {% if student.designation %}
+                                    {{student.designation|capfirst}}
+                                    {% else %}
+                                   Click on edit button to find your institute and get started.
+                                    {% endif %}
+                                    </span>
+                                </h2>
+                            </div>
+
+
+                            
+                        </div>
+                        
+                        <div class="user_content">
+                            <div class="md-btn btn-goback">
+                                <i class="material-icons">arrow_back</i>
+                                <input type="submit" value="Go Back" style="border: none;" id="augbb" onclick="goBack()" > 
+                               </div>
+                                                                    
+                            <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
+                                <li class="uk-active"><a href="#">Student's Detail</a></li>
+                            </ul>
+
+                            <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
+                                <li>
+                                   {{user.profile.about|default:''}}             
+                                     <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                        <div class="uk-width-large-1-2">
+                                            
+                                            <ul class="md-list">
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="#">Father's Name</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{student.father_name}}</span>
+                                                    </div>
+                                                </li>
+
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="#">Mother's Name</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{student.mother_name}}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="#">Date of Birth</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{student.date_of_birth}}</span>
+                                                    </div>
+                                                </li>
+
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="#">Gender</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{student.gender}}</span>
+                                                    </div>
+                                                </li>
+                                                
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="#">Address</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{student.address_line_1}} 
+                            {% if student.address_line_2 %}{{student.address_line_2}},{% endif %}
+                            
+                            {% if student.city %}
+                            {{student.city}},
+                            {% endif %}
+                             
+                            {% if student.state %}
+                            {{student.state}},
+                            {% endif %}
+
+                            {% if student.country %}
+                            {{student.country}} -
+                            {% endif %} 
+                            
+                            {% if student.pin_code %}
+                            {{student.pin_code}}
+                            {% endif %}
+
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="">Phone</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{student.mobile_number|default:''}}</span>
+                                                       
+                                                    </div>
+                                                </li>
+
+                                               
+
+                                                                                               
+                                                <li>
+                                                        <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="">Email</a></span>
+                                                        <span class="uk-text-small uk-text-muted"><a href="mailto:{{user.student.email}}">{{user.student.email}}</a></span>
+                                                       
+                                                    </div>
+                                                </li>
+                                                
+                                                
+                                            </ul>
+                                        </div>
+
+                                        <div class="uk-width-large-1-2">
+                                           
+                                            <ul class="md-list">
+
+                                                <li>
+                                                   
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="">Class</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{student.Class}}</span>
+                                                        
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                   
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="">Roll No</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{student.roll_number}}</span>
+                                                        
+                                                    </div>
+                                                </li>
+                                                
+
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="#">Category</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{student.category}}</span>
+                                                    </div>
+                                                </li>
+                                                
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="#">Aadhar Card Number</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{student.aadhar_card_number}}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="#">Nationality</a></span>
+                                                        <span class="uk-text-small uk-text-muted">{{user.country}}</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="md-list-addon-element">
+                                                        
+                                                    </div>
+                                                    <div class="md-list-content">
+                                                        <span class="md-list-heading"><a href="">Facebook</a></span>
+                                                        <span class="uk-text-small uk-text-muted"><a target="_blank" href="{{student.facebook_link}}">{{student.facebook_link}}</a></span>
+                                                        
+                                                    </div>
+                                                </li> 
+
+
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                
+                                </li>
+                                       
+
+                                                                             
+                                 
+                                        
+                                            
+                                           
+                                   
+                    </div>
+                </div>
                 
-                <div class="md-card-content"  >                       
-                    <form  method="POST" action="#" style="border: 2px solid lightgray;padding: 10px;border-radius: 10px;background-color:aliceblue;" class="form-inline attendance_form" id="child_form">
-                        {% csrf_token %}
-                          <label style="margin: 4px;">Select Institute:  </label>
-                        <select id="selected_institute" name="selected_institute" class="form-control"  required>
-                            <option selected disabled value=""  >                     
-                            -- select institute --
-                            </option>
-                            {% for institute in institutes %}
-                            <option value={{institute.id}}>{{institute}}</option>
-                            {% endfor %}
-                     </select>
-                     <label style="margin: 4px;">Select Class:  </label>
-                        <select id="fetched_classes" name="selected_class" class="form-control">
-                            <option selected disabled value=""> -- Select Class -- </option>
-                        </select>
-                    <label style="margin: 4px;">Roll No:  </label> 
-                    <input type="text" class="form-control" name='roll_number' placeholder="Enter a roll number" >  
-                    <input type="submit" value="Add" style="margin: 4px;" class="md-btn md-btn-primary ">
-                    </form>
-                    <div >
-                    <h3  {% if request.POST %}
-                    style="margin-left: 20px; margin-top: 10px;margin-bottom:0px;"
-                    {% else %}
-                    style = "display: none;"
-                {% endif %}>Child</h3>
-                    </div>
-                    </div>
-            
-            
+            </div>
+        </div>
+    </div>
 
-                    <script>
-                        $(document).ready(function(){
-                          $('#selected_institute').change(function(){
-                              $.ajax({
-                                  type:'POST',
-                                  url:'fetch_intitute_classes/',
-                                  data:{school_id:$("#selected_institute").val(), csrfmiddlewaretoken: '{{ csrf_token }}' },
-                                  
-                                  success: function(msg){
-                                      $('#fetched_classes').html(msg);
-                                  }
-                              })
-                          })
-                        })
-                        </script>
-                    
-                    
-                    
+    <footer id="footer" class =" md-bg-blue-700 text-white" style ="text-align: right;">
+    
+        A product of  <a href="#" style ="color:white;" >Trueblue AppWerks</a>
+        
+    </footer>
 
-            
     <!-- google web fonts -->
     <script>
         WebFontConfig = {
@@ -573,10 +752,10 @@
                 ]
             }
         };
-        (function () {
+        (function() {
             var wf = document.createElement('script');
             wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-                '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
             wf.type = 'text/javascript';
             wf.async = 'true';
             var s = document.getElementsByTagName('script')[0];
@@ -584,7 +763,6 @@
         })();
     </script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- common functions -->
     <script src="{% static 'main_app/js/common.min.js' %}"></script>
     <!-- uikit functions -->
@@ -594,30 +772,32 @@
 
 
     <script>
-        $(function () {
-            if (isHighDensity()) {
-                $.getScript("assets/js/custom/dense.min.js", function (data) {
+        $(function() {
+            if(isHighDensity()) {
+                $.getScript( "static 'main_app/js/custom/dense.min.js'", function(data) {
                     // enable hires images
                     altair_helpers.retina_images();
                 });
             }
-            if (Modernizr.touch) {
+            if(Modernizr.touch) {
                 // fastClick (touch devices)
                 FastClick.attach(document.body);
             }
         });
-        $window.load(function () {
+        $window.load(function() {
             // ie fixes
             altair_helpers.ie_fix();
         });
     </script>
 
-
-    
+<script>
+    function goBack() {
+      window.history.back();
+    }
+    </script>
 
  
-    
-    
-    </body>
 
+    
+</body>
 </html>

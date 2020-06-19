@@ -249,6 +249,19 @@ def fetch_notice_audience(request):
     
     return HttpResponse(individual_options)
     
+
+
+
+def last_notice_view_time(request):
+    user = User.objects.get(pk=request.GET.get('user_id'))
+    try:
+        user_see_time = NoticeViewTime.objects.get(user=user)
+        user_see_time.last_seen = timezone.now()
+        user_see_time.save()
+    except:
+        NoticeViewTime.objects.create(user=user, last_seen= timezone.now())
+    
+    
     
 
     

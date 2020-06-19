@@ -240,25 +240,17 @@
         </div>
     </header><!-- main header end -->
     <!-- main sidebar -->
-    <aside id="sidebar_main">
-
-        <div class="sidebar_main_header">
-            <div class="sidebar_logo">
-                <a href="{% url 'user_dashboard' %}" class="sSidebar_hide sidebar_logo_large">
-                    <img class="logo_regular img-fluid " id="slogo" src="{% static 'main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
-                    <img class="logo_light img-fluid " id="slogo" src="{% static 'main_app/img/main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
-                </a>
-                <a href="{% url 'user_dashboard' %}" class="sSidebar_show sidebar_logo_small">
-                    <img class="logo_regular" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
-                    <img class="logo_light" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
-                </a>
+    <aside id="sidebar_main" >
+        
+        <div class="institute_logo_top" >
+            <div>
+                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="institute_logo style="height: 48px;" /> </a>
             </div>
-            
         </div>
-
-        <div class="menu_section">
-            <ul>
-                <li title="Dashboard">
+        
+        <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
+            <ul style="margin-bottom: 80px;">
+                <li class="current_section" title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -318,21 +310,24 @@
 </li>
 <!-- ending notice menu -->
 
+{% for i in user.user_institute_role.level.permissions.all %}    
+              {% if i.function_name == "Can Update Lecture Timing" %}
+              <li  title="Fees">
+                <a href="{% url 'fees_home' %}">
+                    <span class="menu_icon"><i class="material-icons">receipt</i></span>
+                    <span class="menu_title">Fees Setup</span>
+                </a>
+            </li>      
+              {% endif %}
+            {% endfor %}
 
-{% if can_setup_fees_permission in user_permissions or user.profile.designation.level_name == "teacher" %}
-<li  title="Fees">
-    <a href="{% url 'fees_home' %}">
-        <span class="menu_icon"><i class="material-icons">date_range</i></span>
-        <span class="menu_title">Fees Setup</span>
-    </a>
-</li>
 
-{% endif %}
+           
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
     <a href="{% url 'parent_fees' %}">
-        <span class="menu_icon"><i class="material-icons">date_range</i></span>
+        <span class="menu_icon"><i class="material-icons">receipt</i></span>
         <span class="menu_title">Fees Status</span>
     </a>
 </li>
@@ -356,7 +351,7 @@
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
-                    <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
+                    <span class="menu_icon"><i class="material-icons">group_add</i></span>
                     <span class="menu_title">Admission Requests</span>
                 </a>
             </li>
@@ -385,12 +380,7 @@
                             <span class="menu_title">Attendance</span>
                         </a>
                     </li> 
-                    <li class="current_section" title="Library">
-                        <a href="{% url 'library' %}">
-                                <span class="menu_icon"><i class="material-icons">local_library</i></span>
-                                <span class="menu_title">Library</span>
-                            </a>
-                        </li> 
+               
 
                     <li  title="Class Students">
                         <a href="{% url 'class_students_list' %}">
@@ -399,6 +389,17 @@
                             </a>
                         </li> 
                     {% endif %}
+
+                    {% for i in user.user_institute_role.level.permissions.all %}    
+                    {% if i.function_name == "Can Manage Library" %}
+                    <li  title="Library">
+                      <a href="{% url 'library' %}">
+                          <span class="menu_icon"><i class="material-icons">local_library</i></span>
+                          <span class="menu_title">Library</span>
+                      </a>
+                  </li>      
+                    {% endif %}
+                  {% endfor %}
                    
 
                     <li  title="Examination">
@@ -464,16 +465,16 @@
 
                     {% endif %}  
                     {% endif %} 
-                <li title="Log Out">
-                        <a href="{% url 'auth_logout' %}">
-                            <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
-                            <span class="menu_title">Log Out</span>
-                        </a>
-                    </li>
+                
             </ul>
         </div>
-
+        <div class="global_logo">
+            
+                <a target="_blank" href="http://globalcredence.com/" ><img  style="max-height: 32px;" src="{% static 'main_app/images/blogo1.png' %}" alt=""/> </a>
+         
+        </div>
     </aside><!-- main sidebar end -->
+
     
     <div id="page_content">
         <div id="page_content_inner">      
