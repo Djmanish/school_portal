@@ -27,6 +27,10 @@ from examschedule.models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
+
 from main_app.serializers import UserProfileSerializer, UserSerializer
 from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -44,12 +48,14 @@ class userList(APIView):
     def post(self):
         pass
 class userLoginData(APIView):
+    authentication_classes=(TokenAuthentication,SessionAuthentication)
+    permission_classes=(IsAuthenticated,)
+	
     def get(self, request):
         user1= User.objects.all()
         serializer = UserSerializer(user1, many=True)
         return Response(serializer.data)
-    def post(self):
-        pass
+    
 
     
 def add_classes(request):
@@ -657,6 +663,7 @@ class RegistrationViewUniqueEmail(RegistrationView):
     form_class = RegistrationFormUniqueEmail
     
 from django.contrib.auth import logout
+from django.contrib.auth.hashers import check_password, make_password
 def login(request):
     try:
         if request.user.is_authenticated:
@@ -666,6 +673,8 @@ def login(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
+        password =make_password(password)
+        
         try:
             g_user = User.objects.get(email= username) # checkng whether user registered or not ?
             try:

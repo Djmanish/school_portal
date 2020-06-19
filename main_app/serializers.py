@@ -24,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
             instance.user.save()
     class Meta:
         model = User
-        fields = ['email', 'username', 'password']
+        fields = ['id','email', 'username', 'password']
     
     validate_password = make_password
         # extra_kwargs = {'password': {'write_only': True}}
