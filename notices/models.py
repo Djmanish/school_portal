@@ -27,3 +27,11 @@ class Notice(models.Model):
 
     def __str__(self):
         return self.subject
+
+# model for tracking new notice time
+class NoticeViewTime(models.Model):
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name="user_last_notice_view", null=True)
+    last_seen = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return str(self.user) + str(self.last_seen)

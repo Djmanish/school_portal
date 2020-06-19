@@ -1,6 +1,10 @@
 from django.db import models
 from main_app.models import *
 from datetime import date
+import qrcode
+from io import BytesIO
+from django.core.files import File
+from PIL import Image, ImageDraw 
 
 # Create your models here.
 class BookCategory(models.Model):
@@ -17,6 +21,10 @@ class BookSubCategory(models.Model):
        return self.book_sub_category_name
 
 class BookCode(models.Model):
+    Chi1 =[
+        ('active', 'Active'),('inactive', 'Inactive'),
+        
+    ]
     code=models.CharField(max_length=20, null=True)
     book_count= models.IntegerField(null=True)
     book_institute = models.ForeignKey(to=Institute, related_name="bookcode_institute", on_delete=models.CASCADE, null=True, blank=True)
@@ -26,12 +34,17 @@ class BookCode(models.Model):
     author= models.CharField(max_length=50)
     publications= models.CharField(max_length=50)
     edition= models.CharField(max_length=50)
+    status = models.CharField(max_length=25,choices=Chi1,default="active")
     class Meta:
         unique_together = ['code', 'book_institute']
     def __str__(self):
         return self.code
 
 class Book(models.Model):
+    Chi2 =[
+        ('active', 'Active'),('inactive', 'Inactive'),
+        
+    ]
     book_code=models.CharField(max_length=20, null=True)
     book_id= models.CharField(max_length=20, null=True)
     book_institute = models.ForeignKey(to=Institute, related_name="book_institute", on_delete=models.CASCADE, null=True, blank=True)
@@ -42,10 +55,34 @@ class Book(models.Model):
     publications= models.CharField(max_length=50)
     edition= models.CharField(max_length=50)
     book_count= models.IntegerField(null=True)
+    status = models.CharField(max_length=25,choices=Chi2,default="active")
+    qr_codes = models.ImageField(upload_to='QrCodes', blank=True)
     class Meta:
         unique_together = ['book_code', 'book_id', 'book_institute']
     def __str__(self):
        return self.book_name
+
+    def save(self, *args, **kwargs):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=0,
+        )
+        qr.add_data(self.book_id)
+        qr.make(fit=True)
+
+        img = qr.make_image(fill_color="black", back_color="white")
+        # qrcode_img = qrcode.make(self.book_id)
+        canvas = Image.new('RGB', (213, 205), 'white')
+        draw =ImageDraw.Draw(canvas)
+        canvas.paste(img)
+        fname = f'{self.book_id}-{self.book_name}'+'.png'
+        buffer = BytesIO()
+        canvas.save(buffer, 'PNG')
+        self.qr_codes.save(fname, File(buffer), save=False)
+        canvas.close()
+        super().save(*args, **kwargs)
 
 class IssueBook(models.Model):
     user_name= models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='user_name', null=True, blank=False)
@@ -57,6 +94,10 @@ class IssueBook(models.Model):
     return_date= models.DateTimeField(null=True, blank=True)
     description= models.TextField(blank=True)
     delay_counter= models.IntegerField(null=True, blank=True)
+    late_fine = models.IntegerField(null=True, blank=True)
+    damage_fine= models.IntegerField(default=0)
+    updated_by= models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='updated_by', null=True, blank=True)
+    date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
        return str(self.user_name)
@@ -66,6 +107,7 @@ class LibrarySettings(models.Model):
     max_Book_Allows= models.IntegerField(null=True, blank=True)
     day_Span= models.IntegerField(null=True, blank=True)
     send_Reminder_Before= models.IntegerField(null=True, blank=True)
+    late_fine_per_day = models.IntegerField(null=True, blank=True)
     
     def __str__(self):
         return str(self.institute)

@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from main_app import views as main_app_views
 from rest_framework.urlpatterns import format_suffix_patterns
 from main_app.views import userList, userLoginData
-
+from notices import views as notice_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +25,5 @@ urlpatterns = [
     path('fees/', include('fees.urls')),
     path('users/', userList.as_view()),
     path('users_login_data/', userLoginData.as_view()),
+    path('notice/view/time/', notice_views.last_notice_view_time, )
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

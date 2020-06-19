@@ -580,6 +580,7 @@ def dashboard(request):
                 pending_users= UserProfile.objects.filter(status='pending', institute=request.user.profile.institute,Class=Class_teachers , designation__level_name="student").count()
                 request.user.approval_request = pending_users  
             except:
+                
                 pass
         # Starting fees status for teacher view
         if request.user.profile.designation.level_name == "teacher":
@@ -901,6 +902,10 @@ def edit_profile(request, pk):
 
 @login_required
 def institute_profile(request, pk):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     inst = request.user.profile.institute.id
 
     if pk==inst:

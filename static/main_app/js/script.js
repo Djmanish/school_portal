@@ -1,6 +1,7 @@
 
  
 $(document).ready(function(){
+
   
     $('.n_i').keypress(function (e) {
         var regex = new RegExp("^[a-zA-Z ]+$");
@@ -33,11 +34,20 @@ $(document).ready(function(){
       });
 
       
-// starting script for due date fees alert
+// starting script for last notification view
 
-
-
-// starting script for due date fees alert
+$('#user_action_iconb').click(function(){
+  $.ajax({
+    type:'GET',
+    url:'/notice/view/time/',
+    data:{user_id:$('#user_action_iconb').attr('atval'),
+    
+    success: function(msg){
+      
+    }}
+})
+})
+// ending script for last notification view
 
   });
 
@@ -86,25 +96,6 @@ $(document).ready(function () {
     }
     });
     }
-
-// Report_Card Print
-// var doc = new jsPDF();          
-// var elementHandler = {
-//   '#myresult': function (element, renderer) {
-//     return true;
-//   }
-// };
-// var source = window.document.getElementsByTagName("body")[0];
-// doc.fromHTML(
-//     source,
-//     15,
-//     15,
-//     {
-//       'width': 180,'elementHandlers': elementHandler
-//     });
-
-// doc.output("dataurlnewwindow");
-
 
 
   
