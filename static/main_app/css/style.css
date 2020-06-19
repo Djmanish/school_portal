@@ -405,3 +405,8 @@ border-radius: 2px;
   background-color: transparent !important;
   left: 5px !important;
 }
+
+
+#sidebar_main .menu_section>ul>li>a{
+  padding: 5px 20px !important;
+}
