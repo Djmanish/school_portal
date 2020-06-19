@@ -377,3 +377,45 @@ border-radius: 2px;
   background-color: white;
   color: blue;
 }
+.zoom {
+  padding: 100px;
+  transition: transform .2s;
+  margin: 0 auto;
+}
+.zoom:hover {
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Safari 3-8 */
+  transform: scale(1.5); 
+}
+/* starting styling for institute logo and global credence bottom logo */
+.institute_logo_top{
+  position: fixed;
+   top: 0px;
+    z-index: 1;
+    width: 100% !important;
+    background-color: white;
+
+}
+.global_logo{
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+   z-index: 99999;
+   text-align: center !important;
+   background-color: white !important;
+
+}
+/* ending styling for institute logo and global credence bottom logo */
+#nbadge{
+  color:yellow !important;
+  size: 40px !important;
+}
+.nbadge{
+  background-color: transparent !important;
+  left: 5px !important;
+}
+
+
+#sidebar_main .menu_section>ul>li>a{
+  padding: 5px 20px !important;
+}

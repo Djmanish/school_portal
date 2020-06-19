@@ -123,11 +123,21 @@
                     <div class="uk-navbar-flip">
                         <ul class="uk-navbar-nav user_actions">
                             <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
-                            <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
-                            
+                        
                             {% if user.profile.designation %}
                             <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                                <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
+                              
+                                {% if user.profile.status == 'approve' %}
+                                <a href="#" id="user_action_iconb" atval="{{user.pk}}" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i>
+                                    {% for notice in user.users_notice %}
+                                    {% if notice.publish_date >= user.user_last_notice_view.last_seen %}
+                                    <span class="uk-badge nbadge" >  <i class="large material-icons" id="nbadge" style="font-size: 15px;">lens</i>
+                                    </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </a> 
+                                   
+                                {% endif %}
                                 <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
                                     <div class="md-card-content">
                                         <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
@@ -203,6 +213,12 @@
                                     <ul class="uk-nav js-uk-prevent">
                                         <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                         <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                        <li title="Log Out">
+                                            <a href="{% url 'auth_logout' %}">
+                                                
+                                                <span class="menu_title">Log Out</span>
+                                            </a>
+                                        </li>
                                        
                                     </ul>
                                 </div>
@@ -239,25 +255,17 @@
         </div>
     </header><!-- main header end -->
     <!-- main sidebar -->
-    <aside id="sidebar_main">
-
-        <div class="sidebar_main_header">
-            <div class="sidebar_logo">
-                <a href="{% url 'user_dashboard' %}" class="sSidebar_hide sidebar_logo_large">
-                    <img class="logo_regular img-fluid " id="slogo" src="{% static 'main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
-                    <img class="logo_light img-fluid " id="slogo" src="{% static 'main_app/img/main_app/images/blogo.png' %}" alt="" style="height: 48px;" />
-                </a>
-                <a href="{% url 'user_dashboard' %}" class="sSidebar_show sidebar_logo_small">
-                    <img class="logo_regular" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
-                    <img class="logo_light" src="{% static 'main_app/images/blogo.png' %}" alt="" height="32" width="32"/>
-                </a>
+    <aside id="sidebar_main" >
+        
+        <div class="institute_logo_top" >
+            <div>
+                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="institute_logo style="height: 48px;" /> </a>
             </div>
-            
         </div>
-
-        <div class="menu_section">
-            <ul>
-                <li title="Dashboard">
+        
+        <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
+            <ul style="margin-bottom: 80px;">
+                <li class="current_section" title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -317,21 +325,24 @@
 </li>
 <!-- ending notice menu -->
 
+{% for i in user.user_institute_role.level.permissions.all %}    
+              {% if i.function_name == "Can Update Lecture Timing" %}
+              <li  title="Fees">
+                <a href="{% url 'fees_home' %}">
+                    <span class="menu_icon"><i class="material-icons">receipt</i></span>
+                    <span class="menu_title">Fees Setup</span>
+                </a>
+            </li>      
+              {% endif %}
+            {% endfor %}
 
-{% if can_setup_fees_permission in user_permissions or user.profile.designation.level_name == "teacher" %}
-<li  title="Fees">
-    <a href="{% url 'fees_home' %}">
-        <span class="menu_icon"><i class="material-icons">date_range</i></span>
-        <span class="menu_title">Fees Setup</span>
-    </a>
-</li>
 
-{% endif %}
+           
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
     <a href="{% url 'parent_fees' %}">
-        <span class="menu_icon"><i class="material-icons">date_range</i></span>
+        <span class="menu_icon"><i class="material-icons">receipt</i></span>
         <span class="menu_title">Fees Status</span>
     </a>
 </li>
@@ -355,7 +366,7 @@
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
-                    <span class="menu_icon"><i class="material-icons">how_to_reg</i></span>
+                    <span class="menu_icon"><i class="material-icons">group_add</i></span>
                     <span class="menu_title">Admission Requests</span>
                 </a>
             </li>
@@ -384,12 +395,7 @@
                             <span class="menu_title">Attendance</span>
                         </a>
                     </li> 
-                    <li class="current_section" title="Library">
-                        <a href="{% url 'library' %}">
-                                <span class="menu_icon"><i class="material-icons">local_library</i></span>
-                                <span class="menu_title">Library</span>
-                            </a>
-                        </li> 
+               
 
                     <li  title="Class Students">
                         <a href="{% url 'class_students_list' %}">
@@ -398,6 +404,17 @@
                             </a>
                         </li> 
                     {% endif %}
+
+                    {% for i in user.user_institute_role.level.permissions.all %}    
+                    {% if i.function_name == "Can Manage Library" %}
+                    <li  title="Library">
+                      <a href="{% url 'library' %}">
+                          <span class="menu_icon"><i class="material-icons">local_library</i></span>
+                          <span class="menu_title">Library</span>
+                      </a>
+                  </li>      
+                    {% endif %}
+                  {% endfor %}
                    
 
                     <li  title="Examination">
@@ -463,16 +480,16 @@
 
                     {% endif %}  
                     {% endif %} 
-                <li title="Log Out">
-                        <a href="{% url 'auth_logout' %}">
-                            <span class="menu_icon"><i class="material-icons">power_settings_new</i></span>
-                            <span class="menu_title">Log Out</span>
-                        </a>
-                    </li>
+                
             </ul>
         </div>
-
+        <div class="global_logo">
+            
+                <a target="_blank" href="http://globalcredence.com/" ><img  style="max-height: 32px;" src="{% static 'main_app/images/blogo1.png' %}" alt=""/> </a>
+         
+        </div>
     </aside><!-- main sidebar end -->
+
     
     <div id="page_content">
         <div id="page_content_inner">      
@@ -591,6 +608,38 @@
                                             <label class="required" style="color: black;">Reminder Start Before (Days)</label>
                                             <input type="number" class="form-control" value="{{lib_set.send_Reminder_Before}}" name="reminder_days" required>
                                           </div>
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Book Fine Per day (Rs.)</label>
+                                            <input type="number" class="form-control" value="{{lib_set.late_fine_per_day}}" name="fine_per_day" required>
+                                          </div>
+                                                                                                                                                
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+                            <a type="hidden" id="modal_add_book_btn" data-uk-modal="{target:'#modal_add_book_copies'}"></a>
+                            <div class="uk-modal" id="modal_add_book_copies">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Add More Copies</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'add_more_books' %}">
+                                        {% csrf_token %}
+                                        <input id="book_code_hidden" type="hidden" class="form-control" name="book_code_hidden">
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Enter No. Of Copies To Be Added</label>
+                                            <input type="number" class="form-control" name="add_more_books" required >
+                                          </div>   
+                                          
                                                                                                                                                 
                                               <table>
                                                 <tr>
@@ -629,7 +678,7 @@
                                     <li class="uk-active"><a href="#">Issue Book</a></li>
                                      <li><a href="#">Return Books</a></li>                                     
                                      <li><a href="#">Books</a></li>
-                                     <li><a href="#">Fine</a></li>                   
+                                     <!-- <li><a href="#">QR-Codes</a></li>                    -->
                                     
                                          
                                     
@@ -695,6 +744,10 @@
                                                 <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"  data-uk-modal="{target:'#modal_new_book'}" >
                                                     <i class="uk-icon-book"></i>
                                                     Add Book
+                                                </a>
+                                                <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"   data-uk-modal="{target:'#modal_print_qr'}" >
+                                                    <i class="uk-icon-qrcode"></i>
+                                                    Print QR
                                                 </a>
                                                 <!-- <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"  href="{% url 'add_book' %}" >
                                                     <i class="uk-icon-book"></i>
@@ -762,22 +815,123 @@
                                                         </td>
                                                     </tr>
                                                     </table>
-                                                    <script>
-                                                        $(document).ready(function(){
-                                                          $('#book_category').change(function(){
-                                                              $.ajax({
-                                                                  type:'POST',
-                                                                  url:'fetch_sub_category/',
-                                                                  data:{category:$("#book_category").val(), 
-                                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
-                                                                  
-                                                                  success: function(msg){
-                                                                      $('#book_sub_category').html(msg);
-                                                                  }
-                                                              })
-                                                          })
-                                                        })
-                                                        </script>
+                                                    
+                                                    </form>
+                                                    </div>
+                                                </div>
+                                                <div class="uk-modal" id="modal_print_qr">
+                                                    <div class="uk-modal-dialog">
+                                                        <button type="button" class="uk-modal-close uk-close"></button>
+                                                        <div class="uk-modal-header">
+                                                            <h3 class="uk-text-primary">Print QR</h3>
+                                                        </div>
+                                                        <form  method="POST" action="{% url 'show_qr' %}" target="_blank">
+                                                            {% csrf_token %}
+                                                                  <div class="form-group">
+                                                                    <label class="required" for="sel 1">Select Book Code</label>
+                                                                    <select class="form-control-sm form-control" id="selcted_book_grp" required>
+                                                                        <option selected disabled value="">--- Select ---</option>
+                                                                        {% for i in books %}
+                                                                        <option value={{i.id}}>{{i}}</option>
+                                                                        {% endfor %}
+                                                                     
+                                                                    </select>
+                                                                  </div> 
+                                                                  <div class="form-group">
+                                                                    <div class="row" style="padding: 0px 25px;">
+                                                                        <div col-sm-6><div class="form-check" style="margin: 2px;" >
+                                                                            <label class="form-check-label">
+                                                                              <input type="checkbox" class="form-check-input" value="" name="all_classes_check">Select All Books
+                                                                            </label>
+                                                                          </div> </div>
+                                                                        <div col-sm-6>
+                                                                            
+                                                                          <div class="form-check" style="margin: 2px;" id="sel_al_c" >
+                                                                            <label class="form-check-label">
+                                                                              <input type="checkbox" name="if_ind_s" class="form-check-input" value="">Select Individual
+                                                                            </label>
+                                                                          </div>
+                                                                        </div>
+                                                                          </div>
+                                                                  </div> 
+                                                                  <script>
+                                                                    $(document).ready(function(){
+                                                                       $('input[name="all_classes_check"]').click(function(){
+                                                                           if($(this).is(":checked")){
+                                                                              
+                                                                             $('#selcted_book_grp').css('display','none')
+                                                                             $('#selcted_book_grp').removeAttr('required')
+                                                                             $('#select_individual').css("display", "none");
+                                                                             $('#sel_al_c').css('display','none')
+                                                                           }
+                                                                           else if($(this).is(":not(:checked)")){
+                                                                            $('#selcted_book_grp').css('display','block')
+                                                                             $('#selcted_book_grp').attr('required','required')
+                                                                             $('#select_individual').css("display", "block");
+                                                                             $('#sel_al_c').css('display','block')
+                                                                           }
+                                                                       });
+                                                                   });
+                                                                </script>
+                                                                <script>
+                                                                    $(document).ready(function(){
+                                                                       $('input[name="if_ind_s"]').click(function(){
+                                                                           if($(this).is(":checked")){
+                                                                              
+                                                                             $('#select_individual').css('display','block')
+                                                                             $('#select_individual').css('class','form-group')
+                                                                           }
+                                                                           else if($(this).is(":not(:checked)")){
+                                                                            $('#select_individual').css("display", "none");
+                                                                           }
+                                                                       });
+                                                                   });
+                                                                </script>
+
+                                                                <div class="form-group" id="select_individual" style="display: none;" >
+                                                                    <div class="input-group  input-group-sm">
+                                                                        <div class="input-group-prepend">
+                                                                        <span class="input-group-text search_icon"><i class="material-icons search_icon ">search</i></span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control"  id="myInput" placeholder="Search a book in list ...">
+                                                                    </div>
+                                                                <small>press and hold ctrl to select multiple...</small>
+                                                                    <select class="Individual_option form-control" id="select_individual" multiple="multiple"  class="selectpicker" data-live-search="true" name="selected_individual">
+                                                                    <option selected disabled value=""> -- first select a class </option>
+                                                                    </select>
+                                                                </div>
+                                                                <br>
+                                                                <br>
+
+                                                                <script>
+                                                                    $(document).ready(function(){
+                                                                        $("#selcted_book_grp").change(function(){
+                                                                            $.ajax({
+                                                                        type:'POST',
+                                                                        url: "{% url 'fetch_book_ids' %}" ,
+                                                                        data:{class_id: $('#selcted_book_grp').val(),
+                                                                        csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                        success: function(msg){
+                                                                            $('.Individual_option').html(msg);
+                                                                        }
+                                                                        })
+                                                                            
+                                                                        });
+                                                                    })
+                                                                    
+                                                                </script>
+                                                                                                               
+                                                                  <table>
+                                                                    <tr>
+                                                                        <td> 
+                                                                      <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
+                                                                    </td>
+                                                                    <td style="padding-left:20px;">
+                                                            <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:white; color: black ;width: 140px;">Cancel</button> -->
+                                                        </td>
+                                                    </tr>
+                                                    </table>
+                                                    
                                                     </form>
                                                     </div>
                                                 </div>
@@ -792,24 +946,25 @@
                                                         <div class="uk-modal-header">
                                                             <h3 class="uk-text-primary">Edit Book</h3>
                                                         </div>
-                                                        <form  method="POST" action="#">
+                                                        <form  method="POST" action="{% url 'edit_book' %}">
                                                             {% csrf_token %}
                                                             <div class="form-group">
+                                                                <input id="book_id_hide"  type="hidden" class="form-control-sm form-control" name="book_id">
                                                                     <label class="required">Book Code ( ISBN No / Subject Code )</label>
-                                                                    <input id="book_code" type="text" class="form-control form form-control-sm " name="book_code" required>
+                                                                    <input readonly id="book_code" type="text" class="form-control form form-control-sm " name="book_code" required>
                                                                 </div> 
-                                                                <div class="form-group">                                                      
+                                                                <!-- <div class="form-group">                                                      
                                                                     <label class="required">Book Count</label>
                                                                     <input id="book_count" type="number" class="form-control-sm form-control" name="book_count" required>
-                                                                  </div> 
+                                                                  </div>  -->
                                                                   <div class="form-group">
                                                                     <label  class="required">Book Name</label>
                                                                     <input id="book_name" type="text" class="form-control-sm form-control" name="book_name" required>
                                                                   </div>
                                                                   <div class="form-group">
                                                                     <label class="required" for="sel 1">Select Category</label>
-                                                                    <select id="book_category" class="form-control-sm form-control" name="book_category" required>
-                                                                        
+                                                                    <select id="book_category_edit" class="form-control-sm form-control" name="book_category" required>
+                                                                        <option id="selcat" selected disabled value=""></option>
                                                                         {% for i in categories %}
                                                                         <option value={{i.id}}>{{i}}</option>
                                                                         {% endfor %}
@@ -818,14 +973,14 @@
                                                                   </div> 
                                                                   <div class="form-group">
                                                                     <label class="required" for="sel1">Select Sub Category</label>
-                                                                    <select id="book_sub_category" class="form-control-sm form-control" name="book_sub_category" required>
-                                                                        <!-- <option selected disabled value="">--- Select ---</option> -->
-                                                                        {% for j in sub_categories %}
+                                                                    <select id="book_sub_category_editr" class="form-control-sm form-control" name="book_sub_category" required>
+                                                                        <option id="selsubcat" selected disabled value=""></option>
+                                                                        <!-- {% for j in sub_categories %}
                                                                         <option value={{j.id}}>{{j}}</option>
-                                                                        {% endfor %}
+                                                                        {% endfor %} -->
                                                                      
                                                                     </select>
-                                                                  </div> 
+                                                                  </div>
                                                                   <div class="form-group">
                                                                     <label class="required">Author Name</label>
                                                                     <input id="book_author" type="text" class="form-control-sm form-control" name="author_name" required>
@@ -841,13 +996,14 @@
                                                                   <table>
                                                                     <tr>
                                                                         <td> 
-                                                                      <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add Book</button>
+                                                                      <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Update</button>
                                                                     </td>
                                                                     <td style="padding-left:20px;">
                                                             <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:white; color: black ;width: 140px;">Cancel</button> -->
                                                         </td>
                                                     </tr>
                                                     </table>
+                                                    
                                                     </form>
                                                     </div>
                                                 </div>
@@ -864,7 +1020,9 @@
                                                             <th>Book Sub Category</th>
                                                             <th>Author</th>
                                                             <th>Total Books</th>
-                                                            
+                                                            <th>Edit</th>
+                                                            <th>Add</th>
+                                                            <th>Delete</th>                                                            
                                                         </tr>
                                                         </thead>
                                                         <tbody>
@@ -872,28 +1030,52 @@
                                                         <tr>
                                                             <td>{{forloop.counter}}</td>
                                                             <td>{{book.code}}</td>
-                                                            <td>{{book.book_name}}</td>
+                                                            <td><a href="{% url 'view_book' book.pk %}">{{book.book_name}}</a></td>
                                                             <td>{{book.book_category}}</td>
                                                             <td>{{book.book_sub_category}}</td>
                                                             <td>{{book.author}}</td>
                                                             <td>{{book.count}}</td>
                                                             
+                                                            <td><a id="{{book.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                            </td>
+                                                            <td><a class="{{book.id|slugify}}" ><i class="material-icons" style="color: #7cb342;font-weight: bold;">add</i></a>
+                                                            </td>
+                                                            <td><a class="confirm-delete" href="{% url 'delete_book' book.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                            </td>
+                                                            
                                                         </tr>
+                                                        
+                                                        <script>
+                                                            $(document).ready(function(){
+                                                            $(document).on('click', '.confirm-delete', function(){
+                                                                return confirm('Are you sure you want to delete this?');
+                                                                });
+                                                            });
+                                                        </script>
+                                                        <script>
+                                                            $(document).ready(function(){
+                                                            $('.{{book.id|slugify}}').click(function(){
+                                                                $('#modal_add_book_btn').click(); 
+                                                                $('#book_code_hidden').val('{{book.id}}');                                                               
+                                                            });
+                                                            });
+                                                        </script>
                                                         <script>
                                                             $(document).ready(function(){
                                                             $('#{{book.id|slugify}}').click(function(){
                                                                 $('#modal_edit_book_btn').click();
+                                                                $('#book_id_hide').val('{{book.id}}');
                                                                 $('#book_code').val('{{book.code}}');
                                                                 $('#book_count').val('{{book.book_count}}');
                                                                 $('#book_name').val('{{book.book_name}}');
-                                                                $('#book_category').val('{{book.book_category}}');
-                                                                $('#book_sub_category').val('{{book.book_sub_category}}');
+                                                                $('#selcat').html('<option value="{{book.book_category.id}}" selected>{{book.book_category}}</option>');
+                                                                $('#selsubcat').html('<option value="{{book.book_sub_category.id}}" selected>{{book.book_sub_category}}</option>');
                                                                 $('#book_author').val('{{book.author}}');
                                                                 $('#book_publication').val('{{book.publications}}');
                                                                 $('#book_edition').val('{{book.edition}}');
                                                                 
-                                                            })
-                                                            })
+                                                            });
+                                                            });
                                                         </script>
                                                         {% endfor %}
                                                         </tbody>
@@ -906,7 +1088,21 @@
                                 <!-- Add Book Tab End -->
                                 <!--Start Fine Tab-->
                                 <li>
-                                    Hello World
+                                    <div class="uk-grid" data-uk-grid-margin>
+                                        <div class="uk-width-medium-1-8" >
+                                            <form  method="POST" action="{% url 'show_qr' %}" class="form-inline" id="qr_form">
+                                                {% csrf_token %}
+                                            
+                                                <label class ="required" style="margin: 4px;">Enter Book Code</label>
+                                                <input id="book_code" type="text" class="form-control-sm form-control" name="qr_book_code" required>
+                                                
+                                        
+                                                <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">          
+                                                <a href="{% url 'see_all' %}">See All</a>
+                                            </form>
+                                            
+                                        </div>
+                                    </div>
                                 </li>
                                 <!--End Fine Tab-->
                                         </div>
@@ -1052,8 +1248,50 @@
             altair_helpers.ie_fix();
         });
     </script>
-
-
+    
+                                                    <script>
+                                                        $(document).ready(function(){
+                                                          $('#book_category').change(function(){
+                                                              $.ajax({
+                                                                  type:'POST',
+                                                                  url:'fetch_sub_category/',
+                                                                  data:{category:$("#book_category").val(), 
+                                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                  
+                                                                  success: function(msg){
+                                                                      $('#book_sub_category').html(msg);
+                                                                  }
+                                                              });
+                                                          });
+                                                        });
+                                                    </script>
+                                                    // edit book category script
+                                                        <script>
+                                                        $(document).ready(function(){
+                                                          $('#book_category_edit').change(function(){
+                                                              $.ajax({
+                                                                  type:'POST',
+                                                                  url:'fetch_sub_category/',
+                                                                  data:{category:$("#book_category_edit").val(), 
+                                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                  
+                                                                  success: function(msg){
+                                                                      $('#book_sub_category_editr').html(msg);
+                                                                  }
+                                                              });
+                                                          });
+                                                        });
+                                                        </script>
+  <script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#select_individual option").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    </script>  
     
     
 </body>

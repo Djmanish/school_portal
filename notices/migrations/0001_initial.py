@@ -10,8 +10,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('main_app', '0001_initial'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -29,8 +29,17 @@ class Migration(migrations.Migration):
                 ('institute', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='institute_notices', to='main_app.Institute')),
                 ('recipients_list', models.ManyToManyField(related_name='users_notice', to='main_app.UserProfile')),
             ],
-            options={
-                'unique_together': {('reference_no', 'institute')},
-            },
+        ),
+        migrations.CreateModel(
+            name='NoticeViewTime',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('last_seen', models.DateTimeField(null=True)),
+                ('user', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='user_last_notice_view', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.AlterUniqueTogether(
+            name='notice',
+            unique_together={('reference_no', 'institute')},
         ),
     ]

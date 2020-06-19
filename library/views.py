@@ -5,6 +5,14 @@ from django.contrib import messages
 from django.utils import timezone
 from notices.models import *
 from datetime import datetime, timedelta
+from library.utils import render_to_pdf
+from django.core.paginator import Paginator
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from library.serializers import UserSerializer
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 
 
@@ -14,13 +22,13 @@ def library(request):
     categories= BookCategory.objects.filter(institute_category=request.user.profile.institute)
     sub_categories= BookSubCategory.objects.filter(institute_subcategory=request.user.profile.institute)
     #?
-    total_books = Book.objects.filter(book_institute=request.user.profile.institute).count()
+    total_books = Book.objects.filter(book_institute=request.user.profile.institute, status="active").count()
     total_issue = IssueBook.objects.filter(issue_book_institute=request.user.profile.institute,return_date__isnull=True)
     total_issue_books = total_issue.count()
     left = total_books - total_issue_books
-    books= BookCode.objects.filter(book_institute=request.user.profile.institute)
+    books= BookCode.objects.filter(book_institute=request.user.profile.institute, status = "active")
     for b in books:
-          sh_books= Book.objects.filter(book_code=b.code, book_institute=b.book_institute).count()
+          sh_books= Book.objects.filter(book_code=b.code, book_institute=b.book_institute,status="active").count()
           b.count=sh_books
     lib_set= LibrarySettings.objects.get(institute=request.user.profile.institute)
     
@@ -133,8 +141,6 @@ def add_new_book(request):
                       try:
                         search_books= Book.objects.get(book_id=book, book_institute=request.user.profile.institute)
                         messages.error(request, "Books Id's Must Be Unique !") 
-                        instance = BookCode.objects.get(id=book_code.id, book_institute=request.user.profile.institute)
-                        instance.delete() 
                         return HttpResponseRedirect(f'/library/') 
                       except:
                         pass
@@ -242,23 +248,32 @@ def issue_book(request):
 
 def book_return(request):
       if request.method == 'POST':
-            print("Book Return method")
+            lib = LibrarySettings.objects.get(institute__id=request.user.profile.institute.id)
             book_i= request.POST.get('borrow_id') 
-            cat= request.POST.get('book_category')  
+            cat= request.POST.get('book_category') 
+            fine= request.POST.get('book_fine') 
+            desc= request.POST.get('book_desc')
             if cat == "0":  
               messages.error(request, 'Book Not Returned, Please Try Again !')
             else:      
               t = IssueBook.objects.get(id=book_i)
               cd = t.expiry_date           
               td = timezone.now()
+
               if td > cd :
                     cc= (td - cd).days
+                    lt_fine = int(cc*lib.late_fine_per_day)
               else:
                     cc = 0
-              print(cc) 
-              print(t)
+                    lt_fine = 0
+              
               t.return_date = timezone.now()            
               t.delay_counter=cc
+              t.late_fine = lt_fine
+              t.fine = fine
+              t.description= desc
+              t.updated_by= request.user.profile
+              t.date= td
               t.save()
               messages.success(request, 'Book returned successfully !')
             return HttpResponseRedirect(f'/library/')
@@ -298,7 +313,231 @@ def lib_settings(request):
             t.save()              
             return HttpResponseRedirect(f'/library/')        
 
-def edit_book(request,pk):
-      book = BookCode.objects.get(pk=pk)
-      print(book)
-      return HttpResponse('Hello')
+def edit_book(request):
+      if request.method == "POST": 
+            book_cid = request.POST['book_id']
+            search_edit_book= BookCode.objects.get(pk=book_cid)
+            search_books= Book.objects.filter(book_code=search_edit_book.code)
+            name = request.POST['book_name']
+            category = request.POST['book_category']
+            sch_cat = BookCategory.objects.get(pk=category)
+            edit_sub_category = request.POST['book_sub_category']
+            sch_sub_cat = BookSubCategory.objects.get(pk=edit_sub_category)
+            author = request.POST['author_name']
+            pub = request.POST['publications']
+            edition = request.POST['editions']
+            # BookCode Group Section
+            search_edit_book.book_name = name
+            search_edit_book.book_category = sch_cat
+            search_edit_book.book_sub_category = sch_sub_cat
+            search_edit_book.author = author
+            search_edit_book.publications = pub
+            search_edit_book.edition = edition
+            search_edit_book.save()
+            for i in search_books:
+              i.book_name = name
+              i.book_category = sch_cat
+              i.book_sub_category = sch_sub_cat
+              i.author = author
+              i.publications = pub
+              i.edition = edition
+              i.save()        
+            messages.success(request, 'Books info updated successfully !')    
+      return HttpResponseRedirect(f'/library/')
+
+def delete_book(request,pk):
+      search_edit_book= BookCode.objects.get(pk=pk)
+      
+      search_books= Book.objects.filter(book_code=search_edit_book.code)
+      for i in search_books:
+            try:
+                  ser_bk = IssueBook.objects.get(book_name__id= i.id, return_date__isnull=True)
+                  messages.error(request,f'Unable to delete, Book ID: {i.book_id} is issued')
+                  return HttpResponseRedirect(f'/library/')
+            except IssueBook.DoesNotExist:
+                  pass
+      for i in search_books:
+            i.status = "inactive"
+            i.save()
+      search_edit_book.status = "inactive"
+      search_edit_book.save()
+      messages.error(request,f'Book Code:- {search_edit_book}, Deleted successfully')
+      return HttpResponseRedirect(f'/library/')
+
+def add_more_books(request):
+      if request.method == 'POST':
+        institute_data=Institute.objects.get(pk=request.user.profile.institute.id)
+        book_code= BookCode.objects.get(pk=request.POST.get('book_code_hidden')) 
+        copies_books = Book.objects.filter(book_code=book_code.code, book_institute= request.user.profile.institute)
+        copies= copies_books.count()
+        new_copies = int(request.POST.get('add_more_books'))
+        context_data = {
+        'institute_data':institute_data,  
+        'book_code':book_code,
+        'copies':copies,
+        'copies_books':copies_books,
+        'range':range(new_copies),
+        }
+      return render(request, 'library/add_more_copies.html', context_data)
+
+def add_new_books(request):
+      if request.method == 'POST':            
+            book_ids= request.POST.getlist('fullname')
+            book_count_len=len(book_ids)
+            book_code= BookCode.objects.get(pk=request.POST.get('hide'))
+            res= checkIfDuplicates_1(book_ids)
+            
+            if res:
+                  messages.error(request, "You Are Entering Same Book ID's !")  
+                  return HttpResponseRedirect(f'/library/') 
+            else:
+                  print ("non Duplicates")
+            for book in book_ids:
+                      try:
+                        search_books= Book.objects.get(book_id=book, book_institute=request.user.profile.institute)
+                        messages.error(request, "Books Id's Must Be Unique !") 
+                        return HttpResponseRedirect(f'/library/') 
+                      except:
+                        pass
+            for id in book_ids:
+                      id = id.strip()                        
+                      Book.objects.create(book_id=id, book_code=book_code.code, book_institute=book_code.book_institute, book_name=book_code.book_name, book_category=book_code.book_category, book_sub_category=book_code.book_sub_category, author=book_code.author, publications=book_code.publications, edition=book_code.edition, book_count=book_count_len )
+            messages.success(request, 'Books Added successfully !')
+            return HttpResponseRedirect(f'/library/')
+
+def see_all(request):
+      return HttpResponse('See all Book')
+            
+
+def show_qr(request):
+      if 'selected_individual' in request.POST:
+            print("Hello World")
+            institute_data = request.user.profile.institute
+            selected_books = request.POST.getlist('selected_individual')
+            selected_individuals_list = []
+            for i in selected_books: #test this
+                  selected_individuals_list.append(Book.objects.get(pk=i,status="active"))
+            length = len(selected_individuals_list)
+            if length  == 5:
+                  rows = 1
+            else:
+                  rows = int((length/5)+1)
+            print(rows)
+            q = []
+            col = 5
+            intial = 0
+            for i in range(rows):
+                  q.append((selected_individuals_list)[intial:col])
+                  intial = col
+                  col = col+5
+            for i in q:
+                  print(i)                  
+            return render_to_pdf(
+                  'library/all_book_pdf.html',
+                  {
+                        'pagesize':'A4',
+                        'wishlist': q,
+                        'institute_data':institute_data,
+                    }
+                  )
+
+      if 'all_classes_check' in request.POST:
+            print("Nothng")
+            institute_data = request.user.profile.institute
+            results= Book.objects.filter(status="active", book_institute=request.user.profile.institute)
+            r = int((results.count()/5)+1) 
+            q = []
+            col = 5
+            initial = 0
+            for i in range(r):
+                  print("Hello world")
+                  q.append((results)[initial:col])  
+                  initial = col
+                  col = col+5  
+            for i in q:
+                  print(i)       
+            return render_to_pdf(
+                  'library/all_book_pdf.html',
+                  {
+                        'pagesize':'A4',
+                        'mylist': q,
+                        'institute_data':institute_data,
+                        
+                    }
+                  )
+      # if request.method == 'POST':
+      #       institute_data = request.user.profile.institute
+      #       book_cd = request.POST['qr_book_code'].strip()
+      #       results= Book.objects.filter(book_code= book_cd, status="active", book_institute=request.user.profile.institute)
+      #       all_books = Book.objects.filter(status="active", book_institute=request.user.profile.institute)
+      #       for i in results:
+      #             print(i.qr_codes.url)
+      #       return render_to_pdf(
+      #               'library/book_pdf.html',
+      #               {
+      #                   'pagesize':'A4',
+      #                   'mylist': results,
+      #                   'institute_data':institute_data,
+      #                   'all_books':all_books,
+      #               }
+      #             )
+
+
+def view_book(request, pk):
+      institute_data=Institute.objects.get(pk = request.user.profile.institute.id)
+      total_books = Book.objects.filter(book_institute=request.user.profile.institute, status="active").count()
+      total_issue = IssueBook.objects.filter(issue_book_institute=request.user.profile.institute,return_date__isnull=True)
+      total_issue_books = total_issue.count()
+      left = total_books - total_issue_books
+      book_grp= BookCode.objects.get(pk=pk)
+      grp_books= Book.objects.filter(book_code=book_grp.code, book_institute=request.user.profile.institute, status="active")
+      context_data = {
+      'institute_data':institute_data,
+      'total_books':total_books,
+      'total_issue_books':total_issue_books,
+      'left':left,
+      'book_grp':book_grp,
+      'grp_books':grp_books,   
+    }
+      return render(request, 'library/view_book.html',context_data)
+
+def delete_view_book(request, pk):
+      delete_bk= Book.objects.get(pk=pk)
+      book_cd = BookCode.objects.get(code=delete_bk.book_code, book_institute=request.user.profile.institute)
+      idd = book_cd.pk
+      try:
+            search_book = IssueBook.objects.get(book_name__id=delete_bk.id, return_date__isnull=True)
+            messages.error(request,f'Unable to delete, Book ID: {delete_bk.book_id} is issued')
+            return HttpResponseRedirect(f'/library/view_book/{idd}')
+      except IssueBook.DoesNotExist:
+            print("hello")
+            delete_bk.status="inactive"
+            delete_bk.save()      
+            messages.error(request,f'Book Deleted Successfully')
+            return HttpResponseRedirect(f'/library/view_book/{idd}')
+
+def fetch_book_ids(request):
+      selected_book_code = BookCode.objects.get(pk=request.POST.get('class_id') )
+      search_books = Book.objects.filter(book_code=selected_book_code.code, status="active")
+      individual_options = ''
+      for individual in search_books:
+            individual_options = individual_options+f"<option value='{individual.id}'>{individual.book_id} - {individual.book_name}</option>"
+     
+      return HttpResponse(individual_options)
+
+class UserCreate(APIView):
+    """ 
+    Creates the user. 
+    """
+
+    def post(self, request, format='json'):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            if user:
+                token = Token.objects.create(user=user)
+                json = serializer.data
+                json['token'] = token.key
+                return Response(json, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

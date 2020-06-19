@@ -1,0 +1,808 @@
+<!doctype html>
+{% load static %}
+<!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
+
+
+    <title>View Book</title>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+    <!-- uikit -->
+    <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
+        media="all">
+
+    <!-- flag icons -->
+    <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
+
+  
+    <!-- altair admin -->
+    <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
+
+    <!-- themes -->
+    <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- matchMedia polyfill for testing media queries in JS -->
+    <!--[if lte IE 9]>
+        <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.js' %}"></script>
+        <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
+    <![endif]-->
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
+    
+</head>
+
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <!-- main header -->
+    <header id="header_main">
+        <div class="header_main_content">
+            <nav class="uk-navbar">
+                                
+                <!-- main sidebar switch -->
+                <a href="#" id="sidebar_main_toggle" class="sSwitch sSwitch_left">
+                    <span class="sSwitchIcon"></span>
+                </a>
+                
+                <!-- secondary sidebar switch -->
+                <!-- <a href="#" id="sidebar_secondary_toggle" class="sSwitch sSwitch_right sidebar_secondary_check">
+                    <span class="sSwitchIcon"></span>
+                </a> -->
+                
+                    <!-- <div id="menu_top_dropdown" class="uk-float-left uk-hidden-small">
+                        <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+                            <a href="#" class="top_menu_toggle"><i class="material-icons md-24">&#xE8F0;</i></a>
+                            <div class="uk-dropdown uk-dropdown-width-3">
+                                <div class="uk-grid uk-dropdown-grid">
+                                    <div class="uk-width-2-3">
+                                        <div class="uk-grid uk-grid-width-medium-1-3 uk-margin-bottom uk-text-center">
+                                            <a href="page_mailbox.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-light-green-600">&#xE158;</i>
+                                                <span class="uk-text-muted uk-display-block">Mailbox</span>
+                                            </a>
+                                            <a href="page_invoices.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-purple-600">&#xE53E;</i>
+                                                <span class="uk-text-muted uk-display-block">Invoices</span>
+                                            </a>
+                                            <a href="page_chat.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-cyan-600">&#xE0B9;</i>
+                                                <span class="uk-text-muted uk-display-block">Chat</span>
+                                            </a>
+                                            <a href="page_scrum_board.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-red-600">&#xE85C;</i>
+                                                <span class="uk-text-muted uk-display-block">Scrum Board</span>
+                                            </a>
+                                            <a href="page_snippets.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-blue-600">&#xE86F;</i>
+                                                <span class="uk-text-muted uk-display-block">Snippets</span>
+                                            </a>
+                                            <a href="page_user_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">User profile</span>
+                                            </a>
+                                            <a href="page_institute_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">Institute profile</span>
+                                            </a>
+                                            <a href="page_institute_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">Admin profile</span>
+                                            </a>
+                                            <a href="page_institute_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">Teacher profile</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-1-3">
+                                        <ul class="uk-nav uk-nav-dropdown uk-panel">
+                                            <li class="uk-nav-header">Components</li>
+                                            <li><a href="components_accordion.html">Accordions</a></li>
+                                            <li><a href="components_buttons.html">Buttons</a></li>
+                                            <li><a href="components_notifications.html">Notifications</a></li>
+                                            <li><a href="components_sortable.html">Sortable</a></li>
+                                            <li><a href="components_tabs.html">Tabs</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                
+                    <div class="uk-navbar-flip">
+                        <ul class="uk-navbar-nav user_actions">
+                            <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
+                            <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
+                            
+                            {% if user.profile.designation %}
+                            <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                                <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
+                                <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
+                                    <div class="md-card-content">
+                                        <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
+                                            <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
+                                            <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
+                                        </ul>
+                                        <ul id="header_alerts"  class="uk-switcher uk-margin">
+                                            <li>
+                                                <ul class="md-list md-list-addon alert_notice_list">
+                                                    {% for notice in user.users_notice %}
+                                                    <li>
+                                                        <a href="{% url 'all_notice_list' %}">
+                                                            <div class="md-list-addon-element">
+                                                                <span class="md-user-letters md-bg-cyan">N</span>
+                                                            </div>
+                                                            <div class="md-list-content">
+                                                                <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <ul class="md-list md-list-addon">
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">Voluptatem omnis.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Consequatur eaque natus esse assumenda aut ab quidem.</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">Itaque sit officiis.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Ad velit quia possimus officia adipisci dicta enim.</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">Modi odit impedit.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Inventore unde praesentium numquam amet et sunt dolorum.</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons uk-text-primary">&#xE8FD;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">Qui et.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Quia pariatur id facere accusantium rerum illum.</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endif %}
+                                
+                            <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                                <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
+                                <div class="uk-dropdown uk-dropdown-small">
+                                    <ul class="uk-nav js-uk-prevent">
+                                        <li><a href="{% url 'user_profile' %}">My profile</a></li>
+                                        <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                       
+                                    </ul>
+                                </div>
+                            </li>
+                          
+                        </ul>
+                    </div>
+            </nav>
+        </div>
+        <div class="header_main_search_form">
+            <i class="md-icon header_main_search_close material-icons">&#xE5CD;</i>
+            <form class="uk-form uk-autocomplete" data-uk-autocomplete="{source:'data/search_data.json'}">
+                <input type="text" class="header_main_search_input" />
+                <button class="header_main_search_btn uk-button-link"><i
+                        class="md-icon material-icons">&#xE8B6;</i></button>
+                <script type="text/autocomplete">
+                    <ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">
+                                                <li data-value="">
+                            <a href="" class="needsclick">
+                               <br>
+                                <span class="uk-text-muted uk-text-small"></span>
+                            </a>
+                        </li>
+                       
+                        <li data-value="autocomplete-value">
+                            <a class="needsclick">
+                                Autocomplete Text<br>
+                                <span class="uk-text-muted uk-text-small">Helper text</span>
+                            </a>
+                        </li>
+                    </ul>
+                </script>
+            </form>
+        </div>
+    </header><!-- main header end -->
+    <!-- main sidebar -->
+    <aside id="sidebar_main" >
+        
+        <div class="institute_logo_top" >
+            <div>
+                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="institute_logo style="height: 48px;" /> </a>
+            </div>
+        </div>
+        
+        <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
+            <ul style="margin-bottom: 80px;">
+                <li class="current_section" title="Dashboard">
+                    <a href="{% url 'user_dashboard' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
+                        <span class="menu_title">Dashboard</span>
+                    </a> 
+                </li>
+                
+                <li title="User Profile">
+                    <a href="{% url 'user_profile' %}">
+                        <span class="menu_icon"><i class="material-icons">person</i></span>
+                        <span class="menu_title">My Profile</span>
+                    </a>    
+                </li>
+                
+                {% if user.profile.institute == None %}
+                <li title="Admission Query">
+                    <a href="{% url 'admission_home' %}">
+                        <span class="menu_icon"><i class="material-icons">person</i></span>
+                        <span class="menu_title">Admission Query</span>
+                    </a>    
+                </li>
+                {% endif %}
+                    
+
+                {% if user.profile.institute and user.profile.status == 'approve' %}
+                <li  title="Institute Profile">
+                    <a href="{% url 'institute_detail' user.profile.institute.pk %}">
+                        <span class="menu_icon"><i class="material-icons">school</i></span>
+                        <span class="menu_title">Institute Profile</span>
+                    </a>    
+                </li>
+      
+<!-- starting notice menu -->
+<li  title="Notices">
+    <a href="">
+        <span class="menu_icon"><i class="material-icons">notifications_active</i></span>
+        <span class="menu_title">Notifications</span>
+    </a>
+    <ul>
+        <li>
+            <a href="{% url 'all_notice_list'  %}">
+                <span class="menu_icon"><i class="material-icons">notifications</i></span>
+                <span class="menu_title">My Notifications</span>
+            </a>
+        </li> 
+
+        
+        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" %}
+        {% else %}
+        <li>
+            <a href="{% url 'create_notice'  %}">
+                <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                <span class="menu_title">Create a Notification</span>
+            </a>
+        </li> 
+        {% endif %}
+    </ul>
+</li>
+<!-- ending notice menu -->
+
+{% for i in user.user_institute_role.level.permissions.all %}    
+              {% if i.function_name == "Can Update Lecture Timing" %}
+              <li  title="Fees">
+                <a href="{% url 'fees_home' %}">
+                    <span class="menu_icon"><i class="material-icons">receipt</i></span>
+                    <span class="menu_title">Fees Setup</span>
+                </a>
+            </li>      
+              {% endif %}
+            {% endfor %}
+
+
+           
+    
+{% if user.profile.designation.level_name == "parent" %}
+<li  title="Fees">
+    <a href="{% url 'parent_fees' %}">
+        <span class="menu_icon"><i class="material-icons">receipt</i></span>
+        <span class="menu_title">Fees Status</span>
+    </a>
+</li>
+{% endif %}
+    
+                <li  title="Holiday List">
+                    <a href="{% url 'holidaylist' user.profile.institute.pk %}">
+                        <span class="menu_icon"><i class="material-icons">date_range</i></span>
+                        <span class="menu_title">Holiday List</span>
+                    </a>   
+                </li>
+                
+               <li  title="Institute Schedule">
+                <a href="{% url 'class_schedule' %}">
+                    <span class="menu_icon"><i class="material-icons">schedule</i></span>
+                    <span class="menu_title">Schedule</span>
+                </a>
+            </li>               
+           
+
+            {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+            <li  title="Admission Requests">
+                <a href="{% url 'admission_requests' %}">
+                    <span class="menu_icon"><i class="material-icons">group_add</i></span>
+                    <span class="menu_title">Admission Requests</span>
+                </a>
+            </li>
+
+        {% endif %}
+            
+
+                {% if user.profile.institute %}
+                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+                    <li  title="Approvals">
+                        <a href="{% url 'approvals' user.profile.institute.pk %}">
+                            <span class="menu_icon"><i class="material-icons">how_to_reg</i>
+                                {% if user.approval_request > 0 %}
+                                <span class="uk-badge" style="background-color: red;">                                
+                                {{user.approval_request}}                                     
+                                </span>
+                                {% endif %}
+                        </span>
+                            <span class="menu_title">Approvals</span>
+                        </a>
+                    </li>
+                    
+                    <li  title="Attendance">
+                    <a href="{% url 'attendance' %}">
+                            <span class="menu_icon"><i class="material-icons">done_all</i></span>
+                            <span class="menu_title">Attendance</span>
+                        </a>
+                    </li> 
+               
+
+                    <li  title="Class Students">
+                        <a href="{% url 'class_students_list' %}">
+                                <span class="menu_icon"><i class="material-icons">people</i></span>
+                                <span class="menu_title">Class Students</span>
+                            </a>
+                        </li> 
+                    {% endif %}
+
+                    {% for i in user.user_institute_role.level.permissions.all %}    
+                    {% if i.function_name == "Can Manage Library" %}
+                    <li  title="Library">
+                      <a href="{% url 'library' %}">
+                          <span class="menu_icon"><i class="material-icons">local_library</i></span>
+                          <span class="menu_title">Library</span>
+                      </a>
+                  </li>      
+                    {% endif %}
+                  {% endfor %}
+                   
+
+                    <li  title="Examination">
+
+                        <a href="">
+                            <span class="menu_icon"><i class="material-icons">trending_up</i></span>
+                            <span class="menu_title">Examination</span>
+                        </a>
+                        <ul>
+                            {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
+
+                            <li>
+                                <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                                    <span class="menu_title">Create Exam</span>
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a href="{% url 'examschedule' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                                    <span class="menu_title">Create Exam Schedule</span>
+                                </a>
+    
+                            </li>
+                            {% endif %}
+                            <li>
+                                <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
+                                    <span class="menu_title">View Exam Schedule</span>
+                                </a>
+                            </li>
+                           
+                            {% if user.profile.designation.level_name == "teacher"%}
+                            <li>
+                                <a href="{% url 'examresult' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">receipt</i></span>
+                                    <span class="menu_title">Exam Result</span>
+                                </a>
+                            </li>
+                            <li  title="Class Students">
+                    
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
+                                        <span class="menu_icon"><i class="material-icons">verified_user</i></span>
+                                        <span class="menu_title">Class Promotion</span>
+                                    </a>
+                                    
+                                </li> 
+                            {% endif %}
+                            {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
+                            
+                        
+                            <li>
+                                <a href="{% url 'report_card' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">file_copy</i></span>
+                                    <span class="menu_title">Report Card</span>
+                                </a>
+    
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                    {% endif %}  
+                    {% endif %} 
+                
+            </ul>
+        </div>
+        <div class="global_logo">
+            
+                <a target="_blank" href="http://globalcredence.com/" ><img  style="max-height: 32px;" src="{% static 'main_app/images/blogo1.png' %}" alt=""/> </a>
+         
+        </div>
+    </aside><!-- main sidebar end -->
+
+    
+    <div id="page_content">
+        <div id="page_content_inner">      
+            {% if messages %}
+            <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+            {% endif %}      
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+                <div class="uk-width-large">
+                    <div class="md-card">
+                        <div class="user_heading">
+                            
+                            
+                            <div class="user_heading_avatar">
+                                <div class="thumbnail">
+                                    <img src="{{institute_data.profile_pic.url}}" alt="user avatar" />
+                                </div>
+                            </div>
+                            <div class="uk-modal" id="modal_new_category">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Add Book Category</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'add_category' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Category Name</label>
+                                            <input type="text" class="form-control" name="book_category_name" required>
+                                          </div>                                                                                                         
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add Category</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+                            <div class="uk-modal" id="modal_new_sub_category">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Add Book Sub Category</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'add_sub_category' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Select Category</label>
+                                            <select class="form-control" name="sub_category_parent" required>
+                                                <option selected disabled value="">--- Select ---</option>
+                                                {% for i in categories %}
+                                              <option value={{i.id}}>{{i}}</option>
+                                              {% endfor %}
+                                            </select>
+                                          </div>  
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Sub Category Name</label>
+                                            <input type="text" class="form-control" name="sub_category_name" required>
+                                          </div>   
+                                                                                                                                             
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;">Add Sub Category</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color:white;width: 140px;color: black;">Cancel</button> -->
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+                            <div class="uk-modal" id="modal_library_settings">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Library Settings</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'lib_settings' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Max Books Per User</label>
+                                            <input type="number" class="form-control" value="{{lib_set.max_Book_Allows}}" name="max_books" required >
+                                          </div>   
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Set Days For Book Allotement</label>
+                                            <input type="number" class="form-control" value="{{lib_set.day_Span}}" name="days_books" required>
+                                          </div> 
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Reminder Start Before (Days)</label>
+                                            <input type="number" class="form-control" value="{{lib_set.send_Reminder_Before}}" name="reminder_days" required>
+                                          </div>
+                                                                                                                                                
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+                            <a type="hidden" id="modal_add_book_btn" data-uk-modal="{target:'#modal_add_book_copies'}"></a>
+                            <div class="uk-modal" id="modal_add_book_copies">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Add More Copies</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'add_more_books' %}">
+                                        {% csrf_token %}
+                                        <input id="book_code_hidden" type="hidden" class="form-control" name="book_code_hidden">
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Enter No. Of Copies To Be Added</label>
+                                            <input type="number" class="form-control" name="add_more_books" required >
+                                          </div>   
+                                          
+                                                                                                                                                
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+                            
+                            <div class="user_heading_content">
+                                <h2 class="heading_b uk-margin-bottom"><span
+                                        class="uk-text-truncate">{{institute_data.name}}</span></h2>
+                                        <ul class="user_stats">
+                                            <li>
+                                                <h4 class="heading_a">{{total_books}} <span class="sub-heading">Books</span></h4>
+                                            </li>
+                                            <li>
+                                                <h4 class="heading_a">{{total_issue_books}} <span class="sub-heading">Issued</span></h4>
+                                            </li>
+                                            <li>
+                                                <h4 class="heading_a">{{left}} <span class="sub-heading">Left</span></h4>
+                                            </li>
+                                        </ul>
+                            </div>
+                            
+                        </div>
+                        <a type="hidden" id="modal_edit_book_btn" data-uk-modal="{target:'#modal_edit_book'}"></a>
+                                        <div class="uk-modal" id="modal_edit_book">
+                                                    <div class="uk-modal-dialog">
+                                                        <button type="button" class="uk-modal-close uk-close"></button>
+                                                        <div class="uk-modal-header">
+                                                            <h3 class="uk-text-primary">View QR</h3>
+                                                        </div>
+                                                        <img class="modal-content" id="img01">
+                                                        
+                                                    </div>
+                                                </div>
+                        <div class="user_content">
+                            <div class="user_content">   
+                                <h4 class="heading_a uk-margin-bottom">{{book_grp.code}} - {{book_grp.book_name}}</h4>
+                                <div class="md-card uk-margin-medium-bottom">
+                                    <div class="md-card-content">
+                                        <div class="uk-overflow-container">
+                                            <table class="uk-table uk-table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th>S.No.</th>
+                                                    <th>Book Id</th>
+                                                    <th>Book Name</th>
+                                                    <th>Book QR</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for i in grp_books %}
+                                                <tr>
+                                                    <td>{{forloop.counter}}</td>
+                                                    <td>{{i.book_id}}</td>
+                                                    <td>{{i.book_name}}</td>
+                                                    <td>
+                                                        <img id="{{i.id|slugify}}" src="{{i.qr_codes.url}}" style="width: 40px;height: auto;object-fit:fill;vertical-align: middle;cursor: pointer;transition: 0.3s;">
+                                                    </td>
+                                                    </td>
+                                                    <td><a class="confirm-delete"  href="{% url 'delete_view_book' i.pk %}" onclick="myFunction()"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <script>
+                                                    $(document).ready(function(){
+                                                    $(document).on('click', '.confirm-delete', function(){
+                                                        return confirm('Are you sure you want to delete this?');
+                                                        });
+                                                    });
+                                                </script>
+                                                    
+                                                <script>
+                                                    $(document).ready(function(){
+                                                    $('#{{i.id|slugify}}').click(function(){
+                                                        $('#modal_edit_book_btn').click();
+                                                        var loc = $(this).attr("src");
+                                                        $('#img01').attr("src",loc);
+                                                        
+                                                    });
+                                                    });
+                                                </script>
+                                                {% endfor %}
+                                                
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                     
+                                
+                                   
+                                
+                            </div>
+                            
+                        </div>
+                       
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- google web fonts -->
+    <script>
+        WebFontConfig = {
+            google: {
+                families: [
+                    'Source+Code+Pro:400,700:latin',
+                    'Roboto:400,300,500,700,400italic:latin'
+                ]
+            }
+        };
+        (function () {
+            var wf = document.createElement('script');
+            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+                '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
+    </script>
+
+    <!-- common functions -->
+    <script src="{% static 'main_app/js/common.min.js' %}"></script>
+    <!-- uikit functions -->
+    <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
+    <!-- altair common functions/helpers -->
+    <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
+
+
+    <script>
+        $(function () {
+            if (isHighDensity()) {
+                $.getScript("assets/js/custom/dense.min.js", function (data) {
+                    // enable hires images
+                    altair_helpers.retina_images();
+                });
+            }
+            if (Modernizr.touch) {
+                // fastClick (touch devices)
+                FastClick.attach(document.body);
+            }
+        });
+        $window.load(function () {
+            // ie fixes
+            altair_helpers.ie_fix();
+        });
+    </script>
+    
+                                                    <script>
+                                                        $(document).ready(function(){
+                                                          $('#book_category').change(function(){
+                                                              $.ajax({
+                                                                  type:'POST',
+                                                                  url:'fetch_sub_category/',
+                                                                  data:{category:$("#book_category").val(), 
+                                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                  
+                                                                  success: function(msg){
+                                                                      $('#book_sub_category').html(msg);
+                                                                  }
+                                                              });
+                                                          });
+                                                        });
+                                                    </script>
+                                                    // edit book category script
+                                                        <script>
+                                                        $(document).ready(function(){
+                                                          $('#book_category_edit').change(function(){
+                                                              $.ajax({
+                                                                  type:'POST',
+                                                                  url:'fetch_sub_category/',
+                                                                  data:{category:$("#book_category_edit").val(), 
+                                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                  
+                                                                  success: function(msg){
+                                                                      $('#book_sub_category_editr').html(msg);
+                                                                  }
+                                                              });
+                                                          });
+                                                        });
+                                                        </script>
+    
+    
+</body>
+
+</html>

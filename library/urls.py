@@ -1,6 +1,7 @@
 from django.urls import path, include
 from . import views
 from django.views.generic.base import RedirectView
+from django.conf.urls import url
 
 
 
@@ -20,5 +21,16 @@ urlpatterns = [
     path('return_book/',views.return_book,name='return_book'),
     path('fetch_sub_category/', views.fetch_sub_category, name="fetch_sub_category"),
     path('lib_settings/',views.lib_settings,name='lib_settings'),
-    path('edit_book/<int:pk>/',views.edit_book,name='edit_book'),
+    path('edit_book/',views.edit_book,name='edit_book'),
+    path('delete_book/<int:pk>/',views.delete_book,name='delete_book'),
+    path('add_more_books/',views.add_more_books,name='add_more_books'),
+    path('add_new_books/',views.add_new_books,name='add_new_books'),
+    path('see_all/',views.see_all,name='see_all'),
+    path('show_qr/',views.show_qr,name='show_qr'),
+    path('view_book/<int:pk>/',views.view_book,name='view_book'),
+    path('delete_view_book/<int:pk>/',views.delete_view_book,name='delete_view_book'),
+    path('fetch_book_ids/',views.fetch_book_ids,name='fetch_book_ids'),
+    path('api/users', views.UserCreate.as_view(), name='account-create'),
+    
+    
 ]

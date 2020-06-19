@@ -11,7 +11,7 @@ from django.contrib.auth.signals import user_logged_in
 @receiver(post_save, sender=Institute)
 def LibrarySetting(sender, instance, created, **kwargs):
     if created:
-        LibrarySettings.objects.create(institute=instance, max_Book_Allows= 3, day_Span= 5, send_Reminder_Before= 2)
+        LibrarySettings.objects.create(institute=instance, max_Book_Allows= 3, day_Span= 5, send_Reminder_Before= 2, late_fine_per_day=5)
 # ending signal for creating library settings when institute is created
 
 # starting sending notification when Book Issued    

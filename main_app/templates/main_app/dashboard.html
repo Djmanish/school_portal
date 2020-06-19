@@ -153,7 +153,7 @@
 
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}" media="all">
 
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" media="all">
+   
 
     <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
@@ -165,6 +165,7 @@
   
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" media="all">
     
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
@@ -246,13 +247,20 @@
                     <div class="uk-navbar-flip">
                         <ul class="uk-navbar-nav user_actions">
                             <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
-                            <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
-                            
+                        
                             {% if user.profile.designation %}
                             <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
                               
                                 {% if user.profile.status == 'approve' %}
-                                <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a> 
+                                <a href="#" id="user_action_iconb" atval="{{user.pk}}" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i>
+                                    {% for notice in user.users_notice %}
+                                    {% if notice.publish_date >= user.user_last_notice_view.last_seen %}
+                                    <span class="uk-badge nbadge" >  <i class="large material-icons" id="nbadge" style="font-size: 15px;">lens</i>
+                                    </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </a> 
+                                   
                                 {% endif %}
                                 <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
                                     <div class="md-card-content">
@@ -324,7 +332,7 @@
                             {% endif %}
                                 
                             <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                                <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.profile.first_name}} {{user.profile.last_name}}</span></a>
+                                <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
                                 <div class="uk-dropdown uk-dropdown-small">
                                     <ul class="uk-nav js-uk-prevent">
                                         <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -373,14 +381,14 @@
     <!-- main sidebar -->
     <aside id="sidebar_main" >
         
-        <div class="sidebar_main_header" style="position: fixed; top: -7px; z-index: 1;">
+        <div class="institute_logo_top" >
             <div>
-                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="" style="height: 48px;" /> </a>
+                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="institute_logo style="height: 48px;" /> </a>
             </div>
         </div>
         
-        <div class="menu_section" style="position: relative;top: 91px; bottom: 60px; ">
-            <ul style="margin-bottom: 100px;">
+        <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
+            <ul style="margin-bottom: 80px;">
                 <li class="current_section" title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
@@ -452,6 +460,8 @@
               {% endif %}
             {% endfor %}
 
+
+           
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
@@ -509,12 +519,7 @@
                             <span class="menu_title">Attendance</span>
                         </a>
                     </li> 
-                    <li  title="Library">
-                        <a href="{% url 'library' %}">
-                                <span class="menu_icon"><i class="material-icons">local_library</i></span>
-                                <span class="menu_title">Library</span>
-                            </a>
-                        </li> 
+               
 
                     <li  title="Class Students">
                         <a href="{% url 'class_students_list' %}">
@@ -523,6 +528,17 @@
                             </a>
                         </li> 
                     {% endif %}
+
+                    {% for i in user.user_institute_role.level.permissions.all %}    
+                    {% if i.function_name == "Can Manage Library" %}
+                    <li  title="Library">
+                      <a href="{% url 'library' %}">
+                          <span class="menu_icon"><i class="material-icons">local_library</i></span>
+                          <span class="menu_title">Library</span>
+                      </a>
+                  </li>      
+                    {% endif %}
+                  {% endfor %}
                    
 
                     <li  title="Examination">
@@ -591,12 +607,11 @@
                 
             </ul>
         </div>
-        <div class="sidebar_main_header" style="position: fixed;bottom: -35px; z-index: 1;">
-            <div>
+        <div class="global_logo">
             
-                <a href="#" ><img id="slogo" class="img.bottom_logo" style="width:60%;" src="{% static 'main_app/images/blogo1.png' %}" alt=""/> </a>
-            </div>
-        </div></div>
+                <a target="_blank" href="http://globalcredence.com/" ><img  style="max-height: 32px;" src="{% static 'main_app/images/blogo1.png' %}" alt=""/> </a>
+         
+        </div>
     </aside><!-- main sidebar end -->
 
     <div id="page_content">
@@ -1018,6 +1033,7 @@
                 <div class="md-card">
                     <div class="md-card-content">
                         <div class="uk-overflow-container">
+                            {% if user.teacher_class != None %}
                             <table class="uk-table uk-table-hover uk-table-condensed">
                                 <thead>
                                        <div>
@@ -1043,6 +1059,7 @@
                                         
                                 </tbody>
                             </table>
+                            {% endif %}
                             {% if user.users.has_other_pages %}
                                 <ul class="pagination">
                                     {% if user.users.has_previous %}
@@ -1192,12 +1209,12 @@
                                 {% if request.POST %}
                                     {{user.post_child}}
                                 {% else %}
-                                    {{user.first_child.child}}
+                                    {{user.first_child.child.first_name}}
                                 {% endif %}
                                 </option>
                                 {% for child in user.child_par %}
                                 {% if child.status == "active" %}
-                                <option value={{child.child.id}}>{{child.child}}</option>
+                                <option value={{child.child.id}}>{{child.child.first_name}}</option>
                                 {% endif %}
                                 {% endfor %}
                          </select>
@@ -1220,7 +1237,8 @@
                <div class="uk-width-medium-1-2">
                    <div class="md-card">
                        <div class="md-card-content">
-                           <h4>Fess Status</h4>
+                        <h3 class="heading_a uk-margin-bottom">Fess Status</h3>
+                           <!-- <h4>Fess Status</h4> -->
                            <h6 lass="uk-accordion-title" class="on-the">Classes<span class="on-the-fly">Pending Fees</span></h6>
                            <div class="uk-accordion uk-overflow-container dbmh" data-uk-accordion="{showfirst: false}">
                                {% for cl in request.user.l_classes %}
@@ -1683,9 +1701,9 @@
         </div>
 
     </aside>
-    <footer id="footer" class =" md-bg-blue-700 text-white" style ="text-align: right; z-index:1">
+    <footer id="footer" class =" md-bg-blue-700 text-white" style ="text-align: right; z-index:1; height: 47px;">
     
-        &copy; A product of <a href="#" style ="color:white;" >Trueblue AppWerks</a>
+        &copy; A product of <a target="_blank" href="https://www.trueblueappwerks.com" style ="color:white;" >TrueBlue AppWerks</a>
         
     </footer>
 
@@ -1837,7 +1855,10 @@
       
           var calendar = new FullCalendar.Calendar(calendarEl, {
             plugins: [ 'interaction', 'dayGrid' ],
-            
+            header: {
+                left: 'title',
+                right: 'today,dayGridMonth,dayGridWeek,prev,next,'
+            },            
             editable: false,
             eventLimit: true, // allow "more" link when too many events
             events: [

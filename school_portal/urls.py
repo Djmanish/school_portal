@@ -10,6 +10,7 @@ from rest_framework.authtoken import views as authviews
 
 
 urlpatterns = [
+    
     path('admin/', admin.site.urls),
     path('', include('main_app.urls')),
     path('library/', include('library.urls')),
@@ -25,8 +26,8 @@ urlpatterns = [
     path('notice/', include('notices.urls') ),
     path('fees/', include('fees.urls')),
    # API URL
-  path('users/', userList.as_view()),
-  path('users_login_data/', userLoginData.as_view()),
-   path('api-token-auth/', authviews.obtain_auth_token),
+    path('users/', userList.as_view()),
+    path('users_login_data/', userLoginData.as_view()),
+    path('api-token-auth/', authviews.obtain_auth_token),
  
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
