@@ -253,6 +253,7 @@ def book_return(request):
             cat= request.POST.get('book_category') 
             fine= request.POST.get('book_fine') 
             desc= request.POST.get('book_desc')
+            print(fine)
             if cat == "0":  
               messages.error(request, 'Book Not Returned, Please Try Again !')
             else:      
@@ -270,7 +271,7 @@ def book_return(request):
               t.return_date = timezone.now()            
               t.delay_counter=cc
               t.late_fine = lt_fine
-              t.fine = fine
+              t.damage_fine = int(fine)
               t.description= desc
               t.updated_by= request.user.profile
               t.date= td
@@ -445,7 +446,10 @@ def show_qr(request):
             print("Nothng")
             institute_data = request.user.profile.institute
             results= Book.objects.filter(status="active", book_institute=request.user.profile.institute)
-            r = int((results.count()/5)+1) 
+            if results.count() <= 5:
+                  r = 1
+            else:
+                  r = int((results.count()/5)+1) 
             q = []
             col = 5
             initial = 0
