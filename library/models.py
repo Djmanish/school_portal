@@ -1,7 +1,7 @@
 from django.db import models
 from main_app.models import *
 from datetime import date
-# import qrcode
+import qrcode
 from io import BytesIO
 from django.core.files import File
 from PIL import Image, ImageDraw 
@@ -61,7 +61,7 @@ class Book(models.Model):
         unique_together = ['book_code', 'book_id', 'book_institute']
     def __str__(self):
        return self.book_name
-
+    # qr code auto generate
     def save(self, *args, **kwargs):
         qr = qrcode.QRCode(
             version=1,
