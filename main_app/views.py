@@ -36,6 +36,7 @@ from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
 from django.core.exceptions import PermissionDenied
+from rest_framework.authtoken.models import Token
 
 
 
@@ -52,9 +53,15 @@ class userLoginData(APIView):
     permission_classes=(IsAuthenticated,)
 	
     def get(self, request):
-        user1= User.objects.all()
+        user1= User.objects.all().order_by('-id')
+        for user in User.objects.all():
+            Token.objects.get_or_create(user=user)
         serializer = UserSerializer(user1, many=True)
         return Response(serializer.data)
+
+
+    def post(self):
+        pass
     
 
     
@@ -675,7 +682,7 @@ def login(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
-        password =make_password(password)
+        # password =make_password(password)
         
         try:
             g_user = User.objects.get(email= username) # checkng whether user registered or not ?

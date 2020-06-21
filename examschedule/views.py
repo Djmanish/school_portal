@@ -321,20 +321,25 @@ def edit_examschedule(request,pk):
     if request.method=="POST":
           select_exam_subject=request.POST.get('select_exam_subject')
           select_exam_subject_teacher= request.POST.get('select_exam_subject_teacher')
+          selected_subject_teacher=User.objects.get(pk=select_exam_subject_teacher)
+          
           select_date = request.POST.get('select_date')
           select_start_time = request.POST.get('select_start_time')
+          
           select_end_time = request.POST.get('select_end_time')
           assign_teacher = request.POST.get('assign_teacher')
+          selected_assign_teacher=User.objects.get(pk=assign_teacher)
      
           examdetails_info.institute=request.user.profile.institute
           examdetails_info.exam_subject=select_exam_subject
-          examdetails_info.exam_subject_teacher=select_exam_subject_teacher
+          examdetails_info.exam_subject_teacher=selected_subject_teacher
           examdetails_info.exam_date=select_date
           examdetails_info.exam_start_time=select_start_time
+          
 
           examdetails_info.exam_end_time=select_end_time
 
-          # examdetails_info.exam_assign_teacher=assign_teacher
+          examdetails_info.exam_assign_teacher=selected_assign_teacher
 
 
          
