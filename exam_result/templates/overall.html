@@ -556,17 +556,24 @@
                         {% csrf_token %}
                         <tr>
 
-                            <td> <select class="form-control" name="result_exam_type" style="padding: 2px;"
-                                    required>
-                                    <option selected disabled value="">--Select Exam Type--</option>
-                                    <option value="overall">Overall</option>
-
-                                    {% for exam_type in exam_type_list %}
-
-                                    <option value={{exam_type.id}}>{{exam_type}}</option>
-                                    {% endfor %}
-                                </select>
-
+                            <td>
+                                <label class ="required" style="margin: 4px;">Select Exam Type</label> 
+                                <select class="form-control" name="result_exam_type" style="padding: 2px;"
+                                required>
+                                
+                                {% if selected_exam_type.id %}
+                                    
+                                
+                                    
+                                <option selected disabled value="{{selected_exam_type.id}}">{{selected_exam_type.id}}</option>
+                                {% else %}
+                                <option selected  value="">-- Select Class --</option>
+                                <option value="overall">Overall</option>
+                                {% for exam_type in exam_type_list %}
+                                <option value={{exam_type.id}}>{{exam_type}}</option>
+                                {% endfor %}
+                                {% endif %}
+                            </select>
                             </td>
                             <td>
 
@@ -615,14 +622,10 @@
 
                     </form>
         
-        <table
-        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair "
-        id="ts_issues">
+        <table class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
         <tbody >
             <tr>
-                <table class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                
-                id="ts_issues">
+                <table  class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
                
                 <tr>
                     <td  style="width:10%; text-align: left;"><b>Institute Name:&nbsp&nbsp&nbsp {{institute_student}}</b></td>
@@ -630,36 +633,35 @@
 
             </table>
         </tr>
-        <table class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair "
-        id="ts_issues">
+        <table class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
 
        
             
             
             
-            <tr style="text-align: center;background-color: #1976d2; color:white">
-                <td ><b>Subjects</b>
+            <tr >
+                <td >Subjects
                     </td >
               {% for exam  in type_exam %}
               <td></td>
-              <td><b>
+              <td>
                   {{exam}}
               
-              </b></td>
+              </td>
              
               {% endfor %}
           <td></td>
   
   
-              <td><b>Final Score</b></td>
+              <td>Final Score</td>
             </tr>
           
-         
+            
             {% for data in sub_percent_list %}
                     
                  
                     
-            <tr style="text-align: right;">
+            <tr>
                
                 {% for k,v in data.items %}
                 

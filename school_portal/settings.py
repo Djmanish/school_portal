@@ -94,6 +94,8 @@ TEMPLATES = [
     },
 ]
 
+
+
 WSGI_APPLICATION = 'school_portal.wsgi.application'
 
 
@@ -172,8 +174,21 @@ MESSAGE_TAGS = {
 }
 
 REST_FRAMEWORK = {
-  'DEFAULT_AUTHENTICATION_CLASSES': (
-      'rest_framework.authentication.TokenAuthentication',
-      
-    )
+    # 'DEFAULT_PERMISSION_CLASSES': 'rest_framework.pagination.PagenumberPagination',
+   'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.IsAuthenticated',
+        ],
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
+            'rest_framework.authentication.SessionAuthentication',
+            'rest_framework.authentication.TokenAuthentication',
+            'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+           
+           
+        ),
+        # 'PAGE_SIZE':2
 }
+
+
+
+

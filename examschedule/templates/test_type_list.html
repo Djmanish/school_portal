@@ -581,8 +581,7 @@
 
                                                         <div class="uk-overflow-container uk-margin-bottom">
                                                     <table
-                                                    class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                                                    id="ts_issues">
+                                                    class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
                                                    
                                                 
 
@@ -590,7 +589,7 @@
                                                        
                                                        {% if institute_exam_type %}
                                                            
-                                                            <tr style="background-color: #1976d2; color:white; text-align:center;">
+                                                            <tr >
                                                                 <td>Sr. No.</td>
                                                                 <td>Exam Type</td>
                                                                 <td>Maximum Marks</td>
@@ -603,16 +602,16 @@
                                                        
                                                         
                                                             {% for test_type in institute_exam_type %}
-                                                            <tr  style="text-align:center;">
+                                                            <tr  >
                                                                 <td> {{ forloop.counter}}
                                                                 </td>
                                                                 <td>{{test_type.exam_type}}
                                                                 </td>
-                                                                <td>{{test_type.exam_max_marks}}</td>
+                                                                <td style="text-align:center; ">{{test_type.exam_max_marks}}</td>
 
-                                                                <td>{{test_type.exam_max_limit}}</td>
+                                                                <td style="text-align:center;">{{test_type.exam_max_limit}}</td>
 
-                                                                <td>{{test_type.exam_per_final_score}}</td>
+                                                                <td style="text-align:center;">{{test_type.exam_per_final_score}}</td>
                                                                 <td><a   href="{% url 'edit_test_type' test_type.pk%}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                                 </td>
                                                                 <td><a  href="{% url 'delete_test_type' test_type.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
