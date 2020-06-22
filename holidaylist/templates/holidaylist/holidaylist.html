@@ -607,8 +607,8 @@
                                        <th  >Content</th> 
                                         <!-- <th >SMS</th>
                                         <th >Content</th> -->
-                                        <th >Notification</th>
-                                        <th >Content</th>
+                                        <!-- <th >Notification</th>
+                                        <th >Content</th> -->
 
                                         {% if can_edit_holiday_permission in user_permissions %}
                                         <th >Edit</th>
@@ -667,7 +667,7 @@
                                            Link
                                             {% endif %}
                                         </td> -->
-                                        <td >
+                                        <!-- <td >
                                             {{holiday.holiday_notification}}
                    
                                         </td>
@@ -678,7 +678,7 @@
                                             {% else %}
                                            Link
                                             {% endif %}
-                                        </td>
+                                        </td> -->
 
                                             {% if can_edit_holiday_permission in user_permissions %}
                                             <td ><a  class="" href="{% url 'edit_holiday' holiday.pk %}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
