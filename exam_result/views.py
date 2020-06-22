@@ -312,7 +312,9 @@ def report_card(request,pk):
                 for e_no in exam_no:
                   try:
                         student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
+                        
                         data_marks[e_no]=student_data.result_score
+                        
                         
                   except: 
                       data_marks[e_no]=None
@@ -348,7 +350,7 @@ def report_card(request,pk):
                 'student_class':student_class,
                     'select_exam_type':exam_type,
 
-                    ''
+                   
                     'all_exam':all_exam,
                     'exam_no':exam_no,
                     'resultsubject':resultsubject,
@@ -1122,7 +1124,7 @@ def reports_card(request,pk):
                       percentage_sum.append(v)
                 sum=0
                 for per_sum in percentage_sum:
-                    sum=sum+per_sum
+                  sum=sum+per_sum
               
               
 
@@ -1149,7 +1151,7 @@ def reports_card(request,pk):
                     'exam_type_list':exam_type_list,
                     'parent_student_list':parent_student_list,
                     'e_maxmarks':e_maxmarks,
-                    'sum':sum,
+                    
                           }
               return render(request, 'ReportCard.html', context)
 
