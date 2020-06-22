@@ -648,8 +648,8 @@
                                                                             <td> {{ institute_exam_schedule.exam_subject}}</td>
                                                                             <td>{{institute_exam_schedule.exam_subject_teacher.profile.first_name}}</td>
                                                                             <td>{{institute_exam_schedule.exam_date}}</td>
-                                                                            <td>{{institute_exam_schedule.exam_start_time}}</td>
-                                                                            <td>{{institute_exam_schedule.exam_end_time}}</td>
+                                                                            <td>{{institute_exam_schedule.exam_start_time|date:"H:i"}}</td>
+                                                                            <td>{{institute_exam_schedule.exam_end_time|date:"H:i"}}</td>
                                                                             <td>{{institute_exam_schedule.exam_assign_teacher.profile.first_name}} {{institute_exam_schedule.exam_assign_teacher.profile.last_name}}</td>
                                                                             
 

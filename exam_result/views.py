@@ -67,7 +67,7 @@ def exam_result(request,pk):
             pass
           
           else:
-            messages.error(request, 'Current Date does not match with Exam Schedule date!')
+            messages.error(request, 'Current date does not match with exam schedule date!')
                  
             return HttpResponseRedirect(f'/examresult/examresult/{institute_pk}') 
            
@@ -138,7 +138,7 @@ def examresult(request,pk):
             if int(score)<check_limit or int(score)==check_limit:
                               pass
             else:
-                              messages.info(request, 'Entered Marks is greater than the Exam Type Maximum Marks')
+                              messages.info(request, 'Entered marks is greater than the exam type maximum marks')
                               return redirect(f'/examresult/examresult/{inst_id}')
              
             try:
@@ -160,7 +160,7 @@ def examresult(request,pk):
               marks_data.result_max_marks=exam_max_marks
               marks_data.save()
 
-          messages.success(request, 'Exam Result Stored successfully !!!')  
+          messages.success(request, 'Exam result stored successfully !!!')  
           return redirect(f'/examresult/examresult/{inst_id}') 
 
       
