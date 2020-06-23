@@ -25,6 +25,10 @@ from django.db.models.fields.files import ImageFieldFile
 # Create your views here.
 def exam_result(request,pk):
   inst = request.user.profile.institute.id
+      # starting user notice
+  if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
   today_date=datetime.date.today()
   
 
@@ -510,6 +514,10 @@ def report_card(request,pk):
 
 
 def overall_result(request,pk,student_pk):
+      # starting user notice
+  if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
   
   inst = request.user.profile.institute.id
   user_children= AddChild.objects.filter(parent= request.user.profile)
@@ -923,6 +931,10 @@ def overall_result(request,pk,student_pk):
   
 def class_promotion(request,pk):
   inst = request.user.profile.institute.id
+      # starting user notice
+  if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
 
   if pk==inst:
         current_year=datetime.date.today().year
