@@ -891,10 +891,61 @@
                                     </table>
                                 </div>
                             </div>
-                    </div>               
+                    </div>  
+                    </div>  
+                    <div class="uk-width-medium-1-2">
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <h3 class="heading_a uk-margin-bottom">Approvals</h3>
+                                <!-- <div style="width: 300px;height: 300px;">
+                                    <canvas id="myChart" width="200px" height="200px"></canvas>                           
+                
+                                </div> -->
+                                <div id="container" style="width: 100%;height: auto;margin-top: 80px;">
+                                    <canvas id="canvas"></canvas>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>           
                     {% endif %} 
+                    {% if user.profile.designation.level_name == "principal" %}
+               <div class="uk-width-medium-1-2">
+                   <div class="md-card">
+                       <div class="md-card-content">
+                           <h4>Fess Status</h4>
+                           <h6 lass="uk-accordion-title" class="on-the">Classes<span class="on-the-fly">Pending Fees</span></h6>
+                           <div class="uk-accordion uk-overflow-container dbmh" data-uk-accordion="{showfirst: false}">
+                               {% for cl in request.user.l_classes %}
+                               <h3 class="uk-accordion-title" style="color: #0080ff;">{{cl}}<span class="on-the-fly-behavior">{{cl.total_unpaid_student}} Student</span></h3>
+                               <div class="uk-accordion-content">
+                                   
+                                   <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap">
+                                       <thead>
+                                           <tr>
+                                               <th>Student Name</th>
+                                               <th>Due Date</th>
+                                               <th>Fee Status</th>
+                                           </tr>
+                                           </thead>
+                                           <tbody>
+                                               {% for i in cl.total_unpaid %}
+                                               <tr>
+                                                   <td><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
+                                                   <td>{{i.due_date}}</td>
+                                                   <td>Unpaid</td>
+                                               </tr>
+                                           {% endfor %}
+                                       </tbody>
+                                   </table>
+                               </div>
+                               {% endfor %} 
+                           </div>
+                       </div>
+                   </div>
+               </div>               
+               {% endif %}
             
-            {% endif %}
+            
 <!-- Teacher Card -->
         {% if user.profile.designation.level_name == "teacher" %}      
             
@@ -1184,7 +1235,40 @@
             </div>
         </div>
         {% endif %}
-        {% if user.result %}
+        
+        {% if user.student_fees_st_len %}
+            <div class="uk-width-medium-1-2">
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <h4>My Dues</h4>
+                                <table class="uk-table uk-table-condensed uk-table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="uk-text-nowrap">Sr No.</th>
+                                        <th class="uk-text-nowrap">Dues</th>
+                                        <th class="uk-text-nowrap">Amount</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <br>
+                                        {% for sn in user.student_fees_st %}
+                                        <tr>
+                                            <td class="uk-width-3-10 uk-text-nowrap">{{forloop.counter}}</td>
+                                            <td class="uk-width-3-10 uk-text-nowrap">{{sn.due_date}}</td>
+                                            {% if sn.total_due_amount == 0 %}
+                                                <!-- <td class="uk-width-3-10 uk-text-nowrap" style="color:#7cb342"><b>Paid</b></td> -->
+                                            {% else %}
+                                                <td class="uk-width-3-10 uk-text-nowrap">{{sn.total_due_amount}}</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+            </div>               
+        {% endif %} 
+        {% if user.total_sum %}
         <div class="uk-width-medium-1-2">
             <div class="md-card">
                 <div class="md-card-content">
@@ -1221,7 +1305,7 @@
                                     <td>{{user.exam_date1.exam_date|date:"j, M"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
                                 </tr>
                                 {% endif %}
-                                {% endif %}
+                                
                                 <tr>
                                     <td>Max Marks</td>
                                     <td>{{user.exam_type_child.exam_max_marks}}</td>
@@ -1251,7 +1335,7 @@
             </div>
         </div>
         {% endif %}
-    {% endif %}
+        {% endif %}
                     <!-- student library book status -->
 
                     {% if user.student_books %}
@@ -1379,8 +1463,9 @@
          </div>                          
         {% endif %}              
 </div> 
+{% endif %}
 
-                      
+                    
             
            
     <!-- secondary sidebar -->
