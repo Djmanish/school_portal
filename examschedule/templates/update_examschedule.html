@@ -200,7 +200,7 @@
                         {% endif %}
                             
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.profile.first_name}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -599,8 +599,7 @@
                                         <div class="uk-overflow-container uk-margin-bottom">
                                                         
                                                         <table
-                                                        class="uk-table uk-text-nowrap"
-                                                        id="ts_issues">
+                                                        class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
                                                         {% if exam_details %}
                                                         <thead>
                                                             <tr>
@@ -623,8 +622,7 @@
                                                                 {% if exam_details %}
                                                                     
                                                                  
-                                                            
-                                                            <tr  style="background-color: #1976d2; color:white;  text-align:center;">
+                                                            <tr >
                                                                
                                                                 <td>Subject</td>
                                                                 <td>Subject Teacher</td>
@@ -636,21 +634,22 @@
 
                                                                 <td>Edit</td>
                                                                 <td>Delete</td>
+                                                            </tr >
 
                                                                 {% endif %}
                                                                 
-                                                            </tr >
+                                                        
                                                             {% endif %}
                                                            
 
                                                     
                                                                         {% for institute_exam_schedule in exam_details %}
-                                                                        <tr style="text-align:center;">
+                                                                        <tr>
                                                                             <td> {{ institute_exam_schedule.exam_subject}}</td>
                                                                             <td>{{institute_exam_schedule.exam_subject_teacher.profile.first_name}}</td>
                                                                             <td>{{institute_exam_schedule.exam_date}}</td>
-                                                                            <td>{{institute_exam_schedule.exam_start_time}}</td>
-                                                                            <td>{{institute_exam_schedule.exam_end_time}}</td>
+                                                                            <td>{{institute_exam_schedule.exam_start_time|date:"H:i"}}</td>
+                                                                            <td>{{institute_exam_schedule.exam_end_time|date:"H:i"}}</td>
                                                                             <td>{{institute_exam_schedule.exam_assign_teacher.profile.first_name}} {{institute_exam_schedule.exam_assign_teacher.profile.last_name}}</td>
                                                                             
 

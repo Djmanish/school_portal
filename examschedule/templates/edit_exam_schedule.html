@@ -2,67 +2,67 @@
 {% load static %}
 {% load crispy_forms_tags %}
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="en">
+<!--<![endif]-->
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Remove Tap Highlight on Windows Phone IE -->
-    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="msapplication-tap-highlight" content="no" />
 
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
 
     <title>Examination</title>
-  
+
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
 
-   <!-- bootstrap -->
-   <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
     <!-- uikit -->
-    <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
+        media="all">
 
     <!-- flag icons -->
     <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
 
-    
+
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
 
- 
 
-   <!-- matchMedia polyfill for testing media queries in JS -->
+
+    <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.js' %}"></script>
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
-
- 
-</head>
-<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}" </head> <body
+        class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
     <header id="header_main">
         <div class="header_main_content">
             <nav class="uk-navbar">
-                                
+
                 <!-- main sidebar switch -->
                 <a href="#" id="sidebar_main_toggle" class="sSwitch sSwitch_left">
                     <span class="sSwitchIcon"></span>
                 </a>
-                
+
                 <!-- secondary sidebar switch -->
                 <a href="#" id="sidebar_secondary_toggle" class="sSwitch sSwitch_right sidebar_secondary_check">
                     <span class="sSwitchIcon"></span>
                 </a>
-                
-                    <!-- <div id="menu_top_dropdown" class="uk-float-left uk-hidden-small">
+
+                <!-- <div id="menu_top_dropdown" class="uk-float-left uk-hidden-small">
                         <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
                             <a href="#" class="top_menu_toggle"><i class="material-icons md-24">&#xE8F0;</i></a>
                             <div class="uk-dropdown uk-dropdown-width-3">
@@ -114,31 +114,36 @@
                         </div>
                     </div>
                  -->
-                 <div class="uk-navbar-flip">
+                <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav user_actions">
-                        <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
-                    
+                        <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i
+                                    class="material-icons md-24 md-light">fullscreen</i></a></li>
+
                         {% if user.profile.designation %}
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                          
+
                             {% if user.profile.status == 'approve' %}
-                            <a href="#" id="user_action_iconb" atval="{{user.pk}}" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i>
+                            <a href="#" id="user_action_iconb" atval="{{user.pk}}" class="user_action_icon"><i
+                                    class="material-icons md-24 md-light">&#xE7F4;</i>
                                 {% for notice in user.users_notice %}
                                 {% if notice.publish_date >= user.user_last_notice_view.last_seen %}
-                                <span class="uk-badge nbadge" >  <i class="large material-icons" id="nbadge" style="font-size: 15px;">lens</i>
+                                <span class="uk-badge nbadge"> <i class="large material-icons" id="nbadge"
+                                        style="font-size: 15px;">lens</i>
                                 </span>
                                 {% endif %}
-                            {% endfor %}
-                        </a> 
-                               
+                                {% endfor %}
+                            </a>
+
                             {% endif %}
                             <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
                                 <div class="md-card-content">
-                                    <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
-                                        <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
+                                    <ul class="uk-tab uk-tab-grid"
+                                        data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
+                                        <li class="uk-width-1-2 uk-active"><a href="#"
+                                                class="js-uk-prevent uk-text-small">Notices</a></li>
                                         <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
                                     </ul>
-                                    <ul id="header_alerts"  class="uk-switcher uk-margin">
+                                    <ul id="header_alerts" class="uk-switcher uk-margin">
                                         <li>
                                             <ul class="md-list md-list-addon alert_notice_list">
                                                 {% for notice in user.users_notice %}
@@ -148,7 +153,9 @@
                                                             <span class="md-user-letters md-bg-cyan">N</span>
                                                         </div>
                                                         <div class="md-list-content">
-                                                            <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
+                                                            <span class="uk-text-small uk-text-muted">{{notice}} <i
+                                                                    style="color: blue;">{{notice.publish_date}}</i>
+                                                            </span>
                                                         </div>
                                                     </a>
                                                 </li>
@@ -159,38 +166,48 @@
                                             <ul class="md-list md-list-addon">
                                                 <li>
                                                     <div class="md-list-addon-element">
-                                                        <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
+                                                        <i
+                                                            class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading">Voluptatem omnis.</span>
-                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Consequatur eaque natus esse assumenda aut ab quidem.</span>
+                                                        <span
+                                                            class="uk-text-small uk-text-muted uk-text-truncate">Consequatur
+                                                            eaque natus esse assumenda aut ab quidem.</span>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="md-list-addon-element">
-                                                        <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
+                                                        <i
+                                                            class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading">Itaque sit officiis.</span>
-                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Ad velit quia possimus officia adipisci dicta enim.</span>
+                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Ad
+                                                            velit quia possimus officia adipisci dicta enim.</span>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="md-list-addon-element">
-                                                        <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
+                                                        <i
+                                                            class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading">Modi odit impedit.</span>
-                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Inventore unde praesentium numquam amet et sunt dolorum.</span>
+                                                        <span
+                                                            class="uk-text-small uk-text-muted uk-text-truncate">Inventore
+                                                            unde praesentium numquam amet et sunt dolorum.</span>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="md-list-addon-element">
-                                                        <i class="md-list-addon-icon material-icons uk-text-primary">&#xE8FD;</i>
+                                                        <i
+                                                            class="md-list-addon-icon material-icons uk-text-primary">&#xE8FD;</i>
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading">Qui et.</span>
-                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Quia pariatur id facere accusantium rerum illum.</span>
+                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">Quia
+                                                            pariatur id facere accusantium rerum illum.</span>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -200,24 +217,24 @@
                             </div>
                         </li>
                         {% endif %}
-                            
+
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.profile.first_name}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                     <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
                                     <li title="Log Out">
                                         <a href="{% url 'auth_logout' %}">
-                                            
+
                                             <span class="menu_title">Log Out</span>
                                         </a>
                                     </li>
-                                   
+
                                 </ul>
                             </div>
                         </li>
-                      
+
                     </ul>
                 </div>
             </nav>
@@ -226,7 +243,8 @@
             <i class="md-icon header_main_search_close material-icons">&#xE5CD;</i>
             <form class="uk-form uk-autocomplete" data-uk-autocomplete="{source:'data/search_data.json'}">
                 <input type="text" class="header_main_search_input" />
-                <button class="header_main_search_btn uk-button-link"><i class="md-icon material-icons">&#xE8B6;</i></button>
+                <button class="header_main_search_btn uk-button-link"><i
+                        class="md-icon material-icons">&#xE8B6;</i></button>
                 <script type="text/autocomplete">
                     <ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">
                                                 <li data-value="">
@@ -248,238 +266,241 @@
         </div>
     </header><!-- main header end -->
     <!-- main sidebar -->
-    <aside id="sidebar_main" >
-        
-        <div class="institute_logo_top" >
+    <aside id="sidebar_main">
+
+        <div class="institute_logo_top">
             <div>
-                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="institute_logo style="height: 48px;" /> </a>
+                <a href="#" class="user_action_image"><img id="slogo" class="img-logo"
+                        src="{{user.profile.institute.institute_logo.url}}" alt="institute_logo style=" height:
+                        48px;" /> </a>
             </div>
         </div>
-        
+
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
                 <li class="current_section" title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
-                    </a> 
+                    </a>
                 </li>
-                
+
                 <li title="User Profile">
                     <a href="{% url 'user_profile' %}">
                         <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">My Profile</span>
-                    </a>    
+                    </a>
                 </li>
-                
+
                 {% if user.profile.institute == None %}
                 <li title="Admission Query">
                     <a href="{% url 'admission_home' %}">
                         <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">Admission Query</span>
-                    </a>    
+                    </a>
                 </li>
                 {% endif %}
-                    
+
 
                 {% if user.profile.institute and user.profile.status == 'approve' %}
-                <li  title="Institute Profile">
+                <li title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>
-                    </a>    
+                    </a>
                 </li>
-      
-<!-- starting notice menu -->
-<li  title="Notices">
-    <a href="">
-        <span class="menu_icon"><i class="material-icons">notifications_active</i></span>
-        <span class="menu_title">Notifications</span>
-    </a>
-    <ul>
-        <li>
-            <a href="{% url 'all_notice_list'  %}">
-                <span class="menu_icon"><i class="material-icons">notifications</i></span>
-                <span class="menu_title">My Notifications</span>
-            </a>
-        </li> 
 
-        
-        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" %}
-        {% else %}
-        <li>
-            <a href="{% url 'create_notice'  %}">
-                <span class="menu_icon"><i class="material-icons">add_circle</i></span>
-                <span class="menu_title">Create a Notification</span>
-            </a>
-        </li> 
-        {% endif %}
-    </ul>
-</li>
-<!-- ending notice menu -->
-
-{% for i in user.user_institute_role.level.permissions.all %}    
-              {% if i.function_name == "Can Update Lecture Timing" %}
-              <li  title="Fees">
-                <a href="{% url 'fees_home' %}">
-                    <span class="menu_icon"><i class="material-icons">receipt</i></span>
-                    <span class="menu_title">Fees Setup</span>
-                </a>
-            </li>      
-              {% endif %}
-            {% endfor %}
+                <!-- starting notice menu -->
+                <li title="Notices">
+                    <a href="">
+                        <span class="menu_icon"><i class="material-icons">notifications_active</i></span>
+                        <span class="menu_title">Notifications</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{% url 'all_notice_list'  %}">
+                                <span class="menu_icon"><i class="material-icons">notifications</i></span>
+                                <span class="menu_title">My Notifications</span>
+                            </a>
+                        </li>
 
 
-           
-    
-{% if user.profile.designation.level_name == "parent" %}
-<li  title="Fees">
-    <a href="{% url 'parent_fees' %}">
-        <span class="menu_icon"><i class="material-icons">receipt</i></span>
-        <span class="menu_title">Fees Status</span>
-    </a>
-</li>
-{% endif %}
-    
-                <li  title="Holiday List">
+                        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" %}
+                        {% else %}
+                        <li>
+                            <a href="{% url 'create_notice'  %}">
+                                <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                                <span class="menu_title">Create a Notification</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </li>
+                <!-- ending notice menu -->
+
+                {% for i in user.user_institute_role.level.permissions.all %}
+                {% if i.function_name == "Can Update Lecture Timing" %}
+                <li title="Fees">
+                    <a href="{% url 'fees_home' %}">
+                        <span class="menu_icon"><i class="material-icons">receipt</i></span>
+                        <span class="menu_title">Fees Setup</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+
+
+
+                {% if user.profile.designation.level_name == "parent" %}
+                <li title="Fees">
+                    <a href="{% url 'parent_fees' %}">
+                        <span class="menu_icon"><i class="material-icons">receipt</i></span>
+                        <span class="menu_title">Fees Status</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <li title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
                         <span class="menu_title">Holiday List</span>
-                    </a>   
+                    </a>
                 </li>
-                
-               <li  title="Institute Schedule">
-                <a href="{% url 'class_schedule' %}">
-                    <span class="menu_icon"><i class="material-icons">schedule</i></span>
-                    <span class="menu_title">Schedule</span>
-                </a>
-            </li>               
-           
 
-            {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-            <li  title="Admission Requests">
-                <a href="{% url 'admission_requests' %}">
-                    <span class="menu_icon"><i class="material-icons">group_add</i></span>
-                    <span class="menu_title">Admission Requests</span>
-                </a>
-            </li>
+                <li title="Institute Schedule">
+                    <a href="{% url 'class_schedule' %}">
+                        <span class="menu_icon"><i class="material-icons">schedule</i></span>
+                        <span class="menu_title">Schedule</span>
+                    </a>
+                </li>
 
-        {% endif %}
-            
+
+                {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+                <li title="Admission Requests">
+                    <a href="{% url 'admission_requests' %}">
+                        <span class="menu_icon"><i class="material-icons">group_add</i></span>
+                        <span class="menu_title">Admission Requests</span>
+                    </a>
+                </li>
+
+                {% endif %}
+
 
                 {% if user.profile.institute %}
                 {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-                    <li  title="Approvals">
-                        <a href="{% url 'approvals' user.profile.institute.pk %}">
-                            <span class="menu_icon"><i class="material-icons">how_to_reg</i>
-                                {% if user.approval_request > 0 %}
-                                <span class="uk-badge" style="background-color: red;">                                
-                                {{user.approval_request}}                                     
-                                </span>
-                                {% endif %}
+                <li title="Approvals">
+                    <a href="{% url 'approvals' user.profile.institute.pk %}">
+                        <span class="menu_icon"><i class="material-icons">how_to_reg</i>
+                            {% if user.approval_request > 0 %}
+                            <span class="uk-badge" style="background-color: red;">
+                                {{user.approval_request}}
+                            </span>
+                            {% endif %}
                         </span>
-                            <span class="menu_title">Approvals</span>
-                        </a>
-                    </li>
-                    
-                    <li  title="Attendance">
+                        <span class="menu_title">Approvals</span>
+                    </a>
+                </li>
+
+                <li title="Attendance">
                     <a href="{% url 'attendance' %}">
-                            <span class="menu_icon"><i class="material-icons">done_all</i></span>
-                            <span class="menu_title">Attendance</span>
-                        </a>
-                    </li> 
-               
+                        <span class="menu_icon"><i class="material-icons">done_all</i></span>
+                        <span class="menu_title">Attendance</span>
+                    </a>
+                </li>
 
-                    <li  title="Class Students">
-                        <a href="{% url 'class_students_list' %}">
-                                <span class="menu_icon"><i class="material-icons">people</i></span>
-                                <span class="menu_title">Class Students</span>
+
+                <li title="Class Students">
+                    <a href="{% url 'class_students_list' %}">
+                        <span class="menu_icon"><i class="material-icons">people</i></span>
+                        <span class="menu_title">Class Students</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for i in user.user_institute_role.level.permissions.all %}
+                {% if i.function_name == "Can Manage Library" %}
+                <li title="Library">
+                    <a href="{% url 'library' %}">
+                        <span class="menu_icon"><i class="material-icons">local_library</i></span>
+                        <span class="menu_title">Library</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+
+                <li title="Examination">
+
+                    <a href="">
+                        <span class="menu_icon"><i class="material-icons">trending_up</i></span>
+                        <span class="menu_title">Examination</span>
+                    </a>
+                    <ul>
+                        {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
+
+                        <li>
+                            <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                                <span class="menu_title">Create Exam</span>
                             </a>
-                        </li> 
-                    {% endif %}
+                        </li>
 
-                    {% for i in user.user_institute_role.level.permissions.all %}    
-                    {% if i.function_name == "Can Manage Library" %}
-                    <li  title="Library">
-                      <a href="{% url 'library' %}">
-                          <span class="menu_icon"><i class="material-icons">local_library</i></span>
-                          <span class="menu_title">Library</span>
-                      </a>
-                  </li>      
-                    {% endif %}
-                  {% endfor %}
-                   
+                        <li>
+                            <a href="{% url 'examschedule' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                                <span class="menu_title">Create Exam Schedule</span>
+                            </a>
 
-                    <li  title="Examination">
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">visibility</i></span>
+                                <span class="menu_title">View Exam Schedule</span>
+                            </a>
+                        </li>
 
-                        <a href="">
-                            <span class="menu_icon"><i class="material-icons">trending_up</i></span>
-                            <span class="menu_title">Examination</span>
-                        </a>
-                        <ul>
-                            {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
+                        {% if user.profile.designation.level_name == "teacher"%}
+                        <li>
+                            <a href="{% url 'examresult' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">receipt</i></span>
+                                <span class="menu_title">Exam Result</span>
+                            </a>
+                        </li>
+                        <li title="Class Students">
 
-                            <li>
-                                <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
-                                    <span class="menu_title">Create Exam</span>
-                                </a>
-                            </li>
-                            
-                            <li>
-                                <a href="{% url 'examschedule' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
-                                    <span class="menu_title">Create Exam Schedule</span>
-                                </a>
-    
-                            </li>
-                            {% endif %}
-                            <li>
-                                <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
-                                    <span class="menu_title">View Exam Schedule</span>
-                                </a>
-                            </li>
-                           
-                            {% if user.profile.designation.level_name == "teacher"%}
-                            <li>
-                                <a href="{% url 'examresult' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">receipt</i></span>
-                                    <span class="menu_title">Exam Result</span>
-                                </a>
-                            </li>
-                            <li  title="Class Students">
-                    
-                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
-                                        <span class="menu_icon"><i class="material-icons">verified_user</i></span>
-                                        <span class="menu_title">Class Promotion</span>
-                                    </a>
-                                    
-                                </li> 
-                            {% endif %}
-                            {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
-                            
-                        
-                            <li>
-                                <a href="{% url 'report_card' request.user.profile.institute.id %}">
-                                    <span class="menu_icon"><i class="material-icons">file_copy</i></span>
-                                    <span class="menu_title">Report Card</span>
-                                </a>
-    
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </li>
+                            <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">verified_user</i></span>
+                                <span class="menu_title">Class Promotion</span>
+                            </a>
 
-                    {% endif %}  
-                    {% endif %} 
-                
+                        </li>
+                        {% endif %}
+                        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
+
+
+                        <li>
+                            <a href="{% url 'report_card' request.user.profile.institute.id %}">
+                                <span class="menu_icon"><i class="material-icons">file_copy</i></span>
+                                <span class="menu_title">Report Card</span>
+                            </a>
+
+                        </li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                {% endif %}
+                {% endif %}
+
             </ul>
         </div>
         <div class="global_logo">
-            
-                <a target="_blank" href="http://globalcredence.com/" ><img  style="max-height: 32px;" src="{% static 'main_app/images/blogo1.png' %}" alt=""/> </a>
-         
+
+            <a target="_blank" href="http://globalcredence.com/"><img style="max-height: 32px;"
+                    src="{% static 'main_app/images/blogo1.png' %}" alt="" /> </a>
+
         </div>
     </aside><!-- main sidebar end -->
 
@@ -496,81 +517,97 @@
           </div>
             </div>
             {% endif %}
-            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">      
                 <div class="uk-width-large">
+
                     <div class="md-card">
                         <div class="user_heading">
-                            <h2 style="color: white;">Subject Update</h2>
-                            <div class="user_heading_menu hidden-print">
-                                <!--<div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
-                                    <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
-                                    <div class="uk-dropdown uk-dropdown-small">
-                                        
-                                    </div>
-                                </div>-->
-                            </div>
-                            
-                            
-                           
-                        </div>
- <div class="user_content">
-
- 
- <!-- Subject form -->
-                       
- <form  method="POST" action="">
-    {% csrf_token %}
-    <div class="form-group">
-        
-      </div>
-          <div class="form-group">
-            <label >Subject:</label>
-            <input type="text" class="form-control" name='select_exam_subject' value="{{examdetails_info.exam_subject}}" required="required" readonly>
+            <div class="user_heading_avatar">
+                <div class="thumbnail">
+                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
+                </div>
             </div>
-          <div class="form-group">
-            <label >Subject Teacher:</label>
-            <input type="text" class="form-control" name='select_exam_subject_teacher' value="{{examdetails_info.exam_subject_teacher}}" required="required" readonly>
+            <div class="user_heading_content">
+                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading"></span></h2>
 
-          </div>
-          <div class="form-group">
-            <label >Date:</label>
-            <input type="date" class="form-control" name='select_date' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{examdetails_info.exam_date|date:'Y-m-d'}}" >
+            </div>
+            <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
+                <i class="material-icons">&#xE150;</i>
+            </a> -->
+        </div>
 
             
-          </div>
-          <div class="form-group">
-            <label >Start Time:</label>
-            <input type="time" class="form-control" name='select_start_time'   value="{{examdetails_info.exam_start_time}}" required="required">
-
-          </div>
-          <div class="form-group">
-            <label >End Time:</label>
-            <input type="time" class="form-control" name='select_end_time'  value="{{examdetails_info.exam_end_time}}" required="required">
-
-          </div>
-          <div class="form-group">
-            <label for="sel1">Select Subject Teacher</label>
-            <select class="form-control" name="subject_teacher" required>
-                <option selected value="{{examdetails_info.exam_assign_teacher.id}}">{{examdetails_info.exam_assign_teacher}}</option>
-              
-              {% for teacher in institute_teachers %}
-                  <option value='{{teacher.pk}}'>{{teacher}}</option>
-              {% endfor %}
-                  
     
-            </select>
-        </div>
-        
-              <button type="submit" class="md-btn md-btn-primary">Update</button>
-</form>
+                        <div class="user_content">
+
+
+                            <!-- Subject form -->
+
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <div class="form-group">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Subject:</label>
+                                    <input type="text" class="form-control" name='select_exam_subject'
+                                        value="{{examdetails_info.exam_subject}}" required="required" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sel1">Subject Teacher</label>
+                                    <select class="form-control" name="select_exam_subject_teacher" required="required" readonly>
+                                        <option selected value="{{examdetails_info.exam_subject_teacher.id}}" >
+                                            {{examdetails_info.exam_subject_teacher.profile.first_name}} {{examdetails_info.exam_subject_teacher.profile.last_name}}</option>
+
+                                     
+
+
+                                    </select>
+                                </div>
+            
+                                <div class="form-group">
+                                    <label>Date:</label>
+                                    <input type="date" class="form-control" name='select_date' pattern="^[0-9-]{10}$"
+                                        placeholder="YYYY-MM-DD" value="{{examdetails_info.exam_date|date:'Y-m-d'}}" required="required">
+
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Start Time:</label>
+                                    <input type="time" class="form-control" name='select_start_time' 
+                                        value="{{examdetails_info.exam_start_time|time:'H:i'}}" required="required">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>End Time:</label>
+                                    <input type="time" class="form-control" name='select_end_time'
+                                        value="{{examdetails_info.exam_end_time|time:'H:i'}}" required="required">
+
+                                </div>
+                                <div class="form-group">
+                                    <label for="sel1">Assign Teacher</label>
+                                    <select class="form-control" name="assign_teacher" required="required">
+                                        <option selected value="{{examdetails_info.exam_assign_teacher.id}}">
+                                            {{examdetails_info.exam_assign_teacher.profile.first_name}}  {{examdetails_info.exam_assign_teacher.profile.last_name}}</option>
+
+                                        {% for teacher in institute_teachers %}
+                                        <option value='{{teacher.pk}}'>{{teacher.first_name}} {{teacher.last_name}}</option>
+                                        {% endfor %}
+
+
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="md-btn md-btn-primary">Update</button>
+                            </form>
 
 
 
-                            
- </div>
-                                   
-</div>
-</div>
+
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -585,10 +622,10 @@
                 ]
             }
         };
-        (function() {
+        (function () {
             var wf = document.createElement('script');
             wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+                '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
             wf.type = 'text/javascript';
             wf.async = 'true';
             var s = document.getElementsByTagName('script')[0];
@@ -605,75 +642,76 @@
 
 
     <script>
-        $(function() {
-            if(isHighDensity()) {
-                $.getScript( "assets/js/custom/dense.min.js", function(data) {
+        $(function () {
+            if (isHighDensity()) {
+                $.getScript("assets/js/custom/dense.min.js", function (data) {
                     // enable hires images
                     altair_helpers.retina_images();
                 });
             }
-            if(Modernizr.touch) {
+            if (Modernizr.touch) {
                 // fastClick (touch devices)
                 FastClick.attach(document.body);
             }
         });
-        $window.load(function() {
+        $window.load(function () {
             // ie fixes
             altair_helpers.ie_fix();
         });
     </script>
 
 
-    
-    
-<!-- code to toggle admin options -->
-<script>
-        $(document).ready(function(){
-            $('#defaultUnchecked').click(function(){
-                if($(this).prop("checked") == true){
+
+
+    <!-- code to toggle admin options -->
+    <script>
+        $(document).ready(function () {
+            $('#defaultUnchecked').click(function () {
+                if ($(this).prop("checked") == true) {
                     $('#institute_list').hide()
                     $('#institute-options').show()
                 }
-                else if($(this).prop("checked") == false){
+                else if ($(this).prop("checked") == false) {
                     $('#institute-options').hide()
                     $('#institute_list').show()
                 }
             });
         });
-    
+
     </script>
 
-<!-- ending code to toggle admin options -->
+    <!-- ending code to toggle admin options -->
 
-<script>
-    $("input[type=date]").datepicker({
-  dateFormat: 'yy-mm-dd',
-  onSelect: function(dateText, inst) {
-    $(inst).val(dateText); // Write the value in the input
-  }
-});
+    <script>
+        $("input[type=date]").datepicker({
+            dateFormat: 'yy-mm-dd',
+            onSelect: function (dateText, inst) {
+                $(inst).val(dateText); // Write the value in the input
+            }
+        });
 
-// Code below to avoid the classic date-picker
-$("input[type=date]").on('click', function() {
-  return false;
-});
-</script>
-
-<script>
-    $(document).ready(function(){
-      $('#select_school').change(function(){
-          $.ajax({
-              type:'POST',
-              url:'/fetch_levels/',
-              data:{school_id:$("#select_school").val(), csrfmiddlewaretoken: '{{ csrf_token }}' },
-              
-              success: function(msg){
-                  $('#fdata').html(msg);
-              }
-          })
-      })
-    })
+        // Code below to avoid the classic date-picker
+        $("input[type=date]").on('click', function () {
+            return false;
+        });
     </script>
-   
-</body>
+
+    <script>
+        $(document).ready(function () {
+            $('#select_school').change(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/fetch_levels/',
+                    data: { school_id: $("#select_school").val(), csrfmiddlewaretoken: '{{ csrf_token }}' },
+
+                    success: function (msg) {
+                        $('#fdata').html(msg);
+                    }
+                })
+            })
+        })
+    </script>
+
+    </body>
+
 </html>

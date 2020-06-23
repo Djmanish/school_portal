@@ -200,7 +200,7 @@
                         {% endif %}
                             
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.profile.first_name}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -575,8 +575,7 @@
                                                         <div class="uk-overflow-container uk-margin-bottom">
                                                         
                                                         <table
-                                                        class="uk-table uk-text-nowrap"
-                                                        id="ts_issues">
+                                                        class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
                                                         {% if institute_students %} 
                                                         <thead>
 
@@ -601,7 +600,7 @@
                                                                
                                                                 
                                                          
-                                                            <tr style="background-color: #1976d2; color:white; text-align:center">
+                                                            <tr >
                                                                
                                                                 <td >S.No.</td>
                                                                 <td >First Name</td>
@@ -624,29 +623,29 @@
                                                                      {% for student in institute_students %}
                                                                      
                                                                      
-                                                            <tr style="text-align-last: center;">
+                                                            <tr >
                                                                   <td >
                                                                         {{ forloop.counter}}
                                                                      </td>
                                                                     
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select  id="text_center" style="overflow:hidden; text-align-last: center; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="student_first_name" >
-                                                                                  <option id="text_center"  value="{{student.id}}">{{student.first_name}}</option>
+                                                                                <select style="overflow:hidden;  -webkit-appearance: none;   border:1px solid white !important;" class="form-control"  name="student_first_name" >
+                                                                                  <option  value="{{student.id}}">{{student.first_name}}</option>
                                                                                 </select>
                                                                               </div>
                                                                               
                                                                         </td>
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select style="overflow:hidden; text-align-last: center; -webkit-appearance: none; width:150px; background-color: white; border:none;" class="form-control"  name="student_last_name">
+                                                                                <select style="overflow:hidden;  -webkit-appearance: none;  border:1px solid white !important;" class="form-control"  name="student_last_name">
                                                                                   <option  value="{{student.id}}">{{student.last_name}}</option>
                                                                                 </select>
                                                                               </div>
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <select style="overflow:hidden; text-align-last: center; -webkit-appearance: none; width:50px; background-color: white; border:none;" class="form-control"  name="student_roll_no">
+                                                                                <select style="overflow:hidden;  -webkit-appearance: none;   border:1px solid white !important;" class="form-control"  name="student_roll_no">
                                                                                   <option  value="{{student.id}}">{{student.roll_number}}</option>
                                                                                 </select>
                                                                               </div>
@@ -654,7 +653,7 @@
                                                                         
                                                                         
                                                                        <td >
-                                                                           <input type="text" name="student_marks" value="{{student.existing_marks}}"class="positive_number" required></input>
+                                                                           <input type="text" style="text-align: center;" name="student_marks" value="{{student.existing_marks}}"class="positive_number" required></input>
                                                                        </td>
                                                                     
                                                             </tr>

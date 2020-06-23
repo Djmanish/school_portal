@@ -198,7 +198,7 @@
                         {% endif %}
                             
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.profile.first_name}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -568,8 +568,7 @@
                                                             <div class="uk-overflow-container uk-margin-bottom">
                                                        
                                                         <table 
-                                                        class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                                                        id="ts_issues">
+                                                        class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
                                                         {% if exam_class_subject %}
                                                         <thead>
                                                             <tr>
@@ -608,7 +607,7 @@
                                                            
 
                                                           
-                                                             <tr style="background-color: #1976d2; color:white; text-align:center;">
+                                                             <tr>
                                                                 <td>Subject</td>
                                                                 <td>Subject Teacher</td>
                                                                 <td>Date</td>
@@ -651,26 +650,26 @@
                                                           
                                                                     {% for exam_subject in exam_class_subject%}
                                                                     <tr> 
-                                                                        <td  style="text-align:center; text-align-last: center;">
+                                                                        <td >
                                                                             <div class="form-group">
-                                                                                <select  style="width:150px; background-color: white;-webkit-appearance:none; border:none;" class="form-control"  name="select_exam_subject" required>
+                                                                                <select  style=" background-color: white;-webkit-appearance:none; border:1px solid white !important;" class="form-control"  name="select_exam_subject" required>
                                                                                   <option  value="{{exam_subject.id}}">{{exam_subject}}</option>
                                                                                 </select>
                                                                               </div>
                                                                             
                                                                         </td>
-                                                                        <td  style="text-align:center; text-align-last: center;">
+                                                                        <td >
                                                                             <div class="form-group">
-                                                                                <select id="hide"  style=" width:150px; background-color: white; -webkit-appearance:none; border:none;" class="form-control"  name="select_exam_subject_teacher" required>
+                                                                                <select id="hide"  style=" background-color: white; -webkit-appearance:none;border:1px solid white !important;" class="form-control"  name="select_exam_subject_teacher" required>
                                                                                   <option  value="{{exam_subject.subject_teacher.id}}">{{exam_subject.subject_teacher.profile.first_name}} {{exam_subject.subject_teacher.profile.last_name}}</option>
                                                                                 </select>
                                                                               </div>
                                                                        
                                                                            </td>
-                                                                        <td  style="text-align:center; text-align-last: center;"><div class="form-group"><input type='date', class="form-control", value="", name="select_date" required/></div></td>
-                                                                        <td  style="text-align:center; text-align-last: center;"><div class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value='', min = '00:01', max = '23:59:59', name="select_start_time" required/></div></td>
-                                                                        <td  style="text-align:center; text-align-last: center;"><div class="form-group"><input type='time', onchange="onTimeChange()" ,  class="form-control", value='',min = '00:01',max = '23:59:59', name="select_end_time" required/></div></td>
-                                                                        <td  style="text-align:center; text-align-last: center;">  <div class="form-group">
+                                                                        <td ><div class="form-group"><input type='date', class="form-control", value="", name="select_date" required/></div></td>
+                                                                        <td ><div class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value='', min = '00:01', max = '23:59:59', name="select_start_time" required/></div></td>
+                                                                        <td ><div class="form-group"><input type='time', onchange="onTimeChange()" ,  class="form-control", value='',min = '00:01',max = '23:59:59', name="select_end_time" required/></div></td>
+                                                                        <td  >  <div class="form-group">
                                                                            
                                                                             <select class="form-control" name="assign_teacher" required>
                                                                                 <option value="" selected disabled>--Assign Teacher--</option>
