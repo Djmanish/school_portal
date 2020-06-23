@@ -640,6 +640,7 @@
 {% if user.profile.status == "approve" %}
             <!-- statistics (small charts) -->
             {% if user.profile.designation %}
+            <!-- Small Cards for Student Dashboard -->
             {% if user.profile.designation.level_name == "student" %}
                 <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
                     <div>
@@ -684,6 +685,7 @@
                     </div>
                     
                 </div>
+            <!-- Small Card for other users -->
             {% else %}
                 <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
                     <div>
@@ -726,12 +728,12 @@
                 </div>
             {% endif %}
             {% endif %}
-                
+            <!--end of all small card  -->
 
             
             
 
-            <!-- large chart -->
+            <!-- Child card only visible to parent -->
             {% if user.profile.institute %}
             {% if user.profile.designation.level_name == "parent"%}
             <div class="uk-grid">
@@ -833,89 +835,98 @@
                     </div>
                 </div>
             </div>{% endif %}{% endif %}
+            <!-- End Child card only visible to parent -->
 
-            <!-- circular charts -->
-            
-            {% if user.profile.designation %}
-            {% if  user.profile.designation.level_name == "student"  %}
-            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-                <div class="uk-width-medium-1-2">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <h4>My Attendance</h4>
-                            <div class="uk-overflow-container">
-                                <table class="uk-table uk-table-condensed uk-table-hover">
-                                    <thead>
-                                       
-                                    </thead>
-                                    <tbody>
-                                        <br>
-                                      
-                                        <tr>
-                                            <td>Total Days Attendance Taken</td>
-                                             <td>{{user.student_total_days_school_open|default:0}}</td>
-                                           </tr>
-
-                                           <tr>
-                                            <td>Total Days Present</td>
-                                             <td>{{user.student_total_days_present|default:0}}</td>
-                                           </tr>
-
-                                           <tr>
-                                            <td>Total Days Absent</td>
-                                             <td>{{user.student_total_days_absent|default:0}}</td>
-                                           </tr>
-
-                                           <tr>
-                                            <td>Total Days Leave Taken</td>
-                                             <td>{{user.student_total_days_leave|default:0}}</td>
-                                           </tr>
-
-                                           <tr>
-                                            <td>Attendance Percentage</td>
-                                             <td>{{user.student_attendance_percentage|default:0}}%</td>
-                                           </tr>
-                                    </tbody>
-                                </table>
+            <!-- Start 1-2 cards -->  
+        <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+<!-- Principal & Admin -->
+            {% if  user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "admin" %}
+                    <div class="uk-width-medium-1-2">
+                        <div class="md-card">
+                        
+                            <div class="md-card-content">
+                                <h3 class="heading_a uk-margin-bottom">Today's Class Status </h3>
+                            
+                                <div class="uk-overflow-container dbmh " >
+                                    <table class="uk-table uk-table-condensed uk-table-hover">
+                                    
+                                        <thead>
+                                            <tr>
+                                                <th >Class</th>
+                                                <th >Students</th>
+                                                <th >Present</th>
+                                                <th >Absent</th>
+                                                <th >Leave</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="TCS">
+                                            {% for class in all_classes %}
+                                            <tr class="uk-table-middle">
+                                                <td ><a href="{% url 'current_attendance_record' class.pk %}">{{class}}</a></td>
+                                                <td >{{class.total_student}}</td>
+                                                <td >{{class.total_present}}</td>
+                                                <td >{{class.total_absent}}</td>
+                                                <td >{{class.total_leave}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                {% if request.user.profile.designation.level_name == "student" %}
-                <div class="uk-width-medium-1-2">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <h4>Classmates</h4>
-                            <div class="uk-overflow-container">
-                                <table class="uk-table uk-table-condensed uk-table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th class="uk-text-nowrap" style="text-align: center;">SI No</th>
-                                            <th class="uk-text-nowrap" style="text-align: center;margin-left: 0px;">Image</th>
-                                            <th class="uk-text-nowrap" style="text-align: center;">Student Name</th>                                                                       
-                                        </tr>                                       
-                                    </thead>
-                                    <tbody>
-                                        {% for stdr in std_random %}
-                                        <tr>
-                                        <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;">{{forloop.counter}}</td>
-                                        <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;margin-left: 0px;">
-                                            <img class="md-card-head-avatar" src="{{stdr.profile_pic.url}}" style="width: 40px; height: 40px; margin-top: 0%;" alt=""/>
-                                        </td>
-                                        <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;"><a href="#">{{stdr.first_name}} {{stdr.last_name}}</a></td>
-                                        </tr>   
-                                        {% endfor %}                                    
-                                    </tbody>
-                                </table>
+                    <div class="uk-width-medium-1-2">
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <h3 class="heading_a uk-margin-bottom">Approvals</h3>
+                                <div id="container" style="width: 100%;height: auto;">
+                                    <canvas id="canvas"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                {% endif %}
-            </div>
-           {% elif user.profile.designation.level_name == "teacher" %}      
+                    {% if user.profile.designation.level_name == "principal" %}
+                    <div class="uk-width-medium-1-2">
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <h3 class="heading_a uk-margin-bottom">Fess Status</h3>
+                                <!-- <h4>Fess Status</h4> -->
+                                <h6 lass="uk-accordion-title" class="on-the">Classes<span class="on-the-fly">Pending Fees</span></h6>
+                                <div class="uk-accordion uk-overflow-container dbmh" data-uk-accordion="{showfirst: false}">
+                                    {% for cl in request.user.l_classes %}
+                                    <h3 class="uk-accordion-title" style="color: #0080ff;">{{cl}}<span class="on-the-fly-behavior">{{cl.total_unpaid_student}} Student</span></h3>
+                                    <div class="uk-accordion-content">
+                                        
+                                        <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>Student Name</th>
+                                                    <th>Due Date</th>
+                                                    <th>Fee Status</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for i in cl.total_unpaid %}
+                                                    <tr>
+                                                        <td><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
+                                                        <td>{{i.due_date}}</td>
+                                                        <td>Unpaid</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {% endfor %} 
+                                </div>
+                            </div>
+                        </div>
+                    </div>               
+                    {% endif %} 
             
-           <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+            {% endif %}
+<!-- Teacher Card -->
+        {% if user.profile.designation.level_name == "teacher" %}      
+            
             {% if user.user_subject_one_len > 0 %}
             <div class="uk-width-medium-1-2">
                 <div class="md-card">
@@ -993,7 +1004,7 @@
                 
             </div>
             {% endif %}
-            {% if final_data > 0 %}
+            
             <div class="uk-width-medium-1-2">
                 <div class="md-card">
                     <div class="md-card-content">
@@ -1027,7 +1038,7 @@
 
                 
             </div>
-            {% endif %}
+            
             {% if user.total_unpaid_student %}
             <div class="uk-width-medium-1-2">
                 <div class="md-card">
@@ -1048,10 +1059,8 @@
                                     {% for i in user.total_unpaid_student %}
                                     
                                     <tr>  
-                                        {% if i.student.status == 'approve' %}                                      
                                         <td class="uk-width-3-10 uk-text-nowrap"><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
                                         <td class="uk-width-3-10 uk-text-nowrap" style="color: red;">Unpaid</td>                                        
-                                        {% endif %}
                                     </tr>
                                     {% endfor %}
                                     
@@ -1087,359 +1096,320 @@
 
                 
             </div>
-            {% endif %}
-            </div>
+            {% endif %}            
+        {% endif %}
+        {% if  user.profile.designation.level_name == "parent" %}            
             
-            {% elif  user.profile.designation.level_name == "parent" %}
-            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-                {% if user.user_child_fee_status.status == "active" %}
-                <div class="uk-width-medium-1-2">
-                    <div class="">
-                        <div class="md-card-content">
-                            <div class="md-card uk-margin-medium-bottom">
-                                <div class="md-card-content">
-                                    <div class="uk-overflow-container">
-                                        <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap">
-                                            <h3 class="heading_a uk-margin-bottom">Fees Status</h3>
-                                            
-                                            {% if user.user_child_fee_status %}
-                                            <thead>
-                                                <tr>
-                                                    <th>Student Name</th>
-                                                    <th>Earliest Due Date</th>
-                                                    <th>Amount</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% else %}
-                                                    <h4>No Pending dues...</h4>   
-                                            {% endif %}
-                                                
-                                            
-                                                
-                                                {% for stfs in request.user.user_child_fee_status %}
-                                                {% if stfs.status == "active" %}
-                                                    <tr>
-                                                        <td><a href="{% url 'parent_fees' %}">{{stfs.student.first_name}} {{stfs.student.last_name|default:""}}</a></td>
-                                                        <td>{{stfs.due_date}}</td>
-                                                        <td>{{stfs.total_due_amount}}</td>
-                                                    </tr>
-                                                {% endif %}
-                                                {% endfor %}
-                                                    
-                                                
-                                              
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-           
-
-            {% else %}
-   <!-- tasks -->
-                <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-                    <div class="uk-width-medium-1-2">
-                        <div class="md-card">
-                        
+            <div class="uk-width-medium-1-2">
+                <div class="">
+                    <div class="md-card-content">
+                        <div class="md-card uk-margin-medium-bottom">
                             <div class="md-card-content">
-                                <h3 class="heading_a uk-margin-bottom">Today's Class Status </h3>
-                            
-                                <div class="uk-overflow-container dbmh " >
-                                    <table class="uk-table uk-table-condensed uk-table-hover">
-                                    
+                                <div class="uk-overflow-container">
+                                    <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap">
+                                        <h3 class="heading_a uk-margin-bottom">Fees Status</h3>
+                                        
+                                        {% if user.user_child_fee_status %}
                                         <thead>
                                             <tr>
-                                                <th >Class</th>
-                                                <th >Students</th>
-                                                <th >Present</th>
-                                                <th >Absent</th>
-                                                <th >Leave</th>
+                                                <th>Student Name</th>
+                                                <th>Earliest Due Date</th>
+                                                <th>Amount</th>
                                             </tr>
-                                        </thead>
-                                        <tbody id="TCS">
-                                            {% for class in all_classes %}
-                                            <tr class="uk-table-middle">
-                                                <td ><a href="{% url 'current_attendance_record' class.pk %}">{{class}}</a></td>
-                                                <td >{{class.total_student}}</td>
-                                                <td >{{class.total_present}}</td>
-                                                <td >{{class.total_absent}}</td>
-                                                <td >{{class.total_leave}}</td>
-                                            </tr>
-                                            {% endfor %}
+                                            </thead>
+                                            <tbody>                                       
+                                            {% for stfs in request.user.user_child_fee_status %}
+                                            
+                                                <tr>
+                                                    <td><a href="{% url 'parent_fees' %}">{{stfs.student.first_name}} {{stfs.student.last_name|default:""}}</a></td>
+                                                    <td>{{stfs.due_date}}</td>
+                                                    <td>{{stfs.total_due_amount}}</td>
+                                                </tr>
+                                            {% endfor %} 
                                         </tbody>
+                                        {% else %}
+                                        <h4>No Pending dues...</h4>   
+                                        {% endif %}
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="uk-width-medium-1-2">
+                </div>
+            </div>
+        {% endif %}
+        <!-- Student Cards -->
+        {% if  user.profile.designation.level_name == "student"  %}
+        <div class="uk-width-medium-1-2">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <h4>My Attendance</h4>
+                    <div class="uk-overflow-container">
+                        <table class="uk-table uk-table-condensed uk-table-hover">
+                            <thead>
+                               
+                            </thead>
+                            <tbody>
+                                <br>
+                              
+                                <tr>
+                                    <td>Total Days Attendance Taken</td>
+                                     <td>{{user.student_total_days_school_open|default:0}}</td>
+                                   </tr>
+
+                                   <tr>
+                                    <td>Total Days Present</td>
+                                     <td>{{user.student_total_days_present|default:0}}</td>
+                                   </tr>
+
+                                   <tr>
+                                    <td>Total Days Absent</td>
+                                     <td>{{user.student_total_days_absent|default:0}}</td>
+                                   </tr>
+
+                                   <tr>
+                                    <td>Total Days Leave Taken</td>
+                                     <td>{{user.student_total_days_leave|default:0}}</td>
+                                   </tr>
+
+                                   <tr>
+                                    <td>Attendance Percentage</td>
+                                     <td>{{user.student_attendance_percentage|default:0}}%</td>
+                                   </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if std_random %}
+        <div class="uk-width-medium-1-2">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <h4>Classmates</h4>
+                    <div class="uk-overflow-container">
+                        <table class="uk-table uk-table-condensed uk-table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="uk-text-nowrap" style="text-align: center;">SI No</th>
+                                    <th class="uk-text-nowrap" style="text-align: center;margin-left: 0px;">Image</th>
+                                    <th class="uk-text-nowrap" style="text-align: center;">Student Name</th>                                                                       
+                                </tr>                                       
+                            </thead>
+                            <tbody>
+                                {% for stdr in std_random %}
+                                <tr>
+                                <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;">{{forloop.counter}}</td>
+                                <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;margin-left: 0px;">
+                                    <img class="md-card-head-avatar" src="{{stdr.profile_pic.url}}" style="width: 40px; height: 40px; margin-top: 0%;" alt=""/>
+                                </td>
+                                <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;"><a href="#">{{stdr.first_name}} {{stdr.last_name}}</a></td>
+                                </tr>   
+                                {% endfor %}                                    
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if user.result %}
+        <div class="uk-width-medium-1-2">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <h4>My Results</h4>
+                    <div class="uk-overflow-container">
+                        <table class="uk-table uk-table-condensed uk-table-hover">
+                            <thead>
+                            
+                            </thead>
+                            <tbody>
+                                <br>
+                                <tr>
+                                    <td>Exam Sr No.</td>
+                                    <td>{{user.exam_type_child.exam_type_sr_no}}</td>
+                                </tr>
+                                    <tr>
+                                    <td>Exam</td>
+                                    <td>{{user.exam_type_child}}</td>
+                                </tr>
+                                {% if user.exam_date1 == None and user.exam_date2 == None%}
+                                <tr>
+                                    <td>Exam Date</td>
+                                    <td>N/A</td>
+                                </tr>
+                                
+                                {% elif user.exam_date1.exam_date|date:"M" == user.exam_date2.exam_date|date:"M" %}
+                                <tr>
+                                    <td>Exam Date</td>
+                                    <td>{{user.exam_date1.exam_date|date:"j"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td>Exam Date</td>
+                                    <td>{{user.exam_date1.exam_date|date:"j, M"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
+                                </tr>
+                                {% endif %}
+                                {% endif %}
+                                <tr>
+                                    <td>Max Marks</td>
+                                    <td>{{user.exam_type_child.exam_max_marks}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Marks Obtained</td>
+                                    {% if user.total_sum == 0 %}
+                                    <td>Marks Not Uploaded</td>
+                                    {% else %}
+                                    <td>{{user.total_sum}}</td>
+                                    {% endif %}
+                                </tr>
+
+                                <tr>
+                                    <td>Result</td>
+                                    {% if user.total_sum == 0 %}
+                                    <td>N/A</td>
+                                    {% else %}
+                                    <td>{{user.result}}</td>
+                                    {% endif %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endif %}
+                    <!-- student library book status -->
+
+                    {% if user.student_books %}
+                    {% if request.user.profile.designation.level_name != "parent" %} 
+                    <div class="uk-width-medium-1-2">         
                         <div class="md-card">
                             <div class="md-card-content">
-                                <h3 class="heading_a uk-margin-bottom">Approvals</h3>
-                                <div id="container" style="width: 100%;height: auto;">
-                                    <canvas id="canvas"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
- 
-            {% endif %}
-                
-            
-            <!-- info cards -->
-<div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
-               
-               {% if user.profile.designation %}
-               <div class="uk-width-medium-1-2">
-                <div class="md-card">
-                    {% if user.profile.designation.level_name == "parent" %}
-                        {% if user.count > 1 %}
-                        <form  method="POST" action="#" class="form-inline" id="parent_calendar_form">
-                            {% csrf_token %}
-                              <label style="margin: 4px;">Select Child:  </label>
-                                <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
-                                {% if request.POST %}
-                                    {{user.post_child}}
-                                {% else %}
-                                    {{user.first_child.child.first_name}}
-                                {% endif %}
-                                </option>
-                                {% for child in user.child_par %}
-                                {% if child.status == "active" %}
-                                <option value={{child.child.id}}>{{child.child.first_name}}</option>
-                                {% endif %}
-                                {% endfor %}
-                         </select>
-                        <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary md-btn-mini ">
-                        </form>
-                        {% endif %}
-                        {% endif %}
-                    <div class="md-card-content">
-                        
-                        
-                        <div id='calendar'></div>
-                        
-                        </div>
-                                             
-                    </div>
-                </div>
-                             
-               {% endif %}
-               {% if user.profile.designation.level_name == "principal" %}
-               <div class="uk-width-medium-1-2">
-                   <div class="md-card">
-                       <div class="md-card-content">
-                        <h3 class="heading_a uk-margin-bottom">Fess Status</h3>
-                           <!-- <h4>Fess Status</h4> -->
-                           <h6 lass="uk-accordion-title" class="on-the">Classes<span class="on-the-fly">Pending Fees</span></h6>
-                           <div class="uk-accordion uk-overflow-container dbmh" data-uk-accordion="{showfirst: false}">
-                               {% for cl in request.user.l_classes %}
-                               <h3 class="uk-accordion-title" style="color: #0080ff;">{{cl}}<span class="on-the-fly-behavior">{{cl.total_unpaid_student}} Student</span></h3>
-                               <div class="uk-accordion-content">
-                                   
-                                   <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap">
-                                       <thead>
-                                           <tr>
-                                               <th>Student Name</th>
-                                               <th>Due Date</th>
-                                               <th>Fee Status</th>
-                                           </tr>
-                                           </thead>
-                                           <tbody>
-                                               {% for i in cl.total_unpaid %}
-                                               <tr>
-                                                   <td><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
-                                                   <td>{{i.due_date}}</td>
-                                                   <td>Unpaid</td>
-                                               </tr>
-                                           {% endfor %}
-                                       </tbody>
-                                   </table>
-                               </div>
-                               {% endfor %} 
-                           </div>
-                       </div>
-                   </div>
-               </div>               
-               {% endif %}   
-               
-                <!-- student library book status -->
-
-                {% if user.student_books %}
-                {% if request.user.profile.designation.level_name != "parent" %} 
-                <div class="uk-width-medium-1-2">         
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <div >
-                            <table class="uk-table uk-table-condensed uk-table-hover">
-                                    <thead>
-                                        <div class="row">
-                                            <div class="col-sm-6" >
-                                            <h3 class="heading_a ">Library Book Issue</h3>
-                                            </div>
-                                            <div class="col-sm-6 text-center">
-                                                {% if user.booksdue > 0 %}
-                                                <h3 class="heading_a uk-margin-bottom">Book(s) Delayed:<span style="color: red; font-weight:bold;">{{user.booksdue}}</span></h3>
-                                                {%endif%}
-                                            </div>
-                                        </div>
-                                        
-                                            <tr>
-                                            <th class="uk-text-nowrap">Book Name</th>
-                                            <th class="uk-text-nowrap">Due Date</th>
-                                            </tr>
-                                    </thead>
-                                    <tbody>
-                                    
-                                        {% for stdr in user.student_books %}
-                                            <tr class="uk-table-middle">
-                                            <td class="uk-width-3-10 uk-text-nowrap">{{stdr.book_name}}</td>
-                                            <td class="uk-width-3-10 uk-text-nowrap" >{{stdr.expiry_date.date}}</td>
-                                            </tr>
-                                    
-                                        {% endfor %}
-                                    </tbody>
-                                
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                                
-                <!-- parent library book status -->
-                {% endif %}
- 
-                {% if request.user.profile.designation.level_name == "parent" %}
-                    
-                <div class="uk-width-medium-1-2">
-                        
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <div >
-                            <table class="uk-table uk-table-condensed uk-table-hover">
-                                    <thead>
-                                        <div class="row">
-                                            <div class="col-sm-6" >
-                                            <h3 class="heading_a ">Book Issue By Student(s)</h3>
+                                <div >
+                                <table class="uk-table uk-table-condensed uk-table-hover">
+                                        <thead>
+                                            <div class="row">
+                                                <div class="col-sm-6" >
+                                                <h3 class="heading_a ">Library Book Issue</h3>
+                                                </div>
+                                                <div class="col-sm-6 text-center">
+                                                    {% if user.booksdue > 0 %}
+                                                    <h3 class="heading_a uk-margin-bottom">Book(s) Delayed:<span style="color: red; font-weight:bold;">{{user.booksdue}}</span></h3>
+                                                    {%endif%}
+                                                </div>
                                             </div>
                                             
-                                            <div class="col-sm-6 text-center">
-                                                {% if user.booksdue > 0 %}
-                                                <h3 class="heading_a uk-margin-bottom">Book(s) Delayed:<span style="color: red; font-weight:bold;">{{user.booksdue}}</span></h3>
-                                                {%endif%}
-                                            </div>
-                                        </div>
-                                        
-                                            <tr>
-                                            <th class="uk-text-nowrap">Book Name</th>
-                                            <th class="uk-text-nowrap">Due Date</th>
-                                            </tr>
-                                    </thead>
-                                    <tbody>
-                                    
-                                        {% for stdr in user.student_books %}
-                                            <tr class="uk-table-middle">
-                                            <td class="uk-width-3-10 uk-text-nowrap">{{stdr.book_name}}</td>
-                                            <td class="uk-width-3-10 uk-text-nowrap" >{{stdr.expiry_date.date}}</td>
-                                            </tr>
-                                    
-                                        {% endfor %}
-                                    </tbody>
-                                
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-                {% endif %}
- 
-         
-
-
-
-
-                {% if user.exam_type_child %}
-               {% if user.profile.designation.level_name == "student" %}
-               <!-- {% if user.exam_type_child != None %} -->
-                    <div class="uk-width-medium-1-2">
-                        <div class="md-card">
-                            <div class="md-card-content">
-                                <h4>My Results</h4>
-                                <div class="uk-overflow-container">
-                                    <table class="uk-table uk-table-condensed uk-table-hover">
-                                        <thead>
-                                        
+                                                <tr>
+                                                <th class="uk-text-nowrap">Book Name</th>
+                                                <th class="uk-text-nowrap">Due Date</th>
+                                                </tr>
                                         </thead>
                                         <tbody>
-                                            <br>
-                                            <tr>
-                                                <td>Exam Sr No.</td>
-                                                <td>{{user.exam_type_child.exam_type_sr_no}}</td>
-                                            </tr>
-                                                <tr>
-                                                <td>Exam</td>
-                                                <td>{{user.exam_type_child}}</td>
-                                            </tr>
-                                            {% if user.exam_date1 == None and user.exam_date2 == None%}
-                                            <tr>
-                                                <td>Exam Date</td>
-                                                <td>N/A</td>
-                                            </tr>
-                                            
-                                            {% elif user.exam_date1.exam_date|date:"M" == user.exam_date2.exam_date|date:"M" %}
-                                            <tr>
-                                                <td>Exam Date</td>
-                                                <td>{{user.exam_date1.exam_date|date:"j"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
-                                            </tr>
-                                            {% else %}
-                                            <tr>
-                                                <td>Exam Date</td>
-                                                <td>{{user.exam_date1.exam_date|date:"j, M"}} to {{user.exam_date2.exam_date|date:"j, M, Y"}}</td>
-                                            </tr>
-                                            {% endif %}
-                                            {% endif %}
-                                            <tr>
-                                                <td>Max Marks</td>
-                                                <td>{{user.exam_type_child.exam_max_marks}}</td>
-                                            </tr>
-        
-                                            <tr>
-                                                <td>Marks Obtained</td>
-                                                {% if user.total_sum == 0 %}
-                                                <td>Marks Not Uploaded</td>
-                                                {% else %}
-                                                <td>{{user.total_sum}}</td>
-                                                {% endif %}
-                                            </tr>
-        
-                                            <tr>
-                                                <td>Result</td>
-                                                {% if user.total_sum == 0 %}
-                                                <td>N/A</td>
-                                                {% else %}
-                                                <td>{{user.result}}</td>
-                                                {% endif %}
-                                            </tr>
+                                        
+                                            {% for stdr in user.student_books %}
+                                                <tr class="uk-table-middle">
+                                                <td class="uk-width-3-10 uk-text-nowrap">{{stdr.book_name}}</td>
+                                                <td class="uk-width-3-10 uk-text-nowrap" >{{stdr.expiry_date.date}}</td>
+                                                </tr>
+                                        
+                                            {% endfor %}
                                         </tbody>
+                                    
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <!-- {% endif %} -->
-                {% endif %}{% endif %}
+                                    
+                    <!-- parent library book status -->
+                    {% endif %}
+     
+                    {% if request.user.profile.designation.level_name == "parent" %}
+                        
+                    <div class="uk-width-medium-1-2">
+                            
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <div >
+                                <table class="uk-table uk-table-condensed uk-table-hover">
+                                        <thead>
+                                            <div class="row">
+                                                <div class="col-sm-6" >
+                                                <h3 class="heading_a ">Book Issue By Student(s)</h3>
+                                                </div>
+                                                
+                                                <div class="col-sm-6 text-center">
+                                                    {% if user.booksdue > 0 %}
+                                                    <h3 class="heading_a uk-margin-bottom">Book(s) Delayed:<span style="color: red; font-weight:bold;">{{user.booksdue}}</span></h3>
+                                                    {%endif%}
+                                                </div>
+                                            </div>
+                                            
+                                                <tr>
+                                                <th class="uk-text-nowrap">Book Name</th>
+                                                <th class="uk-text-nowrap">Due Date</th>
+                                                </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            {% for stdr in user.student_books %}
+                                                <tr class="uk-table-middle">
+                                                <td class="uk-width-3-10 uk-text-nowrap">{{stdr.book_name}}</td>
+                                                <td class="uk-width-3-10 uk-text-nowrap" >{{stdr.expiry_date.date}}</td>
+                                                </tr>
+                                        
+                                            {% endfor %}
+                                        </tbody>
+                                    
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+        <!-- Calendar -->
+        {% if user.profile.designation %}
+        <div class="uk-width-medium-1-2">
+            <div class="md-card">
+             {% if user.profile.designation.level_name == "parent" %}
+                 {% if user.count > 1 %}
+                 <form  method="POST" action="#" class="form-inline" id="parent_calendar_form">
+                     {% csrf_token %}
+                       <label style="margin: 4px;">Select Child:  </label>
+                         <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
+                         {% if request.POST %}
+                             {{user.post_child}}
+                         {% else %}
+                             {{user.first_child.child.first_name}}
+                         {% endif %}
+                         </option>
+                         {% for child in user.child_par %}
+                         {% if child.status == "active" %}
+                         <option value={{child.child.id}}>{{child.child.first_name}}</option>
+                         {% endif %}
+                         {% endfor %}
+                  </select>
+                 <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary md-btn-mini ">
+                 </form>
+                 {% endif %}
+                 {% endif %}
+             <div class="md-card-content">
+                 
+                 
+                 <div id='calendar'></div>
+                 
+                 </div>
+                                      
+            </div>
+         </div>                          
+        {% endif %}              
 </div> 
-          
-               
+
+                      
             
            
     <!-- secondary sidebar -->

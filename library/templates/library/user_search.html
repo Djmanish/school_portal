@@ -11,6 +11,7 @@
                                 <th>Designation</th>
                                 {% if des == 0 %}
                                 <th>Class</th>
+                                <th>Roll No.</th>
                                 {% endif %}
                                 <th>Action</th>
                             </tr>
@@ -26,6 +27,7 @@
                                 <td>{{i.designation}}</td>
                                 {% if des == 0 %}
                                 <td>{{i.Class}}</td>
+                                <td>{{i.roll_number}}</td>
                                 {% endif %}
                                 <td>
                                     <a id="{{i.id|slugify}}"  style=" margin-left:0%;vertical-align:middle; font-size: 16px; font-weight: bold;color: #1976d2;">Issue</a>
