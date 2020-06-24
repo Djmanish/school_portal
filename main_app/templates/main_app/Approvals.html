@@ -523,6 +523,11 @@
                             <ul class="uk-tab" data-uk-tab="{connect:'#tabs_1_content'}" id="tabs_1">
                                 <li class="uk-active"><a href="#">Pending</a></li>
                                 <li><a href="#">Approved</a></li>
+                                {% if user.profile.designation.level_name == "principal" %}
+                                <li><a href="#">Role Change Requests</a></li>
+                                {% endif %}
+                                
+
                                 <!-- <li><a href="#">Disaproved</a></li> -->
                                 
                             </ul>
@@ -842,6 +847,7 @@
                                     </div>
                                     {% endif %}
                                 </li>
+                                <!-- starting role change tab list -->
                                 <li>
                                     <div id="">
                                         <div class="md-card">
@@ -850,47 +856,39 @@
                                                     <table
                                                         class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
+                                                        <h4>Role Change Requests</h4>
                                                         <thead>
                                                             <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
+                                                                <th >SI No.</th>
                                                                 <th>Name</th>
-                                                                <th>Designation</th>
+                                                                <th>Current Role</th>
                         
-                                                                <th>Request Date</th>
-                                                                <th>Action Date</th>
-                                                                <th>Status</th>
-                                                                <th style="text-align: left;">Permission</th>
+                                                                <th>New Assigned Role</th>
+                                                               <th>Action</th>
+                                                                
+                                                              
                                                             </tr>
                                                         </thead>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <th class="uk-text-center">Sr No.</th>
-                                                                <th>Name</th>
-                                                                <th>Designation</th>
-                                                                <th>Request Date</th>
-                                                                <th>Action Date</th>
-                                                                <th>Status</th>
-                                                                <th style="text-align: left">Permission</th>
-                                                            </tr>
-                                                        </tfoot>
+                                                       
                                                         <tbody>
-                                                                {% for inactive in Inactive_user %}
-                                                                <tr>
-                                                                    <th style="text-align: center;"> {{ forloop.counter}} </th>
-                                                                    <td> {{inactive.first_name }} {{inactive.last_name }}</td>
-                                                                    <td> {{inactive.designation }} </td>
-                                                                    <td> {{inactive.created_at}} </td>
-                                                                    <td> {{inactive.updated_at}} </td>
-                                                                    <td style="text-align: left;"> {{inactive.status}}  </td>
-                                                                    <td style="text-align: left;"> <div class="uk-width-medium-1-6">
-                                                                            <a class="md-btn md-btn-flat approve_btn md-btn-flat-primary md-btn-wave" href="{% url 'user_approval' inactive.pk %}">Approve</a>
-                                                                        </div>
-                                                                        </td>
-                                                                </tr>
-                                                                {% endfor %}
+                                                            
+                                                            {% for role_change in role_change_requests  %}
+                                                               <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{role_change.user.first_name}} {{role_change.user.last_name}}</td>
+        <td>{{role_change.current_role|capfirst}}</td>
+        <td>{{role_change.new_role|capfirst}}</td>
+        <td><div>
+            <a class="md-btn md-btn-flat md-btn-flat-primary md-btn-wave approve_btn" href=" {% url 'role_change_approved' role_change.pk %}">Approve</a>
+            <a class="md-btn md-btn-flat md-btn-flat-danger md-btn-wave disapprove_btn" href="{% url 'role_change_disapproved' role_change.pk %}">Disapprove</a>
+        </div></td>
+                                                               </tr>
+                                                            {% endfor %}
+                                                                
+                                                              
                                                         </tbody>
                                 </li>
-                                
+                                <!-- ending role change tab list -->
                             </ul>
                             
                         </div>

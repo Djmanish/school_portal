@@ -203,3 +203,24 @@ class Institute_disapproved_user(models.Model):
     user = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name="disapproved_from")
     applied_role = models.ForeignKey(to= Institute_levels, on_delete=models.SET_NULL, null=True)
     date = models.DateField()
+
+
+class User_Role_changes(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Disapproved', 'Disapproved'),
+       
+    ]
+    user = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='user_role_change')
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='institute_role_changes', null=True, blank=True)
+    request_date = models.DateTimeField()
+    current_role = models.ForeignKey(to=Institute_levels, on_delete=models.PROTECT, related_name='current_role')
+    new_role = models.ForeignKey(to=Institute_levels, on_delete=models.PROTECT, related_name='assigning_role')
+    action_date = models.DateTimeField(null=True)
+    status = models.CharField(max_length=15, choices = STATUS_CHOICES, default="Pending")
+    request_by = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, null=True, related_name='created_role_change')
+    action_by = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return str(self.user.first_name)
