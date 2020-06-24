@@ -25,6 +25,10 @@ from django.db.models.fields.files import ImageFieldFile
 # Create your views here.
 def exam_result(request,pk):
   inst = request.user.profile.institute.id
+      # starting user notice
+  if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
   today_date=datetime.date.today()
   
 
@@ -312,7 +316,9 @@ def report_card(request,pk):
                 for e_no in exam_no:
                   try:
                         student_data=ExamResult.objects.get(exam_type=exam_type,exam_sr_no=e_no, result_student_data=request.user,result_subject=sub_data)
+                        
                         data_marks[e_no]=student_data.result_score
+                        
                         
                   except: 
                       data_marks[e_no]=None
@@ -348,7 +354,7 @@ def report_card(request,pk):
                 'student_class':student_class,
                     'select_exam_type':exam_type,
 
-                    ''
+                   
                     'all_exam':all_exam,
                     'exam_no':exam_no,
                     'resultsubject':resultsubject,
@@ -508,6 +514,10 @@ def report_card(request,pk):
 
 
 def overall_result(request,pk,student_pk):
+      # starting user notice
+  if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
   
   inst = request.user.profile.institute.id
   user_children= AddChild.objects.filter(parent= request.user.profile)
@@ -921,6 +931,10 @@ def overall_result(request,pk,student_pk):
   
 def class_promotion(request,pk):
   inst = request.user.profile.institute.id
+      # starting user notice
+  if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
 
   if pk==inst:
         current_year=datetime.date.today().year
@@ -1122,7 +1136,7 @@ def reports_card(request,pk):
                       percentage_sum.append(v)
                 sum=0
                 for per_sum in percentage_sum:
-                    sum=sum+per_sum
+                  sum=sum+per_sum
               
               
 
@@ -1149,7 +1163,7 @@ def reports_card(request,pk):
                     'exam_type_list':exam_type_list,
                     'parent_student_list':parent_student_list,
                     'e_maxmarks':e_maxmarks,
-                    'sum':sum,
+                    
                           }
               return render(request, 'ReportCard.html', context)
 

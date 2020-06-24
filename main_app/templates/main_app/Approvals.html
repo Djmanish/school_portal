@@ -587,6 +587,7 @@
                         
                                             </div>
                                         </div>
+                                        {% if request.user.profile.designation.level_name == "teacher" %}
                                         <div class="md-card">
                                             <div class="md-card-content">
                                                 <h4>Parents Requests</h4>
@@ -639,7 +640,7 @@
                         
                                             </div>
                                         </div>
-                        
+                                        {% endif %}
                                     </div>
                                 </li>
                                 
@@ -691,6 +692,7 @@
                         
                                             </div>
                                         </div>
+                                        {% if request.user.profile.designation.level_name == "teacher" %}
                                          <div class="md-card">
                                             <div class="md-card-content">
                                                 <h4>Parents Requests</h4>
@@ -742,7 +744,7 @@
                         
                                             </div>
                                         </div>
-                        
+                                        {% endif %}
                                     </div>
                                     {% endif %}
                                     {% if  user.profile.designation.level_name == "teacher" %}
@@ -792,6 +794,7 @@
                         
                                             </div>
                                         </div>
+                                        {% if request.user.profile.designation.level_name == "teacher" %}
                                          <div class="md-card">
                                             <div class="md-card-content">
                                                 <h4>Parents Requests</h4>
@@ -843,7 +846,7 @@
                         
                                             </div>
                                         </div>
-                        
+                                        {% endif %}
                                     </div>
                                     {% endif %}
                                 </li>

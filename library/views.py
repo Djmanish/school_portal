@@ -16,6 +16,7 @@ from rest_framework.authtoken.models import Token
 
 
 
+
 # Create your views here.
 def library(request):
     institute_data=Institute.objects.get(pk = request.user.profile.institute.id)
@@ -31,12 +32,17 @@ def library(request):
           sh_books= Book.objects.filter(book_code=b.code, book_institute=b.book_institute,status="active").count()
           b.count=sh_books
     lib_set= LibrarySettings.objects.get(institute=request.user.profile.institute)
+    cat = BookCategory.objects.filter(institute_category=request.user.profile.institute)
+    for i in cat:
+          i.name= i
+          i.sub = BookSubCategory.objects.filter(parent_category=i.name, institute_subcategory=request.user.profile.institute)
     
      # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
     context_data = {
+      'cat':cat,
       'institute_data':institute_data,
       'categories':categories, 
       'books':books,   
@@ -545,3 +551,4 @@ class UserCreate(APIView):
                 return Response(json, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

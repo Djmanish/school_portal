@@ -13,6 +13,10 @@ from django.core.exceptions import PermissionDenied
 # Create your views here.
 
 def create_test_type(request,pk):
+            # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+         # ending user notice
         inst = request.user.profile.institute.id
 
         if pk==inst:        
@@ -48,6 +52,10 @@ def create_test_type(request,pk):
 
     
 def edit_test_type(request, pk):
+            # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     test_type_info= ExamType.objects.get(pk=pk)
     # institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
     
@@ -90,6 +98,10 @@ def delete_test_type(request, pk):
 
 
 def exam_schedule(request,pk):
+            # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
         inst = request.user.profile.institute.id
 
         if pk!=inst:
@@ -155,6 +167,10 @@ def exam_schedule(request,pk):
         return render(request,'examschedule.html',context)
 
 def create_exam_schedule(request, pk):
+            # starting user notice
+        if request.user.profile.designation:
+                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
         
         institute_exam_schedule_data = Institute.objects.get(pk=pk)
         institute_exam_schedule = ExamDetails.objects.filter(institute=institute_exam_schedule_data)
@@ -206,6 +222,10 @@ def create_exam_schedule(request, pk):
  
 
 def examschedule_view(request,pk):
+        # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
         inst = request.user.profile.institute.id
 
         if pk==inst:
@@ -314,6 +334,10 @@ def examschedule_view(request,pk):
                 raise PermissionDenied
 
 def edit_examschedule(request,pk):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     examdetails_info= ExamDetails.objects.get(pk=pk)
     designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
     institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
@@ -357,6 +381,10 @@ def edit_examschedule(request,pk):
     return render(request, 'edit_exam_schedule.html', context)
 
 def delete_examschedule(request, pk):
+        # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
         examdetails_info= ExamDetails.objects.get(pk=pk)
       
         examdetails_info.exam_subject="null"
