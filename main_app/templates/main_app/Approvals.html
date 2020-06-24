@@ -476,6 +476,9 @@
                 <a target="_blank" href="http://globalcredence.com/" ><img  style="max-height: 32px;" src="{% static 'main_app/images/blogo1.png' %}" alt=""/> </a>
          
         </div>
+    
+   
+   
     </aside><!-- main sidebar end -->
 
     <div id="page_content">
@@ -483,7 +486,7 @@
             
             {% if messages %}
             <div class="md-card md-card-primary">
-          <div class=>
+          <div >
               <ul class="messages alert">
                   {% for message in messages %}
                   <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
@@ -642,6 +645,9 @@
                                         </div>
                                         {% endif %}
                                     </div>
+                                    <footer id="footer" >
+                                        &copy; A product of <a target="_blank" id="tblf" href="https://www.trueblueappwerks.com" >TrueBlue AppWerks</a>
+                                    </footer>   
                                 </li>
                                 
                                 <li>
@@ -849,6 +855,9 @@
                                         {% endif %}
                                     </div>
                                     {% endif %}
+                                    <footer id="footer" >
+                                        &copy; A product of <a target="_blank" id="tblf" href="https://www.trueblueappwerks.com" >TrueBlue AppWerks</a>
+                                    </footer>   
                                 </li>
                                 <!-- starting role change tab list -->
                                 <li>
@@ -860,6 +869,8 @@
                                                         class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
                                                         <h4>Role Change Requests</h4>
+                                                        
+                                                        {% if role_change_requests %}
                                                         <thead>
                                                             <tr>
                                                                 <th >SI No.</th>
@@ -871,7 +882,12 @@
                                                                 
                                                               
                                                             </tr>
-                                                        </thead>
+                                                        </thead>  
+                                                        {% else %}
+                                                        <h5 class="text-center">No Pending Requests</h5> 
+                                                        {% endif %}
+                                                            
+                                                        
                                                        
                                                         <tbody>
                                                             
@@ -890,6 +906,9 @@
                                                                 
                                                               
                                                         </tbody>
+                                                        <footer id="footer" >
+                                                            &copy; A product of <a target="_blank" id="tblf" href="https://www.trueblueappwerks.com" >TrueBlue AppWerks</a>
+                                                        </footer>   
                                 </li>
                                 <!-- ending role change tab list -->
                             </ul>
@@ -898,7 +917,15 @@
                     </div>
                 </div>
             </div>
-
+        </div>
+       
+    
+    
+    
+    </div>
+            
+           
+  
     <!-- google web fonts -->
     <script>
         WebFontConfig = {
@@ -948,7 +975,6 @@
     </script>
 
 
-   
-    
+
 </body>
 </html>
