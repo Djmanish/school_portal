@@ -678,7 +678,7 @@
                                     <li class="uk-active"><a href="#">Issue Book</a></li>
                                      <li><a href="#">Return Books</a></li>                                     
                                      <li><a href="#">Books</a></li>
-                                     <!-- <li><a href="#">QR-Codes</a></li>                    -->
+                                     <li><a href="#">Categories</a></li>                   
                                     
                                          
                                     
@@ -1086,25 +1086,40 @@
                                         
                                     </li>                                             
                                 <!-- Add Book Tab End -->
-                                <!--Start Fine Tab-->
+                                <!--Start category Tab-->
                                 <li>
                                     <div class="uk-grid" data-uk-grid-margin>
                                         <div class="uk-width-medium-1-8" >
-                                            <form  method="POST" action="{% url 'show_qr' %}" class="form-inline" id="qr_form">
-                                                {% csrf_token %}
-                                            
-                                                <label class ="required" style="margin: 4px;">Enter Book Code</label>
-                                                <input id="book_code" type="text" class="form-control-sm form-control" name="qr_book_code" required>
-                                                
+                                            <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"  data-uk-modal="{target:'#modal_new_category'}" >
+                                                <i class="uk-icon-list-ul"></i>
+                                                Add Category
+                                            </a>
+                                            <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"   data-uk-modal="{target:'#modal_new_sub_category'}" >
+                                                <i class="uk-icon-list"></i>
+                                                Add Sub Category
+                                            </a>
                                         
-                                                <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">          
-                                                <a href="{% url 'see_all' %}">See All</a>
-                                            </form>
-                                            
+                                    <div class="md-card uk-margin-medium-bottom">
+                                        <div class="md-card-content">
+                                            <h3 class="heading_a uk-margin-bottom">Institute Categories</h3>
+                                            <div class="uk-accordion" data-uk-accordion="{showfirst: false}">
+                                                {% for i in cat %}
+                                                <h3 class="uk-accordion-title">{{i}}</h3>
+                                                
+                                                <div class="uk-accordion-content">
+                                                    <h4>Sub Categories</h4>
+                                                    {% for j in i.sub %}
+                                                        <p>{{forloop.counter}}. {{j}}</p> 
+                                                    {% endfor %}
+                                                </div>                                            
+                                                {% endfor %}                                            
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
                                 </li>
-                                <!--End Fine Tab-->
+                                <!--End category Tab-->
                                         </div>
                             <!-- <div class="uk-grid" data-uk-grid-margin style="margin-left: 30px;">
                                 <div class="uk-width-medium-1-5" >
@@ -1200,6 +1215,9 @@
             </div>
         </div>
     </div>
+    <footer id="footer" >
+        &copy; A product of <a target="_blank" id="tblf" href="https://www.trueblueappwerks.com" >TrueBlue AppWerks</a>
+    </footer> 
 
     <!-- google web fonts -->
     <script>

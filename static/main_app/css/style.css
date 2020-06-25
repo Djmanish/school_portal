@@ -419,3 +419,14 @@ border-radius: 2px;
 #sidebar_main .menu_section>ul>li>a{
   padding: 5px 20px !important;
 }
+#footer{
+  background-color: #1976d2;
+  text-align: right;
+   z-index:1;
+    height: 47px;
+     color: white;
+}
+#tblf{
+  font-weight: 900;
+   color: white;
+}
