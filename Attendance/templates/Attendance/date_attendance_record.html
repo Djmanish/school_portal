@@ -520,12 +520,12 @@
                     <form  method="POST" action="#" class="form-inline" id="attendance_form">
                         {% csrf_token %}
                     
-                          <label style="margin: 4px;">Select Class:  </label>
+                          <label class = "required" style="margin: 4px;">Select Class</label>
                         <select name="selected_class_attendance" class="form-control"  required>
                             {% if selected_class_for_attendance %}
                             <option selected  value="{{selected_class_for_attendance.id}}" >   {{ selected_class_for_attendance}}</option>
                             {% else %}
-                            <option selected  value="">-- select a class --</option>
+                            <option selected  value="">-- Select Class --</option>
                             
                             {% endif %}
                                 
@@ -534,7 +534,7 @@
                             {% endfor %}
                      </select>
                       
-                     <label style="margin: 4px;">Attendance Date:</label>
+                     <label class= "required" style="margin: 4px;">Attendance Date</label>
 
 
   <input   type="date" class="form-control" name="attendance_date" 

@@ -512,7 +512,7 @@
                                                      
                                                     </td>
                                                     <td>
-
+                                                    
                                                     </td>
                                                     
                                                     {% if user.profile.designation.level_name == "parent" %}
@@ -527,7 +527,7 @@
 
                                                         {% for student in parent_student_list %}
                                                         
-                                                           <option value={{student.id}}>{{student}}</option>
+                                                           <option value={{student.id}}>{{student.first_name}} {{student.last_name}}</option>
                                                         {% endfor %}
                                                    
                                                  </select>
