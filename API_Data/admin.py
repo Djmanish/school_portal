@@ -1,5 +1,5 @@
-from django.contrib import admin
-from .models import *
+# from django.contrib import admin
+# from API_Data.models import *
 
-# Register your models here.
-admin.site.register(API_Data)
+# # Register your models here.
+# admin.site.register(API_Data)
