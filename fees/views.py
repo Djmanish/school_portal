@@ -14,6 +14,7 @@ from paytm import checksum
 from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 # Create your views here.
 
 def fees_home(request):
@@ -319,7 +320,8 @@ def processing_fees(request):
         except:
             messages.info(request, "No student to process fees !")
         # starting checking if data already processed
-        if_already = Student_Tag_Processed_Record.objects.filter(institute = request.user.profile.institute, due_date = request.user.profile.institute.institute_schedule.due_date ).first()
+
+        if_already = Student_Tag_Processed_Record.objects.filter(Q(institute = request.user.profile.institute, due_date__year = request.user.profile.institute.institute_schedule.due_date.year) & Q(institute = request.user.profile.institute, due_date__month = request.user.profile.institute.institute_schedule.due_date.month) ).first()
         if if_already:
             return HttpResponse('fees already processed for this due date')
         # ending checking if data already processed
@@ -403,7 +405,7 @@ def fees_pay_page(request):
         "TXN_AMOUNT" : str(amount),
 
         # on completion of transaction, we will send you the response on this URL
-        "CALLBACK_URL" : "http://localhost:8000/fees/handle_requests/",
+        "CALLBACK_URL" : "http://trueblueappworks.com/fees/handle_requests/",
     }
         
 

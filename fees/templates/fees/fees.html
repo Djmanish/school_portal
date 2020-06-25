@@ -596,8 +596,9 @@
                                            <a href="{% url 'fees_tag_history' %}"> <b><i class="material-icons uk-text-primary">history</i> Tag Updates Full History</b></a>
                                            <div class="uk-modal" id="modal_new_tag">
                                                <div class="uk-modal-dialog">
+                                                <button type="button" class="uk-modal-close uk-close"></button>
                                                    <div class="uk-modal-header">
-                                                       <h3 class="uk-modal-title">Add New Tag </h3>
+                                                    <h3 class="uk-text-primary">Add New Tag</h3>
                                                    </div>
                                                    <form method="POST" action="{% url 'create_fee_tag' %}">
                                                        {% csrf_token %}
@@ -735,7 +736,7 @@
    success: function(msg){
        $("#myModal").modal("hide");
        if (msg == 'fees already processed for this due date'){
-           alert('Fees for this due date already processed');
+           alert('Fees for this due date already processed !');
            location.reload();
        }else{
            window.location.href = msg;
@@ -1013,7 +1014,7 @@
        </div>
        <input type="text" class="form-control"  id="myInput" placeholder="Search a student name in list ...">
      </div>
-      <select data-live-search="true"  id="myDIV" class="form-control mso multiple_student_tag persons" name="selected_students" multiple style="min-height: 200px; " >
+      <select  id="myDIV" class="form-control mso multiple_student_tag persons" name="selected_students" multiple style="min-height: 200px; " >
          <option  disabled value="">   --- select students ---</option>
 
         {% for student in all_students %}
@@ -1353,7 +1354,7 @@ $('#unselectAll').click(function() {
 
 
     
-<script>
+<!-- <script>
     
 $('document').ready(function(){ 
   $('option').mousedown(function(e) {
@@ -1362,7 +1363,7 @@ $('document').ready(function(){
     return false;
 });
 })
-</script>
+</script> -->
   
 </body>
 

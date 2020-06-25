@@ -355,7 +355,8 @@ def dashboard(request):
     # class attendance status 
     
     # Library Book Status
-    if request.user.profile.designation != "parent":
+    if request.user.profile.designation:
+        if request.user.profile.designation != "parent":
             request.user.student_books=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
             request.user.booksdue=IssueBook.objects.filter(user_name= request.user.profile, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
           
@@ -370,26 +371,32 @@ def dashboard(request):
            
 
 # starting library status for parent view
-    if request.user.profile.designation.level_name == "parent":
-              
-        request.user.user_child_books_status = []
-        user_children= AddChild.objects.filter( parent= request.user.profile)
-        print(user_children)
-        parent_student_list = []
-        for books in user_children:
-            student= UserProfile.objects.get(pk=books.child.id)
-            parent_student_list.append(student)
+        if request.user.profile.designation.level_name == "parent":
+                
+            request.user.user_child_books_status = []
+            user_children= AddChild.objects.filter( parent= request.user.profile)
+            print(user_children)
+            parent_student_list = []
+            for books in user_children:
+                student= UserProfile.objects.get(pk=books.child.id)
+                parent_student_list.append(student)
+                
+            # if(len(user_children)>0):
+            #     student_lib = Students_fees_table.objects.filter(student__in= parent_student_list )
+            #     request.user.user_child_books_status = student_lib
+    
+
+            request.user.student_books=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
             
-        request.user.student_books=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True) 
-        request.user.booksdue=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
-        
-        count_delay=timezone.now()
-        for i in request.user.student_books:
-               
-            if count_delay > i.expiry_date:
-                i.delay = count_delay - i.expiry_date
-            else:
-                i.delay = 0 
+            request.user.booksdue=IssueBook.objects.filter(user_name__in= parent_student_list, issue_book_institute=request.user.profile.institute,return_date__isnull=True,expiry_date__lt=timezone.now()).count()
+            
+            count_delay=timezone.now()
+            for i in request.user.student_books:
+                
+                if count_delay > i.expiry_date:
+                    i.delay = count_delay - i.expiry_date
+                else:
+                    i.delay = 0 
     
 
 # starting class teacher's  class status for last six days
@@ -436,11 +443,11 @@ def dashboard(request):
     # Active Users Count
     time= timezone.now()- datetime.timedelta(minutes=3)
     time1= timezone.now()
-    count=User.objects.filter(last_login__gte=time,last_login__lte=time1)
+    count=UserProfile.objects.filter(user__last_login__gte=time,user__last_login__lte=time1)
     
     online_user=[]
     for i_user in count:
-        if i_user.profile.institute==request.user.profile.institute:
+        if i_user.institute==request.user.profile.institute:
             online_user.append(i_user)
 
     len_online_user=len(online_user)
@@ -569,6 +576,7 @@ def dashboard(request):
             try:
                 request.user.teacher_class = Classes.objects.get(class_teacher= request.user)
                 request.user.total_unpaid_student=Students_fees_table.objects.filter(institute = request.user.profile.institute,total_due_amount__gt=0,student_class=request.user.teacher_class)
+                
             except:
                 request.user.teacher_class = None
                 request.user.total_unpaid_student= None
@@ -639,10 +647,13 @@ def dashboard(request):
 class RegistrationViewUniqueEmail(RegistrationView):
     form_class = RegistrationFormUniqueEmail
     
-
+from django.contrib.auth import logout
 def login(request):
-    if request.user.is_authenticated:
-        return redirect('user_dashboard')
+    try:
+        if request.user.is_authenticated:
+            return redirect('user_dashboard')
+    except:
+        logout(request)
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']

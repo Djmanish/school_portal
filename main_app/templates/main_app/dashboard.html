@@ -250,7 +250,10 @@
                             
                             {% if user.profile.designation %}
                             <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                                <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
+                              
+                                {% if user.profile.status == 'approve' %}
+                                <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a> 
+                                {% endif %}
                                 <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
                                     <div class="md-card-content">
                                         <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
@@ -738,10 +741,12 @@
                                 Chart
                             </h3>
                         </div> -->
+                        {% if parent_children %}
                         <div class="md-card-content">
                             <!--Child Card For Parents-->
             
             <div class="uk-grid uk-grid-medium uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                
                 {% for student in parent_children %}<div>
                     <div class="md-card">
                         <div class="md-card-head md-bg-light-blue-600">
@@ -809,6 +814,7 @@
             </div>
             
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>{% endif %}{% endif %}
@@ -934,6 +940,7 @@
                 </div>
             </div>
             {% endif %}
+            {% if teacher_subject %}
             <div class="uk-width-medium-1-2">
                 
                 <div class="md-card">
@@ -970,6 +977,8 @@
 
                 
             </div>
+            {% endif %}
+            {% if final_data > 0 %}
             <div class="uk-width-medium-1-2">
                 <div class="md-card">
                     <div class="md-card-content">
@@ -1003,6 +1012,8 @@
 
                 
             </div>
+            {% endif %}
+            {% if user.total_unpaid_student %}
             <div class="uk-width-medium-1-2">
                 <div class="md-card">
                     <div class="md-card-content">
@@ -1020,7 +1031,7 @@
                                 <tbody>
                                     {% for i in user.total_unpaid_student %}
                                     <tr class="uk-table-middle">  
-                                        {% if i.status == 'active' %}                                      
+                                        {% if i.student.status == 'active' %}                                      
                                         <td class="uk-width-3-10 uk-text-nowrap"><a href="#">{{i.student.first_name}} {{i.student.last_name}}</a></td>
                                         <td class="uk-width-3-10 uk-text-nowrap" style="color: red;">Unpaid</td>                                        
                                         {% endif %}
@@ -1058,11 +1069,12 @@
 
                 
             </div>
-           
+            {% endif %}
             </div>
             
             {% elif  user.profile.designation.level_name == "parent" %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match="{target:'.md-card-content'}">
+                {% if user.user_child_fee_status %}
                 <div class="uk-width-medium-1-2">
                     <div class="">
                         <div class="md-card-content">
@@ -1105,7 +1117,7 @@
                         </div>
                     </div>
                 </div>
-                
+                {% endif %}
             </div>
            
 
@@ -1240,8 +1252,7 @@
 
 {% if user.student_books %}
 {% if request.user.profile.designation.level_name != "parent" %} 
-<div class="uk-width-medium-1-2">
-         
+<div class="uk-width-medium-1-2">         
     <div class="md-card">
         <div class="md-card-content">
             <div >
@@ -1281,8 +1292,9 @@
 </div>
                   
  <!-- parent library book status -->
+{% endif %}
  
- {% elif request.user.profile.designation.level_name == "parent" %}
+ {% if request.user.profile.designation.level_name == "parent" %}
      
  <div class="uk-width-medium-1-2">
          
@@ -1323,14 +1335,18 @@
             </div>
         </div>
     </div>
-</div>{% endif %}{% endif %}
-      
+</div>
+{% endif %}
+{% endif %}
+ 
+         
 
 
 
 
+                {% if user.exam_type_child %}
                {% if user.profile.designation.level_name == "student" %}
-               {% if user.exam_type_child != None %}
+               <!-- {% if user.exam_type_child != None %} -->
                     <div class="uk-width-medium-1-2">
                         <div class="md-card">
                             <div class="md-card-content">
@@ -1395,8 +1411,10 @@
                                 </div>
                             </div>
                         </div>
-                     </div>{% endif %}{% endif %}
-            
+                    </div>
+                <!-- {% endif %} -->
+                {% endif %}{% endif %}
+</div> 
           
                
             

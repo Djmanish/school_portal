@@ -90,9 +90,11 @@ def student_tag_changed(sender, instance, action,pk_set, **kwargs):
         student = UserProfile.objects.get(pk=instance.student.id)
         tag_change_notice.recipients_list.add(student)
 
-        student_parent= AddChild.objects.filter(child= instance.student).first()
-        tag_change_notice.recipients_list.add(student_parent.parent)
-
+        try:
+            student_parent= AddChild.objects.filter(child= instance.student).first()
+            tag_change_notice.recipients_list.add(student_parent.parent)
+        except:
+            pass
     elif action =='post_remove':
  
         all_tags = instance.tags.all()
@@ -111,8 +113,11 @@ def student_tag_changed(sender, instance, action,pk_set, **kwargs):
         student = UserProfile.objects.get(pk=instance.student.id)
         tag_change_notice.recipients_list.add(student)
 
-        student_parent= AddChild.objects.filter(child= instance.student).first()
-        tag_change_notice.recipients_list.add(student_parent.parent)
+        try:
+            student_parent= AddChild.objects.filter(child= instance.student).first()
+            tag_change_notice.recipients_list.add(student_parent.parent)
+        except:
+            pass
 
 # ending sending notification if a students tag changed
 
@@ -129,8 +134,11 @@ def fees_paid_notification(sender, instance, created, **kwargs):
             student = UserProfile.objects.get(pk=instance.student.id)
             fees_paid_notice.recipients_list.add(student)
 
-            student_parent= AddChild.objects.filter(child= instance.student).first()
-            fees_paid_notice.recipients_list.add(student_parent.parent)
-                
+            try:
+                student_parent= AddChild.objects.filter(child= instance.student).first()
+                fees_paid_notice.recipients_list.add(student_parent.parent)
+            except:
+                pass
+                    
 
 # ending sending notification when fees paid

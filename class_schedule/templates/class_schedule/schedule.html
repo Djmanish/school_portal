@@ -552,17 +552,25 @@
                                                     <thead>
                                                         <tr>
                                                             <th class="" colspan="2">
-                    <form >
-                        <select name="selected_class" id="sche_sel_class"  required>
-                            <option selected disabled value="">-- Select Class --</option>
-                            
-                            {% for class in all_classes %}
-                               <option value="{{class.id}}"  > {{class}}</option>
-                            {% endfor %}
-                                
-                     </select>
-                     <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
-                    </form>
+
+{% if user.profile.designation.level_name == "student" %}
+{% else %}
+<form >
+    <select name="selected_class" id="sche_sel_class"  required>
+        <option selected disabled value="">-- Select Class --</option>
+        
+        {% for class in all_classes %}
+           <option value="{{class.id}}"  > {{class}}</option>
+        {% endfor %}
+            
+ </select>
+ <input type="submit" value="View" class="md-btn md-btn-primary md-btn-mini">
+</form>
+    
+{% endif %}
+    
+
+                    
                                                             
                                                             </th>
                                                             <th>  </th>
