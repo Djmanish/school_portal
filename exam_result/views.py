@@ -22,6 +22,9 @@ from django.http import JsonResponse
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.fields.files import ImageFieldFile
+from notices.models import Notice
+from django.utils import timezone
+
 # Create your views here.
 def exam_result(request,pk):
   inst = request.user.profile.institute.id
