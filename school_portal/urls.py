@@ -27,6 +27,7 @@ urlpatterns = [
     path('admission_process/', include('admissions.urls')),
     path('notice/', include('notices.urls') ),
     path('fees/', include('fees.urls')),
+    path('api/', include('API_Data.urls')),
    # API URL
     path('users/', userList.as_view()),
     path('users_login_data/', userLoginData.as_view()),
