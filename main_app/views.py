@@ -269,7 +269,9 @@ def approvals(request,pk):
             pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval).order_by('id')
             active_users= UserProfile.objects.filter(status='approve', institute=institute_approval).order_by('id')
             inactive_users= UserProfile.objects.filter(status='dissapprove', institute=institute_approval).order_by('id')
-        return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users})
+            role_change_requests = User_Role_changes.objects.filter(institute= request.user.profile.institute, status='Pending')
+            
+        return render(request, 'main_app/Approvals.html', {'Pending_user':pending_users,'Active_user':active_users,'Inactive_user':inactive_users, 'role_change_requests':role_change_requests})
     else:
         messages.info(request, "You don't have permission to approve/disapprove requests !")
         return redirect('not_found')
@@ -397,7 +399,7 @@ def dashboard(request):
                 
             request.user.user_child_books_status = []
             user_children= AddChild.objects.filter( parent= request.user.profile)
-            print(user_children)
+            
             parent_student_list = []
             for books in user_children:
                 student= UserProfile.objects.get(pk=books.child.id)
@@ -938,6 +940,8 @@ def institute_profile(request, pk):
 
         institute_data= Institute.objects.get(pk=pk)
         institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
+        institute_staff = UserProfile.objects.filter(institute=institute_data).exclude(designation__level_name="student").exclude(designation__level_name="student").exclude(designation__level_name="principal") #staff dropdown for assigning role
+        
         institute_class = Classes.objects.filter(institute=institute_data).reverse()
         institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
         designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
@@ -967,7 +971,8 @@ def institute_profile(request, pk):
             'can_edit_class_permission':can_edit_class_permission,
             'can_delete_class_permission':can_delete_class_permission,
             'can_edit_subject_permission':can_edit_subject_permission,
-            'can_delete_subject_permission': can_delete_subject_permission
+            'can_delete_subject_permission': can_delete_subject_permission,
+            'institute_staff':institute_staff
             }
 
         return render(request, 'main_app/institute_profile.html', context_data)
@@ -1226,3 +1231,64 @@ def fetch_classes(request):
         all_classes= all_classes+ f"<option value='{c.id}' >"+str(c)+"</option>"
     return HttpResponse(all_classes)
 
+
+
+def role_change_request(request):
+    if request.method == 'POST':
+        print('role change post method ')
+        try:
+            User_Role_changes.objects.create(
+                user = UserProfile.objects.get(pk= request.POST.get('selected_staff')),
+                request_date = timezone.now(),
+                institute = UserProfile.objects.get(pk= request.POST.get('selected_staff')).institute,
+                current_role = UserProfile.objects.get(pk= request.POST.get('selected_staff')).designation,
+                new_role = Institute_levels.objects.get(pk = request.POST.get('new_role_name') ),
+                request_by = request.user.profile
+
+            )
+            messages.success(request, 'Request sent successfully !')
+            rr=request.user.profile.institute.id
+            return HttpResponseRedirect(f'/institute/profile/{rr}/')
+
+        except:
+            messages.error(request, 'Something went wrong, could not send request. Please try again !')
+            rr=request.user.profile.institute.id
+            return HttpResponseRedirect(f'/institute/profile/{rr}/')
+
+def role_change_approval(request, pk):
+    approved_request = User_Role_changes.objects.get(pk=pk)
+
+    user_role_description = Role_Description.objects.get(user = approved_request.user.user)
+    user_role_description.level = approved_request.new_role
+    user_role_description.save()
+
+    approved_user = UserProfile.objects.get(pk = approved_request.user.pk)
+    approved_user.designation = approved_request.new_role
+    approved_user.save()
+
+    
+
+    approved_request.action_date = timezone.now()
+    approved_request.status = "Approved"
+    approved_request.action_by = request.user.profile
+    approved_request.save()
+    messages.success(request, f"{approved_request.user.first_name}'s request for the role {approved_request.new_role} has been approved successfully !")
+    rr=request.user.profile.institute.id
+    return HttpResponseRedirect(f'/user/approvals/{rr}/')
+
+
+
+def role_change_disapprove(request, pk):
+    disapproved_request = User_Role_changes.objects.get(pk=pk)
+    disapproved_request.action_date = timezone.now()
+    disapproved_request.status = "Disapproved"
+    disapproved_request.action_by = request.user.profile
+    disapproved_request.save()
+    messages.success(request, f"{disapproved_request.user.first_name}'s request for the role {disapproved_request.new_role} has been disapproved successfully !")
+    rr=request.user.profile.institute.id
+    return HttpResponseRedirect(f'/user/approvals/{rr}/')
+
+
+
+
+        

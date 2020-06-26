@@ -55,6 +55,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'bus_management',
     'AuthTokens',
+    'API_Data'
+
+    
     
     
    
