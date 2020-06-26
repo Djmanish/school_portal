@@ -544,7 +544,12 @@
                   </li>      
                     {% endif %}
                   {% endfor %}
-                   
+                  <li  title="Bus Management">
+                    <a href="{% url 'bus' %}">
+                        <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
+                        <span class="menu_title">Bus Management</span>
+                    </a>
+                </li>  
 
                     <li  title="Examination">
 
@@ -1159,6 +1164,16 @@
                     </div>
                 </div>
             </div>
+            <div class="uk-width-medium-1-2">
+                <div class="md-card">
+                    <div class="md-card-content">
+                        <h3 class="heading_a uk-margin-bottom">Approvals</h3>
+                        <div id="container" style="width: 100%;height: auto;">
+                            <canvas id="canvas1"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endif %}
         <!-- Student Cards -->
         {% if  user.profile.designation.level_name == "student"  %}
@@ -1424,6 +1439,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     {% endif %}
                     {% endif %}
         <!-- Calendar -->
@@ -1525,6 +1541,7 @@
             </div>
         </div>
     </div> 
+    
     {% endif %}
         <!-- ending fees status box for parents -->
     
@@ -1779,6 +1796,8 @@
         });
       
       </script>
+
+
     
                         
     
