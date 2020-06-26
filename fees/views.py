@@ -406,7 +406,7 @@ def fees_pay_page(request):
         "TXN_AMOUNT" : str(amount),
 
         # on completion of transaction, we will send you the response on this URL
-        "CALLBACK_URL" : "http://trueblueappworks.com/fees/handle_requests/",
+        "CALLBACK_URL" : "http://localhost:8000/fees/handle_requests/",
     }
         
 
@@ -474,6 +474,11 @@ def handle_requests(request):
     institute_id_d = str(response_dict['ORDERID'])
     new_d = institute_id_d.split('-')
     school_id = new_d[0]
+#fetching current logged in user through invoice to show page option and menu because handle request page does not request info
+    student_id = new_d[1]
+    user = AddChild.objects.filter(child__id = student_id, status='active').first()
+    request.user = user.parent.user
+
     accnt_details = Account_details.objects.get(institute__id = school_id)
     MERCHANT_KEY = accnt_details.merchant_key
     # ending fetching account details
