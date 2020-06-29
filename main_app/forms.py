@@ -11,10 +11,7 @@ from django.core.exceptions import ValidationError
 #         model = Subjects
 #         fields = ['subject_class','subject_code','subject_name']
 
-def no_future(value):
-    today = date.today()
-    if value > today:
-        raise ValidationError('Purchase_Date cannot be in the future.')
+
 
 class ClassUpdateForm(forms.ModelForm):
     
