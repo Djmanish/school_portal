@@ -266,6 +266,7 @@ def report_card(request,pk):
               student_address2=request.user.profile.address_line_2
               # student_session=UserProfile.objects.get(pk=request.user)
               select_exam_type = request.POST.get('result_exam_type')
+             
               if select_exam_type=="overall":
                 if request.POST.get("report_cart_button"):
                     # return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
@@ -290,6 +291,7 @@ def report_card(request,pk):
                       pass
                 
               exam_type=ExamType.objects.get(pk=select_exam_type)
+              
               exam_per_value=exam_type.exam_per_final_score
               e=int(exam_per_value)
               e_maxmarks=exam_type.exam_max_marks
