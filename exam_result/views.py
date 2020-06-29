@@ -62,7 +62,7 @@ def exam_result(request,pk):
         student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
         institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
         if institute_students==None:
-            messages.info(request, 'No Students Found')
+            messages.info(request, 'No Students Found!')
             return redirect(f'/examresult/examresult/{inst_id}')
         else:
           pass
@@ -266,6 +266,7 @@ def report_card(request,pk):
               student_address2=request.user.profile.address_line_2
               # student_session=UserProfile.objects.get(pk=request.user)
               select_exam_type = request.POST.get('result_exam_type')
+             
               if select_exam_type=="overall":
                 if request.POST.get("report_cart_button"):
                     # return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
@@ -290,6 +291,7 @@ def report_card(request,pk):
                       pass
                 
               exam_type=ExamType.objects.get(pk=select_exam_type)
+              
               exam_per_value=exam_type.exam_per_final_score
               e=int(exam_per_value)
               e_maxmarks=exam_type.exam_max_marks
@@ -1055,7 +1057,11 @@ def reports_card(request,pk):
               student_session_start=request.user.profile.class_current_year
               student_session_end=request.user.profile.class_next_year
               student_profile_pic=request.user.profile.profile_pic
+              
               student_roll_no=request.user.profile.roll_number
+              if student_roll_no==None:
+                student_roll_no="-"
+
               student_first_name=request.user.profile.first_name
               student_last_name=request.user.profile.last_name
               student_mother_name=request.user.profile.mother_name

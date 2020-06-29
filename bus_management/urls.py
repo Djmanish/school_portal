@@ -1,8 +1,7 @@
 from django.urls import path, include
-from django.http import HttpResponse
-
 from . import views
-from .views import *
+from django.views.generic.base import RedirectView
+from django.conf.urls import url
 
 # from holidaylist.views import add_holiday
 
@@ -10,12 +9,9 @@ from .views import *
 
 
 urlpatterns = [
-  
-  path('create_route/<int:pk>', views.exam_result, name="examresult"),
-
-  
-
-
-  path('result/', views.st_result, name="st_result")
- 
-              ]
+  path('',views.bus,name='bus'),
+  path('add_bus',views.add_bus,name='add_bus'),
+  path('add_point',views.add_point,name='add_point'),
+  path('edit_bus',views.edit_bus,name='edit_bus'),
+  path('del_bus/<int:pk>/',views.del_bus,name='del_bus'),
+]
