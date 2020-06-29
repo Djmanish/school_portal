@@ -1002,6 +1002,7 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
         
         return super().form_valid(form)
     
+    
     def test_func(self):
         inst_id = self.get_object().id
         if inst_id!=self.request.user.profile.institute.id:
