@@ -940,6 +940,7 @@ def institute_profile(request, pk):
 
         institute_data= Institute.objects.get(pk=pk)
         institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
+        assign_inst_roles = Institute_levels.objects.filter(institute=institute_data).exclude(level_name="parent").exclude(level_name='student')
         institute_staff = UserProfile.objects.filter(institute=institute_data).exclude(designation__level_name="student").exclude(designation__level_name="student").exclude(designation__level_name="principal") #staff dropdown for assigning role
         
         institute_class = Classes.objects.filter(institute=institute_data).reverse()
@@ -960,6 +961,7 @@ def institute_profile(request, pk):
         # ending user permission code
         context_data = {'institute_data':institute_data, 
         'institute_roles':institute_roles,
+        'assign_inst_roles':assign_inst_roles,
             'institute_class':institute_class,
             'institute_subject':institute_subject,
             'all_classes':institute_class,
@@ -1222,6 +1224,15 @@ class Permission_Updates_History_list_View(LoginRequiredMixin, ListView):
         queryset = Tracking_permission_changes.objects.filter(institute= self.request.user.profile.institute).exclude(role= admin_role).order_by('-update_time')
        
         return queryset
+    def get_context_data(self, **kwargs):
+       
+        # starting user notice
+        if self.request.user.profile.designation:
+            self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
+            # ending user 
+        context = super().get_context_data(**kwargs)
+        return context
+        
 
 def fetch_classes(request):
     instiute_id = Institute.objects.get(pk=request.POST.get('school_id'))
@@ -1291,4 +1302,20 @@ def role_change_disapprove(request, pk):
 
 
 
-        
+class Role_Changes_History_list_View(LoginRequiredMixin, ListView):
+    
+    template_name = 'main_app/role_changes_history.html'
+    paginate_by = 25
+
+    def get_queryset(self):
+        queryset = User_Role_changes.objects.filter(institute= self.request.user.profile.institute).exclude(status= 'Pending').order_by('-id')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+       
+        # starting user notice
+        if self.request.user.profile.designation:
+            self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
+            # ending user notice
+        context = super().get_context_data(**kwargs)
+        return context

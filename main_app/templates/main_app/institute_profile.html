@@ -1125,7 +1125,7 @@
 <label class="required">Select a Role to Assign</label>
 <select class="form-control" name="new_role_name" required>
 <option selected disabled value=""> --- select a role --- </option>
-{% for role in institute_roles %}
+{% for role in assign_inst_roles %}
 <option value="{{role.id}}">{{role.level_name|capfirst}}</option>
 {% endfor %}
 </select>
