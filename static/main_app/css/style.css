@@ -398,7 +398,7 @@ border-radius: 2px;
 }
 .global_logo{
   position: fixed;
-  bottom: 0px;
+  bottom: 3px;
   width: 100%;
    z-index: 99999;
    text-align: center !important;
