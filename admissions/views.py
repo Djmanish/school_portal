@@ -59,11 +59,9 @@ def admission_home(request):
         new_request.first_name= request.POST.get('first_name').strip()
         new_request.middle_name= request.POST.get('middle_name').strip()
         new_request.last_name = request.POST.get('last_name').strip()
-        new_request.father_name = request.POST.get('father_name').strip()
-        new_request.mother_name = request.POST.get('mother_name').strip()
-        new_request.date_of_birth = request.POST.get('date_of_birth')
+        new_request.date_of_birth = request.POST.get('dob')
+        new_request.student_blood_group = request.POST.get('student_blood_group')
         new_request.gender = request.POST.get('gender')
-        new_request.Category = request.POST.get('category')
         new_request.school_name = Institute.objects.get(pk= request.POST.get('school'))
         new_request.class_name = Classes.objects.get(pk=request.POST.get('class'))
         new_request.mobile_Number = request.POST.get('mobile_number')
@@ -71,9 +69,60 @@ def admission_home(request):
         new_request.Nationality = request.POST.get('nationality')
         new_request.Address= request.POST.get('address').strip()
         new_request.District = request.POST.get('district').strip()
-        new_request.State = State.objects.get(pk=request.POST.get('state'))
+        new_request.State = request.POST.get('state')
+        new_request.country = request.POST.get('country').strip()
         new_request.Pin_Code = request.POST.get('pin_code')
+        new_request.p_address= request.POST.get('p_address')
+        new_request.p_district = request.POST.get('p_district')
+        new_request.p_State = request.POST.get('p_state')
+        new_request.p_country = request.POST.get('p_country')
+        new_request.p_pin_code = request.POST.get('p_pin_code')
+        new_request.religion = request.POST.get('religion')
+        new_request.category = request.POST.get('category')
+        new_request.sub_cast = request.POST.get('sub_cast')
+        new_request.student_aadhar_card = request.POST.get('student_aadhar_card')
         new_request.Student_Photo= request.FILES['student_pic']
+        new_request.father_name = request.POST.get('father_name').strip()
+        new_request.f_mobile_Number = request.POST.get('f_mobile_number')
+        new_request.f_Email_Id = request.POST.get('f_Email_Id')
+        new_request.f_aadhar_card = request.POST.get('f_aadhar_card')
+        new_request.f_qualification = request.POST.get('f_qualification')
+        new_request.f_occupation = request.POST.get('f_occupation')
+        if 'f_photo' in request.FILES:
+            new_request.f_photo= request.FILES['f_photo']
+
+        new_request.mother_name = request.POST.get('mother_name').strip()
+        new_request.m_mobile_Number = request.POST.get('m_mobile_number')
+        new_request.m_Email_Id = request.POST.get('m_Email_Id')
+        new_request.m_aadhar_card = request.POST.get('m_aadhar_card')
+        new_request.m_qualification = request.POST.get('m_qualification')
+        new_request.m_occupation = request.POST.get('m_occupation')
+        if 'm_photo' in request.FILES:
+            new_request.m_photo= request.FILES['m_photo']
+        new_request.guardian_name = request.POST.get('guardian_name').strip()
+        new_request.g_mobile_Number = request.POST.get('g_mobile_number')
+        new_request.g_Email_Id = request.POST.get('g_Email_Id')
+        new_request.g_aadhar_card = request.POST.get('g_aadhar_card')
+        new_request.g_qualification = request.POST.get('g_qualification')
+        new_request.g_occupation = request.POST.get('g_occupation')
+        if 'g_photo' in request.FILES:
+            new_request.g_photo= request.FILES['g_photo']
+        if 'dob_certificate' in request.FILES:
+            new_request.dob_certificate = request.FILES['dob_certificate']
+        if 'id_proof_certificate' in request.FILES:
+            new_request.id_proof_certificate = request.FILES['id_proof_certificate']
+        if 'domicile_certificate' in request.FILES:
+            new_request.domicile_certificate = request.FILES['domicile_certificate']
+        if 'cast_certificate' in request.FILES:
+            new_request.cast_certificate = request.FILES['cast_certificate']
+        if 'character_certificate' in request.FILES:    
+            new_request.character_certificate = request.FILES['character_certificate']
+        if 'medical_certificate' in request.FILES:    
+            new_request.medical_certificate = request.FILES['medical_certificate']
+        if 'transfer_certificate' in request.FILES:    
+            new_request.transfer_certificate = request.FILES['transfer_certificate']
+        if 'last_year_certificate' in request.FILES:    
+            new_request.last_year_certificate = request.FILES['last_year_certificate']
         new_request.request_by = request.user
         try:
             new_request.save()
@@ -94,7 +143,7 @@ def admission_home(request):
 def fetch_institute_class_admission(request):
     selected_school  = Institute.objects.get(pk=request.POST.get('school_id'))
     schools_all_classes = Classes.objects.filter(institute= selected_school)
-    classes = "<option selected disabled value="">-- select Clas -- </option>"
+    classes = "<option selected disabled value="">-- Select class -- </option>"
     for Class in schools_all_classes:
         classes= classes+ f"<option value='{Class.id}' >"+str(Class)+"</option>"
     return HttpResponse(classes)
@@ -189,7 +238,7 @@ def approve_admission_request(request, pk):
         return redirect('admission_requests')
     except:
         messages.error(request, "Failed to register !")
-        return redirect('admission_requests')
+        return redirect('admission_requests') 
 
 
 

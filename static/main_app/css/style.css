@@ -419,3 +419,10 @@ border-radius: 2px;
 #sidebar_main .menu_section>ul>li>a{
   padding: 5px 20px !important;
 }
+
+input[type="checkbox"]:required:valid + label::before {
+  content: "\2611";
+  padding-right: 0.2em;
+  font-size: 1.6em;
+  color: green;
+}
