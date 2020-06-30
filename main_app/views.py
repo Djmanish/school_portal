@@ -245,6 +245,10 @@ def delete_class(request, pk):
 
 
 def approvals(request,pk):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     
     institute_approval = Institute.objects.get(pk=pk)
     if request.user.profile.institute != institute_approval:
@@ -941,7 +945,7 @@ def institute_profile(request, pk):
         institute_data= Institute.objects.get(pk=pk)
         institute_roles = Institute_levels.objects.filter(institute=institute_data).reverse()
         assign_inst_roles = Institute_levels.objects.filter(institute=institute_data).exclude(level_name="parent").exclude(level_name='student')
-        institute_staff = UserProfile.objects.filter(institute=institute_data).exclude(designation__level_name="student").exclude(designation__level_name="student").exclude(designation__level_name="principal") #staff dropdown for assigning role
+        institute_staff = UserProfile.objects.filter(institute=institute_data).exclude(designation__level_name="parent").exclude(designation__level_name="student").exclude(designation__level_name="principal") #staff dropdown for assigning role
         
         institute_class = Classes.objects.filter(institute=institute_data).reverse()
         institute_subject = Subjects.objects.filter(institute=institute_data).reverse()
@@ -1223,7 +1227,6 @@ class Permission_Updates_History_list_View(LoginRequiredMixin, ListView):
     def get_queryset(self):
         admin_role = Institute_levels.objects.get(institute=self.request.user.profile.institute, level_name="admin") ##skipping admin role changes
         queryset = Tracking_permission_changes.objects.filter(institute= self.request.user.profile.institute).exclude(role= admin_role).order_by('-update_time')
-       
         return queryset
     def get_context_data(self, **kwargs):
        
