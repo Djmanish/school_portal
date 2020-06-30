@@ -76,7 +76,7 @@ class Admission_Query(models.Model):
     ]
 
     status = models.CharField(max_length=15, choices = STATUS_CHOICES, default="Pending")
-    request_by = models.ForeignKey(to=User, null=True, on_delete=models.SET_NULL, related_name='admission_request')
+    request_by = models.OneToOneField(to=User, null=True, on_delete=models.SET_NULL, related_name='admission_request')
     
    
     def __str__(self):
