@@ -1,6 +1,7 @@
 from django.urls import path, include
 from . import views
 from django.views.generic.base import RedirectView
+from django.conf.urls import url
 
 
 
@@ -29,5 +30,7 @@ urlpatterns = [
     path('view_book/<int:pk>/',views.view_book,name='view_book'),
     path('delete_view_book/<int:pk>/',views.delete_view_book,name='delete_view_book'),
     path('fetch_book_ids/',views.fetch_book_ids,name='fetch_book_ids'),
+    path('api/users', views.UserCreate.as_view(), name='account-create'),
+    
     
 ]

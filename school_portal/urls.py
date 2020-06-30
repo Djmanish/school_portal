@@ -6,11 +6,16 @@ from django.conf.urls.static import static
 from main_app import views as main_app_views
 from rest_framework.urlpatterns import format_suffix_patterns
 from main_app.views import userList, userLoginData
+from rest_framework.authtoken import views as authviews
+from rest_framework_jwt.views import obtain_jwt_token
 from notices import views as notice_views
 
+
 urlpatterns = [
+    
     path('admin/', admin.site.urls),
     path('', include('main_app.urls')),
+    path('bus/', include('bus_management.urls')),
     path('library/', include('library.urls')),
     path('addchild/', include('AddChild.urls')),
     path('attendance/', include('Attendance.urls')),
@@ -23,7 +28,12 @@ urlpatterns = [
     path('admission_process/', include('admissions.urls')),
     path('notice/', include('notices.urls') ),
     path('fees/', include('fees.urls')),
+    path('api/', include('API_Data.urls')),
+   # API URL
     path('users/', userList.as_view()),
     path('users_login_data/', userLoginData.as_view()),
-    path('notice/view/time/', notice_views.last_notice_view_time, )
+    path('api-token-auth/', obtain_jwt_token),
+    path('notice/view/time/', notice_views.last_notice_view_time)
+    
+ 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

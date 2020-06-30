@@ -8,11 +8,17 @@ from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from AddChild.models import *
 from django.core.exceptions import PermissionDenied
+from notices.models import Notice
+from django.utils import timezone
 
 
 # Create your views here.
 
 def create_test_type(request,pk):
+            # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+         # ending user notice
         inst = request.user.profile.institute.id
 
         if pk==inst:        
@@ -33,7 +39,7 @@ def create_test_type(request,pk):
                         examtype.exam_per_final_score=exam_per_final_score
                         examtype.exam_type_sr_no=exam_sr_no
                         examtype.save()
-                        messages.success(request, 'New Exam Type Created successfully !')
+                        messages.success(request, 'New exam type created successfully !')
                         institute_pk = request.user.profile.institute.pk
                         return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
                 
@@ -48,6 +54,10 @@ def create_test_type(request,pk):
 
     
 def edit_test_type(request, pk):
+            # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     test_type_info= ExamType.objects.get(pk=pk)
     # institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
     
@@ -90,6 +100,10 @@ def delete_test_type(request, pk):
 
 
 def exam_schedule(request,pk):
+            # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
         inst = request.user.profile.institute.id
 
         if pk!=inst:
@@ -142,7 +156,7 @@ def exam_schedule(request,pk):
                         }
                         return render(request,'examschedule.html',context)
                 else:
-                        messages.error(request, 'No subjects Found for Selected Class!')
+                        messages.error(request, 'No subjects found for selected class!')
                         return HttpResponseRedirect(f'/examschedule/examschedule/{institute_pk}')
 
         context={
@@ -155,6 +169,10 @@ def exam_schedule(request,pk):
         return render(request,'examschedule.html',context)
 
 def create_exam_schedule(request, pk):
+            # starting user notice
+        if request.user.profile.designation:
+                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
         
         institute_exam_schedule_data = Institute.objects.get(pk=pk)
         institute_exam_schedule = ExamDetails.objects.filter(institute=institute_exam_schedule_data)
@@ -190,7 +208,7 @@ def create_exam_schedule(request, pk):
                         new_exam.exam_class=selected_class
                         new_exam.exam_type=select_exam_type
                         new_exam.save()
-        messages.success(request, 'New Exam Schedule Created successfully!')
+        messages.success(request, 'New exam schedule created successfully!')
                         
          
         return redirect(f'/examschedule/examschedule/{inst_id}') 
@@ -206,6 +224,10 @@ def create_exam_schedule(request, pk):
  
 
 def examschedule_view(request,pk):
+        # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
         inst = request.user.profile.institute.id
 
         if pk==inst:
@@ -314,6 +336,10 @@ def examschedule_view(request,pk):
                 raise PermissionDenied
 
 def edit_examschedule(request,pk):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     examdetails_info= ExamDetails.objects.get(pk=pk)
     designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
     institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
@@ -321,20 +347,25 @@ def edit_examschedule(request,pk):
     if request.method=="POST":
           select_exam_subject=request.POST.get('select_exam_subject')
           select_exam_subject_teacher= request.POST.get('select_exam_subject_teacher')
+          selected_subject_teacher=User.objects.get(pk=select_exam_subject_teacher)
+          
           select_date = request.POST.get('select_date')
           select_start_time = request.POST.get('select_start_time')
+          
           select_end_time = request.POST.get('select_end_time')
           assign_teacher = request.POST.get('assign_teacher')
+          selected_assign_teacher=User.objects.get(pk=assign_teacher)
      
           examdetails_info.institute=request.user.profile.institute
           examdetails_info.exam_subject=select_exam_subject
-          examdetails_info.exam_subject_teacher=select_exam_subject_teacher
+          examdetails_info.exam_subject_teacher=selected_subject_teacher
           examdetails_info.exam_date=select_date
           examdetails_info.exam_start_time=select_start_time
+          
 
           examdetails_info.exam_end_time=select_end_time
 
-          # examdetails_info.exam_assign_teacher=assign_teacher
+          examdetails_info.exam_assign_teacher=selected_assign_teacher
 
 
          
@@ -352,6 +383,10 @@ def edit_examschedule(request,pk):
     return render(request, 'edit_exam_schedule.html', context)
 
 def delete_examschedule(request, pk):
+        # starting user notice
+        if request.user.profile.designation:
+                request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
         examdetails_info= ExamDetails.objects.get(pk=pk)
       
         examdetails_info.exam_subject="null"

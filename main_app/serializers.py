@@ -11,20 +11,24 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields= '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
-
-    def create(self, validated_data):
-        validated_data['password'] = make_password(validated_data['password'])
-        return super(UserSerializer, self).create(validated_data)
-
-    def update(self, instance, validated_data):
-        if 'user' in validated_data:
-            instance.user.password = make_password(
-                validated_data.get('user').get('password', instance.user.password)
-            )
-            instance.user.save()
     class Meta:
-        model = User
-        fields = ['email', 'username', 'password']
+        model =User
+        fields= '__all__'
+   
+
+    # def create(self, validated_data):
+    #     validated_data['password'] = make_password(validated_data['password'])
+    #     return super(UserSerializer, self).create(validated_data)
+
+    # def update(self, instance, validated_data):
+    #     if 'user' in validated_data:
+    #         instance.user.password = make_password(
+    #             validated_data.get('user').get('password', instance.user.password)
+    #         )
+    #         instance.user.save()
+    # class Meta:
+    #     model = User
+    #     fields = ['id','email', 'username', 'password']
     
-    validate_password = make_password
-        # extra_kwargs = {'password': {'write_only': True}}
+    # validate_password = make_passwords
+    # # extra_kwargs = {'password': {'write_only': True}}

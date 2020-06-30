@@ -208,7 +208,7 @@
                         {% endif %}
                             
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.profile.first_name}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -267,7 +267,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -300,7 +300,7 @@
                 </li>
       
 <!-- starting notice menu -->
-<li  title="Notices">
+<li class="current_section" title="Notices">
     <a href="">
         <span class="menu_icon"><i class="material-icons">notifications_active</i></span>
         <span class="menu_title">Notifications</span>
@@ -536,7 +536,7 @@
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading"></span></h2>
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading">Create a Notification</span></h2>
 
                             </div>
                             <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
@@ -549,8 +549,8 @@
                                 <div class="md-card-content">
                                     <div class="">
                                         <ul class="uk-tab" data-uk-tab="{connect:'#tabs_5'}">
-                                            <li class="uk-active"><a href="#">Create Notice</a></li>
-                                            <li><a href="#">My Notices</a></li>
+                                            <li class="uk-active"><a href="#">Create a Notification</a></li>
+                                            <li><a href="#">My Published Notifications</a></li>
                                             <!-- <li><a href="#">Item</a></li> -->
                                         </ul>
                                     </div>
@@ -797,7 +797,7 @@ alert('not deleted')
                                 {% endif %}
                         
                                 <span class="current">
-                                    Page {{ user_notices.number }} of {{ user_notices.paginator.num_pages }}.
+                                    Page {{ user_notices.number }} of {{ user_notices.paginator.num_pages }}
                                 </span>
                         
                                 {% if user_notices.has_next %}
@@ -895,6 +895,9 @@ alert('not deleted')
             </div>
         </div>
     </div>
+    <footer id="footer" >
+        &copy; A product of <a target="_blank" id="tblf" href="https://www.trueblueappwerks.com" >TrueBlue AppWerks</a>
+    </footer> 
 
     <!-- google web fonts -->
     <script>

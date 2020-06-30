@@ -201,7 +201,7 @@
                         {% endif %}
                             
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.profile.first_name}}</span></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -509,18 +509,23 @@
                         </div>
                         <div class="md-card">
                             <div class="md-card-content">
-                                <form method="POST" class="form-inline" id="attendance_form">
+                                <form method="POST" class="form-inline" id="attendance_form" >
                                     {% csrf_token %}
-                                    <tr>
+                                    <tr >
                                         <td> 
                                             <label class ="required" style="margin: 4px;">Select Exam Type</label>
                                             <select class="form-control" name="result_exam_type" style="padding: 2px;"
                                                 required>
-                                                <option selected disabled value="">--Select Exam Type--</option>
+                                                {% if selected_exam_type %}
+                                                <option selected  value="{{selected_exam_type.id}}">{{selected_exam_type}}</option>
+                                                {% else %}
+                                                <option selected  value="">-- Select Class --</option>
+                                                {% endif %}
                                                 <option value="overall">Overall</option>
                                                 {% for exam_type in exam_type_list %}
                                                 <option value={{exam_type.id}}>{{exam_type}}</option>
                                                 {% endfor %}
+                                                
                                             </select>
                                         </td>
                                         <td>
@@ -531,7 +536,7 @@
                                                 required>
                                                 <option selected disabled value="">--Select Student--</option>
                                                 {% for student in parent_student_list %}
-                                                <option value={{student.id}}>{{student}}</option>
+                                                <option value={{student.id}}>{{student.first_name}} {{student.last_name}}</option>
                                                 {% endfor %}
                                             </select>
                                         </td>
@@ -539,15 +544,27 @@
                                         <td></td>
                                         &nbsp
 
-                                        <td>
+                                        <td  >
                                             <input type="submit" name="view_button" value="View"
                                                 class="md-btn md-btn-primary">
-                                        </td>
-                                        &nbsp
-                                        &nbsp
-                                        <td>
-                                            <input type="submit" name="report_cart_button" value="Print"
-                                                class="md-btn md-btn-primary">
+                                        </td >
+                                       
+                                       
+                                     
+                                        <td >
+                                           
+                                            <div class="md-card-toolbar hidden-print">
+                                                <div class="md-card-toolbar-actions hidden-print">  
+                                                    <button type="submit" name="report_cart_button" style="outline:none;  border: 0; margin-left:580px;" value="Print">
+                                                        <i class="md-icon material-icons" id="invoice_print"></i>
+                                                </button>
+                                                </div>
+                                                </div>
+
+                                       
+                                               
+                                           
+                                            
                                 </form>
                                 </td>
                                 <td>
@@ -555,8 +572,7 @@
                                 </form>
                                 </tr>
                                 <table
-                                    class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                                    id="ts_issues">
+                                   class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
                                     {% if result_data %}
 
                                     <thead>
@@ -571,52 +587,27 @@
                                     <tbody id="myresult">
 
                                         {% if result_data %}
-                                        <!-- <tr>
-                                                        <table class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                                                        
-                                                        id="ts_issues">
-                                                       
-                                                        <tr>
-                                                            <td  style="width:10%; text-align: center;"><b>Institute Name:&nbsp&nbsp&nbsp {{institute_student}}</b></td>
-                                                            <td style="width: 10%; text-align: center;"><b> Exam:&nbsp&nbsp&nbsp{{select_exam_type}}</b></td>
-                                                            <td style="width: 10%; text-align: center;"><b>Class:&nbsp&nbsp&nbsp{{student_class}}</b></td>
-                                                            <td style="width: 10%; text-align: center;"><b>Max. Marks:&nbsp&nbsp&nbsp{{e_maxmarks}}</b></td>
-                                                    </tr>
-
-                                                    </table>
-                                                </tr> -->
+                                      
                                         <tr>
                                             &nbsp
                                             &nbsp
 
-                                            <table
-                                                class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
-                                                id="ts_issues">
+                                            <table class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
 
 
                                                 <tr>
-                                                    <th
-                                                        style="text-align: center; background-color: #1976d2; color:white">
-                                                        Subjects</th>
+                                                    <td > Subjects</td>
                                                     {% for e_no in exam_no %}
-                                                    <th
-                                                        style="text-align: center; background-color: #1976d2; color:white">
-                                                        {{select_exam_type}}&nbsp{{e_no}}
+                                                    <td>{{select_exam_type}}&nbsp{{e_no}}
 
-                                                    </th>
+                                                    </td>
                                                     {% endfor%}
-                                                    <th
-                                                        style="text-align: center; background-color: #1976d2;color:white">
+                                                    <td>Total Marks
 
-                                                        Total Marks
+                                                    </td>
+                                                    <td >Expected %
 
-                                                    </th>
-                                                    <th
-                                                        style="text-align: center; background-color: #1976d2;color:white">
-
-                                                        Expected %
-
-                                                    </th>
+                                                    </td>
                                                 </tr>
                                                 {% endif %}
 
@@ -625,7 +616,8 @@
                                                 <tr>
 
                                                     {% for k,v in data.items %}
-                                                    <td style="text-align: left;">
+                                                    <td>
+                                                        
                                                         {{v}}
                                                     </td>
 
@@ -656,7 +648,9 @@
     </div>
     </div>
     </div>
-
+    <footer id="footer" >
+        &copy; A product of <a target="_blank" id="tblf" href="https://www.trueblueappwerks.com" >TrueBlue AppWerks</a>
+    </footer> 
     <!-- google web fonts -->
     <script>
 

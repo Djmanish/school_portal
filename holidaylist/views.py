@@ -24,6 +24,10 @@ from django.core.exceptions import PermissionDenied
 
         # Create your views here.
 def holidaylist(request,pk):
+        # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
 
     inst = request.user.profile.institute.id
 
@@ -74,6 +78,10 @@ def holidaylist(request,pk):
         raise PermissionDenied
                 
 def edit_holiday(request, pk):
+        # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     edit_holiday= HolidayList.objects.get(pk=pk)
     user_permissions = request.user.user_institute_role.level.permissions.all()
     can_edit_holiday_permission = App_functions.objects.get(function_name='Can Edit Holiday')
@@ -113,6 +121,10 @@ def edit_holiday(request, pk):
 
 
 def delete_holiday(request,pk):
+        # starting user notice
+         if request.user.profile.designation:
+            request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
 
 
          delete_holiday=HolidayList.objects.get(pk=pk)
@@ -132,7 +144,9 @@ def delete_holiday(request,pk):
 
 
 from .forms import HolidayUpdateForm
+
 class HolidayUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+
  model = HolidayList
  form_class = HolidayUpdateForm
  template_name="holidaylist/edit_holiday.html"
@@ -159,6 +173,10 @@ def holidayemail(request):
 #         #    raise Exception("Error")
 
 def emailView(request,pk):
+        # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     institute_holiday = Institute.objects.get(pk=pk)
     # user_emails=UserProfile.objects.filter(institute=request.user.profile.institute)
     # user_data_email=[]

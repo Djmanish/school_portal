@@ -230,7 +230,7 @@ aliceblue;
                             {% endif %}
                                 
                             <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                                <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.username}}</span></a>
+                                <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.profile.first_name}}</span></a>
                                 <div class="uk-dropdown uk-dropdown-small">
                                     <ul class="uk-nav js-uk-prevent">
                                         <li><a href="{% url 'user_profile' %}">My profile</a></li>
@@ -561,7 +561,7 @@ aliceblue;
                 </div>
                 
                         <div class="md-card-content" >
-                            <a href="/library/" class="md-btn btn-goback" style="margin-bottom: 10px;color: ;"><i class=" material-icons ">arrow_back </i> GO BACK</a>
+                            <a href="/library/" class="md-btn md-btn-primary" style="margin-bottom: 10px;color: ;"><i class=" material-icons ">arrow_back </i> GO BACK</a>
                             <!-- <h4 class="heading_a uk-margin-bottom">Select User For Book Issue</h4> -->
                             <form  method="POST" action="#" class="form-inline attendance_form" id="child_form">
                                 {% csrf_token %}
@@ -631,7 +631,9 @@ aliceblue;
                     
                     
                     
-
+                    <footer id="footer" >
+                        &copy; A product of <a target="_blank" id="tblf" href="https://www.trueblueappwerks.com" >TrueBlue AppWerks</a>
+                    </footer> 
             
     <!-- google web fonts -->
     <script>

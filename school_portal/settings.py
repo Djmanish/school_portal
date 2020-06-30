@@ -52,6 +52,11 @@ INSTALLED_APPS = [
     'fees',
     'rest_framework',
     'library',
+    'rest_framework.authtoken',
+    'bus_management',
+    
+    'API_Data'
+
     
     
     
@@ -91,6 +96,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'school_portal.wsgi.application'
 
@@ -168,3 +175,23 @@ LOGIN_REDIRECT_URL = 'user_dashboard'
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
+
+REST_FRAMEWORK = {
+    # 'DEFAULT_PERMISSION_CLASSES': 'rest_framework.pagination.PagenumberPagination',
+   'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.IsAuthenticated',
+        ],
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
+            'rest_framework.authentication.SessionAuthentication',
+            'rest_framework.authentication.TokenAuthentication',
+            'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+           
+           
+        ),
+        # 'PAGE_SIZE':2
+}
+
+
+
+

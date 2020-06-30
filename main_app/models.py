@@ -4,6 +4,7 @@ from datetime import date
 from django.core.validators import MinValueValidator, MaxValueValidator,FileExtensionValidator
 import datetime
 from PIL import Image
+from django.core.exceptions import ValidationError
 
 
 
@@ -20,6 +21,14 @@ class App_functions(models.Model):
         return self.function_name
 
 
+def no_future(value):
+    today = date.today()
+    if value > today:
+        raise ValidationError('Establish Date cannot be in the future.')
+def session_date(value):
+    today = date.today()
+    if value > today:
+        raise ValidationError('Session Start Date cannot be in the future.')
 
 class Institute(models.Model):
     name = models.CharField(max_length=150, unique=True )
@@ -27,11 +36,11 @@ class Institute(models.Model):
 
     code = models.CharField(max_length=50, blank=True, null=True)
     name = models.CharField(max_length=150)
-    establish_date=models.DateField(null=True, blank=True)
+    establish_date=models.DateField(null=True, blank=True, validators=[no_future])
     profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.png", null=True, blank=True, validators=[FileExtensionValidator(['jpeg','jpg','gif','png'])] )
     institute_logo = models.ImageField(upload_to="Institute logo",default="default_school_pic.png", null=True, blank=True, validators=[FileExtensionValidator(['jpeg','jpg','gif','png'])] )
     principal = models.CharField(max_length=50, null=True)
-    session_start_date = models.DateField(null=True, blank=True)
+    session_start_date = models.DateField(null=True, blank=True, validators=[session_date])
     about = models.TextField(max_length=300, blank=True, default="This is about Institute" )
     contact_number1 = models.CharField(max_length=12,null=True)
     contact_number2 = models.CharField(max_length=12,null=True, blank=True)
@@ -203,3 +212,24 @@ class Institute_disapproved_user(models.Model):
     user = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name="disapproved_from")
     applied_role = models.ForeignKey(to= Institute_levels, on_delete=models.SET_NULL, null=True)
     date = models.DateField()
+
+
+class User_Role_changes(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Disapproved', 'Disapproved'),
+       
+    ]
+    user = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='user_role_change')
+    institute = models.ForeignKey(to=Institute, on_delete=models.CASCADE,related_name='institute_role_changes', null=True, blank=True)
+    request_date = models.DateTimeField()
+    current_role = models.ForeignKey(to=Institute_levels, on_delete=models.PROTECT, related_name='current_role')
+    new_role = models.ForeignKey(to=Institute_levels, on_delete=models.PROTECT, related_name='assigning_role')
+    action_date = models.DateTimeField(null=True)
+    status = models.CharField(max_length=15, choices = STATUS_CHOICES, default="Pending")
+    request_by = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, null=True, related_name='created_role_change')
+    action_by = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return str(self.user.first_name)

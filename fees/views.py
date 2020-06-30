@@ -15,9 +15,15 @@ from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
+from notices.models import Notice
 # Create your views here.
 
 def fees_home(request):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
+
     # permission check 
     user_permissions = request.user.user_institute_role.level.permissions.all()
     can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
@@ -70,6 +76,10 @@ def fees_home(request):
 
 
 def parent_fees(request):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     if request.user.profile.designation.level_name == "parent":
         #starting those data for pending fees            
             user_children= AddChild.objects.filter( parent= request.user.profile, status='active')
@@ -167,10 +177,34 @@ class Fees_tag_update_view(LoginRequiredMixin,UserPassesTestMixin, SuccessMessag
         else:
             return False
     
+    def get_context_data(self, **kwargs):
+       
+        # starting user notice
+        if self.request.user.profile.designation:
+            self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        return context
+    
 class Fees_Tag_History_List(LoginRequiredMixin, ListView):
     model = Fees_tag_update_history
     template_name = 'fees/fees_tag_update_history.html'
     paginate_by = 20
+
+    def get_context_data(self, **kwargs):
+       
+        # starting user notice
+        if self.request.user.profile.designation:
+            self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
+        # ending user notice
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        return context
+    
+    def get_queryset(self):
+        queryset = Fees_tag_update_history.objects.filter(fees_tag__institute= self.request.user.profile.institute)
+        return queryset
     
 
 def institute_fees_schedule(request):
@@ -474,6 +508,11 @@ def handle_requests(request):
     institute_id_d = str(response_dict['ORDERID'])
     new_d = institute_id_d.split('-')
     school_id = new_d[0]
+#fetching current logged in user through invoice to show page option and menu because handle request page does not request info
+    student_id = new_d[1]
+    user = AddChild.objects.filter(child__id = student_id, status='active').first()
+    request.user = user.parent.user
+
     accnt_details = Account_details.objects.get(institute__id = school_id)
     MERCHANT_KEY = accnt_details.merchant_key
     # ending fetching account details

@@ -398,7 +398,7 @@ border-radius: 2px;
 }
 .global_logo{
   position: fixed;
-  bottom: 0px;
+  bottom: 3px;
   width: 100%;
    z-index: 99999;
    text-align: center !important;
@@ -425,4 +425,14 @@ input[type="checkbox"]:required:valid + label::before {
   padding-right: 0.2em;
   font-size: 1.6em;
   color: green;
+#footer{
+  background-color: #1976d2;
+  text-align: right;
+   z-index:1;
+    height: 47px;
+     color: white;
+}
+#tblf{
+  font-weight: 900;
+   color: white;
 }
