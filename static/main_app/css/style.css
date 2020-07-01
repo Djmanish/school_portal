@@ -425,6 +425,7 @@ input[type="checkbox"]:required:valid + label::before {
   padding-right: 0.2em;
   font-size: 1.6em;
   color: green;
+}
 #footer{
   background-color: #1976d2;
   text-align: right;
