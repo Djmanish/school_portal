@@ -510,17 +510,14 @@
                                                     <!-- first section -->
                                                     <label class="uk-alert">
                                                     <h3 >Personal Information</h3></label>
+                                                    <br>
                                                     <section>
-                                                        <!-- <h2 class="heading_a">
-                                                            Owner Information
-                                                            <span class="sub-heading">fill the form very carefully</span>
-                                                        </h2> -->
-                                                        <!-- <hr class="md-hr"/> -->
+                                                   
                                                         <div class="uk-grid">
                                                             <div class="uk-width-medium-1-3 parsley-row">
                                                                 <label class="required">First Name</label>
                                                                 <input type="text" value="" class="form-control n_i" name='first_name' required="required" >
-                                                                <!-- <input type="text" name="wizard_fullname" id="wizard_fullname" required class="md-input" /> -->
+                                                                
                                                             </div>
                                                             <div class="uk-width-medium-1-3 parsley-row">
                                                                 <label >Middle Name</label>
@@ -535,10 +532,9 @@
                                                         
                                                         <div class="uk-grid" data-uk-grid-margin>
                                                             <div class="uk-width-medium-1-3 parsley-row">
-                                                                <label class="required">Birth of Date</label>
+                                                                <label class="required">Date of Birth</label>
                                                                 <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" required>
-                                                                <!-- <input type="text" value="" class="form-control" name='date_of_birth' required="required" data-parsley-date data-parsley-date-message="This value should be a valid date" data-uk-datepicker="{format:'DD.MM.YYYY'}" /> -->
-                                                                <!-- <input type="text" name="wizard_birth" id="wizard_birth" required class="md-input" data-parsley-date data-parsley-date-message="This value should be a valid date" data-uk-datepicker="{format:'MM.DD.YYYY'}" /> -->
+                                                                
                                                             </div>
                                                             <div class="uk-width-medium-1-3 parsley-row">
                                                                 <label >Blood Group</label>
@@ -555,34 +551,11 @@
                                                                   <option  >O-</option >
                                                                 </select>
                                                             </div>
-                                                            <!-- <div class="uk-width-medium-1-3 parsley-row">
-                                                                <select id="wizard_birth_place" name="wizard_birth_place" required data-md-selectize-delayed>
-                                                                    <option value="">Place of Birth</option>
-                                                                                                                    <option value="city_0">West Hayden</option>
-                                                                                                                    <option value="city_1">Port Katarina</option>
-                                                                                                                    <option value="city_2">East Salmafurt</option>
-                                                                                                                    <option value="city_3">Monahanfort</option>
-                                                                                                                    <option value="city_4">Gleasonview</option>
-                                                                                                                    <option value="city_5">Ethelbury</option>
-                                                                                                                    <option value="city_6">Kirlinhaven</option>
-                                                                                                                    <option value="city_7">Nathanielport</option>
-                                                                                                                    <option value="city_8">West Zachariah</option>
-                                                                                                                    <option value="city_9">New Bridieland</option>
-                                                                                                                    <option value="city_10">Frederikchester</option>
-                                                                                                                    <option value="city_11">Kundehaven</option>
-                                                                                                                    <option value="city_12">Ernserberg</option>
-                                                                                                                    <option value="city_13">Thompsonmouth</option>
-                                                                                                                    <option value="city_14">North Gardnerchester</option>
-                                                                                                                    <option value="city_15">Hermannberg</option>
-                                                                                                                    <option value="city_16">Osbaldoton</option>
-                                                                                                                    <option value="city_17">Bobbieville</option>
-                                                                                                                    <option value="city_18">Lake Eddietown</option>
-                                                                                                                    <option value="city_19">South Derek</option>
-                                                                                                            </select>
-                                                            </div> -->
+                                                            
                                                             <div class="uk-width-medium-1-3 parsley-row">
-                                                                <label  for="gender">Gender</label>
-                                                                <select class="form-control" name="gender" id="gender">
+                                                                <label class="required"  for="gender">Gender</label>
+                                                                <select class="form-control" name="gender" id="gender" required>
+                                                                    <option selected disabled value=""> --- select gender ---</option>
                                                                     <option value="Male" >Male</option>
                                                                     <option value="Female">Female</option>
                                                                     <option value="Other">Other</option>
@@ -611,7 +584,13 @@
                                                                 <label class="required">State</label>
                                                                 <select class="form-control" id="currentstate" name="state" required >
                                                                     <option selected disabled value="" > -- Select state -- </option>
-                                                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+
+                                                                    {% for state in states_list %}
+                                                                    <option value="{{state.id}}" >{{state}}</option>
+                                                                    {% endfor %}
+
+
+                                                                    <!-- <option value="Andhra Pradesh">Andhra Pradesh</option>
 <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
 <option value="Arunachal Pradesh">Arunachal Pradesh</option>
 <option value="Assam">Assam</option>
@@ -647,12 +626,12 @@
 <option value="Uttar Pradesh">Uttar Pradesh</option>
 <option value="Uttarakhand">Uttarakhand</option>
 <option value="West Bengal">West Bengal</option>
-                         
+                          -->
                                                                 </select>
                                                             </div>
                                                             <div class="uk-width-medium-1-3 parsley-row">
-                                                                <label>Country</label>
-                                                                <input type="text" class="form-control n_i" id="currentcountry"name='country' value="">
+                                                                <label class="required">Country</label>
+                                                                <input type="text" class="form-control n_i" id="currentcountry"name='country' value="" required>
                                                             </div>
                                                             <div class="uk-width-medium-1-3 parsley-row">
                                                                 <label class="required">Pin Code</label>
@@ -661,7 +640,7 @@
                                                         </div><br>
                                                         <span style="color: #1976d2;">
                                                             <input type="checkbox" id="same" name="same" onchange= "addressFunction()"/>              
-                                                            <label for = "same"><b>If permanent address is same, select this box.</b></label></span>
+                                                            <label for = "same"><b>Check this box if permanent address and current address are same.</b></label></span>
                                                         <!-- <input type="checkbox" id="addresscheck"><b> Current address is the same as the Parmanent Address.</b></span> -->
                                                         <div><br>
                                                             <h2 class="heading_a">
@@ -684,9 +663,14 @@
 
                                                             <div class="uk-width-medium-1-3 parsley-row">
                                                                 <label class="required">State</label>
-                                                                <select class="form-control" id="permanentstate"name="p_state" >
+                                                                <select class="form-control" id="permanentstate"name="p_state" required >
                                                                     <option selected disabled value="" > -- Select state  -- </option>
-                                                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+
+                                                                    {% for state in states_list %}
+                                                                    <option value="{{state.id}}" >{{state}}</option>
+                                                                    {% endfor %}
+
+                                                                    <!-- <option value="Andhra Pradesh">Andhra Pradesh</option>
 <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
 <option value="Arunachal Pradesh">Arunachal Pradesh</option>
 <option value="Assam">Assam</option>
@@ -722,13 +706,13 @@
 <option value="Uttar Pradesh">Uttar Pradesh</option>
 <option value="Uttarakhand">Uttarakhand</option>
 <option value="West Bengal">West Bengal</option>
-                                                                    
+                                                                     -->
                          
                                                                 </select>
                                                             </div>
                                                             <div class="uk-width-medium-1-3 parsley-row">
-                                                                <label>Country</label>
-                                                                <input type="text" class="form-control n_i" id="permanentcountry"name='p_country' value="">
+                                                                <label class="required">Country</label>
+                                                                <input type="text" class="form-control n_i" id="permanentcountry"name='p_country' value="" required>
                                                             </div>
                                                                 <div class="uk-width-medium-1-3 parsley-row">
                                                                     <label class="required">Pin Code</label>
@@ -739,10 +723,10 @@
                                                         <br>
                                                         <div class="uk-grid" data-uk-grid-margin>
                                                             <div class="uk-width-medium-1-3 parsley-row">
-                                                                <label >Religion</label>
+                                                                <label class="required" >Religion</label>
 
-                                                                <select class="form-control" name="religion" >
-                                                                    <option value="">-- Select one --</option>
+                                                                <select class="form-control" name="religion" required>
+                                                                    <option selected disabled value="">-- Select one --</option>
                                                                                                                     <option value="Hindu">Hindu</option>
                                                                                                                     <option value="Islam">Islam</option>
                                                                                                                     <option value="Sikhs">Sikhs</option>
@@ -757,7 +741,7 @@
 
                                                             <div class="uk-width-medium-1-3 parsley-row">
                                                                 <label class= "required" >Category</label>
-                                                                <select class="form-control" name="category">
+                                                                <select class="form-control" name="category" required>
                                                                     <option value="">-- Select one --</option>
                                                                     
                                                                                                                     <option value="General">General</option>
@@ -769,15 +753,15 @@
                                                             </div>
 
                                                             <div class="uk-width-medium-1-3 parsley-row">
-                                                                <label for="sub_cast">Sub Cast</label>
+                                                                <label for="sub_cast">Sub Caste</label>
                                                                 <input type="text" id="sub_cast" class="form-control" name="sub_cast">
                                                             </div> </div>  
 
                                                             <div class="uk-grid" >
                                                                 <div class="uk-width-medium-1-3 parsley-row">
                                                                
-                                                                <label>Mobile No</label>
-                                                                <input type="number"  class="form-control" name='mobile_number' pattern="[1-9]{1}[0-9]{9}" placeholder="Enter 10 digit mobile number">
+                                                                <label class="required">Mobile No</label>
+                                                                <input type="number"  class="form-control" name='mobile_number' pattern="[1-9]{1}[0-9]{9}" placeholder="Enter 10 digit mobile number" required>
                                                             </div>
                                                             <div class="uk-width-medium-1-3 parsley-row">
                                                                    
@@ -793,7 +777,7 @@
                                                            
                                                         <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin>
                                                             <div class="parsley-row">
-                                                                <label>Student's Image</label>
+                                                                <label>Student Photo</label>
                                                                 <div class="custom-file">
                                                                     <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="student_pic" required>
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
@@ -801,7 +785,7 @@
                                                             </div>
                                                             
                                                             <div class="parsley-row">
-                                                                <label>Select School/Institute</label>
+                                                                <label class="required">Select School/Institute</label>
                                                                 <select class="form-control" name="school" id="selected_institute" required>
                                                                     <option selected disabled value="" > -- Select school -- </option>
                         
@@ -813,7 +797,7 @@
 
                                                             </div>
                                                             <div class="parsley-row">
-                                                                <label>Select Class</label>
+                                                                <label class="required">Select Class</label>
                                                                 <select class="form-control" name="class" id="fetched_classes_admission" required >
                                                                     <option selected disabled value="" > -- Select school to choose class -- </option>
                                                                    
@@ -827,10 +811,10 @@
                                                     </section>
                                                     
                                                     <!-- second section -->
-                                                    <h3 class="uk-alert">Parent Information</h3>
+                                                    <h3 class="uk-alert">Parents Information</h3>
                                                     <section>
                                                         <h2 class="heading_a">
-                                                            Father's Detail
+                                                            Father's Details
                                                         </h2>
                                                         <!-- <hr class="md-hr"/> -->
                                                         <div class="uk-grid uk-grid-width-large-1-2 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
@@ -839,11 +823,11 @@
                                                                 <input type="text" value="" class="form-control n_i" name="father_name" required="required" >
                                                             </div>
                                                             <div class="parsley-row">
-                                                                <label>Father's Mobile No</label>
-                                                                <input type="text" value="" class="form-control" name='f_mobile_number' >
+                                                                <label class="required">Father's Mobile No</label>
+                                                                <input type="text" value="" class="form-control" name='f_mobile_number' required >
                                                             </div>
                                                             <div class="parsley-row">
-                                                                <label>Father's Email ID</label>
+                                                                <label>Father's Email </label>
                                                                 <input type="text" value="" class="form-control n_i" name='f_Email_Id'  >
                                                             </div>
                                                             <div class="parsley-row">
@@ -857,11 +841,11 @@
                                                                 <input type="text" value="" class="form-control n_i" name='f_qualification'>
                                                             </div>
                                                             <div class="parsley-row">
-                                                                <label for="wizard_vehicle_make">Father's Occupation</label>
-                                                                <input type="text" value="" class="form-control n_i" name='f_occupation'>
+                                                                <label for="wizard_vehicle_make" class="required">Father's Occupation</label>
+                                                                <input type="text" value="" class="form-control n_i" name='f_occupation' required>
                                                             </div>
                                                             <div class="parsley-row">
-                                                                <label>Father's Image</label>
+                                                                <label>Father's Photo</label>
                                                                 <div class="custom-file">
                                                                     <input type="file" class="custom-file-input" id="customFile" accept="image/*" name='f_photo'>
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
@@ -871,7 +855,7 @@
                                                         </div>
 
                                                         <h2 class="heading_a">
-                                                            Mother's Detail
+                                                            Mother's Details
                                                         </h2>
                                                         <!-- <hr class="md-hr"/> -->
                                                         <div class="uk-grid uk-grid-width-large-1-2 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
@@ -884,7 +868,7 @@
                                                                 <input type="text" value="" class="form-control" name='m_mobile_number' >
                                                             </div>
                                                             <div class="parsley-row">
-                                                                <label>Mother's Email ID</label>
+                                                                <label>Mother's Email </label>
                                                                 <input type="text" value="" class="form-control n_i" name='m_Email_Id'  >
                                                             </div>
                                                             <div class="parsley-row">
@@ -902,7 +886,7 @@
                                                                 <input type="text" value="" class="form-control n_i" name='m_occupation'>
                                                             </div>
                                                             <div class="parsley-row">
-                                                                <label>Mother's Image</label>
+                                                                <label>Mother's Photo</label>
                                                                 <div class="custom-file">
                                                                     <input type="file" class="custom-file-input" id="customFile" accept="image/*" name='m_photo'>
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
@@ -913,11 +897,11 @@
                                                         <br>
                                                         <label style="color:#1976d2;" >  
                                                         <input type="checkbox" id="Guardiancheck">
-                                                        <b>Click if Guardian detail available</b></label> 
+                                                        <b>Check this box if guardian details available</b></label> 
                                                         <div id="Guardianfielddiv" style="display:none">
                                                         
                                                         <h2 class="heading_a">
-                                                            Guardian's Detail
+                                                            Guardian's Details
                                                         </h2>
                                                         <!-- <hr class="md-hr"/> -->
                                                         <div class="uk-grid uk-grid-width-large-1-2 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
@@ -930,7 +914,7 @@
                                                                 <input type="text" id="Guardianmobile" value="" class="form-control" name='g_mobile_number' >
                                                             </div>
                                                             <div class="parsley-row">
-                                                                <label>Guardian's Email ID</label>
+                                                                <label>Guardian's Email </label>
                                                                 <input type="text" value="" class="form-control " name='g_Email_Id'  >
                                                             </div>
                                                             <div class="parsley-row">
@@ -948,7 +932,7 @@
                                                                 <input type="text" value="" class="form-control n_i" name='g_occupation'>
                                                             </div>
                                                             <div class="parsley-row">
-                                                                <label>Guardian's Image</label>
+                                                                <label>Guardian's photo</label>
                                                                 <div class="custom-file">
                                                                     <input type="file" class="custom-file-input" id="customFile" accept="image/*" name='g_photo'>
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
@@ -971,16 +955,16 @@
                                                         
                                                         <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin>
                                                             <div class="parsley-row">
-                                                                <label>Date of Birth Certificate</label>
+                                                                <label class="required">Date of Birth Certificate</label>
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="dob_certificate">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="dob_certificate" required>
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                                                 </div>
                                                             </div> 
                                                             <div class="parsley-row">
-                                                                <label>ID Proof (Aadhar/PAN card)</label>
+                                                                <label class="required">ID Proof (Aadhar/PAN card)</label>
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="id_proof_certificate">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="id_proof_certificate" required>
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                                                 </div>
                                                             </div> 
@@ -992,7 +976,7 @@
                                                                 </div>
                                                             </div> 
                                                             <div class="parsley-row">
-                                                                <label>Cast Certificate</label>
+                                                                <label>Caste Certificate</label>
                                                                 <div class="custom-file">
                                                                     <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="cast_certificate">
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
@@ -1013,16 +997,16 @@
                                                                 </div>
                                                             </div> 
                                                             <div class="parsley-row">
-                                                                <label>Transfer Certificate</label>
+                                                                <label class="required">Transfer Certificate</label>
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="transfer_certificate" >
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="transfer_certificate" required >
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                                                 </div>
                                                             </div>  
                                                             <div class="parsley-row">
-                                                                <label>Last Year Certificate</label>
+                                                                <label class="required">Last Year Certificate</label>
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="last_year_certificate" >
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="last_year_certificate" required>
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                                                 </div>
                                                             </div>   
@@ -1333,5 +1317,16 @@
       }
     }
     </script>
+
+
+<!-- starting showing uploaded file name bootstrap -->
+<script>
+$(".custom-file-input").on("change", function() {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
+</script>
+
+<!-- ending showing uploaded file name bootstrap -->
 </body>
 </html>

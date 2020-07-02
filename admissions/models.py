@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 class Admission_Query(models.Model):
     
-    first_name = models.CharField(max_length=20, verbose_name="First Name",)
+    first_name = models.CharField(max_length=20, verbose_name="First Name", null=True)
     middle_name =  models.CharField(max_length=20, blank= True, null= True, )
     last_name =  models.CharField(max_length=20, blank= True, null= True, )
     date_of_birth = models.DateField(null=True)
@@ -22,13 +22,13 @@ class Admission_Query(models.Model):
     
     Address = models.CharField(max_length=100, null=True)
     District = models.CharField(max_length=20, null=True)
-    State = models.CharField(max_length=20, null=True )
+    state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True, related_name='ad_c_state')
     country= models.CharField(max_length=100, null=True, blank=True)
     Pin_Code = models.IntegerField(null=True)
 
     p_address = models.CharField(max_length=100, null=True)
     p_district = models.CharField(max_length=20, null=True)
-    p_State = models.CharField(max_length=20, null=True )
+    p_State = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, related_name="ad_p_state")
     p_country= models.CharField(max_length=100, null=True, blank=True)
     p_pin_code = models.IntegerField(null=True)
     address_same = models.BooleanField(null=True)
@@ -68,15 +68,7 @@ class Admission_Query(models.Model):
     transfer_certificate = models.FileField( upload_to='student_document', null=True)
     last_year_certificate = models.FileField( upload_to='student_document', null=True)
     
-    STATUS_CHOICES = [
-        ('Pending', 'Pending'),
-        ('Approved', 'Approved'),
-        ('Disapproved', 'Disapproved'),
-       
-    ]
-
-    status = models.CharField(max_length=15, choices = STATUS_CHOICES, default="Pending")
-    request_by = models.ForeignKey(to=User, null=True, on_delete=models.SET_NULL, related_name='admission_request')
+    request_by = models.OneToOneField(to=User, null=True, on_delete=models.SET_NULL, related_name='admission_request')
     
    
     def __str__(self):

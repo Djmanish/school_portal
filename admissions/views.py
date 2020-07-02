@@ -44,7 +44,7 @@ def admission_home(request):
     }
     if request.method == "POST":
         # starting code for checking profile pic extension
-        Student_Photo= request.FILES['student_pic']
+        Student_Photo= request.FILES.get('student_pic')
         fname = Student_Photo.name
         if  fname.endswith('.jpeg') or fname.endswith('.jpg') or fname.endswith('.gif'):
             pass
@@ -69,12 +69,12 @@ def admission_home(request):
         new_request.Nationality = request.POST.get('nationality')
         new_request.Address= request.POST.get('address').strip()
         new_request.District = request.POST.get('district').strip()
-        new_request.State = request.POST.get('state')
+        new_request.state = State.objects.get(pk = request.POST.get('state'))
         new_request.country = request.POST.get('country').strip()
         new_request.Pin_Code = request.POST.get('pin_code')
         new_request.p_address= request.POST.get('p_address')
         new_request.p_district = request.POST.get('p_district')
-        new_request.p_State = request.POST.get('p_state')
+        new_request.p_State = State.objects.get(pk=request.POST.get('p_state'))
         new_request.p_country = request.POST.get('p_country')
         new_request.p_pin_code = request.POST.get('p_pin_code')
         new_request.religion = request.POST.get('religion')
@@ -185,8 +185,7 @@ class Admission_Request_Detail_View(LoginRequiredMixin, UserPassesTestMixin, Det
             return False
 
     
-    def get_context_data(self, **kwargs):
-            
+    def get_context_data(self, **kwargs):       
     # starting user notice
         if self.request.user.profile.designation:
             self.request.user.users_notice = Notice.objects.filter(institute=self.request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = self.request.user.profile).order_by('id').reverse()[:10]
@@ -213,8 +212,6 @@ def approve_admission_request(request, pk):
     approved_user = Admission_Query.objects.get(pk=pk)
     approved_user_class = approved_user.class_name
     approved_user_first_name = approved_user.first_name
-    
-    
     approved_user = approved_user.request_by
     student_designation = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='student')
     
@@ -224,8 +221,6 @@ def approve_admission_request(request, pk):
     approved_user_profile.Class = approved_user_class
     approved_user_profile.status= 'approve'
     approved_user_profile.first_name = approved_user_first_name
-    
-    
     try:
         Role_Description.objects.create(user=approved_user, institute= request.user.profile.institute, level=student_designation)       
     except:
@@ -233,6 +228,52 @@ def approve_admission_request(request, pk):
         return redirect('user_dashboard')
     try:
         approved_user_profile.save()
+       
+        #creating object of student info table for this student
+        try:
+            approved_user = Admission_Query.objects.filter(pk=pk).first()    
+            Student_Info.objects.create(
+                student = approved_user_profile,
+                blood_group =  approved_user.student_blood_group,
+
+                religion = approved_user.religion,
+                sub_cast = approved_user.sub_cast,
+                f_mobile_Number = approved_user.f_mobile_Number,
+                f_Email_Id = approved_user.f_Email_Id,
+                f_aadhar_card = approved_user.f_aadhar_card,
+                f_qualification= approved_user.f_qualification,
+                f_occupation = approved_user.f_occupation,
+                f_photo= approved_user.f_photo,
+                m_mobile_Number = approved_user.m_mobile_Number,
+                m_Email_Id = approved_user.m_Email_Id,
+                m_aadhar_card = approved_user.m_aadhar_card,
+                m_qualification = approved_user.m_qualification,
+                m_occupation = approved_user.m_occupation,
+                m_photo = approved_user.m_photo,
+                guardian_name = approved_user.guardian_name,
+                guardian_mobile_Number = approved_user.g_mobile_Number,
+                guardian_Email_Id = approved_user.g_Email_Id,
+                guardian_aadhar_card = approved_user.g_aadhar_card,
+                guardian_qualification = approved_user.g_qualification,
+                guardian_occupation = approved_user.g_occupation,
+                guardian_photo = approved_user.g_photo,
+                guardian_applicable = approved_user.g_applicable,
+
+                dob_certificate = approved_user.dob_certificate,
+                id_proof_certificate = approved_user.id_proof_certificate,
+                domicile_certificate = approved_user.domicile_certificate,
+                cast_certificate = approved_user.cast_certificate,
+                character_certificate = approved_user.character_certificate,
+                medical_certificate = approved_user.medical_certificate,
+                transfer_certificate = approved_user.transfer_certificate,
+                last_year_certificate = approved_user.transfer_certificate,
+
+
+
+            )
+            
+        except:
+            print('failed')
         Admission_Query.objects.get(pk=pk).delete()
         messages.success(request, 'Student approved and registered successfully !')
         return redirect('admission_requests')
