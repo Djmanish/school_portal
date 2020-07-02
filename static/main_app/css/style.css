@@ -398,7 +398,7 @@ border-radius: 2px;
 }
 .global_logo{
   position: fixed;
-  bottom: 0px;
+  bottom: 3px;
   width: 100%;
    z-index: 99999;
    text-align: center !important;
@@ -418,6 +418,13 @@ border-radius: 2px;
 
 #sidebar_main .menu_section>ul>li>a{
   padding: 5px 20px !important;
+}
+
+input[type="checkbox"]:required:valid + label::before {
+  content: "\2611";
+  padding-right: 0.2em;
+  font-size: 1.6em;
+  color: green;
 }
 #footer{
   background-color: #1976d2;

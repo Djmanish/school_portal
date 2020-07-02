@@ -106,10 +106,14 @@ def create_notice(request):
             elif 'all_classes_check' in request.POST:
                 all_students = UserProfile.objects.filter(designation__level_name='student', institute= request.user.profile.institute)
                 all_parents = UserProfile.objects.filter(designation__level_name='parent', institute= request.user.profile.institute )
+                all_teachers = UserProfile.objects.filter(designation__level_name='teacher', institute= request.user.profile.institute )
                 for st in all_students:
                     recipients_valid_list.append(st)
                 for pt in all_parents:
                     recipients_valid_list.append(pt)
+                for teacher in all_teachers:
+                    recipients_valid_list.append(teacher)
+                
                 
                 for i in recipients_valid_list:
                     new_notice.recipients_list.add(i)
@@ -119,6 +123,9 @@ def create_notice(request):
             else:
                 class_student = UserProfile.objects.filter(Class= selected_class, institute= request.user.profile.institute)
                 class_parent = AddChild.objects.filter(Class= selected_class, institute= request.user.profile.institute, status='active')
+                all_assigned_teacher = Subjects.objects.filter(subject_class= selected_class)
+                for teacher_ in all_assigned_teacher:
+                    recipients_valid_list.append(teacher_.subject_teacher.profile)
                 for st in class_student:
                     recipients_valid_list.append(st)
                 for pt in class_parent:
