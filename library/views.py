@@ -259,6 +259,10 @@ def book_return(request):
             cat= request.POST.get('book_category') 
             fine= request.POST.get('book_fine') 
             desc= request.POST.get('book_desc')
+            if fine:
+                  pass
+            else:
+                  fine = 0
             print(fine)
             if cat == "0":  
               messages.error(request, 'Book Not Returned, Please Try Again !')

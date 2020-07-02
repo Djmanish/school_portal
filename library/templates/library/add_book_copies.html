@@ -517,8 +517,9 @@
                             </div>
                             <div class="user_heading_content">
                                 <h2 class="heading_b uk-margin-bottom"><span
-                                        class="uk-text-truncate">{{institute_data.name}}</span></h2>
-                                        <ul class="user_stats">
+                                        class="uk-text-truncate">{{institute_data.name}}</span>
+                                        <span class="sub-heading">Add Book Copies</span></h2>
+                                        <!-- <ul class="user_stats">
                                             <li>
                                                 <h4 class="heading_a">0 <span class="sub-heading">Books</span></h4>
                                             </li>
@@ -528,7 +529,7 @@
                                             <li>
                                                 <h4 class="heading_a">0 <span class="sub-heading">Left</span></h4>
                                             </li>
-                                        </ul>
+                                        </ul> -->
                             </div>
                             
                         </div>
@@ -571,17 +572,16 @@
                                                            
                                                         </div>
                                                     </li>
-                                                    <li>
-                                                        <!-- <div class="md-list-addon-element">
+                                                    <!-- <li>
+                                                        <div class="md-list-addon-element">
                                                             <i class="md-list-addon-icon material-icons">&#xE158;</i>
-                                                        </div> -->
+                                                        </div>
                                                         <div class="md-list-content">
                                                             <span class="md-list-heading"><a href="">Number Of Copies</a></span>
                                                             <span class="uk-text-small uk-text-muted">{{book_code.book_count}}</span>
                                                            
                                                         </div>
-                                                    </li>
-                                                    
+                                                    </li>                                                     -->
                                                 </ul>
                                             </div>
     
@@ -623,14 +623,16 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                    
+                                        
                                     </li>
+                                    
                                 </ul>
+                                
                                 <h6 class="heading_a uk-margin-bottom">Enter Book ID's</h6>
 
                                 <div class="md-card">
                                     <div class="md-card-content large-padding">
-                                        <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'add_new_book' %}">
+                                        <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'add_new_books' %}">
                                             {% csrf_token %}
                                             <div class="uk-grid" data-uk-grid-margin>
                                                 {% for count in range %}
