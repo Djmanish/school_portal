@@ -344,9 +344,7 @@ aliceblue;
     </ul>
 </li>
 <!-- ending notice menu -->
-
-{% for i in user.user_institute_role.level.permissions.all %}    
-              {% if i.function_name == "Can Update Lecture Timing" %}
+{% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
               <li  title="Fees">
                 <a href="{% url 'fees_home' %}">
                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
@@ -354,10 +352,6 @@ aliceblue;
                 </a>
             </li>      
               {% endif %}
-            {% endfor %}
-
-
-           
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
