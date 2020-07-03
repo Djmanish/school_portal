@@ -544,10 +544,10 @@
                   </li>      
                     {% endif %}
                   {% endfor %}
-                  <li  title="Bus Management">
+                  <li  title="Vehicle">
                     <a href="{% url 'bus' %}">
                         <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
-                        <span class="menu_title">Bus Management</span>
+                        <span class="menu_title">Vehicle</span>
                     </a>
                 </li>  
 
@@ -971,12 +971,12 @@
                                         </tr>
                                 </thead>
                                 <tbody>
-                                    {% for u in user.user_t1 %}
+                                    <!-- {% for u in user.user_t1 %}
                                     <tr class="uk-table-middle">
                                         <td class="uk-width-3-10 uk-text-nowrap">{{u}}</td>
                                         <td class="uk-width-3-10 uk-text-nowrap"><b>Class Teacher</b></td>
                                     </tr>
-                                    {% endfor %}
+                                    {% endfor %} -->
                                     {% for teacher1 in user_subject_one %}
                                     <tr class="uk-table-middle">
                                         <td class="uk-width-3-10 uk-text-nowrap">{{teacher1.subject_class}}</td>
@@ -1259,7 +1259,7 @@
                                 <table class="uk-table uk-table-condensed uk-table-hover">
                                     <thead>
                                     <tr>
-                                        <th class="uk-text-nowrap">Sr No.</th>
+                                        <th class="uk-text-nowrap">S.No.</th>
                                         <th class="uk-text-nowrap">Dues</th>
                                         <th class="uk-text-nowrap">Amount</th>
                                     </tr>
@@ -1296,7 +1296,7 @@
                             <tbody>
                                 <br>
                                 <tr>
-                                    <td>Exam Sr No.</td>
+                                    <td>Exam S.No.</td>
                                     <td>{{user.exam_type_child.exam_type_sr_no}}</td>
                                 </tr>
                                     <tr>

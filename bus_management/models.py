@@ -19,14 +19,35 @@ class Bus(models.Model):
        return self.bus_no
 
 class Point(models.Model):
+    Chi =[
+        ('active', 'Active'),('inactive', 'Inactive'),    
+    ]
     point_code = models.CharField(max_length=10)
-    point_name = models.CharField(max_length=10)
+    point_name = models.CharField(max_length=30)
     point_street_no = models.IntegerField(null=True, blank=True)
     point_landmark = models.CharField(max_length=15)
+    point_exact_place = models.CharField(max_length=20, null=True, blank=True)
     point_city = models.CharField(max_length=20)
     point_state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True)
     point_country = models.CharField(max_length=20)
+    status = models.CharField(max_length=25,choices=Chi,default="active")
     point_institute = models.ForeignKey(to=Institute, related_name="point_institute", on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.point_name
+
+class Driver(models.Model):
+    driver_id = models.CharField(max_length=10)
+    name = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='driver_name', null=True, blank=False)
+    driving_lic_no = models.CharField(max_length=13)
+    def __str__(self):
+        return self.name
+
+class RouteInfo(models.Model):
+    route_no = models.IntegerField(null=True, blank=True)
+    vehicle = models.ForeignKey(to=Bus, on_delete=models.CASCADE, related_name='vehicle', null=True, blank=False)
+    vehicle_driver = models.ForeignKey(to=Driver, on_delete=models.CASCADE, related_name='driver', null=True, blank=False)
+    from_date = models.DateTimeField(null=True)
+    to_date = models.DateTimeField(null=True)
+    def __str__(self):
+        return self.route_no
