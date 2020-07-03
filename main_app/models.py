@@ -263,6 +263,22 @@ class Student_Info(models.Model):
     guardian_photo = models.ImageField( upload_to='student_document', null=True)
     guardian_applicable = models.BooleanField(null=True)
 
+    #starting current address and permanent address and check as well
+    c_address = models.CharField(max_length=100, null=True)
+    c_District = models.CharField(max_length=20, null=True)
+    c_state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True, related_name='si_c_state')
+    c_country= models.CharField(max_length=100, null=True, blank=True)
+    c_Pin_Code = models.IntegerField(null=True)
+    same_address = models.BooleanField(null=True)
+
+    p_address = models.CharField(max_length=100, null=True)
+    p_district = models.CharField(max_length=20, null=True)
+    p_State = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, related_name="si_p_state")
+    p_country= models.CharField(max_length=100, null=True, blank=True)
+    p_pin_code = models.IntegerField(null=True)
+
+    #ending current address and permanent address and check as well
+
     dob_certificate = models.FileField( upload_to='student_document', null=True)
     id_proof_certificate = models.FileField( upload_to='student_document', null=True)
     domicile_certificate = models.FileField( upload_to='student_document', null=True)

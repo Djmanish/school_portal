@@ -195,6 +195,12 @@
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                     <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                    <li title="Log Out">
+                                        <a href="{% url 'auth_logout' %}">
+                                            
+                                            <span class="menu_title">Log Out</span>
+                                        </a>
+                                    </li>
                                    
                                 </ul>
                             </div>
@@ -245,7 +251,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -260,7 +266,7 @@
                 </li>
                 
                 {% if user.profile.institute == None %}
-                <li title="Admission Query">
+                <li class="current_section" title="Admission Query">
                     <a href="{% url 'admission_home' %}">
                         <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">Admission Query</span>
@@ -634,7 +640,7 @@
                                                             </div>
                                                         </div><br>
                                                         <span style="color: #1976d2;">
-                                                            <input type="checkbox" id="same" name="same" onchange= "addressFunction()"/>              
+                                                            <input type="checkbox" id="same" name="address_same" onchange= "addressFunction()"/>              
                                                             <label for = "same"><b>Check this box if permanent address and current address are same.</b></label></span>
                                                         <!-- <input type="checkbox" id="addresscheck"><b> Current address is the same as the Parmanent Address.</b></span> -->
                                                         <div><br>
@@ -891,7 +897,7 @@
                                                         </div>
                                                         <br>
                                                         <label style="color:#1976d2;" >  
-                                                        <input type="checkbox" id="Guardiancheck">
+                                                        <input type="checkbox" id="Guardiancheck" name="guardian_applicable">
                                                         <b>Check this box if guardian details available</b></label> 
                                                         <div id="Guardianfielddiv" style="display:none">
                                                         
