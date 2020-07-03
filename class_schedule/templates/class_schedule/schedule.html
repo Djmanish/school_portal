@@ -259,7 +259,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -349,7 +349,7 @@
                     </a>   
                 </li>
                 
-               <li  title="Institute Schedule">
+               <li class="current_section"  title="Institute Schedule">
                 <a href="{% url 'class_schedule' %}">
                     <span class="menu_icon"><i class="material-icons">schedule</i></span>
                     <span class="menu_title">Schedule</span>
@@ -599,7 +599,7 @@
                                                             
                                                             <th class="uk-text-center" colspan="3">
                                                        
-                                                             <b style="color: #1976d2;"> {{time_table_for_class}} Time Table</b>
+                                                             <b style="color: #1976d2;">Class: {{time_table_for_class}} Time Table</b>
                                                           
                                                             
                                                             </th>

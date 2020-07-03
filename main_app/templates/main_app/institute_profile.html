@@ -1216,24 +1216,14 @@
 
                                 {% for role in institute_roles %}
                                 <tr >
-                                  
                                     <td >
-                                 
-                                            {{role.level_name}}
+                                            {{role.level_name|capfirst}}
                                     </td>
-                                
                                     <td >
                                      <a href="{% url 'role_permissions' role.pk %}"><i class="material-icons" style="color: #1976d2;">edit</i> </a>
                                     </td>
-
-
                                 </tr>
                                 {% endfor %}
-
-
-
-
-
                             </tbody>
 
                         </table>
