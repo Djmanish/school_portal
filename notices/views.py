@@ -48,8 +48,9 @@ def create_notice(request):
         if request.user.user_institute_role.level.level_name == 'teacher':
             teacher_classes = Subjects.objects.filter(subject_teacher= request.user)
             for aclass in teacher_classes:
-                
-                author_classes.append(aclass.subject_class)
+                # checking if a class already in author class list in case of repeated subject
+                if not aclass.subject_class in author_classes: 
+                    author_classes.append(aclass.subject_class)
         else:
             author_classes = Classes.objects.filter(institute= request.user.profile.institute)
 
