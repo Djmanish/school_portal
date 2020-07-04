@@ -25,4 +25,5 @@ admin.site.register(App_functions)
 admin.site.register(Tracking_permission_changes)
 admin.site.register(Institute_disapproved_user)
 admin.site.register(User_Role_changes)
+admin.site.register(Student_Info )
 

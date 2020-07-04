@@ -267,7 +267,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -300,7 +300,7 @@
                 </li>
       
 <!-- starting notice menu -->
-<li  title="Notices">
+<li class="current_section" title="Notices">
     <a href="">
         <span class="menu_icon"><i class="material-icons">notifications_active</i></span>
         <span class="menu_title">Notifications</span>
@@ -326,20 +326,14 @@
     </ul>
 </li>
 <!-- ending notice menu -->
-
-{% for i in user.user_institute_role.level.permissions.all %}    
-              {% if i.function_name == "Can Update Lecture Timing" %}
+{% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
               <li  title="Fees">
                 <a href="{% url 'fees_home' %}">
                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                     <span class="menu_title">Fees Setup</span>
                 </a>
             </li>      
-              {% endif %}
-            {% endfor %}
-
-
-           
+              {% endif %}        
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
@@ -536,7 +530,7 @@
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading"></span></h2>
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading">Create a Notification</span></h2>
 
                             </div>
                             <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
@@ -549,8 +543,8 @@
                                 <div class="md-card-content">
                                     <div class="">
                                         <ul class="uk-tab" data-uk-tab="{connect:'#tabs_5'}">
-                                            <li class="uk-active"><a href="#">Create Notice</a></li>
-                                            <li><a href="#">My Notices</a></li>
+                                            <li class="uk-active"><a href="#">Create a Notification</a></li>
+                                            <li><a href="#">My Published Notifications</a></li>
                                             <!-- <li><a href="#">Item</a></li> -->
                                         </ul>
                                     </div>
@@ -634,7 +628,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text search_icon"><i class="material-icons search_icon ">search</i></span>
        </div>
-       <input type="text" class="form-control"  id="myInput" placeholder="Search a student name in list ...">
+       <input type="text" class="form-control"  id="myInput" placeholder="Type to serach...">
      </div>
   <small>press and hold ctrl to select multiple...</small>
     <select class="Individual_option form-control" id="select_individual" multiple="multiple"  class="selectpicker" data-live-search="true" name="selected_individual">
@@ -797,7 +791,7 @@ alert('not deleted')
                                 {% endif %}
                         
                                 <span class="current">
-                                    Page {{ user_notices.number }} of {{ user_notices.paginator.num_pages }}.
+                                    Page {{ user_notices.number }} of {{ user_notices.paginator.num_pages }}
                                 </span>
                         
                                 {% if user_notices.has_next %}

@@ -13,5 +13,8 @@ urlpatterns = [
   path('add_bus',views.add_bus,name='add_bus'),
   path('add_point',views.add_point,name='add_point'),
   path('edit_bus',views.edit_bus,name='edit_bus'),
-  path('del_bus/<int:pk>/',views.del_bus,name='del_bus'),
+  path('edit_point',views.edit_point,name='edit_point'),
+  path('delete_point/<int:pk>/',views.delete_point,name='delete_point'),
+  path('fetch_bus_details/', views.fetch_bus_details, name="fetch_bus_details"),
+  path('add_driver/', views.add_driver, name="add_driver"),
 ]

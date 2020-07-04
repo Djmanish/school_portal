@@ -234,3 +234,58 @@ class User_Role_changes(models.Model):
 
     def __str__(self):
         return str(self.user.first_name)
+
+
+
+
+class Student_Info(models.Model):
+    student = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name="student_info" )
+    blood_group = models.CharField(max_length=10)
+    religion = models.CharField(max_length=10)
+    sub_cast = models.CharField(max_length=50, null=True, blank=True)
+    f_mobile_Number =models.CharField( max_length=12, null=True)
+    f_Email_Id = models.CharField( max_length=50,blank= True, null= True,)
+    f_aadhar_card = models.CharField(max_length= 20, null=True, default='')
+    f_qualification = models.CharField(max_length=20, null=True)
+    f_occupation = models.CharField(max_length=20, null=True)
+    f_photo = models.ImageField( upload_to='student_document', null=True)
+    m_mobile_Number =models.CharField( max_length=10, null=True)
+    m_Email_Id = models.CharField( max_length=100,blank= True, null= True)
+    m_aadhar_card = models.CharField(max_length= 20, null=True, default='')
+    m_qualification = models.CharField(max_length=20, null=True)
+    m_occupation = models.CharField(max_length=20, null=True)
+    m_photo = models.ImageField( upload_to='student_document', null=True)
+    guardian_name = models.CharField(max_length=30, null=True)
+    guardian_mobile_Number =models.CharField( max_length=10, null=True)
+    guardian_Email_Id = models.CharField( max_length=100,blank= True, null= True,)
+    guardian_aadhar_card = models.CharField(max_length= 20, null=True, default='')
+    guardian_qualification = models.CharField(max_length=20, null=True)
+    guardian_occupation = models.CharField(max_length=20, null=True)
+    guardian_photo = models.ImageField( upload_to='student_document', null=True)
+    guardian_applicable = models.BooleanField(null=True)
+
+    #starting current address and permanent address and check as well
+    c_address = models.CharField(max_length=100, null=True)
+    c_District = models.CharField(max_length=20, null=True)
+    c_state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True, related_name='si_c_state')
+    c_country= models.CharField(max_length=100, null=True, blank=True)
+    c_Pin_Code = models.IntegerField(null=True)
+    same_address = models.BooleanField(null=True)
+
+    p_address = models.CharField(max_length=100, null=True)
+    p_district = models.CharField(max_length=20, null=True)
+    p_State = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, related_name="si_p_state")
+    p_country= models.CharField(max_length=100, null=True, blank=True)
+    p_pin_code = models.IntegerField(null=True)
+
+    #ending current address and permanent address and check as well
+
+    dob_certificate = models.FileField( upload_to='student_document', null=True)
+    id_proof_certificate = models.FileField( upload_to='student_document', null=True)
+    domicile_certificate = models.FileField( upload_to='student_document', null=True)
+    cast_certificate = models.FileField( upload_to='student_document', null=True)
+    character_certificate = models.FileField( upload_to='student_document', null=True)
+    medical_certificate = models.FileField( upload_to='student_document', null=True)
+    transfer_certificate = models.FileField( upload_to='student_document', null=True)
+    last_year_certificate = models.FileField( upload_to='student_document', null=True)
+    

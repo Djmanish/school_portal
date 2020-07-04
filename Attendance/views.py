@@ -15,6 +15,10 @@ from django.utils import timezone
 
 #student detail
 def student_detail(request,pk):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     student=UserProfile.objects.get(pk=pk)
     context = {'student':student}
     return render (request, 'Attendance/student_detail.html', context)

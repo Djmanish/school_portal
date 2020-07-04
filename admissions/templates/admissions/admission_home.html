@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 {% load static %}
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
@@ -40,6 +40,7 @@
 
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
    
 
 </head>
@@ -194,6 +195,12 @@
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                     <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                    <li title="Log Out">
+                                        <a href="{% url 'auth_logout' %}">
+                                            
+                                            <span class="menu_title">Log Out</span>
+                                        </a>
+                                    </li>
                                    
                                 </ul>
                             </div>
@@ -244,7 +251,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -259,7 +266,7 @@
                 </li>
                 
                 {% if user.profile.institute == None %}
-                <li title="Admission Query">
+                <li class="current_section" title="Admission Query">
                     <a href="{% url 'admission_home' %}">
                         <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">Admission Query</span>
@@ -303,9 +310,7 @@
     </ul>
 </li>
 <!-- ending notice menu -->
-
-{% for i in user.user_institute_role.level.permissions.all %}    
-              {% if i.function_name == "Can Update Lecture Timing" %}
+{% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
               <li  title="Fees">
                 <a href="{% url 'fees_home' %}">
                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
@@ -313,9 +318,6 @@
                 </a>
             </li>      
               {% endif %}
-            {% endfor %}
-
-
            
     
 {% if user.profile.designation.level_name == "parent" %}
@@ -484,23 +486,559 @@
             </div>
             {% endif %}
             <div class="md-card uk-margin-medium-bottom">
-                <div class="md-card-content">
-                    <div class="uk-grid">
-                        <div class="uk-width-1-1">
-                            <h3 class="heading_b uk-margin-bottom text-center uk-text-primary">Fill Form to Initiate Admission Process</h3>
-<hr>
+                
 
-                            
-                           
-                            <div class="row">
-                                <div class="col-sm-6" >
-                                  <h3 class="uk-text-primary">Fill Your Information Carefully</h3>
+                              
+                               
+                        
+                                    
+                        
+                                    <div class="md-card uk-margin-large-bottom">
+                                        <div class="md-card-content">
+                                            <div class="row">
+                                                <div class="col-sm-6" >
+                                                  <h3 class="uk-text-primary">Fill Your Information Carefully</h3>
+                                                </div>
+                                                <div class="col-sm-6 text-right">
+                                                    <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
+                                                </div>
+                                              </div>
+                                            
+                                            <form class="uk-form-stacked" id="wizard_advanced_form" method="POST" enctype="multipart/form-data" action="{% url 'admission_home' %}" onsubmit="return checkForm(this);">
+                                                    {% csrf_token %}    
+                                                <div>
+                        
+                                                    <!-- first section -->
+                                                    <label class="uk-alert">
+                                                    <h3 >Personal Information</h3></label>
+                                                    <br>
+                                                    <section>
+                                                   
+                                                        <div class="uk-grid">
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class="required">First Name</label>
+                                                                <input type="text" value="" class="form-control n_i" name='first_name' required="required" >
+                                                                
+                                                            </div>
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label >Middle Name</label>
+                                                                <input type="text" value="" class="form-control n_i" name='middle_name' >
+                                                            </div>
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label >Last Name</label>
+                                                                <input type="text" value="" class="form-control n_i" name='last_name' >
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                        <div class="uk-grid" data-uk-grid-margin>
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class="required">Date of Birth</label>
+                                                                <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" required>
+                                                                
+                                                            </div>
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label >Blood Group</label>
+                                                                <select class="form-control" name="student_blood_group">     
+                                                                    
+                                                                    <option value="none">-- Select One --</option>
+                                                                  <option >A+</option>
+                                                                  <option  >B+</option >
+                                                                  <option  >AB+</option >
+                                                                  <option  >O+</option >
+                                                                  <option  >A-</option >
+                                                                  <option  >B-</option >
+                                                                  <option  >AB-</option >
+                                                                  <option  >O-</option >
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class="required"  for="gender">Gender</label>
+                                                                <select class="form-control" name="gender" id="gender" required>
+                                                                    <option selected disabled value=""> --- select gender ---</option>
+                                                                    <option value="Male" >Male</option>
+                                                                    <option value="Female">Female</option>
+                                                                    <option value="Other">Other</option>
+                                                                  </select>
+                                                                  
+                                                            </div>
+                                                        </div>
+                                                        <h2 class="heading_a">
+                                                            Current Address
+                                                        </h2> 
+                                                          <div class="uk-grid" data-uk-grid-margin  >
+                                                                                                       
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                               
+                                                                    <label class="required">Address</label>
+                                                                    <input type="text" class="form-control" id="currentaddress" name='address' value="" required>
+                                                                  
+                                                            </div>
+                                                            
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class="required" >District</label>
+                                                                <input type="text" class="form-control n_i" id="currentdistrict" name='district' value="" required>
+                                                            </div>
+
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class="required">State</label>
+                                                                <select class="form-control" id="currentstate" name="state" required >
+                                                                    <option selected disabled value="" > -- Select state -- </option>
+
+                                                                    {% for state in states_list %}
+                                                                    <option value="{{state.id}}" >{{state}}</option>
+                                                                    {% endfor %}
+
+
+                                                                    <!-- <option value="Andhra Pradesh">Andhra Pradesh</option>
+<option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+<option value="Assam">Assam</option>
+<option value="Bihar">Bihar</option>
+<option value="Chandigarh">Chandigarh</option>
+<option value="Chhattisgarh">Chhattisgarh</option>
+<option value="Dadar and Nagar Haveli">Dadar and Nagar Haveli</option>
+<option value="Daman and Diu">Daman and Diu</option> 
+<option value="Delhi">Delhi</option>
+<option value="Lakshadweep">Lakshadweep</option>
+<option value="Puducherry">Puducherry</option>
+<option value="Goa">Goa</option>
+<option value="Gujarat">Gujarat</option>
+<option value="Haryana">Haryana</option>
+<option value="Himachal Pradesh">Himachal Pradesh</option>
+<option value="Jammu and Kashmir">Jammu and Kashmir</option>
+<option value="Jharkhand">Jharkhand</option>
+<option value="Karnataka">Karnataka</option>
+<option value="Kerala">Kerala</option>
+<option value="Madhya Pradesh">Madhya Pradesh</option>
+<option value="Maharashtra">Maharashtra</option>
+<option value="Manipur">Manipur</option>
+<option value="Meghalaya">Meghalaya</option>
+<option value="Mizoram">Mizoram</option>
+<option value="Nagaland">Nagaland</option>
+<option value="Odisha">Odisha</option>
+<option value="Punjab">Punjab</option>
+<option value="Rajasthan">Rajasthan</option>
+<option value="Sikkim">Sikkim</option>
+<option value="Tamil Nadu">Tamil Nadu</option>
+<option value="Telangana">Telangana</option>
+<option value="Tripura">Tripura</option>
+<option value="Uttar Pradesh">Uttar Pradesh</option>
+<option value="Uttarakhand">Uttarakhand</option>
+<option value="West Bengal">West Bengal</option>
+                          -->
+                                                                </select>
+                                                            </div>
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class="required">Country</label>
+                                                                <input type="text" class="form-control n_i" id="currentcountry"name='country' value="" required>
+                                                            </div>
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class="required">Pin Code</label>
+                                                                <input type="text" class="form-control" id="currentpincode"name='pin_code' pattern ="[0-9]{6}"value="" required>
+                                                            </div>
+                                                        </div><br>
+                                                        <span style="color: #1976d2;">
+                                                            <input type="checkbox" id="same" name="address_same" onchange= "addressFunction()"/>              
+                                                            <label for = "same"><b>Check this box if permanent address and current address are same.</b></label></span>
+                                                        <!-- <input type="checkbox" id="addresscheck"><b> Current address is the same as the Parmanent Address.</b></span> -->
+                                                        <div><br>
+                                                            <h2 class="heading_a">
+                                                            Permanent Address
+                                                            </h2> 
+                                                            
+                                                        <div class="uk-grid" data-uk-grid-margin  >
+                                                                                                       
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                               
+                                                                    <label class="required">Address</label>
+                                                                    <input type="text" class="form-control" name='p_address' value="" id="permanentaddress" required>
+                                                                  
+                                                            </div>
+                                                            
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class="required" >District</label>
+                                                                <input type="text" class="form-control n_i" name='p_district' value="" id="permanentdistrict"required>
+                                                            </div>
+
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class="required">State</label>
+                                                                <select class="form-control" id="permanentstate"name="p_state" required >
+                                                                    <option selected disabled value="" > -- Select state  -- </option>
+
+                                                                    {% for state in states_list %}
+                                                                    <option value="{{state.id}}" >{{state}}</option>
+                                                                    {% endfor %}
+
+                                                                    <!-- <option value="Andhra Pradesh">Andhra Pradesh</option>
+<option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+<option value="Assam">Assam</option>
+<option value="Bihar">Bihar</option>
+<option value="Chandigarh">Chandigarh</option>
+<option value="Chhattisgarh">Chhattisgarh</option>
+<option value="Dadar and Nagar Haveli">Dadar and Nagar Haveli</option>
+<option value="Daman and Diu">Daman and Diu</option>
+<option value="Delhi">Delhi</option>
+<option value="Lakshadweep">Lakshadweep</option>
+<option value="Puducherry">Puducherry</option>
+<option value="Goa">Goa</option>
+<option value="Gujarat">Gujarat</option>
+<option value="Haryana">Haryana</option>
+<option value="Himachal Pradesh">Himachal Pradesh</option>
+<option value="Jammu and Kashmir">Jammu and Kashmir</option>
+<option value="Jharkhand">Jharkhand</option>
+<option value="Karnataka">Karnataka</option>
+<option value="Kerala">Kerala</option>
+<option value="Madhya Pradesh">Madhya Pradesh</option>
+<option value="Maharashtra">Maharashtra</option>
+<option value="Manipur">Manipur</option>
+<option value="Meghalaya">Meghalaya</option>
+<option value="Mizoram">Mizoram</option>
+<option value="Nagaland">Nagaland</option>
+<option value="Odisha">Odisha</option>
+<option value="Punjab">Punjab</option>
+<option value="Rajasthan">Rajasthan</option>
+<option value="Sikkim">Sikkim</option>
+<option value="Tamil Nadu">Tamil Nadu</option>
+<option value="Telangana">Telangana</option>
+<option value="Tripura">Tripura</option>
+<option value="Uttar Pradesh">Uttar Pradesh</option>
+<option value="Uttarakhand">Uttarakhand</option>
+<option value="West Bengal">West Bengal</option>
+                                                                     -->
+                         
+                                                                </select>
+                                                            </div>
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class="required">Country</label>
+                                                                <input type="text" class="form-control n_i" id="permanentcountry"name='p_country' value="" required>
+                                                            </div>
+                                                                <div class="uk-width-medium-1-3 parsley-row">
+                                                                    <label class="required">Pin Code</label>
+                                                                    <input type="text" class="form-control" id="permanentpincode" pattern ="[0-9]{6}" name='p_pin_code' value="" required>
+                                                                </div>
+                                                        </div>
+                                                        </div>
+                                                        <br>
+                                                        <div class="uk-grid" data-uk-grid-margin>
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class="required" >Religion</label>
+
+                                                                <select class="form-control" name="religion" required>
+                                                                    <option selected disabled value="">-- Select one --</option>
+                                                                                                                    <option value="Hindu">Hindu</option>
+                                                                                                                    <option value="Islam">Islam</option>
+                                                                                                                    <option value="Sikhs">Sikhs</option>
+                                                                                                                    <option value="Christian">Christian</option>
+                                                                                                                    <option value="budhist">budhist</option>
+                                                                                                                    <option value="Jain">Jain</option>
+                                                                                                                    <option value="Other">Other</option>
+                                                                  </select>
+
+                                                                
+                                                            </div>
+
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label class= "required" >Category</label>
+                                                                <select class="form-control" name="category" required>
+                                                                    <option value="">-- Select one --</option>
+                                                                    
+                                                                                                                    <option value="General">General</option>
+                                                                                                                    <option value="SC/ST">SC/ST</option>
+                                                                                                                    <option value="OBC">OBC</option>
+                                                                                                                                                                                                                                      
+                                                                                                                    
+                                                                                                            </select>
+                                                            </div>
+
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                <label for="sub_cast">Sub Caste</label>
+                                                                <input type="text" id="sub_cast" class="form-control" name="sub_cast">
+                                                            </div> </div>  
+
+                                                            <div class="uk-grid" >
+                                                                <div class="uk-width-medium-1-3 parsley-row">
+                                                               
+                                                                <label class="required">Mobile No</label>
+                                                                <input type="number"  class="form-control" name='mobile_number' pattern="[1-9]{1}[0-9]{9}" placeholder="Enter 10 digit mobile number" required>
+                                                            </div>
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                   
+                                                                <label >Email</label>
+                                                                <input type="email" value="" class="form-control"  name='email' placeholder="example123@gmail.com"> 
+                                                            </div>
+                                                            
+                                                            <div class="uk-width-medium-1-3 parsley-row">
+                                                                
+                                                                <label >Aadhaar Card No</label>
+                                                                <input type="text" class="form-control n_a positive_number" maxlength="12" name='student_aadhar_card' value="" placeholder="12 digit aadhar card No">
+                                                            </div></div>
+                                                           
+                                                        <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin>
+                                                            <div class="parsley-row">
+                                                                <label>Student Photo</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="student_pic" required>
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                  </div>
+                                                            </div>
+                                                            
+                                                            <div class="parsley-row">
+                                                                <label class="required">Select School/Institute</label>
+                                                                <select class="form-control" name="school" id="selected_institute" required>
+                                                                    <option selected disabled value="" > -- Select school -- </option>
+                        
+                                                                    
+                                                                    {% for school in school_list %}
+                                                                    <option value="{{school.id}}"  >{{school}}</option>
+                                                                    {% endfor %}
+                                                                  </select>
+
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label class="required">Select Class</label>
+                                                                <select class="form-control" name="class" id="fetched_classes_admission" required >
+                                                                    <option selected disabled value="" > -- Select school to choose class -- </option>
+                                                                   
+                                                                    
+                                                                  </select>
+
+                                                            </div>
+                                                        </div>          
+                                                            
+                                                            
+                                                    </section>
+                                                    
+                                                    <!-- second section -->
+                                                    <h3 class="uk-alert">Parents Information</h3>
+                                                    <section>
+                                                        <h2 class="heading_a">
+                                                            Father's Details
+                                                        </h2>
+                                                        <!-- <hr class="md-hr"/> -->
+                                                        <div class="uk-grid uk-grid-width-large-1-2 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
+                                                            <div class="parsley-row">
+                                                                <label class="required">Father's Name</label>
+                                                                <input type="text" value="" class="form-control n_i" name="father_name" required="required" >
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label class="required">Father's Mobile No</label>
+                                                                <input type="text" value="" class="form-control" name='f_mobile_number' required >
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label>Father's Email </label>
+                                                                <input type="text" value="" class="form-control n_i" name='f_Email_Id'  >
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label>Aadhar Card No</label>
+                                                                <input type="text" value="" class="form-control n_i" name='f_aadhar_card'>
+                                                            </div>
+                                                        </div>
+                                                        <div class="uk-grid uk-grid-width-large-1-3 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
+                                                            <div class="parsley-row">
+                                                                <label >Father's Qualification</label>
+                                                                <input type="text" value="" class="form-control n_i" name='f_qualification'>
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label for="wizard_vehicle_make" class="required">Father's Occupation</label>
+                                                                <input type="text" value="" class="form-control n_i" name='f_occupation' required>
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label>Father's Photo</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name='f_photo'>
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                  </div>
+                                                            </div>
+                                                            
+                                                        </div>
+
+                                                        <h2 class="heading_a">
+                                                            Mother's Details
+                                                        </h2>
+                                                        <!-- <hr class="md-hr"/> -->
+                                                        <div class="uk-grid uk-grid-width-large-1-2 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
+                                                            <div class="parsley-row">
+                                                                <label class="required" >Mother's Name</label>
+                                                                <input type="text" value="" class="form-control n_i" name="mother_name" required="required" >
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label>Mother's Mobile No</label>
+                                                                <input type="text" value="" class="form-control" name='m_mobile_number' >
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label>Mother's Email </label>
+                                                                <input type="text" value="" class="form-control n_i" name='m_Email_Id'  >
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label>Aadhar Card No</label>
+                                                                <input type="text" value="" class="form-control n_i" name='m_aadhar_card'>
+                                                            </div>
+                                                        </div>
+                                                        <div class="uk-grid uk-grid-width-large-1-3 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
+                                                            <div class="parsley-row">
+                                                                <label >Mother's Qualification</label>
+                                                                <input type="text" value="" class="form-control n_i" name='m_qualification'>
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label for="wizard_vehicle_make">Mother's Occupation</label>
+                                                                <input type="text" value="" class="form-control n_i" name='m_occupation'>
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label>Mother's Photo</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name='m_photo'>
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                  </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <br>
+                                                        <label style="color:#1976d2;" >  
+                                                        <input type="checkbox" id="Guardiancheck" name="guardian_applicable">
+                                                        <b>Check this box if guardian details available</b></label> 
+                                                        <div id="Guardianfielddiv" style="display:none">
+                                                        
+                                                        <h2 class="heading_a">
+                                                            Guardian's Details
+                                                        </h2>
+                                                        <!-- <hr class="md-hr"/> -->
+                                                        <div class="uk-grid uk-grid-width-large-1-2 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
+                                                            <div class="parsley-row">
+                                                                <label for="Guardianname" >Guardian's Name</label>
+                                                                <input type="text" id="Guardianname" value="" class="form-control n_i" name='guardian_name'  >
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label for ="#Guardianmobile">Guardian's Mobile No</label>
+                                                                <input type="text" id="Guardianmobile" value="" class="form-control" name='g_mobile_number' >
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label>Guardian's Email </label>
+                                                                <input type="text" value="" class="form-control " name='g_Email_Id'  >
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label>Aadhar Card No</label>
+                                                                <input type="text" value="" class="form-control " name='g_aadhar_card'>
+                                                            </div>
+                                                        </div>
+                                                        <div class="uk-grid uk-grid-width-large-1-3 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
+                                                            <div class="parsley-row">
+                                                                <label >Guardian's Qualification</label>
+                                                                <input type="text" value="" class="form-control n_i" name='g_qualification'>
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label for="wizard_vehicle_make">Guardian's Occupation</label>
+                                                                <input type="text" value="" class="form-control n_i" name='g_occupation'>
+                                                            </div>
+                                                            <div class="parsley-row">
+                                                                <label>Guardian's photo</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name='g_photo'>
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                  </div>
+                                                            </div>
+                                                            
+                                                        </div></div>
+                                                    </section>
+                                                    
+                                                    <!-- third section -->
+                                                    <h3 class="uk-alert">Document Upload</h3>
+                                                    <section>
+                                                        <!-- <h2 class="heading_a">
+                                                            Additional information
+                                                            <span class="sub-heading">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
+                                                        </h2> -->
+                                                        <!-- <hr class="md-hr"/> -->
+                                                        
+                                                        <span style="color: #1976d2;"><b>Updoad required certificate in PDF/JPG format only.</b></span>
+                                                        
+                                                        <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin>
+                                                            <div class="parsley-row">
+                                                                <label class="required">Date of Birth Certificate</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="dob_certificate" required>
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="parsley-row">
+                                                                <label class="required">ID Proof (Aadhar/PAN card)</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="id_proof_certificate" required>
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="parsley-row">
+                                                                <label>Domicile Certificate</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="domicile_certificate" >
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="parsley-row">
+                                                                <label>Caste Certificate</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="cast_certificate">
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="parsley-row">
+                                                                <label>Character Certificate</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="character_certificate" >
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="parsley-row">
+                                                                <label>Medical Certificate</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="medical_certificate" >
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="parsley-row">
+                                                                <label class="required">Transfer Certificate</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="transfer_certificate" required >
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                </div>
+                                                            </div>  
+                                                            <div class="parsley-row">
+                                                                <label class="required">Last Year Certificate</label>
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="last_year_certificate" required>
+                                                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                </div>
+                                                            </div>   
+                                                        </div>
+                                                    </section> 
+                                                    <!-- <div class="actions clearfix"><ul role="menu" aria-label="Pagination"><li class="button_previous disabled" aria-disabled="true"><a href="#previous" role="menuitem"><i class="material-icons"></i> Previous</a></li><li class="button_next" aria-hidden="false" aria-disabled="false"><a href="#next" role="menuitem">Next <i class="material-icons"></i></a></li><li class="button_finish" aria-hidden="true" style="display: none;"><a href="#finish" role="menuitem">Finish</a></li></ul></div>       -->
+                                                </div>
+                                            </br>
+                                            <!--  -->
+                                            <p><input type="checkbox" required name="terms"> I accept the <u>Terms and Conditions</u></p>  
+                                            <!-- <button type="submit" class="btn btn-primary" value="Submit"><td>submit
+                                                {% if disable_submit %}
+                                                    disabled
+                                                {% endif %}</td></button> -->
+                                               <td><input type="submit" class="form-control admission_submit_button" value="Submit" 
+                                                    {% if disable_submit %}
+                                                        disabled
+                                                    {% endif %}></td>
+                                                
+                                                
+                                            </form>
+                                        </div>
+                                    </div>
+                        
+                                   
+                        
+                                    
+                        
                                 </div>
-                                <div class="col-sm-6 text-right">
-                                    <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
-                                </div>
-                              </div>
-                            <table id="admission_form_table"  >
+                            </div>
+                            <!-- <table id="admission_form_table"  >
                                 
                                 <form method="POST" enctype="multipart/form-data" action="{% url 'admission_home' %}">
                                     {% csrf_token %}
@@ -604,7 +1142,7 @@
 
 
                                 </form>
-                            </table>
+                            </table> -->
                           
                             
                         </div>
@@ -642,6 +1180,26 @@
     <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
     <!-- altair common functions/helpers -->
     <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
+    <!-- page specific plugins -->
+    <!-- parsley (validation) -->
+    <script>
+        // load parsley config (altair_admin_common.js)
+        altair_forms.parsley_validation_config();
+        // load extra validators
+        altair_forms.parsley_extra_validators();
+        </script>
+
+    <script src="{% static 'main_app/js/parsley.min.js'%}"></script>
+    <!-- jquery steps -->
+    <script src="{% static 'main_app/js/wizard_steps.min.js'%}"></script>
+    <!-- handlebars.js -->
+    <script src="{% static 'main_app/js/handlebars.min.js'%}"></script>
+    <script src="{% static 'main_app/js/handlebars_helpers.min.js'%}"></script>
+
+    <!--  forms wizard functions -->
+    <script src="{% static 'main_app/js/forms_wizard.min.js'%}"></script>    
+
+
     <script>
         $(document).ready(function(){
           $('#selected_institute').change(function(){
@@ -681,5 +1239,95 @@
 
 
 <script src="{% static 'main_app/js/script.js' %}"></script>
+
+<!-- <script>
+    $('#addresscheck').click(function(){
+        if($(this).prop("checked") == true){
+        $("#parmanentfielddiv").hide();
+        $('#addressfield').removeAttr("required",''); 
+        $('#cityfield').removeAttr("required",'');
+        $('#statefield').removeAttr("required",'');  
+    
+    }
+    else 
+        if($(this).prop("checked") == false){
+        $("#parmanentfielddiv").show();
+        $('#addressfield').attr("required",''); 
+        $('#cityfield').attr("required",'');
+        $('#statefield').attr("required",'');  
+    }
+    });
+    $("#addresscheck").trigger("change");
+    </script> -->
+    <script> 
+        function addressFunction() 
+        { 
+          if (document.getElementById('same').checked) 
+          { 
+              document.getElementById('permanentaddress').value=document.
+                       getElementById('currentaddress').value;
+              document.getElementById('permanentdistrict').value=document.
+                     getElementById('currentdistrict').value;
+                     
+              document.getElementById('permanentstate').value=document.
+                       getElementById('currentstate').value; 
+              document.getElementById('permanentcountry').value=document.  
+                       getElementById('currentcountry').value;    
+              document.getElementById('permanentpincode').value=document.  
+                       getElementById('currentpincode').value
+               
+          } 
+              
+          else
+          { 
+            document.getElementById('permanentaddress').value=""; 
+            document.getElementById('permanentdistrict').value=""; 
+            document.getElementById('permanentstate').value=""; 
+            document.getElementById('permanentcountry').value=""; 
+            document.getElementById('permanentpincode').value=""; 
+          } 
+        } 
+        </script> 
+
+<script>
+    $('#Guardiancheck').click(function(){
+        if($(this).prop("checked") == true){
+        $("#Guardianfielddiv").show();
+        $('#Guardianname').attr("required",''); 
+        $('#Guardianmobile').attr("required",'');
+           
+    }
+    else 
+        if($(this).prop("checked") == false){
+        $("#Guardianfielddiv").hide();
+        $('#Guardianname').removeAttr("required",''); 
+        $('#Guardianmobile').removeAttr("required",'');
+        
+    }
+    });
+    $("#Guardiancheck").trigger("change");
+    </script>    
+<script>
+    function myFunction() {
+      var checkBox = document.getElementById("myCheck");
+      var text = document.getElementById("text");
+      if (checkBox.checked == true){
+        text.style.display = "block";
+      } else {
+         text.style.display = "none";
+      }
+    }
+    </script>
+
+
+<!-- starting showing uploaded file name bootstrap -->
+<script>
+$(".custom-file-input").on("change", function() {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
+</script>
+
+<!-- ending showing uploaded file name bootstrap -->
 </body>
 </html>

@@ -325,19 +325,14 @@
 </li>
 <!-- ending notice menu -->
 
-{% for i in user.user_institute_role.level.permissions.all %}    
-              {% if i.function_name == "Can Update Lecture Timing" %}
+{% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
               <li  title="Fees">
                 <a href="{% url 'fees_home' %}">
                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                     <span class="menu_title">Fees Setup</span>
                 </a>
             </li>      
-              {% endif %}
-            {% endfor %}
-
-
-           
+              {% endif %}           
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
@@ -671,7 +666,7 @@
                             </div>
                             
                         </div>
-                        <div class="user_content">
+                
                             <div class="user_content">
              
                                 <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
@@ -693,6 +688,7 @@
                                             Issue Book
                                         </a>
                                     </div>
+                                    {% if total_issue %}
                                     <div class="md-card uk-margin-medium-bottom">
                                         <div class="md-card-content">
                                             <div class="uk-overflow-container">
@@ -725,6 +721,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% endif %}
                                     </li>
                                     <!-- End Issue Book Tab -->
                                     <!-- Start Return Book Tab -->
@@ -1007,6 +1004,7 @@
                                                     </form>
                                                     </div>
                                                 </div>
+                                        {% if books %}
                                         <div class="md-card uk-margin-medium-bottom">
                                             <div class="md-card-content">
                                                 <div class="uk-overflow-container">
@@ -1083,7 +1081,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+                                        {% endif %}
                                     </li>                                             
                                 <!-- Add Book Tab End -->
                                 <!--Start category Tab-->
@@ -1120,7 +1118,7 @@
                             </div>
                                 </li>
                                 <!--End category Tab-->
-                                        </div>
+                            </div>
                             <!-- <div class="uk-grid" data-uk-grid-margin style="margin-left: 30px;">
                                 <div class="uk-width-medium-1-5" >
                                     <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'book' %}" >
