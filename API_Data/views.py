@@ -36,6 +36,8 @@ def taskDetail(request,pk):
 
 @permission_classes((AllowAny, ))
 @api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
 def taskCreate(request):
     serializer = UserDataSerializer(data=request.data)
     username=serializer.initial_data['username']
