@@ -6,6 +6,7 @@ from main_app.models import *
 from API_Data.serializers import UserDataSerializer
 from registration.backends.default.views import RegistrationView
 from registration.forms import RegistrationFormUniqueEmail
+from django.core.mail import send_mail, send_mass_mail, mail_admins, mail_managers
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
