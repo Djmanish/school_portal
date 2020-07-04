@@ -9,6 +9,7 @@ from main_app.views import userList, userLoginData
 from rest_framework.authtoken import views as authviews
 from rest_framework_jwt.views import obtain_jwt_token
 from notices import views as notice_views
+from API_Data.router import router
 
 
 urlpatterns = [
@@ -33,6 +34,8 @@ urlpatterns = [
     path('users/', userList.as_view()),
     path('users_login_data/', userLoginData.as_view()),
     path('api-token-auth/', obtain_jwt_token),
+    path('api/',include(router.urls)),
+
     path('notice/view/time/', notice_views.last_notice_view_time)
     
  

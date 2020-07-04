@@ -4,6 +4,7 @@ from datetime import date
 from django.core.validators import MinValueValidator, MaxValueValidator,FileExtensionValidator
 import datetime
 from PIL import Image
+from django.contrib import messages
 from django.core.exceptions import ValidationError
 
 
@@ -24,7 +25,7 @@ class App_functions(models.Model):
 def no_future(value):
     today = date.today()
     if value > today:
-        raise ValidationError('Establish Date cannot be in the future.')
+        return messages.error('Establish Date cannot be in the future.')
 def session_date(value):
     today = date.today()
     if value > today:
