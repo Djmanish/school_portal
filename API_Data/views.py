@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from main_app.models import *
 from API_Data.serializers import UserDataSerializer
+from registration.backends.default.views import RegistrationView
+from registration.forms import RegistrationFormUniqueEmail
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -47,5 +49,9 @@ def taskCreate(request):
     print(email)
 
     if serializer.is_valid():
+        
         serializer.save()
+        send_mail('username','Here is the message.','email', 
+            [created_object.email],  fail_silently=False,)
     return Response(serializer.data)
+
