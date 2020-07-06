@@ -4,6 +4,7 @@ from datetime import date
 from django.core.validators import MinValueValidator, MaxValueValidator,FileExtensionValidator
 import datetime
 from PIL import Image
+from django.contrib import messages
 from django.core.exceptions import ValidationError
 
 
@@ -24,7 +25,7 @@ class App_functions(models.Model):
 def no_future(value):
     today = date.today()
     if value > today:
-        raise ValidationError('Establish Date cannot be in the future.')
+        return messages.error('Establish Date cannot be in the future.')
 def session_date(value):
     today = date.today()
     if value > today:
@@ -239,7 +240,7 @@ class User_Role_changes(models.Model):
 
 class Student_Info(models.Model):
     student = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name="student_info" )
-    blood_group = models.CharField(max_length=10)
+    student_blood_group = models.CharField(max_length=10)
     religion = models.CharField(max_length=10)
     sub_cast = models.CharField(max_length=50, null=True, blank=True)
     f_mobile_Number =models.CharField( max_length=12, null=True)
