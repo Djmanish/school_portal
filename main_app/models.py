@@ -4,6 +4,7 @@ from datetime import date
 from django.core.validators import MinValueValidator, MaxValueValidator,FileExtensionValidator
 import datetime
 from PIL import Image
+from django.contrib import messages
 from django.core.exceptions import ValidationError
 
 
@@ -24,7 +25,7 @@ class App_functions(models.Model):
 def no_future(value):
     today = date.today()
     if value > today:
-        raise ValidationError('Establish Date cannot be in the future.')
+        return messages.error('Establish Date cannot be in the future.')
 def session_date(value):
     today = date.today()
     if value > today:
@@ -239,7 +240,7 @@ class User_Role_changes(models.Model):
 
 class Student_Info(models.Model):
     student = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name="student_info" )
-    blood_group = models.CharField(max_length=10)
+    student_blood_group = models.CharField(max_length=10)
     religion = models.CharField(max_length=10)
     sub_cast = models.CharField(max_length=50, null=True, blank=True)
     f_mobile_Number =models.CharField( max_length=12, null=True)
@@ -262,6 +263,22 @@ class Student_Info(models.Model):
     guardian_occupation = models.CharField(max_length=20, null=True)
     guardian_photo = models.ImageField( upload_to='student_document', null=True)
     guardian_applicable = models.BooleanField(null=True)
+
+    #starting current address and permanent address and check as well
+    c_address = models.CharField(max_length=100, null=True)
+    c_District = models.CharField(max_length=20, null=True)
+    c_state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True, related_name='si_c_state')
+    c_country= models.CharField(max_length=100, null=True, blank=True)
+    c_Pin_Code = models.IntegerField(null=True)
+    same_address = models.BooleanField(null=True)
+
+    p_address = models.CharField(max_length=100, null=True)
+    p_district = models.CharField(max_length=20, null=True)
+    p_State = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, related_name="si_p_state")
+    p_country= models.CharField(max_length=100, null=True, blank=True)
+    p_pin_code = models.IntegerField(null=True)
+
+    #ending current address and permanent address and check as well
 
     dob_certificate = models.FileField( upload_to='student_document', null=True)
     id_proof_certificate = models.FileField( upload_to='student_document', null=True)

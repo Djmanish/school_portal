@@ -326,20 +326,14 @@
     </ul>
 </li>
 <!-- ending notice menu -->
-
-{% for i in user.user_institute_role.level.permissions.all %}    
-              {% if i.function_name == "Can Update Lecture Timing" %}
+{% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
               <li  title="Fees">
                 <a href="{% url 'fees_home' %}">
                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                     <span class="menu_title">Fees Setup</span>
                 </a>
             </li>      
-              {% endif %}
-            {% endfor %}
-
-
-           
+              {% endif %}        
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
@@ -634,7 +628,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text search_icon"><i class="material-icons search_icon ">search</i></span>
        </div>
-       <input type="text" class="form-control"  id="myInput" placeholder="Search a student name in list ...">
+       <input type="text" class="form-control"  id="myInput" placeholder="Type to serach...">
      </div>
   <small>press and hold ctrl to select multiple...</small>
     <select class="Individual_option form-control" id="select_individual" multiple="multiple"  class="selectpicker" data-live-search="true" name="selected_individual">

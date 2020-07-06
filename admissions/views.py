@@ -90,6 +90,10 @@ def admission_home(request):
         new_request.f_occupation = request.POST.get('f_occupation')
         if 'f_photo' in request.FILES:
             new_request.f_photo= request.FILES['f_photo']
+        if 'address_same' in request.POST:
+            new_request.address_same= True
+        if 'guardian_applicable' in request.POST:
+            new_request.g_applicable= True
 
         new_request.mother_name = request.POST.get('mother_name').strip()
         new_request.m_mobile_Number = request.POST.get('m_mobile_number')
@@ -173,7 +177,7 @@ class Admission_Requests_View(LoginRequiredMixin, UserPassesTestMixin,  ListView
 
     
     def get_queryset(self):
-        return Admission_Query.objects.filter(school_name= self.request.user.profile.institute)
+        return Admission_Query.objects.filter(school_name= self.request.user.profile.institute).order_by('-id')
 
 class Admission_Request_Detail_View(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model= Admission_Query
@@ -258,6 +262,18 @@ def approve_admission_request(request, pk):
                 guardian_occupation = approved_user.g_occupation,
                 guardian_photo = approved_user.g_photo,
                 guardian_applicable = approved_user.g_applicable,
+
+                c_address = approved_user.Address,
+                c_District = approved_user.District,
+                c_state = approved_user.state,
+                c_country = approved_user.country,
+                c_Pin_Code = approved_user.Pin_Code,
+                same_address =approved_user.address_same,
+                p_address = approved_user.p_address,
+                p_district =approved_user.p_district,
+                p_State = approved_user.p_State,
+                p_country = approved_user.p_country,
+                p_pin_code = approved_user.p_pin_code,
 
                 dob_certificate = approved_user.dob_certificate,
                 id_proof_certificate = approved_user.id_proof_certificate,

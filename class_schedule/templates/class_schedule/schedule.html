@@ -259,7 +259,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -319,19 +319,14 @@
 </li>
 <!-- ending notice menu -->
 
-{% for i in user.user_institute_role.level.permissions.all %}    
-              {% if i.function_name == "Can Update Lecture Timing" %}
+{% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
               <li  title="Fees">
                 <a href="{% url 'fees_home' %}">
                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                     <span class="menu_title">Fees Setup</span>
                 </a>
             </li>      
-              {% endif %}
-            {% endfor %}
-
-
-           
+              {% endif %}           
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
@@ -349,7 +344,7 @@
                     </a>   
                 </li>
                 
-               <li  title="Institute Schedule">
+               <li class="current_section"  title="Institute Schedule">
                 <a href="{% url 'class_schedule' %}">
                     <span class="menu_icon"><i class="material-icons">schedule</i></span>
                     <span class="menu_title">Schedule</span>
@@ -599,7 +594,7 @@
                                                             
                                                             <th class="uk-text-center" colspan="3">
                                                        
-                                                             <b style="color: #1976d2;"> {{time_table_for_class}} Time Table</b>
+                                                             <b style="color: #1976d2;">Class: {{time_table_for_class}} Time Table</b>
                                                           
                                                             
                                                             </th>

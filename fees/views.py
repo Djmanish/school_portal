@@ -600,7 +600,7 @@ def fee_payment(request):
     #  ending for due date whose fees is pending 
 
     # starting for those due dates whose fees is paid
-    payment_record = list(reversed(Students_fees_table.objects.filter( student= student, total_due_amount=0)))
+    payment_record = Students_fees_table.objects.filter( student= student, total_due_amount=0).order_by('-payment_date')
     # ending for those due dates whose fees is paid
     paginator = Paginator(payment_record, 30)
     page_number = request.GET.get('page')

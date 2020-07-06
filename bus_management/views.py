@@ -115,4 +115,7 @@ def fetch_bus_details(request):
         selected_bus.status = "active"
         selected_bus.save()
     return HttpResponse("Hello world")
-        
+
+def add_driver(request):
+    driver_user = User.objects.create(username="manish", email="manish@example.com", password="test@1234")        
+    return render(request, 'bus/driver.html')
