@@ -54,8 +54,11 @@ class userLoginData(APIView):
 	
     def get(self, request):
         user1= User.objects.all().order_by('-id')
+        
         for user in User.objects.all():
+            
             Token.objects.get_or_create(user=user)
+            
         serializer = UserSerializer(user1, many=True)
         return Response(serializer.data)
 
@@ -102,6 +105,10 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return True
         else:
             return False
+    def no_future(value):
+        today = date.today()
+        if value > today:
+            return messages.error(request, 'Establish Date cannot be in the future.')
 
 
     def get_success_url(self, **kwargs):         
