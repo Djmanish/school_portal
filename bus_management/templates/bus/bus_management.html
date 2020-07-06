@@ -869,6 +869,77 @@
                                 </form>
                                 </div>
                             </div>
+                            <div class="uk-modal" id="modal_new_route">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Create New Route</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'add_route' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Route No.</label>
+                                            <input type="text" class="form-control" name="route_no" required>
+                                          </div>        
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Route Name</label>
+                                            <input type="text" class="form-control" name="route_name" required>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Bus</label>
+                                            <select id="point_state" class="form-control-sm form-control" name="sel_bus" required>
+                                                <option selected disabled value="">--- Select ---</option>
+                                                {% for i in active_buses %}
+                                                <option value={{i.id}}>{{i}}</option>
+                                                {% endfor %}
+                                             
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Driver</label>
+                                            <select id="point_state" class="form-control-sm form-control" name="sel_driver" required>
+                                                <option selected disabled value="">--- Select ---</option>
+                                                {% for i in drivers %}
+                                                <option value={{i.id}}>{{i.name.first_name}} {{i.name.last_name}}</option>
+                                                {% endfor %}
+                                             
+                                            </select>
+                                        </div>
+                                            <div class="uk-form-row">
+                                                <div class="uk-grid" data-uk-grid-margin>
+                                                    <div class="uk-width-medium-1-2">
+                                                    <div class="form-group">
+                                                        <!-- <span class="uk-input-group-addon"><i class="uk-input-group-icon uk-icon-calendar"></i></span> -->
+                                                        <i class="uk-input-group-icon uk-icon-calendar"></i> <label class="required" style="color: black;"> From Date </label>
+                                                        <input type="date" class="form-control" name='from_date' pattern="^[0-9-]{10}$" required>
+                                                    </div>
+                                                    </div>
+                                                    <div class="uk-width-medium-1-2">
+                                                        <div class="form-group">
+                                                            <!-- <span class="uk-input-group-addon"><i class="uk-input-group-icon uk-icon-calendar"></i></span> -->
+                                                            <i class="uk-input-group-icon uk-icon-calendar"></i> <label class="required" style="color: black;"> To Date </label>
+                                                            <input type="date" class="form-control" name='to_date' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" required>
+                                                        </div>
+                                                        </div>
+                                                    
+                                                    </div> 
+                                                    </div>
+                                                    <div class="uk-form-row" style="margin-bottom: 15px">
+                                                        
+                                                            </div>
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Create Route</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
                             <!-- End Modol Forms -->
                             
                             
@@ -1076,38 +1147,40 @@
                                             </a>
                                         </div>
                                         <div class="md-card uk-margin-medium-bottom">
-                                            {% if points %}
-                                            <!-- <div class="md-card-content">                                            
+                                            {% if drivers %}
+                                            <div class="md-card-content">                                            
                                                 <div class="uk-overflow-container">                                                
                                                     <table class="uk-table uk-table-hover">
                                                         <thead>
                                                         <tr>
                                                             <th>Sr No.</th>
-                                                            <th>Point Code.</th>
-                                                            <th>Point Name</th>
-                                                            <th>Landmark</th>
-                                                            <th>Place</th>
+                                                            <th>Driver Code</th>
+                                                            <th>Driver Name.</th>
+                                                            <th>License No.</th>
+                                                            <th>Mobile No.</th>
+                                                            <!-- <th>Place</th>
                                                             <th>Address</th>
                                                             <th>Edit</th>
-                                                            <th>Delete</th>
+                                                            <th>Delete</th> -->
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                        {% for p in points %}
+                                                        {% for p in drivers %}
                                                         <tr>
                                                             <td>{{forloop.counter}}</td>
-                                                            <td>{{p.point_code}}</td>
-                                                            <td>{{p.point_name}}</td>                                                       
-                                                            <td>{{p.point_landmark}}</td>
-                                                            <td>{{p.point_exact_place}}</td>
-                                                            <td>{{p.point_street_no}}, {{p.point_landmark}} {{p.point_city}} {{p.point_state}}, {{p.point_country}} </td>
+                                                            <td>{{p.driver_id}}</td>
+                                                            <td>{{p.name.first_name}} {{p.name.last_name}}</td>
+                                                            <td>{{p.driving_lic_no}}</td>                                                       
+                                                            <td>{{p.name.mobile_number}}</td>
+                                                            <!-- <td>{{p.point_exact_place}}</td>
+                                                            <td>{{p.point_street_no}}, {{p.point_landmark}} {{p.point_city}} {{p.point_state}}, {{p.point_country}} </td> -->
                                                             
-                                                            <td><a id="{{p.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                            <!-- <td><a id="{{p.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                             </td>
                                                             <td><a class="confirm-delete" href="{% url 'delete_point' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
-                                                            </td>
+                                                            </td> -->
                                                         </tr>
-                                                        <script>
+                                                        <!-- <script>
                                                             $(document).ready(function(){
                                                             $(document).on('click', '.confirm-delete', function(){
                                                                 return confirm('Do you want to delete this?');
@@ -1129,15 +1202,64 @@
                                                                 $('#edit_point_country').val('{{p.point_country}}');
                                                             });
                                                             });
-                                                        </script>
+                                                        </script> -->
                                                         {% endfor %}
                                                         </tbody>
                                                     </table>                                                
                                                 </div>                                            
-                                            </div> -->
+                                            </div>
                                             {% endif %}
                                         </div>
-                                    </li>      
+                                    </li> 
+                                    <li>
+                                        <div class="uk-width-medium-1-5">
+                                            <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="#" data-uk-modal="{target:'#modal_new_route'}" >
+                                                <i class="uk-icon-map-signs"></i>
+                                               Create Route
+                                            </a>
+                                        </div>
+                                        <div class="md-card uk-margin-medium-bottom">
+                                            {% if routes %}
+                                            <div class="md-card-content">                                            
+                                                <div class="uk-overflow-container">                                                
+                                                     <table class="uk-table uk-table-hover"> 
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Sr No.</th>
+                                                            <th>Route No.</th>
+                                                            <th>Route Name</th>
+                                                            <th>Vehicle</th>
+                                                            <th>Driver</th>
+                                                            <!-- <th>From Date</th>
+                                                            <th>To Date</th> -->
+                                                            <!-- <th>Delete</th> -->
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for p in routes %}
+                                                        <tr>
+                                                            <td>{{forloop.counter}}</td>
+                                                            <td>{{p.route_no}}</td>
+                                                            <td>{{p.route_name}}</td>                                                       
+                                                            <td>{{p.vehicle}}</td>
+                                                            <td>{{p.vehicle_driver.name.first_name}} {{p.vehicle_driver.name.last_name}}</td>
+                                                            <td>{{p.point_street_no}}</td>
+                                                            <!-- <td>{{p.from_date}}</td>
+                                                            <td>{{p.to_date}}</td>                                                             -->
+                                                            <!-- <td><a id="{{p.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                            </td>
+                                                            <td><a class="confirm-delete" href="{% url 'delete_point' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                            </td> -->
+                                                        </tr>
+                                                        
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>                                                
+                                                </div>                                            
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </li>     
 
                             </div>
                         

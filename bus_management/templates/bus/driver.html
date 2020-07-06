@@ -16,7 +16,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
 
-    <title>Update Profile</title>
+    <title>Add Driver</title>
  
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
    
@@ -548,44 +548,43 @@
                               </div>
                            
                         <!-- starting user form  -->
-                        <form method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' user.profile.pk %}">
+                        <form method="POST" enctype="multipart/form-data" action="{% url 'add_new_driver' %}">
                             {% csrf_token %}
                             
-
                             <div class="form-group">
                                                                                             
+                                <label class="required">Driver Code</label>
+                                <input type="text" class="form-control" name='driver_code' required>
+                              </div>
+                              <div class="form-group">
+                                                                                            
                                 <label class="required">First Name</label>
-                                <input type="text" value="{{user_info.first_name}}" class="form-control n_i" name='first_name' required="required" >
+                                <input type="text" class="form-control n_i" name='first_name' required="required" >
                               </div>
 
                               <div class="form-group">
                                 <label >Middle Name</label>
-                                <input type="text" class="form-control n_i" name='middle_name'  value="{{user_info.middle_name}}">
+                                <input type="text" class="form-control n_i" name='middle_name'>
                               </div>
 
                               <div class="form-group">
                                 <label >Last Name</label>
-                                <input type="text" class="form-control n_i" name='last_name'  value="{{user_info.last_name}}">
+                                <input type="text" class="form-control n_i" name='last_name' >
                               </div>
 
                               <div class="form-group">
                                 <label class="required">Father's Name</label>
-                                <input type="text" class="form-control n_i" name='father_name'  value="{{user_info.father_name}}" required>
+                                <input type="text" class="form-control n_i" name='father_name' required>
                               </div>
 
                               <div class="form-group">
                                 <label >Mother's Name</label>
-                                <input type="text" class="form-control n_i" name='mother_name'  value="{{user_info.mother_name}}">
+                                <input type="text" class="form-control n_i" name='mother_name'>
                               </div>
     
                               <div class="form-group">
                                 <label class="required" for="gender">Gender</label>
-                                <select class="form-control" id="gender" name="gender" required>
-                                    
-                                    {% if user_info.gender %}
-                                        <option selected  >{{user_info.gender}}</option>
-                                    {% endif %}
-                                        
+                                <select class="form-control" id="gender" name="gender" required>                                       
                                   <option >Male</option>
                                   <option  >Female</option >
                                   <option >Other</option>
@@ -593,73 +592,15 @@
                                 </select>
                               </div>
 
-{% if not user_info.designation  %}
-<div class="custom-control custom-checkbox">
-    <input type="checkbox" class="custom-control-input" id="defaultUnchecked" name="admin_check">
-    <label  class="custom-control-label" for="defaultUnchecked">Institute not Listed ? Check this box to create a new institute as an admin</label>
-</div>
-
-<div id="institute_list">
-    <div class="form-group" >
-        <label >Select Institute</label>
-        <select class="form-control" name="select_school" id="select_school">
-            
-            {% if not user_info.institute %}
-            <option selected disabled>-- select your institute --</option>
-            {% endif %}
-            
-          {% for institute in all_institutes %}
-              <option value="{{institute.id}}">{{institute}}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="required">Join As</label>
-        <select class="form-control" name="user_designation" id="fdata" required='required'>
-    <option selected disabled value="">-- First Select Your School -- </option>
-        </select>
-    </div>
-
-    <div class="form-group" id="user_class"  style="display: none;">
-<label>Select Your Class</label>
-<select id="selected_designaion_clas" name="student_class" class="form-control">
-</select>
-    </div>    
-</div>
-{% endif %}
-
-
-
-  <div id="institute-options" style="display: none;">
-    <div class="form-group">
-        <label >Institute Name</label>
-        <input type="text" class="form-control form-control-sm" name='new_institute_name' placeholder="New institute name here" id="new_institute_id" >
-      </div>
-      <div class="form-group">
-        <label>Institute Phone</label>
-        <input type="number" id="new_institute_phone_id" class="form-control form-control-sm" name="new_institute_phone" pattern="[1-9]{1}[0-9]{9}" placeholder="Enter 10 digit mobile number">
-      </div>
-
-      <div class="form-group">
-        <label>Institute Address</label>
-        <input type="text" class="form-control form-control-sm" name="new_institute_address" placeholder="Institute address here">
-      </div>
-  </div>
-
                               <div class="form-group" >
                                 <label class= "required">Date of Birth</label>
                                 
-                                <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" value="{{user_info.date_of_birth|date:'Y-m-d'}}" required>
+                                <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" required>
                               </div>
                               {% if user.user_institute_role.level.level_name != "student" %}
                               <div class="form-group">
                                 <label >Marital Status</label>
                                 <select class="form-control" name="marital_status">     
-                                    {% if user_info.marital_status %}
-                                        <option selected  >{{user_info.marital_status}}</option>
-                                
-                                   
-                                    {% endif %}
                                   <option >Unmarried</option>
                                   <option >Married</option >
                                 </select>
@@ -669,51 +610,18 @@
                               <div class="form-group">
                                 <label >Category</label>
                                 <select class="form-control" name="category_">     
-                                    {% if user_info.category %}
-                                        <option selected  >{{user_info.category}}</option>
-                                
-                                    {% endif %}
+                                    
                                     <option disabled>-- Select One --</option>
                                   <option value="Unreserved" >Unreserved (General)</option>
                                   <option  >Sc/St</option >
                                     <option  >OBC</option >
                                 </select>
-                              </div>
-
-
-
-
-                              {% if user.user_institute_role.level.level_name == "student" %}
-
-
-
-  <div class="form-group">
-    <label for="">My Roll No.</label>
-    <input type="text" class="form-control" value="{{user_info.roll_number|default:''}}" name="st_roll_number">
-  </div>
-
-
-  {% else %}
-{% endif %}
-
-                              <div class="form-group">
-                                <label >About Yourself</label>
-                               
-                                <textarea class="form-control"  name='about' >{{user_info.about|default:''}}</textarea>
-                              </div>
-
-                              {% if user.user_institute_role.level.level_name != "student" %}
-                              <div class="form-group">
-                                <label >Qualification</label>
-                                <input type="text" class="form-control" name='user_qualification' value="{{user_info.qualification}}" >
-                              </div>
-                              {% endif %}
-                             
+                              </div>                            
                              
                               <div class="form-group">
                                 <label >Change Profile Picture</label>
                                 <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="customFile" accept="image/*" name='profile_pic'>
+                                  <input type="file" class="custom-file-input" id="customFile" accept="image/*" name='pc'>
                                   <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
                               </div>
@@ -722,39 +630,40 @@
 
                               <div class="form-group">
                                 <label class="required">Contact No.</label>
-                                <input type="text" class="form-control" name='mobile_number' value="{{user_info.mobile_number|default:''}}" pattern="[1-9]{1}[0-9]{9}" required='required'>
+                                <input type="text" class="form-control" name='mobile_number'  pattern="[1-9]{1}[0-9]{9}" required>
                               </div>
-                            
                               <div class="form-group">
-                                <label >Aadhaar Card Number</label>
-                                <input type="text" class="form-control n_a positive_number" maxlength="12" name='adhar_number' value="{{user_info.aadhar_card_number}}" placeholder="12 digit aadhar card number">
+                                <label class="required" >E-Mail</label>
+                                <input type="email" class="form-control" name='email' required>
+                              </div>
+                              <div class="form-group">
+                                <label class="required" >Aadhaar Card Number</label>
+                                <input type="number" class="form-control n_a positive_number" maxlength="12" name='adhar_number'  placeholder="12 digit aadhar card number" required>
+                              </div>
+                              <div class="form-group">
+                                <label class="required" >Driving License No.</label>
+                                <input type="text" class="form-control " name='driving_license'  placeholder="eg: XX123456789" required>
                               </div>
 
                               <div class="form-group">
                                 <label class="required">Address Line 1</label>
-                                <input type="text" class="form-control" name='address_line_1' value="{{user_info.address_line_1}}" required>
+                                <input type="text" class="form-control" name='address_line_1' required>
                               </div>
 
                               <div class="form-group">
                                 <label >Address Line 2</label>
-                                <input type="text" class="form-control" name='address_line_2' value="{{user_info.address_line_2}}">
+                                <input type="text" class="form-control" name='address_line_2'>
                               </div>
 
                               <div class="form-group">
                                 <label class="required" >City</label>
-                                <input type="text" class="form-control n_i" name='city' value="{{user_info.city|default:''}}" required>
+                                <input type="text" class="form-control n_i" name='city'  required>
                               </div>
 
                               <div class="form-group" > 
                                 <label class="required">State</label>
                                 <select class="form-control" name="state"  required>
-                                    <option selected disabled value=""> --- select state --- </option>
-                                  
-                                  {% if user_info.state %}
-                                      <option selected disabled>{{user_info.state}}</option>
-                                  {% endif %}
-                                      
-                                  
+                                    <option selected disabled value=""> --- select state --- </option>              
                                   {% for state in all_states %}
                                       <option value="{{state.id}}">{{state}}</option>
                                   {% endfor %}
@@ -769,26 +678,12 @@
 
                               <div class="form-group">
                                 <label class="required">Pin Code</label>
-                                <input type="text" class="form-control" name='u_pin_code' value="{{user_info.pin_code|default:''}}" required>
+                                <input type="text" class="form-control" name='u_pin_code' required>
                               </div>
 
-                              <div class="form-group"> 
-                                <label >Facebook Link</label>
-                                <input type="url" class="form-control" name='facebook_link' value="{{user_info.facebook_link}}">
-                              </div>
-                              {% if user.profile.designation.level_name == "student"%}
-                              <div class="form-group">
-                                <label >Class Session</label>
-                                <input type="text" class="form-control" name='student_class_session' value="{{user_info.class_current_year}}-{{user_info.class_next_year}}"></input>
-                              </div>
-                              {% endif %}
-                              <div>
-                                  <input class="form-control" type="hidden" name="user_status" value="{{user_info.status}}">
-                              </div>
-                      
-                              <input 
                               
-                              class="md-btn md-btn-primary" type="submit" value="Update" >
+                      
+                              <input class="md-btn md-btn-primary" type="submit" value="Submit" >
 
 
                         </form>

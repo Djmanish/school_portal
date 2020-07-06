@@ -629,6 +629,10 @@ def dashboard(request):
         
 
         # ending fees status for parent view
+    # if request.user.profile.designation.level_name == "driver":
+    #     user_permissions = None
+    #     can_setup_fees_permission =None
+    # else:
     if request.user.profile.designation:
         user_permissions = request.user.user_institute_role.level.permissions.all()
         can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')

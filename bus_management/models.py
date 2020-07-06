@@ -38,16 +38,19 @@ class Point(models.Model):
 
 class Driver(models.Model):
     driver_id = models.CharField(max_length=10)
-    name = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='driver_name', null=True, blank=False)
+    name = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='driver', default=None)
     driving_lic_no = models.CharField(max_length=13)
+    institute = models.ForeignKey(to=Institute, related_name="driver_institute", on_delete=models.CASCADE, null=True, blank=True)
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class RouteInfo(models.Model):
-    route_no = models.IntegerField(null=True, blank=True)
+    route_no = models.CharField(max_length=20, null=True)
+    route_name = models.CharField(max_length=100, null=True)
     vehicle = models.ForeignKey(to=Bus, on_delete=models.CASCADE, related_name='vehicle', null=True, blank=False)
     vehicle_driver = models.ForeignKey(to=Driver, on_delete=models.CASCADE, related_name='driver', null=True, blank=False)
-    from_date = models.DateTimeField(null=True)
-    to_date = models.DateTimeField(null=True)
+    institute = models.ForeignKey(to=Institute, related_name="route_institute", on_delete=models.CASCADE, null=True, blank=True)
+    from_date = models.DateField(null=True)
+    to_date = models.DateField(null=True)
     def __str__(self):
-        return self.route_no
+        return self.route_name
