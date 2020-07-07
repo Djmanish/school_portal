@@ -240,7 +240,7 @@ class User_Role_changes(models.Model):
 
 class Student_Info(models.Model):
     student = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name="student_info" )
-    blood_group = models.CharField(max_length=10)
+    student_blood_group = models.CharField(max_length=10)
     religion = models.CharField(max_length=10)
     sub_cast = models.CharField(max_length=50, null=True, blank=True)
     f_mobile_Number =models.CharField( max_length=12, null=True)
