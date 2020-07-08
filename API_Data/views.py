@@ -4,9 +4,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from main_app.models import *
 from API_Data.serializers import UserDataSerializer
-from registration.backends.default.views import RegistrationView
-from registration.forms import RegistrationFormUniqueEmail
-from django.core.mail import send_mail, send_mass_mail, mail_admins, mail_managers
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -41,18 +38,13 @@ def taskDetail(request,pk):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([])
+
 def taskCreate(request):
     serializer = UserDataSerializer(data=request.data)
     username=serializer.initial_data['username']
-    print(username)
     password=serializer.initial_data['password']
     email=serializer.initial_data['email']
-    print(email)
-
     if serializer.is_valid():
-        
         serializer.save()
-        send_mail('username','Here is the message.','email', 
-            [created_object.email],  fail_silently=False,)
     return Response(serializer.data)
 

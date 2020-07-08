@@ -5,16 +5,24 @@ from django.contrib import messages
 from django.utils import timezone
 from notices.models import *
 from datetime import datetime, timedelta
+from django.contrib.auth.models import User
+import math
 
 # Create your views here.
 def bus(request):
     buses = Bus.objects.filter(bus_institute=request.user.profile.institute)
     states_list = State.objects.all()
     points = Point.objects.filter(point_institute=request.user.profile.institute)
+    drivers = Driver.objects.filter(institute=request.user.profile.institute)
+    active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
+    routes = RouteInfo.objects.filter(institute=request.user.profile.institute)
     context_data = {
         'buses': buses,
         'states_list': states_list,
         'points':points,
+        'drivers':drivers,
+        'active_buses':active_buses,
+        'routes':routes,
     }
     return render(request, 'bus/bus_management.html', context_data)
 
@@ -116,6 +124,105 @@ def fetch_bus_details(request):
         selected_bus.save()
     return HttpResponse("Hello world")
 
+def get_last_digits(num, last_digits_count=8):
+    return abs(num) % (10**last_digits_count)
+
+def first_n_digits(num, n=4):
+    return num // 10 ** (int(math.log(num, 10)) - n + 1)
+
 def add_driver(request):
-    driver_user = User.objects.create(username="manish", email="manish@example.com", password="test@1234")        
-    return render(request, 'bus/driver.html')
+    all_states = State.objects.all()
+    context_data = {
+        'all_states':all_states
+    }
+    return render(request, 'bus/driver.html', context_data)
+
+def add_new_driver(request):
+    if request.method == 'POST':
+        last = Institute_levels.objects.filter(institute=request.user.profile.institute).first()
+        print(last)
+        l_id= int(last.level_id)+1
+        try:
+            chk_role = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='driver')
+            create_level = chk_role
+        except Institute_levels.DoesNotExist:
+            create_level = Institute_levels.objects.create(institute=request.user.profile.institute,level_id=l_id, level_name='driver')
+            print("except")
+        d_code = request.POST['driver_code'].strip()
+        f_name = request.POST['first_name'].strip()
+        m_name = request.POST['middle_name'].strip()
+        l_name = request.POST['last_name'].strip()
+        fat_name = request.POST['father_name'].strip()
+        mot_name = request.POST['mother_name'].strip()
+        gender = request.POST['gender'].strip()
+        dob = request.POST['dob']
+        marital_status = request.POST['marital_status']
+        category = request.POST['category_']
+        profile= request.FILES.get('pc')
+        m_num = request.POST.get('mobile_number')
+        email = request.POST['email'].strip()
+        aadhar_card_number = request.POST['adhar_number']
+        d_lic = request.POST['driving_license'].strip()
+        add_one = request.POST['address_line_1'].strip()
+        add_two = request.POST['address_line_2'].strip()
+        city = request.POST['city'].strip()
+        state = request.POST['state'].strip()
+        sel_state = State.objects.get(pk=state)
+        pin = request.POST['u_pin_code'].strip() 
+
+        # creating user object
+        pwd = get_last_digits(int(aadhar_card_number))
+        start_digit = first_n_digits(int(aadhar_card_number))
+        user_name = f_name+str(start_digit)
+        driver_user = User.objects.create_user(user_name , email, pwd)
+        driver_user.save()
+        search_user = UserProfile.objects.get(user=driver_user)
+        print(search_user)
+        # creating Userprofile object
+        search_user.institute= request.user.profile.institute
+        search_user.designation=create_level
+        search_user.first_name=f_name
+        search_user.middle_name=m_name
+        search_user.last_name=l_name
+        search_user.father_name=fat_name
+        search_user.mother_name=mot_name
+        search_user.gender=gender
+        search_user.date_of_birth=dob
+        search_user.marital_status=marital_status
+        search_user.category=category
+        search_user.aadhar_card_number=aadhar_card_number
+        search_user.profile_pic=profile
+        search_user.mobile_number=m_num
+        search_user.address_line_1=add_one
+        search_user.address_line_2=add_two
+        search_user.city=city
+        search_user.state=sel_state
+        search_user.pin_code=pin
+        search_user.status="approve"
+        search_user.save()
+
+        # creating driver info object
+        driver = Driver.objects.create(driver_id=d_code, name=search_user,driving_lic_no=d_lic, institute= search_user.institute)
+        # creating role description object
+        role_des = Role_Description.objects.create(user=driver_user, institute= request.user.profile.institute, level=create_level)
+        messages.success(request, 'Driver added successfully !') 
+        messages.info(request,f' Driver ID & Password is id:-{email}, password:-{pwd} ')
+        return HttpResponseRedirect(f'/bus/')  
+
+def add_route(request):
+    if request.method == 'POST':
+        r_no = request.POST['route_no'].strip()
+        r_name = request.POST['route_name'].strip()
+        r_bus = request.POST['sel_bus']
+        sel_b = Bus.objects.get(pk=r_bus)
+        r_driver = request.POST['sel_driver']
+        sel_d = Driver.objects.get(pk=r_driver)
+        r_from_date = request.POST['from_date']
+        r_to_date = request.POST['to_date']
+        print(r_from_date)
+        print(r_to_date)
+        
+        new_route = RouteInfo.objects.create(route_no=r_no, route_name=r_name, vehicle=sel_b, vehicle_driver=sel_d,institute=request.user.profile.institute , from_date=r_from_date, to_date=r_to_date)
+        messages.success(request, 'Route created successfully !') 
+
+        return HttpResponseRedirect(f'/bus/')  

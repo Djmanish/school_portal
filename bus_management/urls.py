@@ -17,4 +17,6 @@ urlpatterns = [
   path('delete_point/<int:pk>/',views.delete_point,name='delete_point'),
   path('fetch_bus_details/', views.fetch_bus_details, name="fetch_bus_details"),
   path('add_driver/', views.add_driver, name="add_driver"),
+  path('add_new_driver/', views.add_new_driver, name="add_new_driver"),
+  path('add_route/', views.add_route, name="add_route"),
 ]

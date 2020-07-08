@@ -522,21 +522,21 @@
     {% csrf_token %}
          
           <div class="form-group">
-            <label >Exam Type:</label>
+            <label class ="required">Exam Type:</label>
             <input type="text" class="form-control" name='exam_type' value="{{test_type_info.exam_type}}" required="required">
             </div>
           <div class="form-group">
-            <label >Maximum Marks:</label>
+            <label class ="required">Maximum Marks:</label>
             <input type="text" class="form-control" name='exam_max_marks' value="{{test_type_info.exam_max_marks}}" required="required">
 
           </div>
           <div class="form-group">
-            <label >Maximum Exam Limit:</label>
+            <label class ="required">Maximum Exam Limit:</label>
             <input type="text" class="form-control" name='exam_max_limit' value="{{test_type_info.exam_max_limit}}" required="required">
             
           </div>
           <div class="form-group">
-            <label >% Of Final Score:</label>
+            <label class ="required">% Of Final Score:</label>
             <input type="text" class="form-control" name='exam_per_final_score' value="{{test_type_info.exam_per_final_score}}" required="required">
 
           </div>
