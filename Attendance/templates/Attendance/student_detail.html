@@ -870,14 +870,20 @@
                                  <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin>
                                      <div class="parsley-row">
                                          <label>Date of Birth Certificate:</label>
-                                        
+                                         {% if student.student_info.dob_certificate %}
                                          <a href="{{student.student_info.dob.certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
-                                         
+                                         {%else%}
+                                        not provided
+                                        {% endif %}
                                      </div> 
                                      <div class="parsley-row">
                                          <label>ID Proof (Aadhar/PAN card):</label>
+                                         {% if student.student_info.if_proof_certificate %}
                                          <a href="{{student.student_info.id_proof_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
-                                     </div> 
+                                         {%else%}
+                                        not provided
+                                        {% endif %}   
+                                        </div> 
                                      <div class="parsley-row">
                                          <label>Domicile Certificate:</label>
                                          {% if student.student_info.domicile_certificate %}

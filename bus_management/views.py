@@ -226,3 +226,4 @@ def add_route(request):
         messages.success(request, 'Route created successfully !') 
 
         return HttpResponseRedirect(f'/bus/')  
+
