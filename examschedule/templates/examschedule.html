@@ -15,7 +15,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>Examination</title>
  
     <!-- uikit -->
@@ -661,7 +661,7 @@
                                                                               </div>
                                                                        
                                                                            </td>
-                                                                        <td ><div style="margin-left:20px;" class="form-group"><input type='date', class="form-control", value="", name="select_date" required/></div></td>
+                                                                        <td ><div style="margin-left:20px;" id="mydate" class="form-group"><input type='date', id="datechange" onkeyup="checkDate()", class="form-control", value="", name="select_date" required/></div></td>
                                                                         
                                                                         <td ><div style="margin-left:20px;" class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value='', min = '00:01', max = '23:59:59', name="select_start_time" required/></div></td>
                                                                        
@@ -694,7 +694,7 @@
                                                                    
                                                                     <td colspan="6">
                                                                         <div style="text-align: center;"> 
-                                                                        <input type="submit"  style="margin: 4px; background-color: #1976d2;" class="md-btn md-btn-primary " value="Submit">
+                                                                        <input type="submit" onclick="checkDate()" style="margin: 4px; background-color: #1976d2;" class="md-btn md-btn-primary " value="Submit">
                                                                     </div>
 
     
@@ -771,7 +771,7 @@
     </script>
 
 
-    
+<script src="{% static 'main_app/js/script.js' %}"></script>
     
     </body>
 

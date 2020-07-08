@@ -886,7 +886,11 @@ def overall_result(request,pk,student_pk):
                            
                             count=count+1
                         total_marks_count=count*100
-                        final_percent_result=(sum/total_marks_count)*100
+                        try:
+
+                          final_percent_result=(sum/total_marks_count)*100
+                        except:
+                          final_percent_result=0
                         grand_result=round(final_percent_result,2)
                         range_value=range(0, count_value)
                             
@@ -900,7 +904,7 @@ def overall_result(request,pk,student_pk):
                             'type_exam':type_exam,
                             'exam_type':exam_type,
                             'etype':etype,
-                            'all_percent_list':all_percent_list,
+                            
                             'exam_type_list':exam_type_list,
                             'sub_percent_list':sub_percent_list,
                             'grand_result':grand_result,
