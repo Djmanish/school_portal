@@ -238,7 +238,7 @@ def approve_admission_request(request, pk):
             approved_user = Admission_Query.objects.filter(pk=pk).first()    
             Student_Info.objects.create(
                 student = approved_user_profile,
-                blood_group =  approved_user.student_blood_group,
+                student_blood_group =  approved_user.student_blood_group,
 
                 religion = approved_user.religion,
                 sub_cast = approved_user.sub_cast,
