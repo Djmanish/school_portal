@@ -514,7 +514,7 @@
                                                 {% if selected_exam_type %}
                                                 <option selected  value="{{selected_exam_type.id}}">{{selected_exam_type}}</option>
                                                 {% else %}
-                                                <option selected  value="">-- Select Class --</option>
+                                                <option selected  value="">-- Select Exam Type --</option>
                                                 {% endif %}
                                                 <option value="overall">Overall</option>
                                                 {% for exam_type in exam_type_list %}
@@ -545,17 +545,14 @@
                                         </td >
                                        
                                        
-                                     
+                                        {% if result_data %}
                                         <td >
-                                           
-                                            <div class="md-card-toolbar hidden-print">
-                                                <div class="md-card-toolbar-actions hidden-print">  
+                                            
                                                     <button type="submit" name="report_cart_button" style="outline:none;  border: 0; margin-left:580px;" value="Print">
                                                         <i class="md-icon material-icons" id="invoice_print"></i>
                                                 </button>
-                                                </div>
-                                                </div>
-
+                                              
+                                        {%endif%}
                                        
                                                
                                            

@@ -255,7 +255,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -315,7 +315,7 @@
 </li>
 <!-- ending notice menu -->
 {% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
-              <li  title="Fees">
+              <li class="current_section"  title="Fees">
                 <a href="{% url 'fees_home' %}">
                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                     <span class="menu_title">Fees Setup</span>
@@ -516,6 +516,7 @@
                             </a> -->
                         </div>
                         <div class="user_content">
+                            <a onclick="goBack()" class="md-btn md-btn-primary text-white"><i class=" material-icons">arrow_back </i> Go Back</a>
                             <ul id="user_profile_tabs" class="uk-tab"
                                 data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}"
                                 data-uk-sticky="{ top: 48, media: 960 }">
@@ -695,7 +696,11 @@
         });
     </script>
 
-
+<script>
+    function goBack() {
+      window.history.back();
+    }
+    </script>
     
     
     </body>

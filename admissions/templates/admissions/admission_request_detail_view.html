@@ -688,13 +688,13 @@
                                             <h4 class="md-color-blue-700"><b>Certificates</b></h4>
                                             <ul class="md-list md-list-addon">
                                              <li> <b>Birth Certificate</b> {% if object.dob_certificate %}
-                                                <a href="{{object.dob_certificate.url}}" download >{{object.dob_certificate.url}}</a></li>
+                                                <a href="{{object.dob_certificate.url}}" target="_blank">view</a></li>
                                                 {% endif %}
                                              <li> <b>ID Certificate:</b>{% if object.id_proof_certificate %}
-                                                <a href="{{object.id_proof_certificate.url}}" download>{{object.id_proof_certificate.url}}</a></li>
+                                                <a href="{{object.id_proof_certificate.url}}" target="_blank">view</a></li>
                                                 {% endif %}
                                              <li> <b>Domicile Certificate:</b>{% if object.domicile_certificate %}
-                                                <a href="{{object.domicile_certificate.url}}" download class="user_action_image">{{object.domicile_certificate.url}}</a></li>
+                                                <a href="{{object.domicile_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
                                                 {% endif %}
                                                                              
                                             </ul></div>
@@ -702,13 +702,13 @@
                                                 <h4 style="color: white;">.</h4>
                                                 <ul class="md-list md-list-addon">
                                             <li> <b>Cast Certificate:</b> {% if object.cast_certificate %}
-                                                <a href="{{object.cast_certificate.url}}" download class="user_action_image">{{object.cast_cerficate.url}}</a></li>
+                                                <a href="{{object.cast_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
                                                 {% endif %}
                                             <li> <b>Character Certificate:</b> {% if object.character_certificate %}
-                                                <a href="{{object.character_certificate.url}}" download class="user_action_image">{{object.character_certificate.url}}</a></li>
+                                                <a href="{{object.character_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
                                                 {% endif %}
                                             <li> <b>Medical Certificate:</b> {% if object.medical_certificate %}
-                                                <a href="{{object.medical_certificate.url}}" download class="user_action_image">{{object.medical_certificate.url}}</a></li>
+                                                <a href="{{object.medical_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
                                                 {% endif %}
                                             
                                            
@@ -718,10 +718,10 @@
                                             <h4 style="color: white;">.</h4>
                                             <ul class="md-list md-list-addon">
                                                 <li> <b>Transfer Certificate:</b> {% if object.transfer_certificate %}
-                                                    <a href="{{object.transfer_certificate.url}}" download class="user_action_image">{{object.transfer_certificate.url}}</a></li>
+                                                    <a href="{{object.transfer_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
                                                     {% endif %}
                                                 <li> <b>Last Year Certificate:</b>{% if object.last_year_certificate %}
-                                                    <a href="{{object.last_year_certificate.url}}" download class="user_action_image">{{object.last_year_certificate.url}}</a></li>
+                                                    <a href="{{object.last_year_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
                                                     {% endif %}
                                                                                                
                                               </ul>

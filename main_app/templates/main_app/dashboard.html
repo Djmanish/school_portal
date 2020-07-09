@@ -10,6 +10,13 @@
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no"/>
     <style>
+
+        .dash_card{
+            max-height: 261px;
+        }
+        .md-card-content_dash_box{
+            max-height: 340px;
+        }
        
         .fc-toolbar{
             margin-left: auto !important;
@@ -865,12 +872,12 @@
 <!-- Principal & Admin -->
             {% if  user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "admin" %}
                     <div class="uk-width-medium-1-2">
-                        <div class="md-card">
+                        <div class="md-card" >
                         
-                            <div class="md-card-content">
+                            <div class="md-card-content ">
                                 <h3 class="heading_a uk-margin-bottom">Today's Class Status </h3>
                             
-                                <div class="uk-overflow-container dbmh " >
+                                <div class="uk-overflow-container dash_card " >
                                     <table class="uk-table uk-table-condensed uk-table-hover">
                                     
                                         <thead>
@@ -906,7 +913,7 @@
                                     <canvas id="myChart" width="200px" height="200px"></canvas>                           
                 
                                 </div> -->
-                                <div id="container" style="width: 100%;height: auto;margin-top: 80px;">
+                                <div id="container" style="width: 100%;height: auto;">
                                     <canvas id="canvas"></canvas>
                                   </div>
                             </div>
@@ -1164,16 +1171,7 @@
                     </div>
                 </div>
             </div>
-            <div class="uk-width-medium-1-2">
-                <div class="md-card">
-                    <div class="md-card-content">
-                        <h3 class="heading_a uk-margin-bottom">Approvals</h3>
-                        <div id="container" style="width: 100%;height: auto;">
-                            <canvas id="canvas1"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         {% endif %}
         <!-- Student Cards -->
         {% if  user.profile.designation.level_name == "student"  %}
@@ -1443,7 +1441,7 @@
         <!-- Calendar -->
         {% if user.profile.designation %}
         <div class="uk-width-medium-1-2">
-            <div class="md-card">
+            <div class="md-card" >
              {% if user.profile.designation.level_name == "parent" %}
                  {% if user.count > 1 %}
                  <form  method="POST" action="#" class="form-inline" id="parent_calendar_form">
@@ -1466,7 +1464,7 @@
                  </form>
                  {% endif %}
                  {% endif %}
-             <div class="md-card-content">
+             <div class="md-card-content" style="max-height: 455px; margin: auto;">
                  
                  
                  <div id='calendar'></div>

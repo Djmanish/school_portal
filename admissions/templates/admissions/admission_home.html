@@ -778,7 +778,7 @@
                                                            
                                                         <div class="uk-grid uk-grid-width-medium-1-2 uk-grid-width-large-1-3" data-uk-grid-margin>
                                                             <div class="parsley-row">
-                                                                <label>Student Photo</label>
+                                                                <label class="required">Student Photo</label>
                                                                 <div class="custom-file">
                                                                     <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="student_pic" required>
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
@@ -829,21 +829,21 @@
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label>Father's Email </label>
-                                                                <input type="text" value="" class="form-control n_i" name='f_Email_Id'  >
+                                                                <input type="email" value="" class="form-control"  name='f_Email_Id' placeholder="example123@gmail.com">
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label>Aadhar Card No</label>
-                                                                <input type="text" value="" class="form-control n_i" name='f_aadhar_card'>
+                                                                <input type="text" value="" class="form-control" name='f_aadhar_card'>
                                                             </div>
                                                         </div>
                                                         <div class="uk-grid uk-grid-width-large-1-3 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
                                                             <div class="parsley-row">
                                                                 <label >Father's Qualification</label>
-                                                                <input type="text" value="" class="form-control n_i" name='f_qualification'>
+                                                                <input type="text" value="" class="form-control" name='f_qualification'>
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label for="wizard_vehicle_make" class="required">Father's Occupation</label>
-                                                                <input type="text" value="" class="form-control n_i" name='f_occupation' required>
+                                                                <input type="text" value="" class="form-control" name='f_occupation' required>
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label>Father's Photo</label>
@@ -870,21 +870,22 @@
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label>Mother's Email </label>
-                                                                <input type="text" value="" class="form-control n_i" name='m_Email_Id'  >
+                                                                <input type="email" value="" class="form-control"  name='m_Email_Id' placeholder="example123@gmail.com">
+                                                                
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label>Aadhar Card No</label>
-                                                                <input type="text" value="" class="form-control n_i" name='m_aadhar_card'>
+                                                                <input type="text" value="" class="form-control" name='m_aadhar_card'>
                                                             </div>
                                                         </div>
                                                         <div class="uk-grid uk-grid-width-large-1-3 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
                                                             <div class="parsley-row">
                                                                 <label >Mother's Qualification</label>
-                                                                <input type="text" value="" class="form-control n_i" name='m_qualification'>
+                                                                <input type="text" value="" class="form-control" name='m_qualification'>
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label for="wizard_vehicle_make">Mother's Occupation</label>
-                                                                <input type="text" value="" class="form-control n_i" name='m_occupation'>
+                                                                <input type="text" value="" class="form-control" name='m_occupation'>
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label>Mother's Photo</label>
@@ -916,7 +917,8 @@
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label>Guardian's Email </label>
-                                                                <input type="text" value="" class="form-control " name='g_Email_Id'  >
+                                                                <input type="email" value="" class="form-control"  name='g_Email_Id' placeholder="example123@gmail.com">
+                                                                
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label>Aadhar Card No</label>
@@ -926,11 +928,11 @@
                                                         <div class="uk-grid uk-grid-width-large-1-3 uk-grid-width-xlarge-1-4" data-uk-grid-margin>
                                                             <div class="parsley-row">
                                                                 <label >Guardian's Qualification</label>
-                                                                <input type="text" value="" class="form-control n_i" name='g_qualification'>
+                                                                <input type="text" value="" class="form-control" name='g_qualification'>
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label for="wizard_vehicle_make">Guardian's Occupation</label>
-                                                                <input type="text" value="" class="form-control n_i" name='g_occupation'>
+                                                                <input type="text" value="" class="form-control" name='g_occupation'>
                                                             </div>
                                                             <div class="parsley-row">
                                                                 <label>Guardian's photo</label>
@@ -998,16 +1000,16 @@
                                                                 </div>
                                                             </div> 
                                                             <div class="parsley-row">
-                                                                <label class="required">Transfer Certificate</label>
+                                                                <label>Transfer Certificate</label>
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="transfer_certificate" required >
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="transfer_certificate">
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                                                 </div>
                                                             </div>  
                                                             <div class="parsley-row">
-                                                                <label class="required">Last Year Certificate</label>
+                                                                <label>Last Year Certificate</label>
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="last_year_certificate" required>
+                                                                    <input type="file" class="custom-file-input" id="customFile" accept="image/*" name="last_year_certificate">
                                                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                                                 </div>
                                                             </div>   
@@ -1018,10 +1020,7 @@
                                             </br>
                                             <!--  -->
                                             <p><input type="checkbox" required name="terms"> I accept the <u>Terms and Conditions</u></p>  
-                                            <!-- <button type="submit" class="btn btn-primary" value="Submit"><td>submit
-                                                {% if disable_submit %}
-                                                    disabled
-                                                {% endif %}</td></button> -->
+                                            
                                                <td><input type="submit" class="form-control admission_submit_button" value="Submit" 
                                                     {% if disable_submit %}
                                                         disabled
