@@ -5,6 +5,7 @@ from django.views.generic.base import RedirectView
 
 
 
+
 urlpatterns = [
     path('',views.attendance ,name='attendance'),
     # path('attendance_principal',views.attendance_principal ,name='attendance_principal'),
@@ -13,7 +14,8 @@ urlpatterns = [
     path('attendance_status_current/<int:pk>/', views.current_date_attendance_record, name="current_attendance_record"),
     path('students_list/', views.class_students_list, name="class_students_list"),
     path('student_detail/<int:pk>/', views.student_detail, name="student_detail"),
-  
+    path('student_details/update/', views.student_detail_edit, name='edit_student_detail'),
+   
     
 
   
