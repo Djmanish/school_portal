@@ -574,20 +574,20 @@
                 <div class="uk-width-large">
                     <div class="md-card">
                         <div class="user_heading">
-                            <!-- <div class="user_heading_menu hidden-print">
+                            <div class="user_heading_menu hidden-print">
                                 <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
                                     <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
                                      <div class="uk-dropdown uk-dropdown-small">
                                         <ul class="uk-nav">
-                                            <li><a href="#" data-uk-modal="{target:'#modal_new_category'}">Create New Category</a></li>
-                                            <li><a href="#" data-uk-modal="{target:'#modal_new_sub_category'}">Create Sub Category</a></li>
+                                            <li><a href="#" data-uk-modal="{target:'#modal_set_location',}">Set Institute Location</a></li>
+                                            <!-- <li><a href="#" data-uk-modal="{target:'#modal_new_sub_category'}">Create Sub Category</a></li>
                                             <li><a href="#" data-uk-modal="{target:'#modal_library_settings'}">Library Settings</a></li>
-                                            <li><a href="#" data-uk-modal="{target:'#modal_set_books_user'}">Set Books Limit Per User</a></li>
+                                            <li><a href="#" data-uk-modal="{target:'#modal_set_books_user'}">Set Books Limit Per User</a></li> -->
                                             
                                         </ul>
                                     </div> 
                                 </div>
-                            </div> -->
+                            </div>
                             
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
@@ -595,6 +595,36 @@
                                 </div>
                             </div>
                             <!-- Page Modol forms -->
+                            <div class="uk-modal" id="modal_set_location">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Set Location</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'set_location' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Longitute</label>
+                                            <input type="number" step="any" class="form-control" name="longitute" required>
+                                          </div>        
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Latitute</label>
+                                            <input type="number" step="any" class="form-control" name="latitute" required>
+                                          </div>
+                                                                                                                                           
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
                             <div class="uk-modal" id="modal_new_bus">
                                 <div class="uk-modal-dialog">
                                     <button type="button" class="uk-modal-close uk-close"></button>
@@ -714,6 +744,23 @@
                                                                 </div>  
                                                             </div> 
                                                             </div>
+                                                            <div class="uk-form-row" style="margin-bottom: 15px">
+                                                                <div class="uk-grid" data-uk-grid-margin>
+                                                                    <div class="uk-width-medium-1-2">
+                                                                    <div class="form-group">
+                                                                        <label class="required" style="color: black;">Longitute</label>
+                                                                        <input type="number" step="any" class="form-control" name="point_longitute" placeholder="12.345678" required>
+                                                                    </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="uk-width-medium-1-2">
+                                                                        <div class="form-group">
+                                                                            <label class="required" style="color: black;">Latitute</label>
+                                                                            <input type="number" step="any" class="form-control" name="point_latitute" placeholder="12.345678" required>
+                                                                        </div>   
+                                                                        </div>  
+                                                                    </div> 
+                                                                    </div>
                                               <table>
                                                 <tr>
                                                     <td> 

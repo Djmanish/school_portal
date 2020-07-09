@@ -19,4 +19,5 @@ urlpatterns = [
   path('add_driver/', views.add_driver, name="add_driver"),
   path('add_new_driver/', views.add_new_driver, name="add_new_driver"),
   path('add_route/', views.add_route, name="add_route"),
+  path('set_location/', views.set_location, name="set_location"),
 ]

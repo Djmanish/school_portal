@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
 
@@ -17,6 +18,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
     <!-- additional styles for plugins -->
+   
         <!-- weather icons -->
         <link rel="stylesheet" href="{% static 'main_app/bower_components/weather-icons/css/weather-icons.min.css' %}" media="all">
         <!-- metrics graphics (charts) -->
@@ -33,11 +35,31 @@
    
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
+    
+    <!-- Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+
+    <!-- mapbox -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css' rel='stylesheet' />
+
+    <style>
+        #map{width:900px;height:800px;margin: auto;}
+        .mapboxgl-canvas{
+            position:absolute!important;           
+            width:100% !important;
+            height: 800px !important;
+        }
+        
+
+    </style>
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
 
+    
    
 
     <!-- matchMedia polyfill for testing media queries in JS -->
@@ -585,6 +607,7 @@
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">About</a></li>
                                  <li><a href="#">Details</a></li>
+                                 <li><a href="#">Bus Select</a></li>
                                  {% if user.user_institute_role.level.level_name == 'student' %}
                                  <li><a href="#">My Documents</a></li>
                                  {% endif %}
@@ -594,7 +617,7 @@
                                  {% if user.profile.designation.level_name == "parent" %}
                                  <li><a href="#">My Child</a></li>
                                  {% endif %}
-                                
+                                 
                                      
                                 
                                 <!-- <li><a href="#">Posts</a></li> -->
@@ -837,6 +860,11 @@
 
 
                                         </li>
+                                <li>
+                                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                    <div id='map'></div>
+                                    </div>
+                                </li>
                                         {% if user.user_institute_role.level.level_name == 'student'  %}
                                         <li>
                                             <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
@@ -1047,6 +1075,7 @@
                                                 
                                             </div>
                                         </li> 
+                                        
                                     </div>
                                    
                     </div>
@@ -1107,6 +1136,44 @@
             altair_helpers.ie_fix();
         });
     </script>
+    <script>
+
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoibWFuaXNoMTA1MTEwNyIsImEiOiJjanF4OXUyMzcwaGlvM3hxdWtxd2QzaGk3In0.roRTHN8l4Cr_inuVmcOiiQ';
+            var map = new mapboxgl.Map({
+                container: 'map', // container id
+                style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+                center: [{{user.sch.longitute}},{{user.sch.latitude}}], // starting position [lng, lat]
+                zoom: 9 // starting zoom
+                
+                
+            });
+            
+            // markers
+            var marker = new mapboxgl.Marker()
+            .setLngLat([{{user.sch.longitute}},{{user.sch.latitude}}])
+            .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+            .setHTML('{{user.profile.institute}}'))
+            .addTo(map);
+            // markers Available
+            {% for i in user.mark %}
+            var marker = new mapboxgl.Marker()
+            .setLngLat([{{i.longitude}},{{i.latitude}}])
+            .setPopup(new mapboxgl.Popup({ offset: 10 }) // add popups
+            .setHTML('<a class="confirm-delete" href="{% url 'add_loca' i.id %}">{{i.point_code}}</a>,<p style="text-align: center;">{{i.point_exact_place}} {{i.point_landmark}}</p>'))
+            .addTo(map);
+            {% endfor %}
+            
+            
+    </script>
+    <script>
+        $(document).ready(function(){
+        $(document).on('click', '.confirm-delete', function(){
+            return confirm('Do you want to add this point?');
+        });
+        });
+    </script>
+    
 
 
  
