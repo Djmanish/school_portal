@@ -10,7 +10,7 @@ class Student_profile_edit_form(ModelForm):
 
     class Meta:
         model = UserProfile
-        exclude = ['user','institute','designation','Class','status','class_promotion_status','class_current_year','class_next_year','created_at','updated_at']
+        exclude = ['user','institute','designation','Class','status','class_promotion_status','class_current_year','class_next_year','created_at','updated_at','qualification']
     
         widgets = {
         'date_of_birth':forms.DateInput(attrs={'type':'date'})
