@@ -74,12 +74,14 @@ def add_point(request):
         print(sel_state)
         p_country = request.POST['point_country'].strip()
         print("Hello")
+        p_longitute = float(request.POST['point_longitute'].strip())
+        p_latitute = float(request.POST['point_latitute'].strip())
         try:
             chk_point= Point.objects.get(point_code=p_code, point_institute=request.user.profile.institute)
         except Point.DoesNotExist:
             chk_point = 0 
         if chk_point == 0:
-            new_point = Point.objects.create(point_code=p_code, point_name=p_name, point_street_no=p_street_no, point_landmark=p_landmark,point_exact_place=p_place, point_city=p_city, point_state=sel_state, point_country=p_country,  point_institute=request.user.profile.institute)
+            new_point = Point.objects.create(point_code=p_code, point_name=p_name, point_street_no=p_street_no, point_landmark=p_landmark,point_exact_place=p_place, point_city=p_city, point_state=sel_state, point_country=p_country,  point_institute=request.user.profile.institute, longitude =p_longitute, latitude =p_latitute)
             messages.success(request, 'Point Created successfully !')  
             return HttpResponseRedirect(f'/bus/')       
         else:
@@ -227,3 +229,22 @@ def add_route(request):
 
         return HttpResponseRedirect(f'/bus/')  
 
+def set_location(request):
+    if request.method == 'POST':
+        longi = request.POST['longitute'].strip()
+        lati = request.POST['latitute'].strip()
+        print(longi)
+        print(request.user.profile.institute.id)
+        try:
+            sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
+        except InstituteLocation.DoesNotExist:
+            sch = 0
+            set_loc = InstituteLocation.objects.create(institute=request.user.profile.institute, longitute=longi, latitude = lati)
+            messages.success(request, 'Institute location updated successfully !') 
+            return HttpResponseRedirect(f'/bus/')  
+        if sch:
+            sch.longitute = longi
+            sch.latitude = lati
+            sch.save()
+            messages.success(request, 'Institute location updated successfully !') 
+            return HttpResponseRedirect(f'/bus/') 
