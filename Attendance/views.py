@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
 from main_app.models import*
 from .models import *
 from django.contrib.auth.models import User
@@ -310,20 +310,22 @@ def student_detail_edit(request):
             for field in student_details.fields: #code for sending form errors
                 if student_details[field].errors:
                     for f in student_details[field].errors:
-                        messages.error(request, f  )
+                        messages.error(request, f"{field} - {f}"  )
             messages.error(request, 'Details could not be updated !')
-            return render(request, 'Attendance/edit_students_detail.html', {'student_prfile_edit_form':student_prfile_edit_form, 'student_info_edit_form':student_info_edit_form,  })
+            return render(request, 'Attendance/edit_students_detail.html', {'student_prfile_edit_form':student_prfile_edit_form, 'student_info_edit_form':student_info_edit_form, 'student_details':student_details  })
             
 
         
         if student_info.is_valid():
             student_info.save()
             messages.success(request, "Student's additional information updated successfully !")
+            return HttpResponseRedirect(f"/attendance/student_detail/{request.GET.get('username')}/")
+            
         else:
             for field in student_info.fields: #code for sending form errors
                 if student_info[field].errors:
                     for f in student_info[field].errors:
-                        messages.error(request, f  )
+                         messages.error(request, f"{field} - {f}"  )
             student_info_edit_form = Student_info_edit_form(instance=student_info_instace)
             messages.error(request, 'Details could not be updated !')
             

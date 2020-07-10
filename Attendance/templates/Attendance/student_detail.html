@@ -873,14 +873,14 @@
                                      <div class="parsley-row">
                                          <label>Date of Birth Certificate:</label>
                                          {% if student.student_info.dob_certificate %}
-                                         <a href="{{student.student_info.dob.certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                         <a href="{{student.student_info.dob_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
                                          {%else%}
                                          Not provided
                                          {% endif %}
                                      </div> 
                                      <div class="parsley-row">
                                          <label>ID Proof (Aadhar/PAN card):</label>
-                                         {% if student.student_info.if_proof_certificate %}
+                                         {% if student.student_info.id_proof_certificate %}
                                          <a href="{{student.student_info.id_proof_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
                                          {%else%}
                                         Not provided
@@ -889,7 +889,7 @@
                                      <div class="parsley-row">
                                          <label>Domicile Certificate:</label>
                                          {% if student.student_info.domicile_certificate %}
-                                         <a href="{{student.student_info.domicile_certificate}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                         <a href="{{student.student_info.domicile_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
                                          {%else%}
                                          Not provided
                                          {% endif %}
@@ -898,7 +898,7 @@
                                      <div class="parsley-row">
                                          <label>Caste Certificate:</label>
                                          {% if student.student_info.cast_certificate %}
-                                         <a href="{{student.student_info.cast_certificate}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                         <a href="{{student.student_info.cast_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
                                          {%else%}
                                          Not provided
                                          {% endif %}
@@ -906,7 +906,7 @@
                                      <div class="parsley-row">
                                          <label>Character Certificate:</label>
                                          {% if student.student_info.character_certificate %}
-                                         <a href="{{student.student_info.character_certificate}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                         <a href="{{student.student_info.character_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
                                          {%else%}
                                          Not provided
                                          {% endif %}
