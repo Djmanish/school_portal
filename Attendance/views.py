@@ -283,6 +283,10 @@ from .forms import Student_profile_edit_form, Student_info_edit_form
 
 
 def student_detail_edit(request):
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     user_profile = UserProfile.objects.get(pk= request.GET.get('username'))
     # creating student info table instance for non existing student_details
     try:

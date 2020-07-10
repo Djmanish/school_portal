@@ -131,11 +131,21 @@
                  <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav user_actions">
                         <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
-                        <!-- <li><a href="#" id="main_search_btn" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE8B6;</i></a></li> -->
-                        
+                    
                         {% if user.profile.designation %}
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
+                          
+                            {% if user.profile.status == 'approve' %}
+                            <a href="#" id="user_action_iconb" atval="{{user.pk}}" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i>
+                                {% for notice in user.users_notice %}
+                                {% if notice.publish_date >= user.user_last_notice_view.last_seen %}
+                                <span class="uk-badge nbadge" >  <i class="large material-icons" id="nbadge" style="font-size: 15px;">lens</i>
+                                </span>
+                                {% endif %}
+                            {% endfor %}
+                        </a> 
+                               
+                            {% endif %}
                             <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
                                 <div class="md-card-content">
                                     <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
@@ -211,6 +221,13 @@
                                 <ul class="uk-nav js-uk-prevent">
                                     <li><a href="{% url 'user_profile' %}">My profile</a></li>
                                     <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                    <li title="Log Out">
+                                        <a href="{% url 'auth_logout' %}">
+                                            
+                                            <span class="menu_title">Log Out</span>
+                                        </a>
+                                    </li>
+                                   
                                 </ul>
                             </div>
                         </li>
@@ -664,9 +681,9 @@
                                     <span style="color: #1976d2;">
                                     {% if student.student_info.same_address is True %}
                                     
-                                        <input type="checkbox" checked disabled> 
+                                        <input type="checkbox" checked > 
                                     {% else %}
-                                        <input type="checkbox" disabled> 
+                                        <input type="checkbox" > 
                                     {% endif %} 
                                     
                                     <label><b>If permanent address and current address are same.</b></label>
@@ -807,9 +824,9 @@
                                 <br>
                                 <label style="color:#1976d2;" >
                                 {% if student.student_info.guardian_applicable is True %}      
-                                    <input type="checkbox" checked disabled>
+                                    <input type="checkbox" checked >
                                 {% else %}
-                                    <input type= "checkbox" disabled>
+                                    <input type= "checkbox" >
                                 {% endif %}
                                 <b>If guardian details available.</b></label> 
                                 <div id="Guardianfielddiv" style="display:none">
