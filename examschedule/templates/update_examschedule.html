@@ -521,7 +521,7 @@
                                                                 {% if user.profile.designation.level_name == "parent" %}
                                                                 <td>
                                                                     <label class ="required" style="margin: 4px;">Select Student</label>
-                                                                    <select class="form-control" name="selected_student" style="padding: 2px;"
+                                                                    <select class="form-control" id="selected_student" name="selected_student" style="padding: 2px;"
                                                                         required>
                                                                         <option selected disabled value="">--Select Student--</option>
                                                                         {% for student in parent_student_list %}
@@ -529,6 +529,19 @@
                                                                         {% endfor %}
                                                                     </select>
                                                                 </td>
+                                                                <label class ="required" style="margin: 4px;">Select Exam Type</label>
+                                                                <select class="form-control" id="selected_exam_type" name="selected_exam_type"  required>
+                                                
+                                                                    <option selected disabled value="">--Exam Type--</option>
+                                                                   
+                                                                </select>
+                                                             
+                                                                <label class ="required" style="margin: 4px;">Select Exam Type No.</label>
+                                                            
+                                                                <select class="form-control" id="fetch_sr_no" name="selected_exam_type_no"  required>
+                                                                    <option selected disabled value=''>--Exam Type No.--</option>
+                                        
+                                                             </select>
                                                                 {% endif %}
                                                            
                                                                 {% if user.profile.designation.level_name != "student" and  user.profile.designation.level_name != "parent"%}
@@ -541,8 +554,10 @@
                                                                            <option value="{{class.id}}"> {{class}}</option>
                                                                         {% endfor %}
                                                                     </select>
+                                                                    
 
                                                                 {% endif %}
+                                                                {% if user.profile.designation.level_name == "student" %}
                                                                 <label class ="required" style="margin: 4px;">Select Exam Type</label>
                                                                     <select class="form-control" id="selected_exam_type" name="selected_exam_type"  required>
                                                     
@@ -559,7 +574,7 @@
                                                                         <option selected disabled value=''>--Exam Type No.--</option>
                                             
                                                                  </select>
-                                                                 
+                                                                 {% endif %}
                                                                  &nbsp
                                                                  &nbsp
                                                                 <input type="submit" value="View" class="md-btn md-btn-primary">
@@ -581,6 +596,38 @@
                                                                           
                                                                           success: function(msg){
                                                                               $('#fetched_sr_no').html(msg);
+                                                                          }
+                                                                      })
+                                                                  })
+                                                                })
+
+                                                                $(document).ready(function(){
+                                                                  $('#selected_exam_type').change(function(){
+                                                                     
+                                                                      $.ajax({
+                                                                          type:'POST',
+                                                                          url:'/examschedule/fetching_no/',
+                                                                          data:{exam_type_no:$("#selected_exam_type").val(), 
+                                                                          csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                          
+                                                                          success: function(msg){
+                                                                              $('#fetch_sr_no').html(msg);
+                                                                          }
+                                                                      })
+                                                                  })
+                                                                })
+
+                                                                $(document).ready(function(){
+                                                                  $('#selected_student').change(function(){
+                                                                     
+                                                                      $.ajax({
+                                                                          type:'POST',
+                                                                          url:'/examschedule/selected_exam_type/',
+                                                                          data:{selected_student:$("#selected_student").val(), 
+                                                                          csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                          
+                                                                          success: function(msg){
+                                                                              $('#selected_exam_type').html(msg);
                                                                           }
                                                                       })
                                                                   })
