@@ -27,7 +27,7 @@
     <!-- flag icons -->
     <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
 
-  
+    
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
 
@@ -1015,6 +1015,8 @@
                                      <li><a href="#">Driver</a></li>
                                      <li><a href="#">Routes</a></li>
                                      <li><a href="#">Map Routes</a></li>
+                                     <!-- <li><a href="#">Test</a></li> -->
+                                     
                                      
                                 </ul>
                                 <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
@@ -1115,11 +1117,14 @@
                                     </div>
                                     </li>  
                                     <li>
-                                        <div class="uk-width-medium-1-5">
+                                        <div class="uk-width-medium-1-8" >
                                             <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="#" data-uk-modal="{target:'#modal_new_point'}">
                                                 <i class="uk-icon-street-view"></i>
                                                 Create Point
                                             </a>
+                                        <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'see_map' %}" >
+                                            <i class="uk-icon-map-marker"></i>
+                                            See Map</a>
                                         </div>
                                         <div class="md-card uk-margin-medium-bottom">
                                             {% if points %}
@@ -1304,7 +1309,9 @@
                                             </div>
                                             {% endif %}
                                         </div>
-                                    </li>     
+                                    </li> 
+                                    <li>Hello</li>
+                                        
 
                             </div>
                         
@@ -1362,7 +1369,7 @@
             altair_helpers.ie_fix();
         });
     </script>
-
+    
     
     
 </body>

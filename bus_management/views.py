@@ -248,3 +248,11 @@ def set_location(request):
             sch.save()
             messages.success(request, 'Institute location updated successfully !') 
             return HttpResponseRedirect(f'/bus/') 
+def see_map(request):
+    ins_loc = InstituteLocation.objects.get(institute=request.user.profile.institute)
+    
+    context_data={
+        'ins_loc':ins_loc, 
+    }
+    return render(request, 'bus/index.html', context_data)
+    

@@ -742,9 +742,10 @@ def user_profile(request):
     
     # Transportation
     try:
-        request.user.sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
-        request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute)
+        request.user.sel_point = BusUsers.objects.get(user=request.user.profile)
+        print(request.user.sel_point)
     except:
+        print("hello")
         pass
 
     # Secondry Institute
@@ -1359,5 +1360,12 @@ def add_loca(request,pk):
         new_user = BusUsers.objects.create(user=request.user.profile, point=sel_point, institute= request.user.profile.institute)
         messages.success(request, 'Point added successfully !')  
         return HttpResponseRedirect(f'/user/profile/') 
-    
+def set_loc(request):
+    try:
+        request.user.sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
+        request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute)
+    except:
+        pass
+    return render(request, 'main_app/map.html')
+
         

@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>Map</title>
+
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+	
+	<!-- mapbox -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css' rel='stylesheet' />
+
+	
+</head>
+<body>
+
+
+<!-- <a href="{% url 'bus' %}">Back</a> -->
+<div id='map' style="width:1300px;height: 600px;margin:auto;"></div>
+<script>
+        
+    mapboxgl.accessToken = 'pk.eyJ1IjoibWFuaXNoMTA1MTEwNyIsImEiOiJjanF4OXUyMzcwaGlvM3hxdWtxd2QzaGk3In0.roRTHN8l4Cr_inuVmcOiiQ';    
+        var map = new mapboxgl.Map({
+            container: 'map', // container id
+            tileSize: 512,
+            zoomOffset: -1,
+            style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+            center: [{{user.sch.longitute}},{{user.sch.latitude}}], // starting position [lng, lat]
+            zoom: 12 // starting zoo    
+                        
+        });
+        
+                    // markers
+        var marker = new mapboxgl.Marker()
+        .setLngLat([{{user.sch.longitute}},{{user.sch.latitude}}])
+        .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+        .setHTML('{{user.profile.institute}}'))
+        .addTo(map);
+        // markers Available
+        {% for i in user.mark %}
+        var marker = new mapboxgl.Marker()
+        .setLngLat([{{i.longitude}},{{i.latitude}}])
+        .setPopup(new mapboxgl.Popup({ offset: 10 }) // add popups
+        .setHTML('<a class="confirm-delete" href="{% url 'add_loca' i.id %}">{{i.point_code}}</a>,<p style="text-align: center;">{{i.point_exact_place}} {{i.point_landmark}}</p>'))
+        .addTo(map);
+        {% endfor %}
+        // map.resize()
+        
+</script>
+<script>
+    $(document).ready(function(){
+    $(document).on('click', '.confirm-delete', function(){
+        return confirm('Do you want to add this point?');
+    });
+    });
+</script>
+
+
+</body>
+</html>
