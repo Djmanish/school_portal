@@ -224,6 +224,15 @@ def approve_admission_request(request, pk):
     approved_user_first_name = approved_user.first_name
     approved_user_middle_name = approved_user.middle_name
     approved_user_last_name = approved_user.last_name
+    approved_user_father_name = approved_user.father_name
+    approved_user_mother_name = approved_user.mother_name
+    approved_user_gender = approved_user.gender
+    approved_user_dob = approved_user.date_of_birth
+    approved_user_category = approved_user.category
+    approved_user_aadhar_card = approved_user.student_aadhar_card
+
+
+
 
     approved_user = approved_user.request_by
     student_designation = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='student')
@@ -236,6 +245,13 @@ def approve_admission_request(request, pk):
     approved_user_profile.middle_name = approved_user_middle_name
     approved_user_profile.first_name = approved_user_first_name
     approved_user_profile.last_name = approved_user_last_name
+    approved_user_profile.father_name = approved_user_father_name
+    approved_user_profile.mother_name = approved_user_mother_name
+    approved_user_profile.gender = approved_user_gender
+    approved_user_profile.date_of_birth = approved_user_dob
+    approved_user_profile.category = approved_user_category
+    approved_user_profile.aadhar_card_number = approved_user_aadhar_card
+    
 
 
     try:
