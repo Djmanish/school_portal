@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+{% load crispy_forms_tags %}
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
 
@@ -9,26 +10,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
-    <title>User Dashboard</title>
-  
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
-    
+    <title>Update Profile</title>
  
+    <script src="{% static 'main_app/js/jquery.js' %}"></script>
+   
 
-    <!-- additional styles for plugins -->
-        <!-- weather icons -->
-        <link rel="stylesheet" href="{% static 'main_app/bower_components/weather-icons/css/weather-icons.min.css' %}" media="all">
-        <!-- metrics graphics (charts) -->
-        <link rel="stylesheet" href="{% static 'main_app/bower_components/metrics-graphics/dist/metricsgraphics.css' %}">
-        <!-- chartist -->
-        <link rel="stylesheet" href="{% static 'main_app/bower_components/chartist/dist/chartist.min.css' %}">
-    
+   <!-- bootstrap -->
+   <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
     <!-- uikit -->
     <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}" media="all">
 
@@ -41,17 +35,23 @@
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
-    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
 
-    <!-- matchMedia polyfill for testing media queries in JS -->
+ 
+
+   <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.js' %}"></script>
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
 
-    
-   
+  <style>
+      .custom-file a{
+          display: none;
+      }
+  </style>
+ 
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
@@ -65,9 +65,9 @@
                 </a>
                 
                 <!-- secondary sidebar switch -->
-                <a href="#" id="sidebar_secondary_toggle" class="sSwitch sSwitch_right sidebar_secondary_check">
+                <!-- <a href="#" id="sidebar_secondary_toggle" class="sSwitch sSwitch_right sidebar_secondary_check">
                     <span class="sSwitchIcon"></span>
-                </a>
+                </a> -->
                 
                     <!-- <div id="menu_top_dropdown" class="uk-float-left uk-hidden-small">
                         <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
@@ -103,14 +103,6 @@
                                             <a href="page_institute_profile.html" class="uk-margin-top">
                                                 <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
                                                 <span class="uk-text-muted uk-display-block">Institute profile</span>
-                                            </a>
-                                            <a href="page_institute_profile.html" class="uk-margin-top">
-                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
-                                                <span class="uk-text-muted uk-display-block">Admin profile</span>
-                                            </a>
-                                            <a href="page_institute_profile.html" class="uk-margin-top">
-                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
-                                                <span class="uk-text-muted uk-display-block">Teacher profile</span>
                                             </a>
                                         </div>
                                     </div>
@@ -244,8 +236,7 @@
                 <button class="header_main_search_btn uk-button-link"><i class="md-icon material-icons">&#xE8B6;</i></button>
                 <script type="text/autocomplete">
                     <ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">
-                       
-                        <li data-value="">
+                                                <li data-value="">
                             <a href="" class="needsclick">
                                <br>
                                 <span class="uk-text-muted uk-text-small"></span>
@@ -263,14 +254,18 @@
             </form>
         </div>
     </header><!-- main header end -->
-   
     <!-- main sidebar -->
     <aside id="sidebar_main" >
         
         <div class="institute_logo_top" >
+            
+            {% if user.profile.institute.institute_logo.url %}
             <div>
                 <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="institute_logo" style="height: 48px;" /> </a>
-            </div>
+            </div>  
+            {% endif %}
+                
+           
         </div>
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
@@ -334,6 +329,7 @@
     </ul>
 </li>
 <!-- ending notice menu -->
+
 {% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
               <li  title="Fees">
                 <a href="{% url 'fees_home' %}">
@@ -341,8 +337,7 @@
                     <span class="menu_title">Fees Setup</span>
                 </a>
             </li>      
-              {% endif %}
-           
+              {% endif %}           
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
@@ -495,309 +490,161 @@
         </div>
     </aside><!-- main sidebar end -->
 
-
     <div id="page_content">
         <div id="page_content_inner">
-            
-            {% if messages %}
-            <div class="md-card md-card-primary">
-          <div class=>
-              <ul class="messages alert">
-                  {% for message in messages %}
-                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                  {% endfor %}
-              </ul>
-          </div>
-            </div>
-            {% endif %}
+             <!-- starting message for new users depending on admisson query and profile -->
+             {% if user.admission_request %}
+             <div class="md-card md-card-primary">
+                 <div class="md-card-content text-info">
+                     You have already requested. Please wait till any response from your school !
+                 </div>
+             </div>
+             {% else %}
+             {% if user.profile.designation %}
+             {% else %}  
+             <div class="md-card md-card-primary">
+                 <div class="md-card-content">
+                     <a href="{% url 'edit_profile' user.profile.pk %}">Click here</a> to select your institute and get started...
+                 </div>
+             </div>
+             {% endif %}
+             {% endif %}
+                 <!-- ending message for new users depending on admisson query and profile -->
+           
+             <!-- messages -->
+             {% if messages %}
+             <div class="md-card md-card-primary">
+           <div >
+               <ul class="messages alert">
+                   {% for message in messages %}
+                   <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                   {% endfor %}
+               </ul>
+           </div>
+             </div>
+             {% endif %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
                 <div class="uk-width-large">
                     <div class="md-card">
                         <div class="user_heading">
                             <div class="user_heading_menu hidden-print">
-                               
                                 <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
                                     <!-- <i class="md-icon material-icons md-icon-light">&#xE5D4;</i> -->
                                     <!-- <div class="uk-dropdown uk-dropdown-small">
-                                        
                                         <ul class="uk-nav">
-                                           
+                                             <li><a href="#">Action 1</a></li>
+                                            <li><a href="#">Action 2</a></li>
                                         </ul>
                                     </div> -->
                                 </div>
                             </div>
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{object.Student_Photo.url}}" alt="user avatar"/>
+                                    <img src="{{user.profile.profile_pic.url}}" alt="user avatar"/>
                                 </div>
                             </div>
                             <div class="user_heading_content">
                                 <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">
-                                    {{object.first_name}} 
-    {% if object.middle_name %}
-    {{object.middle_name}}
-    {% endif %}
-    {% if object.last_name %}
-    {{object.last_name}}
-    {% endif %}
+                                    
+                                    {% if user.profile.first_name %}
+                                    {{user.profile.first_name}}
+                                        {% else %}
+                                    Fill Your Information Correctly
+                                    {% endif %}
                                         
-                                </span><span class="sub-heading">
-                              
-                                </span>
+                                   
+                                    
+                                    {% if user.profile.middle_name %}
+                                       {{user.profile.middle_name}} 
+                                    {% endif %}
+
+                                    
+                                    {% if user.profile.last_name %}
+                                        {{user.profile.last_name}}
+                                    {% endif %}</span><span class="sub-heading">
+                                        
+                                        {% if user.profile.designation %}
+                                        {{user.profile.designation}} 
+                                        {% else %}
+                                        No role selected    
+                                        {% endif %}
+                                            
+                                       </span></h2>
                                                             </div>
-
-
                            
                         </div>
-
                         <div class="user_content">
-                          
+                            <div class="row">
+                                <div class="col-sm-6" >
+                                  <h3 class="uk-text-primary">Update Student's Information</h3>
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
+                                </div>
+                              </div>
 
-                            <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
-                                <li class="uk-active"><a href="#">Student Information </a></li>
-                               
-                                 
-                                 
-                                
-                                <!-- <li><a href="#">Posts</a></li> -->
-                            </ul>
+                              {% if student_prfile_edit_form.errors %}
+                            {% for field in student_prfile_edit_form %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                    {% endif %}
+                              
+                        <!-- starting user form  -->
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
                             
-                            <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
-                                <li><h4 class="md-color-blue-700">Personal Information</h4>
-                                    <div class="uk-grid " data-uk-grid-margin>
-                                          
-                                        <div class="uk-width-medium-1-3 parsley-row">
-                                        <!-- <div class="uk-width-large-1-3"> -->
-                                            
-                                            <ul class="md-list md-list-addon">
-                                             <li> <b>Student Name:</b> {{object.first_name}} {{object.middle_name}} {{object.last_name}}</li>
-                                             <li> <b>Selected Class:</b> {{object.class_name}}</li>
-                                             <li> <b>Date of Birth:</b> {{object.date_of_birth}}</li>
-                                             <li> <b>Gender:</b> {{object.gender}}</li>
-                                             <li> <b>Address:</b> {{object.Address}}, 
-                                                                                                               
-                                                {% if object.District %}
-                                                {{object.District}},
-                                                {% endif %}
-                                                 
-                                                {% if object.State %}
-                                                {{object.State}},
-                                                {% endif %}
-                
-                                                {% if object.country %}
-                                                {{object.country}} -
-                                                {% endif %} 
-                                                
-                                                {% if object.Pin_Code %}
-                                                {{object.Pin_Code}}
-                                                {% endif %}</li>
-
-                                                   
-                                             
-                                            </ul></div>
-                                             <div class="uk-width-medium-1-3 parsley-row">
-                                                 
-                                                <ul class="md-list md-list-addon">
-                                            <li> <b>Blood Group:</b> {{object.student_blood_group}}</li>
-                                            <li> <b>Mobile No:</b> {{object.mobile_Number}}</li>
-                                            <li> <b>Email:</b> {{object.email}}</li>
-                                            <li> <b>Aadhar Card:</b> {{object.student_aadhar_card}}</li>
-                                            <li> <b>Permanent Address:</b> {{object.p_address}},
-                                                                                                               
-                                                {% if object.p_district %}
-                                                {{object.p_district}},
-                                                {% endif %}
-                                                 
-                                                {% if object.p_State %}
-                                                {{object.p_State}},
-                                                {% endif %}
-                
-                                                {% if object.p_country %}
-                                                {{object.p_country}} -
-                                                {% endif %} 
-                                                
-                                                {% if object.p_pin_code %}
-                                                {{object.p_pin_code}}
-                                                {% endif %}</li> 
-                                             </ul>
-                                        </div>
-                                        <div class="uk-width-medium-1-3 parsley-row">
-                                                 
-                                            <ul class="md-list md-list-addon">
-                                                <li> <b>Religion:</b> {{object.religion}}</li>
-                                                <li> <b>Category:</b> {{object.category}}</li>
-                                                <li> <b>Cast:</b> {{object.sub_cast}}</li>
-                                                <!-- <li> <b>Nationality:</b> {{object.Nationality}}</li> -->
-                                              </ul>
-                                        </div>
-                                    </div>
-                                    <hr class="md-hr"/>
-                                    <div class="uk-grid " data-uk-grid-margin>
-                                            
-                                            <div class="uk-width-medium-1-3 parsley-row">
-                                                <h4 class = "md-color-blue-700">Father's Detail</h4>   
-                                                <ul class="md-list md-list-addon">
-                                                    
-                                                    <li> <b>Name:</b> {{object.father_name}}</li>
-                                                    <li> <b>Mobile No:</b> {{object.f_mobile_Number}}</li>
-                                                    <li> <b>Email ID:</b> {{object.f_Email_Id}}</li>
-                                                    <li> <b>Aadhar Card:</b> {{object.f_aadhar_card}}</li>
-                                                    <li> <b>Qualification:</b> {{object.f_qualification}}</li>
-                                                    <li> <b>Occupation:</b> {{object.f_occupation}}</li>
-                                                    <li> <b>Image:</b>{% if object.f_photo %}
-                                                        <a href="{{object.f_photo.url}}" download class="user_action_image"><img class="md-user-image" src="{{object.f_photo.url}}" alt=""/></a></li>
-                                                        {% endif %}
-                                                    </ul>
-                                            </div>
-                                            
-                                            <div class="uk-width-medium-1-3 parsley-row">
-                                                <h4 class="md-color-blue-700"><b>Mother's Detail</b></h4>
-                                            <ul class="md-list md-list-addon">
-                                                <li> <b>Name:</b> {{object.mother_name}}</li>
-                                                    <li> <b>Mobile No:</b> {{object.m_mobile_Number}}</li>
-                                                    <li> <b>Email ID:</b> {{object.m_Email_Id}}</li>
-                                                    <li> <b>Aadhar Card:</b> {{object.m_aadhar_card}}</li>
-                                                    <li> <b>Qualification:</b> {{object.m_qualification}}</li>
-                                                    <li> <b>Occupation:</b> {{object.m_occupation}}</li>
-                                                    <li> <b>Image:</b>{% if object.m_photo %}
-                                                        <a href="{{object.m_photo.url}}" download class="user_action_image"><img class="md-user-image" src="{{object.m_photo.url}}" alt=""/></a></li>
-                                                        {% endif %}
-                                                    </ul>
-                                        </div>
-
-                                        <div class="uk-width-medium-1-3 parsley-row">
-                                            <h4 class="md-color-blue-700"><b>Guardian's Detail</b></h4>
-                                        <ul class="md-list md-list-addon">
-                                            <li> <b>Name:</b> {{object.guardian_name}}</li>
-                                                <li> <b>Mobile No:</b> {{object.g_mobile_Number}}</li>
-                                                <li> <b>Email ID:</b> {{object.g_Email_Id}}</li>
-                                                <li> <b>Aadhar Card:</b> {{object.g_aadhar_card}}</li>
-                                                <li> <b>Qualification:</b> {{object.g_qualification}}</li>
-                                                <li> <b>Occupation:</b> {{object.g_occupation}}</li>
-                                                <li> <b>Image:</b>{% if object.g_photo %}
-                                                    <a href="{{object.g_photo.url}}" download class="user_action_image"><img class="md-user-image" src="{{object.g_photo.url}}" alt=""/></a></li>
-                                                    {% endif %}
-                                                </ul>
-                                    </div>
-                                    </div>
-                                    
-                                    <hr class="md-hr"/>
-                                    <div class="uk-grid " data-uk-grid-margin>
-                                        <div class="uk-width-medium-1-3 parsley-row">
-                                        <!-- <div class="uk-width-large-1-3"> -->
-                                            <h4 class="md-color-blue-700"><b>Certificates</b></h4>
-                                            <ul class="md-list md-list-addon">
-                                             <li> <b>Birth Certificate</b> {% if object.dob_certificate %}
-                                                <a href="{{object.dob_certificate.url}}" target="_blank">view</a></li>
-                                                {% endif %}
-                                             <li> <b>ID Certificate:</b>{% if object.id_proof_certificate %}
-                                                <a href="{{object.id_proof_certificate.url}}" target="_blank">view</a></li>
-                                                {% endif %}
-                                             <li> <b>Domicile Certificate:</b>{% if object.domicile_certificate %}
-                                                <a href="{{object.domicile_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
-                                                {% endif %}
-                                                                             
-                                            </ul></div>
-                                             <div class="uk-width-medium-1-3 parsley-row">
-                                                <h4 style="color: white;">.</h4>
-                                                <ul class="md-list md-list-addon">
-                                            <li> <b>Cast Certificate:</b> {% if object.cast_certificate %}
-                                                <a href="{{object.cast_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
-                                                {% endif %}
-                                            <li> <b>Character Certificate:</b> {% if object.character_certificate %}
-                                                <a href="{{object.character_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
-                                                {% endif %}
-                                            <li> <b>Medical Certificate:</b> {% if object.medical_certificate %}
-                                                <a href="{{object.medical_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
-                                                {% endif %}
-                                            
-                                           
-                                             </ul>
-                                        </div>
-                                        <div class="uk-width-medium-1-3 parsley-row">
-                                            <h4 style="color: white;">.</h4>
-                                            <ul class="md-list md-list-addon">
-                                                <li> <b>Transfer Certificate:</b> {% if object.transfer_certificate %}
-                                                    <a href="{{object.transfer_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
-                                                    {% endif %}
-                                                <li> <b>Last Year Certificate:</b>{% if object.last_year_certificate %}
-                                                    <a href="{{object.last_year_certificate.url}}" target="_blank" class="user_action_image">view</a></li>
-                                                    {% endif %}
-                                                                                               
-                                              </ul>
-                                        </div>
-                                    </div>
-                                    
-                                        
-
-
-                                    <div style="text-align: center;">
-                                        <a href="{% url 'admission_requests' %}" class="md-btn md-btn-primary" ><i class="material-icons">keyboard_backspace</i> Go Back</a>
-
-                                        <a href="{% url 'approve_admission_request' object.id %}" class="md-btn md-btn-success" style="margin: auto;"><i class="material-icons">check</i> Approve</a>
-        
-                                        <a id="disapprove_admission"   class="md-btn md-btn-danger" ><i class="material-icons">closest</i> Disapprove</a>
-                                    </div></div>
+                            <div class="row">
                                 
-                                    <script>
-                                        $(document).ready(function(){
-                                          $('#disapprove_admission').click(function(){
-                                             
-                                              $.ajax({
-                                                  type:'POST',
-                                                  url:'{% url "fetch_disapproved_id" object.id %}',
-                                                  data:{school_id:$("#selected_institute").val(), 
-                                                
-                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
-                                                  
-                                                  success: function(msg){
+                                {% for f in student_prfile_edit_form  %}
+                                <div class="col-sm-4" style="padding: 5px;" >
+                            
+                                    {{f|as_crispy_field}}
+                                    
+                                </div>
+                                <hr>
+                                
+                                {% endfor %}
 
-                                                    $("#dappr").modal("show");
-                                                    $('#dambhm').html(msg)
-                                                  }
-                                              })
-                                          })
-                                        })
-                                        </script>
-                                       
-       
+                            </div>
+                           <h4 class="uk-alert">Students Additional Information</h4>
+                                
+                           <div class="row">
 
-                                </li>
+{% for f in student_info_edit_form %}
+<div class="col-sm-4" style="padding: 5px;" >
 
-                                  <!-- The Modal -->
-                                  <div class="modal fade" id="dappr">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                      <div class="modal-content">
-                                      
-                                        <!-- Modal Header -->
-                                        <div class="modal-header">
-                                          <h4 class="modal-title">Disapprove Admission Request</h4>
-                                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                          
-                                        </div>
-                                        
-                                        <!-- Modal body -->
-                                        <div class="modal-body" id="dambhm">
-                                         
-                                        </div>
-                                        
-                                        <!-- Modal footer -->
-                                        <div class="modal-footer">
-                                          <a href="{% url 'disapprove_admission_request' object.id %}"  class="md-btn md-btn-danger" >Disapprove</a>
-                                          <button type="button" class="md-btn md-btn-primary" data-dismiss="modal">Cancel</button>
-                                        </div>
-                                        
-                                      </div>
-                                    </div>
-                                  </div>
+        {{f|as_crispy_field}}
+        
+    </div>
+    <hr>
+{% endfor %}
+    
+                           </div>
 
+                            
+                         <button class="md-btn md-btn-primary" type="submit">Update Details</button>
+                        </form>
+         
+                        <!-- ending user form -->
 
+<script>
+    $('document').ready(function(){
+        $("form").each(function(){
+    $(this).find('input',).attr('class','form-control') //<-- Should return all input elements in that specific form.
+});
 
+$("form").each(function(){
+    $(this).find('select',).attr('class','form-control') //<-- Should return all input elements in that specific form.
+});
+    })
+</script>
 
-                                                                       
-                            </ul>       
-                                         
-                                    </div>
+                            
+                                            </div>
                                    
                     </div>
                 </div>
@@ -807,15 +654,37 @@
                             <div class="uk-margin-medium-bottom">
                                 <h3 class="heading_c uk-margin-bottom">Alerts</h3>
                                 <ul class="md-list md-list-addon">
-                                    
-                                  
-                                       
-                                       
-                                      
+                                    <li>
+                                        <div class="md-list-addon-element">
+                                            <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
+                                        </div>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">Ullam dolor praesentium.</span>
+                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Et voluptatum cumque excepturi dolores.</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-addon-element">
+                                            <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
+                                        </div>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">Veniam fuga sed.</span>
+                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Quia similique autem aut eaque qui.</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="md-list-addon-element">
+                                            <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
+                                        </div>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">Voluptatem voluptatem veritatis.</span>
+                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Iure autem asperiores numquam rerum ut sunt.</span>
+                                        </div>
+                                    </li>
                                 </ul>
                             </div>
                             
-                          
+                            <a class="md-btn md-btn-flat md-btn-flat-primary" href="#">Show all</a>
                         </div>
                     </div>
                 </div> -->
@@ -825,7 +694,6 @@
     <footer id="footer" >
         &copy; A product of <a target="_blank" id="tblf" href="https://www.trueblueappwerks.com" >TrueBlue AppWerks</a>
     </footer> 
-
     <!-- google web fonts -->
     <script>
         WebFontConfig = {
@@ -854,11 +722,12 @@
     <!-- altair common functions/helpers -->
     <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
 
+    <script src="{% static 'main_app/js/script.js' %}"></script>
 
     <script>
         $(function() {
             if(isHighDensity()) {
-                $.getScript( "static 'main_app/js/custom/dense.min.js'", function(data) {
+                $.getScript( "assets/js/custom/dense.min.js", function(data) {
                     // enable hires images
                     altair_helpers.retina_images();
                 });
@@ -875,10 +744,68 @@
     </script>
 
 
+    
+    
+<!-- code to toggle admin options -->
+<script>
+        $(document).ready(function(){
+            $('#defaultUnchecked').click(function(){
+                if($(this).prop("checked") == true){
+                    $('#institute_list').hide()
+                    $('#institute-options').show()
+                }
+                else if($(this).prop("checked") == false){
+                    $('#institute-options').hide()
+                    $('#institute_list').show()
+                }
+            });
+        });
+    
+    </script>
+
+<!-- ending code to toggle admin options -->
+
+<script>
+    $("input[type=date]").datepicker({
+  dateFormat: 'yy-mm-dd',
+  onSelect: function(dateText, inst) {
+    $(inst).val(dateText); // Write the value in the input
+  }
+});
+
+// Code below to avoid the classic date-picker
+$("input[type=date]").on('click', function() {
+  return false;
+});
+</script>
+
+<script>
+    $(document).ready(function(){
+      $('#select_school').change(function(){
+          $.ajax({
+              type:'POST',
+              url:'/fetch_levels/',
+              data:{school_id:$("#select_school").val(), csrfmiddlewaretoken: '{{ csrf_token }}' },
+              
+              success: function(msg){
+                  $('#fdata').html(msg);
+              }
+          })
+      })
+    })
+    </script>
+    
+
+<script src="{% static 'main_app/js/script.js' %}"></script>   
+
+<script>
+     $(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+
+    $('[type="file"]').css('display','none')
+</script>
    
-    
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    
 </body>
 </html>

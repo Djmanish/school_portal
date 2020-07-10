@@ -169,7 +169,7 @@ class Migration(migrations.Migration):
             name='Student_Info',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('blood_group', models.CharField(max_length=10)),
+                ('student_blood_group', models.CharField(max_length=10)),
                 ('religion', models.CharField(max_length=10)),
                 ('sub_cast', models.CharField(blank=True, max_length=50, null=True)),
                 ('f_mobile_Number', models.CharField(max_length=12, null=True)),
