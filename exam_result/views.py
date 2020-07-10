@@ -61,11 +61,13 @@ def exam_result(request,pk):
       #============================================================================================ 
         student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
         institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
-        if institute_students==None:
-            messages.info(request, 'No Students Found!')
-            return redirect(f'/examresult/examresult/{inst_id}')
+        print(institute_students)
+        if institute_students:
+            pass
+           
         else:
-          pass
+          messages.error(request, 'No Students Found!')
+          return redirect(f'/examresult/examresult/{inst}')
         
         exam_schedule_date=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_subject=selected_subject,exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,)
         for date in exam_schedule_date:
