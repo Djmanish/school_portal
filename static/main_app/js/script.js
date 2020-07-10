@@ -112,36 +112,16 @@ $(document).ready(function(){
   });
 });
 
-function checkDate(){
-  var idate = document.getElementById("datechange"),
-      resultDiv = document.getElementById("mydate"),
-      dateReg = /(0[1-9]|[12][0-9]|3[01])[\/](0[1-9]|1[012])[\/]201[4-9]|20[2-9][0-9]/;
-
-  if(!dateReg.test(idate.value)){
-      resultDiv.innerHTML = "Invalid date!";
-      resultDiv.style.color = "red";
-      return;            
-  } 
-
-  if(isFutureDate(idate.value)){
-      resultDiv.innerHTML = "Entered date is a future date";
-      resultDiv.style.color = "red";
-  } else {
-      resultDiv.innerHTML = "It's a valid date";
-      resultDiv.style.color = "green";
+function checkDate() {
+  var selectedText = document.getElementById('datepicker').value;
+  var selectedDate = new Date(selectedText);
+  var now = new Date();
+  if (selectedDate < now) {
+   alert("Date must be in the future");
   }
 }
 //previous date validation
-function validateDate() {
-  alert('Your message');
-  var userdate = new Date(document.getElementById("datechange").value).toJSON().slice(0,10);
-  print(userdate)
-  var today = new Date().toJSON().slice(0,10);
-  print(today)
-  if(userdate < today){
-    alert('Your message');
-  }
-}
+
 // ending script for processing , notification and due date
 
 function validations(){

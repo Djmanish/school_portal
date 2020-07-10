@@ -24,6 +24,8 @@ urlpatterns = [
   path('user/approve/<int:pk>/', views.approve_request, name="user_approval"),
   path('user/disapprove/<int:pk>/', views.disapprove_request, name="user_disapproval"),
   path('add_loca/<int:pk>/', views.add_loca, name="add_loca"),
+  path('set_loc/', views.set_loc, name="set_loc"),
+
   # path('user/classes/',views.classes, name="classes"),
   # path('institute/profile/subjects/',views.subjects, name="subjects"),
 

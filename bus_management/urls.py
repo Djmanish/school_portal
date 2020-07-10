@@ -20,4 +20,6 @@ urlpatterns = [
   path('add_new_driver/', views.add_new_driver, name="add_new_driver"),
   path('add_route/', views.add_route, name="add_route"),
   path('set_location/', views.set_location, name="set_location"),
+  path('see_map/', views.see_map, name="see_map"),
+
 ]

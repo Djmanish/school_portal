@@ -268,7 +268,7 @@ def examschedule_view(request,pk):
                                 selected_student=User.objects.get(pk=select_st)
                                 student_institute=selected_student.profile.institute
                                 institute_exam_type=ExamType.objects.filter(institute=student_institute)
-                                print(student_institute)
+                                
                                 student_class= selected_student.profile.Class
 
                                 exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=student_class)
@@ -400,4 +400,32 @@ def fetch_max_sr_no(request):
     individual_sr_no = individual_sr_no + f"<option>"+sr_no['exam_sr_no']+"</option>" 
      
   return HttpResponse(individual_sr_no)
+
+
+  
+def fetch_no(request):
+  exam_type_id = request.POST.get('exam_type_no')
+  exam_type=ExamType.objects.get(pk=exam_type_id)
+  
+  max_exam_sr_no = ExamDetails.objects.filter(exam_type=exam_type_id).values('exam_sr_no').distinct()
+ 
+  individual_sr_no = "<option>--Exam Type No.--</option>"
+  for sr_no in max_exam_sr_no:
+    individual_sr_no = individual_sr_no + f"<option>"+sr_no['exam_sr_no']+"</option>" 
+     
+  return HttpResponse(individual_sr_no)
+
+def selected_exam_type(request):
+        select_st= request.POST.get('selected_student')
+        selected_student=UserProfile.objects.get(pk=select_st)
+        student_institute=selected_student.institute
+        institute_exam_type=ExamType.objects.filter(institute=student_institute)
+        # student_exam_type = ExamDetails.objects.filter(institute=institute_exam_type).values('exam_type').distinct()
+        print(institute_exam_type)
+        
+        individual_exam_type = "<option>--Exam Type--</option>"
+        for etype in institute_exam_type:
+                individual_exam_type = individual_exam_type + f"<option value={etype.id}>{etype}</option>" 
+        
+        return HttpResponse(individual_exam_type)
     
