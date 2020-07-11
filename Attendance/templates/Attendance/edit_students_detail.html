@@ -16,7 +16,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
 
-    <title>Add Driver</title>
+    <title>Update Profile</title>
  
     <script src="{% static 'main_app/js/jquery.js' %}"></script>
    
@@ -46,6 +46,11 @@
     <![endif]-->
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
 
+  <style>
+      .custom-file a{
+          display: none;
+      }
+  </style>
  
 </head>
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
@@ -115,7 +120,6 @@
                             </div>
                         </div>
                     </div> -->
-                
                     <div class="uk-navbar-flip">
                         <ul class="uk-navbar-nav user_actions">
                             <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
@@ -325,19 +329,14 @@
 </li>
 <!-- ending notice menu -->
 
-{% for i in user.user_institute_role.level.permissions.all %}    
-              {% if i.function_name == "Can Update Lecture Timing" %}
+{% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
               <li  title="Fees">
                 <a href="{% url 'fees_home' %}">
                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                     <span class="menu_title">Fees Setup</span>
                 </a>
             </li>      
-              {% endif %}
-            {% endfor %}
-
-
-           
+              {% endif %}           
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
@@ -493,11 +492,22 @@
     <div id="page_content">
         <div id="page_content_inner">
              <!-- starting message for new users depending on admisson query and profile -->
-            
-             
-             
-             
-             
+             {% if user.admission_request %}
+             <div class="md-card md-card-primary">
+                 <div class="md-card-content text-info">
+                     You have already requested. Please wait till any response from your school !
+                 </div>
+             </div>
+             {% else %}
+             {% if user.profile.designation %}
+             {% else %}  
+             <div class="md-card md-card-primary">
+                 <div class="md-card-content">
+                     <a href="{% url 'edit_profile' user.profile.pk %}">Click here</a> to select your institute and get started...
+                 </div>
+             </div>
+             {% endif %}
+             {% endif %}
                  <!-- ending message for new users depending on admisson query and profile -->
            
              <!-- messages -->
@@ -529,167 +539,108 @@
                             </div>
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar"/>
+                                    <img src="{{user.profile.profile_pic.url}}" alt="user avatar"/>
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">Add Driver</span></h2>
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">
+                                    
+                                    {% if user.profile.first_name %}
+                                    {{user.profile.first_name}}
+                                        {% else %}
+                                    Fill Your Information Correctly
+                                    {% endif %}
+                                        
+                                   
+                                    
+                                    {% if user.profile.middle_name %}
+                                       {{user.profile.middle_name}} 
+                                    {% endif %}
+
+                                    
+                                    {% if user.profile.last_name %}
+                                        {{user.profile.last_name}}
+                                    {% endif %}</span><span class="sub-heading">
+                                        
+                                        {% if user.profile.designation %}
+                                        {{user.profile.designation}} 
+                                        {% else %}
+                                        No role selected    
+                                        {% endif %}
+                                            
+                                       </span></h2>
                                                             </div>
                            
                         </div>
                         <div class="user_content">
                             <div class="row">
                                 <div class="col-sm-6" >
-                                  <h3 class="uk-text-primary">Fill Driver Info</h3>
+                                  <h3 class="uk-text-primary">Update Student's Information</h3>
                                 </div>
                                 <div class="col-sm-6 text-right">
                                     <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
                                 </div>
                               </div>
-                           
+
+                              {% if student_prfile_edit_form.errors %}
+                            {% for field in student_prfile_edit_form %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                    {% endif %}
+                              
                         <!-- starting user form  -->
-                        <form method="POST" enctype="multipart/form-data" action="{% url 'add_new_driver' %}">
+                        <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             
-                            <div class="form-group">
-                                                                                            
-                                <label class="required">Driver Code</label>
-                                <input type="text" class="form-control" name='driver_code' required>
-                              </div>
-                              <div class="form-group">
-                                                                                            
-                                <label class="required">First Name</label>
-                                <input type="text" class="form-control n_i" name='first_name' required="required" >
-                              </div>
-
-                              <div class="form-group">
-                                <label >Middle Name</label>
-                                <input type="text" class="form-control n_i" name='middle_name'>
-                              </div>
-
-                              <div class="form-group">
-                                <label >Last Name</label>
-                                <input type="text" class="form-control n_i" name='last_name' >
-                              </div>
-
-                              <div class="form-group">
-                                <label class="required">Father's Name</label>
-                                <input type="text" class="form-control n_i" name='father_name' required>
-                              </div>
-
-                              <div class="form-group">
-                                <label >Mother's Name</label>
-                                <input type="text" class="form-control n_i" name='mother_name'>
-                              </div>
-    
-                              <div class="form-group">
-                                <label class="required" for="gender">Gender</label>
-                                <select class="form-control" id="gender" name="gender" required>                                       
-                                  <option >Male</option>
-                                  <option  >Female</option >
-                                  <option >Other</option>
-                                  
-                                </select>
-                              </div>
-
-                              <div class="form-group" >
-                                <label class= "required">Date of Birth</label>
+                            <div class="row">
                                 
-                                <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" required>
-                              </div>
-                              
-                              <div class="form-group">
-                                <label >Marital Status</label>
-                                <select class="form-control" name="marital_status">     
-                                  <option >Unmarried</option>
-                                  <option >Married</option >
-                                </select>
-                              </div>
-                             
-
-                              <div class="form-group">
-                                <label >Category</label>
-                                <select class="form-control" name="category_">     
+                                {% for f in student_prfile_edit_form  %}
+                                <div class="col-sm-4" style="padding: 5px;" >
+                            
+                                    {{f|as_crispy_field}}
                                     
-                                    <option disabled>-- Select One --</option>
-                                  <option value="Unreserved" >Unreserved (General)</option>
-                                  <option  >Sc/St</option >
-                                    <option  >OBC</option >
-                                </select>
-                              </div>                            
-                             
-                              <div class="form-group">
-                                <label >Change Profile Picture</label>
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="customFile" accept="image/*" name='pc'>
-                                  <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
-                              </div>
+                                <hr>
+                                
+                                {% endfor %}
 
+                            </div>
+                           <h4 class="uk-alert">Students Additional Information</h4>
+                                
+                           <div class="row">
 
+{% for f in student_info_edit_form %}
+<div class="col-sm-4" style="padding: 5px;" >
 
-                              <div class="form-group">
-                                <label class="required">Contact No.</label>
-                                <input type="text" class="form-control" name='mobile_number'  pattern="[1-9]{1}[0-9]{9}" required>
-                              </div>
-                              <div class="form-group">
-                                <label class="required" >E-Mail</label>
-                                <input type="email" class="form-control" name='email' required>
-                              </div>
-                              <div class="form-group">
-                                <label class="required" >Aadhaar Card Number</label>
-                                <input type="number" class="form-control n_a positive_number" maxlength="12" name='adhar_number'  placeholder="12 digit aadhar card number" required>
-                              </div>
-                              <div class="form-group">
-                                <label class="required" >Driving License No.</label>
-                                <input type="text" class="form-control " name='driving_license'  placeholder="eg: XX123456789" required>
-                              </div>
+        {{f|as_crispy_field}}
+        
+    </div>
+    <hr>
+{% endfor %}
+    
+                           </div>
 
-                              <div class="form-group">
-                                <label class="required">Address Line 1</label>
-                                <input type="text" class="form-control" name='address_line_1' required>
-                              </div>
-
-                              <div class="form-group">
-                                <label >Address Line 2</label>
-                                <input type="text" class="form-control" name='address_line_2'>
-                              </div>
-
-                              <div class="form-group">
-                                <label class="required" >City</label>
-                                <input type="text" class="form-control n_i" name='city'  required>
-                              </div>
-
-                              <div class="form-group" > 
-                                <label class="required">State</label>
-                                <select class="form-control" name="state"  required>
-                                    <option selected disabled value=""> --- select state --- </option>              
-                                  {% for state in all_states %}
-                                      <option value="{{state.id}}">{{state}}</option>
-                                  {% endfor %}
-                                      
-                                  
-                                </select>
-                              </div>
-                              <!-- <div class="form-group">
-                                <label class="required">Country:</label>
-                                <input type="text" class="form-control n_i" name='country' value="{{user_info.country}}" required>
-                              </div> -->
-
-                              <div class="form-group">
-                                <label class="required">Pin Code</label>
-                                <input type="text" class="form-control" name='u_pin_code' required>
-                              </div>
-
-                              
-                      
-                              <input class="md-btn md-btn-primary" type="submit" value="Submit" >
-
-
+                            
+                         <button class="md-btn md-btn-primary" type="submit">Update Details</button>
                         </form>
+         
                         <!-- ending user form -->
 
+<script>
+    $('document').ready(function(){
+        $("form").each(function(){
+    $(this).find('input',).attr('class','form-control') //<-- Should return all input elements in that specific form.
+});
 
+$("form").each(function(){
+    $(this).find('select',).attr('class','form-control') //<-- Should return all input elements in that specific form.
+});
+    })
+</script>
 
                             
                                             </div>
@@ -846,7 +797,14 @@ $("input[type=date]").on('click', function() {
 
 <script src="{% static 'main_app/js/script.js' %}"></script>   
 
+<script>
+     $(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
 
+    $('[type="file"]').css('display','none')
+</script>
    
 </body>
 </html>

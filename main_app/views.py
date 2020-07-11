@@ -18,6 +18,7 @@ from django.core.mail import send_mail, send_mass_mail
 from django.utils import timezone
 from Attendance.models import *
 from AddChild.models import *
+from bus_management.models import *
 from notices.models import *
 from holidaylist.models import *
 from exam_result.models import *
@@ -30,7 +31,7 @@ from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
-
+from geopy.geocoders import Nominatim
 from main_app.serializers import UserProfileSerializer, UserSerializer
 from fees.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -739,6 +740,14 @@ def user_profile(request):
     # Parent_childern Checkpoint Start
     parent_children = AddChild.objects.filter(parent= request.user.profile,status="active")
     
+    # Transportation
+    try:
+        request.user.sel_point = BusUsers.objects.get(user=request.user.profile)
+        print(request.user.sel_point)
+    except:
+        print("hello")
+        pass
+
     # Secondry Institute
     institute=SecondryInstitute.objects.filter(student_name=request.user.profile,status="active")
     if user_permissions_changes:
@@ -755,6 +764,8 @@ def user_profile(request):
         for permission in users_new_permissions:
             if permission not in users_old_permissions:
                 added_permissions.append(permission)
+
+    
 
 
         update_time = user_permissions_changes.update_time        
@@ -1334,3 +1345,27 @@ class Role_Changes_History_list_View(LoginRequiredMixin, ListView):
             # ending user notice
         context = super().get_context_data(**kwargs)
         return context
+
+def add_loca(request,pk):
+    print(pk)
+    sel_point = Point.objects.get(pk=pk)
+    try:
+        print("try")
+        sch_user = BusUsers.objects.get(user=request.user.profile,institute= request.user.profile.institute)
+        sch_user.point =sel_point
+        sch_user.save()
+        messages.success(request, 'Point updated successfully !')  
+        return HttpResponseRedirect(f'/user/profile/')
+    except BusUsers.DoesNotExist:
+        new_user = BusUsers.objects.create(user=request.user.profile, point=sel_point, institute= request.user.profile.institute)
+        messages.success(request, 'Point added successfully !')  
+        return HttpResponseRedirect(f'/user/profile/') 
+def set_loc(request):
+    try:
+        request.user.sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
+        request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute)
+    except:
+        pass
+    return render(request, 'main_app/map.html')
+
+        

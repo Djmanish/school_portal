@@ -92,8 +92,14 @@ def admission_home(request):
             new_request.f_photo= request.FILES['f_photo']
         if 'address_same' in request.POST:
             new_request.address_same= True
+        else:
+            new_request.address_same= False
+
         if 'guardian_applicable' in request.POST:
             new_request.g_applicable= True
+        else:
+            new_request.g_applicable= False
+
 
         new_request.mother_name = request.POST.get('mother_name').strip()
         new_request.m_mobile_Number = request.POST.get('m_mobile_number')
@@ -213,9 +219,21 @@ def disapprove_admission_request(request, pk):
 
 
 def approve_admission_request(request, pk):
-    approved_user = Admission_Query.objects.get(pk=pk)
+    approved_user = Admission_Query.objects.get(pk=pk) #fetching details for details endter in ad 
     approved_user_class = approved_user.class_name
     approved_user_first_name = approved_user.first_name
+    approved_user_middle_name = approved_user.middle_name
+    approved_user_last_name = approved_user.last_name
+    approved_user_father_name = approved_user.father_name
+    approved_user_mother_name = approved_user.mother_name
+    approved_user_gender = approved_user.gender
+    approved_user_dob = approved_user.date_of_birth
+    approved_user_category = approved_user.category
+    approved_user_aadhar_card = approved_user.student_aadhar_card
+
+
+
+
     approved_user = approved_user.request_by
     student_designation = Institute_levels.objects.get(institute= request.user.profile.institute, level_name='student')
     
@@ -224,7 +242,18 @@ def approve_admission_request(request, pk):
     approved_user_profile.institute = request.user.profile.institute
     approved_user_profile.Class = approved_user_class
     approved_user_profile.status= 'approve'
+    approved_user_profile.middle_name = approved_user_middle_name
     approved_user_profile.first_name = approved_user_first_name
+    approved_user_profile.last_name = approved_user_last_name
+    approved_user_profile.father_name = approved_user_father_name
+    approved_user_profile.mother_name = approved_user_mother_name
+    approved_user_profile.gender = approved_user_gender
+    approved_user_profile.date_of_birth = approved_user_dob
+    approved_user_profile.category = approved_user_category
+    approved_user_profile.aadhar_card_number = approved_user_aadhar_card
+    
+
+
     try:
         Role_Description.objects.create(user=approved_user, institute= request.user.profile.institute, level=student_designation)       
     except:

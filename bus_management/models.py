@@ -27,6 +27,8 @@ class Point(models.Model):
     point_street_no = models.IntegerField(null=True, blank=True)
     point_landmark = models.CharField(max_length=15)
     point_exact_place = models.CharField(max_length=20, null=True, blank=True)
+    longitude = models.FloatField(null=True)
+    latitude = models.FloatField(null=True)
     point_city = models.CharField(max_length=20)
     point_state = models.ForeignKey(to=State, on_delete=models.PROTECT, null= True, blank=True)
     point_country = models.CharField(max_length=20)
@@ -63,3 +65,16 @@ class RouteMap(models.Model):
 
     def __str__(self):
         return str(self.route)
+class InstituteLocation(models.Model):
+    institute = models.OneToOneField(to=Institute, on_delete=models.CASCADE, related_name='transport_institute', default=None)
+    longitute = models.FloatField(null=True)
+    latitude = models.FloatField(null=True)
+    def __str__(self):
+        return str(self.institute)
+
+class BusUsers(models.Model):
+    user = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='bus_users')
+    point = models.ForeignKey(to=Point, on_delete=models.CASCADE)
+    institute = models.ForeignKey(to=Institute, related_name="user_institute", on_delete=models.CASCADE, null=True, blank=True)
+    def __str__(self):
+        return str(self.user)

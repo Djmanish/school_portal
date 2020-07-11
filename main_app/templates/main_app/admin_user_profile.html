@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
 
@@ -17,6 +18,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
     <!-- additional styles for plugins -->
+   
         <!-- weather icons -->
         <link rel="stylesheet" href="{% static 'main_app/bower_components/weather-icons/css/weather-icons.min.css' %}" media="all">
         <!-- metrics graphics (charts) -->
@@ -33,11 +35,14 @@
    
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
+    
+    
 
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
 
+    
    
 
     <!-- matchMedia polyfill for testing media queries in JS -->
@@ -585,6 +590,7 @@
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">About</a></li>
                                  <li><a href="#">Details</a></li>
+                                 <li><a href="#">Bus Select</a></li>
                                  {% if user.user_institute_role.level.level_name == 'student' %}
                                  <li><a href="#">My Documents</a></li>
                                  {% endif %}
@@ -594,7 +600,7 @@
                                  {% if user.profile.designation.level_name == "parent" %}
                                  <li><a href="#">My Child</a></li>
                                  {% endif %}
-                                
+                                 
                                      
                                 
                                 <!-- <li><a href="#">Posts</a></li> -->
@@ -837,6 +843,51 @@
 
 
                                         </li>
+                                <li>
+                                    <div class="uk-width-medium-1-8" >
+                                        <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'set_loc' %}">
+                                            <i class="uk-icon-map-marker"></i>
+                                            Select Point
+                                        </a>
+                                    <!-- <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'see_map' %}" >
+                                        <i class="uk-icon-map-marker"></i>
+                                        See Map</a> -->
+                                    </div>
+                                    <div class="md-card uk-margin-medium-bottom">
+                                        
+                                        <div class="md-card-content">                                            
+                                            <div class="uk-overflow-container">                                                
+                                                <table class="uk-table uk-table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Sr No.</th>
+                                                        <th>Name.</th>
+                                                        <th>Route No.</th>
+                                                        <th>Point No.</th>
+                                                        <th>Point Name</th>
+                                                        <!-- <th>Place</th>
+                                                        <th>Address</th>
+                                                        <th>Edit</th>
+                                                        <th>Delete</th> -->
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>{{user.sel_point.user.first_name}} {{user.sel_point.user.last_name}}</td>
+                                                        <td>None</td>      
+                                                        <td>{{user.sel_point.point.point_code}}</td>                                                 
+                                                        <td>{{user.sel_point.point.point_name}}</td>               
+                                                    </tr>
+                                                    </tbody>
+                                                </table>                                                
+                                            </div>                                            
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </li>
                                         {% if user.user_institute_role.level.level_name == 'student'  %}
                                         <li>
                                             <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
@@ -1047,6 +1098,7 @@
                                                 
                                             </div>
                                         </li> 
+                                        
                                     </div>
                                    
                     </div>
@@ -1107,6 +1159,8 @@
             altair_helpers.ie_fix();
         });
     </script>
+    
+    
 
 
  
