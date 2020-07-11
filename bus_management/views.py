@@ -16,6 +16,16 @@ def bus(request):
     drivers = Driver.objects.filter(institute=request.user.profile.institute)
     active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
     routes = RouteInfo.objects.filter(institute=request.user.profile.institute)
+    new = RouteInfo.objects.filter(institute=request.user.profile.institute)
+    for i in new:
+        i.point_count= RouteMap.objects.filter(route=i).count()
+        s= RouteMap.objects.filter(route=i, index=0)
+        for j in s:
+            i.st= j.time
+        l= RouteMap.objects.filter(route=i, index=i.point_count-1)
+        for k in l:
+            i.lt= k.time
+        # print(s.time)
     context_data = {
         'buses': buses,
         'states_list': states_list,
@@ -23,6 +33,7 @@ def bus(request):
         'drivers':drivers,
         'active_buses':active_buses,
         'routes':routes,
+        'new':new,
     }
     return render(request, 'bus/bus_management.html', context_data)
 
@@ -227,3 +238,55 @@ def add_route(request):
 
         return HttpResponseRedirect(f'/bus/')  
 
+def route_map(request):
+    if request.method == 'POST':
+        route = int(request.POST['route'])
+        point = int(request.POST['point'])
+        sch_route = RouteInfo.objects.get(id=route)
+        points = Point.objects.filter(point_institute=request.user.profile.institute)
+        context_data = {
+        'sch_route':sch_route,
+        'range':range(point),
+        'points':points,
+        
+        }
+        print(route)
+        print(point)
+        return render(request, 'bus/map_route.html', context_data)  
+
+
+def checkIfDuplicates_1(listOfElems):
+    # ''' Check if given list contains any duplicates '''
+    if len(listOfElems) == len(set(listOfElems)):
+      return False
+    else:
+      return True
+
+def add_point_route (request):
+    if request.method == 'POST':
+        select_point= request.POST.getlist('select_point')
+        select_time= request.POST.getlist('time')
+        route= int(request.POST['hide_route'])
+        s_route= RouteInfo.objects.get(id=route)
+        result= checkIfDuplicates_1(select_point)
+        if result:
+            messages.error(request, "You are selecting same point !")  
+                      
+            return HttpResponseRedirect(f'/bus/') 
+        else:
+            print ("non Duplicates")
+
+        result1= checkIfDuplicates_1(select_time)
+        if result1:
+            messages.error(request, "Time never be same !")  
+                      
+            return HttpResponseRedirect(f'/bus/') 
+        else:
+            print ("non Duplicates")   
+        length=len(select_point) 
+        for i in range(length):
+            s_point= Point.objects.get(id=select_point[i])
+            new= RouteMap.objects.create(route=s_route, point=s_point, index=i, time=select_time[i])
+        messages.success(request, "Submit successfully !")     
+    return HttpResponseRedirect(f'/bus/') 
+    
