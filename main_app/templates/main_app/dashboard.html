@@ -85,6 +85,17 @@
     <script src="{% static 'main_app/packages/interaction/main.js' %}"></script>
     <script src="{% static 'main_app/packages/daygrid/main.js' %}"></script>
     <style>
+        @media only screen and (max-width: 600px) {
+            .fc-toolbar h2{
+                font-size: 11px;
+                margin-left:0;
+                font-weight: bolder;
+            }
+            .fc-toolbar{
+                padding: 0;
+            }
+        }
+        
         .fc-unthemed .fc-prev-button::after{
             visibility: hidden;            
         }
@@ -1224,7 +1235,7 @@
                         <table class="uk-table uk-table-condensed uk-table-hover">
                             <thead>
                                 <tr>
-                                    <th class="uk-text-nowrap" style="text-align: center;">SI No</th>
+                                    <th class="uk-text-nowrap" style="text-align: center;">S.No</th>
                                     <th class="uk-text-nowrap" style="text-align: center;margin-left: 0px;">Image</th>
                                     <th class="uk-text-nowrap" style="text-align: center;">Student Name</th>                                                                       
                                 </tr>                                       
