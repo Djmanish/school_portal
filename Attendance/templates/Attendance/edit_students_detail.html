@@ -47,9 +47,12 @@
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
 
   <style>
-      .custom-file a{
-          display: none;
+      .custom-file a, .custom-file input, .custom-file br{
+          display: none !important;
       }
+      /* .custom-file-label{
+          top: 4px;
+      } */
   </style>
  
 </head>
@@ -120,7 +123,6 @@
                             </div>
                         </div>
                     </div> -->
-                
                     <div class="uk-navbar-flip">
                         <ul class="uk-navbar-nav user_actions">
                             <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
