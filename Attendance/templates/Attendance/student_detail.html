@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
-    <title>My Profile   </title>
+    <title>Student Details  </title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
     <!-- additional styles for plugins -->
@@ -274,7 +274,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -402,7 +402,7 @@
                     </li> 
                
 
-                    <li  title="Class Students">
+                    <li class="current_section" title="Class Students">
                         <a href="{% url 'class_students_list' %}">
                                 <span class="menu_icon"><i class="material-icons">people</i></span>
                                 <span class="menu_title">Class Students</span>
@@ -561,8 +561,18 @@
                         
                         <div class="user_content">
                             <a onclick="goBack()" class="md-btn md-btn-primary text-white"><i class=" material-icons">arrow_back </i> Go Back</a>
+                         
+                            
+                           
+                                
+                            {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "admin" or student.Class in user.class_teacher.all %}
 
-                            <a  class="md-btn md-btn-primary text-white" href="{% url 'edit_student_detail'  %}?username={{student.id}}"><i class=" material-icons">edit </i> Edit Student's Detail</a>
+                          
+                            <a  class="md-btn md-btn-primary text-white" href="{% url 'edit_student_detail'  %}?username={{student.id}}"><i class=" material-icons">edit </i> Edit Student's Detail</a>   
+                            {% endif %}
+                                
+
+                            
                             <!-- <div class="md-btn md-btn-primary">
                                 <i class="material-icons">arrow_back</i>
                                 <input type="submit" value="Go Back" class="md-btn-primary" id="augbb"  > 
