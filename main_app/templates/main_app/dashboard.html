@@ -1459,14 +1459,16 @@
                      {% csrf_token %}
                        <label style="margin: 4px;">Select Child:  </label>
                          <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
-                         {% if request.POST %}
-                             {{user.post_child}}
+                        <option selected disabled>
+                        {% if user.post_child %}
+                             {{user.post_child.first_name}}
                          {% else %}
                              {{user.first_child.child.first_name}}
                          {% endif %}
                          </option>
                          {% for child in user.child_par %}
                          {% if child.status == "active" %}
+                         
                          <option value={{child.child.id}}>{{child.child.first_name}}</option>
                          {% endif %}
                          {% endfor %}

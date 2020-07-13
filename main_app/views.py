@@ -323,6 +323,8 @@ def dashboard(request):
             if request.method == "POST":
                 request.user.student=request.POST.get('selected_child')
                 std_child=UserProfile.objects.get(id=request.user.student)
+                print('Hello')
+                print(std_child)
                 request.user.post_child=std_child
                 request.user.holiday_child=HolidayList.objects.filter(institute=std_child.institute,applicable="Yes")
                 request.user.exam_she_child=ExamDetails.objects.filter(institute=std_child.institute,exam_class=std_child.Class)
