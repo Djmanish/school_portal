@@ -70,6 +70,10 @@ def create_notice(request):
             publish_datetime =datetime.datetime.strptime(request.POST.get('pubdatetime'), '%Y-%m-%dT%H:%M')
             notice_refrence_no = request.POST.get('notice_refrence_no').strip()
 
+            if notice_refrence_no == "":
+                notice_refrence_no = None
+
+
             if not notice_refrence_no=="":
                 try:
                     check_notice_no = Notice.objects.get(reference_no= notice_refrence_no)

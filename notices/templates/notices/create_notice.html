@@ -610,6 +610,12 @@
     $(document).ready(function(){
        $('input[name="if_ind_s"]').click(function(){
            if($(this).is(":checked")){
+
+            $('option').mousedown(function(e) {
+    e.preventDefault();
+    $(this).prop('selected', !$(this).prop('selected'));
+    return false;
+});
               
              $('#select_individual').css('display','block')
              $('#select_individual').css('class','form-group')
@@ -622,7 +628,7 @@
 </script>
 
 
-
+ 
 <div class="form-group" id="select_individual" style="display: none;" >
     <div class="input-group  input-group-sm">
         <div class="input-group-prepend">
@@ -630,11 +636,46 @@
        </div>
        <input type="text" class="form-control"  id="myInput" placeholder="Type to serach...">
      </div>
-  <small>press and hold ctrl to select multiple...</small>
+     <div class="md-btn-group">
+        <a  id="sel_all_p"  class="md-btn md-btn-mini md-btn-primary text-light">Select All Parents</a>
+        <a id="sel_all_t" class="md-btn md-btn-mini md-btn-primary text-light">Select All Teachers</a>
+        <a id="sel_all_s" class="md-btn md-btn-mini md-btn-primary text-light">Select All Students</a>
+        <a id="sel_all" class="md-btn md-btn-mini md-btn-primary text-light">Select All</a>
+        <a id="desel_all" class="md-btn md-btn-mini md-btn-primary text-light">Deselect All</a>
+    </div>
     <select class="Individual_option form-control" id="select_individual" multiple="multiple"  class="selectpicker" data-live-search="true" name="selected_individual">
+       
        <option selected disabled value=""> -- first select a class </option>
       </select>
   </div>
+
+  <script>
+      $('#sel_all_p').click(function(){
+        $('#select_individual option').prop('selected', false);
+        $('#select_individual option:contains((parent))').prop('selected', true);
+      })
+
+      $('#sel_all_t').click(function(){
+        $('#select_individual option').prop('selected', false);
+        $('#select_individual option:contains((teacher))').prop('selected', true);
+      })
+
+      $('#sel_all_s').click(function(){
+        $('#select_individual option').prop('selected', false);
+        $('#select_individual option:contains((student))').prop('selected', true);
+      })
+
+
+      $('#desel_all').click(function(){
+        $('#select_individual option').prop('selected', false);
+        // $('select#select_individual option:contains((parent))').attr('selected','selected')
+      })
+
+      $('#sel_all').click(function(){
+        $('#select_individual option').prop('selected', true);
+        // $('select#select_individual option:contains((parent))').attr('selected','selected')
+      })
+  </script>
   <br>
   <br>
 
