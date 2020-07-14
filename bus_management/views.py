@@ -25,7 +25,7 @@ def bus(request):
         l= RouteMap.objects.filter(route=i, index=i.point_count-1)
         for k in l:
             i.lt= k.time
-        # print(s.time)
+       
     context_data = {
         'buses': buses,
         'states_list': states_list,
@@ -290,3 +290,30 @@ def add_point_route (request):
         messages.success(request, "Submit successfully !")     
     return HttpResponseRedirect(f'/bus/') 
     
+def set_location(request):
+    if request.method == 'POST':
+        longi = request.POST['longitute'].strip()
+        lati = request.POST['latitute'].strip()
+        print(longi)
+        print(request.user.profile.institute.id)
+        try:
+            sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
+        except InstituteLocation.DoesNotExist:
+            sch = 0
+            set_loc = InstituteLocation.objects.create(institute=request.user.profile.institute, longitute=longi, latitude = lati)
+            messages.success(request, 'Institute location updated successfully !')
+            return HttpResponseRedirect(f'/bus/')
+    if sch:
+        sch.longitute = longi
+        sch.latitude = lati
+        sch.save()
+        messages.success(request, 'Institute location updated successfully !')
+        return HttpResponseRedirect(f'/bus/')
+
+def see_map(request):
+    ins_loc = InstituteLocation.objects.get(institute=request.user.profile.institute)
+
+    context_data={
+    'ins_loc':ins_loc,
+    }
+    return render(request, 'bus/index.html', context_data)      
