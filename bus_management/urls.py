@@ -21,5 +21,6 @@ urlpatterns = [
   path('add_route/', views.add_route, name="add_route"),
   path('set_location/', views.set_location, name="set_location"),
   path('see_map/', views.see_map, name="see_map"),
+  path('start_trip/', views.start_trip, name="start_trip"),
 
 ]

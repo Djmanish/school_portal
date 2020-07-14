@@ -256,3 +256,10 @@ def see_map(request):
     }
     return render(request, 'bus/index.html', context_data)
     
+def start_trip(request):
+    p = Point.objects.filter(point_institute=request.user.profile.institute)
+
+    context={
+        'p':p,
+    }
+    return render(request, 'bus/trip.html', context)

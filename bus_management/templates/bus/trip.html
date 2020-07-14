@@ -1,0 +1,1161 @@
+<!doctype html>
+{% load static %}
+<!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
+
+
+    <title>Vehicle</title>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+    <!-- uikit -->
+    <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
+        media="all">
+
+    <!-- flag icons -->
+    <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
+
+    
+    <!-- altair admin -->
+    <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
+
+    <!-- themes -->
+    <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- matchMedia polyfill for testing media queries in JS -->
+    <!--[if lte IE 9]>
+        <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.js' %}"></script>
+        <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
+    <![endif]-->
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
+
+    <style>
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 60px;
+          height: 34px;
+        }
+        
+        .switch input { 
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+        
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+        
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 26px;
+          width: 26px;
+          left: 4px;
+          bottom: 4px;
+          background-color: white;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+        
+        input:checked + .slider {
+          background-color: #2196F3;
+        }
+        
+        input:focus + .slider {
+          box-shadow: 0 0 1px #2196F3;
+        }
+        
+        input:checked + .slider:before {
+          -webkit-transform: translateX(26px);
+          -ms-transform: translateX(26px);
+          transform: translateX(26px);
+        }
+        
+        /* Rounded sliders */
+        .slider.round {
+          border-radius: 34px;
+        }
+        
+        .slider.round:before {
+          border-radius: 50%;
+        }
+        </style>
+</head>
+
+<body class="disable_transitions sidebar_main_open sidebar_main_swipe">
+    <!-- main header -->
+    <header id="header_main">
+        <div class="header_main_content">
+            <nav class="uk-navbar">
+                                
+                <!-- main sidebar switch -->
+                <a href="#" id="sidebar_main_toggle" class="sSwitch sSwitch_left">
+                    <span class="sSwitchIcon"></span>
+                </a>
+                
+                <!-- secondary sidebar switch -->
+                <!-- <a href="#" id="sidebar_secondary_toggle" class="sSwitch sSwitch_right sidebar_secondary_check">
+                    <span class="sSwitchIcon"></span>
+                </a> -->
+                
+                    <!-- <div id="menu_top_dropdown" class="uk-float-left uk-hidden-small">
+                        <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+                            <a href="#" class="top_menu_toggle"><i class="material-icons md-24">&#xE8F0;</i></a>
+                            <div class="uk-dropdown uk-dropdown-width-3">
+                                <div class="uk-grid uk-dropdown-grid">
+                                    <div class="uk-width-2-3">
+                                        <div class="uk-grid uk-grid-width-medium-1-3 uk-margin-bottom uk-text-center">
+                                            <a href="page_mailbox.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-light-green-600">&#xE158;</i>
+                                                <span class="uk-text-muted uk-display-block">Mailbox</span>
+                                            </a>
+                                            <a href="page_invoices.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-purple-600">&#xE53E;</i>
+                                                <span class="uk-text-muted uk-display-block">Invoices</span>
+                                            </a>
+                                            <a href="page_chat.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-cyan-600">&#xE0B9;</i>
+                                                <span class="uk-text-muted uk-display-block">Chat</span>
+                                            </a>
+                                            <a href="page_scrum_board.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-red-600">&#xE85C;</i>
+                                                <span class="uk-text-muted uk-display-block">Scrum Board</span>
+                                            </a>
+                                            <a href="page_snippets.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-blue-600">&#xE86F;</i>
+                                                <span class="uk-text-muted uk-display-block">Snippets</span>
+                                            </a>
+                                            <a href="page_user_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">User profile</span>
+                                            </a>
+                                            <a href="page_institute_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">Institute profile</span>
+                                            </a>
+                                            <a href="page_institute_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">Admin profile</span>
+                                            </a>
+                                            <a href="page_institute_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">Teacher profile</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="uk-width-1-3">
+                                        <ul class="uk-nav uk-nav-dropdown uk-panel">
+                                            <li class="uk-nav-header">Components</li>
+                                            <li><a href="components_accordion.html">Accordions</a></li>
+                                            <li><a href="components_buttons.html">Buttons</a></li>
+                                            <li><a href="components_notifications.html">Notifications</a></li>
+                                            <li><a href="components_sortable.html">Sortable</a></li>
+                                            <li><a href="components_tabs.html">Tabs</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                
+                    <div class="uk-navbar-flip">
+                        <ul class="uk-navbar-nav user_actions">
+                            <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
+                        
+                            {% if user.profile.designation %}
+                            <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                              
+                                {% if user.profile.status == 'approve' %}
+                                <a href="#" id="user_action_iconb" atval="{{user.pk}}" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i>
+                                    {% for notice in user.users_notice %}
+                                    {% if notice.publish_date >= user.user_last_notice_view.last_seen %}
+                                    <span class="uk-badge nbadge" >  <i class="large material-icons" id="nbadge" style="font-size: 15px;">lens</i>
+                                    </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </a> 
+                                   
+                                {% endif %}
+                                <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
+                                    <div class="md-card-content">
+                                        <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
+                                            <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
+                                            <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
+                                        </ul>
+                                        <ul id="header_alerts"  class="uk-switcher uk-margin">
+                                            <li>
+                                                <ul class="md-list md-list-addon alert_notice_list">
+                                                    {% for notice in user.users_notice %}
+                                                    <li>
+                                                        <a href="{% url 'all_notice_list' %}">
+                                                            <div class="md-list-addon-element">
+                                                                <span class="md-user-letters md-bg-cyan">N</span>
+                                                            </div>
+                                                            <div class="md-list-content">
+                                                                <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <ul class="md-list md-list-addon">
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">Voluptatem omnis.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Consequatur eaque natus esse assumenda aut ab quidem.</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">Itaque sit officiis.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Ad velit quia possimus officia adipisci dicta enim.</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">Modi odit impedit.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Inventore unde praesentium numquam amet et sunt dolorum.</span>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="md-list-addon-element">
+                                                            <i class="md-list-addon-icon material-icons uk-text-primary">&#xE8FD;</i>
+                                                        </div>
+                                                        <div class="md-list-content">
+                                                            <span class="md-list-heading">Qui et.</span>
+                                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Quia pariatur id facere accusantium rerum illum.</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endif %}
+                                
+                            <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                                <a href="#" class="user_action_image"><img class="md-user-image" src="{{user.profile.profile_pic.url}}" alt=""/> <span id="md_user">{{user.profile.first_name}}</span></a>
+                                <div class="uk-dropdown uk-dropdown-small">
+                                    <ul class="uk-nav js-uk-prevent">
+                                        <li><a href="{% url 'user_profile' %}">My profile</a></li>
+                                        <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                                        <li title="Log Out">
+                                            <a href="{% url 'auth_logout' %}">
+                                                
+                                                <span class="menu_title">Log Out</span>
+                                            </a>
+                                        </li>
+                                       
+                                    </ul>
+                                </div>
+                            </li>
+                          
+                        </ul>
+                    </div>
+            </nav>
+        </div>
+        <div class="header_main_search_form">
+            <i class="md-icon header_main_search_close material-icons">&#xE5CD;</i>
+            <form class="uk-form uk-autocomplete" data-uk-autocomplete="{source:'data/search_data.json'}">
+                <input type="text" class="header_main_search_input" />
+                <button class="header_main_search_btn uk-button-link"><i
+                        class="md-icon material-icons">&#xE8B6;</i></button>
+                <script type="text/autocomplete">
+                    <ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">
+                                                <li data-value="">
+                            <a href="" class="needsclick">
+                               <br>
+                                <span class="uk-text-muted uk-text-small"></span>
+                            </a>
+                        </li>
+                       
+                        <li data-value="autocomplete-value">
+                            <a class="needsclick">
+                                Autocomplete Text<br>
+                                <span class="uk-text-muted uk-text-small">Helper text</span>
+                            </a>
+                        </li>
+                    </ul>
+                </script>
+            </form>
+        </div>
+    </header><!-- main header end -->
+    <!-- main sidebar -->
+    <aside id="sidebar_main" >
+        
+        <div class="institute_logo_top" >
+            
+            {% if user.profile.institute.institute_logo.url %}
+                      
+            <div>
+                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="institute_logo" style="height: 48px;" /> </a>
+            </div> 
+            {% endif %}
+         
+        </div>
+        
+        <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
+            <ul style="margin-bottom: 80px;">
+                <li title="Dashboard">
+                    <a href="{% url 'user_dashboard' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
+                        <span class="menu_title">Dashboard</span>
+                    </a> 
+                </li>
+                
+                <li title="User Profile">
+                    <a href="{% url 'user_profile' %}">
+                        <span class="menu_icon"><i class="material-icons">person</i></span>
+                        <span class="menu_title">My Profile</span>
+                    </a>    
+                </li>
+                
+                {% if user.profile.institute == None %}
+                <li title="Admission Query">
+                    <a href="{% url 'admission_home' %}">
+                        <span class="menu_icon"><i class="material-icons">person</i></span>
+                        <span class="menu_title">Admission Query</span>
+                    </a>    
+                </li>
+                {% endif %}
+                    
+
+                {% if user.profile.institute and user.profile.status == 'approve' %}
+                <li  title="Institute Profile">
+                    <a href="{% url 'institute_detail' user.profile.institute.pk %}">
+                        <span class="menu_icon"><i class="material-icons">school</i></span>
+                        <span class="menu_title">Institute Profile</span>
+                    </a>    
+                </li>
+      
+<!-- starting notice menu -->
+<li  title="Notices">
+    <a href="">
+        <span class="menu_icon"><i class="material-icons">notifications_active</i></span>
+        <span class="menu_title">Notifications</span>
+    </a>
+    <ul>
+        <li>
+            <a href="{% url 'all_notice_list'  %}">
+                <span class="menu_icon"><i class="material-icons">notifications</i></span>
+                <span class="menu_title">My Notifications</span>
+            </a>
+        </li> 
+
+        
+        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" %}
+        {% else %}
+        <li>
+            <a href="{% url 'create_notice'  %}">
+                <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                <span class="menu_title">Create a Notification</span>
+            </a>
+        </li> 
+        {% endif %}
+    </ul>
+</li>
+<!-- ending notice menu -->
+{% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
+              <li  title="Fees">
+                <a href="{% url 'fees_home' %}">
+                    <span class="menu_icon"><i class="material-icons">receipt</i></span>
+                    <span class="menu_title">Fees Setup</span>
+                </a>
+            </li>      
+              {% endif %}           
+    
+{% if user.profile.designation.level_name == "parent" %}
+<li  title="Fees">
+    <a href="{% url 'parent_fees' %}">
+        <span class="menu_icon"><i class="material-icons">receipt</i></span>
+        <span class="menu_title">Fees Status</span>
+    </a>
+</li>
+{% endif %}
+    
+                <li  title="Holiday List">
+                    <a href="{% url 'holidaylist' user.profile.institute.pk %}">
+                        <span class="menu_icon"><i class="material-icons">date_range</i></span>
+                        <span class="menu_title">Holiday List</span>
+                    </a>   
+                </li>
+                
+               <li  title="Institute Schedule">
+                <a href="{% url 'class_schedule' %}">
+                    <span class="menu_icon"><i class="material-icons">schedule</i></span>
+                    <span class="menu_title">Schedule</span>
+                </a>
+            </li>               
+           
+
+            {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+            <li  title="Admission Requests">
+                <a href="{% url 'admission_requests' %}">
+                    <span class="menu_icon"><i class="material-icons">group_add</i></span>
+                    <span class="menu_title">Admission Requests</span>
+                </a>
+            </li>
+
+        {% endif %}
+            
+
+                {% if user.profile.institute %}
+                {% if user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
+                    <li  title="Approvals">
+                        <a href="{% url 'approvals' user.profile.institute.pk %}">
+                            <span class="menu_icon"><i class="material-icons">how_to_reg</i>
+                                {% if user.approval_request > 0 %}
+                                <span class="uk-badge" style="background-color: red;">                                
+                                {{user.approval_request}}                                     
+                                </span>
+                                {% endif %}
+                        </span>
+                            <span class="menu_title">Approvals</span>
+                        </a>
+                    </li>
+                    
+                    <li  title="Attendance">
+                    <a href="{% url 'attendance' %}">
+                            <span class="menu_icon"><i class="material-icons">done_all</i></span>
+                            <span class="menu_title">Attendance</span>
+                        </a>
+                    </li> 
+               
+
+                    <li  title="Class Students">
+                        <a href="{% url 'class_students_list' %}">
+                                <span class="menu_icon"><i class="material-icons">people</i></span>
+                                <span class="menu_title">Class Students</span>
+                            </a>
+                        </li> 
+                    {% endif %}
+
+                    {% for i in user.user_institute_role.level.permissions.all %}    
+                    {% if i.function_name == "Can Manage Library" %}
+                    <li  title="Library">
+                      <a href="{% url 'library' %}">
+                          <span class="menu_icon"><i class="material-icons">local_library</i></span>
+                          <span class="menu_title">Library</span>
+                      </a>
+                  </li>      
+                    {% endif %}
+                  {% endfor %}
+                  <li class="current_section"  title="Vehicle">
+                    <a href="{% url 'bus' %}">
+                        <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
+                        <span class="menu_title">Vehicle</span>
+                    </a>
+                </li>  
+
+                    <li  title="Examination">
+
+                        <a href="">
+                            <span class="menu_icon"><i class="material-icons">trending_up</i></span>
+                            <span class="menu_title">Examination</span>
+                        </a>
+                        <ul>
+                            {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
+
+                            <li>
+                                <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                                    <span class="menu_title">Create Exam</span>
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a href="{% url 'examschedule' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">add_circle</i></span>
+                                    <span class="menu_title">Create Exam Schedule</span>
+                                </a>
+    
+                            </li>
+                            {% endif %}
+                            <li>
+                                <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">visibility</i></span>
+                                    <span class="menu_title">View Exam Schedule</span>
+                                </a>
+                            </li>
+                           
+                            {% if user.profile.designation.level_name == "teacher"%}
+                            <li>
+                                <a href="{% url 'examresult' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">receipt</i></span>
+                                    <span class="menu_title">Exam Result</span>
+                                </a>
+                            </li>
+                            <li  title="Class Students">
+                    
+                                <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
+                                        <span class="menu_icon"><i class="material-icons">verified_user</i></span>
+                                        <span class="menu_title">Class Promotion</span>
+                                    </a>
+                                    
+                                </li> 
+                            {% endif %}
+                            {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
+                            
+                        
+                            <li>
+                                <a href="{% url 'report_card' request.user.profile.institute.id %}">
+                                    <span class="menu_icon"><i class="material-icons">file_copy</i></span>
+                                    <span class="menu_title">Report Card</span>
+                                </a>
+    
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                    {% endif %}  
+                    {% endif %} 
+                
+            </ul>
+        </div>
+        <div class="global_logo">
+            
+                <a target="_blank" href="http://globalcredence.com/" ><img  style="max-height: 32px;" src="{% static 'main_app/images/blogo1.png' %}" alt=""/> </a>
+         
+        </div>
+    </aside><!-- main sidebar end -->
+
+    
+    <div id="page_content">
+        <div id="page_content_inner">      
+            {% if messages %}
+            <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+            {% endif %}      
+            <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+                <div class="uk-width-large">
+                    <div class="md-card">
+                        <div class="user_heading">
+                            <div class="user_heading_menu hidden-print">
+                                <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
+                                    <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
+                                     <div class="uk-dropdown uk-dropdown-small">
+                                        <ul class="uk-nav">
+                                            <li><a href="#" data-uk-modal="{target:'#modal_set_location',}">Set Institute Location</a></li>
+                                            <!-- <li><a href="#" data-uk-modal="{target:'#modal_new_sub_category'}">Create Sub Category</a></li>
+                                            <li><a href="#" data-uk-modal="{target:'#modal_library_settings'}">Library Settings</a></li>
+                                            <li><a href="#" data-uk-modal="{target:'#modal_set_books_user'}">Set Books Limit Per User</a></li> -->
+                                            
+                                        </ul>
+                                    </div> 
+                                </div>
+                            </div>
+                            
+                            <div class="user_heading_avatar">
+                                <div class="thumbnail">
+                                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
+                                </div>
+                            </div>
+                            <!-- Page Modol forms -->
+                            <div class="uk-modal" id="modal_set_location">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Set Location</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'set_location' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Longitute</label>
+                                            <input type="number" step="any" class="form-control" name="longitute" required>
+                                          </div>        
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Latitute</label>
+                                            <input type="number" step="any" class="form-control" name="latitute" required>
+                                          </div>
+                                                                                                                                           
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+                            <div class="uk-modal" id="modal_new_bus">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Add Vehicle</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'add_bus' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Vehicle Registration No.</label>
+                                            <input type="text" class="form-control" name="bus_no"placeholder="ex: UP-XX-XX-XXXX" required>
+                                          </div>        
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Maker Name</label>
+                                            <input type="text" class="form-control" name="bus_maker" placeholder="ex: Tata, Eicher" required>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Vehicle Type</label>
+                                            <input type="text" class="form-control" name="bus_type" placeholder="ex: Bus, Van" required>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Color</label>
+                                            <input type="text" class="form-control" name="bus_color" required>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Fuel Type</label>
+                                            <select id="bus_fuel_type" class="form-control-sm form-control" name="bus_fuel_type" required>
+                                                <option>--Select--</option>
+                                                <option value="petrol">Petrol</option>
+                                                <option value="diesel">Diesel</option>
+                                                <option value="cng">CNG</option>
+                                                <option value="lpg">LPG</option>                                              
+                                             
+                                            </select>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Capacity</label>
+                                            <input type="number" class="form-control" name="bus_capacity" required>
+                                          </div>                                                                                                 
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add Vehicle</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+                            <div class="uk-modal" id="modal_new_point">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Create New Point</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'add_point' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Point Code</label>
+                                            <input type="text" class="form-control" name="point_code" required>
+                                          </div>        
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Point Name</label>
+                                            <input type="text" class="form-control" name="point_name" required>
+                                          </div>
+                                          
+                                            <div class="uk-form-row">
+                                                <div class="uk-grid" data-uk-grid-margin>
+                                                    <div class="uk-width-medium-1-3">
+                                                    <div class="form-group">
+                                                        <label style="color: black;">Street No.</label>
+                                                        <input type="number" class="form-control" name="point_street">
+                                                    </div>
+                                                    </div>
+                                                    <div class="uk-width-medium-1-3">
+                                                    <div class="form-group">
+                                                        <label class="required" style="color: black;">Landmark</label>
+                                                        <input type="Text" class="form-control" name="point_landmark" required>
+                                                    </div>   
+                                                    </div>  
+                                                    <div class="uk-width-medium-1-3">
+                                                        <div class="form-group">
+                                                            <label class="required" style="color: black;">Place</label>
+                                                            <input type="Text" class="form-control" name="point_place" required>
+                                                        </div>   
+                                                        </div> 
+                                                    </div> 
+                                                    </div>
+                                                    <div class="uk-form-row" style="margin-bottom: 15px">
+                                                        <div class="uk-grid" data-uk-grid-margin>
+                                                            <div class="uk-width-medium-1-3">
+                                                            <div class="form-group">
+                                                                <label class="required" style="color: black;">City</label>
+                                                                <input type="text" class="form-control" name="point_city" required>
+                                                            </div>
+                                                            </div>
+                                                            <div class="uk-width-medium-1-3">
+                                                            <div class="form-group">
+                                                                <label class="required" style="color: black;">State</label>
+                                                                <select id="point_state" class="form-control-sm form-control" name="point_state" required>
+                                                                    <option selected disabled value="">--- Select ---</option>
+                                                                    {% for i in states_list %}
+                                                                    <option value={{i.id}}>{{i}}</option>
+                                                                    {% endfor %}
+                                                                 
+                                                                </select>
+                                                            </div>   
+                                                            </div> 
+                                                            <div class="uk-width-medium-1-3">
+                                                                <div class="form-group">
+                                                                    <label class="required" style="color: black;">Country</label>
+                                                                    <input type="Text" class="form-control" name="point_country" required>
+                                                                </div>   
+                                                                </div>  
+                                                            </div> 
+                                                            </div>
+                                                            <div class="uk-form-row" style="margin-bottom: 15px">
+                                                                <div class="uk-grid" data-uk-grid-margin>
+                                                                    <div class="uk-width-medium-1-2">
+                                                                    <div class="form-group">
+                                                                        <label class="required" style="color: black;">Longitute</label>
+                                                                        <input type="number" step="any" class="form-control" name="point_longitute" placeholder="12.345678" required>
+                                                                    </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="uk-width-medium-1-2">
+                                                                        <div class="form-group">
+                                                                            <label class="required" style="color: black;">Latitute</label>
+                                                                            <input type="number" step="any" class="form-control" name="point_latitute" placeholder="12.345678" required>
+                                                                        </div>   
+                                                                        </div>  
+                                                                    </div> 
+                                                                    </div>
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Add Point</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+                            <a type="hidden" id="modal_edit_bus_btn" data-uk-modal="{target:'#modal_edit_bus'}"></a>
+                            <div class="uk-modal" id="modal_edit_bus">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Edit Vehicle</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'edit_bus' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <input id="edit_bus_id_hide"  type="hidden" class="form-control-sm form-control" name="edit_bus_id">
+                                            <label class="required" style="color: black;">Vehicle Registration No.</label>
+                                            <input type="text" class="form-control" id="edit_bus_no" name="edit_bus_n"  readonly>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Maker Name</label>
+                                            <input type="text" class="form-control" id="edit_maker" name="edit_maker" required>
+                                          </div>        
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Vehicle Type</label>
+                                            <input type="text" class="form-control" id="edit_bus_type" name="edit_bus_typ" required>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Bus Color</label>
+                                            <input type="text" class="form-control" id="edit_bus_color" name="edit_bus_colo" required>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;" for="sel 1">Fuel Type</label>
+                                            <select id="edit_fuel" class="form-control-sm form-control" name="edit_fuel" required>
+                                                <option id="selcat" selected disabled value=""></option>
+                                                <option value="petrol">Petrol</option>
+                                                <option value="diesel">Diesel</option>
+                                                <option value="cng">CNG</option>
+                                                <option value="lpg">LPG</option>
+                                             
+                                            </select>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Bus Capacity</label>
+                                            <input type="number" class="form-control" id="edit_bus_capacity" name="edit_bus_capacit" required>
+                                          </div>                                                                                                 
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Update</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+                            <a type="hidden" id="modal_edit_point_btn" data-uk-modal="{target:'#modal_edit_point'}"></a>
+                            <div class="uk-modal" id="modal_edit_point">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Update Point</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'edit_point' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" class="form-control" name="edit_point_id_hide" id="edit_point_id_hide" required>
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Point Code</label>
+                                            <input type="text" class="form-control" name="edit_point_code" id="edit_point_code" required readonly>
+                                          </div>        
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Point Name</label>
+                                            <input type="text" class="form-control" name="edit_point_name" id="edit_point_name" required>
+                                          </div>
+                                          
+                                            <div class="uk-form-row">
+                                                <div class="uk-grid" data-uk-grid-margin>
+                                                    <div class="uk-width-medium-1-3">
+                                                    <div class="form-group">
+                                                        <label style="color: black;">Street No.</label>
+                                                        <input type="number" class="form-control" name="edit_point_street" id="edit_point_street">
+                                                    </div>
+                                                    </div>
+                                                    <div class="uk-width-medium-1-3">
+                                                    <div class="form-group">
+                                                        <label class="required" style="color: black;">Landmark</label>
+                                                        <input type="Text" class="form-control" name="edit_point_landmark" id="edit_point_landmark" required>
+                                                    </div>   
+                                                    </div>  
+                                                    <div class="uk-width-medium-1-3">
+                                                        <div class="form-group">
+                                                            <label class="required" style="color: black;">Place</label>
+                                                            <input type="Text" class="form-control" name="edit_point_place" id="edit_point_place" required>
+                                                        </div>   
+                                                        </div>
+                                                    </div> 
+                                                    </div>
+                                                    <div class="uk-form-row" style="margin-bottom: 15px">
+                                                        <div class="uk-grid" data-uk-grid-margin>
+                                                            <div class="uk-width-medium-1-3">
+                                                            <div class="form-group">
+                                                                <label class="required" style="color: black;">City</label>
+                                                                <input type="text" class="form-control" name="edit_point_city" id="edit_point_city" required>
+                                                            </div>
+                                                            </div>
+                                                            <div class="uk-width-medium-1-3">
+                                                            <div class="form-group">
+                                                                <label class="required" style="color: black;">State</label>
+                                                                <select id="edit_point_state" class="form-control-sm form-control" name="edit_point_state" required>
+                                                                    <option id="selcat1" selected disabled value=""></option>
+                                                                    {% for i in states_list %}
+                                                                    <option value={{i.id}}>{{i}}</option>
+                                                                    {% endfor %}
+                                                                 
+                                                                </select>
+                                                            </div>   
+                                                            </div> 
+                                                            <div class="uk-width-medium-1-3">
+                                                                <div class="form-group">
+                                                                    <label class="required" style="color: black;">Country</label>
+                                                                    <input type="Text" class="form-control" name="edit_point_country" id="edit_point_country" required>
+                                                                </div>   
+                                                                </div>  
+                                                            </div> 
+                                                            </div>
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Update Point</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+                            <div class="uk-modal" id="modal_new_route">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Create New Route</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'add_route' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Route No.</label>
+                                            <input type="text" class="form-control" name="route_no" required>
+                                          </div>        
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Route Name</label>
+                                            <input type="text" class="form-control" name="route_name" required>
+                                          </div>
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">Bus</label>
+                                            <select id="point_state" class="form-control-sm form-control" name="sel_bus" required>
+                                                <option selected disabled value="">--- Select ---</option>
+                                                {% for i in active_buses %}
+                                                <option value={{i.id}}>{{i}}</option>
+                                                {% endfor %}
+                                             
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Driver</label>
+                                            <select id="point_state" class="form-control-sm form-control" name="sel_driver" required>
+                                                <option selected disabled value="">--- Select ---</option>
+                                                {% for i in drivers %}
+                                                <option value={{i.id}}>{{i.name.first_name}} {{i.name.last_name}}</option>
+                                                {% endfor %}
+                                             
+                                            </select>
+                                        </div>
+                                            <div class="uk-form-row">
+                                                <div class="uk-grid" data-uk-grid-margin>
+                                                    <div class="uk-width-medium-1-2">
+                                                    <div class="form-group">
+                                                        <!-- <span class="uk-input-group-addon"><i class="uk-input-group-icon uk-icon-calendar"></i></span> -->
+                                                        <i class="uk-input-group-icon uk-icon-calendar"></i> <label class="required" style="color: black;"> From Date </label>
+                                                        <input type="date" class="form-control" name='from_date' pattern="^[0-9-]{10}$" required>
+                                                    </div>
+                                                    </div>
+                                                    <div class="uk-width-medium-1-2">
+                                                        <div class="form-group">
+                                                            <!-- <span class="uk-input-group-addon"><i class="uk-input-group-icon uk-icon-calendar"></i></span> -->
+                                                            <i class="uk-input-group-icon uk-icon-calendar"></i> <label class="required" style="color: black;"> To Date </label>
+                                                            <input type="date" class="form-control" name='to_date' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" required>
+                                                        </div>
+                                                        </div>
+                                                    
+                                                    </div> 
+                                                    </div>
+                                                    <div class="uk-form-row" style="margin-bottom: 15px">
+                                                        
+                                                            </div>
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Create Route</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+
+                            <!-- start route map modol -->
+                            
+                            <!-- end route map modol -->
+                            <!-- End Modol Forms -->
+                            
+                            
+                            <div class="user_heading_content">
+                                <h2 class="heading_b uk-margin-bottom"><span
+                                        class="uk-text-truncate">{{user.profile.institute.name}}</span>
+                                        <span class="sub-heading">Vehicle Management System</span></h2>
+                                        <!-- <ul class="user_stats">
+                                            <li>
+                                                <h4 class="heading_a">{{total_books}} <span class="sub-heading">Books</span></h4>
+                                            </li>
+                                            <li>
+                                                <h4 class="heading_a">{{total_issue_books}} <span class="sub-heading">Issued</span></h4>
+                                            </li>
+                                            <li>
+                                                <h4 class="heading_a">{{left}} <span class="sub-heading">Left</span></h4>
+                                            </li>
+                                        </ul> -->
+                            </div>
+                            
+                        </div>
+                        
+                            <div class="user_content">
+             
+                                <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
+                                    <li class="uk-active"><a href="#">Trip</a></li>
+                                     <!-- <li><a href="#">Points</a></li>                                     
+                                     <li><a href="#">Driver</a></li>
+                                     <li><a href="#">Routes</a></li>
+                                     <li><a href="#">Map Routes</a></li> -->
+                                     <!-- <li><a href="#">Test</a></li> -->
+                                     
+                                     
+                                </ul>
+                                <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
+                                    <!-- Start Issue Book Tab -->
+                                    <li>
+                                    <!-- <div class="uk-width-medium-1-5">
+                                        <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="#" data-uk-modal="{target:'#modal_new_bus'}">
+                                            <i class="uk-icon-bus"></i>
+                                            Add Vehicle
+                                        </a>
+                                    </div> -->
+                                    <div class="md-card uk-margin-medium-bottom">
+                                        {% if p %}
+                                        <div class="md-card-content">                                            
+                                            <div class="uk-overflow-container">                                                
+                                                <table class="uk-table uk-table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Sr No.</th>
+                                                        <th>Route No.</th>
+                                                        <th>Point No.</th>
+                                                        <th>Point Name</th>
+                                                        <th>Action</th>
+                                                        <!-- <th>Colour</th>
+                                                        <th>Capacity</th>
+                                                        <th>Status</th>
+                                                        <th>Edit</th>
+                                                        <th>Action</th> -->
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for i in p %}
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td>1</td>
+                                                        <td>{{i.point_code}}</td>   
+                                                        <td>{{i.point_name}}</td> 
+                                                        <!-- <td>{{i.fuel_type}}</td>                                                     
+                                                        <td>{{i.bus_color}}</td>
+                                                        <td>{{i.bus_capacity}}</td>
+                                                        <td>{{i.status}}</td> -->
+                                                        
+                                                        
+                                                        <td style="width: 10px">
+                                                            <div class="parsley-row">
+                                                                <input type="checkbox" class="{{bus.id|slugify}}" data-switchery value="{{bus.id}}" />
+                                                            </div>
+                                                        </td>
+                                                        
+                                                    </tr>
+                                                    
+                                                    
+                                                    <script>
+                                                        $(document).ready(function(){
+                                                        $('.{{bus.pk|slugify}}').change(function(){
+                                                            $.ajax({
+                                                                  type:'POST',
+                                                                  url:'fetch_bus_details/',
+                                                                  data:{category:$(".{{bus.pk|slugify}}").val(), 
+                                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                  
+                                                                  success: function(msg){
+                                                                    alert("Bus Status Changed");
+                                                                    window.location.reload();
+                                                                  }
+                                                              });
+                                                            
+                                                        });
+                                                        });
+                                                    </script>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>                                                
+                                            </div>                                            
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    </li>  
+                                        
+
+                            </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- google web fonts -->
+    <script>
+        WebFontConfig = {
+            google: {
+                families: [
+                    'Source+Code+Pro:400,700:latin',
+                    'Roboto:400,300,500,700,400italic:latin'
+                ]
+            }
+        };
+        (function () {
+            var wf = document.createElement('script');
+            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+                '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+            wf.type = 'text/javascript';
+            wf.async = 'true';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(wf, s);
+        })();
+    </script>
+
+    <!-- common functions -->
+    <script src="{% static 'main_app/js/common.min.js' %}"></script>
+    <!-- uikit functions -->
+    <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
+    <!-- altair common functions/helpers -->
+    <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
+
+
+    <script>
+        $(function () {
+            if (isHighDensity()) {
+                $.getScript("assets/js/custom/dense.min.js", function (data) {
+                    // enable hires images
+                    altair_helpers.retina_images();
+                });
+            }
+            if (Modernizr.touch) {
+                // fastClick (touch devices)
+                FastClick.attach(document.body);
+            }
+        });
+        $window.load(function () {
+            // ie fixes
+            altair_helpers.ie_fix();
+        });
+    </script>
+    
+    
+    
+</body>
+
+</html>
