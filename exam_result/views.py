@@ -267,7 +267,7 @@ def report_card(request,pk):
               # student_session=UserProfile.objects.get(pk=request.user)
               select_exam_type = request.POST.get('result_exam_type')
              
-              if select_exam_type=="overall":
+              if select_exam_type=="Overall":
                 if request.POST.get("report_cart_button"):
                     # return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
                   return overall_report_card(request,exam_id,selected_student.id)
@@ -402,7 +402,7 @@ def report_card(request,pk):
               student_address2=selected_student.profile.address_line_2
               exam_id=selected_student.profile.institute.id
               
-              if select_exam_type=="overall":
+              if select_exam_type=="Overall":
                 if request.POST.get("report_cart_button"):
                   return overall_report_card(request,exam_id,selected_student.id)
                 elif request.POST.get('view_button'):
@@ -551,7 +551,7 @@ def overall_result(request,pk,student_pk):
 
               #   return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{selected_student.id}')
               if select_exam_type:
-                  if select_exam_type=="overall":
+                  if select_exam_type=="Overall":
                     
                     if request.POST.get("report_cart_button"):
                       return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
@@ -742,7 +742,7 @@ def overall_result(request,pk,student_pk):
           exam_id=request.user.profile.institute.id
           exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
           if select_exam_type:
-              if select_exam_type=="overall":
+              if select_exam_type=="Overall":
               
                 if request.POST.get("report_cart_button"):
                     return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
@@ -1717,4 +1717,16 @@ def overall_report_card(request,pk,student_pk):
         raise PermissionDenied
 
   
-
+def selected_exam_type(request):
+        select_st= request.POST.get('selected_student')
+        selected_student=UserProfile.objects.get(pk=select_st)
+        student_institute=selected_student.institute
+        institute_exam_type=ExamType.objects.filter(institute=student_institute)
+        # student_exam_type = ExamDetails.objects.filter(institute=institute_exam_type).values('exam_type').distinct()
+        
+        
+        individual_exam_type = "<option>--Exam Type--</option>"
+        for etype in institute_exam_type:
+                individual_exam_type = individual_exam_type + f"<option value={etype.id}>{etype}</option>" 
+        
+        return HttpResponse(individual_exam_type)

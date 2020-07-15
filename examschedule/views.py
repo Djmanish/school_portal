@@ -426,7 +426,7 @@ def selected_exam_type(request):
         student_institute=selected_student.institute
         institute_exam_type=ExamType.objects.filter(institute=student_institute)
         # student_exam_type = ExamDetails.objects.filter(institute=institute_exam_type).values('exam_type').distinct()
-        print(institute_exam_type)
+        
         
         individual_exam_type = "<option>--Exam Type--</option>"
         for etype in institute_exam_type:
