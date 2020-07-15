@@ -23,16 +23,14 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.fields.files import ImageFieldFile
 from notices.models import Notice
-from django.utils import timezone
+
 
 # Create your views here.
 def exam_result(request,pk):
   inst = request.user.profile.institute.id
-      # starting user notice
-  if request.user.profile.designation:
-        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
-    # ending user notice
-  today_date=datetime.date.today()
+
+  today_date=timezone.now()
+  
   
 
   if pk==inst:
