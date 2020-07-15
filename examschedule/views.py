@@ -10,7 +10,7 @@ from AddChild.models import *
 from django.core.exceptions import PermissionDenied
 from notices.models import Notice
 from django.utils import timezone
-
+import _strptime
 
 # Create your views here.
 
@@ -180,7 +180,7 @@ def create_exam_schedule(request, pk):
         inst_id=request.user.profile.institute.id
         designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
         institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
-        
+        today_date=timezone.now()
         
 
 
@@ -193,8 +193,13 @@ def create_exam_schedule(request, pk):
                 sr_no=ExamDetails.objects.filter(exam_type__exam_type=select_exam_type,exam_class=selected_class).values('exam_sr_no').distinct().count()+1
                
                 for subject,subject_teacher,date,start_time,end_time,assign_teacher in zip(request.POST.getlist('select_exam_subject'), request.POST.getlist('select_exam_subject_teacher'),request.POST.getlist('select_date'),request.POST.getlist('select_start_time'),request.POST.getlist('select_end_time'),request.POST.getlist('assign_teacher')):
-                                
-                      
+                       
+                        schedule_date= datetime.datetime.strptime(date, '%Y-%M-%d')
+                        if schedule_date<datetime.datetime.now():
+                                        messages.error(request, 'Date must be in future!')
+                                        return redirect(f'/examschedule/examschedule/{inst_id}') 
+                        
+
                         new_exam = ExamDetails()
                         new_exam.institute=request.user.profile.institute 
                         new_exam.exam_subject = Subjects.objects.get(pk=subject)
