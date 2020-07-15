@@ -128,6 +128,7 @@ function checkDate() {
   var now = new Date();
   if (selectedDate < now) {
    alert("Date must be in the future");
+   return false;
   }
 }
 //previous date validation

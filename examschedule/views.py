@@ -185,7 +185,7 @@ def create_exam_schedule(request, pk):
 
 
         if request.method == "POST":
-                          
+                         
                 selected_class=Classes.objects.get(pk=request.POST.get('selected_class_hidden'))
                 select_exam_type= ExamType.objects.get(pk=request.POST.get('exam_type_id_hidden'))
                 exam_code=request.POST.get('exam_institute_code')

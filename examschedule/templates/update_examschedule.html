@@ -554,7 +554,22 @@
                                                                            <option value="{{class.id}}"> {{class}}</option>
                                                                         {% endfor %}
                                                                     </select>
-                                                                    
+                                                                    <label class ="required" style="margin: 4px;">Select Exam Type</label>
+                                                                    <select class="form-control" id="selected_exam_type" name="selected_exam_type"  required>
+                                                    
+                                                                        <option selected disabled value="">--Exam Type--</option>
+                                                                        
+                                                                        {% for exam_type in institute_exam_type %}
+                                                                           <option value="{{exam_type.id}}"> {{exam_type}}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                 
+                                                                    <label class ="required" style="margin: 4px;">Select Exam Type No.</label>
+                                                                
+                                                                    <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no"  required>
+                                                                        <option selected disabled value=''>--Exam Type No.--</option>
+                                            
+                                                                 </select>
 
                                                                 {% endif %}
                                                                 {% if user.profile.designation.level_name == "student" %}
