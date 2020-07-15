@@ -21,7 +21,14 @@ class App_functions(models.Model):
     def __str__(self):
         return self.function_name
 
-
+def no_future(value):
+    today = date.today()
+    if value > today:
+        raise ValidationError('Establish Date cannot be in the future.')
+def session_date(value):
+    today = date.today()
+    if value > today:
+        raise ValidationError('Session Start Date cannot be in the future.')
 
 
 class Institute(models.Model):
@@ -30,11 +37,11 @@ class Institute(models.Model):
 
     code = models.CharField(max_length=50, blank=True, null=True)
     name = models.CharField(max_length=150)
-    establish_date=models.DateField(null=True, blank=True)
+    establish_date=models.DateField(null=True, blank=True, validators=[no_future])
     profile_pic = models.ImageField(upload_to="Institute Images",default="default_school_pic.png", null=True, blank=True, validators=[FileExtensionValidator(['jpeg','jpg','gif','png'])] )
     institute_logo = models.ImageField(upload_to="Institute logo",default="default_school_pic.png", null=True, blank=True, validators=[FileExtensionValidator(['jpeg','jpg','gif','png'])] )
     principal = models.CharField(max_length=50, null=True)
-    session_start_date = models.DateField(null=True, blank=True)
+    session_start_date = models.DateField(null=True, blank=True, validators=[session_date])
     about = models.TextField(max_length=300, blank=True, default="This is about Institute" )
     contact_number1 = models.CharField(max_length=12,null=True)
     contact_number2 = models.CharField(max_length=12,null=True, blank=True)

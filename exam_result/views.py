@@ -59,7 +59,7 @@ def exam_result(request,pk):
       #============================================================================================ 
         student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
         institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
-        print(institute_students)
+       
         if institute_students:
             pass
            
@@ -68,15 +68,15 @@ def exam_result(request,pk):
           return redirect(f'/examresult/examresult/{inst}')
         
         exam_schedule_date=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_subject=selected_subject,exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,)
-        for date in exam_schedule_date:
-          exam_s_date=date.exam_date
-          if today_date>=exam_s_date:
-            pass
+        # for date in exam_schedule_date:
+        #   exam_s_date=date.exam_date
+        #   if today_date>=exam_s_date:
+        #     pass
           
-          else:
-            messages.error(request, 'Current date does not match with exam schedule date!')
+        #   else:
+        #     messages.error(request, 'Current date does not match with exam schedule date!')
                  
-            return HttpResponseRedirect(f'/examresult/examresult/{institute_pk}') 
+        #     return HttpResponseRedirect(f'/examresult/examresult/{institute_pk}') 
            
        
         exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,exam_class__name=selected_subject.subject_class )
