@@ -904,7 +904,7 @@ def overall_result(request,pk,student_pk):
                             'type_exam':type_exam,
                             'exam_type':exam_type,
                             'etype':etype,
-                            
+                            'select_exam_type':select_exam_type,
                             'exam_type_list':exam_type_list,
                             'sub_percent_list':sub_percent_list,
                             'grand_result':grand_result,
@@ -993,6 +993,14 @@ def class_promotion(request,pk):
                                     pass
                                   
                                   user_d.save()
+                                  context= {
+                                      'all_classes': all_classes,
+                                      'all_students':all_students,
+                                      'list_promotion_choices':list_promotion_choices,
+                                      'promotes_class':promotes_class,
+                                  }
+                                  messages.success(request, 'Students promoted successfully!')
+                                  return render(request, 'class_promotion.html', context)
               # Inner Context
             context= {
                 'all_classes': all_classes,
@@ -1000,7 +1008,7 @@ def class_promotion(request,pk):
                 'list_promotion_choices':list_promotion_choices,
                 'promotes_class':promotes_class,
             }
-            messages.success(request, 'Students Promoted successfully')
+            
             return render(request, 'class_promotion.html', context)
         # Outer Context
         context= {

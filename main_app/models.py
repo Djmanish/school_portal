@@ -24,11 +24,11 @@ class App_functions(models.Model):
 def no_future(value):
     today = date.today()
     if value > today:
-        raise ValidationError('Establish Date cannot be in the future.')
+        raise ValidationError('Establish Date cannot be in the future!')
 def session_date(value):
     today = date.today()
     if value > today:
-        raise ValidationError('Session Start Date cannot be in the future.')
+        raise ValidationError('Session Start Date cannot be in the future!')
 
 
 class Institute(models.Model):

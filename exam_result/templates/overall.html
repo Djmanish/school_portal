@@ -551,8 +551,21 @@
                         <tr>
 
                             <td>
-                                <label class ="required" style="margin: 4px;">Select Exam Type</label> 
+                                <label class ="required" style="margin: 4px;">Select Exam Type</label>
                                 <select class="form-control" name="result_exam_type" style="padding: 2px;"
+                                required>
+                                {% if select_exam_type %}
+                                <option selected  value="{{select_exam_type.id}}">{{select_exam_type}}</option>
+                                {% else %}
+                                <option selected  value="">-- Select Exam Type --</option>
+                                {% endif %}
+                                <option value="overall">Overall</option>
+                                {% for exam_type in exam_type_list %}
+                                <option value={{exam_type.id}}>{{exam_type}}</option>
+                                {% endfor %}
+                                
+                            </select> 
+                                <!-- <select class="form-control" name="result_exam_type" style="padding: 2px;"
                                 required>
                                 
                                 {% if selected_exam_type.id %}
@@ -567,7 +580,7 @@
                                 <option value={{exam_type.id}}>{{exam_type}}</option>
                                 {% endfor %}
                                 {% endif %}
-                            </select>
+                            </select> -->
                             </td>
                             <td>
 
