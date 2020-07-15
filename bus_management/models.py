@@ -65,6 +65,7 @@ class RouteMap(models.Model):
 
     def __str__(self):
         return str(self.route)
+        
 class InstituteLocation(models.Model):
     institute = models.OneToOneField(to=Institute, on_delete=models.CASCADE, related_name='transport_institute', default=None)
     longitute = models.FloatField(null=True)

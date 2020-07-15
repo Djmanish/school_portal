@@ -476,6 +476,22 @@
 
     <div id="page_content">
         <div id="page_content_inner">
+                             <!-- starting showing instiute edit form errors -->
+            {% if form.errors %}
+            <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for field in form %}
+                  {% for error in field.errors %}
+                  <li class=" text-danger">{{ error|escape }}</li>
+                  {% endfor  %}
+                 
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+            {% endif %}
+              <!-- ending showing instiute edit form errors -->
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
                 <div class="uk-width-large">
                     <div class="md-card">
@@ -512,20 +528,11 @@
                         <div class="user_content">
 
 
-                            {% if form.errors %}
-                            {% for field in form %}
-                                {% for error in field.errors %}
-                                    <div class="alert alert-danger">
-                                        <strong>{{ error|escape }}</strong>
-                                    </div>
-                                {% endfor %}
-                            {% endfor %}
-                            <!-- {% for error in form.non_field_errors %}
-                                <div class="alert alert-danger">
-                                    <strong>{{ error|escape }}</strong>
-                                </div>
-                            {% endfor %} -->
-                        {% endif %}
+
+       
+
+
+
 
 
 
