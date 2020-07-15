@@ -17,7 +17,7 @@ urlpatterns = [
   path('fetching_sr_no/', views.fetch_sr_no, name='fetch_result_sr_no' ),
   path('report_card/<int:pk>',views.report_card, name='report_card'),
   path('reports_card/<int:pk>',views.reports_card, name='reports_card'),
-  path('selected_exam_types/', views.selected_exam_type, name='selected_exam_type' ),
+  path('selected_exam_types/', views.selected_exam_types, name='selected_exam_types' ),
 
   path('chart_sr_no/', views.chart_sr_no, name='chart_sr_no'),
   path('overall_result/<int:pk>/<int:student_pk>/', views.overall_result, name='overall_result'),

@@ -1717,13 +1717,14 @@ def overall_report_card(request,pk,student_pk):
         raise PermissionDenied
 
   
-def selected_exam_type(request):
+def selected_exam_types(request):
         select_st= request.POST.get('selected_student')
+        print(select_st)
         selected_student=UserProfile.objects.get(pk=select_st)
         student_institute=selected_student.institute
         institute_exam_type=ExamType.objects.filter(institute=student_institute)
         # student_exam_type = ExamDetails.objects.filter(institute=institute_exam_type).values('exam_type').distinct()
-        
+        print(institute_exam_type)
         
         individual_exam_type = "<option>--Exam Type--</option>"
         for etype in institute_exam_type:

@@ -511,7 +511,7 @@
                                         {% if user.profile.designation.level_name == "parent" %}
                                         <td>
                                             <label class ="required" style="margin: 4px;">Select Student</label>
-                                            <select class="form-control" name="selected_student" style="padding: 2px;"
+                                            <select class="form-control" id="selected_student"  name="selected_student" style="padding: 2px;"
                                                 required>
                                                 <option selected disabled value="">--Select Student--</option>
                                                 {% for student in parent_student_list %}
@@ -525,13 +525,10 @@
                                         
                                         <td> 
                                             <label class ="required" style="margin: 4px;">Select Exam Type</label>
-                                            <select class="form-control" id="selected_exam_type" name="selected_exam_type"  required>
-                                                    
+                                            <select class="form-control" id="selected_exam_types" name="result_exam_type"  required>
+                            
                                                 <option selected disabled value="">--Exam Type--</option>
-                                                
-                                                {% for exam_type in institute_exam_type %}
-                                                   <option value="{{exam_type.id}}"> {{exam_type}}</option>
-                                                {% endfor %}
+                                               
                                             </select>
                                         </td>
                                         <td>
@@ -584,28 +581,30 @@
                                             
                                 </form>
 
-                                <script>
-                                   $(document).ready(function(){
-                                                                  $('#selected_student').change(function(){
-                                                                     
-                                                                      $.ajax({
-                                                                          type:'POST',
-                                                                          url:'/examresult/selected_exam_types/',
-                                                                          data:{selected_student:$("#selected_student").val(), 
-                                                                          csrfmiddlewaretoken: '{{ csrf_token }}' },
-                                                                          
-                                                                          success: function(msg){
-                                                                              $('#selected_exam_type').html(msg);
-                                                                          }
-                                                                      })
-                                                                  })
-                                                                })
-                                </script>
+                               
                                 </td>
                                 <td>
                                 </td>
                                 </form>
                                 </tr>
+
+                                <script>
+                                    $(document).ready(function(){
+                                                                   $('#selected_student').change(function(){
+                                                                      
+                                                                       $.ajax({
+                                                                           type:'POST',
+                                                                           url:'/examresult/selected_exam_types/',
+                                                                           data:{selected_student:$("#selected_student").val(), 
+                                                                           csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                           
+                                                                           success: function(msg){
+                                                                               $('#selected_exam_types').html(msg);
+                                                                           }
+                                                                       })
+                                                                   })
+                                                                 })
+                                 </script>
                                 <table
                                    class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
                                     {% if result_data %}
