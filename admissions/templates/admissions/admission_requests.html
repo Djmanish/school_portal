@@ -256,7 +256,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -350,7 +350,7 @@
            
 
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
-            <li  title="Admission Requests">
+            <li class="current_section" title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
                     <span class="menu_icon"><i class="material-icons">group_add</i></span>
                     <span class="menu_title">Admission Requests</span>

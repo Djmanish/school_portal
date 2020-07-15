@@ -265,7 +265,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -326,7 +326,7 @@
 <!-- ending notice menu -->
 
 {% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
-              <li  title="Fees">
+              <li class="current_section" title="Fees">
                 <a href="{% url 'fees_home' %}">
                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                     <span class="menu_title">Fees Setup</span>
@@ -335,7 +335,7 @@
               {% endif %}           
     
 {% if user.profile.designation.level_name == "parent" %}
-<li  title="Fees">
+<li class="current_section"  title="Fees">
     <a href="{% url 'parent_fees' %}">
         <span class="menu_icon"><i class="material-icons">receipt</i></span>
         <span class="menu_title">Fees Status</span>
