@@ -57,6 +57,14 @@ class RouteInfo(models.Model):
     def __str__(self):
         return self.route_name
 
+class RouteMap(models.Model):
+    route = models.ForeignKey(to=RouteInfo, on_delete=models.CASCADE, related_name='route', null=True, blank=False)
+    point = models.ForeignKey(to=Point, on_delete=models.CASCADE, related_name='point', null=True, blank=False)
+    index = models.IntegerField(default=0)
+    time = models.TimeField()
+
+    def __str__(self):
+        return str(self.route)
 class InstituteLocation(models.Model):
     institute = models.OneToOneField(to=Institute, on_delete=models.CASCADE, related_name='transport_institute', default=None)
     longitute = models.FloatField(null=True)

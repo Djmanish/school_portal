@@ -11,16 +11,23 @@ from notices.models import *
 from AddChild.models import *
 from django.utils import timezone
 from django.views import View
+from django.core.exceptions import PermissionDenied
 # import requests
 
 
 #student detail
 def student_detail(request,pk):
+    # starting check if user has authorization to see list
+    if  request.user.profile.designation.level_name == "principal" or request.user.profile.designation.level_name == "admin" or request.user.profile.designation.level_name == "teacher":
+        pass
+    else:
+        raise PermissionDenied
+    # starting check if user has authorization to see list
     # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
-    student=UserProfile.objects.get(pk=pk)
+    student=UserProfile.objects.get(pk=pk, institute= request.user.profile.institute)
     context = {'student':student}
     return render (request, 'Attendance/student_detail.html', context)
     
@@ -251,6 +258,12 @@ def current_date_attendance_record(request, pk):
 
 
 def class_students_list(request):
+    # starting check if user has authorization to see list
+    if  request.user.profile.designation.level_name == "principal" or request.user.profile.designation.level_name == "admin" or request.user.profile.designation.level_name == "teacher":
+        pass
+    else:
+        raise PermissionDenied
+    # starting check if user has authorization to see list
     
     # starting user notice
     if request.user.profile.designation:
@@ -283,7 +296,17 @@ from .forms import Student_profile_edit_form, Student_info_edit_form
 
 
 def student_detail_edit(request):
-    user_profile = UserProfile.objects.get(pk= request.GET.get('username'))
+    # starting check if user has authorization to see list
+    if  request.user.profile.designation.level_name == "principal" or request.user.profile.designation.level_name == "admin" or request.user.profile.designation.level_name == "teacher":
+        pass
+    else:
+        raise PermissionDenied
+    # starting check if user has authorization to see list
+    # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
+    user_profile = UserProfile.objects.get(pk= request.GET.get('username'), institute= request.user.profile.institute)
     # creating student info table instance for non existing student_details
     try:
         Student_Info.objects.get(student=user_profile)
@@ -302,7 +325,7 @@ def student_detail_edit(request):
          # from userinfo form
         
         if student_details.is_valid():
-            messages.info(request, "Student's profile details updated successfully !")
+            messages.success(request, "Student's profile details updated successfully !")
             student_details.save()
             
         else:

@@ -531,6 +531,7 @@
                         <div class="user_content">
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">Book Details</a></li>
+                            </ul>
                                 <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
                                     <li>
                                         <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
@@ -617,38 +618,39 @@
                                                    
                                                 </ul>
                                             </div>
+                                            
                                         </div>
                                         
                                     </li>
                                     
                                 </ul>
                                 
-                                <h6 class="heading_a uk-margin-bottom">Enter Book ID's</h6>
+                                    <h6 class="heading_a uk-margin-bottom">Enter Book ID's</h6>
 
-                                <div class="md-card">
-                                    <div class="md-card-content large-padding">
-                                        <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'add_new_books' %}">
-                                            {% csrf_token %}
-                                            <div class="uk-grid" data-uk-grid-margin>
-                                                {% for count in range %}
-                                                <div class="uk-width-medium-1-5">
-                                                    <div class="parsley-row">
-                                                        <label for="fullname"><span class="ast">*</span>Enter Book ID {{forloop.counter}}</label>
-                                                        <input type="text" name="fullname" required class="form-control form-control-sm" />
+                                    <div class="md-card">
+                                        <div class="md-card-content large-padding">
+                                            <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'add_new_books' %}">
+                                                {% csrf_token %}
+                                                <div class="uk-grid" data-uk-grid-margin>
+                                                    {% for count in range %}
+                                                    <div class="uk-width-medium-1-5">
+                                                        <div class="parsley-row">
+                                                            <label for="fullname"><span class="ast">*</span>Enter Book ID {{forloop.counter}}</label>
+                                                            <input type="text" name="fullname" required class="form-control form-control-sm" />
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+                                            <input name="hide" type="hidden" value="{{book_code.id}}">
+                                                <div class="uk-grid" style="text-align: center;margin-top: 10px;">
+                                                    <div class="uk-width-1-1">
+                                                        <button type="submit" class="md-btn md-btn-primary">Submit</button>
                                                     </div>
                                                 </div>
-                                                {% endfor %}
-                                            </div>
-                                           <input name="hide" type="hidden" value="{{book_code.id}}">
-                                            <div class="uk-grid" style="text-align: center;margin-top: 10px;">
-                                                <div class="uk-width-1-1">
-                                                    <button type="submit" class="md-btn md-btn-primary">Submit</button>
-                                                </div>
-                                            </div>
-                                        </form>
+                                            </form>
+                                        </div>
                                     </div>
-                                </div>
-                            </ul>
+                                
                             <!-- <div class="uk-grid" data-uk-grid-margin>
                                 <div class="uk-width-medium-1-8" >
                                     <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" style="color: white;"  data-uk-modal="{target:'#modal_new_book'}" >

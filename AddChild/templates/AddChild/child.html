@@ -556,7 +556,7 @@ aliceblue;
                        
                     <form  method="POST" action="#" class="form-inline attendance_form" id="child_form">
                         {% csrf_token %}
-                          <label style="margin: 4px;">Select Institute:  </label>
+                          <label class ="required" style="margin: 4px;">Select Institute:  </label>
                         <select id="selected_institute" name="selected_institute" class="form-control"  required>
                             <option selected disabled value=""  >                     
                             -- select institute --
@@ -565,11 +565,11 @@ aliceblue;
                             <option value={{institute.id}}>{{institute}}</option>
                             {% endfor %}
                      </select>
-                     <label style="margin: 4px;">Select Class:  </label>
+                     <label class ="required" style="margin: 4px;">Select Class:  </label>
                         <select id="fetched_classes" name="selected_class" class="form-control">
                             <option selected disabled value=""> -- Select Class -- </option>
                         </select>
-                    <label style="margin: 4px;">Roll No:  </label> 
+                    <label class ="required" style="margin: 4px;">Roll No:  </label> 
                     <input type="text" class="form-control" name='roll_number' placeholder="Enter a roll number" >  
                     <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary ">
                     </form>

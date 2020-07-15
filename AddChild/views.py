@@ -9,7 +9,10 @@ from main_app.views import *
 # Create your views here.
 def addchild(request):
     institutes=Institute.objects.all()
-    
+     # starting user notice
+    if request.user.profile.designation:
+        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+    # ending user notice
     
     if request.method == "POST":
         selected_institute= Institute.objects.get(pk=request.POST.get("selected_institute"))

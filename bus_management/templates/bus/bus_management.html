@@ -982,9 +982,48 @@
                                 </div>
                             </div>
 
-                            <!-- start route map modol -->
+                            <div class="uk-modal" id="modal_map_route">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Map Routes</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'route_map' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Route</label>
+                                            <select id="point_state" class="form-control-sm form-control" name="route" required>
+                                                <option selected disabled value="">--- Select ---</option>
+                                                {% for i in routes %}
+                                                <option value={{i.id}}>{{i.route_name}} </option>
+                                                {% endfor %}
+                                             
+                                            </select>
+                                          </div>        
+                                          <div class="form-group">
+                                            <label class="required" style="color: black;">No. of Points</label>
+                                            <input type="number" class="form-control" name="point" required>
+                                          </div>
+                                         
+                                          
+                                                    <div class="uk-form-row" style="margin-bottom: 15px">
+                                                        
+                                                    </div>
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
+
                             
-                            <!-- end route map modol -->
                             <!-- End Modol Forms -->
                             
                             
@@ -1309,10 +1348,48 @@
                                             </div>
                                             {% endif %}
                                         </div>
+                                    </li>     
+                                    
+                                        <li>
+                                        <div class="uk-width-medium-1-5">
+                                            <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="#" data-uk-modal="{target:'#modal_map_route'}" >
+                                                <i class="uk-icon-map"></i>
+                                               Maps Routes
+                                            </a>
+                                        </div>
+                                        <div class="md-card uk-margin-medium-bottom">
+                                            {% if new %}
+                                            <div class="md-card-content">                                            
+                                                <div class="uk-overflow-container">                                                
+                                                     <table class="uk-table uk-table-hover"> 
+                                                        <thead>
+                                                        <tr>
+                                                            <th>S.No</th>
+                                                            <th>Route</th>
+                                                            <th>Total Points</th>
+                                                            <th>Start Time</th>
+                                                            <th>End Time</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for p in new %}
+                                                        <tr>
+                                                            <td>{{forloop.counter}}</td>
+                                                            <td>{{p.route_name}}</td>
+                                                            <td>{{p.point_count}}</td>                                                       
+                                                            <td>{{p.st}}</td>
+                                                            <td>{{p.lt}}</td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                       
+                                                        </tbody>
+                                                    </table>                                                
+                                                </div>                                            
+                                            </div>
+                                            {% endif %}
+                                        </div>
                                     </li> 
-                                    <li>Hello</li>
-                                        
-
+                                    
                             </div>
                         
                     </div>
