@@ -49,6 +49,16 @@ $('#user_action_iconb').click(function(){
 })
 // ending script for last notification view
 
+
+
+ // starting Add the following code if you want the name of the file appear on select
+ $(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+
+// ending Add the following code if you want the name of the file appear on select
+
   });
 
 $(document).ready(function () {
@@ -118,6 +128,7 @@ function checkDate() {
   var now = new Date();
   if (selectedDate < now) {
    alert("Date must be in the future");
+   return false
   }
 }
 //previous date validation

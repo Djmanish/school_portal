@@ -254,7 +254,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -269,7 +269,7 @@
                 </li>
                 
                 {% if user.profile.institute == None %}
-                <li title="Admission Query">
+                <li  title="Admission Query">
                     <a href="{% url 'admission_home' %}">
                         <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">Admission Query</span>
@@ -279,7 +279,7 @@
                     
 
                 {% if user.profile.institute and user.profile.status == 'approve' %}
-                <li  title="Institute Profile">
+                <li class="current_section" title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>
@@ -476,6 +476,22 @@
 
     <div id="page_content">
         <div id="page_content_inner">
+                             <!-- starting showing instiute edit form errors -->
+            {% if form.errors %}
+            <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for field in form %}
+                  {% for error in field.errors %}
+                  <li class=" text-danger">{{ error|escape }}</li>
+                  {% endfor  %}
+                 
+                  {% endfor %}
+              </ul>
+          </div>
+            </div>
+            {% endif %}
+              <!-- ending showing instiute edit form errors -->
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
                 <div class="uk-width-large">
                     <div class="md-card">
@@ -512,20 +528,11 @@
                         <div class="user_content">
 
 
-                            {% if form.errors %}
-                            {% for field in form %}
-                                {% for error in field.errors %}
-                                    <div class="alert alert-danger">
-                                        <strong>{{ error|escape }}</strong>
-                                    </div>
-                                {% endfor %}
-                            {% endfor %}
-                            <!-- {% for error in form.non_field_errors %}
-                                <div class="alert alert-danger">
-                                    <strong>{{ error|escape }}</strong>
-                                </div>
-                            {% endfor %} -->
-                        {% endif %}
+
+       
+
+
+
 
 
 

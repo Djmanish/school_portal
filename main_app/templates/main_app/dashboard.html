@@ -9,6 +9,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
     <style>
 
         .dash_card{
@@ -727,6 +729,48 @@
                     </div>
                     
                 </div>
+            <!-- Small Cards for driver Dashboard -->
+            {% elif user.profile.designation.level_name == "driver" %}
+                <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
+                    <div>
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">person</i></span></div>
+                                <span class="uk-text-muted uk-text-small">Name</span>
+                                <h4 class="uk-margin-remove">{{user.driver_data.vehicle_driver.name.first_name}} {{user.driver_data.vehicle_driver.name.last_name}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">directions_bus</i></span></div>
+                                <span class="uk-text-muted uk-text-small">Bus Number</span>
+                                <h4 class="uk-margin-remove">{{user.driver_data.vehicle.bus_no}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">near_me</i></span></div>
+                                <span class="uk-text-muted uk-text-small">Route</span>
+                                <h4 class="uk-margin-remove">{{user.driver_data.route_name}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="{% url 'start_trip' %}">Start</a></div>
+                                <span class="uk-text-muted uk-text-small">Trip</span>
+                                <h4 class="uk-margin-remove">{{user.today}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            
             <!-- Small Card for other users -->
             {% else %}
                 <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
@@ -1449,8 +1493,44 @@
                     
                     {% endif %}
                     {% endif %}
+
+                    <!-- Driver Card -->
+                    {% if request.user.profile.designation.level_name == "driver" %}
+                    <div class="uk-width-medium-1-2">
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <h4>Trips</h4>
+                                <div class="uk-overflow-container">
+                                    <!-- <table class="uk-table uk-table-condensed uk-table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th >Route Name</th>
+                                                <th>Status</th>
+                                                <th >Action</th>                                                                       
+                                            </tr>                                       
+                                        </thead>
+                                        <tbody>
+                                            
+                                            <tr>
+                                                <td>14/07/2020</td>
+                                                <td>Kalyanpur-Rooma</td>
+                                                <td>Incomplete</td>
+                                                <td>
+                                                    <a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="{% url 'start_trip' %}">Start</a>
+                                                </td>
+                                            </tr>                   
+                                                                               
+                                        </tbody>
+                                    </table> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
         <!-- Calendar -->
         {% if user.profile.designation %}
+        
         <div class="uk-width-medium-1-2">
             <div class="md-card" >
              {% if user.profile.designation.level_name == "parent" %}
@@ -1485,9 +1565,44 @@
                  </div>
                                       
             </div>
-         </div>                          
-    
-         {% endif %}    
+         </div>     
+         {% if request.user.profile.designation.level_name != "driver" %}
+
+         <div class="uk-width-medium-1-2">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <h4>My Bus</h4>
+                    <div class="uk-overflow-container">
+                        <div id="mapid" style="width: 455px; height: 400px;margin:auto;"></div>
+
+                        <!-- <table class="uk-table uk-table-condensed uk-table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th >Route Name</th>
+                                    <th>Status</th>
+                                    <th >Action</th>                                                                       
+                                </tr>                                       
+                            </thead>
+                            <tbody>
+                                
+                                <tr>
+                                    <td>14/07/2020</td>
+                                    <td>Kalyanpur-Rooma</td>
+                                    <td>Incomplete</td>
+                                    <td>
+                                        <a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="{% url 'start_trip' %}">Start</a>
+                                    </td>
+                                </tr>                   
+                                                                   
+                            </tbody>
+                        </table> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}    
+        {% endif %}    
     </div>          
 </div> 
 {% endif %}
@@ -1806,6 +1921,34 @@
         });
       
       </script>
+      <script>
+
+        var mymap = L.map('mapid').setView([{{user.location.latitude}}, {{user.location.longitude}}], 12);
+    
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+            maxZoom: 18,
+            attribution: ' © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1
+        }).addTo(mymap);
+
+        
+
+        L.marker([{{user.location.latitude}}, {{user.location.longitude}}]).addTo(mymap)
+            .bindPopup("<b>Your Point </b><br/>").openPopup();
+
+        L.marker([{{user.ins_loc.latitude}}, {{user.ins_loc.longitute}}]).addTo(mymap)
+            .bindPopup("<b>{{user.profile.institute}} </b>");
+        {% for i in user.routes %}
+        L.marker([{{i.point.latitude}}, {{i.point.longitude}}]).addTo(mymap)
+            .bindPopup("<b>{{i.point.point_name}} </b>");
+        {% endfor %}
+        L.marker([{{user.bus_loc.point.latitude}}, {{user.bus_loc.longitude}}]).addTo(mymap)
+            .bindPopup("<b>Your Bus </b><br/>Location.").openPopup();
+
+        
+    </script>
 
 
     

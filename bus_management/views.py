@@ -398,3 +398,32 @@ def see_map(request):
     return render(request, 'bus/index.html', context_data)
 
        
+    
+def start_trip(request):
+    u = RouteInfo.objects.get(vehicle_driver__name=request.user.profile)
+    sel_r = u.id
+    print(sel_r)
+    p = RouteMap.objects.filter(route__id=sel_r)
+    print(p)
+    context={
+        'p':p,
+    }
+    return render(request, 'bus/trip.html', context)
+
+def add_trip(request):
+    if request.method == 'POST':
+        ids = int(request.POST['route_id'])
+        date =datetime.now().date()
+        print(date)
+        r_map = RouteMap.objects.get(id=ids)
+        route = r_map.route
+        point = r_map.point
+        driver = r_map.route.vehicle_driver
+        try:
+            sch_data = Trip.objects.get(route = route, point = point, driver=driver, date = date)
+            return HttpResponse('<h6 style="color: red;">Already Entered</h6>')
+        except Trip.DoesNotExist:
+            new = Trip.objects.create(route=route, point= point, driver=driver, time=datetime.now().strftime('%H:%M:%S') ,date= date)
+            return HttpResponse('<h6 style="color: green;">Submitted</h6>')
+        
+        

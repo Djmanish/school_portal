@@ -2,7 +2,8 @@ from django.urls import path, include
 from django.http import HttpResponse
 
 from . import views
-# from .views import userData
+from .models import *
+from .views import RegisterView, VerifyEmail
 
 
 # from holidaylist.views import add_holiday
@@ -16,6 +17,11 @@ urlpatterns = [
   path('task-list/', views.tasklist, name="userdata_api"),
   path('task-detail/<str:pk>/', views.taskDetail, name="task-detail"),
   path('task-create/', views.taskCreate, name="task-create"),
+
+  path('registeration/', RegisterView.as_view(), name="registeration"),
+  path('email-verify/', VerifyEmail.as_view(), name="email-verify"),
+
+
   
   
 

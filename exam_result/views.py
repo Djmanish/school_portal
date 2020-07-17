@@ -23,16 +23,14 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.fields.files import ImageFieldFile
 from notices.models import Notice
-from django.utils import timezone
+
 
 # Create your views here.
 def exam_result(request,pk):
   inst = request.user.profile.institute.id
-      # starting user notice
-  if request.user.profile.designation:
-        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
-    # ending user notice
-  today_date=datetime.date.today()
+
+  today_date=timezone.now()
+  
   
 
   if pk==inst:
@@ -61,7 +59,7 @@ def exam_result(request,pk):
       #============================================================================================ 
         student_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
         institute_students = UserProfile.objects.filter(institute= request.user.profile.institute, designation=student_designation_pk,Class=selected_subject.subject_class)
-        print(institute_students)
+       
         if institute_students:
             pass
            
@@ -70,15 +68,15 @@ def exam_result(request,pk):
           return redirect(f'/examresult/examresult/{inst}')
         
         exam_schedule_date=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_subject=selected_subject,exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,)
-        for date in exam_schedule_date:
-          exam_s_date=date.exam_date
-          if today_date>=exam_s_date:
-            pass
+        # for date in exam_schedule_date:
+        #   exam_s_date=date.exam_date
+        #   if today_date>=exam_s_date:
+        #     pass
           
-          else:
-            messages.error(request, 'Current date does not match with exam schedule date!')
+        #   else:
+        #     messages.error(request, 'Current date does not match with exam schedule date!')
                  
-            return HttpResponseRedirect(f'/examresult/examresult/{institute_pk}') 
+        #     return HttpResponseRedirect(f'/examresult/examresult/{institute_pk}') 
            
        
         exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,exam_class__name=selected_subject.subject_class )
@@ -269,7 +267,7 @@ def report_card(request,pk):
               # student_session=UserProfile.objects.get(pk=request.user)
               select_exam_type = request.POST.get('result_exam_type')
              
-              if select_exam_type=="overall":
+              if select_exam_type=="Overall":
                 if request.POST.get("report_cart_button"):
                     # return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
                   return overall_report_card(request,exam_id,selected_student.id)
@@ -404,7 +402,7 @@ def report_card(request,pk):
               student_address2=selected_student.profile.address_line_2
               exam_id=selected_student.profile.institute.id
               
-              if select_exam_type=="overall":
+              if select_exam_type=="Overall":
                 if request.POST.get("report_cart_button"):
                   return overall_report_card(request,exam_id,selected_student.id)
                 elif request.POST.get('view_button'):
@@ -553,7 +551,7 @@ def overall_result(request,pk,student_pk):
 
               #   return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{selected_student.id}')
               if select_exam_type:
-                  if select_exam_type=="overall":
+                  if select_exam_type=="Overall":
                     
                     if request.POST.get("report_cart_button"):
                       return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
@@ -744,7 +742,7 @@ def overall_result(request,pk,student_pk):
           exam_id=request.user.profile.institute.id
           exam_type_list=ExamType.objects.filter(institute=request.user.profile.institute)
           if select_exam_type:
-              if select_exam_type=="overall":
+              if select_exam_type=="Overall":
               
                 if request.POST.get("report_cart_button"):
                     return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
@@ -906,7 +904,7 @@ def overall_result(request,pk,student_pk):
                             'type_exam':type_exam,
                             'exam_type':exam_type,
                             'etype':etype,
-                            
+                            'select_exam_type':select_exam_type,
                             'exam_type_list':exam_type_list,
                             'sub_percent_list':sub_percent_list,
                             'grand_result':grand_result,
@@ -995,6 +993,14 @@ def class_promotion(request,pk):
                                     pass
                                   
                                   user_d.save()
+                                  context= {
+                                      'all_classes': all_classes,
+                                      'all_students':all_students,
+                                      'list_promotion_choices':list_promotion_choices,
+                                      'promotes_class':promotes_class,
+                                  }
+                                  messages.success(request, 'Students promoted successfully!')
+                                  return render(request, 'class_promotion.html', context)
               # Inner Context
             context= {
                 'all_classes': all_classes,
@@ -1002,7 +1008,7 @@ def class_promotion(request,pk):
                 'list_promotion_choices':list_promotion_choices,
                 'promotes_class':promotes_class,
             }
-            messages.success(request, 'Students Promoted successfully')
+            
             return render(request, 'class_promotion.html', context)
         # Outer Context
         context= {
@@ -1711,4 +1717,17 @@ def overall_report_card(request,pk,student_pk):
         raise PermissionDenied
 
   
-
+def selected_exam_types(request):
+        select_st= request.POST.get('selected_student')
+        print(select_st)
+        selected_student=UserProfile.objects.get(pk=select_st)
+        student_institute=selected_student.institute
+        institute_exam_type=ExamType.objects.filter(institute=student_institute)
+        # student_exam_type = ExamDetails.objects.filter(institute=institute_exam_type).values('exam_type').distinct()
+        print(institute_exam_type)
+        
+        individual_exam_type = "<option>--Exam Type--</option>"
+        for etype in institute_exam_type:
+                individual_exam_type = individual_exam_type + f"<option value={etype.id}>{etype}</option>" 
+        
+        return HttpResponse(individual_exam_type)

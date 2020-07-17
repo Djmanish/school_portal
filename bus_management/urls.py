@@ -28,4 +28,6 @@ urlpatterns = [
   path('update_route/', views.update_route, name="update_route"),
  
 
+  path('start_trip/', views.start_trip, name="start_trip"),
+  path('add_trip/', views.add_trip, name="add_trip"),
 ]
