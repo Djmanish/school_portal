@@ -355,7 +355,8 @@ def student_detail_edit(request):
     context = {
 
             'student_prfile_edit_form':student_prfile_edit_form,
-            'student_info_edit_form':student_info_edit_form
+            'student_info_edit_form':student_info_edit_form,
+            'user_profile':user_profile
         }
 
     return render(request, 'Attendance/edit_students_detail.html', context)

@@ -542,31 +542,30 @@
                             </div>
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{user.profile.profile_pic.url}}" alt="user avatar"/>
+                                    <img src="{{user_profile.profile_pic.url}}" alt="user avatar"/>
                                 </div>
                             </div>
                             <div class="user_heading_content">
                                 <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">
                                     
-                                    {% if user.profile.first_name %}
-                                    {{user.profile.first_name}}
-                                        {% else %}
-                                    Fill Your Information Correctly
+                                    {% if user_profile.first_name %}
+                                    {{user_profile.first_name}}
+                                       
                                     {% endif %}
                                         
                                    
                                     
-                                    {% if user.profile.middle_name %}
-                                       {{user.profile.middle_name}} 
+                                    {% if user_profile.middle_name %}
+                                       {{user_profile.middle_name}} 
                                     {% endif %}
 
                                     
-                                    {% if user.profile.last_name %}
-                                        {{user.profile.last_name}}
+                                    {% if user_profile.last_name %}
+                                        {{user_profile.last_name}}
                                     {% endif %}</span><span class="sub-heading">
                                         
-                                        {% if user.profile.designation %}
-                                        {{user.profile.designation}} 
+                                        {% if user_profile.designation %}
+                                        {{user_profile.designation}} 
                                         {% else %}
                                         No role selected    
                                         {% endif %}

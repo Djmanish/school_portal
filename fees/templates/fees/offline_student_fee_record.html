@@ -328,7 +328,7 @@
 </li>
 <!-- ending notice menu -->
 {% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
-              <li  title="Fees">
+              <li class="current_section" title="Fees">
                 <a href="{% url 'fees_home' %}">
                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                     <span class="menu_title">Fees Setup</span>

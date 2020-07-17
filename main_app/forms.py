@@ -52,13 +52,7 @@ class InstituteUpdateProfile(forms.ModelForm):
         }
        
 
-        def clean_date(self, *args, **kwargs):
-            date=self.cleaned_data.get('establish_date')
-            current_year=datetime.date.today()
-            print(date)
-            if date > datetime.date.today():
-                raise forms.ValidationError("The date cannot be in the future!")
-            return date
+       
 
         labels = {
         'profile_pic': 'Profile Picture',

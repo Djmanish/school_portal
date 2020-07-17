@@ -502,21 +502,54 @@
                                         class="uk-text-truncate">{{user_institute_name.name}}</span></h2>
                             </div>
                         </div>
+                       
                         <div class="md-card">
                             <div class="md-card-content">
                                 <form method="POST" class="form-inline" id="attendance_form" >
                                     {% csrf_token %}
                                     <tr >
+                                        {% if user.profile.designation.level_name == "parent" %}
+                                        <td>
+                                            <label class ="required" style="margin: 4px;">Select Student</label>
+                                            <select class="form-control" id="selected_student"  name="selected_student" style="padding: 2px;"
+                                                required>
+                                                <option selected disabled value="">--Select Student--</option>
+                                                {% for student in parent_student_list %}
+                                                <option value={{student.id}}>{{student.first_name}} {{student.last_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td></td>
+                                       
+                                        &nbsp
+                                        
+                                        <td> 
+                                            <label class ="required" style="margin: 4px;">Select Exam Type</label>
+                                            <select class="form-control" id="selected_exam_types" name="result_exam_type"  required>
+                            
+                                                <option selected disabled value="">--Exam Type--</option>
+                                               
+                                            </select>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        {% endif %}
+                                       
+                                        <td></td>
+                                       
+                                        &nbsp
+                                       
+                                        {% if user.profile.designation.level_name != "parent" %}
                                         <td> 
                                             <label class ="required" style="margin: 4px;">Select Exam Type</label>
                                             <select class="form-control" name="result_exam_type" style="padding: 2px;"
                                                 required>
-                                                {% if selected_exam_type %}
-                                                <option selected  value="{{selected_exam_type.id}}">{{selected_exam_type}}</option>
+                                                {% if select_exam_type %}
+                                                <option selected  value="{{select_exam_type.id}}">{{select_exam_type}}</option>
                                                 {% else %}
                                                 <option selected  value="">-- Select Exam Type --</option>
                                                 {% endif %}
-                                                <option value="overall">Overall</option>
+                                                <option value="Overall">Overall</option>
                                                 {% for exam_type in exam_type_list %}
                                                 <option value={{exam_type.id}}>{{exam_type}}</option>
                                                 {% endfor %}
@@ -525,20 +558,9 @@
                                         </td>
                                         <td>
                                         </td>
-                                        {% if user.profile.designation.level_name == "parent" %}
-                                        <td>
-                                            <select class="form-control" name="selected_student" style="padding: 2px;"
-                                                required>
-                                                <option selected disabled value="">--Select Student--</option>
-                                                {% for student in parent_student_list %}
-                                                <option value={{student.id}}>{{student.first_name}} {{student.last_name}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </td>
+                                    
                                         {% endif %}
-                                        <td></td>
                                         &nbsp
-
                                         <td  >
                                             <input type="submit" name="view_button" value="View"
                                                 class="md-btn md-btn-primary">
@@ -558,11 +580,31 @@
                                            
                                             
                                 </form>
+
+                               
                                 </td>
                                 <td>
                                 </td>
                                 </form>
                                 </tr>
+
+                                <script>
+                                    $(document).ready(function(){
+                                                                   $('#selected_student').change(function(){
+                                                                      
+                                                                       $.ajax({
+                                                                           type:'POST',
+                                                                           url:'/examresult/selected_exam_types/',
+                                                                           data:{selected_student:$("#selected_student").val(), 
+                                                                           csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                           
+                                                                           success: function(msg){
+                                                                               $('#selected_exam_types').html(msg);
+                                                                           }
+                                                                       })
+                                                                   })
+                                                                 })
+                                 </script>
                                 <table
                                    class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
                                     {% if result_data %}

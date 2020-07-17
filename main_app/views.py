@@ -106,10 +106,7 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return True
         else:
             return False
-    def no_future(value):
-        today = date.today()
-        if value > today:
-            return messages.error(request, 'Establish Date cannot be in the future.')
+   
 
 
     def get_success_url(self, **kwargs):         
@@ -1066,6 +1063,8 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
             return True
         else:
             return False
+   
+
     
     def get_context_data(self, **kwargs):
        
