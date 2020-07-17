@@ -1051,45 +1051,66 @@
                                                     {% for i in p %}
                                                     <tr>
                                                         <td>{{forloop.counter}}</td>
-                                                        <td>1</td>
-                                                        <td>{{i.point_code}}</td>   
-                                                        <td>{{i.point_name}}</td> 
+                                                        <td>{{i.route.route_no}}</td>
+                                                        <td>{{i.point.point_code}}</td>   
+                                                        <td>{{i.point.point_name}}</td> 
                                                         <!-- <td>{{i.fuel_type}}</td>                                                     
                                                         <td>{{i.bus_color}}</td>
                                                         <td>{{i.bus_capacity}}</td>
                                                         <td>{{i.status}}</td> -->
                                                         
                                                         
-                                                        <td style="width: 10px">
-                                                            <div class="parsley-row">
-                                                                <input type="checkbox" class="{{bus.id|slugify}}" data-switchery value="{{bus.id}}" />
-                                                            </div>
+                                                        <td>                                                            
+                                                                <a value="{{i.id}}" class="md-btn md-btn-primary md-btn-mini md-btn-wave-light"  id="{{i.id|slugify}}"  href="#">Yes</a>
+                                                                <div class="{{i.id|slugify}}"></div>                                                            
                                                         </td>
                                                         
                                                     </tr>
+                                                    <script>
+                                                    $(document).ready(function(){
+                                                        $("#{{i.id|slugify}}").click(function(){
+                                                          $("#{{i.id|slugify}}").css("display", "none");
+                                                        });
+                                                      });
+                                                      </script>
                                                     
-                                                    
+                                                    <!-- <script>
+                                                       $('#{{i.id|slugify}}').on('click', function(e) {
+                                                        if ($(this).is(':checked')) {                                                                                                                    
+                                                            alert("selected");
+                                                            
+                                                            // e.preventDefault();
+                                                            // return false;
+                                                        }
+                                                        else {
+                                                        // prevent from being unchecked
+                                                            // alert("Changes Not Allowed");
+                                                            this.checked=!this.checked;
+                                                        }
+                                                    });
+                                                    </script> -->
                                                     <script>
                                                         $(document).ready(function(){
-                                                        $('.{{bus.pk|slugify}}').change(function(){
-                                                            $.ajax({
-                                                                  type:'POST',
-                                                                  url:'fetch_bus_details/',
-                                                                  data:{category:$(".{{bus.pk|slugify}}").val(), 
-                                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
-                                                                  
-                                                                  success: function(msg){
-                                                                    alert("Bus Status Changed");
-                                                                    window.location.reload();
-                                                                  }
-                                                              });
-                                                            
-                                                        });
-                                                        });
+                                                            $("#{{i.id|slugify}}").click(function(){
+                                                                
+                                                                $.ajax({
+                                                            type:'POST',
+                                                            url: "{% url 'add_trip' %}" ,
+                                                            data:{route_id: '{{i.id}}',point:'{{i.point.id}}',
+                                                            csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                            success: function(msg){
+                                                                $('.{{i.id|slugify}}').html(msg);
+                                                            }
+                                                            })
+                                                                
+                                                            });
+                                                        })
+                                                        
                                                     </script>
                                                     {% endfor %}
                                                     </tbody>
-                                                </table>                                                
+                                                </table>    
+                                                <a style="align-content: center;" class="md-btn md-btn-primary md-btn-wave-light"  href="{% url 'user_dashboard' %}">Finish</a>                                            
                                             </div>                                            
                                         </div>
                                         {% endif %}

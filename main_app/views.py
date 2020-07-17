@@ -293,6 +293,32 @@ def index(request):
 
 @login_required
 def dashboard(request):
+    # Bus Location
+    if request.user.profile.designation:
+        if request.user.profile.designation.level_name != "driver":
+            request.user.ins_loc = InstituteLocation.objects.get(institute=request.user.profile.institute)
+            my_loc = BusUsers.objects.get(user=request.user.profile)
+            # print(my_loc.point.id)
+            request.user.location = Point.objects.get(id=my_loc.point.id)
+            route = RouteMap.objects.get(point__id=my_loc.point.id)
+            request.user.routes = RouteMap.objects.filter(route=route.route)
+            # q1= routes.exclude(point__id=my_loc.point.id)
+            try:
+                request.user.bus_loc = Trip.objects.filter(route=route.route, date = datetime.date.today()).last()
+                # request.user.q2 = routes.exclude(point__id = bus_loc.point.id)
+            except:
+                pass
+        
+
+
+
+    # Driver Dashboard
+    if request.user.profile.designation:    
+       if request.user.profile.designation.level_name == "driver":
+           request.user.driver_data = RouteInfo.objects.get(vehicle_driver__name=request.user.profile)
+           request.user.today =datetime.date.today()
+        #    print(driver_data) 
+
     # random classmates for student
     std_random=UserProfile.objects.filter(institute=request.user.profile.institute,Class=request.user.profile.Class,designation__level_name="student").exclude(user=request.user).order_by('?')[:5]
     
@@ -1369,5 +1395,6 @@ def set_loc(request):
     except:
         pass
     return render(request, 'main_app/map.html')
+
 
         

@@ -1,6 +1,7 @@
 from django.db import models
 from main_app.models import *
 from datetime import date
+from django.utils import timezone
 
 # Create your models here.
 class Bus(models.Model):
@@ -57,6 +58,14 @@ class RouteInfo(models.Model):
     def __str__(self):
         return self.route_name
 
+class RouteMap(models.Model):
+    route = models.ForeignKey(to=RouteInfo, on_delete=models.CASCADE, related_name='route', null=True, blank=False)
+    point = models.ForeignKey(to=Point, on_delete=models.CASCADE, related_name='point', null=True, blank=False)
+    index = models.IntegerField(default=0)
+    time = models.TimeField()
+
+    def __str__(self):
+        return str(self.route)
 class InstituteLocation(models.Model):
     institute = models.OneToOneField(to=Institute, on_delete=models.CASCADE, related_name='transport_institute', default=None)
     longitute = models.FloatField(null=True)
@@ -70,3 +79,12 @@ class BusUsers(models.Model):
     institute = models.ForeignKey(to=Institute, related_name="user_institute", on_delete=models.CASCADE, null=True, blank=True)
     def __str__(self):
         return str(self.user)
+
+class Trip(models.Model):
+    route = models.ForeignKey(to=RouteInfo, on_delete=models.CASCADE, related_name='trip_route', null=True, blank=False)
+    point = models.ForeignKey(to=Point, on_delete=models.CASCADE, null=True)
+    driver = models.ForeignKey(to=Driver, on_delete=models.CASCADE, related_name='trip_driver', null=True, blank=False)
+    time = models.TimeField()
+    date = models.DateField()
+    def __str__(self):
+        return str(self.route)

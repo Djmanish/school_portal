@@ -16,6 +16,16 @@ def bus(request):
     drivers = Driver.objects.filter(institute=request.user.profile.institute)
     active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
     routes = RouteInfo.objects.filter(institute=request.user.profile.institute)
+    new = RouteInfo.objects.filter(institute=request.user.profile.institute)
+    for i in new:
+        i.point_count= RouteMap.objects.filter(route=i).count()
+        s= RouteMap.objects.filter(route=i, index=0)
+        for j in s:
+            i.st= j.time
+        l= RouteMap.objects.filter(route=i, index=i.point_count-1)
+        for k in l:
+            i.lt= k.time
+       
     context_data = {
         'buses': buses,
         'states_list': states_list,
@@ -23,6 +33,7 @@ def bus(request):
         'drivers':drivers,
         'active_buses':active_buses,
         'routes':routes,
+        'new':new,
     }
     return render(request, 'bus/bus_management.html', context_data)
 
@@ -74,14 +85,12 @@ def add_point(request):
         print(sel_state)
         p_country = request.POST['point_country'].strip()
         print("Hello")
-        p_longitute = float(request.POST['point_longitute'].strip())
-        p_latitute = float(request.POST['point_latitute'].strip())
         try:
             chk_point= Point.objects.get(point_code=p_code, point_institute=request.user.profile.institute)
         except Point.DoesNotExist:
             chk_point = 0 
         if chk_point == 0:
-            new_point = Point.objects.create(point_code=p_code, point_name=p_name, point_street_no=p_street_no, point_landmark=p_landmark,point_exact_place=p_place, point_city=p_city, point_state=sel_state, point_country=p_country,  point_institute=request.user.profile.institute, longitude =p_longitute, latitude =p_latitute)
+            new_point = Point.objects.create(point_code=p_code, point_name=p_name, point_street_no=p_street_no, point_landmark=p_landmark,point_exact_place=p_place, point_city=p_city, point_state=sel_state, point_country=p_country,  point_institute=request.user.profile.institute)
             messages.success(request, 'Point Created successfully !')  
             return HttpResponseRedirect(f'/bus/')       
         else:
@@ -229,6 +238,58 @@ def add_route(request):
 
         return HttpResponseRedirect(f'/bus/')  
 
+def route_map(request):
+    if request.method == 'POST':
+        route = int(request.POST['route'])
+        point = int(request.POST['point'])
+        sch_route = RouteInfo.objects.get(id=route)
+        points = Point.objects.filter(point_institute=request.user.profile.institute)
+        context_data = {
+        'sch_route':sch_route,
+        'range':range(point),
+        'points':points,
+        
+        }
+        print(route)
+        print(point)
+        return render(request, 'bus/map_route.html', context_data)  
+
+
+def checkIfDuplicates_1(listOfElems):
+    # ''' Check if given list contains any duplicates '''
+    if len(listOfElems) == len(set(listOfElems)):
+      return False
+    else:
+      return True
+
+def add_point_route (request):
+    if request.method == 'POST':
+        select_point= request.POST.getlist('select_point')
+        select_time= request.POST.getlist('time')
+        route= int(request.POST['hide_route'])
+        s_route= RouteInfo.objects.get(id=route)
+        result= checkIfDuplicates_1(select_point)
+        if result:
+            messages.error(request, "You are selecting same point !")  
+                      
+            return HttpResponseRedirect(f'/bus/') 
+        else:
+            print ("non Duplicates")
+
+        result1= checkIfDuplicates_1(select_time)
+        if result1:
+            messages.error(request, "Time never be same !")  
+                      
+            return HttpResponseRedirect(f'/bus/') 
+        else:
+            print ("non Duplicates")   
+        length=len(select_point) 
+        for i in range(length):
+            s_point= Point.objects.get(id=select_point[i])
+            new= RouteMap.objects.create(route=s_route, point=s_point, index=i, time=select_time[i])
+        messages.success(request, "Submit successfully !")     
+    return HttpResponseRedirect(f'/bus/') 
+    
 def set_location(request):
     if request.method == 'POST':
         longi = request.POST['longitute'].strip()
@@ -240,26 +301,48 @@ def set_location(request):
         except InstituteLocation.DoesNotExist:
             sch = 0
             set_loc = InstituteLocation.objects.create(institute=request.user.profile.institute, longitute=longi, latitude = lati)
-            messages.success(request, 'Institute location updated successfully !') 
-            return HttpResponseRedirect(f'/bus/')  
-        if sch:
-            sch.longitute = longi
-            sch.latitude = lati
-            sch.save()
-            messages.success(request, 'Institute location updated successfully !') 
-            return HttpResponseRedirect(f'/bus/') 
+            messages.success(request, 'Institute location updated successfully !')
+            return HttpResponseRedirect(f'/bus/')
+    if sch:
+        sch.longitute = longi
+        sch.latitude = lati
+        sch.save()
+        messages.success(request, 'Institute location updated successfully !')
+        return HttpResponseRedirect(f'/bus/')
+
 def see_map(request):
     ins_loc = InstituteLocation.objects.get(institute=request.user.profile.institute)
-    
+
     context_data={
-        'ins_loc':ins_loc, 
+    'ins_loc':ins_loc,
     }
     return render(request, 'bus/index.html', context_data)
     
 def start_trip(request):
-    p = Point.objects.filter(point_institute=request.user.profile.institute)
-
+    u = RouteInfo.objects.get(vehicle_driver__name=request.user.profile)
+    sel_r = u.id
+    print(sel_r)
+    p = RouteMap.objects.filter(route__id=sel_r)
+    print(p)
     context={
         'p':p,
     }
     return render(request, 'bus/trip.html', context)
+
+def add_trip(request):
+    if request.method == 'POST':
+        ids = int(request.POST['route_id'])
+        date =datetime.now().date()
+        print(date)
+        r_map = RouteMap.objects.get(id=ids)
+        route = r_map.route
+        point = r_map.point
+        driver = r_map.route.vehicle_driver
+        try:
+            sch_data = Trip.objects.get(route = route, point = point, driver=driver, date = date)
+            return HttpResponse('<h6 style="color: red;">Already Entered</h6>')
+        except Trip.DoesNotExist:
+            new = Trip.objects.create(route=route, point= point, driver=driver, time=datetime.now().strftime('%H:%M:%S') ,date= date)
+            return HttpResponse('<h6 style="color: green;">Submitted</h6>')
+        
+        
