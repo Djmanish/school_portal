@@ -18,7 +18,7 @@ urlpatterns = [
   path('task-detail/<str:pk>/', views.taskDetail, name="task-detail"),
   path('task-create/', views.taskCreate, name="task-create"),
 
-  path('register/', RegisterView.as_view(), name="register"),
+  path('registeration/', RegisterView.as_view(), name="registeration"),
   path('email-verify/', VerifyEmail.as_view(), name="email-verify"),
 
 
