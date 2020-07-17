@@ -71,6 +71,7 @@ def registration_view(request):
         else:
             data = serializer.errors
         return Response(data)
+@permission_classes((AllowAny, ))
 class RegisterView(generics.GenericAPIView):
     serializer_class = RegistrationSerializer
 
@@ -95,7 +96,7 @@ class RegisterView(generics.GenericAPIView):
         Util.send_email(data)
         
         return Response(user_data)
-
+@permission_classes((AllowAny, ))
 class VerifyEmail(generics.GenericAPIView):
     def get(self,request):
         token = request.GET.get('token')
