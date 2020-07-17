@@ -1227,7 +1227,10 @@
                                             </div>
                                             {% endif %}
                                         </div>
-                                    </li>  
+                                    </li> 
+                                    
+                                    
+
                                     <li>
                                         <div class="uk-width-medium-1-5">
                                             <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'add_driver' %}" >
@@ -1369,17 +1372,36 @@
                                                             <th>Total Points</th>
                                                             <th>Start Time</th>
                                                             <th>End Time</th>
+                                                            <th>Add</th>
+                                                            <th>Delete</th>
+
                                                         </tr>
                                                         </thead>
                                                         <tbody>
                                                             {% for p in new %}
+                                                            {% if p.point_count > 0 %}
                                                         <tr>
                                                             <td>{{forloop.counter}}</td>
                                                             <td>{{p.route_name}}</td>
                                                             <td>{{p.point_count}}</td>                                                       
                                                             <td>{{p.st}}</td>
                                                             <td>{{p.lt}}</td>
+                                                            <td><a class="{{p.id|slugify}}" ><i class="material-icons" style="color: #7cb342;font-weight: bold;">add</i></a>
+                                                            </td>
+                                                            <td><a href="{% url 'delete_routemap' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                            </td>
+                                                            
                                                         </tr>
+                                                        {% endif %}
+                                                        
+                                                        <script>
+                                                            $(document).ready(function(){
+                                                            $('.{{p.id|slugify}}').click(function(){
+                                                                $('#modal_add_point_btn').click(); 
+                                                                $('#point_code_hidden').val('{{p.id}}');                                                               
+                                                            });
+                                                            });
+                                                        </script>
                                                         {% endfor %}
                                                        
                                                         </tbody>
@@ -1390,6 +1412,35 @@
                                         </div>
                                     </li> 
                                     
+
+                                    <a type="hidden" id="modal_add_point_btn" data-uk-modal="{target:'#modal_add_point'}"></a>
+                            <div class="uk-modal" id="modal_add_point">
+                                <div class="uk-modal-dialog">
+                                    <button type="button" class="uk-modal-close uk-close"></button>
+                                    <div class="uk-modal-header">
+                                        <h3 class="uk-text-primary">Add More Points</h3>
+                                    </div>
+                                    <form  method="POST" action="{% url 'update_map_route' %}">
+                                        {% csrf_token %}
+                                        <input id="point_code_hidden" type="hidden" class="form-control" name="point_code_hidden">
+                                        <div class="form-group">
+                                            <label class="required" style="color: black;">Enter No. Of Points To Be Added</label>
+                                            <input type="number" class="form-control" name="update_map_point" required >
+                                          </div>   
+                                          
+                                                                                                                                                
+                                              <table>
+                                                <tr>
+                                                    <td> 
+                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
+                                                </td>
+                                                <td style="padding-left:20px;">
+                                    </td>
+                                </tr>
+                                </table>
+                                </form>
+                                </div>
+                            </div>
                             </div>
                         
                     </div>

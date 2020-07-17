@@ -23,5 +23,9 @@ urlpatterns = [
   path('add_point_route/',views.add_point_route, name="add_point_route"),
   path('set_location/', views.set_location, name="set_location"),
   path('see_map/', views.see_map, name="see_map"),
+  path('update_map_route/', views.update_map_route, name="update_map_route"),
+  path('delete_routemap/<int:pk>/',views.delete_routemap,name='delete_routemap'),
+  path('update_route/', views.update_route, name="update_route"),
+ 
 
 ]

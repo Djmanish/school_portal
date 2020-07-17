@@ -60,6 +60,7 @@ class RouteInfo(models.Model):
 class RouteMap(models.Model):
     route = models.ForeignKey(to=RouteInfo, on_delete=models.CASCADE, related_name='route', null=True, blank=False)
     point = models.ForeignKey(to=Point, on_delete=models.CASCADE, related_name='point', null=True, blank=False)
+    routemap_institute = models.ForeignKey(to=Institute, related_name="routemap_institute", on_delete=models.CASCADE, null=True, blank=True)
     index = models.IntegerField(default=0)
     time = models.TimeField()
 
