@@ -1501,28 +1501,30 @@
                             <div class="md-card-content">
                                 <h4>Trips</h4>
                                 <div class="uk-overflow-container">
-                                    <!-- <table class="uk-table uk-table-condensed uk-table-hover">
+                                    <table class="uk-table uk-table-condensed uk-table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Date</th>
                                                 <th >Route Name</th>
                                                 <th>Status</th>
-                                                <th >Action</th>                                                                       
+                                                <!-- <th >Action</th>                                                                        -->
                                             </tr>                                       
                                         </thead>
                                         <tbody>
                                             
                                             <tr>
-                                                <td>14/07/2020</td>
-                                                <td>Kalyanpur-Rooma</td>
+                                                <td>{{user.today}}</td>
+                                                <td>{{user.driver_data.route_name}}</td>
+                                                {% if user.trip == user.route_map %}
+                                                <td>Completed</td>
+                                                {% else %}
                                                 <td>Incomplete</td>
-                                                <td>
-                                                    <a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="{% url 'start_trip' %}">Start</a>
-                                                </td>
+                                                {% endif %}
+                                               
                                             </tr>                   
                                                                                
                                         </tbody>
-                                    </table> -->
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -1567,7 +1569,7 @@
             </div>
          </div>     
          {% if request.user.profile.designation.level_name != "driver" %}
-
+         {% if user.location %}
          <div class="uk-width-medium-1-2">
             <div class="md-card">
                 <div class="md-card-content">
@@ -1601,7 +1603,7 @@
                 </div>
             </div>
         </div>
-        {% endif %}    
+        {% endif %}{% endif %}    
         {% endif %}    
     </div>          
 </div> 
