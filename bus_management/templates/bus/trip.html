@@ -982,48 +982,9 @@
                                 </div>
                             </div>
 
-                            <div class="uk-modal" id="modal_map_route">
-                                <div class="uk-modal-dialog">
-                                    <button type="button" class="uk-modal-close uk-close"></button>
-                                    <div class="uk-modal-header">
-                                        <h3 class="uk-text-primary">Map Routes</h3>
-                                    </div>
-                                    <form  method="POST" action="{% url 'route_map' %}">
-                                        {% csrf_token %}
-                                        <div class="form-group">
-                                            <label class="required" style="color: black;">Route</label>
-                                            <select id="point_state" class="form-control-sm form-control" name="route" required>
-                                                <option selected disabled value="">--- Select ---</option>
-                                                {% for i in routes %}
-                                                <option value={{i.id}}>{{i.route_name}} </option>
-                                                {% endfor %}
-                                             
-                                            </select>
-                                          </div>        
-                                          <div class="form-group">
-                                            <label class="required" style="color: black;">No. of Points</label>
-                                            <input type="number" class="form-control" name="point" required>
-                                          </div>
-                                         
-                                          
-                                                    <div class="uk-form-row" style="margin-bottom: 15px">
-                                                        
-                                                    </div>
-                                              <table>
-                                                <tr>
-                                                    <td> 
-                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
-                                                </td>
-                                                <td style="padding-left:20px;">
-                                        <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
-                                    </td>
-                                </tr>
-                                </table>
-                                </form>
-                                </div>
-                            </div>
-
+                            <!-- start route map modol -->
                             
+                            <!-- end route map modol -->
                             <!-- End Modol Forms -->
                             
                             
@@ -1049,11 +1010,11 @@
                             <div class="user_content">
              
                                 <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
-                                    <li class="uk-active"><a href="#">Vehicles</a></li>
-                                     <li><a href="#">Points</a></li>                                     
+                                    <li class="uk-active"><a href="#">Trip</a></li>
+                                     <!-- <li><a href="#">Points</a></li>                                     
                                      <li><a href="#">Driver</a></li>
                                      <li><a href="#">Routes</a></li>
-                                     <li><a href="#">Map Routes</a></li>
+                                     <li><a href="#">Map Routes</a></li> -->
                                      <!-- <li><a href="#">Test</a></li> -->
                                      
                                      
@@ -1061,386 +1022,102 @@
                                 <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
                                     <!-- Start Issue Book Tab -->
                                     <li>
-                                    <div class="uk-width-medium-1-5">
+                                    <!-- <div class="uk-width-medium-1-5">
                                         <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="#" data-uk-modal="{target:'#modal_new_bus'}">
                                             <i class="uk-icon-bus"></i>
                                             Add Vehicle
                                         </a>
-                                    </div>
+                                    </div> -->
                                     <div class="md-card uk-margin-medium-bottom">
-                                        {% if buses %}
+                                        {% if p %}
                                         <div class="md-card-content">                                            
                                             <div class="uk-overflow-container">                                                
                                                 <table class="uk-table uk-table-hover">
                                                     <thead>
                                                     <tr>
                                                         <th>Sr No.</th>
-                                                        <th>Vehicle Registration No.</th>
-                                                        <th>Maker</th>
-                                                        <th>Vehicle Type</th>
-                                                        <th>Fuel Type</th>
-                                                        <th>Colour</th>
+                                                        <th>Route No.</th>
+                                                        <th>Point No.</th>
+                                                        <th>Point Name</th>
+                                                        <th>Action</th>
+                                                        <!-- <th>Colour</th>
                                                         <th>Capacity</th>
                                                         <th>Status</th>
                                                         <th>Edit</th>
-                                                        <th>Action</th>
+                                                        <th>Action</th> -->
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {% for bus in buses %}
+                                                    {% for i in p %}
                                                     <tr>
                                                         <td>{{forloop.counter}}</td>
-                                                        <td>{{bus.bus_no}}</td>
-                                                        <td>{{bus.bus_maker}}</td>   
-                                                        <td>{{bus.vehicle_type}}</td> 
-                                                        <td>{{bus.fuel_type}}</td>                                                     
-                                                        <td>{{bus.bus_color}}</td>
-                                                        <td>{{bus.bus_capacity}}</td>
-                                                        <td>{{bus.status}}</td>
-                                                        <td><a id="{{bus.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                        <td>{{i.route.route_no}}</td>
+                                                        <td>{{i.point.point_code}}</td>   
+                                                        <td>{{i.point.point_name}}</td> 
+                                                        <!-- <td>{{i.fuel_type}}</td>                                                     
+                                                        <td>{{i.bus_color}}</td>
+                                                        <td>{{i.bus_capacity}}</td>
+                                                        <td>{{i.status}}</td> -->
+                                                        
+                                                        
+                                                        <td>                                                            
+                                                                <a value="{{i.id}}" class="md-btn md-btn-primary md-btn-mini md-btn-wave-light"  id="{{i.id|slugify}}"  href="#">Yes</a>
+                                                                <div class="{{i.id|slugify}}"></div>                                                            
                                                         </td>
-                                                        {% if bus.status == "active" %}
-                                                        <td style="width: 10px">
-                                                            <div class="parsley-row">
-                                                                <input type="checkbox" class="{{bus.id|slugify}}" data-switchery checked value="{{bus.id}}" />
-                                                            </div>
-                                                        </td>
-                                                        {% endif %}
-                                                        {% if bus.status == "inactive" %}
-                                                        <td style="width: 10px">
-                                                            <div class="parsley-row">
-                                                                <input type="checkbox" class="{{bus.id|slugify}}" data-switchery value="{{bus.id}}" />
-                                                            </div>
-                                                        </td>
-                                                        {% endif %}
+                                                        
                                                     </tr>
+                                                    <script>
+                                                    $(document).ready(function(){
+                                                        $("#{{i.id|slugify}}").click(function(){
+                                                          $("#{{i.id|slugify}}").css("display", "none");
+                                                        });
+                                                      });
+                                                      </script>
                                                     
-                                                    <script>
-                                                        $(document).ready(function(){
-                                                        $('#{{bus.id|slugify}}').click(function(){
-                                                            $('#modal_edit_bus_btn').click();
-                                                            $('#edit_bus_no').val('{{bus.bus_no}}');
-                                                            $('#edit_maker').val('{{bus.bus_maker}}');
-                                                            $('#selcat').html('<option value="{{bus.fuel_type}}" selected>{{bus.fuel_type}}</option>');
-                                                            $('#edit_bus_type').val('{{bus.vehicle_type}}');
-                                                            $('#edit_bus_color').val('{{bus.bus_color}}');
-                                                            $('#edit_bus_capacity').val('{{bus.bus_capacity}}');
-                                                            $('#edit_bus_id_hide').val('{{bus.id}}');
-                                                        });
-                                                        });
-                                                    </script>
-                                                    <script>
-                                                        $(document).ready(function(){
-                                                        $('.{{bus.pk|slugify}}').change(function(){
-                                                            $.ajax({
-                                                                  type:'POST',
-                                                                  url:'fetch_bus_details/',
-                                                                  data:{category:$(".{{bus.pk|slugify}}").val(), 
-                                                                  csrfmiddlewaretoken: '{{ csrf_token }}' },
-                                                                  
-                                                                  success: function(msg){
-                                                                    alert("Bus Status Changed");
-                                                                    window.location.reload();
-                                                                  }
-                                                              });
+                                                    <!-- <script>
+                                                       $('#{{i.id|slugify}}').on('click', function(e) {
+                                                        if ($(this).is(':checked')) {                                                                                                                    
+                                                            alert("selected");
                                                             
-                                                        });
-                                                        });
+                                                            // e.preventDefault();
+                                                            // return false;
+                                                        }
+                                                        else {
+                                                        // prevent from being unchecked
+                                                            // alert("Changes Not Allowed");
+                                                            this.checked=!this.checked;
+                                                        }
+                                                    });
+                                                    </script> -->
+                                                    <script>
+                                                        $(document).ready(function(){
+                                                            $("#{{i.id|slugify}}").click(function(){
+                                                                
+                                                                $.ajax({
+                                                            type:'POST',
+                                                            url: "{% url 'add_trip' %}" ,
+                                                            data:{route_id: '{{i.id}}',point:'{{i.point.id}}',
+                                                            csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                            success: function(msg){
+                                                                $('.{{i.id|slugify}}').html(msg);
+                                                            }
+                                                            })
+                                                                
+                                                            });
+                                                        })
+                                                        
                                                     </script>
                                                     {% endfor %}
                                                     </tbody>
-                                                </table>                                                
+                                                </table>    
+                                                <a style="align-content: center;" class="md-btn md-btn-primary md-btn-wave-light"  href="{% url 'user_dashboard' %}">Finish</a>                                            
                                             </div>                                            
                                         </div>
                                         {% endif %}
                                     </div>
                                     </li>  
-                                    <li>
-                                        <div class="uk-width-medium-1-8" >
-                                            <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="#" data-uk-modal="{target:'#modal_new_point'}">
-                                                <i class="uk-icon-street-view"></i>
-                                                Create Point
-                                            </a>
-                                        <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'see_map' %}" >
-                                            <i class="uk-icon-map-marker"></i>
-                                            See Map</a>
-                                        </div>
-                                        <div class="md-card uk-margin-medium-bottom">
-                                            {% if points %}
-                                            <div class="md-card-content">                                            
-                                                <div class="uk-overflow-container">                                                
-                                                    <table class="uk-table uk-table-hover">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>Sr No.</th>
-                                                            <th>Point Code.</th>
-                                                            <th>Point Name</th>
-                                                            <th>Landmark</th>
-                                                            <th>Place</th>
-                                                            <th>Address</th>
-                                                            <th>Edit</th>
-                                                            <th>Delete</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {% for p in points %}
-                                                        <tr>
-                                                            <td>{{forloop.counter}}</td>
-                                                            <td>{{p.point_code}}</td>
-                                                            <td>{{p.point_name}}</td>                                                       
-                                                            <td>{{p.point_landmark}}</td>
-                                                            <td>{{p.point_exact_place}}</td>
-                                                            <td>{{p.point_street_no}}, {{p.point_landmark}} {{p.point_city}} {{p.point_state}}, {{p.point_country}} </td>
-                                                            
-                                                            <td><a id="{{p.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
-                                                            </td>
-                                                            <td><a class="confirm-delete" href="{% url 'delete_point' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
-                                                            </td>
-                                                        </tr>
-                                                        <script>
-                                                            $(document).ready(function(){
-                                                            $(document).on('click', '.confirm-delete', function(){
-                                                                return confirm('Do you want to delete this?');
-                                                                });
-                                                            });
-                                                        </script>
-                                                        <script>
-                                                            $(document).ready(function(){
-                                                            $('#{{p.id|slugify}}').click(function(){
-                                                                $('#modal_edit_point_btn').click();
-                                                                $('#edit_point_id_hide').val('{{p.id}}');
-                                                                $('#edit_point_code').val('{{p.point_code}}');
-                                                                $('#edit_point_name').val('{{p.point_name}}');
-                                                                $('#edit_point_street').val('{{p.point_street_no}}');
-                                                                $('#edit_point_landmark').val('{{p.point_landmark}}');
-                                                                $('#edit_point_place').val('{{p.point_exact_place}}');
-                                                                $('#edit_point_city').val('{{p.point_city}}');
-                                                                $('#selcat1').html('<option value="{{p.point_state.id}}" selected>{{p.point_state}}</option>');
-                                                                $('#edit_point_country').val('{{p.point_country}}');
-                                                            });
-                                                            });
-                                                        </script>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>                                                
-                                                </div>                                            
-                                            </div>
-                                            {% endif %}
-                                        </div>
-                                    </li> 
-                                    
-                                    
+                                        
 
-                                    <li>
-                                        <div class="uk-width-medium-1-5">
-                                            <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'add_driver' %}" >
-                                                <i class="uk-icon-drivers-license"></i>
-                                               Add Driver
-                                            </a>
-                                        </div>
-                                        <div class="md-card uk-margin-medium-bottom">
-                                            {% if drivers %}
-                                            <div class="md-card-content">                                            
-                                                <div class="uk-overflow-container">                                                
-                                                    <table class="uk-table uk-table-hover">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>Sr No.</th>
-                                                            <th>Driver Code</th>
-                                                            <th>Driver Name.</th>
-                                                            <th>License No.</th>
-                                                            <th>Mobile No.</th>
-                                                            <!-- <th>Place</th>
-                                                            <th>Address</th>
-                                                            <th>Edit</th>
-                                                            <th>Delete</th> -->
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {% for p in drivers %}
-                                                        <tr>
-                                                            <td>{{forloop.counter}}</td>
-                                                            <td>{{p.driver_id}}</td>
-                                                            <td>{{p.name.first_name}} {{p.name.last_name}}</td>
-                                                            <td>{{p.driving_lic_no}}</td>                                                       
-                                                            <td>{{p.name.mobile_number}}</td>
-                                                            <!-- <td>{{p.point_exact_place}}</td>
-                                                            <td>{{p.point_street_no}}, {{p.point_landmark}} {{p.point_city}} {{p.point_state}}, {{p.point_country}} </td> -->
-                                                            
-                                                            <!-- <td><a id="{{p.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
-                                                            </td>
-                                                            <td><a class="confirm-delete" href="{% url 'delete_point' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
-                                                            </td> -->
-                                                        </tr>
-                                                        <!-- <script>
-                                                            $(document).ready(function(){
-                                                            $(document).on('click', '.confirm-delete', function(){
-                                                                return confirm('Do you want to delete this?');
-                                                                });
-                                                            });
-                                                        </script>
-                                                        <script>
-                                                            $(document).ready(function(){
-                                                            $('#{{p.id|slugify}}').click(function(){
-                                                                $('#modal_edit_point_btn').click();
-                                                                $('#edit_point_id_hide').val('{{p.id}}');
-                                                                $('#edit_point_code').val('{{p.point_code}}');
-                                                                $('#edit_point_name').val('{{p.point_name}}');
-                                                                $('#edit_point_street').val('{{p.point_street_no}}');
-                                                                $('#edit_point_landmark').val('{{p.point_landmark}}');
-                                                                $('#edit_point_place').val('{{p.point_exact_place}}');
-                                                                $('#edit_point_city').val('{{p.point_city}}');
-                                                                $('#selcat1').html('<option value="{{p.point_state.id}}" selected>{{p.point_state}}</option>');
-                                                                $('#edit_point_country').val('{{p.point_country}}');
-                                                            });
-                                                            });
-                                                        </script> -->
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>                                                
-                                                </div>                                            
-                                            </div>
-                                            {% endif %}
-                                        </div>
-                                    </li> 
-                                    <li>
-                                        <div class="uk-width-medium-1-5">
-                                            <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="#" data-uk-modal="{target:'#modal_new_route'}" >
-                                                <i class="uk-icon-map-signs"></i>
-                                               Create Route
-                                            </a>
-                                        </div>
-                                        <div class="md-card uk-margin-medium-bottom">
-                                            {% if routes %}
-                                            <div class="md-card-content">                                            
-                                                <div class="uk-overflow-container">                                                
-                                                     <table class="uk-table uk-table-hover"> 
-                                                        <thead>
-                                                        <tr>
-                                                            <th>Sr No.</th>
-                                                            <th>Route No.</th>
-                                                            <th>Route Name</th>
-                                                            <th>Vehicle</th>
-                                                            <th>Driver</th>
-                                                            <!-- <th>From Date</th>
-                                                            <th>To Date</th> -->
-                                                            <!-- <th>Delete</th> -->
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {% for p in routes %}
-                                                        <tr>
-                                                            <td>{{forloop.counter}}</td>
-                                                            <td>{{p.route_no}}</td>
-                                                            <td>{{p.route_name}}</td>                                                       
-                                                            <td>{{p.vehicle}}</td>
-                                                            <td>{{p.vehicle_driver.name.first_name}} {{p.vehicle_driver.name.last_name}}</td>
-                                                            <td>{{p.point_street_no}}</td>
-                                                            <!-- <td>{{p.from_date}}</td>
-                                                            <td>{{p.to_date}}</td>                                                             -->
-                                                            <!-- <td><a id="{{p.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
-                                                            </td>
-                                                            <td><a class="confirm-delete" href="{% url 'delete_point' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
-                                                            </td> -->
-                                                        </tr>
-                                                        
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>                                                
-                                                </div>                                            
-                                            </div>
-                                            {% endif %}
-                                        </div>
-                                    </li>     
-                                    
-                                        <li>
-                                        <div class="uk-width-medium-1-5">
-                                            <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="#" data-uk-modal="{target:'#modal_map_route'}" >
-                                                <i class="uk-icon-map"></i>
-                                               Maps Routes
-                                            </a>
-                                        </div>
-                                        <div class="md-card uk-margin-medium-bottom">
-                                            {% if new %}
-                                            <div class="md-card-content">                                            
-                                                <div class="uk-overflow-container">                                                
-                                                     <table class="uk-table uk-table-hover"> 
-                                                        <thead>
-                                                        <tr>
-                                                            <th>S.No</th>
-                                                            <th>Route</th>
-                                                            <th>Total Points</th>
-                                                            <th>Start Time</th>
-                                                            <th>End Time</th>
-                                                            <th>Add</th>
-                                                            <th>Delete</th>
-
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {% for p in new %}
-                                                            {% if p.point_count > 0 %}
-                                                        <tr>
-                                                            <td>{{forloop.counter}}</td>
-                                                            <td>{{p.route_name}}</td>
-                                                            <td>{{p.point_count}}</td>                                                       
-                                                            <td>{{p.st}}</td>
-                                                            <td>{{p.lt}}</td>
-                                                            <td><a class="{{p.id|slugify}}" ><i class="material-icons" style="color: #7cb342;font-weight: bold;">add</i></a>
-                                                            </td>
-                                                            <td><a href="{% url 'delete_routemap' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
-                                                            </td>
-                                                            
-                                                        </tr>
-                                                        {% endif %}
-                                                        
-                                                        <script>
-                                                            $(document).ready(function(){
-                                                            $('.{{p.id|slugify}}').click(function(){
-                                                                $('#modal_add_point_btn').click(); 
-                                                                $('#point_code_hidden').val('{{p.id}}');                                                               
-                                                            });
-                                                            });
-                                                        </script>
-                                                        {% endfor %}
-                                                       
-                                                        </tbody>
-                                                    </table>                                                
-                                                </div>                                            
-                                            </div>
-                                            {% endif %}
-                                        </div>
-                                    </li> 
-                                    
-
-                                    <a type="hidden" id="modal_add_point_btn" data-uk-modal="{target:'#modal_add_point'}"></a>
-                            <div class="uk-modal" id="modal_add_point">
-                                <div class="uk-modal-dialog">
-                                    <button type="button" class="uk-modal-close uk-close"></button>
-                                    <div class="uk-modal-header">
-                                        <h3 class="uk-text-primary">Add More Points</h3>
-                                    </div>
-                                    <form  method="POST" action="{% url 'update_map_route' %}">
-                                        {% csrf_token %}
-                                        <input id="point_code_hidden" type="hidden" class="form-control" name="point_code_hidden">
-                                        <div class="form-group">
-                                            <label class="required" style="color: black;">Enter No. Of Points To Be Added</label>
-                                            <input type="number" class="form-control" name="update_map_point" required >
-                                          </div>   
-                                          
-                                                                                                                                                
-                                              <table>
-                                                <tr>
-                                                    <td> 
-                                                  <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Submit</button>
-                                                </td>
-                                                <td style="padding-left:20px;">
-                                    </td>
-                                </tr>
-                                </table>
-                                </form>
-                                </div>
-                            </div>
                             </div>
                         
                     </div>
