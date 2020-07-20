@@ -194,7 +194,8 @@ def create_exam_schedule(request, pk):
                
                 for subject,subject_teacher,date,start_time,end_time,assign_teacher in zip(request.POST.getlist('select_exam_subject'), request.POST.getlist('select_exam_subject_teacher'),request.POST.getlist('select_date'),request.POST.getlist('select_start_time'),request.POST.getlist('select_end_time'),request.POST.getlist('assign_teacher')):
                        
-                        schedule_date= datetime.datetime.strptime(date, '%Y-%M-%d')
+                        schedule_date= datetime.datetime.strptime(date, '%Y-%m-%d')
+                        print(date)
                         if schedule_date<datetime.datetime.now():
                                         messages.error(request, 'Date must be in future!')
                                         return redirect(f'/examschedule/examschedule/{inst_id}') 

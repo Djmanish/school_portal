@@ -33,6 +33,8 @@
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"/>
 
     <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
@@ -510,7 +512,7 @@
                                     <tr >
                                         {% if user.profile.designation.level_name == "parent" %}
                                         <td>
-                                            <label class ="required" style="margin: 4px;">Select Student</label>
+                                            <label class ="required" id="required_margin">Select Student</label>
                                             <select class="form-control" id="selected_student"  name="selected_student" style="padding: 2px;"
                                                 required>
                                                 <option selected disabled value="">--Select Student--</option>
@@ -524,7 +526,7 @@
                                         &nbsp
                                         
                                         <td> 
-                                            <label class ="required" style="margin: 4px;">Select Exam Type</label>
+                                            <label class ="required" id="required_margin">Select Exam Type</label>
                                             <select class="form-control" id="selected_exam_types" name="result_exam_type"  required>
                             
                                                 <option selected disabled value="">--Exam Type--</option>
@@ -541,9 +543,8 @@
                                        
                                         {% if user.profile.designation.level_name != "parent" %}
                                         <td> 
-                                            <label class ="required" style="margin: 4px;">Select Exam Type</label>
-                                            <select class="form-control" name="result_exam_type" style="padding: 2px;"
-                                                required>
+                                            <label class ="required" id="required_margin">Select Exam Type</label>
+                                            <select class="form-control" name="result_exam_type" id="result_padding" required>
                                                 {% if select_exam_type %}
                                                 <option selected  value="{{select_exam_type.id}}">{{select_exam_type}}</option>
                                                 {% else %}
@@ -570,7 +571,7 @@
                                         {% if result_data %}
                                         <td >
                                             
-                                                    <button type="submit" name="report_cart_button" style="outline:none;  border: 0; margin-left:580px;" value="Print">
+                                                    <button type="submit" name="report_cart_button" class="report_card_button" value="Print">
                                                         <i class="md-icon material-icons" id="invoice_print"></i>
                                                 </button>
                                               
@@ -740,7 +741,7 @@
     </script>
 
 
-
+    
 
 </body>
 
