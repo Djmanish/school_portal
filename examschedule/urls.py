@@ -16,6 +16,7 @@ urlpatterns = [
   # path('examtypelist/<int:pk>',views.exam_type, name="create_test_type"),
   path('examschedule/view/<int:pk>', views.examschedule_view, name='examschedule_view'),
   path('examtypelist/<int:pk>', views.create_test_type, name="create_test_type"),
+   path('edit_exam_date/<int:pk>', views.edit_exam_date, name="edit_exam_date"),
   path('fetching_max_sr_no/', views.fetch_max_sr_no, name='fetch_max_sr_no' ),
   path('fetching_no/', views.fetch_no, name='fetch_no' ),
 

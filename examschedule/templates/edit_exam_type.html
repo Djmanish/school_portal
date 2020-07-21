@@ -464,14 +464,20 @@
 
 <div class="md-card-content">
 
+
 <div class="user_content">
+    <div >
+        <a href="{% url 'lectures_list' %}" class="md-btn md-btn-primary"><i class=" material-icons">arrow_back </i> Go Back</a>
+
+    </div>
 
 <!-- Subject form -->
-                    
-<form  method="POST" action="">
+&nbsp
+ <div></div>                   
+<form  method="POST" action="" >
     {% csrf_token %}
         
-        <div class="form-group">
+        <div class="form-group edit_exam_space">
             <label class ="required">Exam Type:</label>
             <input type="text" class="form-control " name='exam_type' value="{{test_type_info.exam_type}}" required="required">
             </div>
@@ -497,7 +503,7 @@
 
 
                             
-</div>
+</div></div>>
                                 
 </div>
 </div>
