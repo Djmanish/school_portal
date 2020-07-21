@@ -299,11 +299,12 @@ label.required::after{
     min-width: 470px;
     min-height: 550px !important;
   }
+  #header_alerts{
+    min-height: 450px;
+  }
 }
 
-#header_alerts{
-  min-height: 450px;
-}
+
 /* ending notification box modification */
 
 .asteriskField{
