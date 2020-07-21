@@ -517,24 +517,24 @@
                                                             {% csrf_token %}
                                                             
                                                             
-                                                            <label class = "required" style="margin: 4px;">Select Subject</label>
-                                                                <select class="form-control" name="result_selected_subject" style="padding: 2px;  height:38px" required>
+                                                            <label class = "required" id="required_margin">Select Subject</label>
+                                                                <select class="form-control" name="result_selected_subject" id="exam_type" required>
                                                                     <option selected disabled value="">--Subject--</option>
                                                                     {% for subject in subject_result %}
                                                                     <option value="{{subject.id}}">{{subject}}</option>
                                                                     {% endfor %}
                                                                  </select>
                                                                  
-                                                            <label class = "required" style="margin: 4px;">Select Exam Type</label>
-                                                             <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px; height:38px" required>
+                                                            <label class = "required" id="required_margin">Select Exam Type</label>
+                                                             <select class="form-control" id="result_exam_type" name="result_exam_type" id="exam_type" required>
                                                                     <option selected disabled value="">--Exam Type--</option>
                                                                     {% for exam_type in institute_exam_type %}
-                                                                       <option value="{{exam_type.id}}"> {{exam_type}}</option>
+                                                                       <option value="{{exam_type.id}}">{{exam_type}}</option>
                                                                     {% endfor %}
                                                              </select>
                                                            
-                                                            <label class = "required" style="margin: 4px;">Select Exam Type No.</label>
-                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px; height:38px" required>
+                                                            <label class = "required" id="required_margin">Select Exam Type No.</label>
+                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" id="exam_type" required>
                                                                     <option selected disabled value=''>--Exam Type No.--</option>
                                         
                                                              </select>
@@ -624,7 +624,7 @@
                                                                     
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select style="overflow:hidden;  -webkit-appearance: none;   border:0px solid!important;"  name="student_first_name" >
+                                                                                <select id="exam_schedule"  name="student_first_name" >
                                                                                   <option  value="{{student.id}}">{{student.first_name}}</option>
                                                                                 </select>
                                                                               </div>
@@ -632,14 +632,14 @@
                                                                         </td>
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select style="overflow:hidden;  -webkit-appearance: none;  border:0px solid !important;"   name="student_last_name">
+                                                                                <select id="exam_schedule"    name="student_last_name">
                                                                                   <option  value="{{student.id}}">{{student.last_name}}</option>
                                                                                 </select>
                                                                               </div>
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <select style="overflow:hidden;  -webkit-appearance: none;   border:1px solid white !important;"   name="student_roll_no">
+                                                                                <select id="exam_schedule"    name="student_roll_no">
                                                                                   <option  value="{{student.id}}">{{student.roll_number}}</option>
                                                                                 </select>
                                                                               </div>
@@ -663,8 +663,8 @@
                                                             
                                                             <tr>
                                                                 <td colspan="6">
-                                                                    <div style="text-align: center;"> 
-                                                                    <input type="submit" class="md-btn md-btn-primary" style="margin: 4px; background-color: #1976d2;" value="Submit">
+                                                                    <div id="button_align"> 
+                                                                    <input type="submit" class="md-btn md-btn-primary exam_schedule_submit" value="Submit">
                                                                     </div>
 
                                                                 </td>

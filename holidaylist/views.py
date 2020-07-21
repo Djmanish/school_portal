@@ -195,7 +195,7 @@ def emailView(request,pk):
             subject = form.cleaned_data['subject']
             from_email = form.cleaned_data['from_email']
             message = form.cleaned_data['message']
-            print("yes")
+            
             try:
                 send_mail(subject, message,from_email,[to_email],fail_silently=False)
             except BadHeaderError:

@@ -532,7 +532,7 @@
                     <form  method="POST" action="{% url 'class_promotion' request.user.profile.institute.id %}" class="form-inline" id="attendance_form">
                         {% csrf_token %}
                     
-                          <label class = "required" style="margin: 4px;">Select Class</label>
+                          <label class = "required" id="required_margin">Select Class</label>
                         <select name="selected_class_promotion" class="form-control"  required>
                            <option selected disabled value="">--Select Class--</option>
 
@@ -599,38 +599,36 @@
                                 
                                   {% for student in all_students %}
                                   <tr>
-                                      <td >{{forloop.counter}}</td>
-                                      <td >
-                                        <div   class="form-group">
-                                            <select style="overflow:hidden; -webkit-appearance: none;  background-color: white;  border:1px solid white !important;" class="form-control"  name="student_first_name">
+                                      <td>{{forloop.counter}}</td>
+                                      <td>
+                                        <div class="form-group">
+                                            <select id="exam_schedule" class="form-control"  name="student_first_name">
                                               <option value="{{student.id}}">{{student.first_name}}</option>
                                             </select>
                                           </div>
-                                          
                                     </td>
                                     <td>
-                                        <div style="text-align: center;"  class="form-group">
-                                            <select style="overflow:hidden; -webkit-appearance: none;   background-color: white; border:1px solid white !important;" class="form-control"  name="student_last_name">
+                                        <div class="form-group">
+                                            <select id="exam_schedule" class="form-control"  name="student_last_name">
                                               <option  value="{{student.id}}">{{student.last_name}}</option>
                                             </select>
                                           </div>
                                     </td>
                                     <td>
-                                        <div style="text-align: center;"  class="form-group">
-                                            <select style="overflow:hidden; -webkit-appearance: none; text-align: center; background-color: white; border:1px solid white !important;" class="form-control"  name="student_roll_no">
+                                        <div class="form-group">
+                                            <select id="exam_schedule" class="form-control"  name="student_roll_no">
                                               <option  value="{{student.id}}">{{student.roll_number}}</option>
                                             </select>
                                           </div>
                                     </td>
                                     <td>
-                                        <div  class="form-group">
-                                            <select style="width:100px;text-align: center;"  name="student_promotion_status">
+                                        <div class="form-group">
+                                            <select id="promotion_status"  name="student_promotion_status">
                                               {% for status in list_promotion_choices %}
                                                  <option value='{{status}}'>{{status}}</option>
                                               {% endfor %}
                                             </select>
                                           </div>
-                                          
                                     </td>
                                   </tr>
                                  
@@ -643,8 +641,8 @@
                                       
                                   <tr>
                                     <td colspan="6">
-                                        <div style="text-align: center;"> 
-                                        <input type="submit" style="background-color: #1976d2;" class="btn btn-primary" value="Submit">
+                                        <div id="promotion_submit"> 
+                                        <input type="submit" class="btn btn-primary exam_schedule_submit" value="Submit">
                                         </div>
 
                                     </td>

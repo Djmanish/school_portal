@@ -23,6 +23,7 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.fields.files import ImageFieldFile
 from notices.models import Notice
+from examschedule.models import Edit_Exam_Date
 
 
 # Create your views here.
@@ -40,10 +41,20 @@ def exam_result(request,pk):
         # ending user notice
     
       result_institute=Institute.objects.get(pk=pk)
-      exam_result_institute=ExamResult.objects.filter(institute=result_institute)
+      edit_date=Edit_Exam_Date.objects.filter(institute=result_institute)
+     
+      
+      # edit_date=edit_date.edit_start_date
+      # edit_end_date=edit_date.edit_end_date
+      # if edit_start_date>timezone.now()<edit_end_date:
+      #     messages.error(request, 'No Editing Allowed!')
+      #     return redirect(f'/examresult/examresult/{inst}')
+
+
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
       institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
+     
     # -----------------------------------------------------------------------------------
       if request.method=="POST":
         selected_subject = Subjects.objects.get(pk=request.POST.get('result_selected_subject'))
@@ -110,6 +121,7 @@ def exam_result(request,pk):
       context={
                   'subject_result':subject_result,
                   'institute_exam_type':institute_exam_type,
+                  
                   }
       return render(request, 'teacher_view.html', context)    
   else:

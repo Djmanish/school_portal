@@ -58,58 +58,7 @@
                     <span class="sSwitchIcon"></span>
                 </a>
 
-                <!-- <div id="menu_top_dropdown" class="uk-float-left uk-hidden-small">
-                    <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
-                        <a href="#" class="top_menu_toggle"><i class="material-icons md-24">&#xE8F0;</i></a>
-                        <div class="uk-dropdown uk-dropdown-width-3">
-                            <div class="uk-grid uk-dropdown-grid">
-                                <div class="uk-width-2-3">
-                                    <div class="uk-grid uk-grid-width-medium-1-3 uk-margin-bottom uk-text-center">
-                                        <a href="page_mailbox.html" class="uk-margin-top">
-                                            <i class="material-icons md-36 md-color-light-green-600">&#xE158;</i>
-                                            <span class="uk-text-muted uk-display-block">Mailbox</span>
-                                        </a>
-                                        <a href="page_invoices.html" class="uk-margin-top">
-                                            <i class="material-icons md-36 md-color-purple-600">&#xE53E;</i>
-                                            <span class="uk-text-muted uk-display-block">Invoices</span>
-                                        </a>
-                                        <a href="page_chat.html" class="uk-margin-top">
-                                            <i class="material-icons md-36 md-color-cyan-600">&#xE0B9;</i>
-                                            <span class="uk-text-muted uk-display-block">Chat</span>
-                                        </a>
-                                        <a href="page_scrum_board.html" class="uk-margin-top">
-                                            <i class="material-icons md-36 md-color-red-600">&#xE85C;</i>
-                                            <span class="uk-text-muted uk-display-block">Scrum Board</span>
-                                        </a>
-                                        <a href="page_snippets.html" class="uk-margin-top">
-                                            <i class="material-icons md-36 md-color-blue-600">&#xE86F;</i>
-                                            <span class="uk-text-muted uk-display-block">Snippets</span>
-                                        </a>
-                                        <a href="page_user_profile.html" class="uk-margin-top">
-                                            <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
-                                            <span class="uk-text-muted uk-display-block">User profile</span>
-                                        </a>
-                                        <a href="page_institute_profile.html" class="uk-margin-top">
-                                            <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
-                                            <span class="uk-text-muted uk-display-block">Institute profile</span>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="uk-width-1-3">
-                                    <ul class="uk-nav uk-nav-dropdown uk-panel">
-                                        <li class="uk-nav-header">Components</li>
-                                        <li><a href="components_accordion.html">Accordions</a></li>
-                                        <li><a href="components_buttons.html">Buttons</a></li>
-                                        <li><a href="components_notifications.html">Notifications</a></li>
-                                        <li><a href="components_sortable.html">Sortable</a></li>
-                                        <li><a href="components_tabs.html">Tabs</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-
+            
                 <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav user_actions">
                         <li><a href="#" id="full_screen_toggle" class="user_action_icon uk-visible-large"><i class="material-icons md-24 md-light">fullscreen</i></a></li>
@@ -523,7 +472,7 @@
                                                             {% csrf_token %}
                                                            
                                                            
-                                                            <label class ="required" style="margin: 4px;">Select Class</label>
+                                                            <label class ="required" id="required_margin">Select Class</label>
                                                                 
                                                                     <select class="form-control" name="selected_class"  required>
                                                                         <option selected disabled value="">--Class--</option>
@@ -537,9 +486,9 @@
                                                                     </select>
                                                                 
                                                               
-                                                                    <label class ="required" style="margin: 4px;">Select Exam Type</label>
+                                                                    <label class ="required" id="required_margin">Select Exam Type</label>
                                                                     
-                                                                        <select class="form-control"name="selected_exam_type" style="padding: 2px; height:38px" required>
+                                                                        <select class="form-control" name="selected_exam_type" id="exam_type" required>
                                                                             <option selected disabled value="">--Exam Type--</option>
                                                                         {% for examtype in exam_type_schedule %}
                                                                             <option value="{{examtype.id}}"> {{examtype}}</option>
@@ -619,7 +568,7 @@
                                                             <div>
                                                                 <ul class="messages alert">
                                                                     
-                                                                    <li style="color: red;">No Subjects Found for Selected Class</li>
+                                                                    <li id="red_color">No Subjects Found for Selected Class</li>
                                                                     
                                                                 </ul>
                                                             </div>
@@ -646,7 +595,7 @@
                                                                     <tr> 
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select  style=" background-color: white;-webkit-appearance:none; border:1px solid white !important;" class="form-control"  name="select_exam_subject" required>
+                                                                                <select  id="exam_schedule" class="form-control"  name="select_exam_subject" required>
                                                                                   <option  value="{{exam_subject.id}}">{{exam_subject}}</option>
                                                                                 </select>
                                                                               </div>
@@ -655,18 +604,18 @@
                                                                         
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select id="hide"  style=" background-color: white; -webkit-appearance:none;border:1px solid white !important;" class="form-control"  name="select_exam_subject_teacher" required>
+                                                                                <select id="exam_schedule" class="form-control"  name="select_exam_subject_teacher" required>
                                                                                   <option  value="{{exam_subject.subject_teacher.id}}">{{exam_subject.subject_teacher.profile.first_name}} {{exam_subject.subject_teacher.profile.last_name}}</option>
                                                                                 </select>
                                                                               </div>
                                                                        
                                                                            </td>
-                                                                        <td ><div style="margin-left:20px;"  class="form-group"><input type='date',  id="datepicker" onchange="checkDate()" class="form-control", value="", name="select_date" required/></div></td>
+                                                                        <td ><div id="exam_left_align"  class="form-group"><input type='date',  id="datepicker" onchange="checkDate()" class="form-control", value="", name="select_date" required/></div></td>
                                                                         
-                                                                        <td ><div style="margin-left:20px;" class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value='', min = '00:01', max = '23:59:59', name="select_start_time" required/></div></td>
+                                                                        <td ><div id="exam_left_align"  class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value='', min = '00:01', max = '23:59:59', name="select_start_time" required/></div></td>
                                                                        
-                                                                        <td ><div style="margin-left:20px;" class="form-group"><input type='time', onchange="onTimeChange()" ,  class="form-control", value='',min = '00:01',max = '23:59:59', name="select_end_time" required/></div></td>
-                                                                        <td  >  <div style="margin-left:20px;" class="form-group">
+                                                                        <td ><div id="exam_left_align" class="form-group"><input type='time', onchange="onTimeChange()" ,  class="form-control", value='',min = '00:01',max = '23:59:59', name="select_end_time" required/></div></td>
+                                                                        <td >  <div id="exam_left_align" class="form-group">
                                                                            
                                                                             <select class="form-control" name="assign_teacher" required>
                                                                                 <option value="" selected disabled>--Assign Teacher--</option>
@@ -694,7 +643,7 @@
                                                                    
                                                                     <td colspan="6">
                                                                         <div style="text-align: center;"> 
-                                                                        <input type="submit" style="margin: 4px; background-color: #1976d2;" class="md-btn md-btn-primary " value="Submit">
+                                                                        <input type="submit"  class="md-btn md-btn-primary exam_schedule_submit" value="Submit">
                                                                     </div>
 
     

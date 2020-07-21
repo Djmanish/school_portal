@@ -16,7 +16,7 @@ class ExamType(models.Model):
   exam_per_final_score=models.CharField(max_length=100, null=True)
 
   def __str__(self):
-    return self.exam_type
+    return str(self.exam_type)
 
   
 
@@ -39,3 +39,13 @@ class ExamDetails(models.Model):
   def __str__(self):
      return str(self.exam_subject)
    
+
+
+class Edit_Exam_Date(models.Model):
+    institute=models.ForeignKey(to=Institute, on_delete=models.PROTECT, related_name='edit_date_institute', null=True)
+
+    edit_start_date=models.DateField(max_length=100, null=True)
+    edit_end_date=models.DateField(max_length=100, null=True)
+
+    def __str__(self):
+      return str(self.institute)

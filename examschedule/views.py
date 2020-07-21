@@ -99,6 +99,53 @@ def delete_test_type(request, pk):
         return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
 
 
+# Edit exam date permission
+def edit_exam_date(request,pk):
+        institute_pk = request.user.profile.institute.pk
+        edit_exam_date=Edit_Exam_Date.objects.filter(institute=request.user.profile.institute)
+        if request.method=="POST":
+               
+              
+                start_date=request.POST.get('start_date')
+                end_date= request.POST.get('end_date')
+                edit_institute=request.user.profile.institute.id
+                edit_exam_institute=Institute.objects.get(pk=edit_institute)
+                
+                edit_data=Edit_Exam_Date()
+                
+                edit_data.institute=edit_exam_institute
+                edit_data.edit_start_date=start_date
+                edit_data.edit_end_date=end_date
+                edit_data.save()
+
+        
+                messages.success(request, 'Edit date stored successfully!')
+                return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
+        context={
+                       'edit_exam_date':edit_exam_date,
+                        
+        }
+        return render(request, 'test_type_list.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def exam_schedule(request,pk):
             # starting user notice
         if request.user.profile.designation:
@@ -194,7 +241,8 @@ def create_exam_schedule(request, pk):
                
                 for subject,subject_teacher,date,start_time,end_time,assign_teacher in zip(request.POST.getlist('select_exam_subject'), request.POST.getlist('select_exam_subject_teacher'),request.POST.getlist('select_date'),request.POST.getlist('select_start_time'),request.POST.getlist('select_end_time'),request.POST.getlist('assign_teacher')):
                        
-                        schedule_date= datetime.datetime.strptime(date, '%Y-%M-%d')
+                        schedule_date= datetime.datetime.strptime(date, '%Y-%m-%d')
+                        
                         if schedule_date<datetime.datetime.now():
                                         messages.error(request, 'Date must be in future!')
                                         return redirect(f'/examschedule/examschedule/{inst_id}') 

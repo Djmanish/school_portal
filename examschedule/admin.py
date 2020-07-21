@@ -8,3 +8,5 @@ admin.site.register(ExamType)
 
 admin.site.register(ExamDetails)
 
+admin.site.register(Edit_Exam_Date)
+
