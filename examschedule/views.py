@@ -22,7 +22,10 @@ def create_test_type(request,pk):
         inst = request.user.profile.institute.id
 
         if pk==inst:        
-       
+                edit_exam_date=Edit_Exam_Date.objects.filter(institute=request.user.profile.institute)
+                for edit_date in edit_exam_date:
+                        s_date=edit_date.edit_start_date
+                        e_date=edit_date.edit_end_date
                 institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
                 exam_sr_no=ExamType.objects.filter(institute=request.user.profile.institute).count()+1
                 
@@ -45,6 +48,8 @@ def create_test_type(request,pk):
                 
                 context={
                 'institute_exam_type':institute_exam_type,
+                's_date':s_date,
+                'e_date':e_date,
                 
                 }
                 return render(request, 'test_type_list.html', context)
@@ -103,6 +108,7 @@ def delete_test_type(request, pk):
 def edit_exam_date(request,pk):
         institute_pk = request.user.profile.institute.pk
         edit_exam_date=Edit_Exam_Date.objects.filter(institute=request.user.profile.institute)
+       
         if request.method=="POST":
                
               
@@ -123,6 +129,8 @@ def edit_exam_date(request,pk):
                 return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
         context={
                        'edit_exam_date':edit_exam_date,
+                       's_date':s_date,
+                       
                         
         }
         return render(request, 'test_type_list.html', context)

@@ -512,7 +512,17 @@
            
                                         <div class="md-card">
                                             <div class="md-card-content">
-                                                <h5>Exam Result</h5>
+                                                <tr>
+
+                                                    <td>
+                                                        <h5>Edit Exam Date Between:
+                                                   
+                                                       {{edit_start_date}} - {{edit_end_date}}
+                                                    </h5>
+                                                    </td>
+                                                </tr>
+                                              
+                                                
                                                         <form method="POST"  class="form-inline" id="attendance_form">
                                                             {% csrf_token %}
                                                             
@@ -565,6 +575,7 @@
                                                             </script>
                                                     
                                                     <div class="md-card-content">
+                                                    
 
                                                         <div class="uk-overflow-container uk-margin-bottom">
                                                         
@@ -578,7 +589,7 @@
                                                             
                                                             <th ><b>Subject Class: {{selected_subject.subject_class}}</b></th>
                                                             <th ><b>Exam Type: {{exam_type_id}}</b></th>
-                                                            <th ><b>Exam Sr. No.: {{result_exam_type_sr_no}}</b></th>
+                                                            <th ><b>Exam Sr. No.: {{result_exam_type_sr_no}} </b></th>
 
 
                                             
@@ -679,7 +690,7 @@
                                                     </div>
                                                     </div>
                                                     
-                                                </div>
+                                                </div></div>>
               
                                             </div>
                                         </div> 
