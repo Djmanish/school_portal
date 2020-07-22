@@ -106,8 +106,8 @@ class VerifyEmail(generics.GenericAPIView):
             if not user.is_staff:
                 user.is_staff = True
                 user.save()
-
-            return Response({'email':'Successfully activated!'}, status=status.HTTP_200_OK)
+            return render(request, 'activation_complete.html', locals())
+            # return Response({'email':'Successfully activated!'}, status=status.HTTP_200_OK)
 
         except jwt.ExpiredSignatureError as identifier:
             return Response({'error':'Activation Expired!'},status=status.HTTP_400_BAD_REQUEST)
