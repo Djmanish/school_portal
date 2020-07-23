@@ -20,9 +20,13 @@ def create_test_type(request,pk):
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
          # ending user notice
         inst = request.user.profile.institute.id
+        edit_exam_date=Edit_Exam_Date.objects.filter(institute=request.user.profile.institute)
+        for edit_date in edit_exam_date:
+                        s_date=edit_date.edit_start_date
+                        e_date=edit_date.edit_end_date
 
         if pk==inst:        
-       
+               
                 institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
                 exam_sr_no=ExamType.objects.filter(institute=request.user.profile.institute).count()+1
                 
@@ -45,6 +49,8 @@ def create_test_type(request,pk):
                 
                 context={
                 'institute_exam_type':institute_exam_type,
+                's_date':s_date,
+                'e_date':e_date,
                 
                 }
                 return render(request, 'test_type_list.html', context)
@@ -103,11 +109,18 @@ def delete_test_type(request, pk):
 def edit_exam_date(request,pk):
         institute_pk = request.user.profile.institute.pk
         edit_exam_date=Edit_Exam_Date.objects.filter(institute=request.user.profile.institute)
+        inst_id = request.user.profile.institute.pk
         if request.method=="POST":
                
               
                 start_date=request.POST.get('start_date')
+
                 end_date= request.POST.get('end_date')
+                schedule_date= datetime.datetime.strptime(start_date, '%Y-%m-%d')
+                        
+                if schedule_date<datetime.datetime.now():
+                                        messages.error(request, 'Date must be in future!')
+                                        return redirect(f'/examschedule/examtypelist/{inst_id}') 
                 edit_institute=request.user.profile.institute.id
                 edit_exam_institute=Institute.objects.get(pk=edit_institute)
                 
@@ -123,6 +136,8 @@ def edit_exam_date(request,pk):
                 return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
         context={
                        'edit_exam_date':edit_exam_date,
+                #        's_date':s_date,
+                       
                         
         }
         return render(request, 'test_type_list.html', context)
@@ -244,8 +259,8 @@ def create_exam_schedule(request, pk):
                         schedule_date= datetime.datetime.strptime(date, '%Y-%m-%d')
                         
                         if schedule_date<datetime.datetime.now():
-                                        messages.error(request, 'Date must be in future!')
-                                        return redirect(f'/examschedule/examschedule/{inst_id}') 
+                                messages.error(request, 'Date must be in future!')
+                                return redirect(f'/examschedule/examschedule/{inst_id}')  
                         
 
                         new_exam = ExamDetails()

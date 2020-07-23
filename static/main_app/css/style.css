@@ -455,9 +455,6 @@ input[type="checkbox"]:required:valid + label::before {
   color:#2196f3;
 }
 
-#delete_button{
-  color: #ff0000;
-}
 #required_margin{
   margin:4px;
 }
@@ -506,3 +503,4 @@ color:#ff0000;
 #edit_exam_date{
   margin-left: 700px;
 }
+
