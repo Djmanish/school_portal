@@ -121,6 +121,7 @@ class VerifyEmail(generics.GenericAPIView):
         except jwt.exceptions.DecodeError as identifier:
             return Response({'error':'Invalid token!'}, status=status.HTTP_400_BAD_REQUEST)
 
+@permission_classes((AllowAny, ))
 class RequestPasswordResetEmail(generics.GenericAPIView):
     serializer_class = ResetPasswordEmailRequestSerializer
 
@@ -144,6 +145,8 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
         return Response({'success':'We have sent you a link to reset your password'},status=status.HTTP_200_OK)
         
 
+
+@permission_classes((AllowAny, ))
 class PasswordTokenCheckAPI(generics.GenericAPIView):
     def get(self, request, uidb64, token):
         try:
@@ -161,9 +164,10 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
 
 
 
+@permission_classes((AllowAny, ))
 class SetNewPasswordAPIView(generics.GenericAPIView):
     serializer_class = SetNewPasswordSerializer
     def patch(self, request):
-        serializer = self.serializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response({'success':True, 'message':'Password reset successful'}, status = status.HTTP_200_OK)
