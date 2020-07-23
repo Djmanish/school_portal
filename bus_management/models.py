@@ -76,7 +76,7 @@ class InstituteLocation(models.Model):
         return str(self.institute)
 
 class BusUsers(models.Model):
-    # user = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='bus_users')
+    user = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='bus_users')
     point = models.ForeignKey(to=Point, on_delete=models.CASCADE)
     institute = models.ForeignKey(to=Institute, related_name="user_institute", on_delete=models.CASCADE, null=True, blank=True)
     def __str__(self):
