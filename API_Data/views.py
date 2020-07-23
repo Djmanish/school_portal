@@ -109,8 +109,8 @@ class VerifyEmail(generics.GenericAPIView):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY)
             user= User.objects.get(id=payload['user_id'])
-            if not user.is_staff:
-                user.is_staff = True
+            if not user.is_active:
+                user.is_active = True
                 user.save()
             # return render(request, 'activation_complete.html', locals())
             return Response({'email':'Successfully activated!'}, status=status.HTTP_200_OK)
