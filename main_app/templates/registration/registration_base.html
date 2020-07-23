@@ -15,7 +15,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app//img/favicon-16x16.png' %} " sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %} " sizes="32x32">
 
-    <title>Register Page</title>
+    <title>{% block title %} {% endblock %}</title>
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -38,7 +38,15 @@
     <div class="login_page_wrapper">
         <div class="md-card" id="login_card">
             <div class="md-card-content large-padding" id="login_form">
-               <p>  We have sent you a to your email. Follow the link to activate your account.</p>
+               
+
+                {% block content %}
+          
+                {% endblock %}
+                
+                
+              
+                
               
             </div>
         </div>
