@@ -70,7 +70,7 @@ def exam_result(request,pk):
                   'edit_end_date':edit_end_date,
 
               }
-              messages.error(request, 'Today date is not between edit  marks dates!')
+              messages.error(request, f'Edit marks date between {edit_start_date} - {edit_end_date}')
               return render(request, 'teacher_view.html', context) 
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)

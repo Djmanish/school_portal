@@ -483,7 +483,11 @@
                                                     
                                                     <div>
                                                         &nbsp
-                                                        <h6>Edit Marks Date for latest exam between: {{s_date}} - {{e_date}}</h6>
+                                                        {% if s_date %}
+                                                            <h6>Edit Marks Date for latest exam between: {{s_date}} - {{e_date}}</h6>
+                                                        {% else %}
+                                                        <h6>Edit Marks Date for latest exam between: Not defined yet </h6>
+                                                        {% endif %}
                                                     </div>
                                                    
 
