@@ -82,9 +82,10 @@ def add_point(request):
         p_place = request.POST['point_place'].strip()
         p_city = request.POST['point_city'].strip()
         p_state = request.POST['point_state']
-        sel_state = State.objects.get(pk=p_state)
-        
+        sel_state = State.objects.get(pk=p_state)        
         p_country = request.POST['point_country'].strip()
+        p_long = request.POST['point_longitute']
+        p_lat = request.POST['point_latitute']
         if p_street_no == "":
             p_street_no = None
         
@@ -93,7 +94,7 @@ def add_point(request):
         except Point.DoesNotExist:
             chk_point = 0 
         if chk_point == 0:
-            new_point = Point.objects.create(point_code=p_code, point_name=p_name, point_street_no=p_street_no, point_landmark=p_landmark,point_exact_place=p_place, point_city=p_city, point_state=sel_state, point_country=p_country,  point_institute=request.user.profile.institute)
+            new_point = Point.objects.create(point_code=p_code, point_name=p_name, point_street_no=p_street_no, point_landmark=p_landmark,point_exact_place=p_place, point_city=p_city, point_state=sel_state, point_country=p_country,  point_institute=request.user.profile.institute, longitude=p_long ,latitude=p_lat)
             messages.success(request, 'Point added successfully !')  
             return HttpResponseRedirect(f'/bus/')       
         else:
