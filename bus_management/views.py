@@ -48,11 +48,11 @@ def add_bus(request):
         print(b_no)
         try:
             chk_bus= Bus.objects.get(bus_no=b_no, bus_institute=request.user.profile.institute)
-            messages.error(request, 'Bus Is Already Exists !')
+            messages.error(request, 'Vehicle with this registration number already exists !')
             return HttpResponseRedirect(f'/bus/')    
         except Bus.DoesNotExist:
             new_bus = Bus.objects.create(bus_no=b_no, bus_maker=b_maker, vehicle_type=b_type,fuel_type=b_fuel, bus_color=b_color, bus_capacity=b_capacity, bus_institute=request.user.profile.institute)
-            messages.success(request, 'Bus Added successfully !')  
+            messages.success(request, 'Vehicle added successfully !')  
             return HttpResponseRedirect(f'/bus/')
 
 def edit_bus(request):
@@ -67,7 +67,7 @@ def edit_bus(request):
         srch_bus.bus_color = request.POST['edit_bus_colo'].strip()
         srch_bus.bus_capacity = request.POST['edit_bus_capacit'].strip()
         srch_bus.save()
-        messages.success(request, 'Bus Info Updated Successfully !')  
+        messages.success(request, 'Vehicle details updated successfully !')  
         return HttpResponseRedirect(f'/bus/')
 
 
@@ -82,16 +82,18 @@ def add_point(request):
         p_city = request.POST['point_city'].strip()
         p_state = request.POST['point_state']
         sel_state = State.objects.get(pk=p_state)
-        print(sel_state)
+        
         p_country = request.POST['point_country'].strip()
-        print("Hello")
+        if p_street_no == "":
+            p_street_no = None
+        
         try:
             chk_point= Point.objects.get(point_code=p_code, point_institute=request.user.profile.institute)
         except Point.DoesNotExist:
             chk_point = 0 
         if chk_point == 0:
             new_point = Point.objects.create(point_code=p_code, point_name=p_name, point_street_no=p_street_no, point_landmark=p_landmark,point_exact_place=p_place, point_city=p_city, point_state=sel_state, point_country=p_country,  point_institute=request.user.profile.institute)
-            messages.success(request, 'Point Created successfully !')  
+            messages.success(request, 'Point added successfully !')  
             return HttpResponseRedirect(f'/bus/')       
         else:
             messages.error(request, 'Point Is Already Exists !')
