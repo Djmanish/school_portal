@@ -31,39 +31,21 @@ from django.core.exceptions import ValidationError
 # Create your views here.
 def exam_result(request,pk):
   inst = request.user.profile.institute.id
-
   today_date=timezone.now()
-  
-  
-
   if pk==inst:
         # starting user notice
       if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
         # ending user notice
-    
-      
              
-          # else:
-           
-            # messages.error(request, 'No Editing Allowed!')
-            # return redirect(f'/examresult/examresult/{inst}')
-            # print("hello")
-            # if schedule_end_date>datetime.datetime.now():
-          #      pass
-          # else:
-             
-
+      # get the Edt_Exam_Date MODEL data
       result_institute=Institute.objects.get(pk=pk)
       edit_date=Edit_Exam_Date.objects.filter(institute=result_institute)
-      
       for e_date in edit_date:
-        
-        
           edit_start_date=e_date.edit_start_date
           edit_end_date=e_date.edit_end_date
          
-          if edit_start_date>timezone.now().date() and edit_end_date>timezone.now().date():
+          if edit_start_date>timezone.now().date() and edit_end_date>timezone.now().date() or edit_start_date == None and edit_end_date == None:
               date1=str(edit_end_date)
               context={
                   'edit_start_date':edit_start_date,
@@ -72,6 +54,9 @@ def exam_result(request,pk):
               }
               messages.error(request, f'Edit marks date between {edit_start_date} - {edit_end_date}')
               return render(request, 'teacher_view.html', context) 
+          else:
+              pass
+             
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
       institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
@@ -80,31 +65,7 @@ def exam_result(request,pk):
       if request.method=="POST":
         selected_subject = Subjects.objects.get(pk=request.POST.get('result_selected_subject'))
         result_exam_type=request.POST.get('result_exam_type')
-        # result_institute=Institute.objects.get(pk=pk)
-        # edit_date=Edit_Exam_Date.objects.filter(institute=result_institute)
-      
-        # for e_date in edit_date:
         
-        
-        #   edit_start_date=e_date.edit_start_date
-        #   # e_start_date=str(edit_start_date)
-         
-        #   # schedule_start_date= datetime.datetime.strptime(e_start_date, '%Y-%m-%d')
-        #   edit_end_date=e_date.edit_end_date
-        #   # e_end_date=str(edit_end_date)
-        #   # schedule_end_date= datetime.datetime.strptime(e_end_date, '%Y-%m-%d')
-        #   # print(schedule_start_date.date())
-        #   # print(timezone.now().date())
-        #   if edit_start_date>timezone.now().date() and edit_end_date<timezone.now().date():
-        #       date1=str(edit_end_date)
-        #       context={
-        #           'edit_start_date':edit_start_date,
-        #           'edit_end_date':edit_end_date,
-
-        #       }
-        #       messages.error(request, 'Today date is not between edit  marks dates')
-        #       return render(request, 'teacher_view.html', context) 
-            # pass
         schedule_exam_type=ExamDetails.objects.filter(institute=request.user.profile.institute)
         institute_pk = request.user.profile.institute.pk
         if result_exam_type==None:
@@ -125,16 +86,7 @@ def exam_result(request,pk):
           return redirect(f'/examresult/examresult/{inst}')
         
         exam_schedule_date=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_subject=selected_subject,exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,)
-        # for date in exam_schedule_date:
-        #   exam_s_date=date.exam_date
-        #   if today_date>=exam_s_date:
-        #     pass
-          
-        #   else:
-        #     messages.error(request, 'Current date does not match with exam schedule date!')
-                 
-        #     return HttpResponseRedirect(f'/examresult/examresult/{institute_pk}') 
-           
+         
        
         exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,exam_class__name=selected_subject.subject_class )
            

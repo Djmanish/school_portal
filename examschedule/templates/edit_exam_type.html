@@ -208,7 +208,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -363,7 +363,7 @@
             <ul>
                 {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
 
-                <li>
+                <li class="act_item">
                     <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
                         <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                         <span class="menu_title">Create Exam</span>

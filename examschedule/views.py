@@ -159,30 +159,18 @@ def edit_exam_date(request,pk):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# function for create exam type
 def exam_schedule(request,pk):
-            # starting user notice
+        # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
-    # ending user notice
+        # ending user notice
         inst = request.user.profile.institute.id
 
+        # if id does not match with institute id
         if pk!=inst:
                 raise PermissionDenied 
+        # fetch the institute id
         institute_exam_schedule_data = Institute.objects.get(pk=pk)
         institute_exam_schedule = ExamDetails.objects.filter(institute=institute_exam_schedule_data)
 
@@ -196,14 +184,20 @@ def exam_schedule(request,pk):
         institute_pk = request.user.profile.institute.pk
 
         if request.method=="POST":
-                select_class_for_schedule = request.POST.get('selected_class')
+                # get the value from the upper selected box
+                select_class_for_schedule = request.POST.get('selected_class') #selected class
                 selected_class = Classes.objects.get(pk=select_class_for_schedule)
-                select_exam_for_schedule = request.POST.get('selected_exam_type')
+
+                select_exam_for_schedule = request.POST.get('selected_exam_type')#selected exam type
                 selected_exam_type = ExamType.objects.get(pk=select_exam_for_schedule)
                 
                 
-                exam_class_subject=Subjects.objects.filter(subject_class=selected_class)
+                exam_class_subject=Subjects.objects.filter(subject_class=selected_class)#exam class
+
+                # get the value of sr no
                 sr_no=ExamDetails.objects.filter(exam_type__exam_type=selected_exam_type,exam_class=selected_class).values('exam_sr_no').distinct().count()+1
+                
+                # check exam type limit
                 exam_type_limit=ExamType.objects.filter(institute=request.user.profile.institute, exam_type=selected_exam_type)
                 for exam_limit in exam_type_limit:
                         limit=exam_limit.exam_max_limit
@@ -212,7 +206,7 @@ def exam_schedule(request,pk):
                 if sr_no<=limit_exam:
                     pass
                 else:
-                    messages.error(request, 'Exam Limit has exceeded')
+                    messages.error(request, 'Exam Limit has exceeded!')
                     return HttpResponseRedirect(f'/examschedule/examschedule/{institute_pk}')
 
                 if exam_class_subject:
@@ -244,23 +238,24 @@ def exam_schedule(request,pk):
         return render(request,'examschedule.html',context)
 
 def create_exam_schedule(request, pk):
-            # starting user notice
+        # starting user notice
         if request.user.profile.designation:
                  request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
-    # ending user notice
+        # ending user notice
         
+        # get the institute id
         institute_exam_schedule_data = Institute.objects.get(pk=pk)
         institute_exam_schedule = ExamDetails.objects.filter(institute=institute_exam_schedule_data)
-        
         inst_id=request.user.profile.institute.id
+
+        # get all the teachers
         designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
         institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
-        today_date=timezone.now()
-        
 
+        # today's time
+        today_date=timezone.now()
 
         if request.method == "POST":
-                         
                 selected_class=Classes.objects.get(pk=request.POST.get('selected_class_hidden'))
                 select_exam_type= ExamType.objects.get(pk=request.POST.get('exam_type_id_hidden'))
                 exam_code=request.POST.get('exam_institute_code')
@@ -275,7 +270,8 @@ def create_exam_schedule(request, pk):
                                 messages.error(request, 'Date must be in future!')
                                 return redirect(f'/examschedule/examschedule/{inst_id}')  
                         
-
+                        else: 
+                                pass
                         new_exam = ExamDetails()
                         new_exam.institute=request.user.profile.institute 
                         new_exam.exam_subject = Subjects.objects.get(pk=subject)

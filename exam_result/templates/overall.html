@@ -208,7 +208,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -386,7 +386,7 @@
                             </li>
                            
                             {% if user.profile.designation.level_name == "teacher"%}
-                            <li>
+                            <li >
                                 <a href="{% url 'examresult' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                                     <span class="menu_title">Exam Result</span>
@@ -404,7 +404,7 @@
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
                         
-                            <li>
+                            <li class="act_item">
                                 <a href="{% url 'report_card' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">file_copy</i></span>
                                     <span class="menu_title">Report Card</span>
@@ -566,7 +566,9 @@
 
                     </form>
         
-        <table class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
+        <table
+                                                            class="uk-table uk-table-condensed uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-hover"
+                                                            id="ts_issues">
         <tbody >
             <tr>
                 <table  class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
@@ -577,29 +579,31 @@
 
             </table>
         </tr>
-        <table class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
+        <table
+        class="uk-table uk-table-condensed uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-hover"
+        id="ts_issues">
 
        
             
-            
+            <thead>
             
             <tr >
-                <td >Subjects
-                    </td >
+                <th >Subjects
+                    </th >
               {% for exam  in type_exam %}
               <td></td>
-              <td>
+              <th>
                   {{exam}}
               
-              </td>
+              </th>
              
               {% endfor %}
           <td></td>
   
   
-              <td>Final Score</td>
+              <th>Final Score</th>
             </tr>
-          
+        </thead>
             
             {% for data in sub_percent_list %}
                     

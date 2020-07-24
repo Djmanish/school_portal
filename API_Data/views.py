@@ -13,6 +13,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from rest_framework import generics
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, redirect
+
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
@@ -112,8 +115,11 @@ class VerifyEmail(generics.GenericAPIView):
             if not user.is_active:
                 user.is_active = True
                 user.save()
-            # return render(request, 'activation_complete.html', locals())
-            return Response({'email':'Successfully activated!'}, status=status.HTTP_200_OK)
+                
+            return HttpResponseRedirect(f'activate/complete/')
+
+            # return redirect( 'http://trueblueappworks.com/accounts/activate/complete/')
+            # return Response({'email':'Successfully activated!'}, status=status.HTTP_200_OK)
 
         except jwt.ExpiredSignatureError as identifier:
             return Response({'error':'Activation Expired!'},status=status.HTTP_400_BAD_REQUEST)
@@ -135,11 +141,11 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
                 uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
                 token = PasswordResetTokenGenerator().make_token(user)
                 current_site=get_current_site(request=request).domain
-                relativeLink=reverse('password-reset-confirm', kwargs={'uidb64':uidb64, 'token':token})
+                relativeLink=reverse('password-reset-confirm', kwargs={'uidb64':uidb64})
                 
                 absurl='http://'+current_site+relativeLink
                 email_body='Hi\n' +user.username+"\nUse Link below to verify your email\n"+absurl
-                data={'email_body':email_body,'to_email':user.email,'email_subject':'Verify Your Email'}
+                data={'email_body':email_body,'to_email':user.email,'email_subject':'Password Reset'}
 
         Util.send_email(data)
         return Response({'success':'We have sent you a link to reset your password'},status=status.HTTP_200_OK)
@@ -148,7 +154,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
 
 @permission_classes((AllowAny, ))
 class PasswordTokenCheckAPI(generics.GenericAPIView):
-    def get(self, request, uidb64, token):
+    def get(self, request, uidb64):
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(id=id)

@@ -10,6 +10,7 @@ from rest_framework.authtoken import views as authviews
 from rest_framework_jwt.views import obtain_jwt_token
 from notices import views as notice_views
 from API_Data.router import router
+from API_Data.views import *
 
 
 urlpatterns = [
@@ -30,11 +31,20 @@ urlpatterns = [
     path('notice/', include('notices.urls') ),
     path('fees/', include('fees.urls')),
     path('api/', include('API_Data.urls')),
+    
+
+   
+
+    
+
    # API URL
     path('users/', userList.as_view()),
     path('users_login_data/', userLoginData.as_view()),
     path('api-token-auth/', obtain_jwt_token),
     path('api/',include(router.urls)),
+    path('accounts/activate/', VerifyEmail.as_view(), name="email-verify"),
+    path('accounts/password/reset/confirm/<uidb64>/set-password/', PasswordTokenCheckAPI.as_view(), name='password-reset-confirm'),
+   
 
     path('notice/view/time/', notice_views.last_notice_view_time)
     
