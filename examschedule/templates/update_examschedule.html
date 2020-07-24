@@ -520,7 +520,7 @@
 
                                                                 {% if user.profile.designation.level_name == "parent" %}
                                                                 <td>
-                                                                    <label class ="required" style="margin: 4px;">Select Student</label>
+                                                                    <label class ="required" id="required_margin">Select Student</label>
                                                                     <select class="form-control" id="selected_student" name="selected_student" style="padding: 2px;"
                                                                         required>
                                                                         <option selected disabled value="">--Select Student--</option>
@@ -529,14 +529,14 @@
                                                                         {% endfor %}
                                                                     </select>
                                                                 </td>
-                                                                <label class ="required" style="margin: 4px;">Select Exam Type</label>
+                                                                <label class ="required" id="required_margin">Select Exam Type</label>
                                                                 <select class="form-control" id="selected_exam_type" name="selected_exam_type"  required>
                                                 
                                                                     <option selected disabled value="">--Exam Type--</option>
                                                                    
                                                                 </select>
                                                              
-                                                                <label class ="required" style="margin: 4px;">Select Exam Type No.</label>
+                                                                <label class ="required" id="required_margin">Select Exam Type No.</label>
                                                             
                                                                 <select class="form-control" id="fetch_sr_no" name="selected_exam_type_no"  required>
                                                                     <option selected disabled value=''>--Exam Type No.--</option>
@@ -546,7 +546,7 @@
                                                            
                                                                 {% if user.profile.designation.level_name != "student" and  user.profile.designation.level_name != "parent"%}
                                   
-                                                                <label class ="required" style="margin: 4px;">Select Class</label>
+                                                                <label class ="required" id="required_margin">Select Class</label>
                                                                     <select class="form-control" name="selected_class"  required>
                                                                         <option selected disabled value="">--Class--</option>
                                                                         
@@ -554,7 +554,7 @@
                                                                            <option value="{{class.id}}"> {{class}}</option>
                                                                         {% endfor %}
                                                                     </select>
-                                                                    <label class ="required" style="margin: 4px;">Select Exam Type</label>
+                                                                    <label class ="required" id="required_margin">Select Exam Type</label>
                                                                     <select class="form-control" id="selected_exam_type" name="selected_exam_type"  required>
                                                     
                                                                         <option selected disabled value="">--Exam Type--</option>
@@ -564,7 +564,7 @@
                                                                         {% endfor %}
                                                                     </select>
                                                                  
-                                                                    <label class ="required" style="margin: 4px;">Select Exam Type No.</label>
+                                                                    <label class ="required" id="required_margin">Select Exam Type No.</label>
                                                                 
                                                                     <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no"  required>
                                                                         <option selected disabled value=''>--Exam Type No.--</option>
@@ -573,7 +573,7 @@
 
                                                                 {% endif %}
                                                                 {% if user.profile.designation.level_name == "student" %}
-                                                                <label class ="required" style="margin: 4px;">Select Exam Type</label>
+                                                                <label class ="required" id="required_margin">Select Exam Type</label>
                                                                     <select class="form-control" id="selected_exam_type" name="selected_exam_type"  required>
                                                     
                                                                         <option selected disabled value="">--Exam Type--</option>
@@ -583,7 +583,7 @@
                                                                         {% endfor %}
                                                                     </select>
                                                                  
-                                                                    <label class ="required" style="margin: 4px;">Select Exam Type No.</label>
+                                                                    <label class ="required" id="required_margin">Select Exam Type No.</label>
                                                                 
                                                                     <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no"  required>
                                                                         <option selected disabled value=''>--Exam Type No.--</option>
@@ -678,8 +678,7 @@
                                                                 {% if exam_details %}
                                                                     
                                                                  
-                                                            <tr >
-                                                               
+                                                            <tr>                                                               
                                                                 <td>Subject</td>
                                                                 <td>Subject Teacher</td>
                                                                 <td>Date</td>
@@ -690,7 +689,7 @@
 
                                                                 <td>Edit</td>
                                                                 <td>Delete</td>
-                                                            </tr >
+                                                            </tr>
 
                                                                 {% endif %}
                                                                 
@@ -712,9 +711,9 @@
                                                                             
                                                                 {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
 
-                                                                            <td><a   href="{% url 'edit_examschedule' institute_exam_schedule.pk%}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
+                                                                            <td><a   href="{% url 'edit_examschedule' institute_exam_schedule.pk%}"><i class="material-icons" id="edit_button">edit</i></a>
                                                                             </td>
-                                                                            <td><a  href="{% url 'delete_examschedule' institute_exam_schedule.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                                            <td><a  href="{% url 'delete_examschedule' institute_exam_schedule.pk %}"><i class="material-icons" id="red_color">delete_forever</i></a>
                                                                             </td>
                                                                             {% endif %}
                                                                         </tr>

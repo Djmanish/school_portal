@@ -652,7 +652,7 @@
                                           <div class="form-group">
                                             <label class="required" style="color: black;">Fuel Type</label>
                                             <select id="bus_fuel_type" class="form-control-sm form-control" name="bus_fuel_type" required>
-                                                <option>--Select--</option>
+                                                <option selected disabled value="" > -- Select -- </option>
                                                 <option value="petrol">Petrol</option>
                                                 <option value="diesel">Diesel</option>
                                                 <option value="cng">CNG</option>
@@ -779,7 +779,7 @@
                                 <div class="uk-modal-dialog">
                                     <button type="button" class="uk-modal-close uk-close"></button>
                                     <div class="uk-modal-header">
-                                        <h3 class="uk-text-primary">Edit Vehicle</h3>
+                                        <h3 class="uk-text-primary">Update Vehicle Details</h3>
                                     </div>
                                     <form  method="POST" action="{% url 'edit_bus' %}">
                                         {% csrf_token %}
@@ -797,7 +797,7 @@
                                             <input type="text" class="form-control" id="edit_bus_type" name="edit_bus_typ" required>
                                           </div>
                                           <div class="form-group">
-                                            <label class="required" style="color: black;">Bus Color</label>
+                                            <label class="required" style="color: black;">Vehicle Color</label>
                                             <input type="text" class="form-control" id="edit_bus_color" name="edit_bus_colo" required>
                                           </div>
                                           <div class="form-group">
@@ -812,7 +812,7 @@
                                             </select>
                                           </div>
                                           <div class="form-group">
-                                            <label class="required" style="color: black;">Bus Capacity</label>
+                                            <label class="required" style="color: black;">Vehicle Capacity</label>
                                             <input type="number" class="form-control" id="edit_bus_capacity" name="edit_bus_capacit" required>
                                           </div>                                                                                                 
                                               <table>
