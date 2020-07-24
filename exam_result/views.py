@@ -278,7 +278,8 @@ def report_card(request,pk):
               select_exam_type = request.POST.get('result_exam_type')
              
               if select_exam_type=="Overall":
-                if request.POST.get("report_cart_button"):
+                
+                if "report_cart_button" in request.POST:
                     # return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
                   return overall_report_card(request,exam_id,selected_student.id)
 
@@ -291,7 +292,7 @@ def report_card(request,pk):
 
                   # return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{request.user.id}')
               else :
-                if select_exam_type!="overall":
+                if select_exam_type!="Overall":
                   
                     if request.POST.get("report_cart_button"):
                       return reports_card(request,exam_id)
@@ -419,7 +420,7 @@ def report_card(request,pk):
                     return overall_result(request,exam_id,selected_student.id)
                     # return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{selected_student.id}')
               else :
-                if select_exam_type!="overall":
+                if select_exam_type!="Overall":
                   
                     if request.POST.get("report_cart_button"):
                       return reports_card(request,exam_id)
@@ -732,7 +733,7 @@ def overall_result(request,pk,student_pk):
                               } 
                   return render(request, 'overall.html', context)
               else :
-                    if select_exam_type!="overall":
+                    if select_exam_type!="Overall":
                         
                       
                         if request.POST.get("report_cart_button"):
@@ -934,7 +935,7 @@ def overall_result(request,pk,student_pk):
               return render(request, 'overall.html', context)
               
           else :
-              if select_exam_type!="overall":
+              if select_exam_type!="Overall":
                     if request.POST.get("report_cart_button"):
                         return reports_card(request,exam_id)
                             # return HttpResponseRedirect(f'/examresult/reports_card/{exam_id}')
