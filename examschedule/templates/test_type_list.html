@@ -503,19 +503,19 @@
                                                                 {% csrf_token %}
                                                                      <div class="form-group" >
                                                                         <label class="required">Exam Type</label>
-                                                                        <input type="text" class="form-control n_i" name="exam_type"  required>
+                                                                        <input type="text" class="form-control" name="exam_type"  required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label class="required">Maximum Marks</label>
-                                                                        <input type="number" class="form-control" name="exam_max_marks"  min="0" required>
+                                                                        <input type="number" class="form-control only_decimal" name="exam_max_marks"  min="0" required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label class="required">Maximum Exam Limit</label>
-                                                                        <input type="number" class="form-control" name="exam_max_limit" min="0" required>
+                                                                        <input type="number" class="form-control only_decimal" name="exam_max_limit" min="0" required>
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label class="required">% of Final Score</label>
-                                                                        <input type="number" class="form-control" name="exam_per_final_score" min="0" required>
+                                                                        <input type="number" class="form-control only_decimal" name="exam_per_final_score" min="0" required>
                                                                       </div>
                                                                       <table>
                                                                         <tr>
