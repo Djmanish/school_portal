@@ -698,7 +698,11 @@ def overall_result(request,pk,student_pk):
                             count=0
                             for i in resultsubject:
                                 count=count+1
-                            total_marks_count=count*100
+                            try:
+
+                               total_marks_count=count*100
+                            except:
+                              total_marks_count=1
 
                             final_percent_result=(sum/total_marks_count)*100
                             grand_result=round(final_percent_result,2)
@@ -896,6 +900,7 @@ def overall_result(request,pk,student_pk):
                         for i in resultsubject:
                            
                             count=count+1
+                            
                         total_marks_count=count*100
                         try:
 
@@ -1681,7 +1686,11 @@ def overall_report_card(request,pk,student_pk):
         count=0
         for i in resultsubject:
             count=count+1
-        total_marks_count=count*100
+
+        try:
+            total_marks_count=count*100
+        except:
+            total_marks_count=1
 
         final_percent_result=(sum/total_marks_count)*100
         grand_result=round(final_percent_result,2)
