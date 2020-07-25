@@ -38,6 +38,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
 from django.core.exceptions import PermissionDenied
 from rest_framework.authtoken.models import Token
+from django.views import *
 
 
 
@@ -106,7 +107,10 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return True
         else:
             return False
-   
+    def no_future(value):
+        today = date.today()
+        if value > today:
+            return messages.error(request, 'Establish Date cannot be in the future.')
 
 
     def get_success_url(self, **kwargs):         
@@ -290,32 +294,6 @@ def index(request):
 
 @login_required
 def dashboard(request):
-    # Bus Location
-    if request.user.profile.designation:
-        if request.user.profile.designation.level_name != "driver":
-            request.user.ins_loc = InstituteLocation.objects.get(institute=request.user.profile.institute)
-            my_loc = BusUsers.objects.get(user=request.user.profile)
-            # print(my_loc.point.id)
-            request.user.location = Point.objects.get(id=my_loc.point.id)
-            route = RouteMap.objects.get(point__id=my_loc.point.id)
-            request.user.routes = RouteMap.objects.filter(route=route.route)
-            # q1= routes.exclude(point__id=my_loc.point.id)
-            try:
-                request.user.bus_loc = Trip.objects.filter(route=route.route, date = datetime.date.today()).last()
-                # request.user.q2 = routes.exclude(point__id = bus_loc.point.id)
-            except:
-                pass
-        
-
-
-
-    # Driver Dashboard
-    if request.user.profile.designation:    
-       if request.user.profile.designation.level_name == "driver":
-           request.user.driver_data = RouteInfo.objects.get(vehicle_driver__name=request.user.profile)
-           request.user.today =datetime.date.today()
-        #    print(driver_data) 
-
     # random classmates for student
     std_random=UserProfile.objects.filter(institute=request.user.profile.institute,Class=request.user.profile.Class,designation__level_name="student").exclude(user=request.user).order_by('?')[:5]
     
@@ -346,8 +324,6 @@ def dashboard(request):
             if request.method == "POST":
                 request.user.student=request.POST.get('selected_child')
                 std_child=UserProfile.objects.get(id=request.user.student)
-                print('Hello')
-                print(std_child)
                 request.user.post_child=std_child
                 request.user.holiday_child=HolidayList.objects.filter(institute=std_child.institute,applicable="Yes")
                 request.user.exam_she_child=ExamDetails.objects.filter(institute=std_child.institute,exam_class=std_child.Class)
@@ -435,7 +411,8 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "parent":
                 
             request.user.user_child_books_status = []
-            user_children= AddChild.objects.filter( parent= request.user.profile)
+            user_children= AddChild.objects.filter( parent= request.user.profile, status="active")
+
             
             parent_student_list = []
             for books in user_children:
@@ -1063,8 +1040,6 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
             return True
         else:
             return False
-   
-
     
     def get_context_data(self, **kwargs):
        
@@ -1395,5 +1370,3 @@ def set_loc(request):
         pass
     return render(request, 'main_app/map.html')
 
-
-        

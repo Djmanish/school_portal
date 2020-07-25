@@ -435,3 +435,8 @@ input[type="checkbox"]:required:valid + label::before {
   font-weight: 900;
    color: white;
 }
+
+.alink {
+  color: green;
+}
+
