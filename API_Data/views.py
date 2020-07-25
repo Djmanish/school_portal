@@ -116,7 +116,7 @@ class VerifyEmail(generics.GenericAPIView):
                 user.is_active = True
                 user.save()
                 
-            return HttpResponseRedirect(f'activate/complete/')
+            return HttpResponseRedirect(f'complete/')
 
             # return redirect( 'http://trueblueappworks.com/accounts/activate/complete/')
             # return Response({'email':'Successfully activated!'}, status=status.HTTP_200_OK)
@@ -156,7 +156,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
 class PasswordTokenCheckAPI(generics.GenericAPIView):
     def get(self, request, uidb64):
         try:
-            id = smart_str(urlsafe_base64_decode(uidb64))
+            id = smart_str(urlsafe_base64_decode(uidb64,token))
             user = User.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(user, token):
                  return Response({'error':'Token is not valid, please request a new one'}, status=status.HTTP_401_UNAUTHORIZED)
