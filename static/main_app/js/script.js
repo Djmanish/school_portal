@@ -73,6 +73,7 @@ $(document).ready(function () {
      });
   });
 
+ 
 
   var specialElementHandlers = {
     "#editor":function(element, renderer){
@@ -122,15 +123,18 @@ $(document).ready(function(){
   });
 });
 
-function checkDate() {
-  var selectedText = document.getElementById('datepicker').value;
-  var selectedDate = new Date(selectedText);
-  var now = new Date();
-  if (selectedDate < now) {
-   alert("Date must be in the future");
-   return false
-  }
-}
+// function checkDate() {
+//   var selectedText = document.getElementById('datepicker').value;
+  
+//   var selectedDate = new Date(selectedText);
+//   var now = new Date();
+//   for selected_date in selectedDate{
+//     if (selected_date < now) {
+//    alert("Date must be in the future");
+//    return false
+//   }
+//   }
+// }
 //previous date validation
 
 // ending script for processing , notification and due date
@@ -170,4 +174,6 @@ $('document').ready(function(){
     return false;
 });
 })
+
+
 

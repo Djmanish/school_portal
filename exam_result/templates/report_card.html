@@ -33,6 +33,8 @@
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"/>
 
     <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
@@ -260,7 +262,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -439,7 +441,7 @@
                             </li>
                            
                             {% if user.profile.designation.level_name == "teacher"%}
-                            <li>
+                            <li >
                                 <a href="{% url 'examresult' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                                     <span class="menu_title">Exam Result</span>
@@ -457,7 +459,7 @@
                             {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"%}
                             
                         
-                            <li>
+                            <li class="act_item">
                                 <a href="{% url 'report_card' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">file_copy</i></span>
                                     <span class="menu_title">Report Card</span>
@@ -510,7 +512,7 @@
                                     <tr >
                                         {% if user.profile.designation.level_name == "parent" %}
                                         <td>
-                                            <label class ="required" style="margin: 4px;">Select Student</label>
+                                            <label class ="required" id="required_margin">Select Student</label>
                                             <select class="form-control" id="selected_student"  name="selected_student" style="padding: 2px;"
                                                 required>
                                                 <option selected disabled value="">--Select Student--</option>
@@ -524,7 +526,7 @@
                                         &nbsp
                                         
                                         <td> 
-                                            <label class ="required" style="margin: 4px;">Select Exam Type</label>
+                                            <label class ="required" id="required_margin">Select Exam Type</label>
                                             <select class="form-control" id="selected_exam_types" name="result_exam_type"  required>
                             
                                                 <option selected disabled value="">--Exam Type--</option>
@@ -541,13 +543,16 @@
                                        
                                         {% if user.profile.designation.level_name != "parent" %}
                                         <td> 
-                                            <label class ="required" style="margin: 4px;">Select Exam Type</label>
-                                            <select class="form-control" name="result_exam_type" style="padding: 2px;"
-                                                required>
+                                            <label class ="required" id="required_margin">Select Exam Type</label>
+                                            <select class="form-control" name="result_exam_type" id="result_padding" required>
                                                 {% if select_exam_type %}
-                                                <option selected  value="{{select_exam_type.id}}">{{select_exam_type}}</option>
+                                                    {% if select_exam_type == "Overall" %}
+                                                    <option value="Overall">Overall</option>
+                                                    {% else %}
+                                                    <option selected  value="{{select_exam_type.id}}">{{select_exam_type}}</option>
+                                                    {% endif %}
                                                 {% else %}
-                                                <option selected  value="">-- Select Exam Type --</option>
+                                                <option  value="">-- Select Exam Type --</option>
                                                 {% endif %}
                                                 <option value="Overall">Overall</option>
                                                 {% for exam_type in exam_type_list %}
@@ -570,7 +575,7 @@
                                         {% if result_data %}
                                         <td >
                                             
-                                                    <button type="submit" name="report_cart_button" style="outline:none;  border: 0; margin-left:580px;" value="Print">
+                                                    <button type="submit" name="report_cart_button" class="report_card_button" value="Print">
                                                         <i class="md-icon material-icons" id="invoice_print"></i>
                                                 </button>
                                               
@@ -626,25 +631,30 @@
                                             &nbsp
                                             &nbsp
 
-                                            <table class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
+                                            <table
+                                                            class="uk-table uk-table-condensed uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-hover"
+                                                            id="ts_issues">
 
-
+                                                
                                                 <tr>
-                                                    <td > Subjects</td>
+                                                    <thead>
+                                                    <th > Subjects</th>
+                                                
+
                                                     {% for e_no in exam_no %}
-                                                    <td>{{select_exam_type}}&nbsp{{e_no}}
+                                                    <th>{{select_exam_type}}&nbsp{{e_no}}
 
-                                                    </td>
+                                                    </th>
                                                     {% endfor%}
-                                                    <td>Total Marks
+                                                    <th>Total Marks
 
-                                                    </td>
-                                                    <td >Expected %
+                                                    </th>
+                                                    <th >Expected %
 
-                                                    </td>
+                                                    </th>
                                                 </tr>
                                                 {% endif %}
-
+                                            </thead>
 
                                                 {% for data in result_data %}
                                                 <tr>
@@ -740,7 +750,7 @@
     </script>
 
 
-
+    
 
 </body>
 

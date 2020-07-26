@@ -145,7 +145,7 @@ body{
 border-bottom: 2px solid white;
 }
 .aftr:hover{
-background-color: lightgray;
+background-color: rgb(148, 134, 134);
 }
 #disapprove_admission{
   color: white;
@@ -299,11 +299,12 @@ label.required::after{
     min-width: 470px;
     min-height: 550px !important;
   }
+  #header_alerts{
+    min-height: 450px;
+  }
 }
 
-#header_alerts{
-  min-height: 450px;
-}
+
 /* ending notification box modification */
 
 .asteriskField{
@@ -438,5 +439,72 @@ input[type="checkbox"]:required:valid + label::before {
 
 .alink {
   color: green;
+}
+
+#report_card_percentage{
+  text-align:center;
+  padding-left:50px;
+
+}
+#report_card_result{
+  text-align: center;
+   padding-left: 25px;
+   
+}
+#promotion_submit{
+  text-align: center;
+}
+
+#edit_button{
+  color:#2196f3;
+}
+
+#required_margin{
+  margin:4px;
+}
+#result_padding{
+  padding: 2px;
+}
+
+#exam_type{
+  padding:2px;
+  height:38px;
+}
+#red_color{
+color:#ff0000;
+}
+
+#exam_schedule{
+  
+  background-color:transparent;
+  -webkit-appearance:none;
+  border:1px solid transparent !important;
+}
+#promotion_status{
+  text-align:center;
+  width:100px;
+}
+
+#exam_left_align{
+  margin-left:20px;
+
+}
+.exam_schedule_submit{
+  margin: 4px;
+  background-color: #1976d2;
+
+}
+.report_card_button{
+    outline:none;
+    border: 0;
+    margin-left:600px;
+}
+
+#button_align{
+  text-align: center;
+}
+
+#edit_exam_date{
+  margin-left: 700px;
 }
 

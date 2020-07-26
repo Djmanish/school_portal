@@ -23,31 +23,49 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.fields.files import ImageFieldFile
 from notices.models import Notice
+from examschedule.models import Edit_Exam_Date
+import _strptime
+from django.core.exceptions import ValidationError
 
 
 # Create your views here.
 def exam_result(request,pk):
   inst = request.user.profile.institute.id
-
   today_date=timezone.now()
-  
-  
-
   if pk==inst:
         # starting user notice
       if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
         # ending user notice
-    
+             
+      # get the Edt_Exam_Date MODEL data
       result_institute=Institute.objects.get(pk=pk)
-      exam_result_institute=ExamResult.objects.filter(institute=result_institute)
+      edit_date=Edit_Exam_Date.objects.filter(institute=result_institute)
+      for e_date in edit_date:
+          edit_start_date=e_date.edit_start_date
+          edit_end_date=e_date.edit_end_date
+         
+          if edit_start_date>timezone.now().date() and edit_end_date>timezone.now().date() or edit_start_date == None and edit_end_date == None:
+              date1=str(edit_end_date)
+              context={
+                  'edit_start_date':edit_start_date,
+                  'edit_end_date':edit_end_date,
+
+              }
+              messages.error(request, f'Edit marks date between {edit_start_date} - {edit_end_date}')
+              return render(request, 'teacher_view.html', context) 
+          else:
+              pass
+             
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
       institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
+     
     # -----------------------------------------------------------------------------------
       if request.method=="POST":
         selected_subject = Subjects.objects.get(pk=request.POST.get('result_selected_subject'))
         result_exam_type=request.POST.get('result_exam_type')
+        
         schedule_exam_type=ExamDetails.objects.filter(institute=request.user.profile.institute)
         institute_pk = request.user.profile.institute.pk
         if result_exam_type==None:
@@ -64,20 +82,11 @@ def exam_result(request,pk):
             pass
            
         else:
-          messages.error(request, 'No Students Found!')
+          messages.error(request, 'No students found!')
           return redirect(f'/examresult/examresult/{inst}')
         
         exam_schedule_date=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_subject=selected_subject,exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,)
-        # for date in exam_schedule_date:
-        #   exam_s_date=date.exam_date
-        #   if today_date>=exam_s_date:
-        #     pass
-          
-        #   else:
-        #     messages.error(request, 'Current date does not match with exam schedule date!')
-                 
-        #     return HttpResponseRedirect(f'/examresult/examresult/{institute_pk}') 
-           
+         
        
         exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,exam_class__name=selected_subject.subject_class )
            
@@ -110,6 +119,7 @@ def exam_result(request,pk):
       context={
                   'subject_result':subject_result,
                   'institute_exam_type':institute_exam_type,
+                  
                   }
       return render(request, 'teacher_view.html', context)    
   else:
@@ -268,7 +278,8 @@ def report_card(request,pk):
               select_exam_type = request.POST.get('result_exam_type')
              
               if select_exam_type=="Overall":
-                if request.POST.get("report_cart_button"):
+                
+                if "report_cart_button" in request.POST:
                     # return HttpResponseRedirect(f'/examresult/overall_report_card/{exam_id}/{selected_student.id}')
                   return overall_report_card(request,exam_id,selected_student.id)
 
@@ -281,7 +292,7 @@ def report_card(request,pk):
 
                   # return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{request.user.id}')
               else :
-                if select_exam_type!="overall":
+                if select_exam_type!="Overall":
                   
                     if request.POST.get("report_cart_button"):
                       return reports_card(request,exam_id)
@@ -409,7 +420,7 @@ def report_card(request,pk):
                     return overall_result(request,exam_id,selected_student.id)
                     # return HttpResponseRedirect(f'/examresult/overall_result/{exam_id}/{selected_student.id}')
               else :
-                if select_exam_type!="overall":
+                if select_exam_type!="Overall":
                   
                     if request.POST.get("report_cart_button"):
                       return reports_card(request,exam_id)
@@ -687,7 +698,11 @@ def overall_result(request,pk,student_pk):
                             count=0
                             for i in resultsubject:
                                 count=count+1
-                            total_marks_count=count*100
+                            try:
+
+                               total_marks_count=count*100
+                            except:
+                              total_marks_count=1
 
                             final_percent_result=(sum/total_marks_count)*100
                             grand_result=round(final_percent_result,2)
@@ -722,7 +737,7 @@ def overall_result(request,pk,student_pk):
                               } 
                   return render(request, 'overall.html', context)
               else :
-                    if select_exam_type!="overall":
+                    if select_exam_type!="Overall":
                         
                       
                         if request.POST.get("report_cart_button"):
@@ -885,6 +900,7 @@ def overall_result(request,pk,student_pk):
                         for i in resultsubject:
                            
                             count=count+1
+                            
                         total_marks_count=count*100
                         try:
 
@@ -924,7 +940,7 @@ def overall_result(request,pk,student_pk):
               return render(request, 'overall.html', context)
               
           else :
-              if select_exam_type!="overall":
+              if select_exam_type!="Overall":
                     if request.POST.get("report_cart_button"):
                         return reports_card(request,exam_id)
                             # return HttpResponseRedirect(f'/examresult/reports_card/{exam_id}')
@@ -1670,7 +1686,11 @@ def overall_report_card(request,pk,student_pk):
         count=0
         for i in resultsubject:
             count=count+1
-        total_marks_count=count*100
+
+        try:
+            total_marks_count=count*100
+        except:
+            total_marks_count=1
 
         final_percent_result=(sum/total_marks_count)*100
         grand_result=round(final_percent_result,2)

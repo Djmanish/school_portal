@@ -259,7 +259,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -437,7 +437,7 @@
                             </li>
                            
                             {% if user.profile.designation.level_name == "teacher"%}
-                            <li>
+                            <li class="act_item">
                                 <a href="{% url 'examresult' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                                     <span class="menu_title">Exam Result</span>
@@ -512,29 +512,39 @@
            
                                         <div class="md-card">
                                             <div class="md-card-content">
-                                                <h5>Exam Result</h5>
+                                                <tr>
+
+                                                    <td>
+                                                        <h5>Edit Exam Date Between:
+                                                   
+                                                       {{edit_start_date}} - {{edit_end_date}}
+                                                    </h5>
+                                                    </td>
+                                                </tr>
+                                              
+                                                
                                                         <form method="POST"  class="form-inline" id="attendance_form">
                                                             {% csrf_token %}
                                                             
                                                             
-                                                            <label class = "required" style="margin: 4px;">Select Subject</label>
-                                                                <select class="form-control" name="result_selected_subject" style="padding: 2px;  height:38px" required>
+                                                            <label class = "required" id="required_margin">Select Subject</label>
+                                                                <select class="form-control" name="result_selected_subject" id="exam_type" required>
                                                                     <option selected disabled value="">--Subject--</option>
                                                                     {% for subject in subject_result %}
                                                                     <option value="{{subject.id}}">{{subject}}</option>
                                                                     {% endfor %}
                                                                  </select>
                                                                  
-                                                            <label class = "required" style="margin: 4px;">Select Exam Type</label>
-                                                             <select class="form-control" id="result_exam_type" name="result_exam_type" style="padding: 2px; height:38px" required>
+                                                            <label class = "required" id="required_margin">Select Exam Type</label>
+                                                             <select class="form-control" id="result_exam_type" name="result_exam_type" id="exam_type" required>
                                                                     <option selected disabled value="">--Exam Type--</option>
                                                                     {% for exam_type in institute_exam_type %}
-                                                                       <option value="{{exam_type.id}}"> {{exam_type}}</option>
+                                                                       <option value="{{exam_type.id}}">{{exam_type}}</option>
                                                                     {% endfor %}
                                                              </select>
                                                            
-                                                            <label class = "required" style="margin: 4px;">Select Exam Type No.</label>
-                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" style="padding: 2px; height:38px" required>
+                                                            <label class = "required" id="required_margin">Select Exam Type No.</label>
+                                                                <select class="form-control" id="fetch_sr_no" name="fetch_sr_no" id="exam_type" required>
                                                                     <option selected disabled value=''>--Exam Type No.--</option>
                                         
                                                              </select>
@@ -565,6 +575,7 @@
                                                             </script>
                                                     
                                                     <div class="md-card-content">
+                                                    
 
                                                         <div class="uk-overflow-container uk-margin-bottom">
                                                         
@@ -578,7 +589,7 @@
                                                             
                                                             <th ><b>Subject Class: {{selected_subject.subject_class}}</b></th>
                                                             <th ><b>Exam Type: {{exam_type_id}}</b></th>
-                                                            <th ><b>Exam Sr. No.: {{result_exam_type_sr_no}}</b></th>
+                                                            <th ><b>Exam Sr. No.: {{result_exam_type_sr_no}} </b></th>
 
 
                                             
@@ -624,7 +635,7 @@
                                                                     
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select style="overflow:hidden;  -webkit-appearance: none;   border:0px solid!important;"  name="student_first_name" >
+                                                                                <select id="exam_schedule"  name="student_first_name" >
                                                                                   <option  value="{{student.id}}">{{student.first_name}}</option>
                                                                                 </select>
                                                                               </div>
@@ -632,14 +643,14 @@
                                                                         </td>
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select style="overflow:hidden;  -webkit-appearance: none;  border:0px solid !important;"   name="student_last_name">
+                                                                                <select id="exam_schedule"    name="student_last_name">
                                                                                   <option  value="{{student.id}}">{{student.last_name}}</option>
                                                                                 </select>
                                                                               </div>
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <select style="overflow:hidden;  -webkit-appearance: none;   border:1px solid white !important;"   name="student_roll_no">
+                                                                                <select id="exam_schedule"    name="student_roll_no">
                                                                                   <option  value="{{student.id}}">{{student.roll_number}}</option>
                                                                                 </select>
                                                                               </div>
@@ -663,8 +674,8 @@
                                                             
                                                             <tr>
                                                                 <td colspan="6">
-                                                                    <div style="text-align: center;"> 
-                                                                    <input type="submit" class="md-btn md-btn-primary" style="margin: 4px; background-color: #1976d2;" value="Submit">
+                                                                    <div id="button_align"> 
+                                                                    <input type="submit" class="md-btn md-btn-primary exam_schedule_submit" value="Submit">
                                                                     </div>
 
                                                                 </td>
@@ -679,13 +690,13 @@
                                                     </div>
                                                     </div>
                                                     
-                                                </div>
+                                                </div></div>
               
                                             </div>
                                         </div> 
                                         </div>
                                         </div>
-                                        <footer id="footer" >
+                                        <footer id="footer">
                                             &copy; A product of <a target="_blank" id="tblf" href="https://www.trueblueappwerks.com" >TrueBlue AppWerks</a>
                                         </footer> 
                 

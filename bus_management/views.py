@@ -6,6 +6,7 @@ from django.utils import timezone
 from notices.models import *
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
+from bus_management import vehicle_signals
 import math
 
 # Create your views here.
@@ -15,7 +16,7 @@ def bus(request):
     points = Point.objects.filter(point_institute=request.user.profile.institute)
     drivers = Driver.objects.filter(institute=request.user.profile.institute)
     active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
-    routes = RouteInfo.objects.filter(institute=request.user.profile.institute)
+    routes = RouteInfo.objects.filter(institute=request.user.profile.institute, status="active")
     new = RouteInfo.objects.filter(institute=request.user.profile.institute)
     for i in new:
         i.point_count= RouteMap.objects.filter(route=i).count()
@@ -48,11 +49,11 @@ def add_bus(request):
         print(b_no)
         try:
             chk_bus= Bus.objects.get(bus_no=b_no, bus_institute=request.user.profile.institute)
-            messages.error(request, 'Bus Is Already Exists !')
+            messages.error(request, 'Vehicle with this registration number already exists !')
             return HttpResponseRedirect(f'/bus/')    
         except Bus.DoesNotExist:
             new_bus = Bus.objects.create(bus_no=b_no, bus_maker=b_maker, vehicle_type=b_type,fuel_type=b_fuel, bus_color=b_color, bus_capacity=b_capacity, bus_institute=request.user.profile.institute)
-            messages.success(request, 'Bus Added successfully !')  
+            messages.success(request, 'Vehicle added successfully !')  
             return HttpResponseRedirect(f'/bus/')
 
 def edit_bus(request):
@@ -67,7 +68,7 @@ def edit_bus(request):
         srch_bus.bus_color = request.POST['edit_bus_colo'].strip()
         srch_bus.bus_capacity = request.POST['edit_bus_capacit'].strip()
         srch_bus.save()
-        messages.success(request, 'Bus Info Updated Successfully !')  
+        messages.success(request, 'Vehicle details updated successfully !')  
         return HttpResponseRedirect(f'/bus/')
 
 
@@ -81,17 +82,20 @@ def add_point(request):
         p_place = request.POST['point_place'].strip()
         p_city = request.POST['point_city'].strip()
         p_state = request.POST['point_state']
-        sel_state = State.objects.get(pk=p_state)
-        print(sel_state)
+        sel_state = State.objects.get(pk=p_state)        
         p_country = request.POST['point_country'].strip()
-        print("Hello")
+        p_long = request.POST['point_longitute']
+        p_lat = request.POST['point_latitute']
+        if p_street_no == "":
+            p_street_no = None
+        
         try:
             chk_point= Point.objects.get(point_code=p_code, point_institute=request.user.profile.institute)
         except Point.DoesNotExist:
             chk_point = 0 
         if chk_point == 0:
-            new_point = Point.objects.create(point_code=p_code, point_name=p_name, point_street_no=p_street_no, point_landmark=p_landmark,point_exact_place=p_place, point_city=p_city, point_state=sel_state, point_country=p_country,  point_institute=request.user.profile.institute)
-            messages.success(request, 'Point Created successfully !')  
+            new_point = Point.objects.create(point_code=p_code, point_name=p_name, point_street_no=p_street_no, point_landmark=p_landmark,point_exact_place=p_place, point_city=p_city, point_state=sel_state, point_country=p_country,  point_institute=request.user.profile.institute, longitude=p_long ,latitude=p_lat)
+            messages.success(request, 'Point added successfully !')  
             return HttpResponseRedirect(f'/bus/')       
         else:
             messages.error(request, 'Point Is Already Exists !')
@@ -111,15 +115,46 @@ def edit_point(request):
         point.point_city = request.POST['edit_point_city']
         point.point_state = state
         point.point_country = request.POST['edit_point_country']
+        point.longitude = request.POST['edit_point_longitute']
+        point.latitude = request.POST['edit_point_latitute']
         point.save()
-        messages.success(request, 'Point Details Updated successfully !')  
+        messages.success(request, 'Point details updated successfully !')  
         return HttpResponseRedirect(f'/bus/') 
+
+def edit_route(request):
+    if request.method == 'POST':
+        selected_route = request.POST['edit_route_id_hide']
+        r = RouteInfo.objects.get(pk=selected_route)
+        r_bus = request.POST['edit_sel_bus']
+        bus = Bus.objects.get(pk=r_bus)
+        r_driver = request.POST['edit_sel_driver']
+        driver = Driver.objects.get(pk=r_driver)
+        r.route_no= request.POST['edit_route_no']
+        r.route_name = request.POST['edit_route_name']
+        r.vehicle = bus
+        r.vehicle_driver = driver
+        r.from_date = request.POST['edit_from_date']
+        r.to_date = request.POST['edit_to_date']
+        r.save()
+        messages.success(request, 'Route info updated successfully !')  
+        return HttpResponseRedirect(f'/bus/')
+
+
+def delete_route(request,pk):
+    sel_route = RouteInfo.objects.get(pk=pk,institute= request.user.profile.institute)
+    sel_route.status = "inactive"
+    sel_route.save()
+    r = RouteMap.objects.filter(route=sel_route)
+    for i in r:
+        i.delete()
+    messages.success(request, 'Route deleted successfully !')  
+    return HttpResponseRedirect(f'/bus/')
 
 def delete_point(request,pk):
     sel_point = Point.objects.get(pk=pk,point_institute= request.user.profile.institute)
     sel_point.status = "inactive"
     sel_point.save()
-    messages.success(request, 'Point Deleted successfully !')  
+    messages.success(request, 'Point deleted successfully !')  
     return HttpResponseRedirect(f'/bus/')
 
 def delete_routemap(request,pk):
@@ -416,9 +451,8 @@ def see_map(request):
 def start_trip(request):
     u = RouteInfo.objects.get(vehicle_driver__name=request.user.profile)
     sel_r = u.id
-    print(sel_r)
     p = RouteMap.objects.filter(route__id=sel_r)
-    print(p)
+    vehicle_signals.start.send(sender=None,route=u)
     context={
         'p':p,
     }
