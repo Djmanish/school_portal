@@ -38,6 +38,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
 from django.core.exceptions import PermissionDenied
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny
 
 
 
@@ -49,6 +51,8 @@ class userList(APIView):
         return Response(serializer.data)
     def post(self):
         pass
+
+@permission_classes((AllowAny, ))
 class userLoginData(APIView):
     authentication_classes=(TokenAuthentication,SessionAuthentication)
     permission_classes=(IsAuthenticated,)
