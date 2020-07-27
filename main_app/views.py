@@ -40,6 +40,7 @@ from django.core.exceptions import PermissionDenied
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
+from django.views import *
 
 
 
@@ -110,7 +111,10 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return True
         else:
             return False
-   
+    def no_future(value):
+        today = date.today()
+        if value > today:
+            return messages.error(request, 'Establish Date cannot be in the future.')
 
 
     def get_success_url(self, **kwargs):         
@@ -407,6 +411,11 @@ def dashboard(request):
                 request.user.exam_she_child=ExamDetails.objects.filter(institute=request.user.first_child.child.institute,exam_class=request.user.first_child.child.Class)
             
             if request.method == "POST":
+                request.user.student=request.POST.get('selected_child')
+                std_child=UserProfile.objects.get(id=request.user.student)
+                request.user.post_child=std_child
+                request.user.holiday_child=HolidayList.objects.filter(institute=std_child.institute,applicable="Yes")
+                request.user.exam_she_child=ExamDetails.objects.filter(institute=std_child.institute,exam_class=std_child.Class)
                 if 'calendar' in request.POST:
                     request.user.student=request.POST.get('selected_child')
                     std_child=UserProfile.objects.get(id=request.user.student)
@@ -499,7 +508,8 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "parent":
                 
             request.user.user_child_books_status = []
-            user_children= AddChild.objects.filter( parent= request.user.profile)
+            user_children= AddChild.objects.filter( parent= request.user.profile, status="active")
+
             
             parent_student_list = []
             for books in user_children:
@@ -1127,8 +1137,6 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
             return True
         else:
             return False
-   
-
     
     def get_context_data(self, **kwargs):
        
@@ -1461,5 +1469,3 @@ def set_loc(request):
         pass
     return render(request, 'main_app/map.html')
 
-
-        

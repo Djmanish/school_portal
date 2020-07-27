@@ -167,6 +167,20 @@ def delete_routemap(request,pk):
    
     return HttpResponseRedirect(f'/bus/')
 
+def delete_view_routepoints(request,pk):
+    del_point = Point.objects.get(pk=pk)
+    ss= RouteMap.objects.filter(point=del_point)
+    for i in ss:
+        i.delete()
+    
+    messages.success(request, 'Point deleted successfully !')  
+   
+    return HttpResponseRedirect(f'/bus/')
+
+# def edit_view_routepoints(request,pk):
+    
+
+
 
 def fetch_bus_details(request):
     # pk=request.POST.get('category')
@@ -316,7 +330,7 @@ def update_map_route(request):
 def update_route(request):
     if request.method == 'POST':
         select_point= request.POST.getlist('select_point')
-        select_time= request.POST.getlist('time')
+        select_time= request.POST.getlist('select_time')
         route= int(request.POST['hide_route'])
         select_index= request.POST.getlist('index')
        
@@ -401,7 +415,7 @@ def add_point_route (request):
         for i in range(length):
             s_point= Point.objects.get(id=select_point[i])
             new= RouteMap.objects.create(route=s_route, point=s_point, index=i+1, time=select_time[i], routemap_institute= request.user.profile.institute)
-        messages.success(request, "Submit successfully !")     
+        messages.success(request, "Point(s) added successfully !")     
     return HttpResponseRedirect(f'/bus/') 
     
 def set_location(request):
@@ -461,3 +475,37 @@ def add_trip(request):
             return HttpResponse('<h6 style="color: green;">Submitted</h6>')
         
         
+def view_routepoints(request, pk):
+    # view_point = Point.objects.get(pk=pk)
+    view_route = RouteInfo.objects.get(pk=pk)
+    maps = RouteMap.objects.filter(route=view_route)
+   
+    context_data = {
+    'view_route': view_route,
+    'maps': maps,
+    }
+    
+    return render(request, 'bus/view_routepoints.html', context_data)
+
+def update_routepoints(request):
+    
+    if request.method == 'POST':
+        route_point = request.POST['edit_routepoint_id_hide']
+        p = RouteMap.objects.get(id= route_point)
+        p_index= request.POST['edit_routeindex']
+        p_time = request.POST['edit_routetime']
+
+        p.index = p_index
+        p.time = p_time
+                
+        p.save()
+        
+        # context_data = {
+        # 'route_editpoint' : route_editpoint,
+        # }
+        messages.success(request, 'Point Details Updated successfully !') 
+        return HttpResponseRedirect(f'/bus/')
+      
+    
+    
+    
