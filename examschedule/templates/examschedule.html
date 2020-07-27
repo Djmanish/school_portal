@@ -206,7 +206,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -368,7 +368,7 @@
                                 </a>
                             </li>
                             
-                            <li>
+                            <li class="act_item">
                                 <a href="{% url 'examschedule' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                                     <span class="menu_title">Create Exam Schedule</span>
@@ -509,9 +509,9 @@
                                                 
 
                                                             <div class="uk-overflow-container uk-margin-bottom">
-                                                       
-                                                        <table 
-                                                        class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
+                                                                <table
+                                                                class="uk-table uk-table-condensed uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-hover"
+                                                                id="ts_issues">
                                                         {% if exam_class_subject %}
                                                         <thead>
                                                             <tr>
@@ -523,6 +523,20 @@
 
 
                                                         </tr>
+                                                        <tr >
+                                                            <td ><label><b>Exam Code</b></label></td>
+                                                            <td colspan="6">
+                                                                <input type="text" value={{institute_exam_schedule_data.code}}-{{selected_class.id}}-{{selected_exam_type.exam_type_sr_no}}-{{sr_no}} name="exam_institute_code"  style="text-align: center; font-weight: 500; border: 0ch;"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Subject</th>
+                                                            <th>Subject Teacher</th>
+                                                            <th>Date</th>
+                                                            <th>Start Time</th>
+                                                            <th>End Time</th>
+                                                            <th>Assign Teacher</th>
+                                                        </tr>
                                                         </thead>
                                                         {% endif %}
 
@@ -533,31 +547,9 @@
                                                           
                                                             <form method="POST" action="{% url 'create_examschedule' request.user.profile.institute.id %}">
                                                                 {% csrf_token %}
-                                                                
-                             
-                                                             
+                                                        
                                                           
-                                                                  
-                                                              
-                                                                          
-                                                            <tr >
-                                                                <td ><label><b>Exam Code</b></label></td>
-                                                                <td colspan="6">
-                                                                    <input type="text" value={{institute_exam_schedule_data.code}}-{{selected_class.id}}-{{selected_exam_type.exam_type_sr_no}}-{{sr_no}} name="exam_institute_code"  style="text-align: center; font-weight: 500; border: 0ch;"/>
-                                                                </td>
-
-                                                            </tr>
-                                                           
-
                                                           
-                                                             <tr>
-                                                                <td>Subject</td>
-                                                                <td>Subject Teacher</td>
-                                                                <td>Date</td>
-                                                                <td>Start Time</td>
-                                                                <td>End Time</td>
-                                                                <td>Assign Teacher</td>
-                                                            </tr>
 
                                                             {% else %}
                                                             {% if exam_details%}
@@ -610,7 +602,8 @@
                                                                               </div>
                                                                        
                                                                            </td>
-                                                                        <td ><div id="exam_left_align"  class="form-group"><input type='date',  id="datepicker" onchange="checkDate()" class="form-control", value="", name="select_date" required/></div></td>
+                                                                           <!-- id="datepicker" onchange="checkDate()" -->
+                                                                        <td ><div  class="form-group"><input type='date',   class="form-control", value="", name="select_date" required/></div></td>
                                                                         
                                                                         <td ><div id="exam_left_align"  class="form-group"><input type='time', onchange="onTimeChange()", class="form-control", value='', min = '00:01', max = '23:59:59', name="select_start_time" required/></div></td>
                                                                        

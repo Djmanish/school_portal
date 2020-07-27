@@ -208,7 +208,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -363,7 +363,7 @@
             <ul>
                 {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
 
-                <li>
+                <li class="act_item">
                     <a href="{% url 'create_test_type' request.user.profile.institute.id %}">
                         <span class="menu_icon"><i class="material-icons">add_circle</i></span>
                         <span class="menu_title">Create Exam</span>
@@ -479,21 +479,21 @@
         
         <div class="form-group edit_exam_space">
             <label class ="required">Exam Type:</label>
-            <input type="text" class="form-control " name='exam_type' value="{{test_type_info.exam_type}}" required="required">
+            <input type="text" class="form-control" name='exam_type' value="{{test_type_info.exam_type}}" required="required">
             </div>
         <div class="form-group">
             <label class ="required">Maximum Marks:</label>
-            <input type="text" class="form-control only_decimal" name='exam_max_marks' value="{{test_type_info.exam_max_marks}}" required="required">
+            <input type="number" class="form-control only_decimal" name='exam_max_marks' value="{{test_type_info.exam_max_marks}}" required="required">
 
         </div>
         <div class="form-group">
             <label class ="required">Maximum Exam Limit:</label>
-            <input type="text" class="form-control only_decimal" name='exam_max_limit' value="{{test_type_info.exam_max_limit}}" required="required">
+            <input type="number" class="form-control only_decimal" name='exam_max_limit' value="{{test_type_info.exam_max_limit}}" required="required">
             
         </div>
         <div class="form-group">
             <label class ="required">% Of Final Score:</label>
-            <input type="text" class="form-control only_decimal" name='exam_per_final_score' value="{{test_type_info.exam_per_final_score}}" required="required">
+            <input type="number" class="form-control only_decimal" name='exam_per_final_score' value="{{test_type_info.exam_per_final_score}}" required="required">
 
         </div>
         

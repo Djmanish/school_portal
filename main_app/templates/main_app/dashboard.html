@@ -564,12 +564,16 @@
                   </li>      
                     {% endif %}
                   {% endfor %}
+                  {% for i in user.user_institute_role.level.permissions.all %}    
+                  {% if i.function_name == "Can Manage Vehicles" %}
                   <li  title="Vehicle">
                     <a href="{% url 'bus' %}">
                         <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
                         <span class="menu_title">Vehicle</span>
                     </a>
                 </li>  
+                {% endif %}
+                  {% endfor %}
 
                     <li  title="Examination">
 
@@ -731,6 +735,7 @@
                 </div>
             <!-- Small Cards for driver Dashboard -->
             {% elif user.profile.designation.level_name == "driver" %}
+            {% if user.driver_data %}
                 <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
                     <div>
                         <div class="md-card">
@@ -753,7 +758,7 @@
                     <div>
                         <div class="md-card">
                             <div class="md-card-content">
-                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">near_me</i></span></div>
+                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">location_on</i></span></div>
                                 <span class="uk-text-muted uk-text-small">Route</span>
                                 <h4 class="uk-margin-remove">{{user.driver_data.route_name}}</h4>
                             </div>
@@ -762,7 +767,7 @@
                     <div>
                         <div class="md-card">
                             <div class="md-card-content">
-                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="{% url 'start_trip' %}">Start</a></div>
+                                <div class="uk-float-right uk-margin-top uk-margin-small-right">{% if user.total != user.total_trip %}<a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="{% url 'start_trip' %}">Start</a>{% else %}<span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">near_me</i></span>{% endif %}</div>
                                 <span class="uk-text-muted uk-text-small">Trip</span>
                                 <h4 class="uk-margin-remove">{{user.today}}</h4>
                             </div>
@@ -770,7 +775,7 @@
                     </div>
                     
                 </div>
-            
+            {% endif %}
             <!-- Small Card for other users -->
             {% else %}
                 <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
@@ -1188,7 +1193,7 @@
             {% endif %}            
         {% endif %}
         {% if  user.profile.designation.level_name == "parent" %}            
-            
+        {% if user.user_child_fee_status %}
             <div class="uk-width-medium-1-2">
                 <div class="">
                     <div class="md-card-content">
@@ -1198,7 +1203,7 @@
                                     <table class="uk-table uk-table-condensed uk-table-hover uk-text-nowrap">
                                         <h3 class="heading_a uk-margin-bottom">Fees Status</h3>
                                         
-                                        {% if user.user_child_fee_status %}
+                                        
                                         <thead>
                                             <tr>
                                                 <th>Student Name</th>
@@ -1216,9 +1221,7 @@
                                                 </tr>
                                             {% endfor %} 
                                         </tbody>
-                                        {% else %}
-                                        <h4>No Pending dues...</h4>   
-                                        {% endif %}
+                                                                               
                                     </table>
                                 </div>
                             </div>
@@ -1226,7 +1229,7 @@
                     </div>
                 </div>
             </div>
-            
+         {% endif %}   
         {% endif %}
         <!-- Student Cards -->
         {% if  user.profile.designation.level_name == "student"  %}
@@ -1475,14 +1478,16 @@
                                                 </tr>
                                         </thead>
                                         <tbody>
-                                        
+                                      
                                             {% for stdr in user.student_books %}
+                                            
                                                 <tr class="uk-table-middle">
                                                 <td class="uk-width-3-10 uk-text-nowrap">{{stdr.book_name}}</td>
                                                 <td class="uk-width-3-10 uk-text-nowrap" >{{stdr.expiry_date.date}}</td>
                                                 </tr>
-                                        
+                                            
                                             {% endfor %}
+                                           
                                         </tbody>
                                     
                                     </table>
@@ -1513,6 +1518,66 @@
                                         <tbody>
                                             
                                             <tr>
+                                                <td>{{user.last6}}</td>
+                                                <td>{{user.driver_data.route_name}}</td>
+                                                {% if user.trip6 == user.route_map %}
+                                                <td>Completed</td>
+                                                {% else %}
+                                                <td>Incomplete</td>
+                                                {% endif %}
+                                               
+                                            </tr>    
+                                            <tr>
+                                                <td>{{user.last5}}</td>
+                                                <td>{{user.driver_data.route_name}}</td>
+                                                {% if user.trip5 == user.route_map %}
+                                                <td>Completed</td>
+                                                {% else %}
+                                                <td>Incomplete</td>
+                                                {% endif %}
+                                               
+                                            </tr> 
+                                            <tr>
+                                                <td>{{user.last4}}</td>
+                                                <td>{{user.driver_data.route_name}}</td>
+                                                {% if user.trip4 == user.route_map %}
+                                                <td>Completed</td>
+                                                {% else %}
+                                                <td>Incomplete</td>
+                                                {% endif %}
+                                               
+                                            </tr> 
+                                            <tr>
+                                                <td>{{user.last3}}</td>
+                                                <td>{{user.driver_data.route_name}}</td>
+                                                {% if user.trip3 == user.route_map %}
+                                                <td>Completed</td>
+                                                {% else %}
+                                                <td>Incomplete</td>
+                                                {% endif %}
+                                               
+                                            </tr>                
+                                            <tr>
+                                                <td>{{user.last2}}</td>
+                                                <td>{{user.driver_data.route_name}}</td>
+                                                {% if user.trip2 == user.route_map %}
+                                                <td>Completed</td>
+                                                {% else %}
+                                                <td>Incomplete</td>
+                                                {% endif %}
+                                               
+                                            </tr> 
+                                            <tr>
+                                                <td>{{user.last1}}</td>
+                                                <td>{{user.driver_data.route_name}}</td>
+                                                {% if user.trip1 == user.route_map %}
+                                                <td>Completed</td>
+                                                {% else %}
+                                                <td>Incomplete</td>
+                                                {% endif %}
+                                               
+                                            </tr> 
+                                            <tr>
                                                 <td>{{user.today}}</td>
                                                 <td>{{user.driver_data.route_name}}</td>
                                                 {% if user.trip == user.route_map %}
@@ -1521,7 +1586,7 @@
                                                 <td>Incomplete</td>
                                                 {% endif %}
                                                
-                                            </tr>                   
+                                            </tr> 
                                                                                
                                         </tbody>
                                     </table>
@@ -1555,7 +1620,7 @@
                          {% endif %}
                          {% endfor %}
                   </select>
-                 <input type="submit" value="View" style="margin: 4px;" class="md-btn md-btn-primary md-btn-mini ">
+                 <input type="submit" name="calendar" value="View" style="margin: 4px;" class="md-btn md-btn-primary md-btn-mini ">
                  </form>
                  {% endif %}
                  {% endif %}
@@ -1603,7 +1668,40 @@
                 </div>
             </div>
         </div>
-        {% endif %}{% endif %}    
+        {% endif %}{% endif %}   
+        {% if request.user.profile.designation.level_name == "parent" %}
+        <div class="uk-width-medium-1-2">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <form  method="POST" action="#" class="form-inline" id="parent_map_form">
+                        {% csrf_token %}
+                          <label style="margin: 4px;">Select Child:  </label>
+                            <select  name="selected_ch" class="form-control form-control-sm"  required>
+                           <option selected disabled>
+                           {% if user.p_child %}
+                                {{user.p_child.first_name}}
+                            {% else %}
+                                {{user.first_child.child.first_name}}
+                            {% endif %}
+                            </option>
+                            {% for child in user.child_par %}
+                            {% if child.status == "active" %}
+                            
+                            <option value={{child.child.id}}>{{child.child.first_name}}</option>
+                            {% endif %}
+                            {% endfor %}
+                     </select>
+                    <input type="submit" name="map" value="View" style="margin: 4px;" class="md-btn md-btn-primary md-btn-mini ">
+                    </form>
+                    <div class="uk-overflow-container">
+                        <div id="mapid" style="width: 455px; height: 400px;margin:auto;"></div>
+
+                            
+                    </div>
+                </div>
+            </div>
+        </div> 
+        {% endif %}
         {% endif %}    
     </div>          
 </div> 
@@ -1923,8 +2021,9 @@
         });
       
       </script>
+      {% if user.profile.designation.level_name != "parent" %}
       <script>
-
+        
         var mymap = L.map('mapid').setView([{{user.location.latitude}}, {{user.location.longitude}}], 12);
     
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -1934,7 +2033,7 @@
             tileSize: 512,
             zoomOffset: -1
         }).addTo(mymap);
-
+        
         
 
         L.marker([{{user.location.latitude}}, {{user.location.longitude}}]).addTo(mymap)
@@ -1942,16 +2041,32 @@
 
         L.marker([{{user.ins_loc.latitude}}, {{user.ins_loc.longitute}}]).addTo(mymap)
             .bindPopup("<b>{{user.profile.institute}} </b>");
-        {% for i in user.routes %}
-        L.marker([{{i.point.latitude}}, {{i.point.longitude}}]).addTo(mymap)
-            .bindPopup("<b>{{i.point.point_name}} </b>");
-        {% endfor %}
-        L.marker([{{user.bus_loc.point.latitude}}, {{user.bus_loc.longitude}}]).addTo(mymap)
+        
+        L.marker([{{user.bus_loc.point.latitude}}, {{user.bus_loc.point.longitude}}]).addTo(mymap)
             .bindPopup("<b>Your Bus </b><br/>Location.").openPopup();
-
         
     </script>
-
+    {% endif %}
+    {% if user.profile.designation.level_name == "parent" %}
+    <script>
+    var mymap = L.map('mapid').setView([{{user.c_location.latitude}}, {{user.c_location.longitude}}], 12);
+    
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        maxZoom: 18,
+        attribution: ' © <a href="https://www.mapbox.com/">Mapbox</a>',
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1
+    }).addTo(mymap);
+    
+    L.marker([{{user.c_location.latitude}}, {{user.c_location.longitude}}]).addTo(mymap)
+        .bindPopup("<b>{{user.child_loc.user.first_name}}'s Point </b><br/>").openPopup();
+    L.marker([{{user.child_ins.latitude}}, {{user.child_ins.longitute}}]).addTo(mymap)
+        .bindPopup("<b>{{user.child_loc.user.institute}} </b>");
+    L.marker([{{user.child_bus.point.latitude}}, {{user.child_bus.point.longitude}}]).addTo(mymap)
+        .bindPopup("<b>Your Child Bus </b><br/>Location.").openPopup();
+    </script>
+    {% endif %}
 
     
                         

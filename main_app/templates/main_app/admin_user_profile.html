@@ -42,6 +42,11 @@
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}"
 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     
    
 
@@ -897,13 +902,21 @@
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Birth Certificate</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{object.dob_certificate}}</span>
+                                                                {% if user.profile.student_info.dob_certificate %}
+                                                                    <a class="alink" href="{{user.profile.student_info.dob_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                                                {%else%}
+                                                                    Not provided
+                                                                {% endif %}
                                                             </div>
                                                         </li>
                                                         <li>
                                                         <div class="md-list-content">
                                                             <span class="md-list-heading"><a href="#">ID Certificate</a></span>
-                                                            <span class="uk-text-small uk-text-muted">{{user.profile.address_line_1}} 
+                                                            {% if user.profile.student_info.id_proof_certificate %}
+                                                            <a class="alink" href="{{user.profile.student_info.id_proof_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                                            {%else%}
+                                                           Not provided
+                                                           {% endif %}  
                                 
 
                                                             </span>
@@ -912,7 +925,11 @@
                                                     <li>
                                                         <div class="md-list-content">
                                                             <span class="md-list-heading"><a href="#">Domicile Certificate</a></span>
-                                                            <span class="uk-text-small uk-text-muted">{{user.profile.mobile_number|default:''}}</span>
+                                                            {% if user.profile.student_info.domicile_certificate %}
+                                                            <a class="alink" href="{{user.profile.student_info.domicile_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                                            {%else%}
+                                                            Not provided
+                                                            {% endif %}
                                                         </div>
                                                     </li>
                                                     
@@ -920,7 +937,11 @@
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Cast Certificate</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.designation|default:''}}</span>
+                                                                {% if user.profile.student_info.cast_certificate %}
+                                                                <a class="alink" href="{{user.profile.student_info.cast_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                                                {%else%}
+                                                                Not provided
+                                                                {% endif %}
                                                             </div>
                                                         </li>
                                                                                                           
@@ -934,28 +955,44 @@
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Character Certificate</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.father_name}}</span>
+                                                                {% if user.profile.student_info.character_certificate %}
+                                         <a class="alink" href="{{user.profile.student_info.character_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                         {%else%}
+                                         Not provided
+                                         {% endif %}
                                                             </div>
                                                         </li>
 
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Medical Cerficate</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.mother_name}}</span>
+                                                                {% if user.profile.student_info.medical_certificate %}
+                                         <a class="alink" href="{{user.profile.student_info.medical_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                        {%else%}
+                                        Not provided
+                                        {% endif %}
                                                             </div>
                                                         </li>
 
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Transfer Certificate</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.date_of_birth}}</span>
+                                                                {% if user.profile.student_info.transfer_certificate %}
+                                         <a class="alink" href="{{user.profile.student_info.transfer_certificate.url}}" target="_blank" link>view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                         {%else%}
+                                         Not provided
+                                         {% endif %}
                                                             </div>
                                                         </li>
 
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Last Year Cerficate</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.gender}}</span>
+                                                                {% if user.profile.student_info.last_year_certificate %}
+                                         <a class="alink" href="{{user.profile.student_info.last_year_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
+                                         {%else%}
+                                         Not provided
+                                         {% endif %}
                                                             </div>
                                                         </li>
                                                     </ul>

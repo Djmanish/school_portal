@@ -38,6 +38,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
 from django.core.exceptions import PermissionDenied
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny
+from django.views import *
 
 
 
@@ -49,6 +52,8 @@ class userList(APIView):
         return Response(serializer.data)
     def post(self):
         pass
+
+@permission_classes((AllowAny, ))
 class userLoginData(APIView):
     authentication_classes=(TokenAuthentication,SessionAuthentication)
     permission_classes=(IsAuthenticated,)
@@ -106,7 +111,10 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return True
         else:
             return False
-   
+    def no_future(value):
+        today = date.today()
+        if value > today:
+            return messages.error(request, 'Establish Date cannot be in the future.')
 
 
     def get_success_url(self, **kwargs):         
@@ -299,7 +307,7 @@ def dashboard(request):
                 # print(my_loc.point.id)
                 request.user.location = Point.objects.get(id=my_loc.point.id)
                 route = RouteMap.objects.get(point__id=my_loc.point.id)
-                request.user.routes = RouteMap.objects.filter(route=route.route)
+                # request.user.routes = RouteMap.objects.filter(route=route.route)
                 # q1= routes.exclude(point__id=my_loc.point.id)
                 try:
                     request.user.bus_loc = Trip.objects.filter(route=route.route, date = datetime.date.today()).last()
@@ -308,22 +316,69 @@ def dashboard(request):
                     pass
             except:
                 pass
-        
-
-
-
+        if request.user.profile.designation.level_name == "parent":
+            f_child=AddChild.objects.filter(parent=request.user.profile).first()
+            try:
+                request.user.child_loc = BusUsers.objects.get(user=f_child.child)
+                request.user.c_location = Point.objects.get(id=request.user.child_loc.point.id)
+                request.user.child_ins = InstituteLocation.objects.get(institute=f_child.institute)
+                r = RouteMap.objects.get(point__id=request.user.child_loc.point.id)
+                
+                try:
+                    request.user.child_bus = Trip.objects.filter(route=r.route, date = datetime.date.today()).last()
+                except:
+                    pass
+            except:
+                pass
+            if request.method == "POST":
+                if 'map' in request.POST:
+                    request.user.student=request.POST.get('selected_ch')
+                    std_child=UserProfile.objects.get(id=request.user.student)
+                    print('Hello')
+                    print(std_child)
+                    request.user.p_child=std_child
+                    try:
+                        request.user.child_loc = BusUsers.objects.get(user=std_child)
+                        request.user.c_location = Point.objects.get(id=request.user.child_loc.point.id)
+                        request.user.child_ins = InstituteLocation.objects.get(institute=std_child.institute)
+                        r = RouteMap.objects.get(point__id=request.user.child_loc.point.id)
+                        
+                        try:
+                            request.user.child_bus = Trip.objects.filter(route=r.route, date = datetime.date.today()).last()
+                        except:
+                            pass
+                    except:
+                        pass
+            
     # Driver Dashboard
     if request.user.profile.designation:    
        if request.user.profile.designation.level_name == "driver":
+            date=datetime.date.today()
+            request.user.last6=date - datetime.timedelta(days=6)
+            request.user.last5=date - datetime.timedelta(days=5)
+            request.user.last4=date - datetime.timedelta(days=4)
+            request.user.last3=date - datetime.timedelta(days=3)
+            request.user.last2=date - datetime.timedelta(days=2)
+            request.user.last1=date - datetime.timedelta(days=1)
+            
             try:
                 request.user.driver_data = RouteInfo.objects.get(vehicle_driver__name=request.user.profile)
+                request.user.total = RouteMap.objects.filter(route=request.user.driver_data).count()
+                request.user.total_trip = Trip.objects.filter(route=request.user.driver_data, date = date).count()
                 request.user.today =datetime.date.today() 
-                print(request.user.today)
-                print("Helll") 
-                request.user.trip = int(Trip.objects.filter(driver__name= request.user.profile, date= datetime.date.today()).length())
-                print(request.user.trip)
+                
+            
+                request.user.trip1 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last1).count()
+                request.user.trip2 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last2).count()
+                request.user.trip3 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last3).count()
+                request.user.trip4 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last4).count()
+                request.user.trip5 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last5).count()
+                request.user.trip6 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last6).count()
+                request.user.trip = Trip.objects.filter(driver__name= request.user.profile, date=date).count()
+                
+                
                 print("Helllpoooo")
-                request.user.route_map = int(RouteMap.objects.filter(route=request.user.driver_data).length())
+                request.user.route_map = RouteMap.objects.filter(route=request.user.driver_data).count()
             except:
                 pass
         #    print(driver_data) 
@@ -358,11 +413,17 @@ def dashboard(request):
             if request.method == "POST":
                 request.user.student=request.POST.get('selected_child')
                 std_child=UserProfile.objects.get(id=request.user.student)
-                print('Hello')
-                print(std_child)
                 request.user.post_child=std_child
                 request.user.holiday_child=HolidayList.objects.filter(institute=std_child.institute,applicable="Yes")
                 request.user.exam_she_child=ExamDetails.objects.filter(institute=std_child.institute,exam_class=std_child.Class)
+                if 'calendar' in request.POST:
+                    request.user.student=request.POST.get('selected_child')
+                    std_child=UserProfile.objects.get(id=request.user.student)
+                    print('Hello')
+                    print(std_child)
+                    request.user.post_child=std_child
+                    request.user.holiday_child=HolidayList.objects.filter(institute=std_child.institute,applicable="Yes")
+                    request.user.exam_she_child=ExamDetails.objects.filter(institute=std_child.institute,exam_class=std_child.Class)
         
     # for student latest exam
     if request.user.profile.designation:    
@@ -447,7 +508,8 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "parent":
                 
             request.user.user_child_books_status = []
-            user_children= AddChild.objects.filter( parent= request.user.profile)
+            user_children= AddChild.objects.filter( parent= request.user.profile, status="active")
+
             
             parent_student_list = []
             for books in user_children:
@@ -1075,8 +1137,6 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
             return True
         else:
             return False
-   
-
     
     def get_context_data(self, **kwargs):
        
@@ -1399,13 +1459,13 @@ def add_loca(request,pk):
         new_user = BusUsers.objects.create(user=request.user.profile, point=sel_point, institute= request.user.profile.institute)
         messages.success(request, 'Point added successfully !')  
         return HttpResponseRedirect(f'/user/profile/') 
+        
 def set_loc(request):
     try:
         request.user.sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
         request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute)
+        print(request.user.mark)
     except:
         pass
     return render(request, 'main_app/map.html')
 
-
-        

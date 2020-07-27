@@ -48,13 +48,17 @@ class Driver(models.Model):
         return str(self.name)
 
 class RouteInfo(models.Model):
+    Cho =[
+        ('active', 'Active'),('inactive', 'Inactive'),    
+    ]
     route_no = models.CharField(max_length=20, null=True)
     route_name = models.CharField(max_length=100, null=True)
-    vehicle = models.ForeignKey(to=Bus, on_delete=models.CASCADE, related_name='vehicle', null=True, blank=False)
-    vehicle_driver = models.ForeignKey(to=Driver, on_delete=models.CASCADE, related_name='driver', null=True, blank=False)
+    vehicle = models.ForeignKey(to=Bus, on_delete=models.PROTECT, related_name='vehicle', null=True, blank=False)
+    vehicle_driver = models.ForeignKey(to=Driver, on_delete=models.PROTECT, related_name='driver', null=True, blank=False)
     institute = models.ForeignKey(to=Institute, related_name="route_institute", on_delete=models.CASCADE, null=True, blank=True)
     from_date = models.DateField(null=True)
     to_date = models.DateField(null=True)
+    status = models.CharField(max_length=25,choices=Cho,default="active")
     def __str__(self):
         return self.route_name
 
