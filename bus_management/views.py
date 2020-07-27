@@ -228,7 +228,7 @@ def add_new_driver(request):
         # creating role description object
         role_des = Role_Description.objects.create(user=driver_user, institute= request.user.profile.institute, level=create_level)
         messages.success(request, 'Driver added successfully !') 
-        messages.info(request,f' Driver ID & Password is id:-{email}, password:-{pwd} ')
+        messages.info(request,f' Driver email & password are id: {email}, password: {pwd} ')
         return HttpResponseRedirect(f'/bus/')  
 
 def add_route(request):
