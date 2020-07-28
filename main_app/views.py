@@ -325,6 +325,7 @@ def dashboard(request):
             if request.method == "POST":
                 if 'map' in request.POST:
                     request.user.student=request.POST.get('selected_ch')
+                    print(request.user.student)
                     std_child=UserProfile.objects.get(id=request.user.student)
                     print('Hello')
                     print(std_child)

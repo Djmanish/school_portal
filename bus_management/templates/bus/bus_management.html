@@ -744,8 +744,16 @@
                                                                 </div>  
                                                             </div> 
                                                             </div>
+                                                            <div class="form-group">
+                                                                <label style="color: grey;"><span class="material-icons">
+                                                                    info
+                                                                    </span>Click See Map and select your point location to know longitude and latitude</label>
+                                                              </div>
+
                                                             <div class="uk-form-row" style="margin-bottom: 15px">
+
                                                                 <div class="uk-grid" data-uk-grid-margin>
+                                                                    
                                                                     <div class="uk-width-medium-1-2">
                                                                     <div class="form-group">
                                                                         <label class="required" style="color: black;">Longitude</label>
@@ -1253,7 +1261,7 @@
                                                 <i class="uk-icon-street-view"></i>
                                                 Create Point
                                             </a>
-                                        <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'see_map' %}" >
+                                        <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'see_map' %}" target="_blank" >
                                             <i class="uk-icon-map-marker"></i>
                                             See Map</a>
                                         </div>
