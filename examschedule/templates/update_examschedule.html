@@ -259,7 +259,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -429,7 +429,7 @@
     
                             </li>
                             {% endif %}
-                            <li>
+                            <li class="act_item">
                                 <a href="{% url 'examschedule_view' request.user.profile.institute.id %}">
                                     <span class="menu_icon"><i class="material-icons">visibility</i></span>
                                     <span class="menu_title">View Exam Schedule</span>
@@ -502,7 +502,7 @@
                 </div>
             </div>
             <div class="user_heading_content">
-                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading"></span></h2>
+                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading">View Exam Schedule</span></h2>
 
             </div>
             <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
@@ -512,7 +512,7 @@
             <div class="md-card">
 
                 <div class="md-card-content">
-                    <h5> View Exam Schedule</h5>
+                
             
                                               
                                                             <form method="POST" class="form-inline" id="attendance_form">
@@ -654,8 +654,9 @@
 
                                         <div class="uk-overflow-container uk-margin-bottom">
                                                         
-                                                        <table
-                                                        class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
+                                            <table
+                                                            class="uk-table uk-table-condensed uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-hover"
+                                                            id="ts_issues">
                                                         {% if exam_details %}
                                                         <thead>
                                                             <tr>
@@ -667,6 +668,21 @@
 
 
                                                         </tr>
+
+                                                                    
+                                                                 
+                                                        <tr>                                                               
+                                                                <th>Subject</th>
+                                                                <th>Subject Teacher</th>
+                                                                <th>Date</th>
+                                                                <th>Start Time</th>
+                                                                <th>End Time</th>
+                                                                <th>Assign Teacher</th>
+                                                                {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
+
+                                                                <th>Edit</th>
+                                                                <th>Delete</th>
+                                                            </tr>
                                                         </thead>
                                                         {% endif %}
 
@@ -674,24 +690,7 @@
                                                                    
                              
                                                               
-                                                                
-                                                                {% if exam_details %}
-                                                                    
-                                                                 
-                                                            <tr>                                                               
-                                                                <td>Subject</td>
-                                                                <td>Subject Teacher</td>
-                                                                <td>Date</td>
-                                                                <td>Start Time</td>
-                                                                <td>End Time</td>
-                                                                <td>Assign Teacher</td>
-                                                                {% if user.profile.designation.level_name == "principal" or user.profile.designation.level_name == "supervisor" or user.profile.designation.level_name == "admin"%}
-
-                                                                <td>Edit</td>
-                                                                <td>Delete</td>
-                                                            </tr>
-
-                                                                {% endif %}
+                         
                                                                 
                                                         
                                                             {% endif %}
@@ -703,8 +702,8 @@
                                                                             <td> {{ institute_exam_schedule.exam_subject}}</td>
                                                                             <td>{{institute_exam_schedule.exam_subject_teacher.profile.first_name}}</td>
                                                                             <td>{{institute_exam_schedule.exam_date}}</td>
-                                                                            <td>{{institute_exam_schedule.exam_start_time|date:"H:i"}}</td>
-                                                                            <td>{{institute_exam_schedule.exam_end_time|date:"H:i"}}</td>
+                                                                            <td>{{institute_exam_schedule.exam_start_time|time:"h:i a"}}</td>
+                                                                            <td>{{institute_exam_schedule.exam_end_time|date:"h:i a"}}</td>
                                                                             <td>{{institute_exam_schedule.exam_assign_teacher.profile.first_name}} {{institute_exam_schedule.exam_assign_teacher.profile.last_name}}</td>
                                                                             
 

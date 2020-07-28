@@ -38,6 +38,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
 from django.core.exceptions import PermissionDenied
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny
+from django.views import *
 
 
 
@@ -49,6 +52,8 @@ class userList(APIView):
         return Response(serializer.data)
     def post(self):
         pass
+
+@permission_classes((AllowAny, ))
 class userLoginData(APIView):
     authentication_classes=(TokenAuthentication,SessionAuthentication)
     permission_classes=(IsAuthenticated,)
@@ -106,7 +111,10 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return True
         else:
             return False
-   
+    def no_future(value):
+        today = date.today()
+        if value > today:
+            return messages.error(request, 'Establish Date cannot be in the future.')
 
 
     def get_success_url(self, **kwargs):         
@@ -404,6 +412,11 @@ def dashboard(request):
                 request.user.exam_she_child=ExamDetails.objects.filter(institute=request.user.first_child.child.institute,exam_class=request.user.first_child.child.Class)
             
             if request.method == "POST":
+                request.user.student=request.POST.get('selected_child')
+                std_child=UserProfile.objects.get(id=request.user.student)
+                request.user.post_child=std_child
+                request.user.holiday_child=HolidayList.objects.filter(institute=std_child.institute,applicable="Yes")
+                request.user.exam_she_child=ExamDetails.objects.filter(institute=std_child.institute,exam_class=std_child.Class)
                 if 'calendar' in request.POST:
                     request.user.student=request.POST.get('selected_child')
                     std_child=UserProfile.objects.get(id=request.user.student)
@@ -496,7 +509,8 @@ def dashboard(request):
         if request.user.profile.designation.level_name == "parent":
                 
             request.user.user_child_books_status = []
-            user_children= AddChild.objects.filter( parent= request.user.profile)
+            user_children= AddChild.objects.filter( parent= request.user.profile, status="active")
+
             
             parent_student_list = []
             for books in user_children:
@@ -1124,8 +1138,6 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
             return True
         else:
             return False
-   
-
     
     def get_context_data(self, **kwargs):
        
@@ -1150,7 +1162,7 @@ def approve_request(request,pk):
 
     user = UserProfile.objects.get(pk=pk)
     user.approve()
-    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>school_portal@gmail.com<p></p>"
+    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>{request.user.profile.institute.email}<p></p>"
             )
     rr= request.user.profile.institute.id
     messages.success(request, f"Request of {user.first_name} approved successfully !")
@@ -1458,5 +1470,3 @@ def set_loc(request):
         pass
     return render(request, 'main_app/map.html')
 
-
-        

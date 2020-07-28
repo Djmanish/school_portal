@@ -1478,14 +1478,16 @@
                                                 </tr>
                                         </thead>
                                         <tbody>
-                                        
+                                      
                                             {% for stdr in user.student_books %}
+                                            
                                                 <tr class="uk-table-middle">
                                                 <td class="uk-width-3-10 uk-text-nowrap">{{stdr.book_name}}</td>
                                                 <td class="uk-width-3-10 uk-text-nowrap" >{{stdr.expiry_date.date}}</td>
                                                 </tr>
-                                        
+                                            
                                             {% endfor %}
+                                           
                                         </tbody>
                                     
                                     </table>

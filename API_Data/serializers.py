@@ -5,6 +5,8 @@ from django.contrib.auth.hashers import make_password
 from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib import auth
+from rest_framework.exceptions import AuthenticationFailed
 
 
 
@@ -89,3 +91,27 @@ class SetNewPasswordSerializer(serializers.Serializer):
             return super().validate(attrs)
 
 
+class LoginSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(max_length=255, min_length=3)
+    password = serializers.CharField(max_length=68, min_length=6)
+
+    def validate(self, attrs):
+        email = attrs.get('email', '')
+        password = attrs.get('password','')
+
+        user = auth.authenticate(email=email, password=password)
+
+        if not user.is_active:
+            raise AuthenticationFailed('No User Found')
+        if not user.is_verified:
+            raise AuthenticationFailed('Email is not verified')
+
+        if not user:
+            raise AuthenticationFailed('Invalid credentials, try again')
+
+        return{
+            'email':user.email,
+            'username':user.username,
+        
+        }
+        return super().validate(attrs)

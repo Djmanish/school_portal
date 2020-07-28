@@ -530,7 +530,7 @@
                         </div>
                         <div class="user_content">
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
-                                <li class="uk-active"><a href="#">Routes Details</a></li>
+                                <li class="uk-active"><a href="#">Route Details</a></li>
                                 <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
                                     
                                         <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
@@ -576,39 +576,48 @@
 
                                 <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'update_route' %}">
                                     {% csrf_token %}
-                                    <div class="uk-grid" data-uk-grid-margin>
-                                        {% for count in range %}
-                                        <div class="uk-width-medium-1-1">
-                                            <div class="form-row p-3 mb-2 " style="background-color:rgb(212, 235, 238);">
-                                                <div class="col-md-4 mb-1">
-                                                <label class="required">Point {{forloop.counter}}</label>
-                                                <select id="point_code" class="form-control-sm form-control" name="select_point" required>
+                                    <div class="md-card-content">                                            
+                                        <div class="uk-overflow-container">                                                
+                                             <table class="uk-table uk-table-hover"> 
+                                                <thead>
+                                                <tr>
+                                                    <th>S.No</th>
+                                                    <th>Point</th>
+                                                    <th>Time</th>
+                                                    <th>Index</th>
                                                     
-                                                    <option selected disabled value="">--- Select ---</option>
-                                                    {% for i in points %}
-                                                    
-                                                    <option value={{i.id}}>{{i.point_name}} </option>
+
+                                                </tr>
+                                                </thead>
+                                                {% for count in range %}
+
+                                                <tbody>
                                                    
-                                                    {% endfor %}
-                                                 
-                                                </select>
-                                                </div>
-                                                <div class="col-md-4 mb-1">
-                                                <label for="fullname" class="required">Time {{forloop.counter}}</label>
-                                               
-                                                <input type="time" class="form-control-sm form-control"  name="time">
+                                                <tr>
+                                                    <td>{{forloop.counter}}</td>
+                                                    <td><select id="point_code" class="form-control-sm form-control" name="select_point" required>
+                                                    
+                                                        <option selected disabled value="">--- Select ---</option>
+                                                        {% for i in points %}
+                                                        
+                                                        <option value={{i.id}}>{{i.point_name}} </option>
+                                                       
+                                                        {% endfor %}
+                                                     
+                                                    </select></td>
+                                                    <td><input type="time" class="form-control-sm form-control"  name="time"></td>  
+                                                    <td><input type="number" class="form-control-sm form-control"  name="index"></td>                                                     
+                                                </tr>
                                                 
-                                                </div>     
-                                                <div class="col-md-4 mb-1">
-                                                    <label for="fullname" class="required">Index {{forloop.counter}}</label>
-                                                   
-                                                    <input type="number" class="form-control-sm form-control"  name="index">
-                                                    
-                                                    </div>      
-                                            </div>
-                                        </div>
-                                        {% endfor %}
+                                                                         
+                                                </tbody>
+                                                {% endfor %}
+                                            </table>                                                
+                                        </div>                                            
                                     </div>
+
+
+                                    
                                    <input name="hide_route" type="hidden" value="{{r_routes.id}}">
                                     <div class="uk-grid" style="text-align: center;margin-top: 10px;">
                                         <div class="uk-width-1-1">

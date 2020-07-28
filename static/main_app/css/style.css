@@ -437,6 +437,10 @@ input[type="checkbox"]:required:valid + label::before {
    color: white;
 }
 
+.alink {
+  color: green;
+}
+
 #report_card_percentage{
   text-align:center;
   padding-left:50px;
@@ -493,7 +497,7 @@ color:#ff0000;
 .report_card_button{
     outline:none;
     border: 0;
-    margin-left:580px;
+    margin-left:600px;
 }
 
 #button_align{

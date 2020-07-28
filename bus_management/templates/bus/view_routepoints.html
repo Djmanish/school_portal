@@ -1,53 +1,50 @@
 <!doctype html>
 {% load static %}
-{% load crispy_forms_tags %}
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="en">
+<!--<![endif]-->
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Remove Tap Highlight on Windows Phone IE -->
-    <meta name="msapplication-tap-highlight" content="no"/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="msapplication-tap-highlight" content="no" />
 
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
 
-    <title>Add Driver</title>
- 
-    <script src="{% static 'main_app/js/jquery.js' %}"></script>
-   
+    <title>Update Route's Points</title>
 
-   <!-- bootstrap -->
-   <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
     <!-- uikit -->
-    <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}" media="all">
-
+    <link rel="stylesheet" href="{% static 'main_app/bower_components/uikit/css/uikit.almost-flat.min.css' %}"
+        media="all">
+        
+    <link href="{% static 'main_app/bower_components/uikit/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
     <!-- flag icons -->
     <link rel="stylesheet" href="{% static 'main_app/icons/flags/flags.min.css' %}" media="all">
 
-    
+  
     <!-- altair admin -->
     <link rel="stylesheet" href="{% static 'main_app/css/main.min.css' %}" media="all">
-
+    <script src="{% static 'main_app/bower_components/js/bootstrap-datetimepicker.min.js' %}"></script>
     <!-- themes -->
     <link rel="stylesheet" href="{% static 'main_app/css/themes/themes_combined.min.css' %}" media="all">
 
- 
-
-   <!-- matchMedia polyfill for testing media queries in JS -->
+    <!-- matchMedia polyfill for testing media queries in JS -->
     <!--[if lte IE 9]>
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.js' %}"></script>
         <script type="text/javascript" src="{% static 'main_app/bower_components/matchMedia/matchMedia.addListener.js' %}"></script>
         <link rel="stylesheet" href="{% static 'main_app/css/ie.css' %}" media="all">
     <![endif]-->
     <link rel="stylesheet" href="{% static 'main_app/css/style.css' %}">
-
- 
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
+
 <body class="disable_transitions sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
     <header id="header_main">
@@ -98,6 +95,14 @@
                                             <a href="page_institute_profile.html" class="uk-margin-top">
                                                 <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
                                                 <span class="uk-text-muted uk-display-block">Institute profile</span>
+                                            </a>
+                                            <a href="page_institute_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">Admin profile</span>
+                                            </a>
+                                            <a href="page_institute_profile.html" class="uk-margin-top">
+                                                <i class="material-icons md-36 md-color-orange-600">&#xE87C;</i>
+                                                <span class="uk-text-muted uk-display-block">Teacher profile</span>
                                             </a>
                                         </div>
                                     </div>
@@ -228,7 +233,8 @@
             <i class="md-icon header_main_search_close material-icons">&#xE5CD;</i>
             <form class="uk-form uk-autocomplete" data-uk-autocomplete="{source:'data/search_data.json'}">
                 <input type="text" class="header_main_search_input" />
-                <button class="header_main_search_btn uk-button-link"><i class="md-icon material-icons">&#xE8B6;</i></button>
+                <button class="header_main_search_btn uk-button-link"><i
+                        class="md-icon material-icons">&#xE8B6;</i></button>
                 <script type="text/autocomplete">
                     <ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">
                                                 <li data-value="">
@@ -253,14 +259,9 @@
     <aside id="sidebar_main" >
         
         <div class="institute_logo_top" >
-            
-            {% if user.profile.institute.institute_logo.url %}
             <div>
-                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="institute_logo" style="height: 48px;" /> </a>
-            </div>  
-            {% endif %}
-                
-           
+                <a href="#" class="user_action_image"><img id="slogo" class="img-logo" src="{{user.profile.institute.institute_logo.url}}" alt="institute_logo style="height: 48px;" /> </a>
+            </div>
         </div>
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
@@ -325,19 +326,14 @@
 </li>
 <!-- ending notice menu -->
 
-{% for i in user.user_institute_role.level.permissions.all %}    
-              {% if i.function_name == "Can Update Lecture Timing" %}
+{% if user.profile.designation.level_name == "admin" or  user.profile.designation.level_name == "teacher" or user.profile.designation.level_name == "principal"   %}
               <li  title="Fees">
                 <a href="{% url 'fees_home' %}">
                     <span class="menu_icon"><i class="material-icons">receipt</i></span>
                     <span class="menu_title">Fees Setup</span>
                 </a>
             </li>      
-              {% endif %}
-            {% endfor %}
-
-
-           
+              {% endif %}           
     
 {% if user.profile.designation.level_name == "parent" %}
 <li  title="Fees">
@@ -490,260 +486,195 @@
         </div>
     </aside><!-- main sidebar end -->
 
+    <!-- Messages Section Begins -->
+    
     <div id="page_content">
         <div id="page_content_inner">
-             <!-- starting message for new users depending on admisson query and profile -->
-            
-             
-             
-             
-             
-                 <!-- ending message for new users depending on admisson query and profile -->
-           
-             <!-- messages -->
-             {% if messages %}
-             <div class="md-card md-card-primary">
-           <div >
-               <ul class="messages alert">
-                   {% for message in messages %}
-                   <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
-                   {% endfor %}
-               </ul>
-           </div>
-             </div>
-             {% endif %}
+            {% if messages %}
+            <!-- <div class="md-card md-card-primary">
+          <div class=>
+              <ul class="messages alert">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class=" text-{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          </div>
+            </div> -->
+            {% endif %}
             <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
                 <div class="uk-width-large">
                     <div class="md-card">
                         <div class="user_heading">
-                            <div class="user_heading_menu hidden-print">
-                                <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
-                                    <!-- <i class="md-icon material-icons md-icon-light">&#xE5D4;</i> -->
-                                    <!-- <div class="uk-dropdown uk-dropdown-small">
-                                        <ul class="uk-nav">
-                                             <li><a href="#">Action 1</a></li>
-                                            <li><a href="#">Action 2</a></li>
-                                        </ul>
-                                    </div> -->
-                                </div>
-                            </div>
+                            
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar"/>
+                                    <img src="{{institute_data.profile_pic.url}}" alt="user avatar" />
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute.name}}</span>
-                                <span class="sub-heading">Add a Driver</span></h2>
-                                                            </div>
-                           
-                        </div>
-                        <div class="user_content">
-                            <div class="row">
-                                <div class="col-sm-6" >
-                                  <h3 class="uk-text-primary">Fill Driver Info</h3>
-                                </div>
-                                <div class="col-sm-6 text-right">
-                                    <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
-                                </div>
-                              </div>
-                           
-                        <!-- starting user form  -->
-                        <form method="POST" enctype="multipart/form-data" action="{% url 'add_new_driver' %}">
-                            {% csrf_token %}
-                            
-                            <div class="form-group">
-                                                                                            
-                                <label class="required">Driver Code</label>
-                                <input type="text" class="form-control" name='driver_code' required>
-                              </div>
-                              <div class="form-group">
-                                                                                            
-                                <label class="required">First Name</label>
-                                <input type="text" class="form-control n_i" name='first_name' required="required" >
-                              </div>
-
-                              <div class="form-group">
-                                <label >Middle Name</label>
-                                <input type="text" class="form-control n_i" name='middle_name'>
-                              </div>
-
-                              <div class="form-group">
-                                <label >Last Name</label>
-                                <input type="text" class="form-control n_i" name='last_name' >
-                              </div>
-
-                              <div class="form-group">
-                                <label class="required">Father's Name</label>
-                                <input type="text" class="form-control n_i" name='father_name' required>
-                              </div>
-
-                              <div class="form-group">
-                                <label >Mother's Name</label>
-                                <input type="text" class="form-control n_i" name='mother_name'>
-                              </div>
-    
-                              <div class="form-group">
-                                <label class="required" for="gender">Gender</label>
-                                <select class="form-control" id="gender" name="gender" required>                                       
-                                  <option >Male</option>
-                                  <option  >Female</option >
-                                  <option >Other</option>
-                                  
-                                </select>
-                              </div>
-
-                              <div class="form-group" >
-                                <label class= "required">Date of Birth</label>
-                                
-                                <input type="date" class="form-control" max="{{date|date:'Y-m-d'}}" name='dob' pattern="^[0-9-]{10}$"  placeholder="YYYY-MM-DD" required>
-                              </div>
-                              
-                              <div class="form-group">
-                                <label >Marital Status</label>
-                                <select class="form-control" name="marital_status">     
-                                  <option >Unmarried</option>
-                                  <option >Married</option >
-                                </select>
-                              </div>
-                             
-                              
-
-                              <div class="form-group">
-                                <label >Category</label>
-                                <select class="form-control" name="category_">     
-                                    
-                                    <option disabled>-- Select One --</option>
-                                  <option value="Unreserved" >Unreserved (General)</option>
-                                  <option  >Sc/St</option >
-                                    <option  >OBC</option >
-                                </select>
-                              </div>                            
-                             
-                              <div class="form-group">
-                                <label >Change Profile Picture</label>
-                                <div class="custom-file">
-                                  <input type="file" class="custom-file-input" id="customFile" accept="image/*" name='pc'>
-                                  <label class="custom-file-label" for="customFile">Choose file</label>
-                                </div>
-                              </div>
-
-
-
-                              <div class="form-group">
-                                <label class="required">Contact No.</label>
-                                <input type="text" class="form-control" name='mobile_number'  pattern="[1-9]{1}[0-9]{9}" required>
-                              </div>
-                              <div class="form-group">
-                                <label class="required" >E-Mail</label>
-                                <input type="email" class="form-control" name='email' required>
-                              </div>
-                              <div class="form-group">
-                                <label class="required" >Aadhaar Card Number</label>
-                                <input type="number" class="form-control n_a positive_number" maxlength="12" name='adhar_number'  placeholder="12 digit aadhar card number" required>
-                              </div>
-                              <div class="form-group">
-                                <label class="required" >Driving License No.</label>
-                                <input type="text" class="form-control " name='driving_license'  placeholder="eg: XX123456789" required>
-                              </div>
-
-                              <div class="form-group">
-                                <label class="required">Address Line 1</label>
-                                <input type="text" class="form-control" name='address_line_1' required>
-                              </div>
-
-                              <div class="form-group">
-                                <label >Address Line 2</label>
-                                <input type="text" class="form-control" name='address_line_2'>
-                              </div>
-
-                              <div class="form-group">
-                                <label class="required" >City</label>
-                                <input type="text" class="form-control n_i" name='city'  required>
-                              </div>
-
-                              <div class="form-group" > 
-                                <label class="required">State</label>
-                                <select class="form-control" name="state"  required>
-                                    <option selected disabled value=""> --- select state --- </option>              
-                                  {% for state in all_states %}
-                                      <option value="{{state.id}}">{{state}}</option>
-                                  {% endfor %}
-                                      
-                                  
-                                </select>
-                              </div>
-                              <!-- <div class="form-group">
-                                <label class="required">Country:</label>
-                                <input type="text" class="form-control n_i" name='country' value="{{user_info.country}}" required>
-                              </div> -->
-
-                              <div class="form-group">
-                                <label class="required">Pin Code</label>
-                                <input type="text" class="form-control" name='u_pin_code' required>
-                              </div>
-
-                              
-                      
-                              <input class="md-btn md-btn-primary" type="submit" value="Submit" >
-
-
-                        </form>
-                        <!-- ending user form -->
-
-
-
-                            
-                                            </div>
-                                   
-                    </div>
-                </div>
-                <!-- <div class="uk-width-large-3-10 hidden-print">
-                    <div class="md-card">
-                        <div class="md-card-content">
-                            <div class="uk-margin-medium-bottom">
-                                <h3 class="heading_c uk-margin-bottom">Alerts</h3>
-                                <ul class="md-list md-list-addon">
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Ullam dolor praesentium.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Et voluptatum cumque excepturi dolores.</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Veniam fuga sed.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Quia similique autem aut eaque qui.</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="md-list-addon-element">
-                                            <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
-                                        </div>
-                                        <div class="md-list-content">
-                                            <span class="md-list-heading">Voluptatem voluptatem veritatis.</span>
-                                            <span class="uk-text-small uk-text-muted uk-text-truncate">Iure autem asperiores numquam rerum ut sunt.</span>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <h2 class="heading_b uk-margin-bottom"><span
+                                        class="uk-text-truncate">{{user.profile.institute.name}}</span>
+                                        <span class="sub-heading">Vehicle Management System</span></h2>
+                                        <!-- <ul class="user_stats">
+                                            <li>
+                                                <h4 class="heading_a">0 <span class="sub-heading">Books</span></h4>
+                                            </li>
+                                            <li>
+                                                <h4 class="heading_a">0 <span class="sub-heading">Issued</span></h4>
+                                            </li>
+                                            <li>
+                                                <h4 class="heading_a">0 <span class="sub-heading">Left</span></h4>
+                                            </li>
+                                        </ul> -->
                             </div>
                             
-                            <a class="md-btn md-btn-flat md-btn-flat-primary" href="#">Show all</a>
+                        </div>
+
+                        <a type="hidden" id="modal_edit_routepoint_btn" data-uk-modal="{target:'#modal_edit_routepoint'}"></a>
+                        <div class="uk-modal" id="modal_edit_routepoint">
+                            <div class="uk-modal-dialog">
+                                <button type="button" class="uk-modal-close uk-close"></button>
+                                <div class="uk-modal-header">
+                                    <h3 class="uk-text-primary">Update Route Point</h3>
+                                </div>
+                                <form  method="POST" action="{% url 'update_routepoints' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" class="form-control" name="edit_routepoint_id_hide" id="edit_routepoint_id_hide" required>
+                                      <div class="form-group">
+                                        <label style="color: black;">Route Name</label>
+                                      
+                                        <input type="text" class="form-control" name="edit_routename" id="edit_routename" readonly>
+                                      </div>        
+                                      <div class="form-group">
+                                        <label  style="color: black;">Point Name</label>
+                                        <input type="text" class="form-control" name="edit_routepoint_name" id= "edit_routepoint_name" readonly>
+                                       </div>
+                                      
+                                        <div class="uk-form-row">
+                                            <div class="uk-grid" data-uk-grid-margin>
+                                                <div class="uk-width-medium-1-2">
+                                                <div class="form-group">
+                                                    <label class="required" style="color: black;">Index</label>
+                                                    <input type="text" class="form-control positive_number" name="edit_routeindex" id= "edit_routeindex">
+                                                </div>
+                                                </div>
+                                                <div class="uk-width-medium-1-2">
+                                                <div class="form-group">
+                                                    <label class="required" style="color: black;">Time</label>
+                                                    <input type="time" class="form-control" name="edit_routetime" id="edit_routetime" required>
+                                                </div>   
+                                                </div>  
+                                                
+                                                </div> 
+                                                </div>
+                                                
+                                          <table>
+                                            <br>
+                                                <td> 
+                                              <button type="submit" class="md-btn md-btn-primary" style="background-color: #1976d2;width: 140px;">Update Point</button>
+                                            </td>
+                                            <td style="padding-left:20px;">
+                                    <!-- <button type="button" class="md-btn md-btn-primary uk-modal-close" style="background-color: white;color: black ;width: 140px;">Cancel</button> -->
+                                </td>
+                            </tr>
+                            </table>
+                            </form>
+                            </div>
+                        </div>
+
+
+
+                        <div class="user_content">
+                             <a onclick="goBack()" class="md-btn md-btn-primary text-white"><i class=" material-icons">arrow_back </i> Go Back</a>
+                            
+                                <div class="md-list-content text-center">
+                                    <span class="uk-text-primary uk-text-large" ><strong>Route Name:</strong></span>
+                                    <span class="uk-text-large"> {{view_route.route_name}}</span>
+                                   
+                                </div>
+                                
+                            
+                                
+                                
+
+                                <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'update_route' %}">
+                                    {% csrf_token %}
+                                    <div class="md-card-content">                                            
+                                        <div class="uk-overflow-container">                                                
+                                             <table class="uk-table uk-table-hover"> 
+                                                <thead>
+                                                <tr>
+                                                    <th>S.No</th>
+                                                    <th>Points</th>
+                                                    <th>Index</th>
+                                                    <th>Time</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                    
+
+                                                </tr>
+                                                </thead>
+                                                
+
+                                                <tbody>
+                                                    {% for i in maps %}
+                                                <tr>
+                                                    <td>{{forloop.counter}}</td>
+                                                    <td>{{i.point}}</td>  
+                                                    <td>{{i.index}}</td>
+                                                    <td>{{i.time}}</td>  
+                                                    <td><a id="{{i.id|slugify}}"><i class="material-icons" style="color: #2196f3;" >edit</i></a>
+                                                    </td> 
+                                                    <td><a  class="confirm-delete12" href="{% url 'delete_view_routepoints' i.point.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                    </td> 
+                                                                                                    
+                                                </tr>
+                                                
+                                                  
+                                                <script>
+                                                    $(document).ready(function(){
+                                                    $('#{{i.id|slugify}}').click(function(){
+                                                        $('#modal_edit_routepoint_btn').click();
+                                                        $('#edit_routepoint_id_hide').val('{{i.id}}');
+                                                        $('#edit_routename').val('{{i.route}}');
+                                                        $('#edit_routepoint_name').val('{{i.point}}');
+                                                        $('#edit_routeindex').val('{{i.index}}');
+                                                        $('#edit_routetime').val('{{i.time|time:"h:i"}}');
+                                                        
+                                                    });
+                                                    });
+                                                </script>
+                                                {% endfor %}               
+                                                        
+                                                </tbody>
+                                                
+                                            </table>                                                
+                                        </div>                                            
+                                    </div>
+                                    <script>
+                                                    $(document).on('click', '.confirm-delete12', function(){
+                                                    return confirm('Are you sure you want to delete this?');
+                                                    })
+                                                </script>  
+
+                                    
+                                                                       
+                                </form> 
+                            
+                            
+                            
+                            
                         </div>
                     </div>
-                </div> -->
+                </div>
+                
             </div>
         </div>
     </div>
     <footer id="footer" >
         &copy; A product of <a target="_blank" id="tblf" href="https://www.trueblueappwerks.com" >TrueBlue AppWerks</a>
     </footer> 
+
     <!-- google web fonts -->
     <script>
         WebFontConfig = {
@@ -754,10 +685,10 @@
                 ]
             }
         };
-        (function() {
+        (function () {
             var wf = document.createElement('script');
             wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+                '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
             wf.type = 'text/javascript';
             wf.async = 'true';
             var s = document.getElementsByTagName('script')[0];
@@ -771,85 +702,33 @@
     <script src="{% static 'main_app/js/uikit_custom.min.js' %}"></script>
     <!-- altair common functions/helpers -->
     <script src="{% static 'main_app/js/altair_admin_common.min.js' %}"></script>
-
     <script src="{% static 'main_app/js/script.js' %}"></script>
 
+
     <script>
-        $(function() {
-            if(isHighDensity()) {
-                $.getScript( "assets/js/custom/dense.min.js", function(data) {
+        $(function () {
+            if (isHighDensity()) {
+                $.getScript("assets/js/custom/dense.min.js", function (data) {
                     // enable hires images
                     altair_helpers.retina_images();
                 });
             }
-            if(Modernizr.touch) {
+            if (Modernizr.touch) {
                 // fastClick (touch devices)
                 FastClick.attach(document.body);
             }
         });
-        $window.load(function() {
+        $window.load(function () {
             // ie fixes
             altair_helpers.ie_fix();
         });
     </script>
-
-
-    
-    
-<!-- code to toggle admin options -->
-<script>
-        $(document).ready(function(){
-            $('#defaultUnchecked').click(function(){
-                if($(this).prop("checked") == true){
-                    $('#institute_list').hide()
-                    $('#institute-options').show()
-                }
-                else if($(this).prop("checked") == false){
-                    $('#institute-options').hide()
-                    $('#institute_list').show()
-                }
-            });
-        });
-    
-    </script>
-
-<!-- ending code to toggle admin options -->
-
-<script>
-    $("input[type=date]").datepicker({
-  dateFormat: 'yy-mm-dd',
-  onSelect: function(dateText, inst) {
-    $(inst).val(dateText); // Write the value in the input
-  }
-});
-
-// Code below to avoid the classic date-picker
-$("input[type=date]").on('click', function() {
-  return false;
-});
-</script>
-
-<script>
-    $(document).ready(function(){
-      $('#select_school').change(function(){
-          $.ajax({
-              type:'POST',
-              url:'/fetch_levels/',
-              data:{school_id:$("#select_school").val(), csrfmiddlewaretoken: '{{ csrf_token }}' },
-              
-              success: function(msg){
-                  $('#fdata').html(msg);
-              }
-          });
-      });
-    });
-    </script>
-    
-
-<script src="{% static 'main_app/js/script.js' %}"></script>  
-
-
-
-   
+    <script>
+        function goBack() {
+          window.history.back();
+        }
+        </script>
+        
 </body>
+
 </html>
