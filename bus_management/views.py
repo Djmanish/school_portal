@@ -18,7 +18,7 @@ def bus(request):
     if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
         buses = Bus.objects.filter(bus_institute=request.user.profile.institute)
         states_list = State.objects.all()
-        points = Point.objects.filter(point_institute=request.user.profile.institute)
+        points = Point.objects.filter(point_institute=request.user.profile.institute, status="active")
         drivers = Driver.objects.filter(institute=request.user.profile.institute)
         active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
         routes = RouteInfo.objects.filter(institute=request.user.profile.institute, status="active")
@@ -126,7 +126,10 @@ def edit_point(request):
         state = State.objects.get(pk=p_state)
         point.point_code= request.POST['edit_point_code']
         point.point_name = request.POST['edit_point_name']
-        point.point_street_no = request.POST['edit_point_street']
+        ss = request.POST['edit_point_street']
+        if ss == "":
+            ss= None
+        point.point_street_no= ss
         point.point_landmark = request.POST['edit_point_landmark']
         point.point_exact_place = request.POST['edit_point_place']
         point.point_city = request.POST['edit_point_city']
@@ -217,14 +220,19 @@ def first_n_digits(num, n=4):
     return num // 10 ** (int(math.log(num, 10)) - n + 1)
 
 def add_driver(request):
-    all_states = State.objects.all()
-    date =datetime.now().date()
-    print(date)
-    context_data = {
-        'all_states':all_states,
-        'date': date
-    }
-    return render(request, 'bus/driver.html', context_data)
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    vehicle_permission = App_functions.objects.get(function_name='Can Manage Vehicles')   
+    if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+        all_states = State.objects.all()
+        date =datetime.now().date()
+        print(date)
+        context_data = {
+            'all_states':all_states,
+            'date': date
+        }
+        return render(request, 'bus/driver.html', context_data)
+    else:
+        raise PermissionDenied
 
 def add_new_driver(request):
     user_permissions = request.user.user_institute_role.level.permissions.all()
@@ -336,20 +344,25 @@ def add_route(request):
         raise PermissionDenied
 
 def route_map(request):
-    if request.method == 'POST':
-        route = int(request.POST['route'])
-        point = int(request.POST['point'])
-        sch_route = RouteInfo.objects.get(id=route)
-        points = Point.objects.filter(point_institute=request.user.profile.institute)
-        context_data = {
-        'sch_route':sch_route,
-        'range':range(point),
-        'points':points,
-        
-        }
-        print(route)
-        print(point)
-        return render(request, 'bus/map_route.html', context_data)  
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    vehicle_permission = App_functions.objects.get(function_name='Can Manage Vehicles')   
+    if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+        if request.method == 'POST':
+            route = int(request.POST['route'])
+            point = int(request.POST['point'])
+            sch_route = RouteInfo.objects.get(id=route)
+            points = Point.objects.filter(point_institute=request.user.profile.institute)
+            context_data = {
+            'sch_route':sch_route,
+            'range':range(point),
+            'points':points,
+            
+            }
+            print(route)
+            print(point)
+            return render(request, 'bus/map_route.html', context_data)  
+    else:
+        raise PermissionDenied
 
 def update_map_route(request):
     if request.method == 'POST':
@@ -454,6 +467,11 @@ def add_point_route (request):
         for i in range(length):
             s_point= Point.objects.get(id=select_point[i])
             new= RouteMap.objects.create(route=s_route, point=s_point, index=i+1, time=select_time[i], routemap_institute= request.user.profile.institute)
+            try:
+                s_users = BusUsers.objects.filter(point=s_point,institute= request.user.profile.institute)
+                vehicle_signals.point_map.send(sender=None,route=s_route,point=s_point)
+            except BusUsers.DoesNotExist:
+                pass
         messages.success(request, "Point(s) added successfully !")     
     return HttpResponseRedirect(f'/bus/') 
     
@@ -486,11 +504,10 @@ def see_map(request):
         return render(request, 'bus/index.html', context_data)
     except InstituteLocation.DoesNotExist:
         geolocator = Nominatim(user_agent="bus_management")
-        
         city = request.user.profile.city
         state = request.user.profile.state.name
         country ="India"
-        insi_loc = geolocator.geocode(city+','+ state +','+ country)
+        insi_loc = geolocator.geocode(city+','+ country)
         print("latitude is :-" ,insi_loc.latitude,"\nlongtitude is:-" ,insi_loc.longitude)
         context_data={
         'insi_loc':insi_loc,
