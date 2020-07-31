@@ -1464,7 +1464,7 @@ def add_loca(request,pk):
 def set_loc(request):
     try:
         request.user.sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
-        request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute)
+        request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute, status="active")
         print(request.user.mark)
     except:
         pass
