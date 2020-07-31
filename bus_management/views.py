@@ -271,6 +271,12 @@ def add_new_driver(request):
             pin = request.POST['u_pin_code'].strip() 
             # security chk
             try:
+                e = User.objects.get(email=email)
+                messages.error(request, 'Entered email id is already registered !')
+                return HttpResponseRedirect(f'/bus/add_driver/')
+            except User.DoesNotExist:
+                pass
+            try:
                 d_id = Driver.objects.get(driver_id=d_code)
                 messages.error(request, 'Driver id already exists !')
                 return HttpResponseRedirect(f'/bus/add_driver/')

@@ -1501,6 +1501,7 @@
 
                     <!-- Driver Card -->
                     {% if request.user.profile.designation.level_name == "driver" %}
+                    {% if user.driver_data %}
                     <div class="uk-width-medium-1-2">
                         <div class="md-card">
                             <div class="md-card-content">
@@ -1594,6 +1595,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                     {% endif %}
         <!-- Calendar -->
         {% if user.profile.designation %}
