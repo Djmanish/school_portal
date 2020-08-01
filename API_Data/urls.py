@@ -3,8 +3,7 @@ from django.http import HttpResponse
 
 from . import views
 from .models import *
-from .views import RegisterView, VerifyEmail, PasswordTokenCheckAPI, RequestPasswordResetEmail, SetNewPasswordAPIView
-
+from .views import * 
 
 # from holidaylist.views import add_holiday
 
@@ -18,10 +17,12 @@ urlpatterns = [
   path('task-detail/<str:pk>/', views.taskDetail, name="task-detail"),
   path('task-create/', views.taskCreate, name="task-create"),
 
+  path('login/',LoginAPIView.as_view(), name="login"),
   path('registration/', RegisterView.as_view(), name="registration"),
   # path('email-verify/', VerifyEmail.as_view(), name="email-verify"),
   path('request-reset-email/', RequestPasswordResetEmail.as_view(),name="request-reset-email"),
-  path('password-reset-complete/', SetNewPasswordAPIView.as_view(), name='password-reset-complete')
+  path('password-reset-complete/', SetNewPasswordAPIView.as_view(), name='password-reset-complete'),
+  path('user_profile/',UserProfileView.as_view(), name="user_profile")
 
 
   

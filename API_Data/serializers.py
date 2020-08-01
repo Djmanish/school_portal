@@ -90,10 +90,24 @@ class SetNewPasswordSerializer(serializers.Serializer):
 
             return super().validate(attrs)
 
+class EmailVerificationSerializer(serializers.ModelSerializer):
+        token = serializers.CharField(max_length=555)
+
+        class Meta:
+            model = User
+            fields = ['token']
+
 
 class LoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=255, min_length=3)
-    password = serializers.CharField(max_length=68, min_length=6)
+    password = serializers.CharField(max_length=68, min_length=6, write_only=True)
+    username = serializers.CharField(max_length=255, min_length=3, read_only=True)
+    tokens = serializers.CharField(max_length=68, min_length=6, read_only=True)
+
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'tokens']
 
     def validate(self, attrs):
         email = attrs.get('email', '')
@@ -101,17 +115,26 @@ class LoginSerializer(serializers.ModelSerializer):
 
         user = auth.authenticate(email=email, password=password)
 
+        if not user:
+            raise AuthenticationFailed('Invalid credentials, try again')
+
         if not user.is_active:
             raise AuthenticationFailed('No User Found')
         if not user.is_verified:
             raise AuthenticationFailed('Email is not verified')
 
-        if not user:
-            raise AuthenticationFailed('Invalid credentials, try again')
+        
 
         return{
             'email':user.email,
             'username':user.username,
+            'tokens':user.token,
         
         }
         return super().validate(attrs)
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =UserProfile
+        fields= '__all__'
