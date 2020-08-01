@@ -596,7 +596,7 @@
                               <div class="form-group" >
                                 <label class= "required">Date of Birth</label>
                                 
-                                <input type="date" class="form-control" name='dob' pattern="^[0-9-]{10}$" placeholder="YYYY-MM-DD" required>
+                                <input type="date" class="form-control" max="{{date|date:'Y-m-d'}}" name='dob' pattern="^[0-9-]{10}$"  placeholder="YYYY-MM-DD" required>
                               </div>
                               
                               <div class="form-group">
@@ -840,13 +840,14 @@ $("input[type=date]").on('click', function() {
               success: function(msg){
                   $('#fdata').html(msg);
               }
-          })
-      })
-    })
+          });
+      });
+    });
     </script>
     
 
-<script src="{% static 'main_app/js/script.js' %}"></script>   
+<script src="{% static 'main_app/js/script.js' %}"></script>  
+
 
 
    

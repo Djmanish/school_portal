@@ -333,6 +333,7 @@ def dashboard(request):
             if request.method == "POST":
                 if 'map' in request.POST:
                     request.user.student=request.POST.get('selected_ch')
+                    print(request.user.student)
                     std_child=UserProfile.objects.get(id=request.user.student)
                     print('Hello')
                     print(std_child)
@@ -1463,7 +1464,7 @@ def add_loca(request,pk):
 def set_loc(request):
     try:
         request.user.sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
-        request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute)
+        request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute, status="active")
         print(request.user.mark)
     except:
         pass
