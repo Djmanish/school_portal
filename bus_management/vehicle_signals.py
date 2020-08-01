@@ -5,7 +5,11 @@ from .models import *
 from notices.models import *
 from django.contrib.auth.signals import user_logged_in
 from AddChild.models import *
+
+
+
 # Starting Custom signal for start bus
+
 start = Signal(providing_args=['route','request'])
 @receiver(start)
 def vehicle_start_notification(sender, **kwargs):
@@ -39,6 +43,22 @@ def vehicle_start_notification(sender, **kwargs):
     except:
         pass
 
+point_map = Signal(providing_args=['route','point','request'])
+@receiver(point_map)
+def point_map_notification(sender, **kwargs):
+    try:
+        r = kwargs['route']
+        p = kwargs['point']
+        s_route= RouteInfo.objects.get(id=r.id)
+        s_point= Point.objects.get(id=p.id)
+        p_timing= RouteMap.objects.get(route=s_route,point=s_point,routemap_institute=s_point.point_institute)
+        print(p_timing)
+        users = BusUsers.objects.filter(point=s_point,institute= s_point.point_institute)
+        point_notice= Notice.objects.create(institute = s_point.point_institute, category ='Vehicle', subject =f"Your point {s_point.point_name} is mapped with route {s_route.route_name}.", content=f"Your point {s_point.point_name} is mapped with route:-{s_route.route_name}, Vehicle No.:-{s_route.vehicle.bus_no}, Driver:- {s_route.vehicle_driver.name.first_name} {s_route.vehicle_driver.name.last_name} and Timing:- {p_timing.time}", created_at= timezone.now(), publish_date= timezone.now() )
+        for i in users:
+                point_notice.recipients_list.add(i.user)
+    except:
+        pass
 
 
 # starting signal for vehicle

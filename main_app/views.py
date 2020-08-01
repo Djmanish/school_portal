@@ -333,6 +333,7 @@ def dashboard(request):
             if request.method == "POST":
                 if 'map' in request.POST:
                     request.user.student=request.POST.get('selected_ch')
+                    print(request.user.student)
                     std_child=UserProfile.objects.get(id=request.user.student)
                     print('Hello')
                     print(std_child)
@@ -439,6 +440,8 @@ def dashboard(request):
                     request.user.exam_date1 = None
                     request.user.exam_date2 = None                  
                 max_marks=request.user.exam_type_child.exam_max_marks
+                print("Hello Max Marks")
+                print(max_marks)
                 total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
                 request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
                 request.user.total_sum = 0
@@ -1161,7 +1164,7 @@ def approve_request(request,pk):
 
     user = UserProfile.objects.get(pk=pk)
     user.approve()
-    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>school_portal@gmail.com<p></p>"
+    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>{request.user.profile.institute.email}<p></p>"
             )
     rr= request.user.profile.institute.id
     messages.success(request, f"Request of {user.first_name} approved successfully !")
@@ -1463,7 +1466,7 @@ def add_loca(request,pk):
 def set_loc(request):
     try:
         request.user.sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
-        request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute)
+        request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute, status="active")
         print(request.user.mark)
     except:
         pass

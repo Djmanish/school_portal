@@ -715,7 +715,7 @@ success: function(msg){
                                                     </div>
                         <div class="form-group">
                             <label for="usr" class="required">Publish Date & Time</label>
-                            <input type="datetime-local" class="form-control form-control-sm" name="pubdatetime"  required>
+                            <input type="datetime-local" class="form-control form-control-sm no_past_date" name="pubdatetime"  required>
                         </div>
 
 
@@ -999,6 +999,30 @@ alert('not deleted')
     });
     </script>
 <!-- ending script for search in audience -->
+ <!-- starting for no past date  -->
+ <script>
+    $(document).ready(function(){
+      $(".no_past_date").blur(function(){
+      var d = $('.no_past_date').val();
+      var d_v = new Date(d);
+      d_v.setHours(0,0,0,0);
+      var c_d = new Date();
+      c_d.setHours(0,0,0,0);
+    
+    if (c_d >d_v){
+     alert('This field does not accept past date !');
+     $(this).val('0000-00-00');
+     $(this).focus();
+     }
+    else{
+    return true;
+    }  
+      });
+    });
+    </script>
+<!-- ending for no past date -->
+
+
 
 <script src="{% static 'main_app/js/script.js' %}"></script>
     </body>

@@ -742,7 +742,7 @@
                             <div class="md-card-content">
                                 <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">person</i></span></div>
                                 <span class="uk-text-muted uk-text-small">Name</span>
-                                <h4 class="uk-margin-remove">{{user.driver_data.vehicle_driver.name.first_name}} {{user.driver_data.vehicle_driver.name.last_name}}</h4>
+                                <h4 class="uk-margin-remove">{{user.profile.first_name}} {{user.profile.last_name}}</h4>
                             </div>
                         </div>
                     </div>
@@ -1501,6 +1501,7 @@
 
                     <!-- Driver Card -->
                     {% if request.user.profile.designation.level_name == "driver" %}
+                    {% if user.driver_data %}
                     <div class="uk-width-medium-1-2">
                         <div class="md-card">
                             <div class="md-card-content">
@@ -1518,55 +1519,16 @@
                                         <tbody>
                                             
                                             <tr>
-                                                <td>{{user.last6}}</td>
+                                                <td>{{user.today}}</td>
                                                 <td>{{user.driver_data.route_name}}</td>
-                                                {% if user.trip6 == user.route_map %}
+                                                {% if user.trip == user.route_map %}
                                                 <td>Completed</td>
                                                 {% else %}
                                                 <td>Incomplete</td>
                                                 {% endif %}
                                                
-                                            </tr>    
-                                            <tr>
-                                                <td>{{user.last5}}</td>
-                                                <td>{{user.driver_data.route_name}}</td>
-                                                {% if user.trip5 == user.route_map %}
-                                                <td>Completed</td>
-                                                {% else %}
-                                                <td>Incomplete</td>
-                                                {% endif %}
-                                               
-                                            </tr> 
-                                            <tr>
-                                                <td>{{user.last4}}</td>
-                                                <td>{{user.driver_data.route_name}}</td>
-                                                {% if user.trip4 == user.route_map %}
-                                                <td>Completed</td>
-                                                {% else %}
-                                                <td>Incomplete</td>
-                                                {% endif %}
-                                               
-                                            </tr> 
-                                            <tr>
-                                                <td>{{user.last3}}</td>
-                                                <td>{{user.driver_data.route_name}}</td>
-                                                {% if user.trip3 == user.route_map %}
-                                                <td>Completed</td>
-                                                {% else %}
-                                                <td>Incomplete</td>
-                                                {% endif %}
-                                               
-                                            </tr>                
-                                            <tr>
-                                                <td>{{user.last2}}</td>
-                                                <td>{{user.driver_data.route_name}}</td>
-                                                {% if user.trip2 == user.route_map %}
-                                                <td>Completed</td>
-                                                {% else %}
-                                                <td>Incomplete</td>
-                                                {% endif %}
-                                               
-                                            </tr> 
+                                            </tr>
+					   
                                             <tr>
                                                 <td>{{user.last1}}</td>
                                                 <td>{{user.driver_data.route_name}}</td>
@@ -1577,16 +1539,60 @@
                                                 {% endif %}
                                                
                                             </tr> 
+					                    
                                             <tr>
-                                                <td>{{user.today}}</td>
+                                                <td>{{user.last2}}</td>
                                                 <td>{{user.driver_data.route_name}}</td>
-                                                {% if user.trip == user.route_map %}
+                                                {% if user.trip2 == user.route_map %}
                                                 <td>Completed</td>
                                                 {% else %}
                                                 <td>Incomplete</td>
                                                 {% endif %}
                                                
                                             </tr> 
+					    
+                                            <tr>
+                                                <td>{{user.last3}}</td>
+                                                <td>{{user.driver_data.route_name}}</td>
+                                                {% if user.trip3 == user.route_map %}
+                                                <td>Completed</td>
+                                                {% else %}
+                                                <td>Incomplete</td>
+                                                {% endif %}
+                                               
+                                            </tr> 
+					   
+                                            <tr>
+                                                <td>{{user.last4}}</td>
+                                                <td>{{user.driver_data.route_name}}</td>
+                                                {% if user.trip4 == user.route_map %}
+                                                <td>Completed</td>
+                                                {% else %}
+                                                <td>Incomplete</td>
+                                                {% endif %}
+                                               
+                                            </tr> 
+					   
+                                            <tr>
+                                                <td>{{user.last5}}</td>
+                                                <td>{{user.driver_data.route_name}}</td>
+                                                {% if user.trip5 == user.route_map %}
+                                                <td>Completed</td>
+                                                {% else %}
+                                                <td>Incomplete</td>
+                                                {% endif %}
+                                               
+                                            </tr> 
+					                         <tr>
+                                                <td>{{user.last6}}</td>
+                                                <td>{{user.driver_data.route_name}}</td>
+                                                {% if user.trip6 == user.route_map %}
+                                                <td>Completed</td>
+                                                {% else %}
+                                                <td>Incomplete</td>
+                                                {% endif %}
+                                               
+                                            </tr>     
                                                                                
                                         </tbody>
                                     </table>
@@ -1594,6 +1600,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                     {% endif %}
         <!-- Calendar -->
         {% if user.profile.designation %}
