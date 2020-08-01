@@ -288,8 +288,6 @@ def add_route(request):
         sel_d = Driver.objects.get(pk=r_driver)
         r_from_date = request.POST['from_date']
         r_to_date = request.POST['to_date']
-        print(r_from_date)
-        print(r_to_date)
         
         new_route = RouteInfo.objects.create(route_no=r_no, route_name=r_name, vehicle=sel_b, vehicle_driver=sel_d,institute=request.user.profile.institute , from_date=r_from_date, to_date=r_to_date)
         messages.success(request, 'Route created successfully !') 
@@ -308,8 +306,7 @@ def route_map(request):
         'points':points,
         
         }
-        print(route)
-        print(point)
+    
         return render(request, 'bus/map_route.html', context_data)  
 
 def update_map_route(request):

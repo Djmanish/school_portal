@@ -25,7 +25,7 @@ class Student_profile_edit_form(ModelForm):
   
 
 class Student_info_edit_form(ModelForm):
-    f_Email_Id = forms.EmailField()
+    
     class Meta:
         model = Student_Info
         exclude = ['student']
