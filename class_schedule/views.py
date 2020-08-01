@@ -11,6 +11,7 @@ from django.contrib import messages
 from notices.models import Notice
 from django.utils import timezone
 from AddChild.models import *
+from django.core.exceptions import PermissionDenied
 # Create your views here.
 
 @login_required
@@ -100,7 +101,11 @@ def schedule_update(request, pk):
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
         # ending user notice
-        schedule_to_update = Schedule.objects.get(pk=pk) # fetching schedule instance to update
+        try:
+                schedule_to_update = Schedule.objects.get(pk=pk, institute= request.user.profile.institute) # fetching schedule instance to update
+        except:
+                raise PermissionDenied
+                
         
         institute_subjects = Subjects.objects.filter(institute= request.user.profile.institute, subject_class= schedule_to_update.Class) # fetching available subjects in the institute
         teacher_designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
@@ -226,10 +231,17 @@ class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
         def test_func(self):
                 user_permissions = self.request.user.user_institute_role.level.permissions.all()
                 update_lecture_timing = App_functions.objects.get(function_name='Can Update Lecture Timing')
+
+                current_object = self.get_object()
+                if current_object.institute == self.request.user.profile.institute:
+                        pass
+                else:
+                        return False;
                 if update_lecture_timing in user_permissions:
                         return True
                 else:
                         return False
+        
                         
                 
         def get_context_data(self, **kwargs):
@@ -246,6 +258,7 @@ class Update_lecture_time(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
 
         def get_success_url(self, **kwargs):
                 current_object = self.get_object()
+        
                 if current_object.class_stage == "Primary":
                         stage_id=1
                 elif current_object.class_stage == "Middle":
