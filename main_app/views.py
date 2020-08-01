@@ -440,6 +440,8 @@ def dashboard(request):
                     request.user.exam_date1 = None
                     request.user.exam_date2 = None                  
                 max_marks=request.user.exam_type_child.exam_max_marks
+                print("Hello Max Marks")
+                print(max_marks)
                 total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
                 request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
                 request.user.total_sum = 0
