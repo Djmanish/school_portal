@@ -191,7 +191,7 @@ class LoginAPIView(generics.GenericAPIView):
         
 
 @permission_classes((AllowAny, ))
-class UserProfileView(APIView):
+class UserProfileViews(APIView):
     def get(self, request):
         user1= UserProfile.objects.all()
         serializer = UserProfileSerializer(user1, many=True)
