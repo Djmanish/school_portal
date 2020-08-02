@@ -1,9 +1,11 @@
 from django.forms import ModelForm
 from django import forms
+
 from .models import *
 from PIL import Image
 from datetime import date
 from django.core.exceptions import ValidationError
+
 
     
 # class SubjectUpdateForm(forms.ModelForm):
@@ -49,6 +51,8 @@ class InstituteUpdateProfile(forms.ModelForm):
             'contact_number1':forms.TextInput(attrs={'class':'positive_number'}),
             'contact_number2':forms.TextInput(attrs={'class':'positive_number'}),
             'contact_number3':forms.TextInput(attrs={'class':'positive_number'}),
+            
+       
         }
        
 

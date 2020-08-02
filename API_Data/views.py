@@ -3,7 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User, AbstractUser
-from API_Data.serializers import UserDataSerializer, RegistrationSerializer, ResetPasswordEmailRequestSerializer, SetNewPasswordSerializer
+from main_app.models import *
+from API_Data.serializers import UserDataSerializer, RegistrationSerializer, ResetPasswordEmailRequestSerializer, SetNewPasswordSerializer, LoginSerializer,UserProfileSerializer
 
 
 from rest_framework.decorators import api_view
@@ -177,7 +178,23 @@ class SetNewPasswordAPIView(generics.GenericAPIView):
         return Response({'success':True, 'message':'Password reset successful'}, status = status.HTTP_200_OK)
 
 
+@permission_classes((AllowAny, ))
 class LoginAPIView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
     def post(self, request):
         serializer= self.serializer_class(data= request.data)
+        serializer.is_valid(raise_exception=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
         
+
+@permission_classes((AllowAny, ))
+class UserProfileViews(APIView):
+    def get(self, request):
+        user1= UserProfile.objects.all()
+        serializer = UserProfileSerializer(user1, many=True)
+        return Response(serializer.data)
+    def post(self):
+        pass
