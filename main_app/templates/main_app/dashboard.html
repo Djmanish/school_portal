@@ -1681,6 +1681,7 @@
         </div>
         {% endif %}{% endif %}   
         {% if request.user.profile.designation.level_name == "parent" %}
+        {% if user.child_par %}
         <div class="uk-width-medium-1-2">
             <div class="md-card">
                 <div class="md-card-content">
@@ -1712,7 +1713,7 @@
                 </div>
             </div>
         </div> 
-        {% endif %}
+        {% endif %}{% endif %}
         {% endif %}    
     </div>          
 </div> 
