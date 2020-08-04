@@ -596,14 +596,20 @@
                                 <li class="uk-active"><a href="#">About</a></li>
                                  <li><a href="#">Details</a></li>
                                  {% if user.profile.status == "approve" %}
+                                 {% if user.profile.designation.level_name != 'parent' %}
+                                 {% if user.profile.designation.level_name != 'driver' %}
                                  <li><a href="#">Bus Select</a></li>
-                                 {% endif %}
-                                 {% if user.user_institute_role.level.level_name == 'student' %}
+                                 {% endif %}{% endif %}{% endif %}
+
+                                 {% if user.profile.designation.level_name == 'student' %}
                                  <li><a href="#">My Documents</a></li>
                                  {% endif %}
-                                 {% if user.user_institute_role.level.level_name != 'admin' %}
+
+                                 {% if user.profile.designation.level_name != 'admin' %}
+                                 {% if user.profile.designation.level_name != 'driver' %}
                                  <li><a href="#">My Permissions</a></li>
-                                 {% endif %}
+                                 {% endif %}{% endif %}
+
                                  {% if user.profile.designation.level_name == "parent" %}
                                  <li><a href="#">My Child</a></li>
                                  {% endif %}
@@ -850,6 +856,8 @@
 
 
                                         </li>
+                                        {% if user.profile.designation.level_name != 'parent' %}
+                                        {% if user.profile.designation.level_name != 'driver' %}
                                 <li>
                                     <div class="uk-width-medium-1-8" >
                                         <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'set_loc' %}">
@@ -899,6 +907,7 @@
                                     </div>
                                     
                                 </li>
+                                {% endif %}{% endif %}
                                         {% if user.user_institute_role.level.level_name == 'student'  %}
                                         <li>
                                             <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
