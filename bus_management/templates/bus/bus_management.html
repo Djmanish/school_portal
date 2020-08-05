@@ -955,7 +955,7 @@
                                             <input type="text" class="form-control" name="route_name" required>
                                           </div>
                                           <div class="form-group">
-                                            <label class="required" style="color: black;">Bus</label>
+                                            <label class="required" style="color: black;">Vehicle</label>
                                             <select id="point_state" class="form-control-sm form-control" name="sel_bus" required>
                                                 <option selected disabled value="">--- Select ---</option>
                                                 {% for i in active_buses %}
@@ -1180,7 +1180,7 @@
                                                         <th>Maker</th>
                                                         <th>Vehicle Type</th>
                                                         <th>Fuel Type</th>
-                                                        <th>Colour</th>
+                                                        <th>Color</th>
                                                         <th>Capacity</th>
                                                         <th>Status</th>
                                                         <th>Edit</th>
@@ -1394,7 +1394,6 @@
                                                             <th>Route Name</th>
                                                             <th>Vehicle</th>
                                                             <th>Driver</th>
-                                                            
                                                             <th>Edit</th>
                                                             <th>Delete</th>
                                                         </tr>
@@ -1455,11 +1454,12 @@
                                             </a>
                                         </div>
                                         <div class="md-card uk-margin-medium-bottom">
-                                            {% if new %}
+                                            
                                             <div class="md-card-content">                                            
                                                 <div class="uk-overflow-container">                                                
                                                      <table class="uk-table uk-table-hover"> 
                                                         <thead>
+                                                            {% if new %}  
                                                         <tr>
                                                             <th>Route No.</th>
                                                             <th>Route Name</th>
@@ -1470,6 +1470,7 @@
                                                             <th>Delete</th>
 
                                                         </tr>
+                                                        {% endif %}
                                                         </thead>
                                                         <tbody>
                                                             {% for p in new %}
@@ -1478,7 +1479,7 @@
                                                             <td>{{forloop.counter}}</td>
                                                             <td><a href="{% url 'view_routepoints' p.pk %}">{{p.route_name}}</a></td>
                                                             <td>{{p.point_count}}</td>                                                       
-                                                            <td>{{p.st}}</td> 
+                                                            <td>{{p.st|time:"H:i"}}</td> 
                                                             <td>{{p.lt}}</td>
                                                             <td><a class="{{p.id|slugify}}" ><i class="material-icons" style="color: #7cb342;font-weight: bold;">add</i></a>
                                                             </td>
@@ -1504,14 +1505,15 @@
                                                     </table>                                                
                                                 </div>                                            
                                             </div>
-                                            {% endif %}
+                                            
                                         </div>
-                                        <script>
-                                            $(document).on('click', '.confirm-delete12', function(){
-                                            return confirm('Are you sure you want to delete this?');
-                                            })
-                                        </script>
+                                       
                                     </li> 
+                                    <script>
+                                        $(document).on('click', '.confirm-delete12', function(){
+                                        return confirm('Are you sure you want to delete this?');
+                                        })
+                                    </script>
                                     
 
                                     <a type="hidden" id="modal_add_point_btn" data-uk-modal="{target:'#modal_add_point'}"></a>

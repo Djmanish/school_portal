@@ -97,7 +97,11 @@
                 padding: 0;
             }
         }
-        
+        .fc-unthemed .fc-button{
+            min-width: 0px !important;
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
         .fc-unthemed .fc-prev-button::after{
             visibility: hidden;            
         }
@@ -1609,9 +1613,9 @@
             <div class="md-card" >
              {% if user.profile.designation.level_name == "parent" %}
                  {% if user.count > 1 %}
-                 <form  method="POST" action="#" class="form-inline" id="parent_calendar_form">
+                 <form  method="POST" action="#" class="form-inline" id="parent_calendar_form" style="margin-left: 15px;padding-top: 8px;">
                      {% csrf_token %}
-                       <label style="margin: 4px;">Select Child:  </label>
+                       <label style="margin: 4px;">Select Child:</label>
                          <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
                         <option selected disabled>
                         {% if user.post_child %}
@@ -1675,8 +1679,10 @@
                 </div>
             </div>
         </div>
-        {% endif %}{% endif %}   
+        {% endif %}
+        {% endif %}   
         {% if request.user.profile.designation.level_name == "parent" %}
+        {% if user.child_par %}
         <div class="uk-width-medium-1-2">
             <div class="md-card">
                 <div class="md-card-content">
@@ -1708,7 +1714,7 @@
                 </div>
             </div>
         </div> 
-        {% endif %}
+        {% endif %}{% endif %}
         {% endif %}    
     </div>          
 </div> 

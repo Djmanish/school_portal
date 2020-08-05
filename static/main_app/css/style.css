@@ -428,9 +428,9 @@ input[type="checkbox"]:required:valid + label::before {
 #footer{
   background-color: #1976d2;
   text-align: right;
-   z-index:1;
-    height: 47px;
-     color: white;
+  z-index:9999;
+  height: 47px;
+  color: white;
 }
 #tblf{
   font-weight: 900;
