@@ -16,7 +16,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
 
-    <title>Add Book</title>
+    <title>Update Map Route</title>
 
     <!-- bootstrap -->
     <link rel="stylesheet" href="{% static 'main_app/css/bootstrap.min.css' %}">
@@ -530,47 +530,25 @@
                         </div>
                         <div class="user_content">
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
-                                <li class="uk-active"><a href="#">Route Details</a></li>
-                                <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
+                                <!-- <li class="uk-active"><a href="#">Route Details</a></li> -->
+                            
+                                <!-- <ul id="user_profile_tabs_content" class="uk-switcher uk-margin"> -->
                                     
                                         <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                             
                                             <div class="uk-width-large-1-2">
-                                                
-                                                <ul class="md-list md-list-addon">
-                                                    
-                                                        <!-- <div class="md-list-addon-element">
-                                                            <i class="md-list-addon-icon material-icons">&#xE158;</i>
-                                                        </div> -->
-                                                        <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="">Route No:</a></span>
-
-                                                            <span class="uk-text-medium uk-text-muted"> {{r_routes.route_no}}</span>
-                                                           
-                                                        </div>
-                                                    
-                                                </ul>
+                                                <span class="uk-text-large md-list-heading"><a href="#">Route No:</a></span>
+                                                <span class="uk-text-large uk-text-muted"> {{r_routes.route_no}}</span>
                                             </div>
     
                                             <div class="uk-width-large-1-2">
-                                                
-                                                <ul class="md-list md-list-addon">
-                                                    
-                                                    
-                                                        <!-- <div class="md-list-addon-element">
-                                                            <i class="md-list-addon-icon material-icons">&#xE158;</i>
-                                                        </div> -->
-                                                        <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="">Route Name: </a></span>
-                                                            <span class="uk-text-medium uk-text-muted"> {{r_routes.route_name}}</span>
-                                                           
-                                                        </div>
-                                                   
-                                                </ul>
+                                                <span class="uk-text-large md-list-heading"><a href="#">Route Name: </a></span>
+                                                <span class="uk-text-large uk-text-muted"> {{r_routes.route_name}}</span>
                                             </div>
                                         </div>
-                                            
-                                </ul>
+                                 </ul>           
+                                
+                            
                                 
                                 <h6 class="heading_a uk-margin-bottom">Select Points</h6>
 
@@ -595,7 +573,7 @@
                                                    
                                                 <tr>
                                                     <td>{{forloop.counter}}</td>
-                                                    <td><select id="point_code" class="form-control-sm form-control" name="select_point" required>
+                                                    <td><select id="point_code" class="form-control-md form-control" name="select_point" required>
                                                     
                                                         <option selected disabled value="">--- Select ---</option>
                                                         {% for i in points %}
@@ -605,8 +583,8 @@
                                                         {% endfor %}
                                                      
                                                     </select></td>
-                                                    <td><input type="time" class="form-control-sm form-control"  name="time"></td>  
-                                                    <td><input type="number" class="form-control-sm form-control"  name="index"></td>                                                     
+                                                    <td><input type="time" class="form-control-md form-control"  name="time"></td>  
+                                                    <td><input type="number" class="form-control-md form-control n_a"  name="index"></td>                                                     
                                                 </tr>
                                                 
                                                                          
@@ -626,7 +604,7 @@
                                     </div>
                                 </form>
                             
-                            </ul>
+                            
                             
                             
                         </div>

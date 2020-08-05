@@ -20,10 +20,10 @@ def bus(request):
     new = RouteInfo.objects.filter(institute=request.user.profile.institute)
     for i in new:
         i.point_count= RouteMap.objects.filter(route=i).count()
-        s= RouteMap.objects.filter(route=i, index=0+1)
+        s= RouteMap.objects.filter(route=i, route_index=0+1)
         for j in s:
             i.st= j.time
-        l= RouteMap.objects.filter(route=i, index=i.point_count)
+        l= RouteMap.objects.filter(route=i, route_index=i.point_count)
         for k in l:
             i.lt= k.time
        
@@ -360,24 +360,25 @@ def update_route(request):
         length=len(select_point) 
         for i in range(length):
             s_point= Point.objects.get(id=select_point[i])
-            ind= select_index[i]
-            try:
-                sch_r= RouteMap.objects.get(route__id=route, index=ind)
-                q= RouteMap.objects.filter(route__id=route)
-                for k in q:
-                    if int(k.index) >= int(ind):
-                        a= RouteMap.objects.get(route__id=route, index=k.index)
-                        a.index= int(k.index+1)
-                        a.save()
-                       
-                new= RouteMap.objects.create(route=sch_r.route, point=s_point, index=ind, time=select_time[i], routemap_institute= request.user.profile.institute)        
-                print(sch_r)
+            ind= int(select_index[i])
+           
+            sch_r= RouteMap.objects.filter(route__id=route)
                 
-            except RouteMap.DoesNotExist:
-                sch_r= RouteMap.objects.filter(route__id=route).last()
-                inr= sch_r.index
-                print(inr)
-                new= RouteMap.objects.create(route=sch_r.route, point=s_point, index=inr+1, time=select_time[i], routemap_institute= request.user.profile.institute)
+            for k in sch_r:
+                if int(k.route_index) >= int(ind):
+                    a= RouteMap.objects.get(route__id=route, route_index=k.route_index)
+                    a.route_index= int(k.route_index+1)
+                    a.save()
+                       
+                new= RouteMap.objects.create(route =route, point=s_point, route_index=ind, routemap_institute= request.user.profile.institute)        
+            print(sch_r)
+                
+            # except :
+            
+            #     sch_r= RouteMap.objects.filter(route__id=route).last()
+            #     inr= sch_r.route_index
+            #     print(inr)
+            #     new= RouteMap.objects.create(route=sch_r.route, point=s_point, route_index=inr+1, time=select_time[i], routemap_institute= request.user.profile.institute)
         messages.success(request, "Route map created successfully !")     
     return HttpResponseRedirect(f'/bus/')
     # return HttpResponse('hello')
@@ -414,7 +415,7 @@ def add_point_route (request):
         length=len(select_point) 
         for i in range(length):
             s_point= Point.objects.get(id=select_point[i])
-            new= RouteMap.objects.create(route=s_route, point=s_point, index=i+1, time=select_time[i], routemap_institute= request.user.profile.institute)
+            new= RouteMap.objects.create(route=s_route, point=s_point, route_index=i+1, time=select_time[i], routemap_institute= request.user.profile.institute)
         messages.success(request, "Point(s) added successfully !")     
     return HttpResponseRedirect(f'/bus/') 
     
@@ -495,16 +496,16 @@ def update_routepoints(request):
         p_index= request.POST['edit_routeindex']
         p_time = request.POST['edit_routetime']
 
-        p.index = p_index
+        p.route_index = p_index
         p.time = p_time
                 
         p.save()
         
-        # context_data = {
-        # 'route_editpoint' : route_editpoint,
-        # }
-        messages.success(request, 'Point Details Updated successfully !') 
-        return HttpResponseRedirect(f'/bus/')
+        context_data = {
+        'p' :p,
+        }
+        # messages.success(request, 'Point Details Updated successfully !') 
+        return render(request, 'bus/view_routepoints.html/', context_data)
       
     
     

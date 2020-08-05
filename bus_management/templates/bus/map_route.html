@@ -514,40 +514,27 @@
                                 <h2 class="heading_b uk-margin-bottom"><span
                                         class="uk-text-truncate">{{user.profile.institute.name}}</span>
                                         <span class="sub-heading">Vehicle Management System</span></h2>
-                                        <!-- <ul class="user_stats">
-                                            <li>
-                                                <h4 class="heading_a">0 <span class="sub-heading">Books</span></h4>
-                                            </li>
-                                            <li>
-                                                <h4 class="heading_a">0 <span class="sub-heading">Issued</span></h4>
-                                            </li>
-                                            <li>
-                                                <h4 class="heading_a">0 <span class="sub-heading">Left</span></h4>
-                                            </li>
-                                        </ul> -->
+                                       
                             </div>
                             
                         </div>
                         <div class="user_content">
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
-                                <li class="uk-active"><a href="#">Route Details</a></li>
-                                <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
+                                <!-- <li class="uk-active"><a href="#">Route Details</a></li> -->
+                                    <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
                                     
                                         <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                             
                                             <div class="uk-width-large-1-2">
                                                 
                                                 <ul class="md-list md-list-addon">
-                                                    
-                                                        <!-- <div class="md-list-addon-element">
-                                                            <i class="md-list-addon-icon material-icons">&#xE158;</i>
-                                                        </div> -->
-                                                        <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="">Route No:</a></span>
+                                                                                                         
+                                                        
+                                                            <span class="uk-text-large md-list-heading"><a href="">Route No:</a></span>
 
-                                                            <span class="uk-text-medium uk-text-muted"> {{sch_route.route_no}}</span>
+                                                            <span class="uk-text-large uk-text-muted"> {{sch_route.route_no}}</span>
                                                            
-                                                        </div>
+                                                       
                                                     
                                                 </ul>
                                             </div>
@@ -557,20 +544,18 @@
                                                 <ul class="md-list md-list-addon">
                                                     
                                                     
-                                                        <!-- <div class="md-list-addon-element">
-                                                            <i class="md-list-addon-icon material-icons">&#xE158;</i>
-                                                        </div> -->
-                                                        <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="">Route Name: </a></span>
-                                                            <span class="uk-text-medium uk-text-muted"> {{sch_route.route_name}}</span>
+                                                       
+                                                            <span class="uk-text-large md-list-heading"><a href="">Route Name: </a></span>
+                                                            <span class="uk-text-large uk-text-muted"> {{sch_route.route_name}}</span>
                                                            
-                                                        </div>
+                                                       
                                                    
                                                 </ul>
                                             </div>
                                         </div>
                                             
-                                </ul>
+                                    </ul>
+                            </ul>
                                 
                                 <h6 class="heading_a uk-margin-bottom">Select Points</h6>
 
@@ -579,7 +564,7 @@
                                             {% csrf_token %}
                                            
                                                 
-
+                                                   
                                                 <div class="md-card-content">                                            
                                                     <div class="uk-overflow-container">                                                
                                                          <table class="uk-table uk-table-hover"> 
@@ -598,7 +583,7 @@
                                                                
                                                             <tr>
                                                                 <td>{{forloop.counter}}</td>
-                                                                <td><select id="point_code" class="form-control-sm form-control" name="select_point" required>
+                                                                <td><select id="point_code" class="form-control-md form-control" name="select_point" required>
                                                             
                                                                     <option selected disabled value="">--- Select ---</option>
                                                                     {% for i in points %}
@@ -608,7 +593,7 @@
                                                                     {% endfor %}
                                                                  
                                                                 </select></td>
-                                                                <td><input type="time" class="form-control-sm form-control"  name="time"></td>                                                       
+                                                                <td><input type="time" class="form-control-md form-control" name="time"></td>                                                       
                                                                
                                                                 
                                                             </tr>
@@ -621,10 +606,8 @@
                                                         </table>                                                
                                                     </div>                                            
                                                 </div>
-
-                                                
-                                               
                                             
+                                                                             
                                            <input name="hide_route" type="hidden" value="{{sch_route.id}}">
                                             <div class="uk-grid" style="text-align: center;margin-top: 10px;">
                                                 <div class="uk-width-1-1">
@@ -633,7 +616,7 @@
                                             </div>
                                         </form>
                                     
-                            </ul>
+                            
                             
                             
                         </div>
