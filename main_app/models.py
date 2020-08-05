@@ -280,12 +280,13 @@ class Student_Info(models.Model):
 
     #ending current address and permanent address and check as well
 
-    dob_certificate = models.FileField( upload_to='student_document', null=True, blank=True)
-    id_proof_certificate = models.FileField( upload_to='student_document', null=True, blank=True)
-    domicile_certificate = models.FileField( upload_to='student_document', null=True, blank=True)
-    cast_certificate = models.FileField( upload_to='student_document', null=True, blank=True)
-    character_certificate = models.FileField( upload_to='student_document', null=True, blank=True)
-    medical_certificate = models.FileField( upload_to='student_document', null=True, blank=True)
-    transfer_certificate = models.FileField( upload_to='student_document', null=True, blank=True)
-    last_year_certificate = models.FileField( upload_to='student_document', null=True, blank=True)
+    dob_certificate = models.FileField( upload_to='student_document', null=True, blank=True, validators=[FileExtensionValidator(['pdf'])], verbose_name="Date of Birth Certificate")
+    id_proof_certificate = models.FileField( upload_to='student_document', null=True, blank=True,validators=[FileExtensionValidator(['pdf'])])
+    domicile_certificate = models.FileField( upload_to='student_document', null=True, blank=True,
+    validators=[FileExtensionValidator(['pdf'])])
+    cast_certificate = models.FileField( upload_to='student_document', null=True, blank=True,validators=[FileExtensionValidator(['pdf'])])
+    character_certificate = models.FileField( upload_to='student_document', null=True, blank=True,validators=[FileExtensionValidator(['pdf'])])
+    medical_certificate = models.FileField( upload_to='student_document', null=True, blank=True,validators=[FileExtensionValidator(['pdf'])])
+    transfer_certificate = models.FileField( upload_to='student_document', null=True, blank=True,validators=[FileExtensionValidator(['pdf'])])
+    last_year_certificate = models.FileField( upload_to='student_document', null=True, blank=True,validators=[FileExtensionValidator(['pdf'])])
     

@@ -696,6 +696,28 @@ $("input[type=date]").on('click', function() {
       })
     })
     </script>
-   
+
+    <!-- starting for no past date  -->
+    <script>
+        $(document).ready(function(){
+          $(".no_past_date").blur(function(){
+          var d = $('.no_past_date').val();
+          var d_v = new Date(d);
+          d_v.setHours(0,0,0,0);
+          var c_d = new Date();
+          c_d.setHours(0,0,0,0);
+        
+        if (c_d >d_v){
+         alert('This field does not accept past date !');
+         $(this).val('0000-00-00');
+         $(this).focus();
+         }
+        else{
+        return true;
+        }  
+          });
+        });
+        </script>
+   <!-- ending for no past date -->
 </body>
 </html>

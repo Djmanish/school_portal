@@ -17,7 +17,7 @@ class Fees_tag_update_form(forms.ModelForm):
              'fees_code': forms.TextInput(attrs={'readonly':'readonly'}),
             'description': forms.TextInput(attrs={'row':'2'}),
             'start_date':forms.TextInput(attrs={'type':'date','class':'tusd'}),
-            'end_date':forms.TextInput(attrs={'type':'date','class':'tued'}),
+            'end_date':forms.TextInput(attrs={'type':'date','class':'tued no_past_date'}),
             'amount':forms.TextInput(attrs={'class':'only_decimal'}),
             'tax_percentage':forms.TextInput(attrs={'class':'only_decimal'})
         }

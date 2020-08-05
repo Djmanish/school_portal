@@ -38,6 +38,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main_app.models import *
 from django.core.exceptions import PermissionDenied
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny
 from django.views import *
 
 
@@ -50,6 +52,8 @@ class userList(APIView):
         return Response(serializer.data)
     def post(self):
         pass
+
+@permission_classes((AllowAny, ))
 class userLoginData(APIView):
     authentication_classes=(TokenAuthentication,SessionAuthentication)
     permission_classes=(IsAuthenticated,)
@@ -292,6 +296,15 @@ def approvals(request,pk):
 def index(request):
     return HttpResponseRedirect(request, 'main_app/index.html')
 
+def get_current_users():
+    active_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    user_id_list = []
+    for session in active_sessions:
+        data = session.get_decoded()
+        user_id_list.append(data.get('_auth_user_id', None))
+    # Query all logged in users based on id list
+    return User.objects.filter(id__in=user_id_list)
+    
 @login_required
 def dashboard(request):
     # Bus Location
@@ -329,6 +342,7 @@ def dashboard(request):
             if request.method == "POST":
                 if 'map' in request.POST:
                     request.user.student=request.POST.get('selected_ch')
+                    print(request.user.student)
                     std_child=UserProfile.objects.get(id=request.user.student)
                     print('Hello')
                     print(std_child)
@@ -407,11 +421,7 @@ def dashboard(request):
                 request.user.exam_she_child=ExamDetails.objects.filter(institute=request.user.first_child.child.institute,exam_class=request.user.first_child.child.Class)
             
             if request.method == "POST":
-                request.user.student=request.POST.get('selected_child')
-                std_child=UserProfile.objects.get(id=request.user.student)
-                request.user.post_child=std_child
-                request.user.holiday_child=HolidayList.objects.filter(institute=std_child.institute,applicable="Yes")
-                request.user.exam_she_child=ExamDetails.objects.filter(institute=std_child.institute,exam_class=std_child.Class)
+               
                 if 'calendar' in request.POST:
                     request.user.student=request.POST.get('selected_child')
                     std_child=UserProfile.objects.get(id=request.user.student)
@@ -435,6 +445,8 @@ def dashboard(request):
                     request.user.exam_date1 = None
                     request.user.exam_date2 = None                  
                 max_marks=request.user.exam_type_child.exam_max_marks
+                print("Hello Max Marks")
+                print(max_marks)
                 total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
                 request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
                 request.user.total_sum = 0
@@ -573,16 +585,16 @@ def dashboard(request):
     # ending student,teacher & class count
     
     # Active Users Count
-    time= timezone.now()- datetime.timedelta(minutes=3)
-    time1= timezone.now()
-    count=UserProfile.objects.filter(user__last_login__gte=time,user__last_login__lte=time1)
     
+    queryset = get_current_users()
+    print("Helloworld")
     online_user=[]
-    for i_user in count:
-        if i_user.institute==request.user.profile.institute:
+    for i_user in queryset:
+        if i_user.profile.institute==request.user.profile.institute:
             online_user.append(i_user)
-
-    len_online_user=len(online_user)
+    for i in online_user:
+        print(i)
+    len_online_user= len(online_user)
     
     # Approvals Data Query Start
     date=datetime.date.today()
@@ -791,6 +803,7 @@ def login(request):
         if request.user.is_authenticated:
             return redirect('user_dashboard')
     except:
+        del request.session['username']
         logout(request)
     if request.method == "POST":
         username = request.POST['username']
@@ -1157,7 +1170,7 @@ def approve_request(request,pk):
 
     user = UserProfile.objects.get(pk=pk)
     user.approve()
-    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>school_portal@gmail.com<p></p>"
+    send_mail('Account Approved ',f'Hello {user.first_name} , Thank you for choosing our application.  ', 'yourcollegeportal@gmail.com',[f'{user.user.email}'], html_message=f"<h4>Hello {user.first_name},</h4><p>your request to join {user.institute} as {user.designation} has been approved. Now you can login to your dashboard and update your profile.</p>School portal<br>{request.user.profile.institute.email}<p></p>"
             )
     rr= request.user.profile.institute.id
     messages.success(request, f"Request of {user.first_name} approved successfully !")
@@ -1459,7 +1472,7 @@ def add_loca(request,pk):
 def set_loc(request):
     try:
         request.user.sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
-        request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute)
+        request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute, status="active")
         print(request.user.mark)
     except:
         pass

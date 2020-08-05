@@ -19,7 +19,11 @@
 
 
 <!-- <a href="{% url 'bus' %}">Back</a> -->
+{% if user.sch %}
 <div id='map' style="width:1300px;height: 600px;margin:auto;"></div>
+{% else %}
+<div><h3 style="color: red;">Map is not setup by your institute yet</h3></div>
+{% endif %}
 <script>
         
     mapboxgl.accessToken = 'pk.eyJ1IjoibWFuaXNoMTA1MTEwNyIsImEiOiJjanF4OXUyMzcwaGlvM3hxdWtxd2QzaGk3In0.roRTHN8l4Cr_inuVmcOiiQ';    

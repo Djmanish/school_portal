@@ -745,8 +745,16 @@
                                                                 </div>  
                                                             </div> 
                                                             </div>
+                                                            <div class="form-group">
+                                                                <label style="color: grey;"><span class="material-icons">
+                                                                    info
+                                                                    </span>Click See Map and select your point location to know longitude and latitude</label>
+                                                              </div>
+
                                                             <div class="uk-form-row" style="margin-bottom: 15px">
+
                                                                 <div class="uk-grid" data-uk-grid-margin>
+                                                                    
                                                                     <div class="uk-width-medium-1-2">
                                                                     <div class="form-group">
                                                                         <label class="required" style="color: black;">Longitude</label>
@@ -947,7 +955,7 @@
                                             <input type="text" class="form-control" name="route_name" required>
                                           </div>
                                           <div class="form-group">
-                                            <label class="required" style="color: black;">Bus</label>
+                                            <label class="required" style="color: black;">Vehicle</label>
                                             <select id="point_state" class="form-control-sm form-control" name="sel_bus" required>
                                                 <option selected disabled value="">--- Select ---</option>
                                                 {% for i in active_buses %}
@@ -1172,7 +1180,7 @@
                                                         <th>Maker</th>
                                                         <th>Vehicle Type</th>
                                                         <th>Fuel Type</th>
-                                                        <th>Colour</th>
+                                                        <th>Color</th>
                                                         <th>Capacity</th>
                                                         <th>Status</th>
                                                         <th>Edit</th>
@@ -1254,7 +1262,7 @@
                                                 <i class="uk-icon-street-view"></i>
                                                 Create Point
                                             </a>
-                                        <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'see_map' %}" >
+                                        <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'see_map' %}" target="_blank" >
                                             <i class="uk-icon-map-marker"></i>
                                             See Map</a>
                                         </div>
@@ -1287,12 +1295,12 @@
                                                             
                                                             <td><a id="{{j.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                             </td>
-                                                            <td><a class="confirm-delete" href="{% url 'delete_point' j.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                            <td><a class="del{{j.id|slugify}}" href="{% url 'delete_point' j.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                             </td>
                                                         </tr>
                                                         <script>
                                                             $(document).ready(function(){
-                                                            $(document).on('click', '.confirm-delete', function(){
+                                                            $(document).on('click', '.del{{j.id|slugify}}', function(){
                                                                 return confirm('Do you want to delete this?');
                                                                 });
                                                             });
@@ -1401,16 +1409,17 @@
                                                             
                                                             <td ><a id="route{{p.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                             </td>
-                                                            <td><a class="confirm-delete" href="{% url 'delete_route' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                            <td><a class="delr{{p.id|slugify}}" href="{% url 'delete_route' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                             </td>
                                                         </tr>
                                                         <script>
                                                             $(document).ready(function(){
-                                                            $(document).on('click', '.confirm-delete', function(){
+                                                            $(document).on('click', '.delr{{p.id|slugify}}', function(){
                                                                 return confirm('Do you want to delete this?');
                                                                 });
                                                             });
                                                         </script>
+                                                        
                                                         <script>
                                                             $(document).ready(function(){
                                                             $('#route{{p.id|slugify}}').click(function(){
@@ -1431,8 +1440,10 @@
                                                     </table>                                                
                                                 </div>                                            
                                             </div>
+                                            
                                             {% endif %}
                                         </div>
+                                        
                                     </li>     
                                     
                                         <li>
