@@ -45,6 +45,7 @@ from django.views import *
 
 
 # Create your views here.
+@permission_classes((AllowAny, ))
 class userList(APIView):
     def get(self, request):
         user1= UserProfile.objects.all()
