@@ -622,7 +622,7 @@
                                                     <td>{{forloop.counter}}</td>
                                                     <td>{{i.point}}</td>  
                                                     <td>{{i.index}}</td>
-                                                    <td>{{i.time}}</td>  
+                                                    <td>{{i.time|time:"H:i"}}</td>  
                                                     <td><a id="{{i.id|slugify}}"><i class="material-icons" style="color: #2196f3;" >edit</i></a>
                                                     </td> 
                                                     <td><a  class="confirm-delete12" href="{% url 'delete_view_routepoints' i.point.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
@@ -639,7 +639,7 @@
                                                         $('#edit_routename').val('{{i.route}}');
                                                         $('#edit_routepoint_name').val('{{i.point}}');
                                                         $('#edit_routeindex').val('{{i.index}}');
-                                                        $('#edit_routetime').val('{{i.time|time:"h:i"}}');
+                                                        $('#edit_routetime').val('{{i.time|time:"H:i"}}');
                                                         
                                                     });
                                                     });

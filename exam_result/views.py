@@ -1005,6 +1005,8 @@ def class_promotion(request,pk):
                                     user_d.Class=promoted_to_class
                                     user_d.class_current_year=current_year+1
                                     user_d.class_next_year=next_year+1
+                                    user_d.roll_number=None
+                                  
                                   else:
                                     pass
                                   

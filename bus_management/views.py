@@ -13,6 +13,32 @@ from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 def bus(request):
+    buses = Bus.objects.filter(bus_institute=request.user.profile.institute)
+    states_list = State.objects.all()
+    points = Point.objects.filter(point_institute=request.user.profile.institute)
+    drivers = Driver.objects.filter(institute=request.user.profile.institute)
+    active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
+    routes = RouteInfo.objects.filter(institute=request.user.profile.institute, status="active")
+    new = RouteInfo.objects.filter(institute=request.user.profile.institute)
+    for i in new:
+        i.point_count= RouteMap.objects.filter(route=i).count()
+        s= RouteMap.objects.filter(route=i, route_index=0+1)
+        for j in s:
+            i.st= j.time
+        l= RouteMap.objects.filter(route=i, route_index=i.point_count)
+        for k in l:
+            i.lt= k.time
+       
+    context_data = {
+        'buses': buses,
+        'states_list': states_list,
+        'points':points,
+        'drivers':drivers,
+        'active_buses':active_buses,
+        'routes':routes,
+        'new':new,
+    }
+    return render(request, 'bus/bus_management.html', context_data)
     user_permissions = request.user.user_institute_role.level.permissions.all()
     vehicle_permission = App_functions.objects.get(function_name='Can Manage Vehicles')   
     if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
@@ -418,24 +444,25 @@ def update_route(request):
         length=len(select_point) 
         for i in range(length):
             s_point= Point.objects.get(id=select_point[i])
-            ind= select_index[i]
-            try:
-                sch_r= RouteMap.objects.get(route__id=route, index=ind)
-                q= RouteMap.objects.filter(route__id=route)
-                for k in q:
-                    if int(k.index) >= int(ind):
-                        a= RouteMap.objects.get(route__id=route, index=k.index)
-                        a.index= int(k.index+1)
-                        a.save()
-                       
-                new= RouteMap.objects.create(route=sch_r.route, point=s_point, index=ind, time=select_time[i], routemap_institute= request.user.profile.institute)        
-                print(sch_r)
+            ind= int(select_index[i])
+           
+            sch_r= RouteMap.objects.filter(route__id=route)
                 
-            except RouteMap.DoesNotExist:
-                sch_r= RouteMap.objects.filter(route__id=route).last()
-                inr= sch_r.index
-                print(inr)
-                new= RouteMap.objects.create(route=sch_r.route, point=s_point, index=inr+1, time=select_time[i], routemap_institute= request.user.profile.institute)
+            for k in sch_r:
+                if int(k.route_index) >= int(ind):
+                    a= RouteMap.objects.get(route__id=route, route_index=k.route_index)
+                    a.route_index= int(k.route_index+1)
+                    a.save()
+                       
+                new= RouteMap.objects.create(route =route, point=s_point, route_index=ind, routemap_institute= request.user.profile.institute)        
+            print(sch_r)
+                
+            # except :
+            
+            #     sch_r= RouteMap.objects.filter(route__id=route).last()
+            #     inr= sch_r.route_index
+            #     print(inr)
+            #     new= RouteMap.objects.create(route=sch_r.route, point=s_point, route_index=inr+1, time=select_time[i], routemap_institute= request.user.profile.institute)
         messages.success(request, "Route map created successfully !")     
     return HttpResponseRedirect(f'/bus/')
     # return HttpResponse('hello')
@@ -569,16 +596,16 @@ def update_routepoints(request):
         p_index= request.POST['edit_routeindex']
         p_time = request.POST['edit_routetime']
 
-        p.index = p_index
+        p.route_index = p_index
         p.time = p_time
                 
         p.save()
         
-        # context_data = {
-        # 'route_editpoint' : route_editpoint,
-        # }
-        messages.success(request, 'Point Details Updated successfully !') 
-        return HttpResponseRedirect(f'/bus/')
+        context_data = {
+        'p' :p,
+        }
+        # messages.success(request, 'Point Details Updated successfully !') 
+        return render(request, 'bus/view_routepoints.html/', context_data)
       
     
     
