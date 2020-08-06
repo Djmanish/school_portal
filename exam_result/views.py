@@ -1687,7 +1687,10 @@ def overall_report_card(request,pk,student_pk):
         # count the number of subjects
         count=0
         for i in resultsubject:
-            count=count+1
+            try:
+              count=count+1
+            except:
+              count=1
 
         try:
             total_marks_count=count*100

@@ -538,7 +538,7 @@
                                                              
                                                                 <label class ="required" id="required_margin">Select Exam Type No.</label>
                                                             
-                                                                <select class="form-control" id="fetch_sr_no" name="selected_exam_type_no"  required>
+                                                                <select class="form-control" id="fetch_sr_no" name="selected_exam_type_no" required>
                                                                     <option selected disabled value=''>--Exam Type No.--</option>
                                         
                                                              </select>
@@ -547,7 +547,7 @@
                                                                 {% if user.profile.designation.level_name != "student" and  user.profile.designation.level_name != "parent"%}
                                   
                                                                 <label class ="required" id="required_margin">Select Class</label>
-                                                                    <select class="form-control" name="selected_class"  required>
+                                                                    <select class="form-control relationshipDropDown" name="selected_class"  required>
                                                                         <option selected disabled value="">--Class--</option>
                                                                         
                                                                         {% for class in exam_class %}
@@ -555,7 +555,7 @@
                                                                         {% endfor %}
                                                                     </select>
                                                                     <label class ="required" id="required_margin">Select Exam Type</label>
-                                                                    <select class="form-control" id="selected_exam_type" name="selected_exam_type"  required>
+                                                                    <select class="form-control relationshipDropDown" id="selected_exam_type" name="selected_exam_type" required>
                                                     
                                                                         <option selected disabled value="">--Exam Type--</option>
                                                                         
@@ -566,7 +566,7 @@
                                                                  
                                                                     <label class ="required" id="required_margin">Select Exam Type No.</label>
                                                                 
-                                                                    <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no"  required>
+                                                                    <select class="form-control relationshipDropDown" id="fetched_sr_no" name="selected_exam_type_no" required>
                                                                         <option selected disabled value=''>--Exam Type No.--</option>
                                             
                                                                  </select>
@@ -596,7 +596,10 @@
                                                             
                                                               </form>
     
-                                                           
+                                                           <script>
+                                                           $('.relationshipDropDown').prop("required", true);
+                                                           </script>
+
                                                            
 
                                                             <script>
@@ -712,7 +715,7 @@
 
                                                                             <td><a   href="{% url 'edit_examschedule' institute_exam_schedule.pk%}"><i class="material-icons" id="edit_button">edit</i></a>
                                                                             </td>
-                                                                            <td><a  href="{% url 'delete_examschedule' institute_exam_schedule.pk %}"><i class="material-icons" id="red_color">delete_forever</i></a>
+                                                                            <td><a class="exam_schedule_delete"   href="{% url 'delete_examschedule' institute_exam_schedule.pk %}"  onclick="myFunction()"><i class="material-icons" id="red_color" >delete_forever</i></a>
                                                                             </td>
                                                                             {% endif %}
                                                                         </tr>
@@ -723,7 +726,13 @@
                                                                          {% endfor %}
                                   
                                                         </tbody>
-
+                                                        <script>
+                                                                $(document).ready(function(){
+                                                                $(document).on('click', '.exam_schedule_delete', function(){
+                                                                    return confirm('Are you sure you want to delete this?');
+                                                                    });
+                                                                });
+                                                                </script>
                                                     </table>
                                                     </div>
                                                     </div>
