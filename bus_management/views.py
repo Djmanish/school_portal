@@ -260,7 +260,7 @@ def add_new_driver(request):
                 create_level = chk_role
             except Institute_levels.DoesNotExist:
                 create_level = Institute_levels.objects.create(institute=request.user.profile.institute,level_id=l_id, level_name='driver')
-                print("except")
+                
             d_code = request.POST['driver_code'].strip()
             f_name = request.POST['first_name'].strip()
             m_name = request.POST['middle_name'].strip()
@@ -271,7 +271,10 @@ def add_new_driver(request):
             dob = request.POST['dob']
             marital_status = request.POST['marital_status']
             category = request.POST['category_']
-            profile= request.FILES.get('pc')
+            if 'pc' in request.FILES:
+                profile= request.FILES.get('pc')
+            else:
+                profile=None
             m_num = request.POST.get('mobile_number')
             email = request.POST['email'].strip()
             aadhar_card_number = request.POST['adhar_number']
@@ -305,7 +308,7 @@ def add_new_driver(request):
             driver_user = User.objects.create_user(user_name , email, pwd)
             driver_user.save()
             search_user = UserProfile.objects.get(user=driver_user)
-            print(search_user)
+            
             # creating Userprofile object
             search_user.institute= request.user.profile.institute
             search_user.designation=create_level
@@ -319,7 +322,8 @@ def add_new_driver(request):
             search_user.marital_status=marital_status
             search_user.category=category
             search_user.aadhar_card_number=aadhar_card_number
-            search_user.profile_pic=profile
+            if profile is not None:
+                search_user.profile_pic=profile
             search_user.mobile_number=m_num
             search_user.address_line_1=add_one
             search_user.address_line_2=add_two
