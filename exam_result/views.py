@@ -1005,6 +1005,8 @@ def class_promotion(request,pk):
                                     user_d.Class=promoted_to_class
                                     user_d.class_current_year=current_year+1
                                     user_d.class_next_year=next_year+1
+                                    user_d.roll_number=None
+                                  
                                   else:
                                     pass
                                   
@@ -1685,7 +1687,10 @@ def overall_report_card(request,pk,student_pk):
         # count the number of subjects
         count=0
         for i in resultsubject:
-            count=count+1
+            try:
+              count=count+1
+            except:
+              count=1
 
         try:
             total_marks_count=count*100
