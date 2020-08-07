@@ -9,7 +9,7 @@ $(document).ready(function(){
         if (regex.test(strigChar)) {
             return true;
         }
-        alert('Only Characters Allowed');
+        alert('Only Characters Allowed !');
         return false
       });
 
@@ -19,7 +19,7 @@ $(document).ready(function(){
         if (regex.test(strigChar)) {
             return true;
         }
-        alert('Only Digits are allowed !!!');
+        alert('Only Digits are allowed !');
         return false
       });
 
@@ -29,7 +29,7 @@ $(document).ready(function(){
         if (regex.test(strigChar)) { 
             return true;
         }
-        alert('Only Positive Numbers !!!');
+        alert('Only Positive Numbers !');
         return false
       });
 

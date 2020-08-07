@@ -418,7 +418,7 @@ def update_map_route(request):
 def update_route(request):
     if request.method == 'POST':
         select_point= request.POST.getlist('select_point')
-        select_time= request.POST.getlist('select_time')
+        select_time= request.POST.getlist('time')
         route= int(request.POST['hide_route'])
         select_index= request.POST.getlist('index')
        
@@ -445,28 +445,29 @@ def update_route(request):
             return HttpResponseRedirect(f'/bus/') 
         else:
             print ("non Duplicates")      
-        length=len(select_point) 
-        for i in range(length):
-            s_point= Point.objects.get(id=select_point[i])
-            ind= int(select_index[i])
-           
-            sch_r= RouteMap.objects.filter(route__id=route)
-                
-            for k in sch_r:
-                if int(k.route_index) >= int(ind):
-                    a= RouteMap.objects.get(route__id=route, route_index=k.route_index)
-                    a.route_index= int(k.route_index+1)
-                    a.save()
-                       
-                new= RouteMap.objects.create(route =route, point=s_point, route_index=ind, routemap_institute= request.user.profile.institute)        
-            print(sch_r)
-                
-            # except :
+        length=len(select_point)
+        try: 
+            for i in range(length):
+                s_point= Point.objects.get(id=select_point[i])
+                ind= int(select_index[i])
             
-            #     sch_r= RouteMap.objects.filter(route__id=route).last()
-            #     inr= sch_r.route_index
-            #     print(inr)
-            #     new= RouteMap.objects.create(route=sch_r.route, point=s_point, route_index=inr+1, time=select_time[i], routemap_institute= request.user.profile.institute)
+                sch_r= RouteMap.objects.filter(route__id=route)
+                    
+                for k in sch_r:
+                    if int(k.route_index) >= int(ind):
+                        a= RouteMap.objects.get(route__id=route, route_index=k.route_index)
+                        a.route_index= int(k.route_index+1)
+                        a.save()
+                        
+                    new= RouteMap.objects.create(route =route, point=s_point, route_index=ind, routemap_institute= request.user.profile.institute)        
+                print(sch_r)
+                
+        except :
+            
+            sch_r= RouteMap.objects.filter(route__id=route).last()
+            inr= sch_r.route_index
+            print(inr)
+            new= RouteMap.objects.create(route=sch_r.route, point=s_point, route_index=inr+1, time=select_time[i], routemap_institute= request.user.profile.institute)
         messages.success(request, "Route map created successfully !")     
     return HttpResponseRedirect(f'/bus/')
     # return HttpResponse('hello')
