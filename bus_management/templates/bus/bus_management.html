@@ -663,7 +663,7 @@
                                           </div>
                                           <div class="form-group">
                                             <label class="required" style="color: black;">Capacity</label>
-                                            <input type="number" class="form-control" name="bus_capacity" required>
+                                            <input type="number" min="0" class="form-control" name="bus_capacity" required>
                                           </div>                                                                                                 
                                               <table>
                                                 <tr>
@@ -822,7 +822,7 @@
                                           </div>
                                           <div class="form-group">
                                             <label class="required" style="color: black;">Vehicle Capacity</label>
-                                            <input type="number" class="form-control" id="edit_bus_capacity" name="edit_bus_capacit" required>
+                                            <input type="number" nin="0" class="form-control" id="edit_bus_capacity" name="edit_bus_capacit" required>
                                           </div>                                                                                                 
                                               <table>
                                                 <tr>
@@ -1103,10 +1103,9 @@
                                           </div>        
                                           <div class="form-group">
                                             <label class="required" style="color: black;">No. of Points</label>
-                                            <input type="text" class="form-control n_a positive_number" name="point" required>
+                                            <input type="number" min="1" value="1" class="form-control" name="point" required>
                                           </div>
-                                         
-                                          
+                                                                        
                                                     <div class="uk-form-row" style="margin-bottom: 15px">
                                                         
                                                     </div>
@@ -1454,12 +1453,12 @@
                                             </a>
                                         </div>
                                         <div class="md-card uk-margin-medium-bottom">
-                                            
+                                            {% if new %} 
                                             <div class="md-card-content">                                            
                                                 <div class="uk-overflow-container">                                                
                                                      <table class="uk-table uk-table-hover"> 
                                                         <thead>
-                                                            {% if new %}  
+                                                            
                                                         <tr>
                                                             <th>Route No.</th>
                                                             <th>Route Name</th>
@@ -1470,7 +1469,7 @@
                                                             <th>Delete</th>
 
                                                         </tr>
-                                                        {% endif %}
+                                                        
                                                         </thead>
                                                         <tbody>
                                                             
@@ -1480,8 +1479,8 @@
                                                             <td>{{forloop.counter}}</td>
                                                             <td><a href="{% url 'view_routepoints' p.pk %}">{{p.route_name}}</a></td>
                                                             <td>{{p.point_count}}</td>                                                       
-                                                            <td>{{p.st|time:"H:i"}}</td> 
-                                                            <td>{{p.lt}}</td>
+                                                            <td>{{p.st|time:"h:i a"}}</td> 
+                                                            <td>{{p.lt|time:"h:i a"}}</td>
                                                             <td><a class="{{p.id|slugify}}" ><i class="material-icons" style="color: #7cb342;font-weight: bold;">add</i></a>
                                                             </td>
                                                             <td><a class="confirm-delete12" href="{% url 'delete_routemap' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
@@ -1506,7 +1505,7 @@
                                                     </table>                                                
                                                 </div>                                            
                                             </div>
-                                            
+                                            {% endif %}
                                         </div>
                                        
                                     </li> 
@@ -1529,7 +1528,7 @@
                                         <input id="point_code_hidden" type="hidden" class="form-control" name="point_code_hidden">
                                         <div class="form-group">
                                             <label class="required" style="color: black;">Enter No. Of Points To Be Added</label>
-                                            <input type="text" class="form-control n_a positive_number" name="update_map_point" required >
+                                            <input type="number" min="1" class="form-control" name="update_map_point" required >
                                           </div>   
                                           
                                                                                                                                                 
