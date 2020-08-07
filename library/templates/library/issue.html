@@ -423,7 +423,7 @@ aliceblue;
 
                     {% for i in user.user_institute_role.level.permissions.all %}    
                     {% if i.function_name == "Can Manage Library" %}
-                    <li  title="Library">
+                    <li class= "current_section" title="Library">
                       <a href="{% url 'library' %}">
                           <span class="menu_icon"><i class="material-icons">local_library</i></span>
                           <span class="menu_title">Library</span>
@@ -432,6 +432,16 @@ aliceblue;
                     {% endif %}
                   {% endfor %}
                    
+                  {% for i in user.user_institute_role.level.permissions.all %}    
+                  {% if i.function_name == "Can Manage Vehicles" %}
+                  <li  title="Vehicle">
+                    <a href="{% url 'bus' %}">
+                        <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
+                        <span class="menu_title">Vehicle</span>
+                    </a>
+                </li>  
+                {% endif %}
+                  {% endfor %}
 
                     <li  title="Examination">
 

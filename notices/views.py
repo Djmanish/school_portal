@@ -178,7 +178,7 @@ def creating_new_notice(request):
         for u in recipients_valid_list:
             user_name = u
             new_notice.recipients_list.add(user_name)
-        return HttpResponse('notice published !!!')
+        return HttpResponse('notice published !')
 
         
         
