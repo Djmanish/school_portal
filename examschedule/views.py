@@ -334,7 +334,7 @@ def examschedule_view(request,pk):
                         
                                 return render(request,'update_examschedule.html', context)
                         else:
-                                messages.error(request, 'No result found for this selection!')
+                                messages.error(request, f'No result found for Class-{selected_class}, Exam Type-{exam_type_data}!')
                                 return redirect(f'/examschedule/examschedule/{inst}')
                         
                         
@@ -456,7 +456,7 @@ def delete_examschedule(request, pk):
         examdetails_info= ExamDetails.objects.get(pk=pk)
       
         examdetails_info.exam_subject="null"
-        examdetails_info.exam_subject_teacher="null"
+        examdetails_info.exam_subject_teacher.profile.exam_subject_teacher="null"
         examdetails_info.exam_start_time="null"
         examdetails_info.exam_end_time="null"
         

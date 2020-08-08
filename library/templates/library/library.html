@@ -411,7 +411,16 @@
                     {% endif %}
                   {% endfor %}
                    
-
+                  {% for i in user.user_institute_role.level.permissions.all %}    
+                  {% if i.function_name == "Can Manage Vehicles" %}
+                  <li  title="Vehicle">
+                    <a href="{% url 'bus' %}">
+                        <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
+                        <span class="menu_title">Vehicle</span>
+                    </a>
+                </li>  
+                {% endif %}
+                  {% endfor %}
                     <li  title="Examination">
 
                         <a href="">
@@ -508,8 +517,8 @@
                                     <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
                                      <div class="uk-dropdown uk-dropdown-small">
                                         <ul class="uk-nav">
-                                            <li><a href="#" data-uk-modal="{target:'#modal_new_category'}">Create New Category</a></li>
-                                            <li><a href="#" data-uk-modal="{target:'#modal_new_sub_category'}">Create Sub Category</a></li>
+                                            <!-- <li><a href="#" data-uk-modal="{target:'#modal_new_category'}">Create New Category</a></li>
+                                            <li><a href="#" data-uk-modal="{target:'#modal_new_sub_category'}">Create Sub Category</a></li> -->
                                             <li><a href="#" data-uk-modal="{target:'#modal_library_settings'}">Library Settings</a></li>
                                             <!-- <li><a href="#" data-uk-modal="{target:'#modal_set_books_user'}">Set Books Limit Per User</a></li> -->
                                             
@@ -1106,7 +1115,7 @@
                                                 <h3 class="uk-accordion-title">{{i}}</h3>
                                                 
                                                 <div class="uk-accordion-content">
-                                                    <h4>Sub Categories</h4>
+                                                    <h6>Sub Categories</h6>
                                                     {% for j in i.sub %}
                                                         <p>{{forloop.counter}}. {{j}}</p> 
                                                     {% endfor %}

@@ -412,6 +412,16 @@
                     {% endif %}
                   {% endfor %}
                    
+                  {% for i in user.user_institute_role.level.permissions.all %}    
+                  {% if i.function_name == "Can Manage Vehicles" %}
+                  <li  class= "current_section" title="Vehicle">
+                    <a href="{% url 'bus' %}">
+                        <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
+                        <span class="menu_title">Vehicle</span>
+                    </a>
+                </li>  
+                {% endif %}
+                  {% endfor %}
 
                     <li  title="Examination">
 
@@ -555,7 +565,7 @@
                                                 <div class="uk-width-medium-1-2">
                                                 <div class="form-group">
                                                     <label class="required" style="color: black;">Index</label>
-                                                    <input type="text" class="form-control positive_number" name="edit_routeindex" id= "edit_routeindex">
+                                                    <input type="number" min="1" class="form-control positive_number" name="edit_routeindex" id= "edit_routeindex" required>
                                                 </div>
                                                 </div>
                                                 <div class="uk-width-medium-1-2">
@@ -622,7 +632,7 @@
                                                     <td>{{forloop.counter}}</td>
                                                     <td>{{i.point}}</td>  
                                                     <td>{{i.index}}</td>
-                                                    <td>{{i.time}}</td>  
+                                                    <td>{{i.time|time:"h:i a"}}</td>  
                                                     <td><a id="{{i.id|slugify}}"><i class="material-icons" style="color: #2196f3;" >edit</i></a>
                                                     </td> 
                                                     <td><a  class="confirm-delete12" href="{% url 'delete_view_routepoints' i.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
@@ -639,7 +649,7 @@
                                                         $('#edit_routename').val('{{i.route}}');
                                                         $('#edit_routepoint_name').val('{{i.point}}');
                                                         $('#edit_routeindex').val('{{i.index}}');
-                                                        $('#edit_routetime').val('{{i.time|time:"h:i"}}');
+                                                        $('#edit_routetime').val('{{i.time|time:"H:i"}}');
                                                         
                                                     });
                                                     });

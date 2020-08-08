@@ -82,7 +82,7 @@ def exam_result(request,pk):
             pass
            
         else:
-          messages.error(request, 'No students found!')
+          messages.error(request, 'No students found !')
           return redirect(f'/examresult/examresult/{inst}')
         
         exam_schedule_date=ExamDetails.objects.filter(institute=request.user.profile.institute,exam_subject=selected_subject,exam_type__exam_type= exam_type_id,exam_sr_no= result_exam_type_sr_no,)
@@ -112,7 +112,7 @@ def exam_result(request,pk):
                     }
           return render(request, 'teacher_view.html', context) 
         else:
-              messages.info(request, 'There is no schedule created for this selection!')
+              messages.info(request, 'There is no schedule created for this selection !')
                  
               return HttpResponseRedirect(f'/examresult/examresult/{institute_pk}')    
     # ----------------------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ def examresult(request,pk):
               marks_data.result_max_marks=exam_max_marks
               marks_data.save()
 
-          messages.success(request, 'Exam result stored successfully !!!')  
+          messages.success(request, 'Exam result stored successfully !')  
           return redirect(f'/examresult/examresult/{inst_id}') 
 
       
@@ -1005,6 +1005,8 @@ def class_promotion(request,pk):
                                     user_d.Class=promoted_to_class
                                     user_d.class_current_year=current_year+1
                                     user_d.class_next_year=next_year+1
+                                    user_d.roll_number=None
+                                  
                                   else:
                                     pass
                                   
@@ -1015,7 +1017,7 @@ def class_promotion(request,pk):
                                       'list_promotion_choices':list_promotion_choices,
                                       'promotes_class':promotes_class,
                                   }
-                                  messages.success(request, 'Students promoted successfully!')
+                                  messages.success(request, 'Students promoted successfully !')
                                   return render(request, 'class_promotion.html', context)
               # Inner Context
             context= {
@@ -1685,7 +1687,10 @@ def overall_report_card(request,pk,student_pk):
         # count the number of subjects
         count=0
         for i in resultsubject:
-            count=count+1
+            try:
+              count=count+1
+            except:
+              count=1
 
         try:
             total_marks_count=count*100

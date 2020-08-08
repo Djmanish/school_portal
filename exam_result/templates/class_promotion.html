@@ -417,7 +417,17 @@
                   </li>      
                     {% endif %}
                   {% endfor %}
-                   
+                  
+                  {% for i in user.user_institute_role.level.permissions.all %}    
+                  {% if i.function_name == "Can Manage Vehicles" %}
+                  <li  title="Vehicle">
+                    <a href="{% url 'bus' %}">
+                        <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
+                        <span class="menu_title">Vehicle</span>
+                    </a>
+                </li>  
+                {% endif %}
+                  {% endfor %}
 
                     <li  title="Examination">
 
@@ -457,7 +467,7 @@
                                     <span class="menu_title">Exam Result</span>
                                 </a>
                             </li>
-                            <li  class="act_item" title="Class Students">
+                            <li  class="act_item" title="Examination">
                     
                                 <a href="{% url 'class_promotion' request.user.profile.institute.id %}">
                                         <span class="menu_icon"><i class="material-icons">verified_user</i></span>
@@ -516,7 +526,7 @@
                 </div>
             </div>
             <div class="user_heading_content">
-                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading"></span></h2>
+                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.institute}}</span><span class="sub-heading">Class Promotion</span></h2>
 
             </div>
             <!-- <a class="md-fab md-fab-small md-fab-accent hidden-print" href="page_user_edit_profile.html">
@@ -580,43 +590,50 @@
                                
 
                                     <div class="uk-overflow-container uk-margin-bottom">
-                              <tbody>
-                                  
-                                  {% if all_students %}
+                                        <table
+                                        class="uk-table uk-table-condensed uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair uk-table-hover"
+                                        id="ts_issues">
+                                        <thead>
+                                            {% if all_students %}
                                       
                                  
                                       
-                                <tr>
-                                    <td ><b>Sr. No.</b></td>
-                                    <td ><b>First Name</b></td>
-                                    <td ><b>Last Name</b></td>
+                                            <tr>
+                                                <th >Sr. No.</th>
+                                                <th >First Name</td>
+                                                <th >Last Name</td>
+            
+                                                <th>Roll No.</td>
+                                                <th>Status</td>
+            
+                                            </tr>
+                                            {% endif %}
 
-                                    <td><b>Roll No.</b></td>
-                                    <td><b>Status</b></td>
-
-                                </tr>
-                                {% endif %}
+                                        </thead>
+                              <tbody>
+                                  
+                                 
                                 
                                   {% for student in all_students %}
                                   <tr>
                                       <td>{{forloop.counter}}</td>
                                       <td>
                                         <div class="form-group">
-                                            <select id="exam_schedule" class="form-control"  name="student_first_name">
+                                            <select id="exam_schedule" class="form-control noDropDown"  name="student_first_name" readonly>
                                               <option value="{{student.id}}">{{student.first_name}}</option>
                                             </select>
                                           </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <select id="exam_schedule" class="form-control"  name="student_last_name">
+                                            <select id="exam_schedule" class="form-control noDropDown"  name="student_last_name">
                                               <option  value="{{student.id}}">{{student.last_name}}</option>
                                             </select>
                                           </div>
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <select id="exam_schedule" class="form-control"  name="student_roll_no">
+                                            <select id="exam_schedule" class="form-control noDropDown"  name="student_roll_no">
                                               <option  value="{{student.id}}">{{student.roll_number}}</option>
                                             </select>
                                           </div>
@@ -653,7 +670,9 @@
                         </div>
                         </table>
                    
-
+<script>
+$(".noDropDown").prop( "disabled", true );  
+</script>
                     </form>
                
                     </div>
