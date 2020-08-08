@@ -1296,7 +1296,11 @@
                                 <tr>
                                 <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;">{{forloop.counter}}</td>
                                 <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;margin-left: 0px;">
+                                    {% if stdr.profile_pic.url %}
                                     <img class="md-card-head-avatar" src="{{stdr.profile_pic.url}}" style="width: 40px; height: 40px; margin-top: 0%;" alt=""/>
+                                    {% else %}
+                                    <label>No Image</label>
+                                    {% endif %}
                                 </td>
                                 <td class="uk-width-3-10 uk-text-nowrap" style="text-align: center;"><a href="#">{{stdr.first_name}} {{stdr.last_name}}</a></td>
                                 </tr>   

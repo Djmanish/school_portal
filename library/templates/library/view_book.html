@@ -649,10 +649,12 @@
 
                             <div class="user_content">   
                                 <h4 class="heading_a uk-margin-bottom">{{book_grp.code}} - {{book_grp.book_name}}</h4>
+                                {% if grp_books %}
                                 <div class="md-card uk-margin-medium-bottom">
+                                    
                                     <div class="md-card-content">
                                         <div class="uk-overflow-container">
-                                            {% if grp_books %}
+                                            
                                             <table class="uk-table uk-table-hover">
                                                 <thead>
                                                 <tr>
@@ -699,11 +701,13 @@
                                                 
                                                 </tbody>
                                             </table>
-                                            {% endif %}
+                                            
                                         </div>
+                                        
                                     </div>
+                                    
                                 </div>
-                     
+                                {% endif %}
                                 
                                    
                                 

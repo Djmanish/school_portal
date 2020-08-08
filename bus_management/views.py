@@ -113,7 +113,7 @@ def add_point(request):
                 messages.success(request, 'Point added successfully !')  
                 return HttpResponseRedirect(f'/bus/')       
             else:
-                messages.error(request, 'Point Is Already Exists !')
+                messages.error(request, 'Point Is already exists !')
                 return HttpResponseRedirect(f'/bus/') 
     else:
         raise PermissionDenied
@@ -182,17 +182,30 @@ def delete_routemap(request,pk):
     s= RouteMap.objects.filter(route=sel_route)
     for i in s:
         i.delete()
-    
+        try:
+            s_users = BusUsers.objects.filter(point=i.point,institute= request.user.profile.institute)
+            print(s_users)
+            vehicle_signals.point_map_del.send(sender=None,route=i.route,point=i.point)
+        except BusUsers.DoesNotExist:
+            pass
     messages.success(request, 'Route map deleted successfully !')  
    
     return HttpResponseRedirect(f'/bus/')
 
 def delete_view_routepoints(request,pk):
-    del_point = Point.objects.get(pk=pk)
-    ss= RouteMap.objects.filter(point=del_point)
-    for i in ss:
-        i.delete()
-    
+    del_point = RouteMap.objects.get(pk=pk)
+    del_point.delete()
+    sch = RouteMap.objects.filter(route=del_point.route)
+    for i in sch:
+        if i.index > del_point.index:
+            i.index = i.index-1
+            i.save()    
+    try:
+        s_users = BusUsers.objects.filter(point=del_point.point,institute= request.user.profile.institute)
+        print(s_users)
+        vehicle_signals.point_map_del.send(sender=None,route=del_point.route,point=del_point.point)
+    except BusUsers.DoesNotExist:
+        pass
     messages.success(request, 'Point deleted successfully !')  
    
     return HttpResponseRedirect(f'/bus/')
@@ -321,7 +334,7 @@ def add_new_driver(request):
             # creating role description object
             role_des = Role_Description.objects.create(user=driver_user, institute= request.user.profile.institute, level=create_level)
             messages.success(request, 'Driver added successfully !') 
-            messages.info(request,f' Driver ID & Password is id:-{email}, password:-{pwd} ')
+            messages.info(request,f' Driver id is:-{email}, password is:-{pwd} ')
             return HttpResponseRedirect(f'/bus/')  
     else:
         raise PermissionDenied
@@ -388,10 +401,10 @@ def update_map_route(request):
 def update_route(request):
     if request.method == 'POST':
         select_point= request.POST.getlist('select_point')
-        select_time= request.POST.getlist('select_time')
+        select_time= request.POST.getlist('time')
         route= int(request.POST['hide_route'])
         select_index= request.POST.getlist('index')
-       
+        print(select_time)
         result= checkIfDuplicates_1(select_point)
         if result:
             messages.error(request, "You are selecting same point !")  
@@ -416,26 +429,49 @@ def update_route(request):
         else:
             print ("non Duplicates")      
         length=len(select_point) 
-        for i in range(length):
+        for i in range(length):            
             s_point= Point.objects.get(id=select_point[i])
-            ind= select_index[i]
+            ind= int(select_index[i])
+            print(ind)
+            sel = ind
+            t = select_time[i]
             try:
                 sch_r= RouteMap.objects.get(route__id=route, index=ind)
-                q= RouteMap.objects.filter(route__id=route)
-                for k in q:
-                    if int(k.index) >= int(ind):
-                        a= RouteMap.objects.get(route__id=route, index=k.index)
-                        a.index= int(k.index+1)
-                        a.save()
-                       
-                new= RouteMap.objects.create(route=sch_r.route, point=s_point, index=ind, time=select_time[i], routemap_institute= request.user.profile.institute)        
-                print(sch_r)
-                
+                b = 1
+            except IndexError as e:
+                b=0
             except RouteMap.DoesNotExist:
+                b=0
+            if b == 1:
+                sch_r= RouteMap.objects.get(route__id=route, index=ind)
+                q= RouteMap.objects.filter(route__id=route)
+                c = q.count()
+                print(c)
+                e = int(ind)
+                
+                for i in range(c, e-1, -1):
+                    print(i)
+                    a= RouteMap.objects.get(route__id=route, index=i)
+                    a.index= int(i+1)
+                    a.save() 
+                print("HelloManish")                      
+                new= RouteMap.objects.create(route=sch_r.route, point=s_point, index=sel, time=t, routemap_institute= request.user.profile.institute)        
+                try:
+                    s_users = BusUsers.objects.filter(point=s_point,institute= request.user.profile.institute)
+                    vehicle_signals.point_map.send(sender=None,route=sch_r.route,point=s_point)
+                except BusUsers.DoesNotExist:
+                    pass
+            else:    
                 sch_r= RouteMap.objects.filter(route__id=route).last()
-                inr= sch_r.index
+                inr= int(sch_r.index)
                 print(inr)
+                print("ManishHello")
                 new= RouteMap.objects.create(route=sch_r.route, point=s_point, index=inr+1, time=select_time[i], routemap_institute= request.user.profile.institute)
+                try:
+                    s_users = BusUsers.objects.filter(point=s_point,institute= request.user.profile.institute)
+                    vehicle_signals.point_map.send(sender=None,route=sch_r.route,point=s_point)
+                except BusUsers.DoesNotExist:
+                    pass
         messages.success(request, "Route map created successfully !")     
     return HttpResponseRedirect(f'/bus/')
     # return HttpResponse('hello')
@@ -454,6 +490,34 @@ def add_point_route (request):
         select_time= request.POST.getlist('time')
         route= int(request.POST['hide_route'])
         s_route= RouteInfo.objects.get(id=route)
+        l = len(select_time)
+        first = select_time[0]
+        last = select_time[l-1]
+        print(first)
+        print(last)
+        try:
+            driver = RouteInfo.objects.filter(vehicle_driver=s_route.vehicle_driver)
+            try:
+                for d in driver:
+                    print("Inside loop")
+                    leen = RouteMap.objects.filter(route=d).count()
+                    chk1 = RouteMap.objects.get(route=d, index=1)
+                    chk2 = RouteMap.objects.get(route=d, index=leen)
+                    chk_f = str(chk1.time)
+                    chk_l = str(chk2.time)
+                    print(chk_f)
+                    print(chk_l)
+                    print("Before if")
+                    if (first >= chk_f and first <= chk_l ) or (last >= chk_f and last <= chk_l):
+                        print("After if")
+                        messages.error(request,f'{s_route.vehicle_driver.name.first_name} is already mapped with route:- {d} for entered time !')                       
+                        return HttpResponseRedirect(f'/bus/') 
+                    else:
+                        pass
+            except:
+                pass
+        except RouteInfo.DoesNotExist:
+            pass
         result= checkIfDuplicates_1(select_point)
         if result:
             messages.error(request, "You are selecting same point !")  
@@ -478,7 +542,7 @@ def add_point_route (request):
                 vehicle_signals.point_map.send(sender=None,route=s_route,point=s_point)
             except BusUsers.DoesNotExist:
                 pass
-        messages.success(request, "Point(s) added successfully !")     
+        messages.success(request, "Point's mapped with route successfully !")     
     return HttpResponseRedirect(f'/bus/') 
     
 def set_location(request):
@@ -552,7 +616,7 @@ def add_trip(request):
 def view_routepoints(request, pk):
     # view_point = Point.objects.get(pk=pk)
     view_route = RouteInfo.objects.get(pk=pk)
-    maps = RouteMap.objects.filter(route=view_route)
+    maps = RouteMap.objects.filter(route=view_route).order_by('index')
    
     context_data = {
     'view_route': view_route,
@@ -577,7 +641,7 @@ def update_routepoints(request):
         # context_data = {
         # 'route_editpoint' : route_editpoint,
         # }
-        messages.success(request, 'Point Details Updated successfully !') 
+        messages.success(request, 'Point details updated successfully !') 
         return HttpResponseRedirect(f'/bus/')
       
     
