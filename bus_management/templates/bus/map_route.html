@@ -517,7 +517,7 @@
                             
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{institute_data.profile_pic.url}}" alt="user avatar" />
+                                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
                                 </div>
                             </div>
                             <div class="user_heading_content">
@@ -533,7 +533,7 @@
                                 <!-- <li class="uk-active"><a href="#">Route Details</a></li> -->
                                     <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
                                     
-                                        <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                        <div class="uk-grid " data-uk-grid-margin>
                                             
                                             <div class="uk-width-large-1-2">
                                                 
@@ -567,7 +567,7 @@
                                     </ul>
                             </ul>
                                 
-                                <h6 class="heading_a uk-margin-bottom">Select Points</h6>
+                                <h6 class="heading_a">Select Points</h6>
 
                                 
                                         <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'add_point_route' %}">
@@ -603,7 +603,7 @@
                                                                     {% endfor %}
                                                                  
                                                                 </select></td>
-                                                                <td><input type="time" class="form-control-md form-control" name="time"></td>                                                       
+                                                                <td><input type="time" class="form-control-md form-control" name="time" required></td>                                                       
                                                                
                                                                 
                                                             </tr>
