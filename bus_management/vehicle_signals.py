@@ -61,6 +61,24 @@ def point_map_notification(sender, **kwargs):
         pass
 
 
+point_map_del = Signal(providing_args=['route','point','request'])
+@receiver(point_map_del)
+def point_map_del_notification(sender, **kwargs):
+    try:
+        r = kwargs['route']
+        p = kwargs['point']
+        s_route= RouteInfo.objects.get(id=r.id)
+        s_point= Point.objects.get(id=p.id)
+        users = BusUsers.objects.filter(point=s_point,institute= s_point.point_institute)
+        point_notice= Notice.objects.create(institute = s_point.point_institute, category ='Vehicle', subject =f"Your point:- {s_point.point_name} is removed from route:- {s_route.route_name}.", content=f"Your point:- {s_point.point_name} is removed from route:-{s_route.route_name}", created_at= timezone.now(), publish_date= timezone.now() )
+        for i in users:
+                point_notice.recipients_list.add(i.user)
+    except:
+        pass
+
+
+
+
 # starting signal for vehicle
   
 @receiver(post_save, sender=Trip)
