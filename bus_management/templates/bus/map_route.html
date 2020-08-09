@@ -411,6 +411,16 @@
                     {% endif %}
                   {% endfor %}
                    
+                  {% for i in user.user_institute_role.level.permissions.all %}    
+                  {% if i.function_name == "Can Manage Vehicles" %}
+                  <li  class = "current_section" title="Vehicle">
+                    <a href="{% url 'bus' %}">
+                        <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
+                        <span class="menu_title">Vehicle</span>
+                    </a>
+                </li>  
+                {% endif %}
+                  {% endfor %}
 
                     <li  title="Examination">
 
@@ -507,7 +517,7 @@
                             
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{institute_data.profile_pic.url}}" alt="user avatar" />
+                                    <img src="{{user.profile.institute.profile_pic.url}}" alt="user avatar" />
                                 </div>
                             </div>
                             <div class="user_heading_content">
@@ -518,46 +528,33 @@
                             </div>
                             
                         </div>
-                        <div class="user_content">
+                        <div class="col px-md-5">
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                 <!-- <li class="uk-active"><a href="#">Route Details</a></li> -->
-                                    <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
+                                    <!-- <ul id="user_profile_tabs_content" class="uk-switcher uk-margin"> -->
                                     
-                                        <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                        <div class="uk-grid " data-uk-grid-margin>
+                                                     
+                                            <div class="uk-width-large-1-3">
+                                              
+                                                <a onclick="goBack()" class="md-btn md-btn-primary text-white"><i class=" material-icons">arrow_back </i> Go Back</a>
+                                            </div>
                                             
-                                            <div class="uk-width-large-1-2">
-                                                
-                                                <ul class="md-list md-list-addon">
-                                                                                                         
-                                                        
-                                                            <span class="uk-text-large md-list-heading"><a href="">Route No:</a></span>
-
-                                                            <span class="uk-text-large uk-text-muted"> {{sch_route.route_no}}</span>
-                                                           
-                                                       
-                                                    
-                                                </ul>
+                                            <div class="uk-width-large-1-3">
+                                                <span class="uk-text-large md-list-heading"><a href="">Route No:</a></span>
+                                                <span class="uk-text-large uk-text-muted"> {{sch_route.route_no}}</span>
                                             </div>
     
-                                            <div class="uk-width-large-1-2">
-                                                
-                                                <ul class="md-list md-list-addon">
-                                                    
-                                                    
-                                                       
-                                                            <span class="uk-text-large md-list-heading"><a href="">Route Name: </a></span>
-                                                            <span class="uk-text-large uk-text-muted"> {{sch_route.route_name}}</span>
-                                                           
-                                                       
-                                                   
-                                                </ul>
+                                            <div class="uk-width-large-1-3">
+                                                <span class="uk-text-large md-list-heading"><a href="">Route Name: </a></span>
+                                                <span class="uk-text-large uk-text-muted"> {{sch_route.route_name}}</span>
                                             </div>
                                         </div>
                                             
-                                    </ul>
+                                    <!-- </ul> -->
                             </ul>
                                 
-                                <h6 class="heading_a uk-margin-bottom">Select Points</h6>
+                                <h6 class="heading_a">Select Points</h6>
 
                                 
                                         <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'add_point_route' %}">
@@ -565,9 +562,9 @@
                                            
                                                 
                                                    
-                                                <div class="md-card-content">                                            
+                                                <div class="md-card-content" >                                            
                                                     <div class="uk-overflow-container">                                                
-                                                         <table class="uk-table uk-table-hover"> 
+                                                         <table class="uk-table uk-table-hover" > 
                                                             <thead>
                                                             <tr>
                                                                 <th>S.No</th>
@@ -593,7 +590,7 @@
                                                                     {% endfor %}
                                                                  
                                                                 </select></td>
-                                                                <td><input type="time" class="form-control-md form-control" name="time"></td>                                                       
+                                                                <td><input type="time" class="form-control-md form-control" name="time" required></td>                                                       
                                                                
                                                                 
                                                             </tr>
@@ -613,7 +610,7 @@
                                                 <div class="uk-width-1-1">
                                                     <button type="submit" class="md-btn md-btn-primary">Submit</button>
                                                 </div>
-                                            </div>
+                                            </div><br>
                                         </form>
                                     
                             
@@ -677,6 +674,11 @@
             altair_helpers.ie_fix();
         });
     </script>
+     <script>
+        function goBack() {
+          window.history.back();
+        }
+        </script>
         
 </body>
 

@@ -418,7 +418,17 @@
                     {% endif %}
                   {% endfor %}
                    
-
+                  {% for i in user.user_institute_role.level.permissions.all %}    
+                  {% if i.function_name == "Can Manage Vehicles" %}
+                  <li  title="Vehicle">
+                    <a href="{% url 'bus' %}">
+                        <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
+                        <span class="menu_title">Vehicle</span>
+                    </a>
+                </li>  
+                {% endif %}
+                  {% endfor %}
+                  
                     <li  title="Examination">
 
                         <a href="">
@@ -606,7 +616,7 @@
                                     </td>
                                     <div>
                                     <td class="zoom">
-                                        <img class="md-card-head-avatar" src="{{student.profile_pic.url}}" style="width: 40px; height: 40px; margin-top: 0%;" alt=""/>
+                                        <img class="md-card-head-avatar" src="{{student.profile_pic.url}}" style="width: 40px; height: 40px; margin-top: 0%;" alt="No image"/>
                                     </td></div>
                                        
                                     <td> {{student.roll_number}}</td>

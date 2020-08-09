@@ -386,7 +386,7 @@
 
                     {% for i in user.user_institute_role.level.permissions.all %}    
                     {% if i.function_name == "Can Manage Library" %}
-                    <li  title="Library">
+                    <li class= "current_section" title="Library">
                       <a href="{% url 'library' %}">
                           <span class="menu_icon"><i class="material-icons">local_library</i></span>
                           <span class="menu_title">Library</span>
@@ -395,6 +395,16 @@
                     {% endif %}
                   {% endfor %}
                    
+                  {% for i in user.user_institute_role.level.permissions.all %}    
+                  {% if i.function_name == "Can Manage Vehicles" %}
+                  <li  title="Vehicle">
+                    <a href="{% url 'bus' %}">
+                        <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
+                        <span class="menu_title">Vehicle</span>
+                    </a>
+                </li>  
+                {% endif %}
+                  {% endfor %}
 
                     <li  title="Examination">
 
@@ -649,10 +659,12 @@
 
                             <div class="user_content">   
                                 <h4 class="heading_a uk-margin-bottom">{{book_grp.code}} - {{book_grp.book_name}}</h4>
+                                {% if grp_books %}
                                 <div class="md-card uk-margin-medium-bottom">
+                                    
                                     <div class="md-card-content">
                                         <div class="uk-overflow-container">
-                                            {% if grp_books %}
+                                            
                                             <table class="uk-table uk-table-hover">
                                                 <thead>
                                                 <tr>
@@ -699,11 +711,13 @@
                                                 
                                                 </tbody>
                                             </table>
-                                            {% endif %}
+                                            
                                         </div>
+                                        
                                     </div>
+                                    
                                 </div>
-                     
+                                {% endif %}
                                 
                                    
                                 

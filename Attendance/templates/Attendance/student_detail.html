@@ -421,7 +421,17 @@
                     {% endif %}
                   {% endfor %}
                    
-
+                  {% for i in user.user_institute_role.level.permissions.all %}    
+                  {% if i.function_name == "Can Manage Vehicles" %}
+                  <li  title="Vehicle">
+                    <a href="{% url 'bus' %}">
+                        <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
+                        <span class="menu_title">Vehicle</span>
+                    </a>
+                </li>  
+                {% endif %}
+                  {% endfor %}
+                  
                     <li  title="Examination">
 
                         <a href="">
@@ -544,14 +554,16 @@
                                     {% if student.last_name %}
                                         {{student.last_name}}
                                     {% endif %}
+                                </span>
+                                    <span class="sub-heading">Student Detail</span>
                                 
-                                </span><span class="sub-heading">
+                                <!-- <span class="sub-heading">
                                     {% if student.designation %}
                                     {{student.designation|capfirst}}
                                     {% else %}
                                    Click on edit button to find your institute and get started.
                                     {% endif %}
-                                    </span>
+                                    </span> -->
                                 </h2>
                             </div>
 
