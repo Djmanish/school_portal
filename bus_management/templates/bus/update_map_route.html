@@ -542,17 +542,18 @@
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                
                                     
-                                        <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                        <div class="uk-grid uk-margin-medium-top uk-margin-small-bottom" data-uk-grid-margin>
                                             
-                                            <div class="uk-width-large-1-3">
+                                            <div class="uk-width-large-1-1">
                                                 <a onclick="goBack()" class="md-btn md-btn-primary text-white"><i class=" material-icons">arrow_back </i> Go Back</a>
                                             </div>
-                                            <div class="uk-width-large-1-3">
+                                        
+                                            <div class="uk-width-large-1-2">
                                                 <span class="uk-text-large md-list-heading"><a href="#">Route No:</a></span>
                                                 <span class="uk-text-large uk-text-muted"> {{r_routes.route_no}}</span>
                                             </div>
     
-                                            <div class="uk-width-large-1-3">
+                                            <div class="uk-width-large-1-2">
                                                 <span class="uk-text-large md-list-heading"><a href="#">Route Name: </a></span>
                                                 <span class="uk-text-large uk-text-muted"> {{r_routes.route_name}}</span>
                                             </div>
@@ -561,7 +562,7 @@
                                 
                             
                                 
-                                <h6 class="heading_a uk-margin-bottom">Select Points</h6>
+                                <!-- <h6 class="heading_a uk-margin-bottom">Select Points</h6> -->
 
                                 <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'update_route' %}">
                                     {% csrf_token %}
@@ -571,9 +572,9 @@
                                                 <thead>
                                                 <tr>
                                                     <th>S.No</th>
-                                                    <th>Point</th>
-                                                    <th>Time</th>
-                                                    <th>Index</th>
+                                                    <th >Point</th>
+                                                    <th >Time</th>
+                                                    <th >Index</th>
                                                     
 
                                                 </tr>
@@ -594,8 +595,8 @@
                                                         {% endfor %}
                                                      
                                                     </select></td>
-                                                    <td><input type="time" class="form-control-md form-control"  name="time"></td>  
-                                                    <td><input type="number" min="1" class="form-control-md form-control"  name="index"></td>                                                     
+                                                    <td><input type="time" class="form-control-md form-control"  name="time" required></td>  
+                                                    <td><input type="number" min="1" class="form-control-md form-control"  name="index" required></td>                                                     
                                                 </tr>
                                                 
                                                                          

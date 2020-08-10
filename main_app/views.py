@@ -115,7 +115,7 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def no_future(value):
         today = date.today()
         if value > today:
-            return messages.error(request, 'Establish Date cannot be in the future.')
+            return messages.error(request, 'Establish Date cannot be in the future. !')
 
 
     def get_success_url(self, **kwargs):         
