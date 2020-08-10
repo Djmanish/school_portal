@@ -615,10 +615,11 @@
                                  <li><a href="#">My Documents</a></li>
                                  {% endif %}
 
-                                 {% if user.profile.designation.level_name != 'admin' %}
-                                 {% if user.profile.designation.level_name != 'driver' %}
+                                 {% if user.profile.designation.level_name == 'admin' or user.profile.designation.level_name == 'student' or user.profile.designation.level_name == 'driver' or user.profile.designation.level_name == 'parent' %}
+
+                                 {% else %}
                                  <li><a href="#">My Permissions</a></li>
-                                 {% endif %}{% endif %}
+                                 {% endif %}
 
                                  {% if user.profile.designation.level_name == "parent" %}
                                  <li><a href="#">My Child</a></li>
@@ -1030,62 +1031,58 @@
                                         </li>
 {% endif %}
 
-                                            <li>
-                                            {% if added_permissions or removed_permissions  %}
-                                            <div class="row">
-                                                <div class="col ">
-                                                  <div class="card" >
-                                                   
-                                                    <div class="card-content" style="padding: 10px;">
-                                                        <small class="">Permissions Updated at: <a>{{updated_time}}</a></small>
-                                                      <p>Comment: {{changes_comment}}</p>
-                                                    </div>
-                                                    
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              {% else %}
-                                            <h3>No Changes to Show !</h3>
-                                              
-                                            {% endif %}
-                                            <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
-                                               
-                                              
-                                               
-                                                <div class="uk-width-large-1-2">
-                                                   
-                                                    {% if added_permissions  %}
-                                                   
-                                                    <span class="heading_c uk-margin-small-bottom"> <i class="md-list-addon-icon material-icons uk-text-success">new_releases</i> <a href="#">New Permissions Assigned</a>
-                                                    </span>
-                                                    {% for pn in added_permissions %}
-                                                    <span class="uk-text-small uk-text-muted uk-text-truncate">
-                                                        <i class="material-icons tiny uk-text-success">done</i>{{pn}}</span>
-                                                    {% endfor %}
+{% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "driver" or user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"     %}
 
-                                                    {% endif %}
-                                                    
-                                                    </div>
+{% else %}
+<li>
+    {% if added_permissions or removed_permissions  %}
+    <div class="row">
+        <div class="col ">
+          <div class="card" >
+           
+            <div class="card-content" style="padding: 10px;">
+                <small class="">Permissions Updated at: <a>{{updated_time}}</a></small>
+              <p>Comment: {{changes_comment}}</p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      {% else %}
+    <h3>No Changes to Show !</h3>
+      
+    {% endif %}
+    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+        <div class="uk-width-large-1-2">
+           
+            {% if added_permissions  %}
+           
+            <span class="heading_c uk-margin-small-bottom"> <i class="md-list-addon-icon material-icons uk-text-success">new_releases</i> <a href="#">New Permissions Assigned</a>
+            </span>
+            {% for pn in added_permissions %}
+            <span class="uk-text-small uk-text-muted uk-text-truncate">
+                <i class="material-icons tiny uk-text-success">done</i>{{pn}}</span>
+            {% endfor %}
 
-                                                    <div class="uk-width-large-1-2">
-                                                        {% if removed_permissions %}
-                                                       
-                                                        <span class="heading_c uk-margin-small-bottom"> <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i> <a href="#">Removed Permissions</a></span>
-                                                        {% for pn in removed_permissions %}
-                                                        <span class="uk-text-small uk-text-muted uk-text-truncate">
-                                                            <i class="material-icons tiny uk-text-danger">clear</i>{{pn}}</span>
-                                                        {% endfor %}
-                                                        {% endif %}
-                                                    </div>
+            {% endif %}
+            
+            </div>
 
-                                               
+            <div class="uk-width-large-1-2">
+                {% if removed_permissions %}
+               
+                <span class="heading_c uk-margin-small-bottom"> <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i> <a href="#">Removed Permissions</a></span>
+                {% for pn in removed_permissions %}
+                <span class="uk-text-small uk-text-muted uk-text-truncate">
+                    <i class="material-icons tiny uk-text-danger">clear</i>{{pn}}</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+    </div>
+</li>
+{% endif %}
 
-
-
-                                            </div>
-
-
-                                        </li>
+                                           
                                         
                                  
                                         {% if user.profile.designation.level_name == "parent" %}

@@ -1213,6 +1213,10 @@
                             <tbody>
 
                                 {% for role in institute_roles %}
+                                
+                                {% if role.level_name == "student" or role.level_name == 'parent'  %}
+
+                                {% else %}
                                 <tr >
                                     <td >
                                             {{role.level_name|capfirst}}
@@ -1221,6 +1225,7 @@
                                      <a href="{% url 'role_permissions' role.pk %}"><i class="material-icons" style="color: #1976d2;">edit</i> </a>
                                     </td>
                                 </tr>
+                                {% endif %}
                                 {% endfor %}
                             </tbody>
 

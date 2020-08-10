@@ -1332,7 +1332,10 @@ def edit_role_permissions(request, pk):
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
-    role_to_update_permissions = Institute_levels.objects.get(pk=pk)
+    try:
+        role_to_update_permissions = Institute_levels.objects.get(pk=pk, institute= request.user.profile.institute)
+    except:
+        raise PermissionDenied
     roles_to_update_all_permissions = role_to_update_permissions.permissions.all()
     all_app_functions = App_functions.objects.all()
     
