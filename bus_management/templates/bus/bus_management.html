@@ -1283,7 +1283,7 @@
                                                             <th>Place</th>
                                                             <th>Address</th>
                                                             <th>Edit</th>
-                                                            <th>Delete</th>
+                                                            <th>Status</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
@@ -1298,8 +1298,20 @@
                                                             
                                                             <td><a id="{{j.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                             </td>
-                                                            <td><a class="del{{j.id|slugify}}" href="{% url 'delete_point' j.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                            {% if j.status == "active" %}
+                                                            <td style="width: 10px">
+                                                                <div class="parsley-row">
+                                                                    <input type="checkbox" class="point{{j.id|slugify}}" data-switchery checked value="{{j.id}}" />
+                                                                </div>
                                                             </td>
+                                                            {% endif %}
+                                                            {% if j.status == "inactive" %}
+                                                            <td style="width: 10px">
+                                                                <div class="parsley-row">
+                                                                    <input type="checkbox" class="point{{j.id|slugify}}" data-switchery value="{{j.id}}" />
+                                                                </div>
+                                                            </td>
+                                                            {% endif %}
                                                         </tr>
                                                         <script>
                                                             $(document).ready(function(){
@@ -1323,6 +1335,24 @@
                                                                 $('#edit_point_country').val('{{j.point_country}}');
                                                                 $('#edit_point_longitute').val('{{j.longitude}}');
                                                                 $('#edit_point_latitute').val('{{j.latitude}}');
+                                                            });
+                                                            });
+                                                        </script>
+                                                        <script>
+                                                            $(document).ready(function(){
+                                                            $('.point{{j.id|slugify}}').change(function(){
+                                                                $.ajax({
+                                                                      type:'POST',
+                                                                      url:'fetch_point_details/',
+                                                                      data:{cat:$(".point{{j.id|slugify}}").val(), 
+                                                                      csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                      
+                                                                      success: function(msg){
+                                                                        alert("Point Status Changed");
+                                                                        window.location.reload();
+                                                                      }
+                                                                  });
+                                                                
                                                             });
                                                             });
                                                         </script>
