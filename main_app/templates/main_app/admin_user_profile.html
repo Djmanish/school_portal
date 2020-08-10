@@ -868,6 +868,7 @@
                                         </li>
                                         {% if user.profile.designation.level_name != 'parent' %}
                                         {% if user.profile.designation.level_name != 'driver' %}
+                                        {% if user.profile.status == 'approve' %}
                                 <li>
                                     <div class="uk-width-medium-1-8" >
                                         <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'set_loc' %}">
@@ -917,7 +918,7 @@
                                     </div>
                                     
                                 </li>
-                                {% endif %}{% endif %}
+                                {% endif %}{% endif %}{% endif %}
                                         {% if user.user_institute_role.level.level_name == 'student'  %}
                                         <li>
                                             <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>

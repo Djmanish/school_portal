@@ -31,6 +31,6 @@ urlpatterns = [
   path('view_routepoints/<int:pk>', views.view_routepoints, name="view_routepoints"),
   path('update_routepoints/', views.update_routepoints, name="update_routepoints"),
   path('view_delete_view_routepoints/<int:pk>', views.delete_view_routepoints, name="delete_view_routepoints"),
-  path('start_trip/', views.start_trip, name="start_trip"),
+  path('start_trip/<int:pk>/', views.start_trip, name="start_trip"),
   path('add_trip/', views.add_trip, name="add_trip"),
 ]

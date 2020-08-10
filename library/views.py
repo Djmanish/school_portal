@@ -505,9 +505,9 @@ def view_book(request, pk):
       total_issue_books = total_issue.count()
       left = total_books - total_issue_books
       try:
-            book_grp= BookCode.objects.get(pk=pk)
+            book_grp= BookCode.objects.get(pk=pk, book_institute=request.user.profile.institute)
       except BookCode.DoesNotExist:
-            messages.error(request,f'Request book not found !')
+            messages.error(request,f'Requested book not found !')
             return HttpResponseRedirect(f'/library/')
       
       grp_books= Book.objects.filter(book_code=book_grp.code, book_institute=request.user.profile.institute, status="active")

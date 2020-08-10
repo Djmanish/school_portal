@@ -97,6 +97,9 @@
                 padding: 0;
             }
         }
+        .fc-left{
+            font-size:13px;
+        }
         .fc-unthemed .fc-button{
             min-width: 0px !important;
             padding-left: 5px !important;
@@ -500,7 +503,7 @@
     </a>
 </li>
 {% endif %}
-    
+                {% if user.profile.designation.level_name != "driver" %}
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
@@ -514,7 +517,7 @@
                     <span class="menu_title">Schedule</span>
                 </a>
             </li>               
-           
+            {% endif %}
 
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
@@ -570,6 +573,8 @@
                   {% endfor %}
                   {% for i in user.user_institute_role.level.permissions.all %}    
                   {% if i.function_name == "Can Manage Vehicles" %}
+                {% if user.profile.designation.level_name != "driver" %}
+
                   <li  title="Vehicle">
                     <a href="{% url 'bus' %}">
                         <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
@@ -577,7 +582,9 @@
                     </a>
                 </li>  
                 {% endif %}
+                {% endif %}
                   {% endfor %}
+                {% if user.profile.designation.level_name != "driver" %}
 
                     <li  title="Examination">
 
@@ -640,7 +647,7 @@
                         </ul>
                     </li>
 
-                    {% endif %}  
+                    {% endif %}  {% endif %}  
                     {% endif %} 
                 
             </ul>
@@ -739,7 +746,7 @@
                 </div>
             <!-- Small Cards for driver Dashboard -->
             {% elif user.profile.designation.level_name == "driver" %}
-            {% if user.driver_data %}
+            {% if user.z %}
                 <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
                     <div>
                         <div class="md-card">
@@ -755,7 +762,7 @@
                             <div class="md-card-content">
                                 <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">directions_bus</i></span></div>
                                 <span class="uk-text-muted uk-text-small">Bus Number</span>
-                                <h4 class="uk-margin-remove">{{user.driver_data.vehicle.bus_no}}</h4>
+                                <h4 class="uk-margin-remove">{{user.z.vehicle.bus_no}}</h4>
                             </div>
                         </div>
                     </div>
@@ -764,14 +771,14 @@
                             <div class="md-card-content">
                                 <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">location_on</i></span></div>
                                 <span class="uk-text-muted uk-text-small">Route</span>
-                                <h4 class="uk-margin-remove">{{user.driver_data.route_name}}</h4>
+                                <h4 class="uk-margin-remove">{{user.z.route_name}}</h4>
                             </div>
                         </div>
                     </div>
                     <div>
                         <div class="md-card">
                             <div class="md-card-content">
-                                <div class="uk-float-right uk-margin-top uk-margin-small-right">{% if user.total != user.total_trip %}<a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="{% url 'start_trip' %}">Start</a>{% else %}<span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">near_me</i></span>{% endif %}</div>
+                                <div class="uk-float-right uk-margin-top uk-margin-small-right">{% if user.total != user.total_trip %}<a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="{% url 'start_trip' user.z.pk %}">Start</a>{% else %}<span class="menu_icon"><i class="material-icons" style="font-size: 40px;color: #1976d2;">near_me</i></span>{% endif %}</div>
                                 <span class="uk-text-muted uk-text-small">Trip</span>
                                 <h4 class="uk-margin-remove">{{user.today}}</h4>
                             </div>
@@ -1509,7 +1516,7 @@
 
                     <!-- Driver Card -->
                     {% if request.user.profile.designation.level_name == "driver" %}
-                    {% if user.driver_data %}
+                    {% if user.z %}
                     <div class="uk-width-medium-1-2">
                         <div class="md-card">
                             <div class="md-card-content">
@@ -1528,7 +1535,7 @@
                                             
                                             <tr>
                                                 <td>{{user.today}}</td>
-                                                <td>{{user.driver_data.route_name}}</td>
+                                                <td>{{user.z.route_name}}</td>
                                                 {% if user.trip == user.route_map %}
                                                 <td>Completed</td>
                                                 {% else %}
@@ -1539,7 +1546,7 @@
 					   
                                             <tr>
                                                 <td>{{user.last1}}</td>
-                                                <td>{{user.driver_data.route_name}}</td>
+                                                <td>{{user.z.route_name}}</td>
                                                 {% if user.trip1 == user.route_map %}
                                                 <td>Completed</td>
                                                 {% else %}
@@ -1550,7 +1557,7 @@
 					                    
                                             <tr>
                                                 <td>{{user.last2}}</td>
-                                                <td>{{user.driver_data.route_name}}</td>
+                                                <td>{{user.z.route_name}}</td>
                                                 {% if user.trip2 == user.route_map %}
                                                 <td>Completed</td>
                                                 {% else %}
@@ -1561,7 +1568,7 @@
 					    
                                             <tr>
                                                 <td>{{user.last3}}</td>
-                                                <td>{{user.driver_data.route_name}}</td>
+                                                <td>{{user.z.route_name}}</td>
                                                 {% if user.trip3 == user.route_map %}
                                                 <td>Completed</td>
                                                 {% else %}
@@ -1572,7 +1579,7 @@
 					   
                                             <tr>
                                                 <td>{{user.last4}}</td>
-                                                <td>{{user.driver_data.route_name}}</td>
+                                                <td>{{user.z.route_name}}</td>
                                                 {% if user.trip4 == user.route_map %}
                                                 <td>Completed</td>
                                                 {% else %}
@@ -1583,7 +1590,7 @@
 					   
                                             <tr>
                                                 <td>{{user.last5}}</td>
-                                                <td>{{user.driver_data.route_name}}</td>
+                                                <td>{{user.z.route_name}}</td>
                                                 {% if user.trip5 == user.route_map %}
                                                 <td>Completed</td>
                                                 {% else %}
@@ -1593,7 +1600,7 @@
                                             </tr> 
 					                         <tr>
                                                 <td>{{user.last6}}</td>
-                                                <td>{{user.driver_data.route_name}}</td>
+                                                <td>{{user.z.route_name}}</td>
                                                 {% if user.trip6 == user.route_map %}
                                                 <td>Completed</td>
                                                 {% else %}
@@ -1657,28 +1664,7 @@
                     <div class="uk-overflow-container">
                         <div id="mapid" style="width: 455px; height: 400px;margin:auto;"></div>
 
-                        <!-- <table class="uk-table uk-table-condensed uk-table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th >Route Name</th>
-                                    <th>Status</th>
-                                    <th >Action</th>                                                                       
-                                </tr>                                       
-                            </thead>
-                            <tbody>
-                                
-                                <tr>
-                                    <td>14/07/2020</td>
-                                    <td>Kalyanpur-Rooma</td>
-                                    <td>Incomplete</td>
-                                    <td>
-                                        <a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light" href="{% url 'start_trip' %}">Start</a>
-                                    </td>
-                                </tr>                   
-                                                                   
-                            </tbody>
-                        </table> -->
+                        
                     </div>
                 </div>
             </div>
