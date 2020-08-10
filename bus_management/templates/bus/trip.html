@@ -332,7 +332,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -408,7 +408,8 @@
     </a>
 </li>
 {% endif %}
-    
+{% if user.profile.designation.level_name != "driver" %}
+
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">date_range</i></span>
@@ -422,7 +423,7 @@
                     <span class="menu_title">Schedule</span>
                 </a>
             </li>               
-           
+            {% endif %}
 
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
@@ -476,12 +477,14 @@
                   </li>      
                     {% endif %}
                   {% endfor %}
-                  <li class="current_section"  title="Vehicle">
-                    <a href="{% url 'bus' %}">
+
+                  <li class="current_section" title="Vehicle">
+                    <a href="#">
                         <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
                         <span class="menu_title">Vehicle</span>
                     </a>
-                </li>  
+                </li> 
+                {% if user.profile.designation.level_name != "driver" %}
 
                     <li  title="Examination">
 
@@ -544,7 +547,7 @@
                         </ul>
                     </li>
 
-                    {% endif %}  
+                    {% endif %}  {% endif %}  
                     {% endif %} 
                 
             </ul>
@@ -574,20 +577,7 @@
                 <div class="uk-width-large">
                     <div class="md-card">
                         <div class="user_heading">
-                            <div class="user_heading_menu hidden-print">
-                                <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
-                                    <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
-                                     <div class="uk-dropdown uk-dropdown-small">
-                                        <ul class="uk-nav">
-                                            <li><a href="#" data-uk-modal="{target:'#modal_set_location',}">Set Institute Location</a></li>
-                                            <!-- <li><a href="#" data-uk-modal="{target:'#modal_new_sub_category'}">Create Sub Category</a></li>
-                                            <li><a href="#" data-uk-modal="{target:'#modal_library_settings'}">Library Settings</a></li>
-                                            <li><a href="#" data-uk-modal="{target:'#modal_set_books_user'}">Set Books Limit Per User</a></li> -->
-                                            
-                                        </ul>
-                                    </div> 
-                                </div>
-                            </div>
+                            
                             
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">

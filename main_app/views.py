@@ -3,6 +3,7 @@ from registration.backends.default.views import RegistrationView
 from registration.forms import RegistrationFormUniqueEmail
 from django.contrib import auth
 from django.contrib.auth.models import User
+from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.views.generic import *
 from .models import *
@@ -13,6 +14,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.db.models import Q
 from class_schedule.models import *
+from django.utils.timezone import utc
 from .forms import ClassUpdateForm, InstituteUpdateProfile
 from django.core.mail import send_mail, send_mass_mail
 from django.utils import timezone
@@ -314,14 +316,13 @@ def dashboard(request):
             try:
                 request.user.ins_loc = InstituteLocation.objects.get(institute=request.user.profile.institute)
                 my_loc = BusUsers.objects.get(user=request.user.profile)
-                # print(my_loc.point.id)
+                
                 request.user.location = Point.objects.get(id=my_loc.point.id)
                 route = RouteMap.objects.get(point__id=my_loc.point.id)
-                # request.user.routes = RouteMap.objects.filter(route=route.route)
-                # q1= routes.exclude(point__id=my_loc.point.id)
+                
                 try:
                     request.user.bus_loc = Trip.objects.filter(route=route.route, date = datetime.date.today()).last()
-                    # request.user.q2 = routes.exclude(point__id = bus_loc.point.id)
+                    
                 except:
                     pass
             except:
@@ -365,6 +366,10 @@ def dashboard(request):
     if request.user.profile.designation:    
        if request.user.profile.designation.level_name == "driver":
             date=datetime.date.today()
+            time = datetime.datetime.now()
+            
+            print(time)
+            
             request.user.last6=date - datetime.timedelta(days=6)
             request.user.last5=date - datetime.timedelta(days=5)
             request.user.last4=date - datetime.timedelta(days=4)
@@ -373,9 +378,31 @@ def dashboard(request):
             request.user.last1=date - datetime.timedelta(days=1)
             
             try:
-                request.user.driver_data = RouteInfo.objects.get(vehicle_driver__name=request.user.profile)
-                request.user.total = RouteMap.objects.filter(route=request.user.driver_data).count()
-                request.user.total_trip = Trip.objects.filter(route=request.user.driver_data, date = date).count()
+                driver_data = RouteInfo.objects.filter(vehicle_driver__name=request.user.profile)
+                p = []
+                for di in driver_data:
+                    try:
+                        total = RouteMap.objects.get(route=di, index=1)
+                        p.append(total)
+                    except RouteMap.DoesNotExist:
+                        pass
+                m = []
+                for j in p:
+                    c = j.time
+                    a = datetime.datetime.combine(date, c)
+                    if time > a:
+                        b = time - a
+                        m.append(b)
+                    else:
+                        b = a - time
+                        m.append(b)
+                f = int(m.index(min(m)))
+                request.user.z = driver_data[f]
+                    
+                request.user.total = RouteMap.objects.filter(route=request.user.z).count()
+                print(request.user.total)
+                request.user.total_trip = Trip.objects.filter(route=request.user.z, date = date).count()
+                print(request.user.total_trip)
                 request.user.today =datetime.date.today() 
                 
             
@@ -388,7 +415,7 @@ def dashboard(request):
                 request.user.trip = Trip.objects.filter(driver__name= request.user.profile, date=date).count()
                 
                 
-                print("Helllpoooo")
+                
                 request.user.route_map = RouteMap.objects.filter(route=request.user.driver_data).count()
             except:
                 pass
@@ -1305,7 +1332,10 @@ def edit_role_permissions(request, pk):
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
-    role_to_update_permissions = Institute_levels.objects.get(pk=pk)
+    try:
+        role_to_update_permissions = Institute_levels.objects.get(pk=pk, institute= request.user.profile.institute)
+    except:
+        raise PermissionDenied
     roles_to_update_all_permissions = role_to_update_permissions.permissions.all()
     all_app_functions = App_functions.objects.all()
     
