@@ -532,7 +532,7 @@ def add_point_route (request):
 
         result1= checkIfDuplicates_1(select_time)
         if result1:
-            messages.error(request, "Time never be same !")  
+            messages.error(request, "Time can't be same for two points !")  
                       
             return HttpResponseRedirect(f'/bus/') 
         else:
