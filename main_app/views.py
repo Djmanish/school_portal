@@ -366,8 +366,10 @@ def dashboard(request):
     if request.user.profile.designation:    
        if request.user.profile.designation.level_name == "driver":
             date=datetime.date.today()
-            time = datetime.datetime.now().time()
+            time = datetime.datetime.now()
+            
             print(time)
+            
             request.user.last6=date - datetime.timedelta(days=6)
             request.user.last5=date - datetime.timedelta(days=5)
             request.user.last4=date - datetime.timedelta(days=4)
@@ -377,7 +379,6 @@ def dashboard(request):
             
             try:
                 driver_data = RouteInfo.objects.filter(vehicle_driver__name=request.user.profile)
-                print(driver_data)
                 p = []
                 for di in driver_data:
                     try:
@@ -385,11 +386,23 @@ def dashboard(request):
                         p.append(total)
                     except RouteMap.DoesNotExist:
                         pass
+                m = []
                 for j in p:
-                    print(j.time)
+                    c = j.time
+                    a = datetime.datetime.combine(date, c)
+                    if time > a:
+                        b = time - a
+                        m.append(b)
+                    else:
+                        b = a - time
+                        m.append(b)
+                f = int(m.index(min(m)))
+                request.user.z = driver_data[f]
                     
-                   
-                request.user.total_trip = Trip.objects.filter(route=request.user.driver_data, date = date).count()
+                request.user.total = RouteMap.objects.filter(route=request.user.z).count()
+                print(request.user.total)
+                request.user.total_trip = Trip.objects.filter(route=request.user.z, date = date).count()
+                print(request.user.total_trip)
                 request.user.today =datetime.date.today() 
                 
             

@@ -590,8 +590,8 @@ def see_map(request):
 
        
     
-def start_trip(request):
-    u = RouteInfo.objects.get(vehicle_driver__name=request.user.profile)
+def start_trip(request,pk):
+    u = RouteInfo.objects.get(pk=pk)
     sel_r = u.id
     p = RouteMap.objects.filter(route__id=sel_r)
     vehicle_signals.start.send(sender=None,route=u)
