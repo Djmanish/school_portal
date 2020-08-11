@@ -38,6 +38,8 @@ def create_test_type(request,pk):
                 except:
                         e_end=None  
                 institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
+                
+                       
                 exam_sr_no=ExamType.objects.filter(institute=request.user.profile.institute).count()+1
                 
                 if request.method=="POST":
@@ -45,6 +47,13 @@ def create_test_type(request,pk):
                         exam_max_marks= request.POST.get('exam_max_marks')
                         exam_max_limit = request.POST.get('exam_max_limit')
                         exam_per_final_score = request.POST.get('exam_per_final_score')
+                        for exam_name in institute_exam_type:
+                                exam_type = exam_name.exam_type
+                                if exam_type == exam_type_name:
+                                        messages.error(request, 'Exam type already exists !')
+                                        institute_pk = request.user.profile.institute.pk
+                                        return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
+
                         examtype= ExamType()
                         examtype.institute=request.user.profile.institute
                         examtype.exam_type=exam_type_name
@@ -132,11 +141,12 @@ def edit_exam_date(request,pk):
                 start_date=str(request.POST.get('start_date'))
 
                 end_date= str(request.POST.get('end_date'))
-                schedule_date= datetime.datetime.strptime(start_date, '%Y-%m-%d')
+                schedule_date= datetime.datetime.strptime(start_date, '%Y-%m-%d').date()
 
                 
+                
                         
-                if schedule_date<datetime.datetime.now():
+                if schedule_date<datetime.datetime.now().date():
                                         messages.error(request, 'Date must be in future!')
                                         return redirect(f'/examschedule/examtypelist/{inst_id}') 
                 edit_institute=request.user.profile.institute.id
@@ -148,12 +158,13 @@ def edit_exam_date(request,pk):
                 edit_data.edit_start_date=start_date
                 edit_data.edit_end_date=end_date
                 edit_data.save()
-
+               
         
                 messages.success(request, 'Edit date stored successfully!')
                 return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
         context={
                        'edit_exam_date':edit_exam_date,
+                       
                        
                        
                         

@@ -79,6 +79,10 @@ def holidaylist(request,pk):
                 
 def edit_holiday(request, pk):
         # starting user notice
+    inst = request.user.profile.institute.id
+
+    if pk!=inst:
+            raise PermissionDenied
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
