@@ -166,7 +166,7 @@ def add_category(request):
               new_category= BookCategory.objects.create(book_category_name=category, institute_category=request.user.profile.institute)
               messages.success(request, 'Category created successfully !')
             except:
-              messages.error(request, 'Category already exists !!!')
+              messages.error(request, 'Category already exists !')
               
             return HttpResponseRedirect(f'/library/')    
 
@@ -228,11 +228,11 @@ def issue_book(request):
           try:
             borrower_book= Book.objects.get(book_id=bookid, book_institute=request.user.profile.institute)
           except Book.DoesNotExist:
-            messages.error(request, 'Incorrect book id')
+            messages.error(request, 'Incorrect book id !')
             return HttpResponseRedirect(f'/library/issuebook/')
           try:
             chk= IssueBook.objects.get(book_name__book_id=bookid, return_date__isnull=True)
-            messages.error(request, 'Book is already issued')
+            messages.error(request, 'Book is already issued !')
             return HttpResponseRedirect(f'/library/issuebook/')
           except:
             chk_active_issue= sh_for_days.max_Book_Allows
@@ -243,7 +243,7 @@ def issue_book(request):
             if sch_user < chk_active_issue:
               new_issue_book=IssueBook.objects.create(user_name=borrower, book_name=borrower_book, issue_book_institute=borrower.institute, issued_by=request.user.profile, issued_date=today, expiry_date=expirydate)
               messages.success(request, 'Book issued successfully !')
-              messages.info(request,f' Return date is {ex_d} ')
+              messages.info(request,f' Return date is {ex_d} !')
               return HttpResponseRedirect(f'/library/issuebook/')
             else:                  
                   messages.error(request, 'Requested user active issued book limit is exceeded !')  
@@ -364,7 +364,7 @@ def delete_book(request,pk):
       for i in search_books:
             try:
                   ser_bk = IssueBook.objects.get(book_name__id= i.id, return_date__isnull=True)
-                  messages.error(request,f'Unable to delete, Book ID: {i.book_id} is issued')
+                  messages.error(request,f'Unable to delete, Book ID: {i.book_id} is issued !')
                   return HttpResponseRedirect(f'/library/')
             except IssueBook.DoesNotExist:
                   pass
@@ -373,7 +373,7 @@ def delete_book(request,pk):
             i.save()
       search_edit_book.status = "inactive"
       search_edit_book.save()
-      messages.error(request,f'Book code:- {search_edit_book}, deleted successfully')
+      messages.error(request,f'Book code:- {search_edit_book}, deleted successfully !')
       return HttpResponseRedirect(f'/library/')
 
 def add_more_books(request):
@@ -505,9 +505,9 @@ def view_book(request, pk):
       total_issue_books = total_issue.count()
       left = total_books - total_issue_books
       try:
-            book_grp= BookCode.objects.get(pk=pk)
+            book_grp= BookCode.objects.get(pk=pk, book_institute=request.user.profile.institute)
       except BookCode.DoesNotExist:
-            messages.error(request,f'Request book not found !')
+            messages.error(request,f'Requested book not found !')
             return HttpResponseRedirect(f'/library/')
       
       grp_books= Book.objects.filter(book_code=book_grp.code, book_institute=request.user.profile.institute, status="active")
@@ -528,13 +528,13 @@ def delete_view_book(request, pk):
       idd = book_cd.pk
       try:
             search_book = IssueBook.objects.get(book_name__id=delete_bk.id, return_date__isnull=True)
-            messages.error(request,f'Unable to delete, book id: {delete_bk.book_id} is issued')
+            messages.error(request,f'Unable to delete, book id: {delete_bk.book_id} is issued !')
             return HttpResponseRedirect(f'/library/view_book/{idd}')
       except IssueBook.DoesNotExist:
             print("hello")
             delete_bk.status="inactive"
             delete_bk.save()      
-            messages.error(request,f'Book deleted successfully')
+            messages.error(request,f'Book deleted successfully !')
             return HttpResponseRedirect(f'/library/view_book/{idd}')
 
 def fetch_book_ids(request):

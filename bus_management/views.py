@@ -18,7 +18,7 @@ def bus(request):
     if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
         buses = Bus.objects.filter(bus_institute=request.user.profile.institute)
         states_list = State.objects.all()
-        points = Point.objects.filter(point_institute=request.user.profile.institute, status="active")
+        points = Point.objects.filter(point_institute=request.user.profile.institute)
         drivers = Driver.objects.filter(institute=request.user.profile.institute)
         active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
         routes = RouteInfo.objects.filter(institute=request.user.profile.institute, status="active")
@@ -113,7 +113,7 @@ def add_point(request):
                 messages.success(request, 'Point added successfully !')  
                 return HttpResponseRedirect(f'/bus/')       
             else:
-                messages.error(request, 'Point Is already exists !')
+                messages.error(request, 'Point is already exists !')
                 return HttpResponseRedirect(f'/bus/') 
     else:
         raise PermissionDenied
@@ -170,12 +170,7 @@ def delete_route(request,pk):
     messages.success(request, 'Route deleted successfully !')  
     return HttpResponseRedirect(f'/bus/')
 
-def delete_point(request,pk):
-    sel_point = Point.objects.get(pk=pk,point_institute= request.user.profile.institute)
-    sel_point.status = "inactive"
-    sel_point.save()
-    messages.success(request, 'Point deleted successfully !')  
-    return HttpResponseRedirect(f'/bus/')
+
 
 def delete_routemap(request,pk):
     sel_route = RouteInfo.objects.get(pk=pk)
@@ -195,11 +190,10 @@ def delete_routemap(request,pk):
 def delete_view_routepoints(request,pk):
     del_point = RouteMap.objects.get(pk=pk)
     del_point.delete()
-    sch = RouteMap.objects.filter(route=del_point.route)
+    sch = RouteMap.objects.filter(route=del_point.route, index__gt=del_point.index)
     for i in sch:
-        if i.index > del_point.index:
-            i.index = i.index-1
-            i.save()    
+        i.index = i.index-1
+        i.save()    
     try:
         s_users = BusUsers.objects.filter(point=del_point.point,institute= request.user.profile.institute)
         print(s_users)
@@ -225,6 +219,30 @@ def fetch_bus_details(request):
         selected_bus.status = "active"
         selected_bus.save()
     return HttpResponse("Hello world")
+
+def fetch_point_details(request):
+    # pk=request.POST.get('category')
+    selected_point = Point.objects.get(pk=request.POST.get('cat'))
+    print(selected_point)
+    if selected_point.status == "active":
+        try:
+            maps = RouteMap.objects.filter(point__id=request.POST.get('cat'))
+            for i in maps:
+                try:
+                    f = RouteMap.objects.filter(route=i.route, index__gt = i.index)
+                    for j in f:
+                        j.index = j.index-1
+                        j.save()
+                except:
+                    pass
+                i.delete()
+        except RouteMap.DoesNotExist:
+            pass
+        
+    else:
+        selected_point.status = "active"
+        selected_point.save()
+    return HttpResponse("Hello world")    
 
 def get_last_digits(num, last_digits_count=8):
     return abs(num) % (10**last_digits_count)
@@ -291,6 +309,12 @@ def add_new_driver(request):
                 messages.error(request, 'Entered email id is already registered !')
                 return HttpResponseRedirect(f'/bus/add_driver/')
             except User.DoesNotExist:
+                pass
+            try:
+                j = UserProfile.objects.filter(aadhar_card_number=aadhar_card_number)
+                messages.error(request, 'Entered aadhar card is already registered to other user !')
+                return HttpResponseRedirect(f'/bus/add_driver/')
+            except UserProfile.DoesNotExist:
                 pass
             try:
                 d_id = Driver.objects.get(driver_id=d_code)
@@ -590,8 +614,8 @@ def see_map(request):
 
        
     
-def start_trip(request):
-    u = RouteInfo.objects.get(vehicle_driver__name=request.user.profile)
+def start_trip(request,pk):
+    u = RouteInfo.objects.get(pk=pk)
     sel_r = u.id
     p = RouteMap.objects.filter(route__id=sel_r)
     vehicle_signals.start.send(sender=None,route=u)

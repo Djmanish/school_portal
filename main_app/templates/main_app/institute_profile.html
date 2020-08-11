@@ -845,7 +845,7 @@
                                                 </div>
                                             </div>
                                        
-                                               
+                                            {% if institute_class %}   
                                             <div class="md-card-content">
 
                                                 <div class="uk-overflow-container uk-margin-bottom">
@@ -898,12 +898,22 @@
                                                                 {% endif %}  
                                                                 
                                                                 {% if can_delete_class_permission in user_permissions %} 
-                                                                <td><a  class="" href="{% url 'delete_class' classes.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                                <td><a class="confirm-delete12" href="{% url 'delete_class' classes.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                                 </td>
+                                                                <script>
+                                                                    $(document).on('click', '.confirm-delete12', function(){
+                                                                    return confirm('Are you sure you want to delete this?');
+                                                                    })
+                                                                </script>
                                                                 {% endif %} 
-                                       
+                                                                
                                                             </tr>
                                                             {% endfor %}
+                                                            <!-- <script>
+                                                                $(document).on('click', '.confirm-delete12', function(){
+                                                                return confirm('Are you sure you want to delete this?');
+                                                                })
+                                                            </script> -->
                                                         </tbody>
                                                     </table>
 
@@ -912,7 +922,7 @@
                                                 </div>
 
 
-                                            </div>
+                                            </div>{% endif %}
                                         </div>
                                 </li>
                                 <!-- End Classes Tab Content -->
@@ -988,7 +998,7 @@
                                                 </div>
                                             </div>
 
-
+                                            {% if institute_subject %}
                                             <div class="md-card-content">
 
                                                 <div class="uk-overflow-container uk-margin-bottom">
@@ -1032,16 +1042,17 @@
                                                                 {% endif %}
 
                                                                 {% if can_delete_subject_permission in user_permissions %} 
-                                                                <td><a  class="" href="{% url 'delete_subject' subjects.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
+                                                                <td><a  onclick="myFunction()" href="{% url 'delete_subject' subjects.pk %}"><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                                 </td>
                                                                 {% endif %}
 
                                                             </tr>
                                                             {% endfor %}
+                                                            
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                            </div>
+                                            </div>{% endif %}
                                         </div>
                                     </div>
                                 </li>
@@ -1213,6 +1224,10 @@
                             <tbody>
 
                                 {% for role in institute_roles %}
+                                
+                                {% if role.level_name == "student" or role.level_name == 'parent'  %}
+
+                                {% else %}
                                 <tr >
                                     <td >
                                             {{role.level_name|capfirst}}
@@ -1221,6 +1236,7 @@
                                      <a href="{% url 'role_permissions' role.pk %}"><i class="material-icons" style="color: #1976d2;">edit</i> </a>
                                     </td>
                                 </tr>
+                                {% endif %}
                                 {% endfor %}
                             </tbody>
 
@@ -1306,7 +1322,10 @@
     });
     </script>
     <!-- starting select search input script -->
+    <script>
+    
 
+    </script>
 
     
     

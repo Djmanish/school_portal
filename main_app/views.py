@@ -117,7 +117,7 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def no_future(value):
         today = date.today()
         if value > today:
-            return messages.error(request, 'Establish Date cannot be in the future.')
+            return messages.error(request, 'Establish Date cannot be in the future. !')
 
 
     def get_success_url(self, **kwargs):         
@@ -366,8 +366,10 @@ def dashboard(request):
     if request.user.profile.designation:    
        if request.user.profile.designation.level_name == "driver":
             date=datetime.date.today()
-            time = datetime.datetime.now().time()
+            time = datetime.datetime.now()
+            
             print(time)
+            
             request.user.last6=date - datetime.timedelta(days=6)
             request.user.last5=date - datetime.timedelta(days=5)
             request.user.last4=date - datetime.timedelta(days=4)
@@ -377,7 +379,6 @@ def dashboard(request):
             
             try:
                 driver_data = RouteInfo.objects.filter(vehicle_driver__name=request.user.profile)
-                print(driver_data)
                 p = []
                 for di in driver_data:
                     try:
@@ -385,11 +386,23 @@ def dashboard(request):
                         p.append(total)
                     except RouteMap.DoesNotExist:
                         pass
+                m = []
                 for j in p:
-                    print(j.time)
+                    c = j.time
+                    a = datetime.datetime.combine(date, c)
+                    if time > a:
+                        b = time - a
+                        m.append(b)
+                    else:
+                        b = a - time
+                        m.append(b)
+                f = int(m.index(min(m)))
+                request.user.z = driver_data[f]
                     
-                   
-                request.user.total_trip = Trip.objects.filter(route=request.user.driver_data, date = date).count()
+                request.user.total = RouteMap.objects.filter(route=request.user.z).count()
+                print(request.user.total)
+                request.user.total_trip = Trip.objects.filter(route=request.user.z, date = date).count()
+                print(request.user.total_trip)
                 request.user.today =datetime.date.today() 
                 
             
@@ -1320,7 +1333,10 @@ def edit_role_permissions(request, pk):
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
-    role_to_update_permissions = Institute_levels.objects.get(pk=pk)
+    try:
+        role_to_update_permissions = Institute_levels.objects.get(pk=pk, institute= request.user.profile.institute)
+    except:
+        raise PermissionDenied
     roles_to_update_all_permissions = role_to_update_permissions.permissions.all()
     all_app_functions = App_functions.objects.all()
     
