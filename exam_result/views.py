@@ -54,8 +54,12 @@ def exam_result(request,pk):
               }
               messages.error(request, f'Edit marks date between {edit_start_date} - {edit_end_date}')
               return render(request, 'teacher_view.html', context) 
+          elif edit_end_date<timezone.now().date():
+                    messages.error(request, f'Edit marks date was between {edit_start_date} - {edit_end_date}')
+                    return render(request, 'teacher_view.html', context) 
+
           else:
-              pass
+               pass
              
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
@@ -102,7 +106,7 @@ def exam_result(request,pk):
         if exam_details:
           context={
                     'subject_result':subject_result,
-                    
+                    'edit_date':'edit_date',
                     'selected_subject':selected_subject,
                     'exam_type_id':exam_type_id,
                     'result_exam_type_sr_no':result_exam_type_sr_no,

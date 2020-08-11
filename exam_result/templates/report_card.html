@@ -520,9 +520,9 @@
                             <div class="md-card-content">
                                 <form method="POST" class="form-inline" id="attendance_form" >
                                     {% csrf_token %}
-                                    <tr >
+                                    
                                         {% if user.profile.designation.level_name == "parent" %}
-                                        <td>
+                                        
                                             <label class ="required" id="required_margin">Select Student</label>
                                             <select class="form-control" id="selected_student"  name="selected_student" style="padding: 2px;"
                                                 required>
@@ -531,29 +531,28 @@
                                                 <option value={{student.id}}>{{student.first_name}} {{student.last_name}}</option>
                                                 {% endfor %}
                                             </select>
-                                        </td>
-                                        <td></td>
+                                      
+                                       
                                        
                                         &nbsp
                                         
-                                        <td> 
+                                       
                                             <label class ="required" id="required_margin">Select Exam Type</label>
                                             <select class="form-control" id="selected_exam_types" name="result_exam_type"  required>
                             
                                                 <option selected disabled value="">--Exam Type--</option>
                                                
                                             </select>
-                                        </td>
-                                        <td>
-                                        </td>
+                                       
+                                        
                                         {% endif %}
                                        
-                                        <td></td>
+                                        
                                        
                                         &nbsp
                                        
                                         {% if user.profile.designation.level_name != "parent" %}
-                                        <td> 
+                                        
                                             <label class ="required" id="required_margin">Select Exam Type</label>
                                             <select class="form-control" name="result_exam_type" id="result_padding" required>
                                                 {% if select_exam_type %}
@@ -571,27 +570,24 @@
                                                 {% endfor %}
                                                 
                                             </select>
-                                        </td>
-                                        <td>
-                                        </td>
+                                        
                                     
                                         {% endif %}
                                         &nbsp
-                                        <td  >
+                                        
                                             <input type="submit" name="view_button" value="View"
                                                 class="md-btn md-btn-primary">
-                                        </td >
+                                   
                                        
                                        
                                         {% if result_data %}
-                                        <td >
+                                      <td>
                                             
-                                                <button type="submit" name="report_cart_button" class="report_card_button" value="Print">
+                                                <button type="submit"  name="report_cart_button" class="report_card_button" value="Print">
                                                     <i class="md-icon material-icons" id="invoice_print"></i>
                                             </button>
                                            
                                         </td>
-                                            
                                                    
                                               
                                         
@@ -603,10 +599,7 @@
 
                                
                                 
-                                <td>
-                                </td>
                                
-                                </tr>
 
                                 <script>
                                     $(document).ready(function(){

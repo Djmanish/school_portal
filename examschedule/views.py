@@ -351,7 +351,7 @@ def examschedule_view(request,pk):
                                 return render(request,'update_examschedule.html', context)
                         else:
                                 messages.error(request, f'No result found for Class-{selected_class}, Exam Type-{exam_type_data}!')
-                                return redirect(f'/examschedule/examschedule/{inst}')
+                                return redirect(f'/examschedule/examschedule/view/{inst}')
                         
                         
                 else:
