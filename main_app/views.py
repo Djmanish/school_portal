@@ -1150,6 +1150,7 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
+        form.fields['state'].initial="Select"
         return super().form_valid(form)
     
     

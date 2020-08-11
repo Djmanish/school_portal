@@ -36,6 +36,7 @@ class InstituteUpdateProfile(forms.ModelForm):
         self.fields['state'].required = True
         self.fields['country'].required = True
         self.fields['pin_code'].required = True
+        self.fields['state'].empty_label = '--Select State--'
   
 
     class Meta:
@@ -51,6 +52,7 @@ class InstituteUpdateProfile(forms.ModelForm):
             'contact_number1':forms.TextInput(attrs={'class':'positive_number'}),
             'contact_number2':forms.TextInput(attrs={'class':'positive_number'}),
             'contact_number3':forms.TextInput(attrs={'class':'positive_number'}),
+         
             
        
         }
@@ -74,6 +76,7 @@ class InstituteUpdateProfile(forms.ModelForm):
         'website_link':'School Website Link',
         'district':'City',
         'institute_logo': 'Institute Logo',
+        
 
     }
 

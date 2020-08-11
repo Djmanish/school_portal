@@ -70,6 +70,11 @@ def create_test_type(request,pk):
 
     
 def edit_test_type(request, pk):
+    inst = request.user.profile.institute.id
+
+    if pk!=inst:
+            raise PermissionDenied
+
             # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
