@@ -192,12 +192,18 @@ def edit_subject(request, pk):
     return render(request, 'main_app/edit_subject.html', context)
 
 def delete_subject(request, pk):
-        subject_to_delete = Subjects.objects.get(pk=pk)
-        subject_to_delete.subject_code = "null"
-        subject_to_delete.subject_name = "null"
-        subject_to_delete.delete()
-        messages.success(request, 'Subject deleted successfully !')
         institue_pk = request.user.profile.institute.pk
+        subject_to_delete = Subjects.objects.get(pk=pk)
+        subject_to_delete.subject_code = None
+        subject_to_delete.subject_name = None
+        subject_to_delete.delete()
+        try:
+            subject_to_delete.delete()
+        except:
+            messages.error(request, 'This subject has students. Can not be deleted !')
+            return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
+        messages.success(request, 'Subject deleted successfully !')
+        
         return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
 
 

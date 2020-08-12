@@ -61,7 +61,7 @@ class InstituteUpdateProfile(forms.ModelForm):
        
 
         labels = {
-        'profile_pic': 'Profile Picture',
+        'profile_pic': 'Institute Profile Picture',
         'code':'School Code',
         'name':'School Name',
         'establish_date':'Establish Date',
