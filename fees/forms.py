@@ -4,6 +4,8 @@ from .models import *
 from django.core.exceptions import NON_FIELD_ERRORS
 
 class Fees_tag_update_form(forms.ModelForm):
+  
+    
     class Meta:
         error_messages = {
             NON_FIELD_ERRORS: {
