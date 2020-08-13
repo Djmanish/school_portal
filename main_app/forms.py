@@ -58,8 +58,7 @@ class InstituteUpdateProfile(forms.ModelForm):
         }
        
 
-       
-
+    
         labels = {
         'profile_pic': 'Institute Profile Picture',
         'code':'School Code',
