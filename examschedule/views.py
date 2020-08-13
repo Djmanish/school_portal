@@ -366,7 +366,7 @@ def examschedule_view(request,pk):
                                 
                                 student_class= selected_student.profile.Class
 
-                                exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=student_class)
+                                exam_details = ExamDetails.objects.filter(institute=student_institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=student_class)
                                 
                                 context = {
                                         
