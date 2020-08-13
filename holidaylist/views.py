@@ -78,15 +78,18 @@ def holidaylist(request,pk):
         raise PermissionDenied
                 
 def edit_holiday(request, pk):
-        # starting user notice
+        
     inst = request.user.profile.institute.id
 
-    if pk!=inst:
-            raise PermissionDenied
+   
+    # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
-    edit_holiday= HolidayList.objects.get(pk=pk)
+    try:
+        edit_holiday= HolidayList.objects.get(pk=pk, institute=inst)
+    except:
+        raise PermissionDenied
     user_permissions = request.user.user_institute_role.level.permissions.all()
     can_edit_holiday_permission = App_functions.objects.get(function_name='Can Edit Holiday')
 
