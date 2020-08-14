@@ -541,8 +541,9 @@
                         </div>
                         <div class="user_content">
                             <!-- success message -->
-                           
-
+                           <!-- Go back button -->
+                           <a href="{% url 'class_schedule' %}" class="md-btn md-btn-primary"><i class=" material-icons">arrow_back </i> Go Back</a>
+                            <br><br>
                             <form method="POST" enctype="multipart/form-data" action="">
                           {% csrf_token %}
                                                 

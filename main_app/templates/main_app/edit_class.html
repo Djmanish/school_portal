@@ -258,7 +258,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -283,7 +283,7 @@
                     
 
                 {% if user.profile.institute and user.profile.status == 'approve' %}
-                <li  title="Institute Profile">
+                <li class="current_section" title="Institute Profile">
                     <a href="{% url 'institute_detail' user.profile.institute.pk %}">
                         <span class="menu_icon"><i class="material-icons">school</i></span>
                         <span class="menu_title">Institute Profile</span>
@@ -526,9 +526,11 @@
                                                      <div class="md-card">
                                                  
                                                      <div class="md-card-content">
-                   
+                                                        
                         <div class="user_content">
-
+                            <a onclick="goBack()" class="md-btn md-btn-primary text-white"><i class=" material-icons">arrow_back </i> Go Back</a>
+                            
+                            <br><br>
 <form method="POST" action="{% url 'edit_class' class_info.pk %}">
 {% csrf_token %}
 <div>
@@ -694,6 +696,10 @@ $("input[type=date]").on('click', function() {
       })
     })
     </script>
-   
+<script>
+    function goBack() {
+      window.history.back();
+    }
+    </script>   
 </body>
 </html>
