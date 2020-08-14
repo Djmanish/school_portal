@@ -493,8 +493,8 @@
                                                     
                                                     <div>
                                                         &nbsp
-                                                        {% if s_date %}
-                                                            <h6>Edit Marks Date for latest exam between: {{s_date}} - {{e_date}}</h6>
+                                                        {% if e_start %}
+                                                            <h6>Edit Marks Date for latest exam between: {{e_start}} - {{e_end}}</h6>
                                                         {% else %}
                                                         <h6>Edit Marks Date for latest exam between: Not defined yet </h6>
                                                         {% endif %}
@@ -525,7 +525,7 @@
                                                                       </div>
                                                                       <div class="form-group">
                                                                         <label class="required">% of Final Score</label>
-                                                                        <input type="number" class="form-control only_decimal" name="exam_per_final_score" min="0" max ="100" required>
+                                                                        <input type="number" class="form-control " step="0.1" pattern="^\d*(\.\d{0,2})?$" name="exam_per_final_score" min="0" max ="100" required>
                                                                       </div>
                                                                       <table>
                                                                         <tr>

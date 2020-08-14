@@ -29,12 +29,21 @@ def create_test_type(request,pk):
                 for edit_date in edit_exam_date:
                         e_start_date.append(edit_date.edit_start_date)
                         e_end_date.append(edit_date.edit_end_date)
+
                 try:
-                        e_start=e_start_date[0]
+                        
+                        for i in range(0, len(e_start_date)): 
+                                if i == (len(e_start_date)-1):
+                                        e_start=e_start_date[i]
+                                        print(e_start)
+                                      
                 except:
                         e_start=None
                 try:
-                         e_end=e_end_date[0] 
+                        for i in range(0, len(e_end_date)): 
+                                if i == (len(e_end_date)-1):
+                                        e_end=e_end_date[i]
+                        #  print(e_end)
                 except:
                         e_end=None  
                 institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
@@ -68,8 +77,8 @@ def create_test_type(request,pk):
                 
                 context={
                 'institute_exam_type':institute_exam_type,
-                's_date':e_start,
-                'e_date':e_end,
+                'e_start':e_start,
+                'e_end':e_end,
                 
                 }
                 return render(request, 'test_type_list.html', context)

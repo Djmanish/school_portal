@@ -40,26 +40,26 @@ def exam_result(request,pk):
              
       # get the Edt_Exam_Date MODEL data
       result_institute=Institute.objects.get(pk=pk)
-      edit_date=Edit_Exam_Date.objects.filter(institute=result_institute)
-      for e_date in edit_date:
-          edit_start_date=e_date.edit_start_date
-          edit_end_date=e_date.edit_end_date
-         
-          if edit_start_date>timezone.now().date() and edit_end_date>timezone.now().date() or edit_start_date == None and edit_end_date == None:
-              date1=str(edit_end_date)
-              context={
-                  'edit_start_date':edit_start_date,
-                  'edit_end_date':edit_end_date,
+      edit_date=Edit_Exam_Date.objects.filter(institute=result_institute).last()
+      e_start=edit_date.edit_start_date
+      e_end=edit_date.edit_end_date
+    
+              
+      if e_start>timezone.now().date() and e_end>timezone.now().date() or e_start == None and e_end == None:
+          context={
+                        'edit_start_date':e_start,
+                        'edit_end_date':e_end,
 
-              }
-              messages.error(request, f'Edit marks date between {edit_start_date} - {edit_end_date}')
-              return render(request, 'teacher_view.html', context) 
-          elif edit_end_date<timezone.now().date():
-                    messages.error(request, f'Edit marks date was between {edit_start_date} - {edit_end_date}')
-                    return render(request, 'teacher_view.html', context) 
 
-          else:
-               pass
+            }
+          messages.error(request, f'Edit marks date between {e_start} - {e_end}')
+          return render(request, 'teacher_view.html', context) 
+      elif e_end<timezone.now().date():
+          messages.error(request, f'Edit marks date was between {e_start} - {e_end}')
+          return render(request, 'teacher_view.html') 
+
+      else:
+          pass
              
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
@@ -1690,23 +1690,22 @@ def overall_report_card(request,pk,student_pk):
         sum=0
        
         for final_sum in final_percentage:
-          try:
+         
             sum=sum+final_sum
-          except:
-            sum=1
+          
         # count the number of subjects
-        
+        count=0
         for i in resultsubject:
             count=count+1
         try:
             total_marks_count=count*100
+            
+            final_percent_result=(sum/total_marks_count)*100
+            grand_result=round(final_percent_result,2)
+            range_value=range(0, count_value)
         except:
-            total_marks_count=1
-        
-        print(total_marks_count)
-        final_percent_result=(sum/total_marks_count)*100
-        grand_result=round(final_percent_result,2)
-        range_value=range(0, count_value)
+          pass
+
        
 
         context={

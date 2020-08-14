@@ -32,6 +32,19 @@ $(document).ready(function(){
         alert('Only Positive Numbers !');
         return false
       });
+      $(document).on('keydown', 'input[pattern]', function(e){
+  var input = $(this);
+  var oldVal = input.val();
+  var regex = new RegExp(input.attr('pattern'), 'g');
+
+  setTimeout(function(){
+    var newVal = input.val();
+    if(!regex.test(newVal)){
+      input.val(oldVal); 
+    }
+  }, 0);
+});
+      
 
       
 // starting script for last notification view
@@ -100,7 +113,7 @@ $(document).ready(function () {
     onrendered: function (canvas) {
     imgData = canvas.toDataURL(
     'image/png');
-    var doc = new jsPDF("a4"); // var doc = new jsPDF('l', 'in', [10, 12]); change page size
+    var doc = new jsPDF('l', 'in', [10, 12]); change page size
     doc.addImage(imgData, 'PNG', 10, 10);
     doc.save('ReportCard.pdf');
     
