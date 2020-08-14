@@ -38,6 +38,8 @@ def create_test_type(request,pk):
                 except:
                         e_end=None  
                 institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
+                
+                       
                 exam_sr_no=ExamType.objects.filter(institute=request.user.profile.institute).count()+1
                 
                 if request.method=="POST":
@@ -45,6 +47,13 @@ def create_test_type(request,pk):
                         exam_max_marks= request.POST.get('exam_max_marks')
                         exam_max_limit = request.POST.get('exam_max_limit')
                         exam_per_final_score = request.POST.get('exam_per_final_score')
+                        for exam_name in institute_exam_type:
+                                exam_type = exam_name.exam_type
+                                if exam_type == exam_type_name:
+                                        messages.error(request, 'Exam type already exists !')
+                                        institute_pk = request.user.profile.institute.pk
+                                        return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
+
                         examtype= ExamType()
                         examtype.institute=request.user.profile.institute
                         examtype.exam_type=exam_type_name
@@ -70,11 +79,18 @@ def create_test_type(request,pk):
 
     
 def edit_test_type(request, pk):
+    inst = request.user.profile.institute.id
+
+  
+
             # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
-    test_type_info= ExamType.objects.get(pk=pk)
+    try:
+        test_type_info= ExamType.objects.get(pk=pk, institute=inst)
+    except:
+        raise PermissionDenied
     # institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
     
 
@@ -127,11 +143,12 @@ def edit_exam_date(request,pk):
                 start_date=str(request.POST.get('start_date'))
 
                 end_date= str(request.POST.get('end_date'))
-                schedule_date= datetime.datetime.strptime(start_date, '%Y-%m-%d')
+                schedule_date= datetime.datetime.strptime(start_date, '%Y-%m-%d').date()
 
                 
+                
                         
-                if schedule_date<datetime.datetime.now():
+                if schedule_date<datetime.datetime.now().date():
                                         messages.error(request, 'Date must be in future!')
                                         return redirect(f'/examschedule/examtypelist/{inst_id}') 
                 edit_institute=request.user.profile.institute.id
@@ -143,12 +160,13 @@ def edit_exam_date(request,pk):
                 edit_data.edit_start_date=start_date
                 edit_data.edit_end_date=end_date
                 edit_data.save()
-
+               
         
                 messages.success(request, 'Edit date stored successfully!')
                 return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
         context={
                        'edit_exam_date':edit_exam_date,
+                       
                        
                        
                         
@@ -335,7 +353,7 @@ def examschedule_view(request,pk):
                                 return render(request,'update_examschedule.html', context)
                         else:
                                 messages.error(request, f'No result found for Class-{selected_class}, Exam Type-{exam_type_data}!')
-                                return redirect(f'/examschedule/examschedule/{inst}')
+                                return redirect(f'/examschedule/examschedule/view/{inst}')
                         
                         
                 else:
@@ -348,7 +366,7 @@ def examschedule_view(request,pk):
                                 
                                 student_class= selected_student.profile.Class
 
-                                exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=student_class)
+                                exam_details = ExamDetails.objects.filter(institute=student_institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=student_class)
                                 
                                 context = {
                                         
@@ -406,7 +424,11 @@ def edit_examschedule(request,pk):
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
-    examdetails_info= ExamDetails.objects.get(pk=pk)
+    inst = request.user.profile.institute.id
+    try:
+        examdetails_info= ExamDetails.objects.get(pk=pk, institute=inst)
+    except:
+         raise PermissionDenied
     designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
     institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
 

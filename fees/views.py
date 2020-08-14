@@ -170,6 +170,11 @@ class Fees_tag_update_view(LoginRequiredMixin,UserPassesTestMixin, SuccessMessag
         return super().form_valid(form)
     
     def test_func(self):
+        tag_id = self.get_object().id
+        try:
+            School_tags.objects.get(pk = tag_id, institute= self.request.user.profile.institute)
+        except:
+            return False
         user_permissions = self.request.user.user_institute_role.level.permissions.all()
         can_setup_fees_permission = App_functions.objects.get(function_name='Can Setup Fees')
         if can_setup_fees_permission in user_permissions:
