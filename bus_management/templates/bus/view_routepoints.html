@@ -550,6 +550,7 @@
                                 <form  method="POST" action="{% url 'update_routepoints' %}">
                                     {% csrf_token %}
                                     <input type="hidden" class="form-control" name="edit_routepoint_id_hide" id="edit_routepoint_id_hide" required>
+                                    <input type="hidden" value="{{r_id}}" class="form-control" name="rd" id="rd" required>
                                       <div class="form-group">
                                         <label style="color: black;">Route Name</label>
                                       

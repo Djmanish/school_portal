@@ -399,9 +399,10 @@
                             </a>
                         </li> 
                     {% endif %}
-
+                    
                     {% for i in user.user_institute_role.level.permissions.all %}    
                     {% if i.function_name == "Can Manage Library" %}
+                    
                     <li class="current_section" title="Library">
                       <a href="{% url 'library' %}">
                           <span class="menu_icon"><i class="material-icons">local_library</i></span>
@@ -409,7 +410,7 @@
                       </a>
                   </li>      
                     {% endif %}
-                  {% endfor %}
+                    {% endfor %}
                    
                   {% for i in user.user_institute_role.level.permissions.all %}    
                   {% if i.function_name == "Can Manage Vehicles" %}

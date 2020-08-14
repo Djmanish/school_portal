@@ -117,7 +117,7 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def no_future(value):
         today = date.today()
         if value > today:
-            return messages.error(request, 'Establish Date cannot be in the future. !')
+            return messages.error(request, 'Establish date cannot be in the future. !')
 
 
     def get_success_url(self, **kwargs):         
@@ -209,7 +209,7 @@ def delete_subject(request, pk):
 
 def edit_class(request, pk):
     
-# starting user notice
+    # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice

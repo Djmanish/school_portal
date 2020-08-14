@@ -542,7 +542,9 @@
                                 <li>
                                     <div id="">
                                         <div class="md-card">
+                                            
                                             <div class="md-card-content">
+                                                {% if pending_user %}
                                                 <h4>Institute Requests</h4>
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <table
@@ -589,14 +591,16 @@
                         
                                                     </table>
                                                 </div>
-                        
+                                                {% endif %}
                         
                         
                                             </div>
+                                            
                                         </div>
                                         {% if request.user.profile.designation.level_name == "teacher" %}
                                         <div class="md-card">
                                             <div class="md-card-content">
+                                                {% if parent_request_inactive %}
                                                 <h4>Parents Requests</h4>
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <table
@@ -643,7 +647,7 @@
                                                     </table>
                                                 </div>
                         
-                        
+                                                 {% endif %}
                         
                                             </div>
                                         </div>
@@ -758,11 +762,12 @@
                                     </div>
                                     {% endif %}
                                     {% if  user.profile.designation.level_name == "teacher" %}
-                                    <div id="">
+                                    <div >
                                         <div class="md-card">
                                             <div class="md-card-content">
+                                                {% if Active_user %}
                                                 <h4>Institute Requests</h4>
-                                                <div class="uk-overflow-container uk-margin-bottom">
+                                                <div class="uk-overflow-container ">
                                                     <table
                                                         class="uk-table uk-table-condensed uk-table-hover uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair"
                                                         id="ts_issues">
@@ -799,7 +804,7 @@
                         
                                                     </table>
                                                 </div>
-                        
+                                                 {% endif %}
                         
                         
                                             </div>
@@ -807,6 +812,7 @@
                                         {% if request.user.profile.designation.level_name == "teacher" %}
                                          <div class="md-card">
                                             <div class="md-card-content">
+                                                <!-- {% if parent_request_active %} -->
                                                 <h4>Parents Requests</h4>
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <table
@@ -851,7 +857,7 @@
                         
                                                     </table>
                                                 </div>
-                        
+                                                <!-- {% endif %} -->
                         
                         
                                             </div>
