@@ -1563,6 +1563,7 @@ def overall_report_card(request,pk,student_pk):
       count_value=0
       for exam_count in type_exam:
         count_value=count_value+1
+       
 
 
       for exam_type in exam_type_list:
@@ -1643,7 +1644,7 @@ def overall_report_card(request,pk,student_pk):
               # store percent in dictionary
               dict1['percent']=round(perValue,2)
               e_data.append(dict1)
-        print(e_data)
+        
         
         
         # retrieve list of all subjects from dictionary
@@ -1659,9 +1660,10 @@ def overall_report_card(request,pk,student_pk):
         
       # retrieve list of all percentage from dictionary
         sub_percent_list=[]
+        all_percent_list=[]
         for subject in sub_value:
           sub_percent={}
-          all_percent_list=[]
+          
           per={}
           for sub in e_data:
             sub_percent['sub']=subject
@@ -1671,7 +1673,7 @@ def overall_report_card(request,pk,student_pk):
                  for k,v in sub.items():
                    if k=='percent':
                      all_percent_list.append(v)
-          # print(all_percent_list)
+          
           for percent_marks in all_percent_list:
             sub_percent[percent_marks]=percent_marks 
           
@@ -1686,24 +1688,26 @@ def overall_report_card(request,pk,student_pk):
               if k=='percent_sum':
                 final_percentage.append(v)
         sum=0
+       
         for final_sum in final_percentage:
-          sum=sum+final_sum
+          try:
+            sum=sum+final_sum
+          except:
+            sum=1
         # count the number of subjects
-        count=0
+        
         for i in resultsubject:
-            try:
-              count=count+1
-            except:
-              count=1
-
+            count=count+1
         try:
             total_marks_count=count*100
         except:
             total_marks_count=1
-
+        
+        print(total_marks_count)
         final_percent_result=(sum/total_marks_count)*100
         grand_result=round(final_percent_result,2)
         range_value=range(0, count_value)
+       
 
         context={
           'institute_student':institute_student,

@@ -81,14 +81,16 @@ def create_test_type(request,pk):
 def edit_test_type(request, pk):
     inst = request.user.profile.institute.id
 
-    if pk!=inst:
-            raise PermissionDenied
+  
 
             # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
-    test_type_info= ExamType.objects.get(pk=pk)
+    try:
+        test_type_info= ExamType.objects.get(pk=pk, institute=inst)
+    except:
+        raise PermissionDenied
     # institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
     
 
@@ -364,7 +366,7 @@ def examschedule_view(request,pk):
                                 
                                 student_class= selected_student.profile.Class
 
-                                exam_details = ExamDetails.objects.filter(institute=request.user.profile.institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=student_class)
+                                exam_details = ExamDetails.objects.filter(institute=student_institute, exam_type__exam_type= exam_type_data,exam_sr_no= select_exam_type_no,exam_class__name=student_class)
                                 
                                 context = {
                                         
@@ -422,7 +424,11 @@ def edit_examschedule(request,pk):
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
-    examdetails_info= ExamDetails.objects.get(pk=pk)
+    inst = request.user.profile.institute.id
+    try:
+        examdetails_info= ExamDetails.objects.get(pk=pk, institute=inst)
+    except:
+         raise PermissionDenied
     designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
     institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
 
