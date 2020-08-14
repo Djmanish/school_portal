@@ -19,7 +19,7 @@ $(document).ready(function(){
         if (regex.test(strigChar)) {
             return true;
         }
-        alert('Only Digits are allowed !');
+        alert('Only positive numbers are allowed!');
         return false
       });
 

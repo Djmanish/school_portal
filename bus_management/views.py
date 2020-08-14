@@ -113,7 +113,7 @@ def add_point(request):
                 messages.success(request, 'Point added successfully !')  
                 return HttpResponseRedirect(f'/bus/')       
             else:
-                messages.error(request, 'Point Is already exists !')
+                messages.error(request, 'Point is already exists !')
                 return HttpResponseRedirect(f'/bus/') 
     else:
         raise PermissionDenied

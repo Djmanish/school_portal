@@ -1427,7 +1427,7 @@
                     <div class="uk-width-medium-1-2">         
                         <div class="md-card">
                             <div class="md-card-content">
-                                <div >
+                              
                                 <table class="uk-table uk-table-condensed uk-table-hover">
                                         <thead>
                                             <div class="row">
@@ -1458,7 +1458,7 @@
                                         </tbody>
                                     
                                     </table>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -1472,7 +1472,7 @@
                             
                         <div class="md-card">
                             <div class="md-card-content">
-                                <div >
+                                
                                 <table class="uk-table uk-table-condensed uk-table-hover">
                                         <thead>
                                             <div class="row">
@@ -1506,7 +1506,7 @@
                                         </tbody>
                                     
                                     </table>
-                                </div>
+                               
                             </div>
                         </div>
                     </div>
@@ -1622,37 +1622,38 @@
         
         <div class="uk-width-medium-1-2">
             <div class="md-card" >
-             {% if user.profile.designation.level_name == "parent" %}
-                 {% if user.count > 1 %}
-                 <form  method="POST" action="#" class="form-inline" id="parent_calendar_form" style="margin-left: 15px;padding-top: 8px;">
-                     {% csrf_token %}
-                       <label style="margin: 4px;">Select Child:</label>
-                         <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
-                        <option selected disabled>
-                        {% if user.post_child %}
-                             {{user.post_child.first_name}}
-                         {% else %}
-                             {{user.first_child.child.first_name}}
-                         {% endif %}
-                         </option>
-                         {% for child in user.child_par %}
-                         {% if child.status == "active" %}
-                         
-                         <option value={{child.child.id}}>{{child.child.first_name}}</option>
-                         {% endif %}
-                         {% endfor %}
-                  </select>
-                 <input type="submit" name="calendar" value="View" style="margin: 4px;" class="md-btn md-btn-primary md-btn-mini ">
-                 </form>
-                 {% endif %}
-                 {% endif %}
-             <div class="md-card-content" style="max-height: 455px; margin: auto;">
-                 
+                <div >
+            
+             <div class="md-card-content" >
+                {% if user.profile.designation.level_name == "parent" %}
+                {% if user.count > 1 %}
+                <form  method="POST" action="#" class="form-inline" id="parent_calendar_form" style="width: 75%; margin: auto; margin-bottom: 10px;">
+                    {% csrf_token %}
+                      <label style="margin: 4px;">Select Child:</label>
+                        <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
+                       <option selected disabled>
+                       {% if user.post_child %}
+                            {{user.post_child.first_name}}
+                        {% else %}
+                            {{user.first_child.child.first_name}}
+                        {% endif %}
+                        </option>
+                        {% for child in user.child_par %}
+                        {% if child.status == "active" %}
+                        
+                        <option value={{child.child.id}}>{{child.child.first_name}}</option>
+                        {% endif %}
+                        {% endfor %}
+                 </select>
+                <input type="submit" name="calendar" value="View" style="margin: 4px;" class="md-btn md-btn-primary md-btn-mini ">
+                </form>
+                {% endif %}
+                {% endif %}
                  
                  <div id='calendar'></div>
                  
                  </div>
-                                      
+                </div>                     
             </div>
          </div>     
          {% if request.user.profile.designation.level_name != "driver" %}
@@ -1676,6 +1677,7 @@
         <div class="uk-width-medium-1-2">
             <div class="md-card">
                 <div class="md-card-content">
+                    
                     <form  method="POST" action="#" class="form-inline" id="parent_map_form">
                         {% csrf_token %}
                           <label style="margin: 4px;">Select Child:  </label>
@@ -1699,8 +1701,8 @@
                     <div class="uk-overflow-container">
                         <div id="mapid" style="width: 455px; height: 400px;margin:auto;"></div>
 
-                            
-                    </div>
+                    </div>        
+                    
                 </div>
             </div>
         </div> 

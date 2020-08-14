@@ -532,6 +532,10 @@
                                                     </td>
                                                 </tr>
                                               
+                                              {% if edit_date %}
+                                                  
+                                             
+                                                  
                                                 
                                                         <form method="POST"  class="form-inline" id="attendance_form">
                                                             {% csrf_token %}
@@ -565,6 +569,7 @@
                                                         
                                                            
                                                         </form>
+                                                        
                                                       
                                                         <script>
                                                             $(document).ready(function(){
@@ -583,7 +588,10 @@
                                                               })
                                                             })
                                                             </script>
-                                                    
+                                                            {% else %}
+                                                            <h3>Date is not set by Admin yet.</h3>
+                                                            {% endif %}
+
                                                     <div class="md-card-content">
                                                     
 

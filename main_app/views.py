@@ -117,7 +117,7 @@ class ClassUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def no_future(value):
         today = date.today()
         if value > today:
-            return messages.error(request, 'Establish Date cannot be in the future.')
+            return messages.error(request, 'Establish date cannot be in the future. !')
 
 
     def get_success_url(self, **kwargs):         
@@ -192,18 +192,24 @@ def edit_subject(request, pk):
     return render(request, 'main_app/edit_subject.html', context)
 
 def delete_subject(request, pk):
-        subject_to_delete = Subjects.objects.get(pk=pk)
-        subject_to_delete.subject_code = "null"
-        subject_to_delete.subject_name = "null"
-        subject_to_delete.delete()
-        messages.success(request, 'Subject deleted successfully !')
         institue_pk = request.user.profile.institute.pk
+        subject_to_delete = Subjects.objects.get(pk=pk)
+        subject_to_delete.subject_code = None
+        subject_to_delete.subject_name = None
+        subject_to_delete.delete()
+        try:
+            subject_to_delete.delete()
+        except:
+            messages.error(request, 'This subject has students. Can not be deleted !')
+            return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
+        messages.success(request, 'Subject deleted successfully !')
+        
         return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
 
 
 def edit_class(request, pk):
     
-# starting user notice
+    # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
@@ -1163,6 +1169,7 @@ class InstituteUpdateview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTes
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
+        form.fields['state'].initial="Select"
         return super().form_valid(form)
     
     

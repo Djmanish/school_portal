@@ -546,7 +546,7 @@
                                                                    
                                                                 </select>
                                                              
-                                                                <label class ="required" id="required_margin">Select Exam Type No.</label>
+                                                                <label id="required_margin">Select Exam Type No.</label>
                                                             
                                                                 <select class="form-control" id="fetch_sr_no" name="selected_exam_type_no" required>
                                                                     <option selected disabled value=''>--Exam Type No.--</option>
@@ -554,7 +554,7 @@
                                                              </select>
                                                                 {% endif %}
                                                            
-                                                                {% if user.profile.designation.level_name != "student" and  user.profile.designation.level_name != "parent"%}
+                                                                {% if user.profile.designation.level_name != "student" and  user.profile.designation.level_name != "parent" %}
                                   
                                                                 <label class ="required" id="required_margin">Select Class</label>
                                                                     <select class="form-control relationshipDropDown" name="selected_class"  required>
@@ -574,12 +574,12 @@
                                                                         {% endfor %}
                                                                     </select>
                                                                  
-                                                                    <label class ="required" id="required_margin">Select Exam Type No.</label>
+                                                                    <label id="required_margin">Select Exam Type No.</label>
                                                                 
-                                                                    <select class="form-control relationshipDropDown" id="fetched_sr_no" name="selected_exam_type_no" required>
+                                                                    <select class="form-control required" id="fetched_sr_no" name="selected_exam_type_no"  required>
                                                                         <option selected disabled value=''>--Exam Type No.--</option>
                                             
-                                                                 </select>
+                                                                    </select>
 
                                                                 {% endif %}
                                                                 {% if user.profile.designation.level_name == "student" %}
@@ -593,9 +593,9 @@
                                                                         {% endfor %}
                                                                     </select>
                                                                  
-                                                                    <label class ="required" id="required_margin">Select Exam Type No.</label>
+                                                                    <label id="required_margin">Select Exam Type No.</label>
                                                                 
-                                                                    <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no"  required>
+                                                                    <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no"  required=required>
                                                                         <option selected disabled value=''>--Exam Type No.--</option>
                                             
                                                                  </select>
@@ -623,7 +623,8 @@
                                                                           csrfmiddlewaretoken: '{{ csrf_token }}' },
                                                                           
                                                                           success: function(msg){
-                                                                              $('#fetched_sr_no').html(msg);
+                                                                              $('#fetched_sr_no').html(msg)
+                                                                              ;
                                                                           }
                                                                       })
                                                                   })
@@ -633,6 +634,7 @@
                                                                   $('#selected_exam_type').change(function(){
                                                                      
                                                                       $.ajax({
+                                                                          
                                                                           type:'POST',
                                                                           url:'/examschedule/fetching_no/',
                                                                           data:{exam_type_no:$("#selected_exam_type").val(), 

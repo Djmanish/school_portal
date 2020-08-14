@@ -588,14 +588,16 @@
                            
                         </div>
                         <div class="user_content">
+                           
+                            <div class="col-sm-6" >
+                                <a onclick="goBack()" class="md-btn md-btn-primary text-white"><i class=" material-icons">arrow_back </i> Go Back</a>
+                              </div><br>
                             <div class="row">
-                                <div class="col-sm-4" >
-                                    <a onclick="goBack()" class="md-btn md-btn-primary text-white"><i class=" material-icons">arrow_back </i> Go Back</a>
-                                  </div>
-                                <div class="col-sm-4" >
+                                
+                                <div class="col-sm-6" >
                                   <h3 class="uk-text-primary">Update Student's Information</h3>
                                 </div>
-                                <div class="col-sm-4 text-right">
+                                <div class="col-sm-6 text-right">
                                     <h5><span style="color: red; font-weight:bold;">*</span> Required Field</h5>
                                 </div>
                               </div>
@@ -617,7 +619,7 @@
                             <div class="row">
                                 
                                 {% for f in student_prfile_edit_form  %}
-                                <div class="col-sm-4" style="padding: 5px;" >
+                                <div class="col-sm-4"  >
                             
                                     {{f|as_crispy_field}}
                                     
@@ -632,7 +634,7 @@
                            <div class="row">
 
 {% for f in student_info_edit_form %}
-<div class="col-sm-4" style="padding: 5px;" >
+<div class="col-sm-4"  >
 
         {{f|as_crispy_field}}
         

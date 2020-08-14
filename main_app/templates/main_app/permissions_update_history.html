@@ -528,6 +528,8 @@
                             </a> -->
                         </div>
                         <div class="user_content">
+                            <a onclick="goBack()" class="md-btn md-btn-primary text-white"><i class=" material-icons">arrow_back </i> Go Back</a>
+ <br><br>
                             <ul id="user_profile_tabs" class="uk-tab"
                                 data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}"
                                 data-uk-sticky="{ top: 48, media: 960 }">
@@ -704,7 +706,11 @@
             altair_helpers.ie_fix();
         });
     </script>
-
+<script>
+    function goBack() {
+      window.history.back();
+    }
+    </script>
 
     
     
