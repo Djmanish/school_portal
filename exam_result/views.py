@@ -562,7 +562,7 @@ def report_card(request,pk):
 
 def overall_result(request,pk,student_pk):
   user_permissions = request.user.user_institute_role.level.permissions.all()
-  add_class_permission = App_functions.objects.get(function_name='Can See ReportCard')
+  add_class_permission = App_functions.objects.get(function_name='Can View ReportCard')
   if add_class_permission in user_permissions:
                         pass
   else:
