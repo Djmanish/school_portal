@@ -15,7 +15,14 @@ import _strptime
 # Create your views here.
 
 def create_test_type(request,pk):
-            # starting user notice
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        add_class_permission = App_functions.objects.get(function_name='Can Create Exam')
+        if add_class_permission in user_permissions:
+                pass
+        else:
+                 raise PermissionDenied 
+
+                # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
          # ending user notice
@@ -88,6 +95,12 @@ def create_test_type(request,pk):
 
     
 def edit_test_type(request, pk):
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    add_class_permission = App_functions.objects.get(function_name='Can Edit Exam')
+    if add_class_permission in user_permissions:
+                pass
+    else:
+                 raise PermissionDenied
     inst = request.user.profile.institute.id
 
   
@@ -128,6 +141,12 @@ def edit_test_type(request, pk):
     return render(request, 'edit_exam_type.html', context)
 
 def delete_test_type(request, pk):
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        add_class_permission = App_functions.objects.get(function_name='Can Delete Exam')
+        if add_class_permission in user_permissions:
+                        pass
+        else:
+                        raise PermissionDenied
         test_type_info= ExamType.objects.get(pk=pk)
       
         test_type_info.exam_max_marks="null"
@@ -142,6 +161,7 @@ def delete_test_type(request, pk):
 
 # Edit exam date permission
 def edit_exam_date(request,pk):
+        
         institute_pk = request.user.profile.institute.pk
         edit_exam_date=Edit_Exam_Date.objects.filter(institute=request.user.profile.institute)
         inst_id = request.user.profile.institute.pk
@@ -188,6 +208,12 @@ def edit_exam_date(request,pk):
 
 # function for create exam type
 def exam_schedule(request,pk):
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        add_class_permission = App_functions.objects.get(function_name='Can Create ExamSchedule')
+        if add_class_permission in user_permissions:
+                        pass
+        else:
+                        raise PermissionDenied
         # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -265,6 +291,12 @@ def exam_schedule(request,pk):
         return render(request,'examschedule.html',context)
 
 def create_exam_schedule(request, pk):
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        add_class_permission = App_functions.objects.get(function_name='Can Create ExamSchedule')
+        if add_class_permission in user_permissions:
+                        pass
+        else:
+                        raise PermissionDenied
         # starting user notice
         if request.user.profile.designation:
                  request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -319,6 +351,12 @@ def create_exam_schedule(request, pk):
 
 
 def examschedule_view(request,pk):
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        add_class_permission = App_functions.objects.get(function_name='Can View ExamSchedule')
+        if add_class_permission in user_permissions:
+                        pass
+        else:
+                        raise PermissionDenied
         # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -429,6 +467,12 @@ def examschedule_view(request,pk):
                 raise PermissionDenied
 
 def edit_examschedule(request,pk):
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    add_class_permission = App_functions.objects.get(function_name='Can Edit ExamSchedule')
+    if add_class_permission in user_permissions:
+                        pass
+    else:
+                        raise PermissionDenied
     # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -480,6 +524,12 @@ def edit_examschedule(request,pk):
     return render(request, 'edit_exam_schedule.html', context)
 
 def delete_examschedule(request, pk):
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        add_class_permission = App_functions.objects.get(function_name='Can Delete ExamSchedule')
+        if add_class_permission in user_permissions:
+                        pass
+        else:
+                        raise PermissionDenied
         # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -503,7 +553,7 @@ def fetch_max_sr_no(request):
   
   max_exam_sr_no = ExamDetails.objects.filter(exam_type=exam_type_id).values('exam_sr_no').distinct()
  
-  individual_sr_no = "<option>--Exam Type No.--</option>"
+  individual_sr_no = "<option selected disabled value=''>--Exam Type No.--</option>"
   for sr_no in max_exam_sr_no:
     individual_sr_no = individual_sr_no + f"<option>"+sr_no['exam_sr_no']+"</option>" 
      

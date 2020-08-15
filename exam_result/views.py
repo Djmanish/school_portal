@@ -30,6 +30,12 @@ from django.core.exceptions import ValidationError
 
 # Create your views here.
 def exam_result(request,pk):
+  user_permissions = request.user.user_institute_role.level.permissions.all()
+  add_class_permission = App_functions.objects.get(function_name='Can Create ExamResult')
+  if add_class_permission in user_permissions:
+                        pass
+  else:
+                        raise PermissionDenied
   inst = request.user.profile.institute.id
   today_date=timezone.now()
   if pk==inst:
@@ -130,6 +136,13 @@ def exam_result(request,pk):
         raise PermissionDenied
     
 def examresult(request,pk):
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      add_class_permission = App_functions.objects.get(function_name='Can Create ExamResult')
+      if add_class_permission in user_permissions:
+                            pass
+      else:
+                            raise PermissionDenied
+
     # starting user notice
       if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -241,6 +254,12 @@ def chart_sr_no(request):
   return HttpResponse(chart_result_sr_no)
 
 def report_card(request,pk):
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      add_class_permission = App_functions.objects.get(function_name='Can See ReportCard')
+      if add_class_permission in user_permissions:
+                            pass
+      else:
+                            raise PermissionDenied
       inst = request.user.profile.institute.id
       if pk!=inst:
         raise PermissionDenied
@@ -315,6 +334,14 @@ def report_card(request,pk):
               examtype_total_limit=int(e_total_limit)
 
               all_exam=ExamResult.objects.filter(exam_type=exam_type,result_student_data=request.user)
+              print(type(all_exam))
+              print("all_exam")
+              if not all_exam.exists():
+                messages.error(request, 'No result found !')  
+                return HttpResponseRedirect(f'/examresult/report_card/{exam_id}')
+              else:
+                pass
+
               exam_no=[]
               for data in all_exam:
                 if data.exam_sr_no in exam_no:
@@ -534,6 +561,12 @@ def report_card(request,pk):
 
 
 def overall_result(request,pk,student_pk):
+  user_permissions = request.user.user_institute_role.level.permissions.all()
+  add_class_permission = App_functions.objects.get(function_name='Can See ReportCard')
+  if add_class_permission in user_permissions:
+                        pass
+  else:
+                        raise PermissionDenied
       # starting user notice
   if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -959,6 +992,12 @@ def overall_result(request,pk,student_pk):
   
   
 def class_promotion(request,pk):
+  user_permissions = request.user.user_institute_role.level.permissions.all()
+  add_class_permission = App_functions.objects.get(function_name='Can Promote Students')
+  if add_class_permission in user_permissions:
+                        pass
+  else:
+                        raise PermissionDenied
   inst = request.user.profile.institute.id
       # starting user notice
   if request.user.profile.designation:
@@ -1069,6 +1108,12 @@ def render_to_pdf(template_src, context_dict={}):
 
 
 def reports_card(request,pk):
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      add_class_permission = App_functions.objects.get(function_name='Can Print ReportCard')
+      if add_class_permission in user_permissions:
+                            pass
+      else:
+                            raise PermissionDenied
       user_institute_name=Institute.objects.get(pk=pk)
         # starting user notice
       if request.user.profile.designation:
@@ -1337,6 +1382,12 @@ def reports_card(request,pk):
         
 
 def overall_report_card(request,pk,student_pk):
+  user_permissions = request.user.user_institute_role.level.permissions.all()
+  add_class_permission = App_functions.objects.get(function_name='Can Print ReportCard')
+  if add_class_permission in user_permissions:
+                            pass
+  else:
+                            raise PermissionDenied
   inst = request.user.profile.institute.id
   user_institute_name=Institute.objects.get(pk=pk)
   selected_student_data=UserProfile.objects.get(pk=student_pk)
