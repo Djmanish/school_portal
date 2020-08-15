@@ -113,7 +113,7 @@ $(document).ready(function () {
     onrendered: function (canvas) {
     imgData = canvas.toDataURL(
     'image/png');
-    var doc = new jsPDF('l', 'in', [10, 12]); change page size
+    var doc = new jsPDF('l', 'in', [10, 12]);
     doc.addImage(imgData, 'PNG', 10, 10);
     doc.save('ReportCard.pdf');
     
