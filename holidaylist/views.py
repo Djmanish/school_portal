@@ -24,12 +24,7 @@ from django.core.exceptions import PermissionDenied
 
         # Create your views here.
 def holidaylist(request,pk):
-    user_permissions = request.user.user_institute_role.level.permissions.all()
-    add_class_permission = App_functions.objects.get(function_name='Can Add HolidayList')
-    if add_class_permission in user_permissions:
-                pass
-    else:
-                 raise PermissionDenied 
+
         # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]

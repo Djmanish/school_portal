@@ -105,21 +105,22 @@ $(document).ready(function () {
     doc.save("test.pdf")
   })
 //result print
-  var testDivElement = document.document.getElementById('result');
-  function savePDF() {
+var testDivElement = document.getElementById('result');
+
+function savePDF() {
     var imgData;
     html2canvas($("#myresult"), {
-    useCORS: true,
-    onrendered: function (canvas) {
-    imgData = canvas.toDataURL(
-    'image/png');
-    var doc = new jsPDF('l', 'in', [10, 12]);
-    doc.addImage(imgData, 'PNG', 10, 10);
-    doc.save('ReportCard.pdf');
-    
-    }
+        useCORS: true,
+        onrendered: function (canvas) {
+            imgData = canvas.toDataURL(
+               'image/png');
+            var doc = new jsPDF('a4'); // var doc = new jsPDF('l', 'in', [10, 12]); change page size
+            doc.addImage(imgData, 'PNG', 10, 10);
+            doc.save('ReportCard.pdf');
+           
+        }
     });
-    }
+}
 
 
   

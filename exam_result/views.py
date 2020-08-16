@@ -30,12 +30,7 @@ from django.core.exceptions import ValidationError
 
 # Create your views here.
 def exam_result(request,pk):
-  user_permissions = request.user.user_institute_role.level.permissions.all()
-  add_class_permission = App_functions.objects.get(function_name='Can Create ExamResult')
-  if add_class_permission in user_permissions:
-                        pass
-  else:
-                        raise PermissionDenied
+  
   inst = request.user.profile.institute.id
   today_date=timezone.now()
   if pk==inst:

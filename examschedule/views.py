@@ -208,12 +208,7 @@ def edit_exam_date(request,pk):
 
 # function for create exam type
 def exam_schedule(request,pk):
-        user_permissions = request.user.user_institute_role.level.permissions.all()
-        add_class_permission = App_functions.objects.get(function_name='Can Create ExamSchedule')
-        if add_class_permission in user_permissions:
-                        pass
-        else:
-                        raise PermissionDenied
+       
         # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -291,12 +286,7 @@ def exam_schedule(request,pk):
         return render(request,'examschedule.html',context)
 
 def create_exam_schedule(request, pk):
-        user_permissions = request.user.user_institute_role.level.permissions.all()
-        add_class_permission = App_functions.objects.get(function_name='Can Create ExamSchedule')
-        if add_class_permission in user_permissions:
-                        pass
-        else:
-                        raise PermissionDenied
+        
         # starting user notice
         if request.user.profile.designation:
                  request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -351,12 +341,7 @@ def create_exam_schedule(request, pk):
 
 
 def examschedule_view(request,pk):
-        user_permissions = request.user.user_institute_role.level.permissions.all()
-        add_class_permission = App_functions.objects.get(function_name='Can View ExamSchedule')
-        if add_class_permission in user_permissions:
-                        pass
-        else:
-                        raise PermissionDenied
+     
         # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -467,12 +452,7 @@ def examschedule_view(request,pk):
                 raise PermissionDenied
 
 def edit_examschedule(request,pk):
-    user_permissions = request.user.user_institute_role.level.permissions.all()
-    add_class_permission = App_functions.objects.get(function_name='Can Edit ExamSchedule')
-    if add_class_permission in user_permissions:
-                        pass
-    else:
-                        raise PermissionDenied
+
     # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -524,12 +504,7 @@ def edit_examschedule(request,pk):
     return render(request, 'edit_exam_schedule.html', context)
 
 def delete_examschedule(request, pk):
-        user_permissions = request.user.user_institute_role.level.permissions.all()
-        add_class_permission = App_functions.objects.get(function_name='Can Delete ExamSchedule')
-        if add_class_permission in user_permissions:
-                        pass
-        else:
-                        raise PermissionDenied
+      
         # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
