@@ -548,10 +548,11 @@
                                                              
                                                                 <label class ="required" id="required_margin">Select Exam Type No.</label>
                                                             
-                                                                <select class="form-control" id="fetch_sr_no" name="selected_exam_type_no" required>
+                                                                <select class="form-control " id="fetch_sr_no" name="selected_exam_type_no" required>
                                                                     <option selected disabled value=''>--Exam Type No.--</option>
                                         
                                                              </select>
+                                                            
                                                                 {% endif %}
                                                            
                                                                 {% if user.profile.designation.level_name != "student" and  user.profile.designation.level_name != "parent" %}
@@ -576,10 +577,13 @@
                                                                  
                                                                     <label class="required" id="required_margin">Select Exam Type No.</label>
                                                                 
-                                                                    <select class="form-control required" id="fetched_sr_no" name="selected_exam_type_no"  required>
+                                                                    <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no"  required>
                                                                         <option selected disabled value=''>--Exam Type No.--</option>
                                             
                                                                     </select>
+                                                                    <script>
+                                                                        $('.myTextarea').prop('required',true);
+                                                                        </script>
 
                                                                 {% endif %}
                                                                 {% if user.profile.designation.level_name == "student" %}
@@ -595,7 +599,7 @@
                                                                  
                                                                     <label class= "required" id="required_margin">Select Exam Type No.</label>
                                                                 
-                                                                    <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no"  required=required>
+                                                                    <select class="form-control" id="fetched_sr_no" name="selected_exam_type_no" required>
                                                                         <option selected disabled value=''>--Exam Type No.--</option>
                                             
                                                                  </select>
@@ -615,6 +619,7 @@
                                                                 $(document).ready(function(){
                                                                   $('#selected_exam_type').change(function(){
                                                                      
+                                                                     
                                                                       $.ajax({
                                                                           type:'POST',
                                                                           url:'/examschedule/fetching_max_sr_no/',
@@ -631,18 +636,20 @@
 
                                                                 $(document).ready(function(){
                                                                   $('#selected_exam_type').change(function(){
-                                                                     
+                                                                   
                                                                       $.ajax({
                                                                           
                                                                           type:'POST',
                                                                           url:'/examschedule/fetching_no/',
                                                                           data:{exam_type_no:$("#selected_exam_type").val(), 
+                                                                         
                                                                           csrfmiddlewaretoken: '{{ csrf_token }}' },
                                                                           
                                                                           success: function(msg){
                                                                               $('#fetch_sr_no').html(msg);
                                                                           }
                                                                       })
+                                                                      
                                                                   })
                                                                 })
 

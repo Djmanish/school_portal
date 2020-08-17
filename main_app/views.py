@@ -209,7 +209,7 @@ def delete_subject(request, pk):
 
 def edit_class(request, pk):
     
-# starting user notice
+    # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice

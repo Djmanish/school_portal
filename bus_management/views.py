@@ -295,7 +295,7 @@ def add_new_driver(request):
                 profile=None
             m_num = request.POST.get('mobile_number')
             email = request.POST['email'].strip()
-            aadhar_card_number = request.POST['adhar_number']
+            acm = request.POST['adhar_number']
             d_lic = request.POST['driving_license'].strip()
             add_one = request.POST['address_line_1'].strip()
             add_two = request.POST['address_line_2'].strip()
@@ -311,9 +311,12 @@ def add_new_driver(request):
             except User.DoesNotExist:
                 pass
             try:
-                j = UserProfile.objects.filter(aadhar_card_number=aadhar_card_number)
-                messages.error(request, 'Entered aadhar card is already registered to other user !')
-                return HttpResponseRedirect(f'/bus/add_driver/')
+                j = UserProfile.objects.filter(aadhar_card_number=acm, institute= request.user.profile.institute)
+                if j:
+                    messages.error(request, 'Entered aadhar card is already registered to other user !')
+                    return HttpResponseRedirect(f'/bus/add_driver/')
+                else:
+                    pass
             except UserProfile.DoesNotExist:
                 pass
             try:
@@ -326,8 +329,8 @@ def add_new_driver(request):
             
 
             # creating user object
-            pwd = get_last_digits(int(aadhar_card_number))
-            start_digit = first_n_digits(int(aadhar_card_number))
+            pwd = get_last_digits(int(acm))
+            start_digit = first_n_digits(int(acm))
             user_name = f_name+str(start_digit)
             driver_user = User.objects.create_user(user_name , email, pwd)
             driver_user.save()
@@ -345,7 +348,7 @@ def add_new_driver(request):
             search_user.date_of_birth=dob
             search_user.marital_status=marital_status
             search_user.category=category
-            search_user.aadhar_card_number=aadhar_card_number
+            search_user.aadhar_card_number=acm
             if profile is not None:
                 search_user.profile_pic=profile
             search_user.mobile_number=m_num
@@ -643,6 +646,14 @@ def add_trip(request):
         
 def view_routepoints(request, pk):
     # view_point = Point.objects.get(pk=pk)
+    view_route = RouteInfo.objects.get(pk=pk)
+    maps = RouteMap.objects.filter(route=view_route).order_by('index')
+    r_id = pk
+    context_data = {
+    'view_route': view_route,
+    'maps': maps,
+    'r_id':r_id,
+    }
     
         view_route = RouteInfo.objects.get(pk=pk)
         maps = RouteMap.objects.filter(route=view_route).order_by('index')
@@ -659,10 +670,28 @@ def update_routepoints(request):
     
     if request.method == 'POST':
         route_point = request.POST['edit_routepoint_id_hide']
+        route_id = request.POST['rd']
         p = RouteMap.objects.get(id= route_point)
         p_index= request.POST['edit_routeindex']
         p_time = request.POST['edit_routetime']
+        j = RouteMap.objects.filter(route=p.route).count()
+        if int(p_index) > j:
+            messages.error(request, "Entered index is out of limit")
+            return HttpResponseRedirect(f'/bus/')
 
+
+        if int(p_index) <=0:
+            messages.error(request, "Entered index should be greater than 0 ")
+        sch = RouteMap.objects.filter(route=p.route, index__gt=p.index)
+        if sch:
+            for i in sch:
+                i.index = i.index - 1 
+                i.save()
+        sch1 = RouteMap.objects.filter(route=p.route, index__lt=p.index)
+        if sch1:
+            for j in sch1:
+                j.index = j.index + 1 
+                j.save()        
         p.index = p_index
         p.time = p_time
                 

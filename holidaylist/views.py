@@ -24,6 +24,7 @@ from django.core.exceptions import PermissionDenied
 
         # Create your views here.
 def holidaylist(request,pk):
+
         # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -35,8 +36,7 @@ def holidaylist(request,pk):
         
             institute_holiday = Institute.objects.get(pk=pk)
             institute_holiday_list = HolidayList.objects.filter(institute=institute_holiday)
-            user_permissions = request.user.user_institute_role.level.permissions.all()
-            can_add_holiday_permission = App_functions.objects.get(function_name='Can Add Holiday')
+            
 
             if request.method == "POST":
                 if can_add_holiday_permission in user_permissions:
@@ -78,6 +78,12 @@ def holidaylist(request,pk):
         raise PermissionDenied
                 
 def edit_holiday(request, pk):
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    add_class_permission = App_functions.objects.get(function_name='Can Edit HolidayList')
+    if add_class_permission in user_permissions:
+                pass
+    else:
+                 raise PermissionDenied 
         
     inst = request.user.profile.institute.id
 
@@ -90,8 +96,7 @@ def edit_holiday(request, pk):
         edit_holiday= HolidayList.objects.get(pk=pk, institute=inst)
     except:
         raise PermissionDenied
-    user_permissions = request.user.user_institute_role.level.permissions.all()
-    can_edit_holiday_permission = App_functions.objects.get(function_name='Can Edit Holiday')
+    
 
     
     if request.method == 'POST':
@@ -128,6 +133,12 @@ def edit_holiday(request, pk):
 
 
 def delete_holiday(request,pk):
+         user_permissions = request.user.user_institute_role.level.permissions.all()
+         add_class_permission = App_functions.objects.get(function_name='Can Delete HolidayList')
+         if add_class_permission in user_permissions:
+                    pass
+         else:
+                    raise PermissionDenied 
         # starting user notice
          if request.user.profile.designation:
             request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -180,6 +191,12 @@ def holidayemail(request):
 #         #    raise Exception("Error")
 
 def emailView(request,pk):
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    add_class_permission = App_functions.objects.get(function_name='Can Add HolidayList')
+    if add_class_permission in user_permissions:
+                pass
+    else:
+                 raise PermissionDenied 
         # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
