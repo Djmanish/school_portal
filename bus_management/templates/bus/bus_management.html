@@ -1395,7 +1395,7 @@
                                                         <tr>
                                                             <td>{{forloop.counter}}</td>
                                                             <td>{{ks.driver_id}}</td>
-                                                            <td>{{ks.name.first_name}} {{p.name.last_name}}</td>
+                                                            <td><a href="{% url 'view_driver' ks.pk %}">{{ks.name.first_name}} {{p.name.last_name}}</a></td>
                                                             <td>{{ks.driving_lic_no}}</td>                                                       
                                                             <td>{{ks.name.mobile_number}}</td>
                                                             {% if ks.status == "active" %}

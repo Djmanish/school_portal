@@ -694,6 +694,13 @@ def update_routepoints(request):
         messages.success(request, 'Point details updated successfully !') 
         return HttpResponseRedirect(f'/bus/')
       
-    
+def view_driver(request,pk):
+    sel_d = Driver.objects.get(pk=pk)
+    up = User.objects.get(pk=sel_d.name.user.id)
+    context={
+        'up':up,
+        'sel_d':sel_d,
+    }
+    return render(request, 'bus/driver_profile.html', context) 
     
     

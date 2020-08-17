@@ -34,4 +34,6 @@ urlpatterns = [
   path('view_delete_view_routepoints/<int:pk>', views.delete_view_routepoints, name="delete_view_routepoints"),
   path('start_trip/<int:pk>/', views.start_trip, name="start_trip"),
   path('add_trip/', views.add_trip, name="add_trip"),
+  path('view_driver/<int:pk>/', views.view_driver, name="view_driver"),
+
 ]
