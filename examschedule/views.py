@@ -15,7 +15,14 @@ import _strptime
 # Create your views here.
 
 def create_test_type(request,pk):
-            # starting user notice
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        add_class_permission = App_functions.objects.get(function_name='Can Create Exam')
+        if add_class_permission in user_permissions:
+                pass
+        else:
+                 raise PermissionDenied 
+
+                # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
          # ending user notice
@@ -29,12 +36,21 @@ def create_test_type(request,pk):
                 for edit_date in edit_exam_date:
                         e_start_date.append(edit_date.edit_start_date)
                         e_end_date.append(edit_date.edit_end_date)
+
                 try:
-                        e_start=e_start_date[0]
+                        
+                        for i in range(0, len(e_start_date)): 
+                                if i == (len(e_start_date)-1):
+                                        e_start=e_start_date[i]
+                                        print(e_start)
+                                      
                 except:
                         e_start=None
                 try:
-                         e_end=e_end_date[0] 
+                        for i in range(0, len(e_end_date)): 
+                                if i == (len(e_end_date)-1):
+                                        e_end=e_end_date[i]
+                        #  print(e_end)
                 except:
                         e_end=None  
                 institute_exam_type=ExamType.objects.filter(institute=request.user.profile.institute)
@@ -68,8 +84,8 @@ def create_test_type(request,pk):
                 
                 context={
                 'institute_exam_type':institute_exam_type,
-                's_date':e_start,
-                'e_date':e_end,
+                'e_start':e_start,
+                'e_end':e_end,
                 
                 }
                 return render(request, 'test_type_list.html', context)
@@ -79,6 +95,12 @@ def create_test_type(request,pk):
 
     
 def edit_test_type(request, pk):
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    add_class_permission = App_functions.objects.get(function_name='Can Edit Exam')
+    if add_class_permission in user_permissions:
+                pass
+    else:
+                 raise PermissionDenied
     inst = request.user.profile.institute.id
 
   
@@ -119,6 +141,12 @@ def edit_test_type(request, pk):
     return render(request, 'edit_exam_type.html', context)
 
 def delete_test_type(request, pk):
+        user_permissions = request.user.user_institute_role.level.permissions.all()
+        add_class_permission = App_functions.objects.get(function_name='Can Delete Exam')
+        if add_class_permission in user_permissions:
+                        pass
+        else:
+                        raise PermissionDenied
         test_type_info= ExamType.objects.get(pk=pk)
       
         test_type_info.exam_max_marks="null"
@@ -133,6 +161,7 @@ def delete_test_type(request, pk):
 
 # Edit exam date permission
 def edit_exam_date(request,pk):
+        
         institute_pk = request.user.profile.institute.pk
         edit_exam_date=Edit_Exam_Date.objects.filter(institute=request.user.profile.institute)
         inst_id = request.user.profile.institute.pk
@@ -149,7 +178,7 @@ def edit_exam_date(request,pk):
                 
                         
                 if schedule_date<datetime.datetime.now().date():
-                                        messages.error(request, 'Date must be in future!')
+                                        messages.error(request, 'Date must be in future !')
                                         return redirect(f'/examschedule/examtypelist/{inst_id}') 
                 edit_institute=request.user.profile.institute.id
                 edit_exam_institute=Institute.objects.get(pk=edit_institute)
@@ -162,7 +191,7 @@ def edit_exam_date(request,pk):
                 edit_data.save()
                
         
-                messages.success(request, 'Edit date stored successfully!')
+                messages.success(request, 'Edit date stored successfully !')
                 return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
         context={
                        'edit_exam_date':edit_exam_date,
@@ -179,6 +208,7 @@ def edit_exam_date(request,pk):
 
 # function for create exam type
 def exam_schedule(request,pk):
+       
         # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -224,7 +254,7 @@ def exam_schedule(request,pk):
                 if sr_no<=limit_exam:
                     pass
                 else:
-                    messages.error(request, 'Exam Limit has exceeded!')
+                    messages.error(request, 'Exam Limit has exceeded !')
                     return HttpResponseRedirect(f'/examschedule/examschedule/{institute_pk}')
 
                 if exam_class_subject:
@@ -243,7 +273,7 @@ def exam_schedule(request,pk):
                         }
                         return render(request,'examschedule.html',context)
                 else:
-                        messages.error(request, 'No subjects found for selected class!')
+                        messages.error(request, 'No subjects found for selected class !')
                         return HttpResponseRedirect(f'/examschedule/examschedule/{institute_pk}')
 
         context={
@@ -256,6 +286,7 @@ def exam_schedule(request,pk):
         return render(request,'examschedule.html',context)
 
 def create_exam_schedule(request, pk):
+        
         # starting user notice
         if request.user.profile.designation:
                  request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -285,7 +316,7 @@ def create_exam_schedule(request, pk):
                         schedule_date= datetime.datetime.strptime(date, '%Y-%m-%d')
                         
                         if schedule_date<datetime.datetime.now():
-                                messages.error(request, 'Date must be in future!')
+                                messages.error(request, 'Date must be in future !')
                                 return redirect(f'/examschedule/examschedule/{inst_id}')  
                         
                         else: 
@@ -303,13 +334,14 @@ def create_exam_schedule(request, pk):
                         new_exam.exam_class=selected_class
                         new_exam.exam_type=select_exam_type
                         new_exam.save()
-        messages.success(request, 'New exam schedule created successfully!')
+        messages.success(request, 'New exam schedule created successfully !')
                         
          
         return redirect(f'/examschedule/examschedule/{inst_id}') 
 
 
 def examschedule_view(request,pk):
+     
         # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -352,7 +384,7 @@ def examschedule_view(request,pk):
                         
                                 return render(request,'update_examschedule.html', context)
                         else:
-                                messages.error(request, f'No result found for Class-{selected_class}, Exam Type-{exam_type_data}!')
+                                messages.error(request, f'No result found for Class-{selected_class}, Exam Type-{exam_type_data} !')
                                 return redirect(f'/examschedule/examschedule/view/{inst}')
                         
                         
@@ -420,6 +452,7 @@ def examschedule_view(request,pk):
                 raise PermissionDenied
 
 def edit_examschedule(request,pk):
+
     # starting user notice
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -471,6 +504,7 @@ def edit_examschedule(request,pk):
     return render(request, 'edit_exam_schedule.html', context)
 
 def delete_examschedule(request, pk):
+      
         # starting user notice
         if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -494,7 +528,7 @@ def fetch_max_sr_no(request):
   
   max_exam_sr_no = ExamDetails.objects.filter(exam_type=exam_type_id).values('exam_sr_no').distinct()
  
-  individual_sr_no = "<option>--Exam Type No.--</option>"
+  individual_sr_no = "<option selected disabled value=''>--Exam Type No.--</option>"
   for sr_no in max_exam_sr_no:
     individual_sr_no = individual_sr_no + f"<option>"+sr_no['exam_sr_no']+"</option>" 
      

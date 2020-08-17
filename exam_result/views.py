@@ -30,6 +30,7 @@ from django.core.exceptions import ValidationError
 
 # Create your views here.
 def exam_result(request,pk):
+  
   inst = request.user.profile.institute.id
   today_date=timezone.now()
   if pk==inst:
@@ -40,26 +41,26 @@ def exam_result(request,pk):
              
       # get the Edt_Exam_Date MODEL data
       result_institute=Institute.objects.get(pk=pk)
-      edit_date=Edit_Exam_Date.objects.filter(institute=result_institute)
-      for e_date in edit_date:
-          edit_start_date=e_date.edit_start_date
-          edit_end_date=e_date.edit_end_date
-         
-          if edit_start_date>timezone.now().date() and edit_end_date>timezone.now().date() or edit_start_date == None and edit_end_date == None:
-              date1=str(edit_end_date)
-              context={
-                  'edit_start_date':edit_start_date,
-                  'edit_end_date':edit_end_date,
+      edit_date=Edit_Exam_Date.objects.filter(institute=result_institute).last()
+      e_start=edit_date.edit_start_date
+      e_end=edit_date.edit_end_date
+    
+              
+      if e_start>timezone.now().date() and e_end>timezone.now().date() or e_start == None and e_end == None:
+          context={
+                        'edit_start_date':e_start,
+                        'edit_end_date':e_end,
 
-              }
-              messages.error(request, f'Edit marks date between {edit_start_date} - {edit_end_date}')
-              return render(request, 'teacher_view.html', context) 
-          elif edit_end_date<timezone.now().date():
-                    messages.error(request, f'Edit marks date was between {edit_start_date} - {edit_end_date}')
-                    return render(request, 'teacher_view.html', context) 
 
-          else:
-               pass
+            }
+          messages.error(request, f'Edit marks date between {e_start} - {e_end}')
+          return render(request, 'teacher_view.html', context) 
+      elif e_end<timezone.now().date():
+          messages.error(request, f'Edit marks date was between {e_start} - {e_end}')
+          return render(request, 'teacher_view.html') 
+
+      else:
+          pass
              
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
@@ -130,6 +131,13 @@ def exam_result(request,pk):
         raise PermissionDenied
     
 def examresult(request,pk):
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      add_class_permission = App_functions.objects.get(function_name='Can Create ExamResult')
+      if add_class_permission in user_permissions:
+                            pass
+      else:
+                            raise PermissionDenied
+
     # starting user notice
       if request.user.profile.designation:
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -241,6 +249,7 @@ def chart_sr_no(request):
   return HttpResponse(chart_result_sr_no)
 
 def report_card(request,pk):
+     
       inst = request.user.profile.institute.id
       if pk!=inst:
         raise PermissionDenied
@@ -315,6 +324,14 @@ def report_card(request,pk):
               examtype_total_limit=int(e_total_limit)
 
               all_exam=ExamResult.objects.filter(exam_type=exam_type,result_student_data=request.user)
+              print(type(all_exam))
+              print("all_exam")
+              if not all_exam.exists():
+                messages.error(request, 'No result found !')  
+                return HttpResponseRedirect(f'/examresult/report_card/{exam_id}')
+              else:
+                pass
+
               exam_no=[]
               for data in all_exam:
                 if data.exam_sr_no in exam_no:
@@ -534,6 +551,7 @@ def report_card(request,pk):
 
 
 def overall_result(request,pk,student_pk):
+ 
       # starting user notice
   if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
@@ -959,6 +977,7 @@ def overall_result(request,pk,student_pk):
   
   
 def class_promotion(request,pk):
+ 
   inst = request.user.profile.institute.id
       # starting user notice
   if request.user.profile.designation:
@@ -1069,6 +1088,7 @@ def render_to_pdf(template_src, context_dict={}):
 
 
 def reports_card(request,pk):
+      
       user_institute_name=Institute.objects.get(pk=pk)
         # starting user notice
       if request.user.profile.designation:
@@ -1337,6 +1357,7 @@ def reports_card(request,pk):
         
 
 def overall_report_card(request,pk,student_pk):
+
   inst = request.user.profile.institute.id
   user_institute_name=Institute.objects.get(pk=pk)
   selected_student_data=UserProfile.objects.get(pk=student_pk)
@@ -1690,23 +1711,22 @@ def overall_report_card(request,pk,student_pk):
         sum=0
        
         for final_sum in final_percentage:
-          try:
+         
             sum=sum+final_sum
-          except:
-            sum=1
+          
         # count the number of subjects
-        
+        count=0
         for i in resultsubject:
             count=count+1
         try:
             total_marks_count=count*100
+            
+            final_percent_result=(sum/total_marks_count)*100
+            grand_result=round(final_percent_result,2)
+            range_value=range(0, count_value)
         except:
-            total_marks_count=1
-        
-        print(total_marks_count)
-        final_percent_result=(sum/total_marks_count)*100
-        grand_result=round(final_percent_result,2)
-        range_value=range(0, count_value)
+          pass
+
        
 
         context={

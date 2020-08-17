@@ -532,7 +532,7 @@
                                                     </td>
                                                 </tr>
                                               
-                                              {% if edit_date %}
+                                              {% if edit_date is None %}
                                                   
                                              
                                                   
@@ -571,26 +571,27 @@
                                                         </form>
                                                         
                                                       
-                                                        <script>
-                                                            $(document).ready(function(){
-                                                              $('#result_exam_type').change(function(){
-                                                                 
-                                                                  $.ajax({
-                                                                      type:'POST',
-                                                                      url:'/examresult/fetching_sr_no/',
-                                                                      data:{exam_type_id:$("#result_exam_type").val(), 
-                                                                      csrfmiddlewaretoken: '{{ csrf_token }}' },
-                                                                      
-                                                                      success: function(msg){
-                                                                          $('#fetch_sr_no').html(msg);
-                                                                      }
-                                                                  })
-                                                              })
-                                                            })
-                                                            </script>
+                                                
                                                             {% else %}
                                                             <h3>Date is not set by Admin yet.</h3>
                                                             {% endif %}
+                                                            <script>
+                                                                $(document).ready(function(){
+                                                                  $('#result_exam_type').change(function(){
+                                                                     
+                                                                      $.ajax({
+                                                                          type:'POST',
+                                                                          url:'/examresult/fetching_sr_no/',
+                                                                          data:{exam_type_id:$("#result_exam_type").val(), 
+                                                                          csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                          
+                                                                          success: function(msg){
+                                                                              $('#fetch_sr_no').html(msg);
+                                                                          }
+                                                                      })
+                                                                  })
+                                                                })
+                                                                </script>
 
                                                     <div class="md-card-content">
                                                     
