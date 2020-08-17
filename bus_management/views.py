@@ -646,14 +646,6 @@ def add_trip(request):
         
 def view_routepoints(request, pk):
     # view_point = Point.objects.get(pk=pk)
-    view_route = RouteInfo.objects.get(pk=pk)
-    maps = RouteMap.objects.filter(route=view_route).order_by('index')
-    r_id = pk
-    context_data = {
-    'view_route': view_route,
-    'maps': maps,
-    'r_id':r_id,
-    }
     
         view_route = RouteInfo.objects.get(pk=pk)
         maps = RouteMap.objects.filter(route=view_route).order_by('index')
