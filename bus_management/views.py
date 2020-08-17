@@ -424,7 +424,7 @@ def route_map(request):
             route = int(request.POST['route'])
             point = int(request.POST['point'])
             sch_route = RouteInfo.objects.get(id=route)
-            points = Point.objects.filter(point_institute=request.user.profile.institute)
+            points = Point.objects.filter(point_institute=request.user.profile.institute, status="active")
             context_data = {
             'sch_route':sch_route,
             'range':range(point),
