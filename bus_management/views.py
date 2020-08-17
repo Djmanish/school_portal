@@ -19,7 +19,11 @@ def bus(request):
         buses = Bus.objects.filter(bus_institute=request.user.profile.institute)
         states_list = State.objects.all()
         points = Point.objects.filter(point_institute=request.user.profile.institute)
+        for i in points:
+            print(i)
+            print(i.status)
         drivers = Driver.objects.filter(institute=request.user.profile.institute)
+        active_drivers = Driver.objects.filter(status="active",institute=request.user.profile.institute)
         active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
         routes = RouteInfo.objects.filter(institute=request.user.profile.institute, status="active")
         new = RouteInfo.objects.filter(institute=request.user.profile.institute)
@@ -37,6 +41,7 @@ def bus(request):
             'states_list': states_list,
             'points':points,
             'drivers':drivers,
+            'active_drivers':active_drivers,
             'active_buses':active_buses,
             'routes':routes,
             'new':new,
@@ -206,6 +211,20 @@ def delete_view_routepoints(request,pk):
 
 # def edit_view_routepoints(request,pk):
     
+def fetch_driver_details(request):
+    # pk=request.POST.get('category')
+    selected = Driver.objects.get(pk=request.POST.get('cat'))
+    if selected.status == "active":
+        r = RouteInfo.objects.filter(vehicle_driver=selected,institute= request.user.profile.institute)
+        for i in r:
+            i.vehicle_driver= None
+            i.save()
+        selected.status = "inactive"
+        selected.save()
+    else:
+        selected.status = "active"
+        selected.save()
+    return HttpResponse("Hello world")
 
 
 
@@ -236,8 +255,12 @@ def fetch_point_details(request):
                 except:
                     pass
                 i.delete()
+            selected_point.status = "inactive"
+            selected_point.save()
         except RouteMap.DoesNotExist:
-            pass
+            selected_point.status = "inactive"
+            selected_point.save()
+            
         
     else:
         selected_point.status = "active"
@@ -665,32 +688,8 @@ def update_routepoints(request):
         p = RouteMap.objects.get(id= route_point)
         p_index= request.POST['edit_routeindex']
         p_time = request.POST['edit_routetime']
-        j = RouteMap.objects.filter(route=p.route).count()
-        if int(p_index) > j:
-            messages.error(request, "Entered index is out of limit")
-            return HttpResponseRedirect(f'/bus/')
-
-
-        if int(p_index) <=0:
-            messages.error(request, "Entered index should be greater than 0 ")
-        sch = RouteMap.objects.filter(route=p.route, index__gt=p.index)
-        if sch:
-            for i in sch:
-                i.index = i.index - 1 
-                i.save()
-        sch1 = RouteMap.objects.filter(route=p.route, index__lt=p.index)
-        if sch1:
-            for j in sch1:
-                j.index = j.index + 1 
-                j.save()        
-        p.index = p_index
         p.time = p_time
-                
-        p.save()
-        
-        # context_data = {
-        # 'route_editpoint' : route_editpoint,
-        # }
+        p.save()            
         messages.success(request, 'Point details updated successfully !') 
         return HttpResponseRedirect(f'/bus/')
       
