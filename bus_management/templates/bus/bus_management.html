@@ -973,7 +973,9 @@
                                             <select id="point_state" class="form-control-sm form-control" name="sel_driver" required>
                                                 <option selected disabled value="">--- Select ---</option>
                                                 {% for i in drivers %}
+                                                {% if i.status == "active"%}
                                                 <option value={{i.id}}>{{i.name.first_name}} {{i.name.last_name}}</option>
+                                                {% endif %}
                                                 {% endfor %}
                                              
                                             </select>
