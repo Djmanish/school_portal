@@ -1488,11 +1488,13 @@
                                         </div>
                                         <div class="md-card uk-margin-medium-bottom">
                                             {% if new %} 
-                                            {% for p in new %}
-                                            {% if p.point_count > 0 %} 
-                                            <div class="md-card-content">                                            
+                                            
+                                            
+                                            <div class="md-card-content">  
+                                                                                          
                                                 <div class="uk-overflow-container">      
-                                                                                            
+                                                     
+                                                                                      
                                                      <table class="uk-table uk-table-hover"> 
                                                         <thead>
                                                             
@@ -1508,10 +1510,12 @@
                                                         </tr>
                                                         
                                                         </thead>
+                                                        
                                                         <tbody>
-                                                            
-                                                            
+                                                            {% for p in new %}   
+                                                               
                                                         <tr>
+                                                            {% if p.point_count > 0 %}
                                                             <td>{{forloop.counter}}</td>
                                                             <td><a href="{% url 'view_routepoints' p.pk %}">{{p.route_name}}</a></td>
                                                             <td>{{p.point_count}}</td>                                                       
@@ -1521,9 +1525,9 @@
                                                             </td>
                                                             <td><a class="confirm-delete12" href="{% url 'delete_routemap' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                             </td>
-                                                            
+                                                            {% endif %}
                                                         </tr>
-                                                        {% endif %}
+                                                        
                                                         
                                                         <script>
                                                             $(document).ready(function(){
@@ -1535,11 +1539,11 @@
                                                         </script>
                                                         
                                                        
-                                                        {% endfor %}
+                                                        {% endfor %}  
                                                        
                                                         </tbody>
-                                                    </table>                                                
-                                                </div>                                            
+                                                    </table>                                            
+                                                </div>                                              
                                             </div>
                                             {% endif %}
                                         </div>
