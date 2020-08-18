@@ -620,24 +620,27 @@
                                       <td>{{forloop.counter}}</td>
                                       <td>
                                         <div class="form-group">
-                                            <select id="exam_schedule" class="form-control noDropDown"  name="student_first_name" readonly>
+                                            <select id="exam_schedule" class="form-control noDropDown"  readonly>
                                               <option value="{{student.id}}">{{student.first_name}}</option>
                                             </select>
                                           </div>
+                                          <input type="hidden" name="student_first_name" value="{{student.id}}" />
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <select id="exam_schedule" class="form-control noDropDown"  name="student_last_name">
+                                            <select id="exam_schedule" class="form-control noDropDown" >
                                               <option  value="{{student.id}}">{{student.last_name}}</option>
                                             </select>
                                           </div>
+                                          <input type="hidden" name="student_last_name" value="{{student.id}}" />
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <select id="exam_schedule" class="form-control noDropDown"  name="student_roll_no">
+                                            <select id="exam_schedule" class="form-control noDropDown" >
                                               <option  value="{{student.id}}">{{student.roll_number}}</option>
                                             </select>
                                           </div>
+                                          <input type="hidden" name="student_roll_no" value="{{student.id}}" />
                                     </td>
                                     <td>
                                         <div class="form-group">
