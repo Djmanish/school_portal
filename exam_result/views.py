@@ -131,12 +131,7 @@ def exam_result(request,pk):
         raise PermissionDenied
     
 def examresult(request,pk):
-      user_permissions = request.user.user_institute_role.level.permissions.all()
-      add_class_permission = App_functions.objects.get(function_name='Can Create ExamResult')
-      if add_class_permission in user_permissions:
-                            pass
-      else:
-                            raise PermissionDenied
+      
 
     # starting user notice
       if request.user.profile.designation:
@@ -1006,43 +1001,10 @@ def class_promotion(request,pk):
             promotion_status = UserProfile._meta.get_field('class_promotion_status').choices
             promotion_choices=dict(promotion_status)
             list_promotion_choices=list(promotion_choices)
+            # print(list_promotion_choices)
             institute=request.user.profile.institute
-            if request.method=="POST":
-                      promoted_to_class=request.POST.get('promoted_to_class')
-                      if promoted_to_class == None:
-                            first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
-                            first_class_id = first_class.id
-                            promoted_to_class= first_class_id
-                      promoted_to_class = Classes.objects.get(pk=promoted_to_class)
-                  #  to get the students data from the UserProfile
-                      user_data=UserProfile.objects.filter(institute=institute, Class=selected_class)
-                      #   get the list of users from the UserProfile
-                      for user_d in user_data:
-                          user_da=user_d.user
-                      #  fetch the data from the front end
-                          for sdata,status in zip(request.POST.getlist('student_roll_no'),request.POST.getlist('student_promotion_status')):
-                            student_data = User.objects.get(pk=sdata)
-                            if student_data==user_da:
-                                  user_d.class_promotion_status=status
-                                  if status=="Promoted":
-                                    user_d.Class=promoted_to_class
-                                    user_d.class_current_year=current_year+1
-                                    user_d.class_next_year=next_year+1
-                                    user_d.roll_number=None
-                                  
-                                  else:
-                                    pass
-                                  
-                                  user_d.save()
-                                  context= {
-                                      'all_classes': all_classes,
-                                      'all_students':all_students,
-                                      'list_promotion_choices':list_promotion_choices,
-                                      'promotes_class':promotes_class,
-                                  }
-                                  messages.success(request, 'Students promoted successfully !')
-                                  return render(request, 'class_promotion.html', context)
-              # Inner Context
+            print(all_students)
+                         # Inner Context
             context= {
                 'all_classes': all_classes,
                 'all_students':all_students,
@@ -1066,20 +1028,69 @@ def st_result(request):
   
   pass
  
+def promotion_status(request,pk):
+      exam_id=request.user.profile.institute.id
+      current_year=datetime.date.today().year
+      next_year=datetime.date.today().year+1
+      if request.method=="POST":
+                      institute=request.user.profile.institute.id
+                      selected_class=request.POST.get('selected_class_data')
+                      promoted_to_class=request.POST.get('promoted_to_class')
+                      
+                      if promoted_to_class == None:
+                            first_class = Classes.objects.filter(institute= request.user.profile.institute).first()
+                            first_class_id = first_class.id
+                            promoted_to_class= first_class_id
+                      promoted_to_class = Classes.objects.get(pk=promoted_to_class)
+                  #  to get the students data from the UserProfile
+                      user_data=UserProfile.objects.filter(institute=institute)
+                      #   get the list of users from the UserProfile
+                      # for user_d in user_data:
+                      #     user_da=user_d.user
+                          # print(user_d)
+                          
+                      #  fetch the data from the front end
+                      for sdata,status in zip(request.POST.getlist('student_first_name'),request.POST.getlist('student_promotion_status')):
+                                 
+                                  print(status)
+                                  student_data = UserProfile.objects.get(pk=sdata)
+                                  print(student_data.roll_number)
+                                  
 
+                           
+                            # print(user_da)
 
-def render_to_pdf(template_src, context_dict={}):
-      for i in context_dict.items():
-        print(type(i))
+                            # if student_data==user_da:
+                                  if status=="Promoted":
+                                    student_data.class_promotion_status=status
+                                    student_data.Class=promoted_to_class
+                                    student_data.class_current_year=current_year
+                                    student_data.class_next_year=next_year
+                                    student_data.roll_number=None
+                                    print(student_data.roll_number)
+                                  else:
+                                    pass
+                                  
+                                  student_data.save()
+                                 
+                      messages.success(request, 'Students promoted successfully !')
+                      return HttpResponseRedirect(f'/examresult/class_promotion/{exam_id}')
+      return HttpResponseRedirect(f'/examresult/class_promotion/{exam_id}')
+
+    
+
+# def render_to_pdf(template_src, context_dict={}):
+#       for i in context_dict.items():
+#         print(type(i))
       
-      template=get_template(template_src)
-      html = template.render(context_dict)
-      result=BytesIO()
-      pdf=pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")),result)
+#       template=get_template(template_src)
+#       html = template.render(context_dict)
+#       result=BytesIO()
+#       pdf=pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")),result)
 
-      if not pdf.err:
-          return HttpResponse(result.getvalue(),content_type='application/pdf')
-      return None
+#       if not pdf.err:
+#           return HttpResponse(result.getvalue(),content_type='application/pdf')
+#       return None
 
 
 
@@ -1363,6 +1374,7 @@ def overall_report_card(request,pk,student_pk):
   selected_student_data=UserProfile.objects.get(pk=student_pk)
   institute_student=selected_student_data.institute
   student_class=selected_student_data.Class
+  grand_result=""
 
   if pk==inst:
     if request.user.profile.designation.level_name=='parent':

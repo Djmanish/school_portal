@@ -304,7 +304,7 @@
         </li> 
 
         
-        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" %}
+        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" or user.profile.designation.level_name == "driver" %}
         {% else %}
         <li>
             <a href="{% url 'create_notice'  %}">
@@ -333,6 +333,7 @@
     </a>
 </li>
 {% endif %}
+{% if user.profile.designation.level_name != "driver" %}
     
                 <li  title="Holiday List">
                     <a href="{% url 'holidaylist' user.profile.institute.pk %}">
@@ -348,7 +349,7 @@
                 </a>
             </li>               
            
-
+{% endif %}
             {% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "principal" %}
             <li  title="Admission Requests">
                 <a href="{% url 'admission_requests' %}">
@@ -412,6 +413,7 @@
                 </li>  
                 {% endif %}
                   {% endfor %}
+                  {% if user.profile.designation.level_name != "driver" %}
 
                     <li  title="Examination">
 
@@ -474,7 +476,7 @@
                         </ul>
                     </li>
 
-                    {% endif %}  
+                    {% endif %}{% endif %}  
                     {% endif %} 
                 
             </ul>

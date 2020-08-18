@@ -468,7 +468,7 @@
         </li> 
 
         
-        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" %}
+        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" or user.profile.designation.level_name == "driver" %}
         {% else %}
         <li>
             <a href="{% url 'create_notice'  %}">

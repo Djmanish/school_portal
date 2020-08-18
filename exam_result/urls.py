@@ -24,6 +24,9 @@ urlpatterns = [
   path('overall_report_card/<int:pk>/<int:student_pk>/', views.overall_report_card, name='overall_report_card'),
 
   path('class_promotion/<int:pk>/', views.class_promotion, name="class_promotion"),
+  path('class_promotions/<int:pk>/', views.promotion_status, name="promotion_status"),
+
+  
   
   path('result/', views.st_result, name="st_result")
  

@@ -27,7 +27,8 @@ def create_test_type(request,pk):
                 request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
          # ending user notice
         inst = request.user.profile.institute.id
-
+        e_start=""
+        e_end=""
         if pk==inst:        
                 edit_exam_date=Edit_Exam_Date.objects.filter(institute=request.user.profile.institute)
                 e_start_date=[]
@@ -42,7 +43,7 @@ def create_test_type(request,pk):
                         for i in range(0, len(e_start_date)): 
                                 if i == (len(e_start_date)-1):
                                         e_start=e_start_date[i]
-                                        print(e_start)
+                                        
                                       
                 except:
                         e_start=None
