@@ -179,7 +179,7 @@ def edit_exam_date(request,pk):
                 
                         
                 if schedule_date<datetime.datetime.now().date():
-                                        messages.error(request, 'Date must be in future!')
+                                        messages.error(request, 'Date must be in future !')
                                         return redirect(f'/examschedule/examtypelist/{inst_id}') 
                 edit_institute=request.user.profile.institute.id
                 edit_exam_institute=Institute.objects.get(pk=edit_institute)
@@ -192,7 +192,7 @@ def edit_exam_date(request,pk):
                 edit_data.save()
                
         
-                messages.success(request, 'Edit date stored successfully!')
+                messages.success(request, 'Edit date stored successfully !')
                 return HttpResponseRedirect(f'/examschedule/examtypelist/{institute_pk}')
         context={
                        'edit_exam_date':edit_exam_date,
@@ -255,7 +255,7 @@ def exam_schedule(request,pk):
                 if sr_no<=limit_exam:
                     pass
                 else:
-                    messages.error(request, 'Exam Limit has exceeded!')
+                    messages.error(request, 'Exam Limit has exceeded !')
                     return HttpResponseRedirect(f'/examschedule/examschedule/{institute_pk}')
 
                 if exam_class_subject:
@@ -274,7 +274,7 @@ def exam_schedule(request,pk):
                         }
                         return render(request,'examschedule.html',context)
                 else:
-                        messages.error(request, 'No subjects found for selected class!')
+                        messages.error(request, 'No subjects found for selected class !')
                         return HttpResponseRedirect(f'/examschedule/examschedule/{institute_pk}')
 
         context={
@@ -317,7 +317,7 @@ def create_exam_schedule(request, pk):
                         schedule_date= datetime.datetime.strptime(date, '%Y-%m-%d')
                         
                         if schedule_date<datetime.datetime.now():
-                                messages.error(request, 'Date must be in future!')
+                                messages.error(request, 'Date must be in future !')
                                 return redirect(f'/examschedule/examschedule/{inst_id}')  
                         
                         else: 
@@ -335,7 +335,7 @@ def create_exam_schedule(request, pk):
                         new_exam.exam_class=selected_class
                         new_exam.exam_type=select_exam_type
                         new_exam.save()
-        messages.success(request, 'New exam schedule created successfully!')
+        messages.success(request, 'New exam schedule created successfully !')
                         
          
         return redirect(f'/examschedule/examschedule/{inst_id}') 
@@ -385,7 +385,7 @@ def examschedule_view(request,pk):
                         
                                 return render(request,'update_examschedule.html', context)
                         else:
-                                messages.error(request, f'No result found for Class-{selected_class}, Exam Type-{exam_type_data}!')
+                                messages.error(request, f'No result found for Class-{selected_class}, Exam Type-{exam_type_data} !')
                                 return redirect(f'/examschedule/examschedule/view/{inst}')
                         
                         

@@ -973,7 +973,9 @@
                                             <select id="point_state" class="form-control-sm form-control" name="sel_driver" required>
                                                 <option selected disabled value="">--- Select ---</option>
                                                 {% for i in drivers %}
+                                                {% if i.status == "active"%}
                                                 <option value={{i.id}}>{{i.name.first_name}} {{i.name.last_name}}</option>
+                                                {% endif %}
                                                 {% endfor %}
                                              
                                             </select>
@@ -1044,8 +1046,8 @@
                                         <div class="form-group">
                                             <label class="required" style="color: black;">Driver</label>
                                             <select id="point_state" class="form-control-sm form-control" name="edit_sel_driver" required>
-                                                <option id="selcat3" selected disabled value=""></option>
-                                                {% for i in drivers %}
+                                                <option id="selcat3" selected disabled value="">--Select--</option>
+                                                {% for i in active_drivers %}
                                                 <option value={{i.id}}>{{i.name.first_name}} {{i.name.last_name}}</option>
                                                 {% endfor %}
                                              
@@ -1146,6 +1148,7 @@
                                                 <h4 class="heading_a">{{left}} <span class="sub-heading">Left</span></h4>
                                             </li>
                                         </ul> -->
+                                        
                             </div>
                             
                         </div>
@@ -1386,20 +1389,51 @@
                                                             <th>Driver Name.</th>
                                                             <th>License No.</th>
                                                             <th>Mobile No.</th>
+                                                            <th>Status</th>
                                                             
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                        {% for p in drivers %}
+                                                        {% for ks in drivers %}
                                                         <tr>
                                                             <td>{{forloop.counter}}</td>
-                                                            <td>{{p.driver_id}}</td>
-                                                            <td>{{p.name.first_name}} {{p.name.last_name}}</td>
-                                                            <td>{{p.driving_lic_no}}</td>                                                       
-                                                            <td>{{p.name.mobile_number}}</td>
-                                                           
+                                                            <td>{{ks.driver_id}}</td>
+                                                            <td><a href="{% url 'view_driver' ks.pk %}">{{ks.name.first_name}} {{p.name.last_name}}</a></td>
+                                                            <td>{{ks.driving_lic_no}}</td>                                                       
+                                                            <td>{{ks.name.mobile_number}}</td>
+                                                            {% if ks.status == "active" %}
+                                                            <td style="width: 10px">
+                                                                <div class="parsley-row">
+                                                                    <input type="checkbox" class="driver{{ks.id|slugify}}" data-switchery checked value="{{ks.id}}" />
+                                                                </div>
+                                                            </td>
+                                                            {% endif %}
+                                                            {% if ks.status == "inactive" %}
+                                                            <td style="width: 10px">
+                                                                <div class="parsley-row">
+                                                                    <input type="checkbox" class="driver{{ks.id|slugify}}" data-switchery value="{{ks.id}}" />
+                                                                </div>
+                                                            </td>
+                                                            {% endif %}
                                                         </tr>
-                                                       
+                                                        <script>
+                                                            $(document).ready(function(){
+                                                            $('.driver{{ks.id|slugify}}').change(function(){
+                                                                $.ajax({
+                                                                      type:'POST',
+                                                                      url:'fetch_driver_details/',
+                                                                      data:{cat:$(".driver{{ks.id|slugify}}").val(), 
+                                                                      csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                                      
+                                                                      success: function(msg){
+                                                                        alert("Driver Status Changed");
+                                                                        window.location.reload();
+                                                                      }
+                                                                  });
+                                                                
+                                                            });
+                                                            });
+                                                        </script>
                                                         {% endfor %}
                                                         </tbody>
                                                     </table>                                                
@@ -1438,8 +1472,11 @@
                                                             <td>{{p.route_no}}</td>
                                                             <td>{{p.route_name}}</td>                                                       
                                                             <td>{{p.vehicle}}</td>
+                                                            {% if p.vehicle_driver %}
                                                             <td>{{p.vehicle_driver.name.first_name}} {{p.vehicle_driver.name.last_name}}</td>
-                                                            
+                                                            {% else %}
+                                                            <td>None</td>
+                                                            {% endif %}
                                                             <td ><a id="route{{p.id|slugify}}"><i class="material-icons" style="color: #2196f3;">edit</i></a>
                                                             </td>
                                                             <td><a class="delr{{p.id|slugify}}" href="{% url 'delete_route' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
@@ -1488,8 +1525,11 @@
                                         </div>
                                         <div class="md-card uk-margin-medium-bottom">
                                             {% if new %} 
+                                            {% for p in new %}
+                                            {% if p.point_count > 0 %} 
                                             <div class="md-card-content">                                            
-                                                <div class="uk-overflow-container">                                                
+                                                <div class="uk-overflow-container">      
+                                                                                            
                                                      <table class="uk-table uk-table-hover"> 
                                                         <thead>
                                                             
@@ -1507,8 +1547,7 @@
                                                         </thead>
                                                         <tbody>
                                                             
-                                                            {% for p in new %}
-                                                            {% if p.point_count > 0 %}
+                                                            
                                                         <tr>
                                                             <td>{{forloop.counter}}</td>
                                                             <td><a href="{% url 'view_routepoints' p.pk %}">{{p.route_name}}</a></td>

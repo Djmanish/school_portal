@@ -468,7 +468,7 @@
         </li> 
 
         
-        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" %}
+        {% if user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent" or user.profile.designation.level_name == "driver" %}
         {% else %}
         <li>
             <a href="{% url 'create_notice'  %}">
@@ -1622,9 +1622,7 @@
         
         <div class="uk-width-medium-1-2">
             <div class="md-card" >
-                <div >
-            
-             <div class="md-card-content" >
+              <div class="md-card-content" >
                 {% if user.profile.designation.level_name == "parent" %}
                 {% if user.count > 1 %}
                 <form  method="POST" action="#" class="form-inline" id="parent_calendar_form" style="width: 75%; margin: auto; margin-bottom: 10px;">
@@ -1653,7 +1651,7 @@
                  <div id='calendar'></div>
                  
                  </div>
-                </div>                     
+                                     
             </div>
          </div>     
          {% if request.user.profile.designation.level_name != "driver" %}
@@ -1664,7 +1662,6 @@
                     <h4>My Bus</h4>
                     <div class="uk-overflow-container">
                         <div id="mapid" style="width: 455px; height: 400px;margin:auto;"></div>
-
                         
                     </div>
                 </div>

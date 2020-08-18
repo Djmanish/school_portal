@@ -14,7 +14,7 @@
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'main_app/img/favicon-32x32.png' %}" sizes="32x32">
 
-    <title>My Profile   </title>
+    <title>Driver Details</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
     <!-- additional styles for plugins -->
@@ -292,7 +292,7 @@
                     </a> 
                 </li>
                 
-                <li class="current_section" title="User Profile">
+                <li  title="User Profile">
                     <a href="{% url 'user_profile' %}">
                         <span class="menu_icon"><i class="material-icons">person</i></span>
                         <span class="menu_title">My Profile</span>
@@ -433,7 +433,7 @@
 
                   {% for i in user.user_institute_role.level.permissions.all %}    
                   {% if i.function_name == "Can Manage Vehicles" %}
-                  <li  title="Vehicle">
+                  <li class="current_section" title="Vehicle">
                     <a href="{% url 'bus' %}">
                         <span class="menu_icon"><i class="material-icons">directions_bus</i></span>
                         <span class="menu_title">Vehicle</span>
@@ -571,61 +571,42 @@
                             </div>
                             <div class="user_heading_avatar">
                                 <div class="thumbnail">
-                                    <img src="{{user.profile.profile_pic.url}}" alt="user avatar"/>
+                                    {% if up.profile.profile_pic %}
+                                    <img src="{{up.profile.profile_pic.url}}" alt="user avatar"/>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="user_heading_content">
-                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{user.profile.first_name}}
+                                <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{up.profile.first_name}}
                                     
-                                    {% if user.profile.middle_name %}
-                                       {{user.profile.middle_name}} 
+                                    {% if up.profile.middle_name %}
+                                       {{up.profile.middle_name}} 
                                     {% endif %}
 
                                     
-                                    {% if user.profile.last_name %}
-                                        {{user.profile.last_name}}
+                                    {% if up.profile.last_name %}
+                                        {{up.profile.last_name}}
                                     {% endif %}
                                         
                                         
                                 </span><span class="sub-heading">
-                                {% if user.profile.designation %}
-                                {{user.profile.designation|capfirst}}
-                                {% else %}
-                               Click on edit button to find your institute and get started.
+                                {% if up.profile.designation %}
+                                {{up.profile.designation|capfirst}}
                                 {% endif %}
                                 </span></h2>
                                                             </div>
 
 
-                            <a data-uk-tooltip title="Edit Profile" class="md-fab md-fab-small md-fab-accent hidden-print" href="{% url 'edit_profile' user.profile.pk %}">
-                                <i class="material-icons">&#xE150;</i>
-                            </a>
+                           
                         </div>
 
                         <div class="user_content">
-             
+                            <a href="{% url 'bus' %}" class="md-btn md-btn-primary text-white"><i class=" material-icons">arrow_back </i> Go Back</a>
+                            
                             <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
                                 <li class="uk-active"><a href="#">About</a></li>
                                  <li><a href="#">Details</a></li>
-                                 {% if user.profile.status == "approve" %}
-                                 {% if user.profile.designation.level_name != 'parent' %}
-                                 {% if user.profile.designation.level_name != 'driver' %}
-                                 <li><a href="#">Bus Select</a></li>
-                                 {% endif %}{% endif %}{% endif %}
-
-                                 {% if user.profile.designation.level_name == 'student' %}
-                                 <li><a href="#">My Documents</a></li>
-                                 {% endif %}
-
-                                 {% if user.profile.designation.level_name == 'admin' or user.profile.designation.level_name == 'student' or user.profile.designation.level_name == 'driver' or user.profile.designation.level_name == 'parent' %}
-
-                                 {% else %}
-                                 <li><a href="#">My Permissions</a></li>
-                                 {% endif %}
-
-                                 {% if user.profile.designation.level_name == "parent" %}
-                                 <li><a href="#">My Child</a></li>
-                                 {% endif %}
+                                 
                                  
                                      
                                 
@@ -633,7 +614,7 @@
                             </ul>
                             <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
                                 <li>
-                                   {{user.profile.about|default:''}}               <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                   {{up.about|default:''}}               <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                         <div class="uk-width-large-1-2">
                                             <h4 class="heading_c uk-margin-small-bottom">Contact Info</h4>
                                             <ul class="md-list md-list-addon">
@@ -643,7 +624,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Email</a></span>
-                                                        <span class="uk-text-small uk-text-muted"><a href="mailto:{{user.email}}">{{user.email}}</a></span>
+                                                        <span class="uk-text-small uk-text-muted"><a href="mailto:{{up.email}}">{{up.email}}</a></span>
                                                        
                                                     </div>
                                                 </li>
@@ -653,7 +634,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Phone</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{user.profile.mobile_number|default:''}}</span>
+                                                        <span class="uk-text-small uk-text-muted">{{up.profile.mobile_number|default:''}}</span>
                                                        
                                                     </div>
                                                 </li>
@@ -663,7 +644,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Facebook</a></span>
-                                                        <span class="uk-text-small uk-text-muted"><a target="_blank" href="{{user.profile.facebook_link}}">{{user.profile.facebook_link}}</a></span>
+                                                        <span class="uk-text-small uk-text-muted"><a target="_blank" href="{{up.profile.facebook_link}}">{{user.profile.facebook_link}}</a></span>
                                                         
                                                     </div>
                                                 </li>
@@ -681,7 +662,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="">Name</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{user.profile.institute|default:''}}</span>
+                                                        <span class="uk-text-small uk-text-muted">{{up.profile.institute|default:''}}</span>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -690,27 +671,27 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Address</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{user.profile.institute.address1}}
+                                                        <span class="uk-text-small uk-text-muted">{{up.profile.institute.address1}}
 
                                                             
-                                                            {% if user.profile.institute.address2 %}
-                                                            {{user.profile.institute.address2}}, 
+                                                            {% if up.profile.institute.address2 %}
+                                                            {{up.profile.institute.address2}}, 
                                                             {% endif %}
 
-                                                            {% if user.profile.institute.district %}
-                                                            {{user.profile.institute.district}},    
+                                                            {% if up.profile.institute.district %}
+                                                            {{up.profile.institute.district}},    
                                                             {% endif %}
                                                             
-                                                            {% if user.profile.institute.state %}
-                                                            {{user.profile.institute.state}},
+                                                            {% if up.profile.institute.state %}
+                                                            {{up.profile.institute.state}},
                                                             {% endif %}
                                                                 
-                                                            {% if user.profile.institute.country %}
-                                                            {{user.profile.institute.country}} -
+                                                            {% if up.profile.institute.country %}
+                                                            {{up.profile.institute.country}} -
                                                             {% endif %}
                                                             
-                                                            {% if user.profile.institute.pin_code %}
-                                                            {{user.profile.institute.pin_code}}    
+                                                            {% if up.profile.institute.pin_code %}
+                                                            {{up.profile.institute.pin_code}}    
                                                             {% endif %}
                                                                 
                                                             
@@ -724,7 +705,7 @@
                                                     </div>
                                                     <div class="md-list-content">
                                                         <span class="md-list-heading"><a href="#">Code</a></span>
-                                                        <span class="uk-text-small uk-text-muted">{{user.profile.institute.code|default:''}}</span>
+                                                        <span class="uk-text-small uk-text-muted">{{up.profile.institute.code|default:''}}</span>
                                                     </div>
                                                 </li>
                                                
@@ -735,84 +716,7 @@
                                 </li>
                                         <li>
                                             <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
-                                                <div class="uk-width-large-1-2">
-                                                    <!-- <h4 class="heading_c uk-margin-small-bottom">Details</h4> -->
-                                                    <ul class="md-list">
-                                                        <li>
-                                                            <div class="md-list-content">
-                                                                <span class="md-list-heading"><a href="#">Organization Name</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.institute.name}}</span>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                        <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="#">Address</a></span>
-                                                            <span class="uk-text-small uk-text-muted">{{user.profile.address_line_1}} 
-                                {% if user.profile.address_line_2 %}{{user.profile.address_line_2}},{% endif %}
-                                
-                                {% if user.profile.city %}
-                                {{user.profile.city}},
-                                {% endif %}
-                                 
-                                {% if user.profile.state %}
-                                {{user.profile.state}},
-                                {% endif %}
-
-                                {% if user.profile.country %}
-                                {{user.profile.country}} -
-                                {% endif %} 
-                                
-                                {% if user.profile.pin_code %}
-                                {{user.profile.pin_code}}
-                                {% endif %}
-
-                                                            </span>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="#">Contact</a></span>
-                                                            <span class="uk-text-small uk-text-muted">{{user.profile.mobile_number|default:''}}</span>
-                                                        </div>
-                                                    </li>
-                                                    
-                                                       
-                                                        <li>
-                                                            <div class="md-list-content">
-                                                                <span class="md-list-heading"><a href="#">Role/Designation</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.designation|default:''}}</span>
-                                                            </div>
-                                                        </li>
-                                                      <!-- class for students -->
-                                                      {% if user.user_institute_role.level.level_name == 'student'  %}
-                                                      <li>
-                                                        <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="#">My Class</a></span>
-                                                            <span class="uk-text-small uk-text-muted">{{user.profile.Class}}</span>
-                                                        </div>
-                                                    </li>
-                                                      {% endif %}
-                                                      <!-- class for students -->
-                                                      {% if user.user_institute_role.level.level_name != 'student'  %}
-                                                      <li>
-                                                        <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="#">Qualification</a></span>
-                                                            <span class="uk-text-small uk-text-muted">{{user.profile.qualification}}</span>
-                                                        </div>
-                                                    </li>
-                                                    {% endif %}
-                                                          
-                                                        <li>
-                                                            <div class="md-list-content">
-                                                                <span class="md-list-heading"><a href="#">Aadhar Card Number</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.aadhar_card_number}}</span>
-                                                            </div>
-                                                        </li>
-                                                        
-
-                                                         
-                                                    </ul>
-                                                </div>
+                                                
 
                                                 <div class="uk-width-large-1-2">
                                                     
@@ -821,346 +725,110 @@
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Father's Name</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.father_name}}</span>
+                                                                <span class="uk-text-small uk-text-muted">{{up.profile.father_name}}</span>
                                                             </div>
                                                         </li>
 
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Mother's Name</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.mother_name}}</span>
+                                                                <span class="uk-text-small uk-text-muted">{{up.profile.mother_name}}</span>
                                                             </div>
                                                         </li>
 
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Date of Birth</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.date_of_birth}}</span>
+                                                                <span class="uk-text-small uk-text-muted">{{up.profile.date_of_birth}}</span>
                                                             </div>
                                                         </li>
 
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Gender</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.gender}}</span>
+                                                                <span class="uk-text-small uk-text-muted">{{up.profile.gender}}</span>
                                                             </div>
                                                         </li>
 
 
-                                                        {% if user.user_institute_role.level.level_name != 'student'  %}
                                                         <li>
                                                             <div class="md-list-content">
                                                                 <span class="md-list-heading"><a href="#">Marital Status</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.marital_status}}</span>
+                                                                <span class="uk-text-small uk-text-muted">{{up.profile.marital_status}}</span>
                                                             </div>
                                                         </li>
-                                                        {% endif %}
 
-                                                        <li>
-                                                            <div class="md-list-content">
-                                                                <span class="md-list-heading"><a href="#">Category</a></span>
-                                                                <span class="uk-text-small uk-text-muted">{{user.profile.category}}</span>
-                                                            </div>
-                                                        </li>
+                                                        
                                                         </ul>
                                                   
                                                 </div>
-                                            </div>
-
-
-                                        </li>
-                                        {% if user.profile.designation.level_name != 'parent' %}
-                                        {% if user.profile.designation.level_name != 'driver' %}
-                                        {% if user.profile.status == 'approve' %}
-                                <li>
-                                    <div class="uk-width-medium-1-8" >
-                                        <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'set_loc' %}">
-                                            <i class="uk-icon-map-marker"></i>
-                                            Select Point
-                                        </a>
-                                    <!-- <a class="md-btn md-btn-primary md-btn-wave-light md-btn-icon" href="{% url 'see_map' %}" >
-                                        <i class="uk-icon-map-marker"></i>
-                                        See Map</a> -->
-                                    </div>
-                                    <div class="md-card uk-margin-medium-bottom">
-                                        {% if user.sel_point %}
-                                        <div class="md-card-content"> 
-                                                                                       
-                                            <div class="uk-overflow-container">  
-                                                                                              
-                                                <table class="uk-table uk-table-hover">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Sr No.</th>
-                                                        <th>Name.</th>
-                                                        <th>Route No.</th>
-                                                        <th>Point No.</th>
-                                                        <th>Point Name</th>
-                                                        <!-- <th>Place</th>
-                                                        <th>Address</th>
-                                                        <th>Edit</th>
-                                                        <th>Delete</th> -->
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>{{user.sel_point.user.first_name}} {{user.sel_point.user.last_name}}</td>
-                                                        <td>None</td>      
-                                                        <td>{{user.sel_point.point.point_code}}</td>                                                 
-                                                        <td>{{user.sel_point.point.point_name}}</td>               
-                                                    </tr>
-                                                    </tbody>
-                                                </table>  
-                                                                                             
-                                            </div>    
-                                                                                     
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                    
-                                </li>
-                                {% endif %}{% endif %}{% endif %}
-                                        {% if user.user_institute_role.level.level_name == 'student'  %}
-                                        <li>
-                                            <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
                                                 <div class="uk-width-large-1-2">
                                                     <!-- <h4 class="heading_c uk-margin-small-bottom">Details</h4> -->
                                                     <ul class="md-list">
-                                                        <li>
-                                                            <div class="md-list-content">
-                                                                <span class="md-list-heading"><a href="#">Birth Certificate</a></span>
-                                                                {% if user.profile.student_info.dob_certificate %}
-                                                                    <a class="alink" href="{{user.profile.student_info.dob_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
-                                                                {%else%}
-                                                                    Not provided
-                                                                {% endif %}
-                                                            </div>
-                                                        </li>
+                                                       
                                                         <li>
                                                         <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="#">ID Certificate</a></span>
-                                                            {% if user.profile.student_info.id_proof_certificate %}
-                                                            <a class="alink" href="{{user.profile.student_info.id_proof_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
-                                                            {%else%}
-                                                           Not provided
-                                                           {% endif %}  
+                                                            <span class="md-list-heading"><a href="#">Address</a></span>
+                                                            <span class="uk-text-small uk-text-muted">{{up.profile.address_line_1}} 
+                                {% if up.profile.address_line_2 %}{{up.profile.address_line_2}},{% endif %}
                                 
+                                {% if up.profile.city %}
+                                {{user.profile.city}},
+                                {% endif %}
+                                 
+                                {% if up.profile.state %}
+                                {{up.profile.state}},
+                                {% endif %}
+
+                                {% if up.profile.country %}
+                                {{up.profile.country}} -
+                                {% endif %} 
+                                
+                                {% if up.profile.pin_code %}
+                                {{up.profile.pin_code}}
+                                {% endif %}
 
                                                             </span>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="#">Domicile Certificate</a></span>
-                                                            {% if user.profile.student_info.domicile_certificate %}
-                                                            <a class="alink" href="{{user.profile.student_info.domicile_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
-                                                            {%else%}
-                                                            Not provided
-                                                            {% endif %}
+                                                            <span class="md-list-heading"><a href="#">Contact</a></span>
+                                                            <span class="uk-text-small uk-text-muted">{{up.profile.mobile_number|default:''}}</span>
                                                         </div>
-                                                    </li>
-                                                    
+                                                    </li>                                                  
                                                        
+                                                        
+                                                     
+                                                      
+                                                          
                                                         <li>
                                                             <div class="md-list-content">
-                                                                <span class="md-list-heading"><a href="#">Cast Certificate</a></span>
-                                                                {% if user.profile.student_info.cast_certificate %}
-                                                                <a class="alink" href="{{user.profile.student_info.cast_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
-                                                                {%else%}
-                                                                Not provided
-                                                                {% endif %}
+                                                                <span class="md-list-heading"><a href="#">Aadhar Card Number</a></span>
+                                                                <span class="uk-text-small uk-text-muted">{{up.profile.aadhar_card_number}}</span>
                                                             </div>
                                                         </li>
-                                                                                                          
+                                                        <li>
+                                                            <div class="md-list-content">
+                                                                <span class="md-list-heading"><a href="#">License No.</a></span>
+                                                                <span class="uk-text-small uk-text-muted">{{sel_d.driving_lic_no}}</span>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="md-list-content">
+                                                                <span class="md-list-heading"><a href="#">Category</a></span>
+                                                                <span class="uk-text-small uk-text-muted">{{up.profile.category}}</span>
+                                                            </div>
+                                                        </li>
+
+
+                                                         
                                                     </ul>
-                                                </div>
-
-                                                <div class="uk-width-large-1-2">
-                                                    
-                                                    <!-- <h4 class="heading_c uk-margin-small-bottom">Other Details</h4> -->
-                                                    <ul class="md-list">
-                                                        <li>
-                                                            <div class="md-list-content">
-                                                                <span class="md-list-heading"><a href="#">Character Certificate</a></span>
-                                                                {% if user.profile.student_info.character_certificate %}
-                                         <a class="alink" href="{{user.profile.student_info.character_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
-                                         {%else%}
-                                         Not provided
-                                         {% endif %}
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="md-list-content">
-                                                                <span class="md-list-heading"><a href="#">Medical Cerficate</a></span>
-                                                                {% if user.profile.student_info.medical_certificate %}
-                                         <a class="alink" href="{{user.profile.student_info.medical_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
-                                        {%else%}
-                                        Not provided
-                                        {% endif %}
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="md-list-content">
-                                                                <span class="md-list-heading"><a href="#">Transfer Certificate</a></span>
-                                                                {% if user.profile.student_info.transfer_certificate %}
-                                         <a class="alink" href="{{user.profile.student_info.transfer_certificate.url}}" target="_blank" link>view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
-                                         {%else%}
-                                         Not provided
-                                         {% endif %}
-                                                            </div>
-                                                        </li>
-
-                                                        <li>
-                                                            <div class="md-list-content">
-                                                                <span class="md-list-heading"><a href="#">Last Year Cerficate</a></span>
-                                                                {% if user.profile.student_info.last_year_certificate %}
-                                         <a class="alink" href="{{user.profile.student_info.last_year_certificate.url}}" target="_blank">view certificate <i style="color: red;" class="far fa-file-pdf"></i></a>
-                                         {%else%}
-                                         Not provided
-                                         {% endif %}
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                  
                                                 </div>
                                             </div>
 
 
                                         </li>
-{% endif %}
-
-{% if user.profile.designation.level_name == "admin" or user.profile.designation.level_name == "driver" or user.profile.designation.level_name == "student" or user.profile.designation.level_name == "parent"     %}
-
-{% else %}
-<li>
-    {% if added_permissions or removed_permissions  %}
-    <div class="row">
-        <div class="col ">
-          <div class="card" >
-           
-            <div class="card-content" style="padding: 10px;">
-                <small class="">Permissions Updated at: <a>{{updated_time}}</a></small>
-              <p>Comment: {{changes_comment}}</p>
-            </div>
-            
-          </div>
-        </div>
-      </div>
-      {% else %}
-    <h3>No Changes to Show !</h3>
-      
-    {% endif %}
-    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
-        <div class="uk-width-large-1-2">
-           
-            {% if added_permissions  %}
-           
-            <span class="heading_c uk-margin-small-bottom"> <i class="md-list-addon-icon material-icons uk-text-success">new_releases</i> <a href="#">New Permissions Assigned</a>
-            </span>
-            {% for pn in added_permissions %}
-            <span class="uk-text-small uk-text-muted uk-text-truncate">
-                <i class="material-icons tiny uk-text-success">done</i>{{pn}}</span>
-            {% endfor %}
-
-            {% endif %}
-            
-            </div>
-
-            <div class="uk-width-large-1-2">
-                {% if removed_permissions %}
-               
-                <span class="heading_c uk-margin-small-bottom"> <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i> <a href="#">Removed Permissions</a></span>
-                {% for pn in removed_permissions %}
-                <span class="uk-text-small uk-text-muted uk-text-truncate">
-                    <i class="material-icons tiny uk-text-danger">clear</i>{{pn}}</span>
-                {% endfor %}
-                {% endif %}
-            </div>
-    </div>
-</li>
-{% endif %}
-
-                                           
-                                        
-                                 
-                                        {% if user.profile.designation.level_name == "parent" %}
-                                        <li>
-                                            <!-- Add Child Here -->
-                                            <div class="uk-width-medium-1-5">
-                                                <a class="md-btn md-btn-primary md-btn-wave-light" href="{% url 'addchild' %}">Add Child</a>
-                                            </div>
-                                                <div class="md-card uk-margin-medium-bottom">
-                                                    <div class="md-card-content">
-                                                        <div class="uk-overflow-container">
-                                                            <table class="uk-table uk-table-hover">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th>Sr No.</th>
-                                                                    <th>Child Name</th>
-                                                                    <th>Class</th>
-                                                                    <th>Institute</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                {% for student in parent_children %}
-                                                                <tr>
-                                                                    <td>{{ forloop.counter}}</td>
-                                                                    <td><a href="{% url 'childview' student.pk %}">{{student.child.first_name}}</a></td>
-                                                                    <td>{{student.child.Class}}</td>
-                                                                    <td>{{student.child.institute}}</td>
-                                                                </tr>
-                                                                {% endfor %}
-                                                               
-                                                              
-                                                                
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    
-                                                </div>                                        
-                                            </li>{% endif %}        
-                                        <li>
-                                            <!-- My Insitute Here -->
-                                            <div class="uk-width-medium-1-5">
-                                                <a class="md-btn md-btn-primary md-btn-wave-light" href="{% url 'secondry_institute' %}">Add Institute</a>
-                                            </div>
-                                            <div class="md-card uk-margin-medium-bottom">
-                                                <div class="md-card-content">
-                                                    <div class="uk-overflow-container">
-                                                        <table class="uk-table uk-table-hover">
-                                                            <thead>
-                                                            <tr>
-                                                                <th>Sr No.</th>
-                                                                <th>Institute Name</th>
-                                                                <th>Class</th>
-                                                                <th>Roll No.</th>
-                                                                <th>Institute Type</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {% for institute in institute %}
-                                                                <tr>
-                                                                    <td>{{ forloop.counter}}</td>
-                                                                    <td><a href="#">{{institute.student_institute}}</a></td>
-                                                                    <td>{{institute.student_Class}}</td>
-                                                                    <td>{{institute.student_rollno}}</td>
-                                                                    <td>{{institute.institute_type}}</td>
-                                                                </tr>
-                                                                {% endfor %}
-                                                           
-                                                          
-                                                            
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                
-                                            </div>
-                                        </li> 
-                                        
                                     </div>
                                    
                     </div>

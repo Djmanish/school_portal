@@ -40,10 +40,15 @@ class Point(models.Model):
         return self.point_name
 
 class Driver(models.Model):
+    Chi3 =[
+        ('active', 'Active'),('inactive', 'Inactive'),    
+    ]
     driver_id = models.CharField(max_length=10)
     name = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='driver', default=None)
     driving_lic_no = models.CharField(max_length=13)
     institute = models.ForeignKey(to=Institute, related_name="driver_institute", on_delete=models.CASCADE, null=True, blank=True)
+    status = models.CharField(max_length=25,choices=Chi3,default="active")
+
     def __str__(self):
         return str(self.name)
 

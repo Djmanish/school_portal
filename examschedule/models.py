@@ -43,7 +43,7 @@ class ExamDetails(models.Model):
 def date_future(value):
         today = date.today()
         if value < today:
-            raise ValidationError('Date must be in future!')
+            raise ValidationError('Date must be in future !')
 
 class Edit_Exam_Date(models.Model):
     

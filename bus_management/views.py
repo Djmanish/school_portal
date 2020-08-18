@@ -19,7 +19,9 @@ def bus(request):
         buses = Bus.objects.filter(bus_institute=request.user.profile.institute)
         states_list = State.objects.all()
         points = Point.objects.filter(point_institute=request.user.profile.institute)
+        
         drivers = Driver.objects.filter(institute=request.user.profile.institute)
+        active_drivers = Driver.objects.filter(status="active",institute=request.user.profile.institute)
         active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
         routes = RouteInfo.objects.filter(institute=request.user.profile.institute, status="active")
         new = RouteInfo.objects.filter(institute=request.user.profile.institute)
@@ -37,6 +39,7 @@ def bus(request):
             'states_list': states_list,
             'points':points,
             'drivers':drivers,
+            'active_drivers':active_drivers,
             'active_buses':active_buses,
             'routes':routes,
             'new':new,
@@ -56,7 +59,6 @@ def add_bus(request):
             b_fuel = request.POST['bus_fuel_type']
             b_color= request.POST['bus_color'].strip()
             b_capacity= request.POST['bus_capacity'].strip()
-            print(b_no)
             try:
                 chk_bus= Bus.objects.get(bus_no=b_no, bus_institute=request.user.profile.institute)
                 messages.error(request, 'Vehicle with this registration number already exists !')
@@ -179,7 +181,6 @@ def delete_routemap(request,pk):
         i.delete()
         try:
             s_users = BusUsers.objects.filter(point=i.point,institute= request.user.profile.institute)
-            print(s_users)
             vehicle_signals.point_map_del.send(sender=None,route=i.route,point=i.point)
         except BusUsers.DoesNotExist:
             pass
@@ -196,16 +197,29 @@ def delete_view_routepoints(request,pk):
         i.save()    
     try:
         s_users = BusUsers.objects.filter(point=del_point.point,institute= request.user.profile.institute)
-        print(s_users)
         vehicle_signals.point_map_del.send(sender=None,route=del_point.route,point=del_point.point)
     except BusUsers.DoesNotExist:
         pass
     messages.success(request, 'Point deleted successfully !')  
    
-    return HttpResponseRedirect(f'/bus/')
+    return HttpResponseRedirect(f'/bus/view_routepoints/{del_point.route.pk}')
 
 # def edit_view_routepoints(request,pk):
     
+def fetch_driver_details(request):
+    # pk=request.POST.get('category')
+    selected = Driver.objects.get(pk=request.POST.get('cat'))
+    if selected.status == "active":
+        r = RouteInfo.objects.filter(vehicle_driver=selected,institute= request.user.profile.institute)
+        for i in r:
+            i.vehicle_driver= None
+            i.save()
+        selected.status = "inactive"
+        selected.save()
+    else:
+        selected.status = "active"
+        selected.save()
+    return HttpResponse("Hello world")
 
 
 
@@ -223,7 +237,6 @@ def fetch_bus_details(request):
 def fetch_point_details(request):
     # pk=request.POST.get('category')
     selected_point = Point.objects.get(pk=request.POST.get('cat'))
-    print(selected_point)
     if selected_point.status == "active":
         try:
             maps = RouteMap.objects.filter(point__id=request.POST.get('cat'))
@@ -236,8 +249,12 @@ def fetch_point_details(request):
                 except:
                     pass
                 i.delete()
+            selected_point.status = "inactive"
+            selected_point.save()
         except RouteMap.DoesNotExist:
-            pass
+            selected_point.status = "inactive"
+            selected_point.save()
+            
         
     else:
         selected_point.status = "active"
@@ -256,7 +273,6 @@ def add_driver(request):
     if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
         all_states = State.objects.all()
         date =datetime.now().date()
-        print(date)
         context_data = {
             'all_states':all_states,
             'date': date
@@ -271,7 +287,6 @@ def add_new_driver(request):
     if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
         if request.method == 'POST':
             last = Institute_levels.objects.filter(institute=request.user.profile.institute).first()
-            print(last)
             l_id= int(last.level_id)+1
             try:
                 chk_role = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='driver')
@@ -383,8 +398,7 @@ def add_route(request):
             sel_d = Driver.objects.get(pk=r_driver)
             r_from_date = request.POST['from_date']
             r_to_date = request.POST['to_date']
-            print(r_from_date)
-            print(r_to_date)
+            
             
             new_route = RouteInfo.objects.create(route_no=r_no, route_name=r_name, vehicle=sel_b, vehicle_driver=sel_d,institute=request.user.profile.institute , from_date=r_from_date, to_date=r_to_date)
             messages.success(request, 'Route created successfully !') 
@@ -401,15 +415,14 @@ def route_map(request):
             route = int(request.POST['route'])
             point = int(request.POST['point'])
             sch_route = RouteInfo.objects.get(id=route)
-            points = Point.objects.filter(point_institute=request.user.profile.institute)
+            points = Point.objects.filter(point_institute=request.user.profile.institute, status="active")
             context_data = {
             'sch_route':sch_route,
             'range':range(point),
             'points':points,
             
             }
-            print(route)
-            print(point)
+           
             return render(request, 'bus/map_route.html', context_data)  
     else:
         raise PermissionDenied
@@ -435,35 +448,24 @@ def update_route(request):
         select_time= request.POST.getlist('time')
         route= int(request.POST['hide_route'])
         select_index= request.POST.getlist('index')
-        print(select_time)
         result= checkIfDuplicates_1(select_point)
         if result:
-            messages.error(request, "You are selecting same point !")  
-                      
+            messages.error(request, "You are selecting same point !")                        
             return HttpResponseRedirect(f'/bus/') 
-        else:
-            print ("non Duplicates")
 
         result1= checkIfDuplicates_1(select_time)
         if result1:
-            messages.error(request, "Time never be same !")  
-                      
+            messages.error(request, "Time never be same !")                        
             return HttpResponseRedirect(f'/bus/') 
-        else:
-            print ("non Duplicates")   
 
         result2= checkIfDuplicates_1(select_index)
         if result2:
-            messages.error(request, "Index number never be same !")  
-                      
+            messages.error(request, "Index number never be same !")                       
             return HttpResponseRedirect(f'/bus/') 
-        else:
-            print ("non Duplicates")      
         length=len(select_point) 
         for i in range(length):            
             s_point= Point.objects.get(id=select_point[i])
             ind= int(select_index[i])
-            print(ind)
             sel = ind
             t = select_time[i]
             try:
@@ -477,15 +479,12 @@ def update_route(request):
                 sch_r= RouteMap.objects.get(route__id=route, index=ind)
                 q= RouteMap.objects.filter(route__id=route)
                 c = q.count()
-                print(c)
                 e = int(ind)
                 
                 for i in range(c, e-1, -1):
-                    print(i)
                     a= RouteMap.objects.get(route__id=route, index=i)
                     a.index= int(i+1)
                     a.save() 
-                print("HelloManish")                      
                 new= RouteMap.objects.create(route=sch_r.route, point=s_point, index=sel, time=t, routemap_institute= request.user.profile.institute)        
                 try:
                     s_users = BusUsers.objects.filter(point=s_point,institute= request.user.profile.institute)
@@ -495,8 +494,7 @@ def update_route(request):
             else:    
                 sch_r= RouteMap.objects.filter(route__id=route).last()
                 inr= int(sch_r.index)
-                print(inr)
-                print("ManishHello")
+                
                 new= RouteMap.objects.create(route=sch_r.route, point=s_point, index=inr+1, time=select_time[i], routemap_institute= request.user.profile.institute)
                 try:
                     s_users = BusUsers.objects.filter(point=s_point,institute= request.user.profile.institute)
@@ -524,23 +522,18 @@ def add_point_route (request):
         l = len(select_time)
         first = select_time[0]
         last = select_time[l-1]
-        print(first)
-        print(last)
+        
         try:
             driver = RouteInfo.objects.filter(vehicle_driver=s_route.vehicle_driver)
             try:
                 for d in driver:
-                    print("Inside loop")
                     leen = RouteMap.objects.filter(route=d).count()
                     chk1 = RouteMap.objects.get(route=d, index=1)
                     chk2 = RouteMap.objects.get(route=d, index=leen)
                     chk_f = str(chk1.time)
                     chk_l = str(chk2.time)
-                    print(chk_f)
-                    print(chk_l)
-                    print("Before if")
+                    
                     if (first >= chk_f and first <= chk_l ) or (last >= chk_f and last <= chk_l):
-                        print("After if")
                         messages.error(request,f'{s_route.vehicle_driver.name.first_name} is already mapped with route:- {d} for entered time !')                       
                         return HttpResponseRedirect(f'/bus/') 
                     else:
@@ -554,16 +547,14 @@ def add_point_route (request):
             messages.error(request, "You are selecting same point !")  
                       
             return HttpResponseRedirect(f'/bus/') 
-        else:
-            print ("non Duplicates")
+       
 
         result1= checkIfDuplicates_1(select_time)
         if result1:
             messages.error(request, "Time can't be same for two points !")  
                       
             return HttpResponseRedirect(f'/bus/') 
-        else:
-            print ("non Duplicates")   
+         
         length=len(select_point) 
         for i in range(length):
             s_point= Point.objects.get(id=select_point[i])
@@ -580,8 +571,7 @@ def set_location(request):
     if request.method == 'POST':
         longi = request.POST['longitute'].strip()
         lati = request.POST['latitute'].strip()
-        print(longi)
-        print(request.user.profile.institute.id)
+        
         try:
             sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
         except InstituteLocation.DoesNotExist:
@@ -609,7 +599,6 @@ def see_map(request):
         state = request.user.profile.state.name
         country ="India"
         insi_loc = geolocator.geocode(city+','+ country)
-        print("latitude is :-" ,insi_loc.latitude,"\nlongtitude is:-" ,insi_loc.longitude)
         context_data={
         'insi_loc':insi_loc,
         }
@@ -631,7 +620,6 @@ def add_trip(request):
     if request.method == 'POST':
         ids = int(request.POST['route_id'])
         date =datetime.now().date()
-        print(date)
         r_map = RouteMap.objects.get(id=ids)
         route = r_map.route
         point = r_map.point
@@ -646,16 +634,17 @@ def add_trip(request):
         
 def view_routepoints(request, pk):
     # view_point = Point.objects.get(pk=pk)
-    view_route = RouteInfo.objects.get(pk=pk)
-    maps = RouteMap.objects.filter(route=view_route).order_by('index')
-    r_id = pk
-    context_data = {
-    'view_route': view_route,
-    'maps': maps,
-    'r_id':r_id,
-    }
     
-    return render(request, 'bus/view_routepoints.html', context_data)
+        view_route = RouteInfo.objects.get(pk=pk)
+        maps = RouteMap.objects.filter(route=view_route).order_by('index')
+        
+        context_data = {
+        'view_route': view_route,
+        'maps': maps,
+        }
+      
+        return render(request, 'bus/view_routepoints.html', context_data)
+   
 
 def update_routepoints(request):
     
@@ -665,35 +654,27 @@ def update_routepoints(request):
         p = RouteMap.objects.get(id= route_point)
         p_index= request.POST['edit_routeindex']
         p_time = request.POST['edit_routetime']
-        j = RouteMap.objects.filter(route=p.route).count()
-        if int(p_index) > j:
-            messages.error(request, "Entered index is out of limit")
-            return HttpResponseRedirect(f'/bus/')
-
-
-        if int(p_index) <=0:
-            messages.error(request, "Entered index should be greater than 0 ")
-        sch = RouteMap.objects.filter(route=p.route, index__gt=p.index)
-        if sch:
-            for i in sch:
-                i.index = i.index - 1 
-                i.save()
-        sch1 = RouteMap.objects.filter(route=p.route, index__lt=p.index)
-        if sch1:
-            for j in sch1:
-                j.index = j.index + 1 
-                j.save()        
-        p.index = p_index
         p.time = p_time
-                
-        p.save()
-        
-        # context_data = {
-        # 'route_editpoint' : route_editpoint,
-        # }
+        p.save()            
         messages.success(request, 'Point details updated successfully !') 
-        return HttpResponseRedirect(f'/bus/')
+        return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}')
       
-    
-    
+def view_driver(request,pk):
+    user_permissions = request.user.user_institute_role.level.permissions.all()
+    vehicle_permission = App_functions.objects.get(function_name='Can Manage Vehicles')   
+    if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+        try:
+            sel_d = Driver.objects.get(pk=pk,institute= request.user.profile.institute)
+            up = User.objects.get(pk=sel_d.name.user.id)
+            context={
+                'up':up,
+                'sel_d':sel_d,
+            }
+            return render(request, 'bus/driver_profile.html', context) 
+        except Driver.DoesNotExist:
+            messages.error(request, 'Driver not found !') 
+            return HttpResponseRedirect(f'/bus/') 
+    else:
+        raise PermissionDenied
+        
     
