@@ -564,8 +564,9 @@
 
               
                     </div>
+                    <input type="hidden" value="{{selected_subject.id}}" name="selected_class_data">
                    
-                    <form method="POST" action="">
+                    <form method="POST" action="{% url 'promotion_status' request.user.profile.institute.id %}" >
                         {% csrf_token %}
                     
                         <table class="uk-table uk-table-condensed uk-table-hover"  id="attendance_student_table">
