@@ -597,7 +597,7 @@
                                                                     <tr> 
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select  id="exam_schedule" class="form-control"  name="select_exam_subject" required>
+                                                                                <select  id="exam_schedule" class="form-control"  disabled="disabled" name="select_exam_subject" required>
                                                                                   <option  value="{{exam_subject.id}}">{{exam_subject}}</option>
                                                                                 </select>
                                                                               </div>
@@ -606,7 +606,7 @@
                                                                         
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select id="exam_schedule" class="form-control"  name="select_exam_subject_teacher" required>
+                                                                                <select id="exam_schedule" disabled="disabled" class="form-control"  name="select_exam_subject_teacher" required>
                                                                                   <option  value="{{exam_subject.subject_teacher.id}}">{{exam_subject.subject_teacher.profile.first_name}} {{exam_subject.subject_teacher.profile.last_name}}</option>
                                                                                 </select>
                                                                               </div>

@@ -131,12 +131,7 @@ def exam_result(request,pk):
         raise PermissionDenied
     
 def examresult(request,pk):
-      user_permissions = request.user.user_institute_role.level.permissions.all()
-      add_class_permission = App_functions.objects.get(function_name='Can Create ExamResult')
-      if add_class_permission in user_permissions:
-                            pass
-      else:
-                            raise PermissionDenied
+      
 
     # starting user notice
       if request.user.profile.designation:
@@ -1019,6 +1014,7 @@ def class_promotion(request,pk):
                       #   get the list of users from the UserProfile
                       for user_d in user_data:
                           user_da=user_d.user
+                          
                       #  fetch the data from the front end
                           for sdata,status in zip(request.POST.getlist('student_roll_no'),request.POST.getlist('student_promotion_status')):
                             student_data = User.objects.get(pk=sdata)
@@ -1029,7 +1025,6 @@ def class_promotion(request,pk):
                                     user_d.class_current_year=current_year+1
                                     user_d.class_next_year=next_year+1
                                     user_d.roll_number=None
-                                  
                                   else:
                                     pass
                                   
@@ -1363,6 +1358,7 @@ def overall_report_card(request,pk,student_pk):
   selected_student_data=UserProfile.objects.get(pk=student_pk)
   institute_student=selected_student_data.institute
   student_class=selected_student_data.Class
+  grand_result=""
 
   if pk==inst:
     if request.user.profile.designation.level_name=='parent':
