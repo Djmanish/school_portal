@@ -532,7 +532,7 @@
                                                     </td>
                                                 </tr>
                                               
-                                              {% if edit_date is None %}
+                                              
                                                   
                                              
                                                   
@@ -567,15 +567,8 @@
                                                           
                                                             <input type="submit" value="View" class="md-btn md-btn-primary">
                                                         
-                                                           
-                                                        </form>
-                                                        
-                                                      
-                                                
-                                                            {% else %}
-                                                            <h3>Date is not set by Admin yet.</h3>
-                                                            {% endif %}
-                                                            <script>
+                                                           <script>
+                                                                           
                                                                 $(document).ready(function(){
                                                                   $('#result_exam_type').change(function(){
                                                                      
@@ -591,7 +584,14 @@
                                                                       })
                                                                   })
                                                                 })
-                                                                </script>
+                                                               
+                                                           </script>
+                                                        </form>
+                                                        
+                                                      
+                                                
+                                                           
+                                                
 
                                                     <div class="md-card-content">
                                                     
@@ -642,8 +642,7 @@
                                                                 <input type="hidden" value="{{selected_subject.subject_teacher.id}}" name="subject_teacher">
                                                                 <input type="hidden" value="{{exam_type_id.exam_max_marks}}" name="exam_max_marks">
                                                                 <input type="hidden" value="{{exam_type_id.exam_max_limit}}" name="exam_max_limit">
-    
-                                                            </tr>
+                                                                </tr>
                                                                      {% for student in institute_students %}
                                                                      
                                                                      
@@ -654,25 +653,28 @@
                                                                     
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select id="exam_schedule"  name="student_first_name" >
+                                                                                <select id="exam_schedule"  class="noDropDown"  >
                                                                                   <option  value="{{student.id}}">{{student.first_name}}</option>
                                                                                 </select>
                                                                               </div>
+                                                                              <input type="hidden" name="student_first_name" value="{{student.id}}" />
                                                                               
                                                                         </td>
                                                                         <td >
                                                                             <div class="form-group">
-                                                                                <select id="exam_schedule"    name="student_last_name">
+                                                                                <select id="exam_schedule"   class="noDropDown"   >
                                                                                   <option  value="{{student.id}}">{{student.last_name}}</option>
                                                                                 </select>
                                                                               </div>
+                                                                              <input type="hidden" name="student_last_name" value="{{student.id}}" />
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <select id="exam_schedule"    name="student_roll_no">
+                                                                                <select id="exam_schedule"   class="noDropDown"    >
                                                                                   <option  value="{{student.id}}">{{student.roll_number}}</option>
                                                                                 </select>
                                                                               </div>
+                                                                              <input type="hidden" name="student_roll_no" value="{{student.id}}" />
                                                                         </td>
                                                                         
                                                                         
@@ -681,6 +683,9 @@
                                                                        </td>
                                                                     
                                                             </tr>
+                                                            <script>
+                                                                $(".noDropDown").prop( "disabled", true );  
+                                                                </script>
                                                             
                                                             {% endfor %}
                                                             

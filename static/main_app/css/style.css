@@ -508,3 +508,6 @@ color:#ff0000;
   margin-left: 700px;
 }
 
+.hidden_dropdown {
+  display: none;
+}

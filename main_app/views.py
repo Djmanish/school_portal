@@ -192,20 +192,27 @@ def edit_subject(request, pk):
     return render(request, 'main_app/edit_subject.html', context)
 
 def delete_subject(request, pk):
-        institue_pk = request.user.profile.institute.pk
+        institute_pk = request.user.profile.institute.pk
+        institute=Institute.objects.get(pk=institute_pk)
         subject_to_delete = Subjects.objects.get(pk=pk)
         subject_to_delete.subject_code = None
         subject_to_delete.subject_name = None
-        subject_to_delete.delete()
-        try:
-            subject_to_delete.delete()
-        except:
-            messages.error(request, 'This subject has students. Can not be deleted !')
-            return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
-        messages.success(request, 'Subject deleted successfully !')
         
-        return HttpResponseRedirect(f'/institute/profile/{institue_pk}')
-
+        exam_result_data=ExamResult.objects.filter(institute=institute)
+    
+        for subject in exam_result_data:
+            result_subject_pk=subject.result_subject.pk
+            print(result_subject_pk)
+            print(pk)
+            if result_subject_pk==pk:
+                messages.error(request, 'This subject has data related to it. Can not be deleted !')
+                return HttpResponseRedirect(f'/institute/profile/{institute_pk}')
+            else:
+                subject_to_delete.delete()
+                messages.success(request, 'Subject deleted successfully !')
+                return HttpResponseRedirect(f'/institute/profile/{institute_pk}')
+        messages.error(request, 'This subject has data related to it. Can not be deleted !')
+        return HttpResponseRedirect(f'/institute/profile/{institute_pk}')
 
 def edit_class(request, pk):
     
