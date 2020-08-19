@@ -383,6 +383,7 @@ def dashboard(request):
             request.user.last2=date - datetime.timedelta(days=2)
             request.user.last1=date - datetime.timedelta(days=1)
             
+            
             try:
                 driver_data = RouteInfo.objects.filter(vehicle_driver__name=request.user.profile)
                 p = []
@@ -406,23 +407,20 @@ def dashboard(request):
                 request.user.z = driver_data[f]
                     
                 request.user.total = RouteMap.objects.filter(route=request.user.z).count()
-                print(request.user.total)
                 request.user.total_trip = Trip.objects.filter(route=request.user.z, date = date).count()
-                print(request.user.total_trip)
                 request.user.today =datetime.date.today() 
-                
-            
                 request.user.trip1 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last1).count()
                 request.user.trip2 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last2).count()
+                
                 request.user.trip3 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last3).count()
+                
                 request.user.trip4 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last4).count()
+                
                 request.user.trip5 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last5).count()
+                
                 request.user.trip6 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last6).count()
+                
                 request.user.trip = Trip.objects.filter(driver__name= request.user.profile, date=date).count()
-                
-                
-                
-                request.user.route_map = RouteMap.objects.filter(route=request.user.driver_data).count()
             except:
                 pass
         #    print(driver_data) 
@@ -621,13 +619,11 @@ def dashboard(request):
     # Active Users Count
     
     queryset = get_current_users()
-    print("Helloworld")
     online_user=[]
     for i_user in queryset:
         if i_user.profile.institute==request.user.profile.institute:
             online_user.append(i_user)
-    for i in online_user:
-        print(i)
+    
     len_online_user= len(online_user)
     
     # Approvals Data Query Start
