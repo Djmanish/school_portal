@@ -111,10 +111,10 @@ function savePDF() {
     var imgData;
     html2canvas($("#myresult"), {
         useCORS: true,
-        onrendered: function (canvas) {
+        rendered: function (canvas) {
             imgData = canvas.toDataURL(
                'image/png');
-            var doc = new jsPDF('a4'); // var doc = new jsPDF('l', 'in', [10, 12]); change page size
+            var doc = new jsPDF('p', 'pt', 'letter'); // var doc = new jsPDF('l', 'in', [10, 12]); change page size
             doc.addImage(imgData, 'PNG', 10, 10);
             doc.save('ReportCard.pdf');
            
