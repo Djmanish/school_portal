@@ -350,10 +350,10 @@ def dashboard(request):
             if request.method == "POST":
                 if 'map' in request.POST:
                     request.user.student=request.POST.get('selected_ch')
-                    print(request.user.student)
+                    
                     std_child=UserProfile.objects.get(id=request.user.student)
-                    print('Hello')
-                    print(std_child)
+                    
+                    
                     request.user.p_child=std_child
                     try:
                         request.user.child_loc = BusUsers.objects.get(user=std_child)
@@ -373,8 +373,6 @@ def dashboard(request):
        if request.user.profile.designation.level_name == "driver":
             date=datetime.date.today()
             time = datetime.datetime.now()
-            
-            print(time)
             
             request.user.last6=date - datetime.timedelta(days=6)
             request.user.last5=date - datetime.timedelta(days=5)
@@ -406,9 +404,9 @@ def dashboard(request):
                 request.user.z = driver_data[f]
                     
                 request.user.total = RouteMap.objects.filter(route=request.user.z).count()
-                print(request.user.total)
+                
                 request.user.total_trip = Trip.objects.filter(route=request.user.z, date = date).count()
-                print(request.user.total_trip)
+                
                 request.user.today =datetime.date.today() 
                 
             
@@ -425,7 +423,7 @@ def dashboard(request):
                 request.user.route_map = RouteMap.objects.filter(route=request.user.driver_data).count()
             except:
                 pass
-        #    print(driver_data) 
+        
 
     # random classmates for student
     std_random=UserProfile.objects.filter(institute=request.user.profile.institute,Class=request.user.profile.Class,designation__level_name="student").exclude(user=request.user).order_by('?')[:5]
@@ -459,8 +457,6 @@ def dashboard(request):
                 if 'calendar' in request.POST:
                     request.user.student=request.POST.get('selected_child')
                     std_child=UserProfile.objects.get(id=request.user.student)
-                    print('Hello')
-                    print(std_child)
                     request.user.post_child=std_child
                     request.user.holiday_child=HolidayList.objects.filter(institute=std_child.institute,applicable="Yes")
                     request.user.exam_she_child=ExamDetails.objects.filter(institute=std_child.institute,exam_class=std_child.Class)
@@ -479,8 +475,8 @@ def dashboard(request):
                     request.user.exam_date1 = None
                     request.user.exam_date2 = None                  
                 max_marks=request.user.exam_type_child.exam_max_marks
-                print("Hello Max Marks")
-                print(max_marks)
+                
+                
                 total_marks=Subjects.objects.filter(institute=request.user.profile.institute,subject_class=request.user.profile.Class).count()*int(max_marks)
                 request.user.child_result=ExamResult.objects.filter(exam_type=request.user.exam_type_child,result_student_data=request.user)
                 request.user.total_sum = 0
@@ -621,7 +617,7 @@ def dashboard(request):
     # Active Users Count
     
     queryset = get_current_users()
-    print("Helloworld")
+    
     online_user=[]
     for i_user in queryset:
         if i_user.profile.institute==request.user.profile.institute:
@@ -885,9 +881,9 @@ def user_profile(request):
     # Transportation
     try:
         request.user.sel_point = BusUsers.objects.get(user=request.user.profile)
-        print(request.user.sel_point)
+        
     except:
-        print("hello")
+        
         pass
 
     # Secondry Institute
@@ -1418,7 +1414,7 @@ def fetch_classes(request):
 
 def role_change_request(request):
     if request.method == 'POST':
-        print('role change post method ')
+        
         try:
             User_Role_changes.objects.create(
                 user = UserProfile.objects.get(pk= request.POST.get('selected_staff')),
@@ -1493,10 +1489,10 @@ class Role_Changes_History_list_View(LoginRequiredMixin, ListView):
         return context
 
 def add_loca(request,pk):
-    print(pk)
+    
     sel_point = Point.objects.get(pk=pk)
     try:
-        print("try")
+        
         sch_user = BusUsers.objects.get(user=request.user.profile,institute= request.user.profile.institute)
         sch_user.point =sel_point
         sch_user.save()
@@ -1511,7 +1507,7 @@ def set_loc(request):
     try:
         request.user.sch = InstituteLocation.objects.get(institute=request.user.profile.institute)
         request.user.mark = Point.objects.filter(point_institute=request.user.profile.institute, status="active")
-        print(request.user.mark)
+        
     except:
         pass
     return render(request, 'main_app/map.html')
