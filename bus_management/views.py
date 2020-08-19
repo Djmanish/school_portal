@@ -433,7 +433,7 @@ def update_map_route(request):
         r_routes = RouteInfo.objects.get(id=r_id)
         point = int(request.POST['update_map_point'])
         
-        points = Point.objects.filter(point_institute=request.user.profile.institute)
+        points = Point.objects.filter(point_institute=request.user.profile.institute, status="active")
         context_data = {
         'range':range(point),
         'points':points,
@@ -493,17 +493,16 @@ def update_route(request):
                     pass
             else:    
                 sch_r= RouteMap.objects.filter(route__id=route).last()
-                inr= int(sch_r.index)
-                
+                inr= int(sch_r.index)                
                 new= RouteMap.objects.create(route=sch_r.route, point=s_point, index=inr+1, time=select_time[i], routemap_institute= request.user.profile.institute)
                 try:
                     s_users = BusUsers.objects.filter(point=s_point,institute= request.user.profile.institute)
                     vehicle_signals.point_map.send(sender=None,route=sch_r.route,point=s_point)
                 except BusUsers.DoesNotExist:
                     pass
-        messages.success(request, "Route map created successfully !")     
-    return HttpResponseRedirect(f'/bus/')
-    # return HttpResponse('hello')
+        messages.success(request, "Route map updated successfully !")     
+    return HttpResponseRedirect(f'/bus/view_routepoints/{route}')
+    
        
 
 def checkIfDuplicates_1(listOfElems):
