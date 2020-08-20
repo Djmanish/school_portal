@@ -1549,10 +1549,11 @@
                                                         </thead>
                                                         
                                                         <tbody>
-                                                            {% for p in new %}   
+                                                        {% for p in new %}   
+                                                        {% if p.point_count > 0 %} 
                                                                
                                                         <tr>
-                                                            {% if p.point_count > 0 %}
+                                                            
                                                             <td>{{forloop.counter}}</td>
                                                             <td><a href="{% url 'view_routepoints' p.pk %}">{{p.route_name}}</a></td>
                                                             <td>{{p.point_count}}</td>                                                       
@@ -1562,9 +1563,9 @@
                                                             </td>
                                                             <td><a class="confirm-delete12" href="{% url 'delete_routemap' p.pk %}" ><i class="material-icons" style="color: #ff0000;">delete_forever</i></a>
                                                             </td>
-                                                            {% endif %}
+                                                            
                                                         </tr>
-                                                        
+                                                        {% endif %}
                                                         
                                                         <script>
                                                             $(document).ready(function(){
