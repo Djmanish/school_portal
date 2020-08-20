@@ -264,4 +264,69 @@ class UserProfileViews(APIView):
         # serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
- 
+@permission_classes((AllowAny, ))
+class StateViews(APIView):
+    serializer_class = StateSerializer
+    def get(self, request):
+        state= State.objects.all()
+        serializer = StateSerializer(state, many=True)
+        return Response(serializer.data)
+
+
+@permission_classes((AllowAny, ))
+class InstituteProfileViews(APIView):
+    serializer_class = InstituteSerializer
+    def get(self, request):
+        institute_data= Institute.objects.all()
+        serializer = InstituteSerializer(institute_data, many=True)
+        return Response(serializer.data)
+    def post(self,request):
+        serializer = self.serializer_class(data=request.data)
+        institute_name=request.POST['name']
+        institute_profile_pic=request.POST['profile_pic']
+        institute_code=request.POST['code']
+        institute_establish_date=request.POST['establish_date']
+        institute_logo=request.POST['institute_logo']
+        institute_principal=request.POST['principal']
+        institute_session_start_date=request.POST['session_start_date']
+        institute_about=request.POST['about']
+        institute_contact_number1=request.POST['contact_number1']
+        institute_contact_number2=request.POST['contact_number2']
+        institute_contact_number3=request.POST['contact_number3']
+        institute_address1=request.POST['address1']
+        institute_address2=request.POST['address2']
+        institute_district=request.POST['district']
+        institute_state=request.POST['state']
+        institute_country=request.POST['country']
+        institute_pin_code=request.POST['pin_code']
+        institute_email=request.POST['email']
+        institute_facebook_link=request.POST['facebook_link']
+        institute_website_link=request.POST['website_link']
+       
+       
+        institute_data.name=institute_name
+        institute_data.profile_pic=institute_profile_pic
+        institute_data.code=institute_code
+        institute_data.establish_date=institute_establish_date
+        institute_data.institute_logo=institute_logo
+        institute_data.principal=institute_principal
+        institute_data.session_start_date=institute_session_start_date
+        institute_data.about=institute_about
+        institute_data.contact_number1=institute_contact_number1
+        institute_data.contact_number2=institute_contact_number2
+        institute_data.contact_number3=institute_contact_number3
+        institute_data.address1=institute_address1
+        institute_data.address2=institute_address2
+        institute_data.district=institute_district
+        institute_data.state=institute_state
+        institute_data.country=institute_country
+        institute_data.pin_code=institute_pin_code
+        institute_data.email=institute_email
+        institute_data.facebook_link=institute_facebook_link
+        institute_data.website_link=institute_website_link
+     
+        
+        institute_data.save()
+       
+        # serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
