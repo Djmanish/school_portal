@@ -148,6 +148,8 @@ def examresult(request,pk):
             student_data = User.objects.get(pk=sdata)
             exam_subject=Subjects.objects.get(pk=request.POST.get('selected_subject'))
             examtype=request.POST.get('exam_type_id')
+            print(student_data)
+            print(score)
             if examtype==None:
                     etype=ExamType.objects.get(institute= request.user.profile.institute, exam_type=examtype)
                     exam_type=etype.id
@@ -166,12 +168,13 @@ def examresult(request,pk):
                               return redirect(f'/examresult/examresult/{inst_id}')
              
             try:
-              
+              print("Hello")
               st_data=ExamResult.objects.get(institute= request.user.profile.institute,result_subject=exam_subject, exam_type=examtype,
               exam_sr_no=examsrno, result_student_data=student_data)
               st_data.result_score=score
               st_data.save()
             except:
+              print("Hello")
               marks_data=ExamResult()
               marks_data.institute=request.user.profile.institute
               marks_data.exam_sr_no= examsrno
@@ -319,7 +322,7 @@ def report_card(request,pk):
               examtype_total_limit=int(e_total_limit)
 
               all_exam=ExamResult.objects.filter(exam_type=exam_type,result_student_data=request.user)
-              print(type(all_exam))
+              print(all_exam)
               print("all_exam")
               if not all_exam.exists():
                 messages.error(request, 'No result found !')  
