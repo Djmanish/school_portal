@@ -198,6 +198,7 @@ class UserProfileViews(APIView):
         return Response(serializer.data)
     def post(self,request):
         serializer = self.serializer_class(data=request.data)
+        user_name=request.POST['user']
         user_first_name=request.POST['first_name']
         user_middle_name=request.POST['middle_name']
         user_last_name=request.POST['last_name']
@@ -222,9 +223,12 @@ class UserProfileViews(APIView):
         user_class_current_year=request.POST['class_current_year']
         user_class_next_year=request.POST['class_next_year']
         user_institute=request.POST['institute']
+        institute_user=Institute.objects.get(pk=user_institute)
         user_designation=request.POST['designation']
         user_Class=request.POST['Class']
-        user_state=request.POST['state']
+        print(user_Class)
+        Class_user= Classes.objects.get(pk=user_Class)
+        updated_state= State.objects.get(pk=request.POST['state'])
        
         user_id=User.objects.get(id=user_name)
         user_data = UserProfile.objects.get(user=user_name)
@@ -251,13 +255,13 @@ class UserProfileViews(APIView):
         user_data.class_promotion_status=user_class_promotion_status
         user_data.class_current_year=user_class_current_year
         user_data.class_next_year=user_class_next_year
-        user_data.institute=user_institute
-        user_data.Class=user_Class
-        user_data.state=user_state
+        user_data.institute=institute_user
+        user_data.Class=Class_user
+        user_data.state=updated_state
         
         user_data.save()
        
-        serializer.is_valid(raise_exception=True)
+        # serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
  

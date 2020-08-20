@@ -146,4 +146,3 @@ class UserProfileUpdate(serializers.ModelSerializer):
             fields=['first_name','middle_name','last_name','father_name','mother_name','gender','date_of_birth','marital_status','category',
             'qualification','aadhar_card_number','about','profile_pic','mobile_number','address_line_1','address_line_2','city','state','pin_code','facebook_link']   
 
-        
