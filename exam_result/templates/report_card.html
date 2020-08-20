@@ -592,14 +592,16 @@
                                        
                                        
                                         {% if result_data %}
-                                      <td>
+                                        {% if user.profile.designation.level_name == "parent" %}
+                                      <div style=" margin-top: -38px; margin-left: 350px;">
+                                        {% endif %}
                                             
                                                 <button type="submit"  name="report_cart_button" class="report_card_button" value="Print">
                                                     <i class="md-icon material-icons" id="invoice_print"></i>
                                             </button>
-                                           
-                                        </td>
-                                                   
+                                            {% if user.profile.designation.level_name == "parent" %}  
+                                        </div>
+                                        {% endif %}       
                                               
                                         
                                        
