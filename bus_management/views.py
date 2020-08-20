@@ -24,6 +24,17 @@ def bus(request):
         active_drivers = Driver.objects.filter(status="active",institute=request.user.profile.institute)
         active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
         routes = RouteInfo.objects.filter(institute=request.user.profile.institute, status="active")
+        # r_maplist = []
+        # for k in routes:
+        #     r_maplist.append= k.route_name
+        #     r_maplist.append = RouteMap.objects.filter(route = k).count()
+        #     st= RouteMap.objects.get(route=k, index=1)
+        #     r_maplist.append = st.time
+        #     r_map = RouteMap.objects.filter(route = k).count()
+        #     lt= RouteMap.objects.filter(route=k, index=r_map)
+        #     r_maplist.append = lt.time
+        # for l in r_maplist:
+        #     print(l.name)    
         new = RouteInfo.objects.filter(institute=request.user.profile.institute)
         for i in new:
             i.point_count= RouteMap.objects.filter(route=i).count()
@@ -433,7 +444,7 @@ def update_map_route(request):
         r_routes = RouteInfo.objects.get(id=r_id)
         point = int(request.POST['update_map_point'])
         
-        points = Point.objects.filter(point_institute=request.user.profile.institute)
+        points = Point.objects.filter(point_institute=request.user.profile.institute, status="active")
         context_data = {
         'range':range(point),
         'points':points,
@@ -493,17 +504,16 @@ def update_route(request):
                     pass
             else:    
                 sch_r= RouteMap.objects.filter(route__id=route).last()
-                inr= int(sch_r.index)
-                
+                inr= int(sch_r.index)                
                 new= RouteMap.objects.create(route=sch_r.route, point=s_point, index=inr+1, time=select_time[i], routemap_institute= request.user.profile.institute)
                 try:
                     s_users = BusUsers.objects.filter(point=s_point,institute= request.user.profile.institute)
                     vehicle_signals.point_map.send(sender=None,route=sch_r.route,point=s_point)
                 except BusUsers.DoesNotExist:
                     pass
-        messages.success(request, "Route map created successfully !")     
-    return HttpResponseRedirect(f'/bus/')
-    # return HttpResponse('hello')
+        messages.success(request, "Route map updated successfully !")     
+    return HttpResponseRedirect(f'/bus/view_routepoints/{route}')
+    
        
 
 def checkIfDuplicates_1(listOfElems):
