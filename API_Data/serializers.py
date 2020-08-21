@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from main_app.models import UserProfile
+from main_app.models import *
 from main_app.models import User
 from django.contrib.auth.hashers import make_password
 from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
@@ -146,4 +146,13 @@ class UserProfileUpdate(serializers.ModelSerializer):
             fields=['first_name','middle_name','last_name','father_name','mother_name','gender','date_of_birth','marital_status','category',
             'qualification','aadhar_card_number','about','profile_pic','mobile_number','address_line_1','address_line_2','city','state','pin_code','facebook_link']   
 
-        
+
+class StateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = State
+        fields='__all__'
+
+class InstituteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Institute
+        fields='__all__'

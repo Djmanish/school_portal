@@ -537,7 +537,9 @@
                                             <label class ="required" id="required_margin">Select Student</label>
                                             <select class="form-control" id="selected_student"  name="selected_student" style="padding: 2px;"
                                                 required>
+                                                {% if select_exam_type %}
                                                 <option selected disabled value="">--Select Student--</option>
+                                                
                                                 {% for student in parent_student_list %}
                                                 <option value={{student.id}}>{{student.first_name}} {{student.last_name}}</option>
                                                 {% endfor %}
@@ -592,14 +594,16 @@
                                        
                                        
                                         {% if result_data %}
-                                      <td>
+                                        {% if user.profile.designation.level_name == "parent" %}
+                                      <div style=" margin-top: -38px; margin-left: 350px;">
+                                        {% endif %}
                                             
                                                 <button type="submit"  name="report_cart_button" class="report_card_button" value="Print">
                                                     <i class="md-icon material-icons" id="invoice_print"></i>
                                             </button>
-                                           
-                                        </td>
-                                                   
+                                            {% if user.profile.designation.level_name == "parent" %}  
+                                        </div>
+                                        {% endif %}       
                                               
                                         
                                        
