@@ -51,6 +51,7 @@ def exam_result(request,pk):
               context={
                             'edit_start_date':e_start,
                             'edit_end_date':e_end,
+                            'edit_date':edit_date,
 
 
                 }
