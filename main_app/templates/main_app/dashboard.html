@@ -98,7 +98,7 @@
             }
         }
         .fc-left{
-            font-size:13px;
+            font-size:10px;
         }
         .fc-unthemed .fc-button{
             min-width: 0px !important;
@@ -1627,7 +1627,7 @@
                 {% if user.count > 1 %}
                 <form  method="POST" action="#" class="form-inline" id="parent_calendar_form" style="width: 75%; margin: auto; margin-bottom: 10px;">
                     {% csrf_token %}
-                      <label style="margin: 4px;">Select Child:</label>
+                      <label style="margin:4px; text-align: justify;">Select Child:</label>
                         <select id="selected_institute" name="selected_child" class="form-control form-control-sm"  required>
                        <option selected disabled>
                        {% if user.post_child %}
