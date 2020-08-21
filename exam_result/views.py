@@ -42,24 +42,26 @@ def exam_result(request,pk):
       # get the Edt_Exam_Date MODEL data
       result_institute=Institute.objects.get(pk=pk)
       edit_date=Edit_Exam_Date.objects.filter(institute=result_institute).last()
-      e_start=edit_date.edit_start_date
-     
-      e_end=edit_date.edit_end_date
+      if edit_date:
+          e_start=edit_date.edit_start_date
+          e_end=edit_date.edit_end_date
     
-              
-      if e_start>timezone.now().date() and e_end>timezone.now().date() or e_start == None and e_end == None:
-          context={
-                        'edit_start_date':e_start,
-                        'edit_end_date':e_end,
+                  
+          if e_start>timezone.now().date() and e_end>timezone.now().date() or e_start == None and e_end == None:
+              context={
+                            'edit_start_date':e_start,
+                            'edit_end_date':e_end,
 
 
-            }
-          messages.error(request, f'Edit marks date between {e_start} - {e_end}')
-          return render(request, 'teacher_view.html', context) 
-      elif e_end<timezone.now().date():
-          messages.error(request, f'Edit marks date was between {e_start} - {e_end}')
-          return render(request, 'teacher_view.html') 
+                }
+              messages.error(request, f'Edit marks date between {e_start} - {e_end}')
+              return render(request, 'teacher_view.html', context) 
+          elif e_end<timezone.now().date():
+              messages.error(request, f'Edit marks date was between {e_start} - {e_end}')
+              return render(request, 'teacher_view.html') 
 
+          else:
+              pass
       else:
           pass
              
