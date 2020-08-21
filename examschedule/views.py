@@ -15,9 +15,8 @@ import _strptime
 # Create your views here.
 
 def create_test_type(request,pk):
-        user_permissions = request.user.user_institute_role.level.permissions.all()
-        add_class_permission = App_functions.objects.get(function_name='Can Create Exam')
-        if add_class_permission in user_permissions:
+        
+        if request.user.profile.designation.level_name=='admin' or request.user.profile.designation.level_name=='principal':
                 pass
         else:
                  raise PermissionDenied 
@@ -410,6 +409,7 @@ def examschedule_view(request,pk):
                                         'exam_details': exam_details,
                                         'institute_exam_schedule':institute_exam_schedule,
                                         'institute_exam_type':institute_exam_type,
+                                        'selected_class':student_class,
                                         }
                                 
                                 return render(request,'update_examschedule.html', context)

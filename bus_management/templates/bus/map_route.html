@@ -579,8 +579,8 @@
                                                             <tbody>
                                                                
                                                             <tr>
-                                                                <td>{{forloop.counter}}</td>
-                                                                <td><select id="point_code" class="form-control-md form-control form-control-sm" name="select_point" required>
+                                                                <td style="width:6%">{{forloop.counter}}</td>
+                                                                <td style="width:47%"><select id="point_code" class="form-control-md form-control" name="select_point" required>
                                                             
                                                                     <option selected disabled value="">--- Select ---</option>
                                                                     {% for i in points %}
@@ -590,7 +590,7 @@
                                                                     {% endfor %}
                                                                  
                                                                 </select></td>
-                                                                <td><input style="width:308px"type="time" class="form-control-md form-control form-control-sm" name="time" required></td>                                                       
+                                                                <td style="width:47%"><input type="time" class="form-control-md form-control" name="time" required></td>                                                       
                                                                
                                                                 
                                                             </tr>

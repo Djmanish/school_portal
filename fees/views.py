@@ -147,7 +147,7 @@ class Fees_tag_update_view(LoginRequiredMixin,UserPassesTestMixin, SuccessMessag
     form_class = Fees_tag_update_form
     template_name = 'fees/edit_fees_tag.html'
     success_url = "/fees"
-    success_message = "Fees Tag information updated successfully !!!"
+    success_message = "Fees Tag information updated successfully !"
 
     def form_valid(self, form):        
         new_amount= form.instance.amount + ((form.instance.amount*form.instance.tax_percentage)/100) # updating amount with tax in case of tag update    
@@ -229,7 +229,7 @@ def institute_fees_schedule(request):
         processing_date = request.POST.get('processing_date')
         current_date = str(datetime.date.today())
         if notification_date< current_date or processing_date < current_date or due_date<current_date:
-            messages.info(request, "Notification, Due or Process dates can not be past dates.")
+            messages.info(request, "Notification, Due or Process dates can not be past dates !")
             return redirect('fees_home')
         try:
             check_existance = Fees_Schedule.objects.get(institute = request.user.profile.institute)
