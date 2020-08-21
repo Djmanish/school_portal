@@ -211,7 +211,7 @@ class UserProfileViews(APIView):
         user_qualification=request.POST['qualification']
         user_aadhar_card_number=request.POST['aadhar_card_number']
         user_about=request.POST['about']
-        user_profile_pic=request.POST['profile_pic']
+        user_profile_pic=request.FILES['profile_pic']
         user_mobile_number=request.POST['mobile_number']
         user_address_line_1=request.POST['address_line_1']
         user_address_line_2=request.POST['address_line_2']
@@ -226,7 +226,7 @@ class UserProfileViews(APIView):
         institute_user=Institute.objects.get(pk=user_institute)
         user_designation=request.POST['designation']
         user_Class=request.POST['Class']
-        print(user_Class)
+        
         Class_user= Classes.objects.get(pk=user_Class)
         updated_state= State.objects.get(pk=request.POST['state'])
        
@@ -283,7 +283,7 @@ class InstituteProfileViews(APIView):
     def post(self,request):
         serializer = self.serializer_class(data=request.data)
         institute_name=request.POST['name']
-        institute_profile_pic=request.POST['profile_pic']
+        institute_profile_pic=request.FILES['profile_pic']
         institute_code=request.POST['code']
         institute_establish_date=request.POST['establish_date']
         institute_logo=request.POST['institute_logo']
