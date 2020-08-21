@@ -409,6 +409,7 @@ def examschedule_view(request,pk):
                                         'exam_details': exam_details,
                                         'institute_exam_schedule':institute_exam_schedule,
                                         'institute_exam_type':institute_exam_type,
+                                        'selected_class':student_class,
                                         }
                                 
                                 return render(request,'update_examschedule.html', context)
