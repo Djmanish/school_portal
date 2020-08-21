@@ -408,24 +408,27 @@ def dashboard(request):
                     else:
                         b = a - time
                         m.append(b)
+                for d in m:
+                    print(d)
                 f = int(m.index(min(m)))
+                
                 request.user.z = driver_data[f]
                     
                 request.user.total = RouteMap.objects.filter(route=request.user.z).count()
                 request.user.total_trip = Trip.objects.filter(route=request.user.z, date = date).count()
                 request.user.today =datetime.date.today() 
-                request.user.trip1 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last1).count()
-                request.user.trip2 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last2).count()
+                request.user.trip1 = Trip.objects.filter(route=request.user.z,driver__name= request.user.profile, date=request.user.last1).count()
+                request.user.trip2 = Trip.objects.filter(route=request.user.z,driver__name= request.user.profile, date=request.user.last2).count()
                 
-                request.user.trip3 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last3).count()
+                request.user.trip3 = Trip.objects.filter(route=request.user.z,driver__name= request.user.profile, date=request.user.last3).count()
                 
-                request.user.trip4 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last4).count()
+                request.user.trip4 = Trip.objects.filter(route=request.user.z,driver__name= request.user.profile, date=request.user.last4).count()
                 
-                request.user.trip5 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last5).count()
+                request.user.trip5 = Trip.objects.filter(route=request.user.z,driver__name= request.user.profile, date=request.user.last5).count()
                 
-                request.user.trip6 = Trip.objects.filter(driver__name= request.user.profile, date=request.user.last6).count()
+                request.user.trip6 = Trip.objects.filter(route=request.user.z,driver__name= request.user.profile, date=request.user.last6).count()
                 
-                request.user.trip = Trip.objects.filter(driver__name= request.user.profile, date=date).count()
+                request.user.trip = Trip.objects.filter(route=request.user.z,driver__name= request.user.profile, date=date).count()
             except:
                 pass
         

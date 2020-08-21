@@ -664,10 +664,30 @@ def update_routepoints(request):
         p = RouteMap.objects.get(id= route_point)
         p_index= request.POST['edit_routeindex']
         p_time = request.POST['edit_routetime']
-        p.time = p_time
-        p.save()            
-        messages.success(request, 'Point details updated successfully !') 
-        return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}')
+        r = RouteMap.objects.get(route=p.route,index=p.index-1)
+        d = RouteInfo.objects.filter(vehicle_driver=p.route.vehicle_driver,institute= request.user.profile.institute).exclude(pk=p.route.id)
+        print(d)
+        t = datetime.strptime(p_time, '%H:%M').time()
+        print(t)
+        for ins in d:
+            try:
+                rm = RouteMap.objects.filter(route=ins,routemap_institute= request.user.profile.institute)
+                p1 = rm[0]
+                p2 = rm[rm.count()-1]
+                print(p1.time)
+                if t >= p1.time and t <= p2.time:
+                    messages.error(request, f'{p.route}, driver is already assigned to {p2.route} for entered time !') 
+                    return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}')
+            except RouteMap.DoesNotExist:
+                pass
+        if t <= r.time:
+            messages.error(request, f"Entered time should be greater than index no {r.index} point's time !") 
+            return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}') 
+        else:        
+            p.time = p_time
+            p.save()            
+            messages.success(request, 'Point details updated successfully !') 
+            return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}')
       
 def view_driver(request,pk):
     user_permissions = request.user.user_institute_role.level.permissions.all()
