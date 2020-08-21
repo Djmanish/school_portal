@@ -53,10 +53,10 @@ def exam_result(request,pk):
 
 
             }
-          messages.error(request, f'Edit marks date between {e_start} - {e_end}')
+          messages.error(request, f'Edit marks date between {e_start} - {e_end} !')
           return render(request, 'teacher_view.html', context) 
       elif e_end<timezone.now().date():
-          messages.error(request, f'Edit marks date was between {e_start} - {e_end}')
+          messages.error(request, f'Edit marks date was between {e_start} - {e_end} !')
           return render(request, 'teacher_view.html') 
 
       else:
@@ -164,7 +164,7 @@ def examresult(request,pk):
             if int(score)<check_limit or int(score)==check_limit:
                               pass
             else:
-                              messages.info(request, 'Entered marks is greater than the exam type maximum marks')
+                              messages.info(request, 'Entered marks is greater than the exam type maximum marks !')
                               return redirect(f'/examresult/examresult/{inst_id}')
              
             try:
