@@ -61,8 +61,7 @@ def exam_result(request,pk):
           messages.error(request, f'Edit marks date was between {e_start} - {e_end} !')
           return render(request, 'teacher_view.html') 
 
-          else:
-              pass
+          
       else:
           pass
              
