@@ -42,25 +42,30 @@ def exam_result(request,pk):
       # get the Edt_Exam_Date MODEL data
       result_institute=Institute.objects.get(pk=pk)
       edit_date=Edit_Exam_Date.objects.filter(institute=result_institute).last()
-      e_start=edit_date.edit_start_date
-      e_end=edit_date.edit_end_date
+      if edit_date:
+          e_start=edit_date.edit_start_date
+          e_end=edit_date.edit_end_date
     
-              
-      if e_start>timezone.now().date() and e_end>timezone.now().date() or e_start == None and e_end == None:
-          context={
-                        'edit_start_date':e_start,
-                        'edit_end_date':e_end,
+                  
+          if e_start>timezone.now().date() and e_end>timezone.now().date() or e_start == None and e_end == None:
+                context={
+                              'edit_start_date':e_start,
+                              'edit_end_date':e_end,
+                              'edit_date':edit_date,
 
 
-            }
-          messages.error(request, f'Edit marks date between {e_start} - {e_end}')
-          return render(request, 'teacher_view.html', context) 
-      elif e_end<timezone.now().date():
-          messages.error(request, f'Edit marks date was between {e_start} - {e_end}')
-          return render(request, 'teacher_view.html') 
+              }
+                messages.error(request, f'Edit marks date between {e_start} - {e_end} !')
+                return render(request, 'teacher_view.html', context) 
+          elif e_end<timezone.now().date():
+              messages.error(request, f'Edit marks date was between {e_start} - {e_end} !')
+              return render(request, 'teacher_view.html') 
 
+          else:
+              pass
       else:
-          pass
+          messages.error(request, "Edit Marks date is not defined by the institute yet.")
+          return render(request, 'teacher_view.html') 
              
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
@@ -164,7 +169,7 @@ def examresult(request,pk):
             if int(score)<check_limit or int(score)==check_limit:
                               pass
             else:
-                              messages.info(request, 'Entered marks is greater than the exam type maximum marks')
+                              messages.info(request, 'Entered marks is greater than the exam type maximum marks !')
                               return redirect(f'/examresult/examresult/{inst_id}')
              
             try:
@@ -322,8 +327,7 @@ def report_card(request,pk):
               examtype_total_limit=int(e_total_limit)
 
               all_exam=ExamResult.objects.filter(exam_type=exam_type,result_student_data=request.user)
-              print(all_exam)
-              print("all_exam")
+              
               if not all_exam.exists():
                 messages.error(request, 'No result found !')  
                 return HttpResponseRedirect(f'/examresult/report_card/{exam_id}')
@@ -455,6 +459,11 @@ def report_card(request,pk):
               examtype_total_limit=int(e_total_limit)
               
               all_exam=ExamResult.objects.filter(exam_type=exam_type,result_student_data=selected_student)
+              if not all_exam.exists():
+                messages.error(request, 'No result found !')  
+                return HttpResponseRedirect(f'/examresult/report_card/{exam_id}')
+              else:
+                pass
               exam_no=[]
               for data in all_exam:
                 if data.exam_sr_no in exam_no:
@@ -999,6 +1008,11 @@ def class_promotion(request,pk):
             selected_class = Classes.objects.get(pk=selected_class_promotes)
             #  to get the list of all students of selected class
             all_students = UserProfile.objects.filter(institute= request.user.profile.institute, Class= selected_class, designation__level_name='student', class_current_year=current_year)
+            if not all_students.exists():
+                messages.error(request, 'No students found !')  
+                return HttpResponseRedirect(f'/examresult/class_promotion/{inst}')
+            else:
+                pass
             for student_class in all_students:
                   stu_class=student_class.Class
             promotion_status = UserProfile._meta.get_field('class_promotion_status').choices
@@ -1378,6 +1392,7 @@ def overall_report_card(request,pk,student_pk):
   institute_student=selected_student_data.institute
   student_class=selected_student_data.Class
   grand_result=""
+  range_value=""
 
   if pk==inst:
     if request.user.profile.designation.level_name=='parent':

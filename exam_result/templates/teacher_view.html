@@ -523,13 +523,15 @@
                                         <div class="md-card">
                                             <div class="md-card-content">
                                                 <tr>
-
+                                                    {% if edit_start_date %}
+                                                    
                                                     <td>
                                                         <h5>Edit Exam Date Between:
                                                    
                                                        {{edit_start_date}} - {{edit_end_date}}
                                                     </h5>
                                                     </td>
+                                                    {% endif %}
                                                 </tr>
                                               
                                               
