@@ -48,22 +48,23 @@ def exam_result(request,pk):
     
                   
           if e_start>timezone.now().date() and e_end>timezone.now().date() or e_start == None and e_end == None:
-              context={
-                            'edit_start_date':e_start,
-                            'edit_end_date':e_end,
-                            'edit_date':edit_date,
+                context={
+                              'edit_start_date':e_start,
+                              'edit_end_date':e_end,
+                              'edit_date':edit_date,
 
 
-            }
-          messages.error(request, f'Edit marks date between {e_start} - {e_end} !')
-          return render(request, 'teacher_view.html', context) 
-      elif e_end<timezone.now().date():
-          messages.error(request, f'Edit marks date was between {e_start} - {e_end} !')
-          return render(request, 'teacher_view.html') 
+              }
+                messages.error(request, f'Edit marks date between {e_start} - {e_end} !')
+                return render(request, 'teacher_view.html', context) 
+          elif e_end<timezone.now().date():
+              messages.error(request, f'Edit marks date was between {e_start} - {e_end} !')
+              return render(request, 'teacher_view.html') 
 
           
       else:
-          pass
+          messages.error(request, "Edit Marks date is not defined by the institute yet.")
+          return render(request, 'teacher_view.html') 
              
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
