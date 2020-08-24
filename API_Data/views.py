@@ -196,73 +196,100 @@ class UserProfileViews(APIView):
         user1= UserProfile.objects.all()
         serializer = UserProfileSerializer(user1, many=True)
         return Response(serializer.data)
+   
+
+@permission_classes((AllowAny, ))
+class UserProfileUpdate(APIView):
+    serializer_class = UserProfileSerializer
+    
+        
     def post(self,request):
         serializer = self.serializer_class(data=request.data)
-        user_name=request.POST['user']
-        user_first_name=request.POST['first_name']
-        user_middle_name=request.POST['middle_name']
-        user_last_name=request.POST['last_name']
-        user_father_name=request.POST['father_name']
-        user_mother_name=request.POST['mother_name']
-        user_gender=request.POST['gender']
-        user_date_of_birth=request.POST['date_of_birth']
-        user_marital_status=request.POST['marital_status']
-        user_category=request.POST['category']
-        user_qualification=request.POST['qualification']
-        user_aadhar_card_number=request.POST['aadhar_card_number']
-        user_about=request.POST['about']
-        user_profile_pic=request.FILES['profile_pic']
-        user_mobile_number=request.POST['mobile_number']
-        user_address_line_1=request.POST['address_line_1']
-        user_address_line_2=request.POST['address_line_2']
-        user_city=request.POST['city']
-        user_pin_code=request.POST['pin_code']
-        user_facebook_link=request.POST['facebook_link']
-        user_status=request.POST['status']
-        user_class_promotion_status=request.POST['class_promotion_status']
-        user_class_current_year=request.POST['class_current_year']
-        user_class_next_year=request.POST['class_next_year']
-        user_institute=request.POST['institute']
-        institute_user=Institute.objects.get(pk=user_institute)
-        user_designation=request.POST['designation']
-        user_Class=request.POST['Class']
-        
-        Class_user= Classes.objects.get(pk=user_Class)
-        updated_state= State.objects.get(pk=request.POST['state'])
-       
-        user_id=User.objects.get(id=user_name)
-        user_data = UserProfile.objects.get(user=user_name)
-        user_data.first_name=user_first_name
-        user_data.middle_name=user_middle_name
-        user_data.last_name=user_last_name
-        user_data.father_name=user_father_name
-        user_data.mother_name=user_mother_name
-        user_data.gender=user_gender
-        user_data.date_of_birth=user_date_of_birth
-        user_data.marital_status=user_marital_status
-        user_data.category=user_category
-        user_data.qualification=user_qualification
-        user_data.aadhar_card_number=user_aadhar_card_number
-        user_data.about=user_about
-        user_data.profile_pic=user_profile_pic
-        user_data.mobile_number=user_mobile_number
-        user_data.address_line_1=user_address_line_1
-        user_data.address_line_2=user_address_line_2
-        user_data.city=user_city
-        user_data.pin_code=user_pin_code
-        user_data.facebook_link=user_facebook_link
-        user_data.status=user_status
-        user_data.class_promotion_status=user_class_promotion_status
-        user_data.class_current_year=user_class_current_year
-        user_data.class_next_year=user_class_next_year
-        user_data.institute=institute_user
-        user_data.Class=Class_user
-        user_data.state=updated_state
-        
-        user_data.save()
-       
-        # serializer.is_valid(raise_exception=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if request.method == 'POST':  
+            user_name=request.POST['user']
+            print(user_name)
+            user_first_name=request.POST['first_name']
+            user_middle_name=request.POST['middle_name']
+            user_last_name=request.POST['last_name']
+            user_father_name=request.POST['father_name']
+            user_mother_name=request.POST['mother_name']
+            user_gender=request.POST['gender']
+            user_date_of_birth=request.POST['date_of_birth']
+            user_marital_status=request.POST['marital_status']
+            user_category=request.POST['category']
+            user_qualification=request.POST['qualification']
+            user_aadhar_card_number=request.POST['aadhar_card_number']
+            user_about=request.POST['about']
+            user_profile_pic=""
+            if 'profile_pic' in request.POST:
+                user_profile_pic=request.FILES['profile_pic']
+            user_mobile_number=request.POST['mobile_number']
+            user_address_line_1=request.POST['address_line_1']
+            user_address_line_2=request.POST['address_line_2']
+            user_city=request.POST['city']
+            user_pin_code=request.POST['pin_code']
+            user_facebook_link=request.POST['facebook_link']
+            user_status=request.POST['status']
+            user_class_promotion_status=""
+            if 'class_promotion_status' in request.POST:
+                user_class_promotion_status=request.POST['class_promotion_status']
+            user_class_current_year=request.POST['class_current_year']
+            user_class_next_year=request.POST['class_next_year']
+            user_institute=""
+            if 'institute' in request.POST:
+                    user_institute=request.POST['institute']
+            institute_user=Institute.objects.get(pk=user_institute)
+            user_designation=request.POST['designation']
+            user_Class=""
+            try:
+                    if 'Class' in request.POST:
+                        user_Class=request.POST['Class']
+                    
+                    Class_user= Classes.objects.get(pk=user_Class)
+            except:
+                Class_user=None
+            updated_state= State.objects.get(pk=request.POST['state'])
+            
+            user_id=User.objects.get(id=user_name)
+            user_info=UserProfile.objects.all()
+            user_d=""
+            for user in user_info:
+                user_d=user.user
+                if user_id==user_d:
+                    
+                    user.first_name=user_first_name
+                    user.middle_name=user_middle_name
+                    user.last_name=user_last_name
+                    user.father_name=user_father_name
+                    user.mother_name=user_mother_name
+                    user.gender=user_gender
+                    user.date_of_birth=user_date_of_birth
+                    user.marital_status=user_marital_status
+                    user.category=user_category
+                    user.qualification=user_qualification
+                    user.aadhar_card_number=user_aadhar_card_number
+                    user.about=user_about
+                    user.profile_pic=user_profile_pic
+                    user.mobile_number=user_mobile_number
+                    user.address_line_1=user_address_line_1
+                    user.address_line_2=user_address_line_2
+                    user.city=user_city
+                    user.pin_code=user_pin_code
+                    user.facebook_link=user_facebook_link
+                    user.status=user_status
+                    user.class_promotion_status=user_class_promotion_status
+                    user.class_current_year=user_class_current_year
+                    user.class_next_year=user_class_next_year
+                    user.institute=institute_user
+                    user.Class=Class_user
+                    user.user=user_id
+                    user.state=updated_state
+                    
+                    user.save()
+                
+                    serializer.is_valid(raise_exception=True)
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @permission_classes((AllowAny, ))
 class StateViews(APIView):
