@@ -24,17 +24,24 @@ def bus(request):
         active_drivers = Driver.objects.filter(status="active",institute=request.user.profile.institute)
         active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
         routes = RouteInfo.objects.filter(institute=request.user.profile.institute, status="active")
-        # r_maplist = []
-        # for k in routes:
-        #     r_maplist.append= k.route_name
-        #     r_maplist.append = RouteMap.objects.filter(route = k).count()
-        #     st= RouteMap.objects.get(route=k, index=1)
-        #     r_maplist.append = st.time
-        #     r_map = RouteMap.objects.filter(route = k).count()
-        #     lt= RouteMap.objects.filter(route=k, index=r_map)
-        #     r_maplist.append = lt.time
-        # for l in r_maplist:
-        #     print(l.name)    
+        r_maplist = []
+        for k in routes:
+            r_maplist.append(k.route_name)
+            r_maplist.append(RouteMap.objects.filter(route = k).count())
+            st= RouteMap.objects.get(route=k, index=1)
+            r_maplist.append(st.time)
+            r_map = RouteMap.objects.filter(route = k).count()
+            lt= RouteMap.objects.get(route=k, index=r_map)
+            r_maplist.append (lt.time)
+        for l in r_maplist:
+            print(l)    
+        request.user.n=[]       
+        for m in routes:
+            s= RouteMap.objects.filter(route=m, routemap_institute= request.user.profile.institute)
+            if s:
+                pass
+            else:
+                request.user.n.append(m)
         new = RouteInfo.objects.filter(institute=request.user.profile.institute)
         for i in new:
             i.point_count= RouteMap.objects.filter(route=i).count()
