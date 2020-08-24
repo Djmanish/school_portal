@@ -390,7 +390,7 @@ def dashboard(request):
             
             
             try:
-                driver_data = RouteInfo.objects.filter(vehicle_driver__name=request.user.profile)
+                driver_data = RouteInfo.objects.filter(vehicle_driver__name=request.user.profile, status="active")
                 p = []
                 for di in driver_data:
                     try:

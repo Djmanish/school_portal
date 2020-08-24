@@ -24,17 +24,24 @@ def bus(request):
         active_drivers = Driver.objects.filter(status="active",institute=request.user.profile.institute)
         active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
         routes = RouteInfo.objects.filter(institute=request.user.profile.institute, status="active")
-        # r_maplist = []
-        # for k in routes:
-        #     r_maplist.append= k.route_name
-        #     r_maplist.append = RouteMap.objects.filter(route = k).count()
-        #     st= RouteMap.objects.get(route=k, index=1)
-        #     r_maplist.append = st.time
-        #     r_map = RouteMap.objects.filter(route = k).count()
-        #     lt= RouteMap.objects.filter(route=k, index=r_map)
-        #     r_maplist.append = lt.time
-        # for l in r_maplist:
-        #     print(l.name)    
+        r_maplist = []
+        for k in routes:
+            r_maplist.append(k.route_name)
+            r_maplist.append(RouteMap.objects.filter(route = k).count())
+            st= RouteMap.objects.get(route=k, index=1)
+            r_maplist.append(st.time)
+            r_map = RouteMap.objects.filter(route = k).count()
+            lt= RouteMap.objects.get(route=k, index=r_map)
+            r_maplist.append (lt.time)
+        for l in r_maplist:
+            print(l)    
+        request.user.n=[]       
+        for m in routes:
+            s= RouteMap.objects.filter(route=m, routemap_institute= request.user.profile.institute)
+            if s:
+                pass
+            else:
+                request.user.n.append(m)
         new = RouteInfo.objects.filter(institute=request.user.profile.institute)
         for i in new:
             i.point_count= RouteMap.objects.filter(route=i).count()
@@ -664,11 +671,8 @@ def update_routepoints(request):
         p = RouteMap.objects.get(id= route_point)
         p_index= request.POST['edit_routeindex']
         p_time = request.POST['edit_routetime']
-        r = RouteMap.objects.get(route=p.route,index=p.index-1)
         d = RouteInfo.objects.filter(vehicle_driver=p.route.vehicle_driver,institute= request.user.profile.institute).exclude(pk=p.route.id)
-        print(d)
         t = datetime.strptime(p_time, '%H:%M').time()
-        print(t)
         for ins in d:
             try:
                 rm = RouteMap.objects.filter(route=ins,routemap_institute= request.user.profile.institute)
@@ -680,14 +684,17 @@ def update_routepoints(request):
                     return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}')
             except RouteMap.DoesNotExist:
                 pass
-        if t <= r.time:
-            messages.error(request, f"Entered time should be greater than index no {r.index} point's time !") 
-            return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}') 
-        else:        
-            p.time = p_time
-            p.save()            
-            messages.success(request, 'Point details updated successfully !') 
-            return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}')
+        try:
+            r = RouteMap.objects.get(route=p.route,index=p.index-1)
+            if t <= r.time:
+                messages.error(request, f"Entered time should be greater than index no {r.index} point's time !") 
+                return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}') 
+        except RouteMap.DoesNotExist:   
+            pass     
+        p.time = p_time
+        p.save()            
+        messages.success(request, 'Point details updated successfully !') 
+        return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}')
       
 def view_driver(request,pk):
     user_permissions = request.user.user_institute_role.level.permissions.all()
