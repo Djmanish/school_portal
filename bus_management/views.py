@@ -682,7 +682,7 @@ def update_routepoints(request):
                 if t >= p1.time and t <= p2.time:
                     messages.error(request, f'{p.route}, driver is already assigned to {p2.route} for entered time !') 
                     return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}')
-            except RouteMap.DoesNotExist:
+            except:
                 pass
         try:
             r = RouteMap.objects.get(route=p.route,index=p.index-1)
