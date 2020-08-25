@@ -31,7 +31,10 @@ def library(request):
     for b in books:
           sh_books= Book.objects.filter(book_code=b.code, book_institute=b.book_institute,status="active").count()
           b.count=sh_books
-    lib_set= LibrarySettings.objects.get(institute=request.user.profile.institute)
+    try:
+          lib_set= LibrarySettings.objects.get(institute=request.user.profile.institute)
+    except LibrarySettings.DoesNotExist:
+          lib_set = LibrarySettings.objects.create(institute=request.user.profile.institute, max_Book_Allows=3, day_Span=5, send_Reminder_Before=2, late_fine_per_day=5)
     cat = BookCategory.objects.filter(institute_category=request.user.profile.institute)
     for i in cat:
           i.name= i
