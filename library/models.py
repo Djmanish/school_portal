@@ -112,9 +112,3 @@ class LibrarySettings(models.Model):
     def __str__(self):
         return str(self.institute)
 
-# class IssueDays(models.Model):
-#     institute= models.ForeignKey(to=Institute, related_name="institute_issue_days", on_delete=models.CASCADE, null=True, blank=True)
-#     issue_days= models.IntegerField(null=True, blank=True)
-
-#     def __str__(self):
-#         return self.issue_days
