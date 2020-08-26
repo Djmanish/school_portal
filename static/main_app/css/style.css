@@ -514,3 +514,6 @@ color:#ff0000;
   display: none;
 
 }
+.uk-modal{
+  z-index: 999999999999999999999999 !important;
+}

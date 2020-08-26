@@ -563,7 +563,7 @@
                             </ul>
                             <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
                                 <li>
-                                    <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                    <div class="uk-grid  uk-margin-large-bottom" data-uk-grid-margin>
                                         <div class="uk-width-large">
                                             
                                            
@@ -602,8 +602,9 @@
                                                       </div>             
                                                      
                                                      </form>                -->
-                                                            
-                                            <br>
+                                                        
+                                            
+                                            {% if children_fee_status %}
                                             <div class="uk-overflow-container">
                                                 <table class="uk-table uk-table-nowrap table_check">
                                                     <thead>
@@ -657,6 +658,12 @@
                                                             
                                                     </tbody>
                                                     </div>
+                                            {% else %}
+                                            <h3 class="heading_a">No Pending Due</h3>
+                                                
+                                            {% endif %}
+                                                
+                                      
                                                 </table>
                                                 <!-- <div class="uk-width-medium-1-6">
                                                     <a class="md-btn md-btn-primary md-btn-wave-light" href="fees_payment.html">Pay Fees</a>
@@ -667,10 +674,13 @@
                                              
                             
                                         <li>
-                                            <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                            <div class="uk-grid " data-uk-grid-margin>
                                                 <div class="uk-width-large">
-                                            <h4 class="heading_a uk-margin-bottom">Payment History </h4>
+                                            
                                             <div class="uk-overflow-container">
+
+                                                
+                                                {% if payment_history %}
                                                 <table class="uk-table uk-table-nowrap table_check">
                                                     <thead>
                                                     <tr>
@@ -710,6 +720,11 @@
                                                     </tbody>
                                                     </div>
                                                 </table>
+                                                {% else %}
+                                                <h3 class="heading_a">Nothing to show</h3>
+                                                {% endif %}
+                                                    
+                                               
                                                 
 
                                                 

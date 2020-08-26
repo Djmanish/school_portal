@@ -24,17 +24,7 @@ def bus(request):
         active_drivers = Driver.objects.filter(status="active",institute=request.user.profile.institute)
         active_buses = Bus.objects.filter(bus_institute=request.user.profile.institute, status="active")
         routes = RouteInfo.objects.filter(institute=request.user.profile.institute, status="active")
-        r_maplist = []
-        for k in routes:
-            r_maplist.append(k.route_name)
-            r_maplist.append(RouteMap.objects.filter(route = k).count())
-            st= RouteMap.objects.get(route=k, index=1)
-            r_maplist.append(st.time)
-            r_map = RouteMap.objects.filter(route = k).count()
-            lt= RouteMap.objects.get(route=k, index=r_map)
-            r_maplist.append (lt.time)
-        for l in r_maplist:
-            print(l)    
+       
         request.user.n=[]       
         for m in routes:
             s= RouteMap.objects.filter(route=m, routemap_institute= request.user.profile.institute)
@@ -682,7 +672,7 @@ def update_routepoints(request):
                 if t >= p1.time and t <= p2.time:
                     messages.error(request, f'{p.route}, driver is already assigned to {p2.route} for entered time !') 
                     return HttpResponseRedirect(f'/bus/view_routepoints/{p.route.pk}')
-            except RouteMap.DoesNotExist:
+            except:
                 pass
         try:
             r = RouteMap.objects.get(route=p.route,index=p.index-1)
