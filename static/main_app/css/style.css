@@ -511,3 +511,6 @@ color:#ff0000;
 .hidden_dropdown {
   display: none;
 }
+.uk-modal{
+  z-index: 999999999999999999999999 !important;
+}

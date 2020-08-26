@@ -445,7 +445,7 @@ def fees_pay_page(request):
         "TXN_AMOUNT" : str(amount),
 
         # on completion of transaction, we will send you the response on this URL
-        "CALLBACK_URL" : "http://trueblueappworks.com/fees/handle_requests/",
+        "CALLBACK_URL" : "http://localhost:8000/fees/handle_requests/",
     }
         
 
