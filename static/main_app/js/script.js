@@ -88,38 +88,39 @@ $(document).ready(function () {
 
  
 
-  var specialElementHandlers = {
-    "#editor":function(element, renderer){
-      return true;
-    }
-  };
+  // var specialElementHandlers = {
+  //   "#editor":function(element, renderer){
+  //     return true;
+  //   }
+  // };
 
-  $("#cmd").click(function(){
+  // $("#cmd").click(function(){
 
-    var doc = new jsPDF();
+  //   var doc = new jsPDF();
 
-    doc.fromHTML($("#target").html(),15,15,{
-      "width":170,
-      "elementHandlers":specialElementHandlers
-    });
-    doc.save("test.pdf")
-  })
+  //   doc.fromHTML($("#target").html(),15,15,{
+  //     "width":170,
+  //     "elementHandlers":specialElementHandlers
+  //   });
+  //   doc.save("test.pdf")
+  // })
 //result print
 var testDivElement = document.getElementById('result');
 
 function savePDF() {
+  
     var imgData;
     html2canvas($("#myresult"), {
-        useCORS: true,
-        rendered: function (canvas) {
-            imgData = canvas.toDataURL(
-               'image/png');
-            var doc = new jsPDF('p', 'pt', 'letter'); // var doc = new jsPDF('l', 'in', [10, 12]); change page size
-            doc.addImage(imgData, 'PNG', 10, 10);
-            doc.save('ReportCard.pdf');
-           
-        }
-    });
+      useCORS: true,
+      onrendered: function (canvas) {
+          imgData = canvas.toDataURL(
+             'image/png');
+          var doc = new jsPDF('a4'); // var doc = new jsPDF('l', 'in', [10, 12]); change page size
+          doc.addImage(imgData, 'PNG', 10, 10);
+          doc.save('ReportCard.pdf');
+         
+      }
+  });
 }
 
 

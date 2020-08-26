@@ -479,7 +479,9 @@ color:#ff0000;
   background-color:transparent;
   -webkit-appearance:none;
   border:1px solid transparent !important;
+  color: black;
 }
+
 #promotion_status{
   text-align:center;
   width:100px;
@@ -510,4 +512,5 @@ color:#ff0000;
 
 .hidden_dropdown {
   display: none;
+
 }
