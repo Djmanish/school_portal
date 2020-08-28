@@ -202,10 +202,15 @@ class UserProfileViews(APIView):
 class UserProfileUpdate(APIView):
     serializer_class = UserProfileSerializer
     
+    
         
-    def post(self,request):
-        serializer = self.serializer_class(data=request.data)
-        if request.method == 'POST':  
+    def put(self, request, pk):
+       
+        user = UserProfile.objects.get(id=pk)
+        serializer = UserProfileSerializer(instance=user, data=request.data, partial=True) 
+        user_info = UserProfile.objects.get(pk=pk)
+        print(user_info)
+        if serializer.is_valid(): 
             user_name=request.POST['user']
             print(user_name)
             user_first_name=request.POST['first_name']
@@ -282,7 +287,7 @@ class UserProfileUpdate(APIView):
                     user.class_next_year=user_class_next_year
                     user.institute=institute_user
                     user.Class=Class_user
-                    user.user=user_id
+                    # user.user=user_id
                     user.state=updated_state
                     
                     user.save()

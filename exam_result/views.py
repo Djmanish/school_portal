@@ -1726,7 +1726,10 @@ def overall_report_card(request,pk,student_pk):
                      all_percent_list.append(v)
           
           for percent_marks in all_percent_list:
-            sub_percent[percent_marks]=percent_marks 
+            try:
+              sub_percent[percent_marks]=percent_marks 
+            except:
+              sub_percent[percent_marks]=0
           
           sum=0
           for percent in all_percent_list:
@@ -1743,6 +1746,7 @@ def overall_report_card(request,pk,student_pk):
         for final_sum in final_percentage:
          
             sum=sum+final_sum
+           
           
         # count the number of subjects
         count=0
@@ -1757,7 +1761,7 @@ def overall_report_card(request,pk,student_pk):
         except:
           pass
 
-       
+        print(sub_percent_list)
 
         context={
           'institute_student':institute_student,
