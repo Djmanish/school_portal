@@ -437,8 +437,10 @@ def show_qr(request):
             if length  == 5:
                   rows = 1
             else:
-                  rows = int((length/5)+1)
-            print(rows)
+                  if length%5 == 0:
+                        rows = int((length/5))
+                  else:
+                        rows = int((length/5)+1)
             q = []
             col = 5
             intial = 0
