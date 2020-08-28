@@ -429,15 +429,18 @@ def show_qr(request):
             print("Hello World")
             institute_data = request.user.profile.institute
             selected_books = request.POST.getlist('selected_individual')
+                       
             selected_individuals_list = []
             for i in selected_books: #test this
-                  selected_individuals_list.append(Book.objects.get(pk=i,status="active"))
+                  selected_individuals_list.append(Book.objects.get(pk=i,status="active", book_institute=request.user.profile.institute))
             length = len(selected_individuals_list)
             if length  == 5:
                   rows = 1
             else:
-                  rows = int((length/5)+1)
-            print(rows)
+                  if length%5 == 0:
+                        rows = int((length/5))
+                  else:
+                        rows = int((length/5)+1)
             q = []
             col = 5
             intial = 0
@@ -463,7 +466,11 @@ def show_qr(request):
             if results.count() <= 5:
                   r = 1
             else:
-                  r = int((results.count()/5)+1) 
+                  if results.count()%5 == 0:
+                        r = int((results.count()/5)) 
+                  else:
+                        r = int((results.count()/5)+1) 
+            
             q = []
             col = 5
             initial = 0
@@ -483,24 +490,7 @@ def show_qr(request):
                         
                     }
                   )
-      # if request.method == 'POST':
-      #       institute_data = request.user.profile.institute
-      #       book_cd = request.POST['qr_book_code'].strip()
-      #       results= Book.objects.filter(book_code= book_cd, status="active", book_institute=request.user.profile.institute)
-      #       all_books = Book.objects.filter(status="active", book_institute=request.user.profile.institute)
-      #       for i in results:
-      #             print(i.qr_codes.url)
-      #       return render_to_pdf(
-      #               'library/book_pdf.html',
-      #               {
-      #                   'pagesize':'A4',
-      #                   'mylist': results,
-      #                   'institute_data':institute_data,
-      #                   'all_books':all_books,
-      #               }
-      #             )
-
-
+      
 def view_book(request, pk):
       institute_data=Institute.objects.get(pk = request.user.profile.institute.id)
       total_books = Book.objects.filter(book_institute=request.user.profile.institute, status="active").count()
@@ -542,7 +532,7 @@ def delete_view_book(request, pk):
 
 def fetch_book_ids(request):
       selected_book_code = BookCode.objects.get(pk=request.POST.get('class_id') )
-      search_books = Book.objects.filter(book_code=selected_book_code.code, status="active")
+      search_books = Book.objects.filter(book_code=selected_book_code.code, status="active",book_institute=request.user.profile.institute)
       individual_options = ''
       for individual in search_books:
             individual_options = individual_options+f"<option value='{individual.id}'>{individual.book_id} - {individual.book_name}</option>"

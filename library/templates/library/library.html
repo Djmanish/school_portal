@@ -835,7 +835,7 @@
                                                         <form  method="POST" action="{% url 'show_qr' %}" target="_blank">
                                                             {% csrf_token %}
                                                                   <div class="form-group">
-                                                                    <label class="required" for="sel 1">Select Book Code</label>
+                                                                    <label class="required" id="lab" for="sel 1">Select Book Code</label>
                                                                     <select class="form-control-sm form-control" id="selcted_book_grp" required>
                                                                         <option selected disabled value="">--- Select ---</option>
                                                                         {% for i in books %}
@@ -845,30 +845,48 @@
                                                                     </select>
                                                                   </div> 
                                                                   <div class="form-group">
-                                                                    <div class="row" style="padding: 0px 25px;">
-                                                                        <div col-sm-6><div class="form-check" style="margin: 2px;" >
+                                                                    <div required class="row" style="padding: 0px 25px;">
+                                                                        <div col-sm-6>
+                                                                            <div id="all" class="form-check" style="margin: 2px;" >
                                                                             <label class="form-check-label">
-                                                                              <input type="checkbox" class="form-check-input" value="" name="all_classes_check">Select All Books
+                                                                              <input required type="checkbox" class="form-check-input" value="" id="all_classes_check" name="all_classes_check">Select All Books
                                                                             </label>
                                                                           </div> </div>
-                                                                        <div col-sm-6>
-                                                                            
+                                                                        <div col-sm-6>                                                                            
                                                                           <div class="form-check" style="margin: 2px;" id="sel_al_c" >
                                                                             <label class="form-check-label">
-                                                                              <input type="checkbox" name="if_ind_s" class="form-check-input" value="">Select Individual
-                                                                            </label>
+                                                                              <input required type="checkbox" id="if_ind_s" name="if_ind_s" class="form-check-input" value="">Select Individual
+                                                                            </label> 
                                                                           </div>
                                                                         </div>
                                                                           </div>
                                                                   </div> 
-                                                                  <script>
+                                                                  
+                                                                <div class="form-group" id="select_individual" style="display: none;" >
+                                                                    <div class="input-group  input-group-sm">
+                                                                        <div class="input-group-prepend">
+                                                                        <span class="input-group-text search_icon"><i class="material-icons search_icon ">search</i></span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control"  id="myInput" placeholder="Search a book in list ...">
+                                                                    </div>
+                                                                <small>press and hold ctrl to select multiple...</small>
+                                                                    <select class="Individual_option form-control" multiple="multiple"  class="selectpicker" data-live-search="true" name="selected_individual">
+                                                                    <option selected disabled value=""> -- first select an option </option>
+                                                                    </select>
+                                                                </div>
+                                                                <br>
+                                                                <br>
+                                                                <script>
                                                                     $(document).ready(function(){
                                                                        $('input[name="all_classes_check"]').click(function(){
                                                                            if($(this).is(":checked")){
                                                                               
                                                                              $('#selcted_book_grp').css('display','none')
                                                                              $('#selcted_book_grp').removeAttr('required')
+                                                                             $('#if_ind_s').removeAttr('required')
+                                                                             $('#select_individual').removeAttr('required')
                                                                              $('#select_individual').css("display", "none");
+                                                                             $('#lab').css("display", "none");
                                                                              $('#sel_al_c').css('display','none')
                                                                            }
                                                                            else if($(this).is(":not(:checked)")){
@@ -884,31 +902,19 @@
                                                                     $(document).ready(function(){
                                                                        $('input[name="if_ind_s"]').click(function(){
                                                                            if($(this).is(":checked")){
-                                                                              
                                                                              $('#select_individual').css('display','block')
+                                                                             $('#all_classes_check').removeAttr('required')
+                                                                             $('#all').css("display", "none");
                                                                              $('#select_individual').css('class','form-group')
+                                                                             $('.Individual_option').attr('required','required');
                                                                            }
                                                                            else if($(this).is(":not(:checked)")){
                                                                             $('#select_individual').css("display", "none");
+                                                                            $('#all').css("display", "block");
                                                                            }
                                                                        });
                                                                    });
                                                                 </script>
-
-                                                                <div class="form-group" id="select_individual" style="display: none;" >
-                                                                    <div class="input-group  input-group-sm">
-                                                                        <div class="input-group-prepend">
-                                                                        <span class="input-group-text search_icon"><i class="material-icons search_icon ">search</i></span>
-                                                                    </div>
-                                                                    <input type="text" class="form-control"  id="myInput" placeholder="Search a book in list ...">
-                                                                    </div>
-                                                                <small>press and hold ctrl to select multiple...</small>
-                                                                    <select class="Individual_option form-control" id="select_individual" multiple="multiple"  class="selectpicker" data-live-search="true" name="selected_individual">
-                                                                    <option selected disabled value=""> -- first select an option </option>
-                                                                    </select>
-                                                                </div>
-                                                                <br>
-                                                                <br>
 
                                                                 <script>
                                                                     $(document).ready(function(){
