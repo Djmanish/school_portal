@@ -233,7 +233,7 @@ def fetch_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
   exam_type=ExamType.objects.get(pk=exam_type_id)
   max_exam_sr_no = ExamDetails.objects.filter(exam_type=exam_type).values('exam_sr_no').distinct()
-  individual_result_sr_no = "<option>--Exam Type No.--</option>"
+  individual_result_sr_no = "<option value="">--Exam Type No.--</option>"
   for result_sr_no in max_exam_sr_no:
     individual_result_sr_no = individual_result_sr_no + f"<option value='{result_sr_no['exam_sr_no']}'>"+result_sr_no['exam_sr_no']+"</option>" 
   return HttpResponse(individual_result_sr_no)
@@ -245,16 +245,16 @@ def chart_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
   
   max_exam_sr_no = ExamResult.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
-  chart_result_sr_no = "<option>--Exam Type No.--</option>"
+  chart_result_sr_no = "<option value="">--Exam Type No.--</option>"
   for result_sr_no in max_exam_sr_no:
     chart_result_sr_no = chart_result_sr_no + f"<option>"+result_sr_no['exam_sr_no']+"</option>" 
   return HttpResponse(chart_result_sr_no)
 
 def report_card(request,pk):
      
-      inst = request.user.profile.institute.id
-      if pk!=inst:
-        raise PermissionDenied
+      # inst = request.user.profile.institute.id
+      # if pk!=inst:
+      #   raise PermissionDenied
 
       user_institute_name=Institute.objects.get(pk=pk)
         # starting user notice
@@ -263,7 +263,8 @@ def report_card(request,pk):
         # ending user notice
 
       request.user.user_child_fee_status = []
-      user_children= AddChild.objects.filter(parent= request.user.profile)
+      
+      user_children= AddChild.objects.filter(parent= request.user.profile, status="active")
       parent_student_list = []
       for st in user_children:
             student= UserProfile.objects.get(pk=st.child.id)
@@ -1808,8 +1809,10 @@ def selected_exam_types(request):
         # student_exam_type = ExamDetails.objects.filter(institute=institute_exam_type).values('exam_type').distinct()
         print(institute_exam_type)
         
-        individual_exam_type = "<option>--Exam Type--</option>"
+        individual_exam_type = "<option value="">--Exam Type--</option>"
         for etype in institute_exam_type:
                 individual_exam_type = individual_exam_type + f"<option value={etype.id}>{etype}</option>" 
         
         return HttpResponse(individual_exam_type)
+
+
