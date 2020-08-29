@@ -333,7 +333,7 @@ def edit_book(request):
       if request.method == "POST": 
             book_cid = request.POST['book_id']
             search_edit_book= BookCode.objects.get(pk=book_cid,status="active")
-            search_books= Book.objects.filter(book_code=search_edit_book.code)
+            search_books= Book.objects.filter(book_code=search_edit_book.code,status="active")
             name = request.POST['book_name']
             category = request.POST['book_category']
             sch_cat = BookCategory.objects.get(pk=category)
