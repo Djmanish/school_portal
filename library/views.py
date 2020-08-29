@@ -91,7 +91,7 @@ def add_book_group(request):
             get_subcategory= BookSubCategory.objects.get(id=new_book_subcategory)
             ins=request.user.profile.institute
             try:
-              search_code= BookCode.objects.get(book_institute=ins, code= new_book_code)
+              search_code= BookCode.objects.get(book_institute=ins, code= new_book_code, status="active")
             except BookCode.DoesNotExist:
               search_code=0
             if search_code == 0:
@@ -102,7 +102,7 @@ def add_book_group(request):
             else:                  
                   messages.error(request, 'Book code already added !')
                   messages.info(request, "Please try another book code !")
-                  return HttpResponseRedirect(f'/library/book/')
+                  return HttpResponseRedirect(f'/library/')
             
               
             
@@ -146,9 +146,10 @@ def add_new_book(request):
                       return HttpResponseRedirect(f'/library/') 
                 else:
                       print ("non Duplicates")
+
                 for book in book_ids:
                       try:
-                        search_books= Book.objects.get(book_id=book, book_institute=request.user.profile.institute)
+                        search_books= Book.objects.get(book_id=book, book_institute=request.user.profile.institute, status="active")
                         messages.error(request, "Books id's must be unique !") 
                         return HttpResponseRedirect(f'/library/') 
                       except:
@@ -331,8 +332,8 @@ def lib_settings(request):
 def edit_book(request):
       if request.method == "POST": 
             book_cid = request.POST['book_id']
-            search_edit_book= BookCode.objects.get(pk=book_cid)
-            search_books= Book.objects.filter(book_code=search_edit_book.code)
+            search_edit_book= BookCode.objects.get(pk=book_cid,status="active")
+            search_books= Book.objects.filter(book_code=search_edit_book.code,status="active")
             name = request.POST['book_name']
             category = request.POST['book_category']
             sch_cat = BookCategory.objects.get(pk=category)
@@ -361,9 +362,9 @@ def edit_book(request):
       return HttpResponseRedirect(f'/library/')
 
 def delete_book(request,pk):
-      search_edit_book= BookCode.objects.get(pk=pk)
+      search_edit_book= BookCode.objects.get(pk=pk,status="active")
       
-      search_books= Book.objects.filter(book_code=search_edit_book.code)
+      search_books= Book.objects.filter(book_code=search_edit_book.code,status="active")
       for i in search_books:
             try:
                   ser_bk = IssueBook.objects.get(book_name__id= i.id, return_date__isnull=True)
@@ -407,9 +408,10 @@ def add_new_books(request):
                   return HttpResponseRedirect(f'/library/') 
             else:
                   print ("non Duplicates")
+
             for book in book_ids:
                       try:
-                        search_books= Book.objects.get(book_id=book, book_institute=request.user.profile.institute)
+                        search_books= Book.objects.get(book_id=book, book_institute=request.user.profile.institute, status="active")
                         messages.error(request, "Books id's must be unique !") 
                         return HttpResponseRedirect(f'/library/') 
                       except:
@@ -458,6 +460,7 @@ def show_qr(request):
                         'institute_data':institute_data,
                     }
                   )
+            
 
       if 'all_classes_check' in request.POST:
             print("Nothng")
