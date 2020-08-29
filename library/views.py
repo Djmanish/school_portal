@@ -102,7 +102,7 @@ def add_book_group(request):
             else:                  
                   messages.error(request, 'Book code already added !')
                   messages.info(request, "Please try another book code !")
-                  return HttpResponseRedirect(f'/library/book/')
+                  return HttpResponseRedirect(f'/library/')
             
               
             
@@ -458,6 +458,7 @@ def show_qr(request):
                         'institute_data':institute_data,
                     }
                   )
+            
 
       if 'all_classes_check' in request.POST:
             print("Nothng")
