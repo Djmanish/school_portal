@@ -255,45 +255,40 @@ class UserProfileUpdate(APIView):
                 Class_user=None
             updated_state= State.objects.get(pk=request.POST['state'])
             
-            user_id=User.objects.get(id=user_name)
-            user_info=UserProfile.objects.all()
-            user_d=""
-            for user in user_info:
-                user_d=user.user
-                if user_id==user_d:
+           
                     
-                    user.first_name=user_first_name
-                    user.middle_name=user_middle_name
-                    user.last_name=user_last_name
-                    user.father_name=user_father_name
-                    user.mother_name=user_mother_name
-                    user.gender=user_gender
-                    user.date_of_birth=user_date_of_birth
-                    user.marital_status=user_marital_status
-                    user.category=user_category
-                    user.qualification=user_qualification
-                    user.aadhar_card_number=user_aadhar_card_number
-                    user.about=user_about
-                    user.profile_pic=user_profile_pic
-                    user.mobile_number=user_mobile_number
-                    user.address_line_1=user_address_line_1
-                    user.address_line_2=user_address_line_2
-                    user.city=user_city
-                    user.pin_code=user_pin_code
-                    user.facebook_link=user_facebook_link
-                    user.status=user_status
-                    user.class_promotion_status=user_class_promotion_status
-                    user.class_current_year=user_class_current_year
-                    user.class_next_year=user_class_next_year
-                    user.institute=institute_user
-                    user.Class=Class_user
+            user_info.first_name=user_first_name
+            user_info.middle_name=user_middle_name
+            user_info.last_name=user_last_name
+            user_info.father_name=user_father_name
+            user_info.mother_name=user_mother_name
+            user_info.gender=user_gender
+            user_info.date_of_birth=user_date_of_birth
+            user_info.marital_status=user_marital_status
+            user_info.category=user_category
+            user_info.qualification=user_qualification
+            user_info.aadhar_card_number=user_aadhar_card_number
+            user_info.about=user_about
+            user_info.profile_pic=user_profile_pic
+            user_info.mobile_number=user_mobile_number
+            user_info.address_line_1=user_address_line_1
+            user_info.address_line_2=user_address_line_2
+            user_info.city=user_city
+            user_info.pin_code=user_pin_code
+            user_info.facebook_link=user_facebook_link
+            user_info.status=user_status
+            user_info.class_promotion_status=user_class_promotion_status
+            user_info.class_current_year=user_class_current_year
+            user_info.class_next_year=user_class_next_year
+            user_info.institute=institute_user
+            user_info.Class=Class_user
                     # user.user=user_id
-                    user.state=updated_state
+            user_info.state=updated_state
                     
-                    user.save()
+            user_info.save()
                 
-                    serializer.is_valid(raise_exception=True)
-                    return Response(serializer.data, status=status.HTTP_200_OK)
+            serializer.is_valid(raise_exception=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @permission_classes((AllowAny, ))
