@@ -35,8 +35,8 @@ class BookCode(models.Model):
     publications= models.CharField(max_length=50)
     edition= models.CharField(max_length=50)
     status = models.CharField(max_length=25,choices=Chi1,default="active")
-    class Meta:
-        unique_together = ['code', 'book_institute']
+    # class Meta:
+    #     unique_together = ['code', 'book_institute', 'status']
     def __str__(self):
         return self.code
 
@@ -57,8 +57,8 @@ class Book(models.Model):
     book_count= models.IntegerField(null=True)
     status = models.CharField(max_length=25,choices=Chi2,default="active")
     qr_codes = models.ImageField(upload_to='QrCodes', blank=True)
-    class Meta:
-        unique_together = ['book_code', 'book_id', 'book_institute']
+    # class Meta:
+    #     unique_together = ['book_code', 'book_id', 'book_institute', 'status']
     def __str__(self):
        return self.book_name
     # qr code auto generate
