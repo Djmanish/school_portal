@@ -206,45 +206,42 @@ class UserProfileUpdate(APIView):
         
     def put(self, request, pk):
        
-        user = UserProfile.objects.get(id=pk)
-        serializer = UserProfileSerializer(instance=user, data=request.data, partial=True) 
-        user_info = UserProfile.objects.get(pk=pk)
-        print(user_info)
-        if serializer.is_valid(): 
-            user_name=request.POST['user']
-            print(user_name)
-            user_first_name=request.POST['first_name']
-            user_middle_name=request.POST['middle_name']
-            user_last_name=request.POST['last_name']
-            user_father_name=request.POST['father_name']
-            user_mother_name=request.POST['mother_name']
-            user_gender=request.POST['gender']
-            user_date_of_birth=request.POST['date_of_birth']
-            user_marital_status=request.POST['marital_status']
-            user_category=request.POST['category']
-            user_qualification=request.POST['qualification']
-            user_aadhar_card_number=request.POST['aadhar_card_number']
-            user_about=request.POST['about']
+            user = UserProfile.objects.get(id=pk)
+            print(user)
+            serializer = UserProfileSerializer(instance=user, data=request.data, partial=True) 
+            user_first_name=request.POST.get('first_name')
+            user_middle_name=request.POST.get('middle_name')
+            user_last_name=request.POST.get('last_name')
+            user_father_name=request.POST.get('father_name')
+            user_mother_name=request.POST.get('mother_name')
+            user_gender=request.POST.get('gender')
+            user_date_of_birth=request.POST.get('date_of_birth')
+            user_marital_status=request.POST.get('marital_status')
+            user_category=request.POST.get('category')
+            user_qualification=request.POST.get('qualification')
+            user_aadhar_card_number=request.POST.get('aadhar_card_number')
+            user_about=request.POST.get('about')
             user_profile_pic=""
             if 'profile_pic' in request.POST:
                 user_profile_pic=request.FILES['profile_pic']
-            user_mobile_number=request.POST['mobile_number']
-            user_address_line_1=request.POST['address_line_1']
-            user_address_line_2=request.POST['address_line_2']
-            user_city=request.POST['city']
-            user_pin_code=request.POST['pin_code']
-            user_facebook_link=request.POST['facebook_link']
-            user_status=request.POST['status']
+            user_mobile_number=request.POST.get('mobile_number')
+            user_address_line_1=request.POST.get('address_line_1')
+            user_address_line_2=request.POST.get('address_line_2')
+            user_city=request.POST.get('city')
+            user_pin_code=request.POST.get('pin_code')
+            user_facebook_link=request.POST.get('facebook_link')
+            user_status=request.POST.get('status')
             user_class_promotion_status=""
             if 'class_promotion_status' in request.POST:
-                user_class_promotion_status=request.POST['class_promotion_status']
-            user_class_current_year=request.POST['class_current_year']
-            user_class_next_year=request.POST['class_next_year']
-            user_institute=""
+                user_class_promotion_status=request.POST.get('class_promotion_status')
+            user_class_current_year=request.POST.get('class_current_year')
+            user_class_next_year=request.POST.get('class_next_year')
+            user_institute=0
+            
             if 'institute' in request.POST:
                     user_institute=request.POST['institute']
             institute_user=Institute.objects.get(pk=user_institute)
-            user_designation=request.POST['designation']
+            user_designation=request.POST.get('designation')
             user_Class=""
             try:
                     if 'Class' in request.POST:
@@ -257,35 +254,33 @@ class UserProfileUpdate(APIView):
             
            
                     
-            user_info.first_name=user_first_name
-            user_info.middle_name=user_middle_name
-            user_info.last_name=user_last_name
-            user_info.father_name=user_father_name
-            user_info.mother_name=user_mother_name
-            user_info.gender=user_gender
-            user_info.date_of_birth=user_date_of_birth
-            user_info.marital_status=user_marital_status
-            user_info.category=user_category
-            user_info.qualification=user_qualification
-            user_info.aadhar_card_number=user_aadhar_card_number
-            user_info.about=user_about
-            user_info.profile_pic=user_profile_pic
-            user_info.mobile_number=user_mobile_number
-            user_info.address_line_1=user_address_line_1
-            user_info.address_line_2=user_address_line_2
-            user_info.city=user_city
-            user_info.pin_code=user_pin_code
-            user_info.facebook_link=user_facebook_link
-            user_info.status=user_status
-            user_info.class_promotion_status=user_class_promotion_status
-            user_info.class_current_year=user_class_current_year
-            user_info.class_next_year=user_class_next_year
-            user_info.institute=institute_user
-            user_info.Class=Class_user
-                    # user.user=user_id
-            user_info.state=updated_state
-                    
-            user_info.save()
+            user.first_name=user_first_name
+            user.middle_name=user_middle_name
+            user.last_name=user_last_name
+            user.father_name=user_father_name
+            user.mother_name=user_mother_name
+            user.gender=user_gender
+            user.date_of_birth=user_date_of_birth
+            user.marital_status=user_marital_status
+            user.category=user_category
+            user.qualification=user_qualification
+            user.aadhar_card_number=user_aadhar_card_number
+            user.about=user_about
+            user.profile_pic=user_profile_pic
+            user.mobile_number=user_mobile_number
+            user.address_line_1=user_address_line_1
+            user.address_line_2=user_address_line_2
+            user.city=user_city
+            user.pin_code=user_pin_code
+            user.facebook_link=user_facebook_link
+            user.status=user_status
+            user.class_promotion_status=user_class_promotion_status
+            user.class_current_year=user_class_current_year
+            user.class_next_year=user_class_next_year
+            user.institute=institute_user
+            user.Class=Class_user
+            user.state=updated_state
+            user.save()
                 
             serializer.is_valid(raise_exception=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
