@@ -207,39 +207,40 @@ class UserProfileUpdate(APIView):
     def put(self, request, pk):
        
             user = UserProfile.objects.get(id=pk)
+            print(user)
             serializer = UserProfileSerializer(instance=user, data=request.data, partial=True) 
-            user_first_name=request.POST['first_name']
-            user_middle_name=request.POST['middle_name']
-            user_last_name=request.POST['last_name']
-            user_father_name=request.POST['father_name']
-            user_mother_name=request.POST['mother_name']
-            user_gender=request.POST['gender']
-            user_date_of_birth=request.POST['date_of_birth']
-            user_marital_status=request.POST['marital_status']
-            user_category=request.POST['category']
-            user_qualification=request.POST['qualification']
-            user_aadhar_card_number=request.POST['aadhar_card_number']
-            user_about=request.POST['about']
+            user_first_name=request.POST.get('first_name')
+            user_middle_name=request.POST.get('middle_name')
+            user_last_name=request.POST.get('last_name')
+            user_father_name=request.POST.get('father_name')
+            user_mother_name=request.POST.get('mother_name')
+            user_gender=request.POST.get('gender')
+            user_date_of_birth=request.POST.get('date_of_birth')
+            user_marital_status=request.POST.get('marital_status')
+            user_category=request.POST.get('category')
+            user_qualification=request.POST.get('qualification')
+            user_aadhar_card_number=request.POST.get('aadhar_card_number')
+            user_about=request.POST.get('about')
             user_profile_pic=""
             if 'profile_pic' in request.POST:
                 user_profile_pic=request.FILES['profile_pic']
-            user_mobile_number=request.POST['mobile_number']
-            user_address_line_1=request.POST['address_line_1']
-            user_address_line_2=request.POST['address_line_2']
-            user_city=request.POST['city']
-            user_pin_code=request.POST['pin_code']
-            user_facebook_link=request.POST['facebook_link']
-            user_status=request.POST['status']
+            user_mobile_number=request.POST.get('mobile_number')
+            user_address_line_1=request.POST.get('address_line_1')
+            user_address_line_2=request.POST.get('address_line_2')
+            user_city=request.POST.get('city')
+            user_pin_code=request.POST.get('pin_code')
+            user_facebook_link=request.POST.get('facebook_link')
+            user_status=request.POST.get('status')
             user_class_promotion_status=""
             if 'class_promotion_status' in request.POST:
-                user_class_promotion_status=request.POST['class_promotion_status']
-            user_class_current_year=request.POST['class_current_year']
-            user_class_next_year=request.POST['class_next_year']
+                user_class_promotion_status=request.POST.get('class_promotion_status')
+            user_class_current_year=request.POST.get('class_current_year')
+            user_class_next_year=request.POST.get('class_next_year')
             user_institute=""
             if 'institute' in request.POST:
                     user_institute=request.POST['institute']
             institute_user=Institute.objects.get(pk=user_institute)
-            user_designation=request.POST['designation']
+            user_designation=request.POST.get('designation')
             user_Class=""
             try:
                     if 'Class' in request.POST:
