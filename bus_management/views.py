@@ -352,9 +352,10 @@ def add_new_driver(request):
             
 
             # creating user object
+            date = datetime.today()
             pwd = get_last_digits(int(acm))
-            start_digit = first_n_digits(int(acm))
-            user_name = f_name+str(start_digit)+f_name+str(pwd)
+            # start_digit = first_n_digits(int(acm))
+            user_name = f_name+str(date)
             driver_user = User.objects.create_user(user_name , email, pwd)
             driver_user.save()
             search_user = UserProfile.objects.get(user=driver_user)
