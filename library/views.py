@@ -13,117 +13,134 @@ from rest_framework import status
 from library.serializers import UserSerializer
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
-
-
-
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 def library(request):
-    institute_data=Institute.objects.get(pk = request.user.profile.institute.id)
-    categories= BookCategory.objects.filter(institute_category=request.user.profile.institute)
-    sub_categories= BookSubCategory.objects.filter(institute_subcategory=request.user.profile.institute)
-    #?
-    total_books = Book.objects.filter(book_institute=request.user.profile.institute, status="active").count()
-    total_issue = IssueBook.objects.filter(issue_book_institute=request.user.profile.institute,return_date__isnull=True)
-    total_issue_books = total_issue.count()
-    left = total_books - total_issue_books
-    books= BookCode.objects.filter(book_institute=request.user.profile.institute, status = "active")
-    for b in books:
-          sh_books= Book.objects.filter(book_code=b.code, book_institute=b.book_institute,status="active").count()
-          b.count=sh_books
-    try:
-          lib_set= LibrarySettings.objects.get(institute=request.user.profile.institute)
-    except LibrarySettings.DoesNotExist:
-          lib_set = LibrarySettings.objects.create(institute=request.user.profile.institute, max_Book_Allows=3, day_Span=5, send_Reminder_Before=2, late_fine_per_day=5)
-    cat = BookCategory.objects.filter(institute_category=request.user.profile.institute)
-    for i in cat:
-          i.name= i
-          i.sub = BookSubCategory.objects.filter(parent_category=i.name, institute_subcategory=request.user.profile.institute)
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      vehicle_permission = App_functions.objects.get(function_name='Can Manage Library')   
+      if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+            institute_data=Institute.objects.get(pk = request.user.profile.institute.id)
+            categories= BookCategory.objects.filter(institute_category=request.user.profile.institute)
+            sub_categories= BookSubCategory.objects.filter(institute_subcategory=request.user.profile.institute)
+            #?
+            total_books = Book.objects.filter(book_institute=request.user.profile.institute, status="active").count()
+            total_issue = IssueBook.objects.filter(issue_book_institute=request.user.profile.institute,return_date__isnull=True)
+            total_issue_books = total_issue.count()
+            left = total_books - total_issue_books
+            books= BookCode.objects.filter(book_institute=request.user.profile.institute, status = "active")
+            for b in books:
+                  sh_books= Book.objects.filter(book_code=b.code, book_institute=b.book_institute,status="active").count()
+                  b.count=sh_books
+            try:
+                  lib_set= LibrarySettings.objects.get(institute=request.user.profile.institute)
+            except LibrarySettings.DoesNotExist:
+                  lib_set = LibrarySettings.objects.create(institute=request.user.profile.institute, max_Book_Allows=3, day_Span=5, send_Reminder_Before=2, late_fine_per_day=5)
+            cat = BookCategory.objects.filter(institute_category=request.user.profile.institute)
+            for i in cat:
+                  i.name= i
+                  i.sub = BookSubCategory.objects.filter(parent_category=i.name, institute_subcategory=request.user.profile.institute)
+            
+            # starting user notice
+            if request.user.profile.designation:
+                  request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+            # ending user notice
+            context_data = {
+                  'cat':cat,
+                  'institute_data':institute_data,
+                  'categories':categories, 
+                  'books':books,   
+                  'sub_categories':sub_categories,
+                  'total_books':total_books,
+                  'total_issue_books':total_issue_books,
+                  'left':left,
+                  'total_issue':total_issue,
+                  'lib_set':lib_set,
+            }
+            return render(request, 'library/library.html',context_data)
+      else:
+            raise PermissionDenied
     
-     # starting user notice
-    if request.user.profile.designation:
-        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
-    # ending user notice
-    context_data = {
-      'cat':cat,
-      'institute_data':institute_data,
-      'categories':categories, 
-      'books':books,   
-      'sub_categories':sub_categories,
-      'total_books':total_books,
-      'total_issue_books':total_issue_books,
-      'left':left,
-      'total_issue':total_issue,
-      'lib_set':lib_set,
-    }
-    return render(request, 'library/library.html',context_data)
-
+    
 def book(request):
-    institute_data=Institute.objects.get(pk=request.user.profile.institute.id)
-    categories= BookCategory.objects.filter(institute_category=request.user.profile.institute)
-    sub_categories= BookSubCategory.objects.filter(institute_subcategory=request.user.profile.institute)
-    books= BookCode.objects.filter(book_institute=request.user.profile.institute)
-    len_books=len(books)
-     # starting user notice
-    if request.user.profile.designation:
-        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
-    # ending user notice
-    context_data = {
-      'institute_data':institute_data,  
-      'categories':categories,
-      'sub_categories':sub_categories,
-      'books':books,
-      'len_books':len_books,
-      }
-    return render(request, 'library/add_book.html',context_data)
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      vehicle_permission = App_functions.objects.get(function_name='Can Manage Library')   
+      if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+            institute_data=Institute.objects.get(pk=request.user.profile.institute.id)
+            categories= BookCategory.objects.filter(institute_category=request.user.profile.institute)
+            sub_categories= BookSubCategory.objects.filter(institute_subcategory=request.user.profile.institute)
+            books= BookCode.objects.filter(book_institute=request.user.profile.institute)
+            len_books=len(books)
+            # starting user notice
+            if request.user.profile.designation:
+                  request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+            # ending user notice
+            context_data = {
+                  'institute_data':institute_data,  
+                  'categories':categories,
+                  'sub_categories':sub_categories,
+                  'books':books,
+                  'len_books':len_books,
+                  }
+            return render(request, 'library/add_book.html',context_data)
+      else:
+            raise PermissionDenied
+
 
 def add_book_group(request):
-      if request.method == 'POST':
-            new_book_code= request.POST['book_code'].strip()
-            new_book_count= request.POST['book_count'].strip()
-            new_book_name= request.POST['book_name']
-            new_book_category= request.POST['book_category']
-            new_book_subcategory= request.POST['book_sub_category']
-            new_book_author= request.POST['author_name']
-            new_book_publication= request.POST['publications']
-            new_book_edition= request.POST['editions']
-            get_category= BookCategory.objects.get(id=new_book_category)
-            get_subcategory= BookSubCategory.objects.get(id=new_book_subcategory)
-            ins=request.user.profile.institute
-            try:
-              search_code= BookCode.objects.get(book_institute=ins, code= new_book_code, status="active")
-            except BookCode.DoesNotExist:
-              search_code=0
-            if search_code == 0:
-                  new_book= BookCode.objects.create(code=new_book_code, book_count=new_book_count, book_institute=ins, book_name=new_book_name, book_category=get_category, book_sub_category=get_subcategory, author=new_book_author, publications=new_book_publication, edition=new_book_edition)
-                  messages.success(request, 'Book group added successfully !')
-                  messages.info(request, "Please enter book ids !")
-                  return HttpResponseRedirect(f'/library/add_book/?book_group={new_book.id}')
-            else:                  
-                  messages.error(request, 'Book code already added !')
-                  messages.info(request, "Please try another book code !")
-                  return HttpResponseRedirect(f'/library/')
-            
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      vehicle_permission = App_functions.objects.get(function_name='Can Manage Library')   
+      if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+            if request.method == 'POST':
+                  new_book_code= request.POST['book_code'].strip()
+                  new_book_count= request.POST['book_count'].strip()
+                  new_book_name= request.POST['book_name']
+                  new_book_category= request.POST['book_category']
+                  new_book_subcategory= request.POST['book_sub_category']
+                  new_book_author= request.POST['author_name']
+                  new_book_publication= request.POST['publications']
+                  new_book_edition= request.POST['editions']
+                  get_category= BookCategory.objects.get(id=new_book_category)
+                  get_subcategory= BookSubCategory.objects.get(id=new_book_subcategory)
+                  ins=request.user.profile.institute
+                  try:
+                        search_code= BookCode.objects.get(book_institute=ins, code= new_book_code, status="active")
+                  except BookCode.DoesNotExist:
+                        search_code=0
+                  if search_code == 0:
+                        new_book= BookCode.objects.create(code=new_book_code, book_count=new_book_count, book_institute=ins, book_name=new_book_name, book_category=get_category, book_sub_category=get_subcategory, author=new_book_author, publications=new_book_publication, edition=new_book_edition)
+                        messages.success(request, 'Book group added successfully !')
+                        messages.info(request, "Please enter book ids !")
+                        return HttpResponseRedirect(f'/library/add_book/?book_group={new_book.id}')
+                  else:                  
+                        messages.error(request, 'Book code already added !')
+                        messages.info(request, "Please try another book code !")
+                        return HttpResponseRedirect(f'/library/')
+      else:
+            raise PermissionDenied
               
             
       
 
 def add_book(request):  
-      institute_data=Institute.objects.get(pk=request.user.profile.institute.id)
-      book_code= BookCode.objects.get(pk=request.GET.get('book_group'))  
-      book_count = int(book_code.book_count)
-       # starting user notice
-      if request.user.profile.designation:
-        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
-      # ending user notice
-      context_data = {
-      'institute_data':institute_data,  
-      'book_code':book_code,
-      'range':range(book_count),
-      }
-
-
-      return render(request, 'library/add_book_copies.html', context_data)
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      vehicle_permission = App_functions.objects.get(function_name='Can Manage Library')   
+      if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+            institute_data=Institute.objects.get(pk=request.user.profile.institute.id)
+            book_code= BookCode.objects.get(pk=request.GET.get('book_group'))  
+            book_count = int(book_code.book_count)
+            # starting user notice
+            if request.user.profile.designation:
+                  request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+            # ending user notice
+            context_data = {
+            'institute_data':institute_data,  
+            'book_code':book_code,
+            'range':range(book_count),
+            }
+            return render(request, 'library/add_book_copies.html', context_data)
+      else:
+            raise PermissionDenied
 
 def checkIfDuplicates_1(listOfElems):
     # ''' Check if given list contains any duplicates '''
@@ -134,70 +151,98 @@ def checkIfDuplicates_1(listOfElems):
 
       
 def add_new_book(request):
-      if request.method == 'POST':
-                book_ids= request.POST.getlist('fullname')
-                book_count_len=len(book_ids)
-                book_code= BookCode.objects.get(pk=request.POST.get('hide'))
-                result= checkIfDuplicates_1(book_ids)
-                if result:
-                      messages.error(request, "You are entering same book id's !")  
-                      instance = BookCode.objects.get(id=book_code.id, book_institute=request.user.profile.institute)
-                      instance.delete()
-                      return HttpResponseRedirect(f'/library/') 
-                else:
-                      print ("non Duplicates")
-
-                for book in book_ids:
-                      try:
-                        search_books= Book.objects.get(book_id=book, book_institute=request.user.profile.institute, status="active")
-                        messages.error(request, "Books id's must be unique !") 
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      vehicle_permission = App_functions.objects.get(function_name='Can Manage Library')   
+      if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+            if request.method == 'POST':
+                  book_ids= request.POST.getlist('fullname')
+                  book_count_len=len(book_ids)
+                  book_code= BookCode.objects.get(pk=request.POST.get('hide')) 
+                  z= int(book_code.book_count)+book_count_len 
+                  result= checkIfDuplicates_1(book_ids)
+                  if result:
+                        messages.error(request, "You are entering same book id's !")  
+                        instance = BookCode.objects.get(id=book_code.id, book_institute=request.user.profile.institute)
+                        instance.delete()
                         return HttpResponseRedirect(f'/library/') 
-                      except:
-                        pass
-                
-                for id in book_ids:
-                      id = id.strip()                        
-                      Book.objects.create(book_id=id, book_code=book_code.code, book_institute=book_code.book_institute, book_name=book_code.book_name, book_category=book_code.book_category, book_sub_category=book_code.book_sub_category, author=book_code.author, publications=book_code.publications, edition=book_code.edition, book_count=book_count_len )
-                messages.success(request, 'Books added successfully !')
-                return HttpResponseRedirect(f'/library/')
+                  else:
+                        print ("non Duplicates")
 
-            
+                  for book in book_ids:
+                        try:
+                              search_books= Book.objects.get(book_id=book, book_institute=request.user.profile.institute, status="active")
+                              messages.error(request, "Books id's must be unique !")                         
+                              return HttpResponseRedirect(f'/library/') 
+                        except:
+                              pass
+                  
+                  for id in book_ids:
+                        id = id.strip()                        
+                        Book.objects.create(book_id=id, book_code=book_code.code, book_institute=book_code.book_institute, book_name=book_code.book_name, book_category=book_code.book_category, book_sub_category=book_code.book_sub_category, author=book_code.author, publications=book_code.publications, edition=book_code.edition, book_count=z)
+                  s = Book.objects.filter(book_code=book_code, book_institute=request.user.profile.institute, status="active")
+                  if s:
+                        for j in s:
+                              j.book_count=z
+                              j.save()
+                  book_code.book_count=z
+                  book_code.save()
+                  messages.success(request, 'Books added successfully !')
+                  return HttpResponseRedirect(f'/library/')
+      else:
+            raise PermissionDenied
+                  
 
 def add_category(request):
-      if request.method == 'POST':
-            category= request.POST['book_category_name']
-            try:
-              new_category= BookCategory.objects.create(book_category_name=category, institute_category=request.user.profile.institute)
-              messages.success(request, 'Category created successfully !')
-            except:
-              messages.error(request, 'Category already exists !')
-              
-            return HttpResponseRedirect(f'/library/')    
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      vehicle_permission = App_functions.objects.get(function_name='Can Manage Library')   
+      if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+            if request.method == 'POST':
+                  category= request.POST['book_category_name']
+                  try:
+                        new_category= BookCategory.objects.create(book_category_name=category, institute_category=request.user.profile.institute)
+                        messages.success(request, 'Category created successfully !')
+                  except:
+                        messages.error(request, 'Category already exists !')
+                  
+                  return HttpResponseRedirect(f'/library/')
+      else:
+            raise PermissionDenied
 
-def add_sub_category(request):    
-  if request.method == 'POST':
-    sub_category= request.POST['sub_category_name']  
-    parent_categorys= request.POST['sub_category_parent']
-    get_parent= BookCategory.objects.get(id=parent_categorys)
-    print(get_parent)
-    new_sub_category= BookSubCategory.objects.create(book_sub_category_name=sub_category, parent_category=get_parent, institute_subcategory=request.user.profile.institute)
-    messages.success(request, 'Sub category created successfully !')
-    return HttpResponseRedirect(f'/library/')
+def add_sub_category(request):   
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      vehicle_permission = App_functions.objects.get(function_name='Can Manage Library')   
+      if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+            if request.method == 'POST':
+                  sub_category= request.POST['sub_category_name']  
+                  parent_categorys= request.POST['sub_category_parent']
+                  get_parent= BookCategory.objects.get(id=parent_categorys)
+                  print(get_parent)
+                  new_sub_category= BookSubCategory.objects.create(book_sub_category_name=sub_category, parent_category=get_parent, institute_subcategory=request.user.profile.institute)
+                  messages.success(request, 'Sub category created successfully !')
+                  return HttpResponseRedirect(f'/library/')
+      else:
+            raise PermissionDenied 
+  
 
 def issuebook(request):
-      designation=Institute_levels.objects.filter(institute=request.user.profile.institute)
-      if request.method == 'POST':
-            role= request.POST['selected_role']
-            name= request.POST['full_name']
-            print(role)
-      # starting user notice
-      if request.user.profile.designation:
-        request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
-      # ending user notice
-      context_data = {
-        'designation':designation,      
-      }
-      return render(request, 'library/issue.html',context_data)
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      vehicle_permission = App_functions.objects.get(function_name='Can Manage Library')   
+      if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+            designation=Institute_levels.objects.filter(institute=request.user.profile.institute)
+            if request.method == 'POST':
+                  role= request.POST['selected_role']
+                  name= request.POST['full_name']
+                  print(role)
+            # starting user notice
+            if request.user.profile.designation:
+                  request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
+            # ending user notice
+            context_data = {
+            'designation':designation,      
+            }
+            return render(request, 'library/issue.html',context_data)
+      else:
+            raise PermissionDenied
 
 def fetch_user_data(request):
       if request.method == 'POST':
@@ -230,7 +275,7 @@ def issue_book(request):
           # expirydate= request.POST['return_date']
           borrower= UserProfile.objects.get(pk=userid)
           try:
-            borrower_book= Book.objects.get(book_id=bookid, book_institute=request.user.profile.institute)
+            borrower_book= Book.objects.get(book_id=bookid, book_institute=request.user.profile.institute,status="active")
           except Book.DoesNotExist:
             messages.error(request, 'Incorrect book id !')
             return HttpResponseRedirect(f'/library/issuebook/')
@@ -384,7 +429,7 @@ def add_more_books(request):
       if request.method == 'POST':
         institute_data=Institute.objects.get(pk=request.user.profile.institute.id)
         book_code= BookCode.objects.get(pk=request.POST.get('book_code_hidden')) 
-        copies_books = Book.objects.filter(book_code=book_code.code, book_institute= request.user.profile.institute)
+        copies_books = Book.objects.filter(book_code=book_code.code, book_institute= request.user.profile.institute, status="active")
         copies= copies_books.count()
         new_copies = int(request.POST.get('add_more_books'))
         context_data = {
@@ -397,14 +442,16 @@ def add_more_books(request):
       return render(request, 'library/add_more_copies.html', context_data)
 
 def add_new_books(request):
-      if request.method == 'POST':            
+      if request.method == 'POST':
             book_ids= request.POST.getlist('fullname')
             book_count_len=len(book_ids)
-            book_code= BookCode.objects.get(pk=request.POST.get('hide'))
+            book_code= BookCode.objects.get(pk=request.POST.get('hide'))            
             res= checkIfDuplicates_1(book_ids)
             
             if res:
                   messages.error(request, "You are entering same book id's !")  
+                  book_code.book_count=0
+                  book_code.save()
                   return HttpResponseRedirect(f'/library/') 
             else:
                   print ("non Duplicates")
@@ -412,7 +459,9 @@ def add_new_books(request):
             for book in book_ids:
                       try:
                         search_books= Book.objects.get(book_id=book, book_institute=request.user.profile.institute, status="active")
-                        messages.error(request, "Books id's must be unique !") 
+                        messages.error(request, "Books id's must be unique !")   
+                        book_code.book_count=0
+                        book_code.save()                      
                         return HttpResponseRedirect(f'/library/') 
                       except:
                         pass
@@ -495,32 +544,37 @@ def show_qr(request):
                   )
       
 def view_book(request, pk):
-      institute_data=Institute.objects.get(pk = request.user.profile.institute.id)
-      total_books = Book.objects.filter(book_institute=request.user.profile.institute, status="active").count()
-      total_issue = IssueBook.objects.filter(issue_book_institute=request.user.profile.institute,return_date__isnull=True)
-      total_issue_books = total_issue.count()
-      left = total_books - total_issue_books
-      try:
-            book_grp= BookCode.objects.get(pk=pk, book_institute=request.user.profile.institute)
-      except BookCode.DoesNotExist:
-            messages.error(request,f'Requested book not found !')
-            return HttpResponseRedirect(f'/library/')
-      
-      grp_books= Book.objects.filter(book_code=book_grp.code, book_institute=request.user.profile.institute, status="active")
-      
-      context_data = {
-      'institute_data':institute_data,
-      'total_books':total_books,
-      'total_issue_books':total_issue_books,
-      'left':left,
-      'book_grp':book_grp,
-      'grp_books':grp_books,   
-    }
-      return render(request, 'library/view_book.html',context_data)
+      user_permissions = request.user.user_institute_role.level.permissions.all()
+      vehicle_permission = App_functions.objects.get(function_name='Can Manage Library')   
+      if request.user.profile.designation.level_name=='admin' or vehicle_permission in user_permissions:
+            institute_data=Institute.objects.get(pk = request.user.profile.institute.id)
+            total_books = Book.objects.filter(book_institute=request.user.profile.institute, status="active").count()
+            total_issue = IssueBook.objects.filter(issue_book_institute=request.user.profile.institute,return_date__isnull=True)
+            total_issue_books = total_issue.count()
+            left = total_books - total_issue_books
+            try:
+                  book_grp= BookCode.objects.get(pk=pk, book_institute=request.user.profile.institute)
+            except BookCode.DoesNotExist:
+                  messages.error(request,f'Requested book not found !')
+                  return HttpResponseRedirect(f'/library/')
+            
+            grp_books= Book.objects.filter(book_code=book_grp.code, book_institute=request.user.profile.institute, status="active")
+            
+            context_data = {
+            'institute_data':institute_data,
+            'total_books':total_books,
+            'total_issue_books':total_issue_books,
+            'left':left,
+            'book_grp':book_grp,
+            'grp_books':grp_books,   
+            }
+            return render(request, 'library/view_book.html',context_data)
+      else:
+            raise PermissionDenied
 
 def delete_view_book(request, pk):
       delete_bk= Book.objects.get(pk=pk)
-      book_cd = BookCode.objects.get(code=delete_bk.book_code, book_institute=request.user.profile.institute)
+      book_cd = BookCode.objects.get(code=delete_bk.book_code, book_institute=request.user.profile.institute, status="active")
       idd = book_cd.pk
       try:
             search_book = IssueBook.objects.get(book_name__id=delete_bk.id, return_date__isnull=True)
@@ -529,7 +583,13 @@ def delete_view_book(request, pk):
       except IssueBook.DoesNotExist:
             print("hello")
             delete_bk.status="inactive"
-            delete_bk.save()      
+            delete_bk.save() 
+            book_cd.book_count= int(book_cd.book_count)-1
+            book_cd.save()
+            all_book = Book.objects.filter(book_code=delete_bk.book_code, book_institute=request.user.profile.institute, status="active")
+            for i in all_book:
+                  i.book_count= int(i.book_count)-1
+                  i.save()     
             messages.error(request,f'Book deleted successfully !')
             return HttpResponseRedirect(f'/library/view_book/{idd}')
 
