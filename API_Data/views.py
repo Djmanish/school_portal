@@ -237,10 +237,9 @@ class UserProfileUpdate(APIView):
             user_class_current_year=request.POST.get('class_current_year')
             user_class_next_year=request.POST.get('class_next_year')
             user_institute=0
-            
             if 'institute' in request.POST:
                     user_institute=request.POST['institute']
-            institute_user=Institute.objects.get(pk=user_institute)
+            institute_user=Institute.objects.filter(pk=user_institute)
             user_designation=request.POST.get('designation')
             user_Class=""
             try:
