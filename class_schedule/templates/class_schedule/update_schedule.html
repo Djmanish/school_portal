@@ -546,6 +546,8 @@
                             <br><br>
                             <form method="POST" enctype="multipart/form-data" action="">
                           {% csrf_token %}
+                          <input type="hidden" name="up_sche_class" value="{{schedule_info.Class.id}}">
+                          <!-- sending class hidden to redirect updated schedule  -->
                                                 
 
                                 <div class="">
