@@ -249,7 +249,8 @@ class UserProfileUpdate(APIView):
                     Class_user= Classes.objects.get(pk=user_Class)
             except:
                 Class_user=None
-            updated_state= State.objects.get(pk=request.POST['state'])
+            state=request.POST['state']
+            updated_state= State.objects.filter(pk=state)
             
            
                     
