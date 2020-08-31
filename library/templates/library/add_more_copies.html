@@ -604,7 +604,7 @@
 
                                 <div class="md-card">
                                     <div class="md-card-content large-padding">
-                                        <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'add_new_books' %}">
+                                        <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'add_new_book' %}">
                                             {% csrf_token %}
                                             <div class="uk-grid" data-uk-grid-margin>
                                                 {% for count in range %}
