@@ -275,7 +275,7 @@ class UserProfileUpdate(APIView):
             user.class_promotion_status=user_class_promotion_status
             user.class_current_year=user_class_current_year
             user.class_next_year=user_class_next_year
-            user.institute=Institute.objects.get(pk=request.POST['institute'])
+            user.institute=Institute.objects.filter(pk=request.POST.get('institute'))
             user.Class=Class_user
             user.state=State.objects.get(pk=request.POST['state'])
             user.save()
