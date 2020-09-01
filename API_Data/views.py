@@ -237,9 +237,7 @@ class UserProfileUpdate(APIView):
             user_class_current_year=request.POST.get('class_current_year')
             user_class_next_year=request.POST.get('class_next_year')
             user_institute=0
-            if 'institute' in request.POST:
-                    user_institute=request.POST['institute']
-            institute_user=Institute.objects.filter(pk=user_institute)
+            
             user_designation=request.POST.get('designation')
             user_Class=""
             try:
@@ -277,7 +275,7 @@ class UserProfileUpdate(APIView):
             user.class_promotion_status=user_class_promotion_status
             user.class_current_year=user_class_current_year
             user.class_next_year=user_class_next_year
-            user.institute=institute_user
+            user.institute=Institute.objects.get(pk=request.POST['institute'])
             user.Class=Class_user
             user.state=State.objects.get(pk=request.POST['state'])
             user.save()
@@ -336,6 +334,7 @@ class InstituteProfileUpdate(APIView):
         institute_email=request.POST['email']
         institute_facebook_link=request.POST['facebook_link']
         institute_website_link=request.POST['website_link']
+        institute_created_by=request.POST['created_by']
        
        
         institute_data.name=institute_name
@@ -358,6 +357,8 @@ class InstituteProfileUpdate(APIView):
         institute_data.email=institute_email
         institute_data.facebook_link=institute_facebook_link
         institute_data.website_link=institute_website_link
+        institute_data.created_by=institute_created_by
+
      
         
         institute_data.save()
