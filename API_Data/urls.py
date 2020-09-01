@@ -26,6 +26,7 @@ urlpatterns = [
   path('userprofile_update/<int:pk>',UserProfileUpdate.as_view(), name="userprofile_update"),
   path('states/',StateViews.as_view(), name="states"),
   path('institute_profile/',InstituteProfileViews.as_view(), name="institute_profile"),
+  path('instituteprofile_update/<int:pk>',InstituteProfileUpdate.as_view(), name="instituteprofile_update"),
 
 
 

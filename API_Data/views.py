@@ -207,7 +207,7 @@ class UserProfileUpdate(APIView):
     def put(self, request, pk):
        
             user = UserProfile.objects.get(id=pk)
-            print(user)
+            
             serializer = UserProfileSerializer(instance=user, data=request.data, partial=True) 
             user_first_name=request.POST.get('first_name')
             user_middle_name=request.POST.get('middle_name')
@@ -249,10 +249,7 @@ class UserProfileUpdate(APIView):
                     Class_user= Classes.objects.get(pk=user_Class)
             except:
                     Class_user=None
-            state=0
-            if 'state' in request.POST:
-                    state=request.POST['state']
-            updated_state= State.objects.get(pk=state)
+            
          
                     
            
@@ -282,7 +279,7 @@ class UserProfileUpdate(APIView):
             user.class_next_year=user_class_next_year
             user.institute=institute_user
             user.Class=Class_user
-            user.state=updated_state
+            user.state=State.objects.get(pk=request.POST['state'])
             user.save()
                 
             serializer.is_valid(raise_exception=True)
@@ -305,13 +302,22 @@ class InstituteProfileViews(APIView):
         institute_data= Institute.objects.all()
         serializer = InstituteSerializer(institute_data, many=True)
         return Response(serializer.data)
-    def post(self,request):
-        serializer = self.serializer_class(data=request.data)
+   
+
+
+
+
+@permission_classes((AllowAny, ))
+class InstituteProfileUpdate(APIView):
+    serializer_class = InstituteSerializer
+    def put(self, request, pk):
+        institute_data = Institute.objects.get(pk=pk)
+        serializer = InstituteSerializer(instance=institute_data, data=request.data, partial=True) 
         institute_name=request.POST['name']
         institute_profile_pic=request.FILES['profile_pic']
         institute_code=request.POST['code']
         institute_establish_date=request.POST['establish_date']
-        institute_logo=request.POST['institute_logo']
+        institute_logo=request.FILES['institute_logo']
         institute_principal=request.POST['principal']
         institute_session_start_date=request.POST['session_start_date']
         institute_about=request.POST['about']
@@ -321,7 +327,10 @@ class InstituteProfileViews(APIView):
         institute_address1=request.POST['address1']
         institute_address2=request.POST['address2']
         institute_district=request.POST['district']
-        institute_state=request.POST['state']
+        # institute_state=0
+        # if 'institute_state' in request.POST:
+        #             institute_state=
+        # updated_institute_state= 
         institute_country=request.POST['country']
         institute_pin_code=request.POST['pin_code']
         institute_email=request.POST['email']
@@ -343,7 +352,7 @@ class InstituteProfileViews(APIView):
         institute_data.address1=institute_address1
         institute_data.address2=institute_address2
         institute_data.district=institute_district
-        institute_data.state=institute_state
+        institute_data.state=State.objects.get(pk=request.POST['state'])
         institute_data.country=institute_country
         institute_data.pin_code=institute_pin_code
         institute_data.email=institute_email
@@ -353,5 +362,5 @@ class InstituteProfileViews(APIView):
         
         institute_data.save()
        
-        # serializer.is_valid(raise_exception=True)
+        serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
