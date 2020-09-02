@@ -78,12 +78,12 @@ def holidaylist(request,pk):
         raise PermissionDenied
                 
 def edit_holiday(request, pk):
-    user_permissions = request.user.user_institute_role.level.permissions.all()
-    add_class_permission = App_functions.objects.get(function_name='Can Edit Holiday')
-    if add_class_permission in user_permissions:
-                pass
-    else:
-                 raise PermissionDenied 
+    # user_permissions = request.user.user_institute_role.level.permissions.all()
+    # add_class_permission = App_functions.objects.get(function_name='Can Edit Holiday')
+    # if add_class_permission in user_permissions:
+    #             pass
+    # else:
+    #              raise PermissionDenied 
         
     inst = request.user.profile.institute.id
 

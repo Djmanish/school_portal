@@ -296,8 +296,9 @@ from .forms import Student_profile_edit_form, Student_info_edit_form
 
 
 def student_detail_edit(request):
+    user_profile = UserProfile.objects.get(pk= request.GET.get('username'), institute= request.user.profile.institute)
     # starting check if user has authorization to see list
-    if  request.user.profile.designation.level_name == "principal" or request.user.profile.designation.level_name == "admin" or request.user.profile.designation.level_name == "teacher":
+    if  request.user.profile.designation.level_name == "principal" or request.user.profile.designation.level_name == "admin" or request.user.profile.designation.level_name == "teacher" and user_profile.Class in request.user.class_teacher.all() :
         pass
     else:
         raise PermissionDenied
@@ -306,7 +307,7 @@ def student_detail_edit(request):
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
-    user_profile = UserProfile.objects.get(pk= request.GET.get('username'), institute= request.user.profile.institute)
+    
     # creating student info table instance for non existing student_details
     try:
         Student_Info.objects.get(student=user_profile)

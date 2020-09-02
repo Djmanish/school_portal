@@ -23,8 +23,10 @@ urlpatterns = [
   path('request-reset-email/', RequestPasswordResetEmail.as_view(),name="request-reset-email"),
   path('password-reset-complete/', SetNewPasswordAPIView.as_view(), name='password-reset-complete'),
   path('userprofile/',UserProfileViews.as_view(), name="userprofile"),
+  path('userprofile_update/<int:pk>',UserProfileUpdate.as_view(), name="userprofile_update"),
   path('states/',StateViews.as_view(), name="states"),
   path('institute_profile/',InstituteProfileViews.as_view(), name="institute_profile"),
+  path('instituteprofile_update/<int:pk>',InstituteProfileUpdate.as_view(), name="instituteprofile_update"),
 
 
 

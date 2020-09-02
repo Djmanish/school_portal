@@ -293,6 +293,7 @@ def approvals(request,pk):
                 Class_teachers = 0
             
             pending_users= UserProfile.objects.filter(status='pending', institute=institute_approval,Class=Class_teachers , designation=student_designation_id).reverse()
+            
             parent_request_inactive= AddChild.objects.filter(status='pending', institute=request.user.profile.institute, Class=Class_teachers)
             parent_request_active= AddChild.objects.filter(status='active', institute=request.user.profile.institute, Class=Class_teachers)
             active_users= UserProfile.objects.filter(status='approve', institute=institute_approval, Class=Class_teachers, designation=student_designation_id).reverse()
@@ -390,7 +391,7 @@ def dashboard(request):
             
             
             try:
-                driver_data = RouteInfo.objects.filter(vehicle_driver__name=request.user.profile)
+                driver_data = RouteInfo.objects.filter(vehicle_driver__name=request.user.profile, status="active")
                 p = []
                 for di in driver_data:
                     try:

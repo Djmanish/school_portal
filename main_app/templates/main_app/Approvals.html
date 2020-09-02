@@ -253,7 +253,7 @@
         
         <div class="menu_section" style="position: relative;top: 60px; bottom: 60px; ">
             <ul style="margin-bottom: 80px;">
-                <li class="current_section" title="Dashboard">
+                <li  title="Dashboard">
                     <a href="{% url 'user_dashboard' %}">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">Dashboard</span>
@@ -544,7 +544,8 @@
                                         <div class="md-card">
                                             
                                             <div class="md-card-content">
-                                                {% if pending_user %}
+                                    
+                                                {% if Pending_user %}
                                                 <h4>Institute Requests</h4>
                                                 <div class="uk-overflow-container uk-margin-bottom">
                                                     <table

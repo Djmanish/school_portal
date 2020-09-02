@@ -537,9 +537,9 @@
                                             <label class ="required" id="required_margin">Select Student</label>
                                             <select class="form-control" id="selected_student"  name="selected_student" style="padding: 2px;"
                                                 required>
-                                                {% if select_exam_type %}
+                                               
                                                 <option selected disabled value="">--Select Student--</option>
-                                                
+                                               
                                                 {% for student in parent_student_list %}
                                                 <option value={{student.id}}>{{student.first_name}} {{student.last_name}}</option>
                                                 {% endfor %}

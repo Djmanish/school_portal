@@ -1101,7 +1101,7 @@
                                             <label class="required" style="color: black;">Route</label>
                                             <select id="point_state" class="form-control" name="route" required>
                                                 <option selected disabled value="">--- Select ---</option>
-                                                {% for i in routes %}
+                                                {% for i in user.n %}
                                                 <option value={{i.id}}>{{i.route_name}} </option>
                                                 {% endfor %}
                                              
@@ -1554,7 +1554,7 @@
                                                                
                                                         <tr>
                                                             
-                                                            <td>{{forloop.counter}}</td>
+                                                            <td>{{p.route_no}}</td>
                                                             <td><a href="{% url 'view_routepoints' p.pk %}">{{p.route_name}}</a></td>
                                                             <td>{{p.point_count}}</td>                                                       
                                                             <td>{{p.st|time:"h:i a"}}</td> 

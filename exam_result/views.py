@@ -48,23 +48,23 @@ def exam_result(request,pk):
     
                   
           if e_start>timezone.now().date() and e_end>timezone.now().date() or e_start == None and e_end == None:
-              context={
-                            'edit_start_date':e_start,
-                            'edit_end_date':e_end,
-                            'edit_date':edit_date,
+                context={
+                              'edit_start_date':e_start,
+                              'edit_end_date':e_end,
+                              'edit_date':edit_date,
 
 
-            }
-          messages.error(request, f'Edit marks date between {e_start} - {e_end} !')
-          return render(request, 'teacher_view.html', context) 
-      elif e_end<timezone.now().date():
-          messages.error(request, f'Edit marks date was between {e_start} - {e_end} !')
-          return render(request, 'teacher_view.html') 
+              }
+                messages.error(request, f'Edit marks date between {e_start} - {e_end} !')
+                return render(request, 'teacher_view.html', context) 
+          elif e_end<timezone.now().date():
+              messages.error(request, f'Edit marks date was between {e_start} - {e_end} !')
+              return render(request, 'teacher_view.html') 
 
+          
       else:
           messages.error(request, "Edit Marks date is not defined by the institute yet.")
           return render(request, 'teacher_view.html') 
-              
              
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
@@ -233,7 +233,7 @@ def fetch_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
   exam_type=ExamType.objects.get(pk=exam_type_id)
   max_exam_sr_no = ExamDetails.objects.filter(exam_type=exam_type).values('exam_sr_no').distinct()
-  individual_result_sr_no = "<option>--Exam Type No.--</option>"
+  individual_result_sr_no = "<option value="">--Exam Type No.--</option>"
   for result_sr_no in max_exam_sr_no:
     individual_result_sr_no = individual_result_sr_no + f"<option value='{result_sr_no['exam_sr_no']}'>"+result_sr_no['exam_sr_no']+"</option>" 
   return HttpResponse(individual_result_sr_no)
@@ -245,16 +245,16 @@ def chart_sr_no(request):
   exam_type_id = request.POST.get('exam_type_id')
   
   max_exam_sr_no = ExamResult.objects.filter(exam_type__exam_type=exam_type_id).values('exam_sr_no').distinct()
-  chart_result_sr_no = "<option>--Exam Type No.--</option>"
+  chart_result_sr_no = "<option value="">--Exam Type No.--</option>"
   for result_sr_no in max_exam_sr_no:
     chart_result_sr_no = chart_result_sr_no + f"<option>"+result_sr_no['exam_sr_no']+"</option>" 
   return HttpResponse(chart_result_sr_no)
 
 def report_card(request,pk):
      
-      inst = request.user.profile.institute.id
-      if pk!=inst:
-        raise PermissionDenied
+      # inst = request.user.profile.institute.id
+      # if pk!=inst:
+      #   raise PermissionDenied
 
       user_institute_name=Institute.objects.get(pk=pk)
         # starting user notice
@@ -263,7 +263,8 @@ def report_card(request,pk):
         # ending user notice
 
       request.user.user_child_fee_status = []
-      user_children= AddChild.objects.filter(parent= request.user.profile)
+      
+      user_children= AddChild.objects.filter(parent= request.user.profile, status="active")
       parent_student_list = []
       for st in user_children:
             student= UserProfile.objects.get(pk=st.child.id)
@@ -1725,7 +1726,10 @@ def overall_report_card(request,pk,student_pk):
                      all_percent_list.append(v)
           
           for percent_marks in all_percent_list:
-            sub_percent[percent_marks]=percent_marks 
+            try:
+              sub_percent[percent_marks]=percent_marks 
+            except:
+              sub_percent[percent_marks]=0
           
           sum=0
           for percent in all_percent_list:
@@ -1742,6 +1746,7 @@ def overall_report_card(request,pk,student_pk):
         for final_sum in final_percentage:
          
             sum=sum+final_sum
+           
           
         # count the number of subjects
         count=0
@@ -1756,7 +1761,7 @@ def overall_report_card(request,pk,student_pk):
         except:
           pass
 
-       
+        print(sub_percent_list)
 
         context={
           'institute_student':institute_student,
@@ -1808,8 +1813,10 @@ def selected_exam_types(request):
         # student_exam_type = ExamDetails.objects.filter(institute=institute_exam_type).values('exam_type').distinct()
         print(institute_exam_type)
         
-        individual_exam_type = "<option>--Exam Type--</option>"
+        individual_exam_type = "<option value="">--Exam Type--</option>"
         for etype in institute_exam_type:
                 individual_exam_type = individual_exam_type + f"<option value={etype.id}>{etype}</option>" 
         
         return HttpResponse(individual_exam_type)
+
+

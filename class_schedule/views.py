@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
 from .models import *
 from main_app.models import *
 from django.contrib.auth.decorators import login_required
@@ -204,7 +204,7 @@ def schedule_update(request, pk):
                         
                         messages.success(request, "Class schedule updated successfully !")
                         schedule_to_update.save()
-                        return redirect('class_schedule')
+                        return HttpResponseRedirect(f"/schedule/?selected_class={request.POST.get('up_sche_class')}")
                 else:
                         messages.info(request, "You don't have permission to update class Schedule !")
                         return redirect('not_found')

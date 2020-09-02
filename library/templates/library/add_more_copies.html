@@ -127,31 +127,12 @@
                             
                             {% if user.profile.designation %}
                             <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                                <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a>
+                                <!-- <a href="#" class="user_action_icon"><i class="material-icons md-24 md-light">&#xE7F4;</i><span class="uk-badge">1</span></a> -->
                                 <div class="uk-dropdown uk-dropdown-xlarge notice_drop">
                                     <div class="md-card-content">
-                                        <ul class="uk-tab uk-tab-grid" data-uk-tab="{connect:'#header_alerts',animation:'slide-horizontal'}">
-                                            <li class="uk-width-1-2 uk-active"><a href="#" class="js-uk-prevent uk-text-small">Notices</a></li>
-                                            <!-- <li class="uk-width-1-2"><a href="#" class="js-uk-prevent uk-text-small">Alerts (4)</a></li> -->
-                                        </ul>
+                                       
                                         <ul id="header_alerts"  class="uk-switcher uk-margin">
-                                            <li>
-                                                <ul class="md-list md-list-addon alert_notice_list">
-                                                    {% for notice in user.users_notice %}
-                                                    <li>
-                                                        <a href="{% url 'all_notice_list' %}">
-                                                            <div class="md-list-addon-element">
-                                                                <span class="md-user-letters md-bg-cyan">N</span>
-                                                            </div>
-                                                            <div class="md-list-content">
-                                                                <span class="uk-text-small uk-text-muted">{{notice}} <i style="color: blue;">{{notice.publish_date}}</i> </span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </li>
-                                            <li>
+                                           
                                                 <ul class="md-list md-list-addon">
                                                     <li>
                                                         <div class="md-list-addon-element">
@@ -535,8 +516,8 @@
                                                             <i class="md-list-addon-icon material-icons">&#xE158;</i>
                                                         </div> -->
                                                         <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="">Book name</a></span>
-                                                            <span class="uk-text-small uk-text-muted">{{book_code.book_name}}</span>
+                                                            <span class="md-list-heading"><a href="#">Book name</a></span>
+                                                            <span class="uk-text-medium uk-text-muted">{{book_code.book_name}}</span>
                                                            
                                                         </div>
                                                     </li>
@@ -546,8 +527,8 @@
                                                             <i class="md-list-addon-icon material-icons">&#xE158;</i>
                                                         </div> -->
                                                         <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="">Number Of Copies</a></span>
-                                                            <span class="uk-text-small uk-text-muted">{{copies}}</span>
+                                                            <span class="md-list-heading"><a href="#">Number Of Copies</a></span>
+                                                            <span class="uk-text-medium uk-text-muted">{{copies}}</span>
                                                            
                                                         </div>
                                                     </li>
@@ -556,7 +537,7 @@
                                             </div>
     
                                             <div class="uk-width-large-1-2">
-                                                <h4 class="heading_c uk-margin-small-bottom"></h4>
+                                                <!-- <h4 class="heading_c uk-margin-small-bottom"></h4> -->
                                                 <ul class="md-list md-list-addon">
                                                     
                                                     <li>
@@ -564,8 +545,8 @@
                                                             <i class="md-list-addon-icon material-icons">&#xE158;</i>
                                                         </div> -->
                                                         <div class="md-list-content">
-                                                            <span class="md-list-heading"><a href="">Book Code</a></span>
-                                                            <span class="uk-text-small uk-text-muted">{{book_code.code}}</span>
+                                                            <span class="md-list-heading"><a href="#">Book Code</a></span>
+                                                            <span class="uk-text-medium uk-text-muted">{{book_code.code}}</span>
                                                            
                                                         </div>
                                                     </li>
@@ -578,7 +559,7 @@
                                                             <div class="uk-modal-dialog " >
                                                                 <button type="button" class="uk-modal-close uk-close"></button>
                                                                 <div class="uk-modal-header">
-                                                                    <h3 class="uk-text-primary">Add More Copies</h3>
+                                                                    <h3 class="uk-text-primary">Added Copies</h3>
                                                                 </div>
                                                                 <form  method="POST" style="max-height: calc(100vh - 250px); overflow-y: auto;" action="#">
                                                                     {% csrf_token %}
@@ -605,7 +586,7 @@
                                                         </div>
                                                         <div class="md-list-content">
                                                             <span class="md-list-heading"><a data-uk-modal="{target:'#modal_add_book_copies'}" href="#">Added Book Ids</a></span>
-                                                            <span class="uk-text-small uk-text-muted">View</span>
+                                                            <span class="uk-text-medium uk-text-muted">View</span>
                                                            
                                                         </div>
                                                     </li>
@@ -623,7 +604,7 @@
 
                                 <div class="md-card">
                                     <div class="md-card-content large-padding">
-                                        <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'add_new_books' %}">
+                                        <form id="form_validation" class="uk-form-stacked" method="POST" action="{% url 'add_new_book' %}">
                                             {% csrf_token %}
                                             <div class="uk-grid" data-uk-grid-margin>
                                                 {% for count in range %}

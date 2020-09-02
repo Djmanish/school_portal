@@ -196,73 +196,93 @@ class UserProfileViews(APIView):
         user1= UserProfile.objects.all()
         serializer = UserProfileSerializer(user1, many=True)
         return Response(serializer.data)
-    def post(self,request):
-        serializer = self.serializer_class(data=request.data)
-        user_name=request.POST['user']
-        user_first_name=request.POST['first_name']
-        user_middle_name=request.POST['middle_name']
-        user_last_name=request.POST['last_name']
-        user_father_name=request.POST['father_name']
-        user_mother_name=request.POST['mother_name']
-        user_gender=request.POST['gender']
-        user_date_of_birth=request.POST['date_of_birth']
-        user_marital_status=request.POST['marital_status']
-        user_category=request.POST['category']
-        user_qualification=request.POST['qualification']
-        user_aadhar_card_number=request.POST['aadhar_card_number']
-        user_about=request.POST['about']
-        user_profile_pic=request.POST['profile_pic']
-        user_mobile_number=request.POST['mobile_number']
-        user_address_line_1=request.POST['address_line_1']
-        user_address_line_2=request.POST['address_line_2']
-        user_city=request.POST['city']
-        user_pin_code=request.POST['pin_code']
-        user_facebook_link=request.POST['facebook_link']
-        user_status=request.POST['status']
-        user_class_promotion_status=request.POST['class_promotion_status']
-        user_class_current_year=request.POST['class_current_year']
-        user_class_next_year=request.POST['class_next_year']
-        user_institute=request.POST['institute']
-        institute_user=Institute.objects.get(pk=user_institute)
-        user_designation=request.POST['designation']
-        user_Class=request.POST['Class']
-        print(user_Class)
-        Class_user= Classes.objects.get(pk=user_Class)
-        updated_state= State.objects.get(pk=request.POST['state'])
-       
-        user_id=User.objects.get(id=user_name)
-        user_data = UserProfile.objects.get(user=user_name)
-        user_data.first_name=user_first_name
-        user_data.middle_name=user_middle_name
-        user_data.last_name=user_last_name
-        user_data.father_name=user_father_name
-        user_data.mother_name=user_mother_name
-        user_data.gender=user_gender
-        user_data.date_of_birth=user_date_of_birth
-        user_data.marital_status=user_marital_status
-        user_data.category=user_category
-        user_data.qualification=user_qualification
-        user_data.aadhar_card_number=user_aadhar_card_number
-        user_data.about=user_about
-        user_data.profile_pic=user_profile_pic
-        user_data.mobile_number=user_mobile_number
-        user_data.address_line_1=user_address_line_1
-        user_data.address_line_2=user_address_line_2
-        user_data.city=user_city
-        user_data.pin_code=user_pin_code
-        user_data.facebook_link=user_facebook_link
-        user_data.status=user_status
-        user_data.class_promotion_status=user_class_promotion_status
-        user_data.class_current_year=user_class_current_year
-        user_data.class_next_year=user_class_next_year
-        user_data.institute=institute_user
-        user_data.Class=Class_user
-        user_data.state=updated_state
+   
+
+@permission_classes((AllowAny, ))
+class UserProfileUpdate(APIView):
+    serializer_class = UserProfileSerializer
+    
+    
         
-        user_data.save()
+    def put(self, request, pk):
        
-        # serializer.is_valid(raise_exception=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            user = UserProfile.objects.get(id=pk)
+            
+            serializer = UserProfileSerializer(instance=user, data=request.data, partial=True) 
+            user_first_name=request.POST.get('first_name')
+            user_middle_name=request.POST.get('middle_name')
+            user_last_name=request.POST.get('last_name')
+            user_father_name=request.POST.get('father_name')
+            user_mother_name=request.POST.get('mother_name')
+            user_gender=request.POST.get('gender')
+            user_date_of_birth=request.POST.get('date_of_birth')
+            user_marital_status=request.POST.get('marital_status')
+            user_category=request.POST.get('category')
+            user_qualification=request.POST.get('qualification')
+            user_aadhar_card_number=request.POST.get('aadhar_card_number')
+            user_about=request.POST.get('about')
+            user_profile_pic=""
+            if 'profile_pic' in request.POST:
+                user_profile_pic=request.FILES['profile_pic']
+            user_mobile_number=request.POST.get('mobile_number')
+            user_address_line_1=request.POST.get('address_line_1')
+            user_address_line_2=request.POST.get('address_line_2')
+            user_city=request.POST.get('city')
+            user_pin_code=request.POST.get('pin_code')
+            user_facebook_link=request.POST.get('facebook_link')
+            user_status=request.POST.get('status')
+            user_class_promotion_status=""
+            if 'class_promotion_status' in request.POST:
+                user_class_promotion_status=request.POST.get('class_promotion_status')
+            user_class_current_year=request.POST.get('class_current_year')
+            user_class_next_year=request.POST.get('class_next_year')
+            user_institute=0
+            
+            user_designation=request.POST.get('designation')
+            user_Class=""
+            try:
+                    if 'Class' in request.POST:
+                        user_Class=request.POST['Class']
+                    
+                    Class_user= Classes.objects.get(pk=user_Class)
+            except:
+                    Class_user=None
+            
+         
+                    
+           
+                    
+            user.first_name=user_first_name
+            user.middle_name=user_middle_name
+            user.last_name=user_last_name
+            user.father_name=user_father_name
+            user.mother_name=user_mother_name
+            user.gender=user_gender
+            user.date_of_birth=user_date_of_birth
+            user.marital_status=user_marital_status
+            user.category=user_category
+            user.qualification=user_qualification
+            user.aadhar_card_number=user_aadhar_card_number
+            user.about=user_about
+            user.profile_pic=user_profile_pic
+            user.mobile_number=user_mobile_number
+            user.address_line_1=user_address_line_1
+            user.address_line_2=user_address_line_2
+            user.city=user_city
+            user.pin_code=user_pin_code
+            user.facebook_link=user_facebook_link
+            user.status=user_status
+            user.class_promotion_status=user_class_promotion_status
+            user.class_current_year=user_class_current_year
+            user.class_next_year=user_class_next_year
+            user.institute=Institute.objects.filter(pk=request.POST.get('institute'))
+            user.Class=Class_user
+            user.state=State.objects.get(pk=request.POST['state'])
+            user.save()
+                
+            serializer.is_valid(raise_exception=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @permission_classes((AllowAny, ))
 class StateViews(APIView):
@@ -280,13 +300,22 @@ class InstituteProfileViews(APIView):
         institute_data= Institute.objects.all()
         serializer = InstituteSerializer(institute_data, many=True)
         return Response(serializer.data)
-    def post(self,request):
-        serializer = self.serializer_class(data=request.data)
+   
+
+
+
+
+@permission_classes((AllowAny, ))
+class InstituteProfileUpdate(APIView):
+    serializer_class = InstituteSerializer
+    def put(self, request, pk):
+        institute_data = Institute.objects.get(pk=pk)
+        serializer = InstituteSerializer(instance=institute_data, data=request.data, partial=True) 
         institute_name=request.POST['name']
-        institute_profile_pic=request.POST['profile_pic']
+        institute_profile_pic=request.FILES['profile_pic']
         institute_code=request.POST['code']
         institute_establish_date=request.POST['establish_date']
-        institute_logo=request.POST['institute_logo']
+        institute_logo=request.FILES['institute_logo']
         institute_principal=request.POST['principal']
         institute_session_start_date=request.POST['session_start_date']
         institute_about=request.POST['about']
@@ -296,12 +325,16 @@ class InstituteProfileViews(APIView):
         institute_address1=request.POST['address1']
         institute_address2=request.POST['address2']
         institute_district=request.POST['district']
-        institute_state=request.POST['state']
+        # institute_state=0
+        # if 'institute_state' in request.POST:
+        #             institute_state=
+        # updated_institute_state= 
         institute_country=request.POST['country']
         institute_pin_code=request.POST['pin_code']
         institute_email=request.POST['email']
         institute_facebook_link=request.POST['facebook_link']
         institute_website_link=request.POST['website_link']
+        institute_created_by=request.POST['created_by']
        
        
         institute_data.name=institute_name
@@ -318,15 +351,17 @@ class InstituteProfileViews(APIView):
         institute_data.address1=institute_address1
         institute_data.address2=institute_address2
         institute_data.district=institute_district
-        institute_data.state=institute_state
+        institute_data.state=State.objects.get(pk=request.POST['state'])
         institute_data.country=institute_country
         institute_data.pin_code=institute_pin_code
         institute_data.email=institute_email
         institute_data.facebook_link=institute_facebook_link
         institute_data.website_link=institute_website_link
+        institute_data.created_by=institute_created_by
+
      
         
         institute_data.save()
        
-        # serializer.is_valid(raise_exception=True)
+        serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
