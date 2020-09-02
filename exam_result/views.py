@@ -61,10 +61,10 @@ def exam_result(request,pk):
           messages.error(request, f'Edit marks date was between {e_start} - {e_end} !')
           return render(request, 'teacher_view.html') 
 
-          else:
-              pass
       else:
-          pass
+          messages.error(request, "Edit Marks date is not defined by the institute yet.")
+          return render(request, 'teacher_view.html') 
+              
              
       #  to fetch the logged in  subject teacher
       subject_result=Subjects.objects.filter(institute=request.user.profile.institute, subject_teacher=request.user)
