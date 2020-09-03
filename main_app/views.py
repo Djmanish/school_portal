@@ -156,7 +156,7 @@ def edit_subject(request, pk):
     if request.user.profile.designation:
         request.user.users_notice = Notice.objects.filter(institute=request.user.profile.institute, publish_date__lte=timezone.now(), recipients_list = request.user.profile).order_by('id').reverse()[:10]
     # ending user notice
-    subject_to_edit = Subjects.objects.get(pk=pk)
+    subject_to_edit = Subjects.objects.get(pk=pk, institute= request.user.profile.institute)
     institute_classes = Classes.objects.filter(institute=request.user.profile.institute )
     designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
     institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
@@ -224,7 +224,7 @@ def edit_class(request, pk):
     can_edit_class_permission = App_functions.objects.get(function_name='Can Edit Class')
     if can_edit_class_permission in user_permissions:
 
-        class_to_edit = Classes.objects.get(pk=pk)
+        class_to_edit = Classes.objects.get(pk=pk, institute=request.user.profile.institute)
         designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
         institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
         # institute_classes = Classes.objects.filter(institute=request.user.profile.institute)
@@ -1301,7 +1301,10 @@ def assign_class_teacher(request, pk):
     assign_class_teacher_permission = App_functions.objects.get(function_name='Can Assign Class Teacher')
 
     if assign_class_teacher_permission in user_permissions:
-        selected_class = Classes.objects.get(pk=pk)
+        try:
+            selected_class = Classes.objects.get(pk=pk, institute=request.user.profile.institute)
+        except:
+            raise PermissionDenied
         designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='teacher')
         institute_teachers = UserProfile.objects.filter(institute= request.user.profile.institute, designation=designation_pk )
         context_data= {'selected_class':selected_class, 'institute_teachers':institute_teachers}
