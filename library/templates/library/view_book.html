@@ -657,10 +657,18 @@
                         <div class="user_content">
                             <a href="/library/" class="md-btn md-btn-primary" style="margin-bottom: 10px;color: ;"><i class=" material-icons ">arrow_back </i> GO BACK</a>
 
-                            <div class="user_content">   
-                                <h4 class="heading_a uk-margin-bottom">{{book_grp.code}} - {{book_grp.book_name}}</h4>
+                            <div class="md-list-content text-center">
+                                <span class="uk-text-primary uk-text-large" ><strong>Book Code:</strong></span>
+                                <span class="uk-text-large"> {{book_grp.code}}</span>, 
+                                <span class="uk-text-primary uk-text-large" ><strong>Book Name:</strong></span>
+                                <span class="uk-text-large">{{book_grp.book_name}}</span>
+                               
+                            </div>
+
+                               
+                               
                                 {% if grp_books %}
-                                <div class="md-card uk-margin-medium-bottom">
+                                <!-- <div class="md-card uk-margin-medium-bottom"> -->
                                     
                                     <div class="md-card-content">
                                         <div class="uk-overflow-container">
@@ -716,12 +724,12 @@
                                         
                                     </div>
                                     
-                                </div>
+                                
                                 {% endif %}
                                 
                                    
                                 
-                            </div>
+                            
                             
                         </div>
                        

@@ -236,7 +236,7 @@ class UserProfileUpdate(APIView):
                 user_class_promotion_status=request.POST.get('class_promotion_status')
             user_class_current_year=request.POST.get('class_current_year')
             user_class_next_year=request.POST.get('class_next_year')
-            user_institute=0
+            
             
             user_designation=request.POST.get('designation')
             user_Class=""
@@ -275,9 +275,11 @@ class UserProfileUpdate(APIView):
             user.class_promotion_status=user_class_promotion_status
             user.class_current_year=user_class_current_year
             user.class_next_year=user_class_next_year
-            user.institute=Institute.objects.filter(pk=request.POST.get('institute'))
+            if "institute" in request.POST:
+                 user.institute=Institute.objects.get(pk=request.POST['institute'])
             user.Class=Class_user
-            user.state=State.objects.get(pk=request.POST['state'])
+            if "state" in request.POST: 
+                 user.state=State.objects.get(pk=request.POST['state'])
             user.save()
                 
             serializer.is_valid(raise_exception=True)
@@ -312,7 +314,9 @@ class InstituteProfileUpdate(APIView):
         institute_data = Institute.objects.get(pk=pk)
         serializer = InstituteSerializer(instance=institute_data, data=request.data, partial=True) 
         institute_name=request.POST['name']
-        institute_profile_pic=request.FILES['profile_pic']
+        institute_profile_pic=""
+        if 'profile_pic' in request.POST:
+            institute_profile_pic=request.FILES['profile_pic']
         institute_code=request.POST['code']
         institute_establish_date=request.POST['establish_date']
         institute_logo=request.FILES['institute_logo']
@@ -358,9 +362,6 @@ class InstituteProfileUpdate(APIView):
         institute_data.facebook_link=institute_facebook_link
         institute_data.website_link=institute_website_link
         institute_data.created_by=institute_created_by
-
-     
-        
         institute_data.save()
        
         serializer.is_valid(raise_exception=True)
