@@ -58,7 +58,7 @@ def attendance(request):
 
         all_class = Classes.objects.filter(institute=request.user.profile.institute)
         designation_pk = Institute_levels.objects.get(institute=request.user.profile.institute, level_name='student')
-        all_students= UserProfile.objects.filter(institute=request.user.profile.institute,designation= designation_pk, Class=students_class)
+        all_students= UserProfile.objects.filter(institute=request.user.profile.institute,designation= designation_pk, Class=students_class, status='approve')
 
         # starting student statistics calculation
         session_start_date = request.user.profile.institute.session_start_date
