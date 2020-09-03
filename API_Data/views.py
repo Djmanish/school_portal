@@ -201,15 +201,12 @@ class UserProfileViews(APIView):
 @permission_classes((AllowAny, ))
 class UserProfileUpdate(APIView):
     serializer_class = UserProfileSerializer
-    
-    
-        
     def put(self, request, pk):
-       
             user = UserProfile.objects.get(id=pk)
-            
             serializer = UserProfileSerializer(instance=user, data=request.data, partial=True) 
             user_first_name=request.POST.get('first_name')
+            print(user_first_name)
+
             user_middle_name=request.POST.get('middle_name')
             user_last_name=request.POST.get('last_name')
             user_father_name=request.POST.get('father_name')
@@ -221,9 +218,6 @@ class UserProfileUpdate(APIView):
             user_qualification=request.POST.get('qualification')
             user_aadhar_card_number=request.POST.get('aadhar_card_number')
             user_about=request.POST.get('about')
-            user_profile_pic=""
-            if 'profile_pic' in request.POST:
-                user_profile_pic=request.FILES['profile_pic']
             user_mobile_number=request.POST.get('mobile_number')
             user_address_line_1=request.POST.get('address_line_1')
             user_address_line_2=request.POST.get('address_line_2')
@@ -250,8 +244,6 @@ class UserProfileUpdate(APIView):
             
          
                     
-           
-                    
             user.first_name=user_first_name
             user.middle_name=user_middle_name
             user.last_name=user_last_name
@@ -264,7 +256,8 @@ class UserProfileUpdate(APIView):
             user.qualification=user_qualification
             user.aadhar_card_number=user_aadhar_card_number
             user.about=user_about
-            user.profile_pic=user_profile_pic
+            if 'profile_pic' in request.POST:
+                    user.profile_pic=request.FILES['profile_pic']
             user.mobile_number=user_mobile_number
             user.address_line_1=user_address_line_1
             user.address_line_2=user_address_line_2
@@ -314,12 +307,10 @@ class InstituteProfileUpdate(APIView):
         institute_data = Institute.objects.get(pk=pk)
         serializer = InstituteSerializer(instance=institute_data, data=request.data, partial=True) 
         institute_name=request.POST['name']
-        institute_profile_pic=""
-        if 'profile_pic' in request.POST:
-            institute_profile_pic=request.FILES['profile_pic']
+        
         institute_code=request.POST['code']
         institute_establish_date=request.POST['establish_date']
-        institute_logo=request.FILES['institute_logo']
+        
         institute_principal=request.POST['principal']
         institute_session_start_date=request.POST['session_start_date']
         institute_about=request.POST['about']
@@ -342,10 +333,12 @@ class InstituteProfileUpdate(APIView):
        
        
         institute_data.name=institute_name
-        institute_data.profile_pic=institute_profile_pic
+        if 'profile_pic' in request.POST:
+                institute_data.profile_pic=request.FILES['profile_pic']
         institute_data.code=institute_code
         institute_data.establish_date=institute_establish_date
-        institute_data.institute_logo=institute_logo
+        if 'institute_logo' in request.POST:
+                institute_data.institute_logo=request.FILES['institute_logo']
         institute_data.principal=institute_principal
         institute_data.session_start_date=institute_session_start_date
         institute_data.about=institute_about
@@ -355,7 +348,8 @@ class InstituteProfileUpdate(APIView):
         institute_data.address1=institute_address1
         institute_data.address2=institute_address2
         institute_data.district=institute_district
-        institute_data.state=State.objects.get(pk=request.POST['state'])
+        if "state" in request.POST:
+            institute_data.state=State.objects.get(pk=request.POST['state'])
         institute_data.country=institute_country
         institute_data.pin_code=institute_pin_code
         institute_data.email=institute_email
