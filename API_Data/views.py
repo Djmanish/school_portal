@@ -278,7 +278,8 @@ class UserProfileUpdate(APIView):
             if "institute" in request.POST:
                  user.institute=Institute.objects.get(pk=request.POST['institute'])
             user.Class=Class_user
-            user.state=State.objects.get(pk=request.POST['state'])
+            if "state" in request.POST: 
+                 user.state=State.objects.get(pk=request.POST['state'])
             user.save()
                 
             serializer.is_valid(raise_exception=True)
