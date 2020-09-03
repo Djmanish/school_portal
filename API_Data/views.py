@@ -360,3 +360,12 @@ class InstituteProfileUpdate(APIView):
        
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+class ClassesViews(APIView):
+    serializer_class = ClassesSerializer
+    def get(self, request):
+        class_data=Classes.objects.all()
+        serializer = ClassesSerializer(class_data, many=True)
+        return Response(serializer.data)

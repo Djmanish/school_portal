@@ -27,6 +27,7 @@ urlpatterns = [
   path('states/',StateViews.as_view(), name="states"),
   path('institute_profile/',InstituteProfileViews.as_view(), name="institute_profile"),
   path('instituteprofile_update/<int:pk>',InstituteProfileUpdate.as_view(), name="instituteprofile_update"),
+  path('classes_data/',ClassesViews.as_view(), name="classes_data"),
 
 
 

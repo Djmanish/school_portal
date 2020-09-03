@@ -7,6 +7,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
+from Attendance.models import *
 
 
 
@@ -150,4 +151,19 @@ class StateSerializer(serializers.ModelSerializer):
 class InstituteSerializer(serializers.ModelSerializer):
     class Meta:
         model=Institute
+        fields='__all__'
+
+class ClassesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Classes
+        fields='__all__'
+
+class AttendanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Attendance
+        fields='__all__'
+
+class DailyAttendanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Daily_Attendance_status
         fields='__all__'
